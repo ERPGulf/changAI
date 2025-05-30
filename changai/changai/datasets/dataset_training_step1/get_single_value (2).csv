@@ -1,0 +1,283 @@
+Corrected Customer Question,Corrected Frappe Query,Query Complexity
+"I need the lead_name for Lead, can you fetch that?","frappe.db.get_single_value(""Lead"", ""lead_name"")",Simple
+What is the source for the Lead?,"frappe.db.get_single_value(""Lead"", ""source"")",Moderate
+Can you get the status from Lead?,"frappe.db.get_single_value(""Lead"", ""status"")",Simple
+"I need the email for Lead, can you fetch that?","frappe.db.get_single_value(""Lead"", ""email"")",Simple
+What is the phone for the Lead?,"frappe.db.get_single_value(""Lead"", ""phone"")",Simple
+"Hey, what's the opportunity_name for the Opportunity?","frappe.db.get_single_value(""Opportunity"", ""opportunity_name"")",Simple
+Give me the customer from Opportunity.,"frappe.db.get_single_value(""Opportunity"", ""customer"")",Moderate
+Can you get the amount from Opportunity?,"frappe.db.get_single_value(""Opportunity"", ""amount"")",Simple
+Please tell me the status for Opportunity.,"frappe.db.get_single_value(""Opportunity"", ""status"")",Simple
+"Hey, what's the closing_date for the Opportunity?","frappe.db.get_single_value(""Opportunity"", ""closing_date"")",Moderate
+Give me the first_name from Contact.,"frappe.db.get_single_value(""Contact"", ""first_name"")",Simple
+What is the last_name for the Contact?,"frappe.db.get_single_value(""Contact"", ""last_name"")",Simple
+"I need the email_id for Contact, can you fetch that?","frappe.db.get_single_value(""Contact"", ""email_id"")",Simple
+Can you let me know the phone for the Contact?,"frappe.db.get_single_value(""Contact"", ""phone"")",Simple
+Can you let me know the designation for the Contact?,"frappe.db.get_single_value(""Contact"", ""designation"")",Moderate
+Give me the customer_name from Customer.,"frappe.db.get_single_value(""Customer"", ""customer_name"")",Simple
+Give me the customer_group from Customer.,"frappe.db.get_single_value(""Customer"", ""customer_group"")",Moderate
+What is the territory for the Customer?,"frappe.db.get_single_value(""Customer"", ""territory"")",Complex
+What is the tax_id for the Customer?,"frappe.db.get_single_value(""Customer"", ""tax_id"")",Complex
+Can you get the mobile_no from Customer?,"frappe.db.get_single_value(""Customer"", ""mobile_no"")",Moderate
+"Hey, what's the order_id for the Sales Order?","frappe.db.get_single_value(""Sales Order"", ""order_id"")",Complex
+"Hey, what's the customer for the Sales Order?","frappe.db.get_single_value(""Sales Order"", ""customer"")",Moderate
+Could you retrieve the order_date from Sales Order?,"frappe.db.get_single_value(""Sales Order"", ""order_date"")",Moderate
+Could you retrieve the total from Sales Order?,"frappe.db.get_single_value(""Sales Order"", ""total"")",Moderate
+"I need the status for Sales Order, can you fetch that?","frappe.db.get_single_value(""Sales Order"", ""status"")",Simple
+"I need the delivery_date for Sales Order, can you fetch that?","frappe.db.get_single_value(""Sales Order"", ""delivery_date"")",Moderate
+What is the quotation_id for the Quotation?,"frappe.db.get_single_value(""Quotation"", ""quotation_id"")",Moderate
+Give me the valid_till from Quotation.,"frappe.db.get_single_value(""Quotation"", ""valid_till"")",Moderate
+Can you let me know the items for the Quotation?,"frappe.db.get_single_value(""Quotation"", ""items"")",Moderate
+"I need the customer for Quotation, can you fetch that?","frappe.db.get_single_value(""Quotation"", ""customer"")",Moderate
+"I need the grand_total for Quotation, can you fetch that?","frappe.db.get_single_value(""Quotation"", ""grand_total"")",Moderate
+Give me the terms_and_conditions from Quotation.,"frappe.db.get_single_value(""Quotation"", ""terms_and_conditions"")",Moderate
+"I need the campaign_name for Campaign, can you fetch that?","frappe.db.get_single_value(""Campaign"", ""campaign_name"")",Simple
+What is the start_date for the Campaign?,"frappe.db.get_single_value(""Campaign"", ""start_date"")",Moderate
+Give me the end_date from Campaign.,"frappe.db.get_single_value(""Campaign"", ""end_date"")",Moderate
+"I need the budget for Campaign, can you fetch that?","frappe.db.get_single_value(""Campaign"", ""budget"")",Moderate
+What is the status for the Campaign?,"frappe.db.get_single_value(""Campaign"", ""status"")",Simple
+Can you get the invoice_number from Sales Invoice?,"frappe.db.get_single_value(""Sales Invoice"", ""invoice_number"")",Moderate
+Give me the customer from Sales Invoice.,"frappe.db.get_single_value(""Sales Invoice"", ""customer"")",Moderate
+Can you let me know the invoice_date for the Sales Invoice?,"frappe.db.get_single_value(""Sales Invoice"", ""invoice_date"")",Moderate
+"I need the total_amount for Sales Invoice, can you fetch that?","frappe.db.get_single_value(""Sales Invoice"", ""total_amount"")",Simple
+Can you let me know the due_date for the Sales Invoice?,"frappe.db.get_single_value(""Sales Invoice"", ""due_date"")",Simple
+Could you retrieve the employee_name from Employee?,"frappe.db.get_single_value(""Employee"", ""employee_name"")",Simple
+Please tell me the department for Employee.,"frappe.db.get_single_value(""Employee"", ""department"")",Moderate
+What is the designation for the Employee?,"frappe.db.get_single_value(""Employee"", ""designation"")",Moderate
+Retrieve the date_of_joining from Employee.,"frappe.db.get_single_value(""Employee"", ""date_of_joining"")",Moderate
+Can you let me know the gender for the Employee?,"frappe.db.get_single_value(""Employee"", ""gender"")",Moderate
+What is the job_title for the Job Opening?,"frappe.db.get_single_value(""Job Opening"", ""job_title"")",Moderate
+Give me the department from Job Opening.,"frappe.db.get_single_value(""Job Opening"", ""department"")",Moderate
+Could you retrieve the status from Job Opening?,"frappe.db.get_single_value(""Job Opening"", ""status"")",Simple
+Could you retrieve the hiring_manager from Job Opening?,"frappe.db.get_single_value(""Job Opening"", ""hiring_manager"")",Moderate
+"Hey, what's the number_of_positions for the Job Opening?","frappe.db.get_single_value(""Job Opening"", ""number_of_positions"")",Moderate
+What is the applicant_name for the Job Applicant?,"frappe.db.get_single_value(""Job Applicant"", ""applicant_name"")",Simple
+Could you retrieve the position_applied from Job Applicant?,"frappe.db.get_single_value(""Job Applicant"", ""position_applied"")",Moderate
+Please tell me the email for Job Applicant.,"frappe.db.get_single_value(""Job Applicant"", ""email"")",Simple
+Retrieve the phone from Job Applicant.,"frappe.db.get_single_value(""Job Applicant"", ""phone"")",Simple
+Please tell me the resume for Job Applicant.,"frappe.db.get_single_value(""Job Applicant"", ""resume"")",Moderate
+Give me the employee from Salary Slip.,"frappe.db.get_single_value(""Salary Slip"", ""employee"")",Moderate
+What is the payroll_period for the Salary Slip?,"frappe.db.get_single_value(""Salary Slip"", ""payroll_period"")",Moderate
+"I need the net_pay for Salary Slip, can you fetch that?","frappe.db.get_single_value(""Salary Slip"", ""net_pay"")",Moderate
+Please tell me the deductions for Salary Slip.,"frappe.db.get_single_value(""Salary Slip"", ""deductions"")",Moderate
+Could you retrieve the earnings from Salary Slip?,"frappe.db.get_single_value(""Salary Slip"", ""earnings"")",Moderate
+Give me the gross_salary from Salary Slip.,"frappe.db.get_single_value(""Salary Slip"", ""gross_salary"")",Moderate
+Please tell me the payroll_entry_name for Payroll Entry.,"frappe.db.get_single_value(""Payroll Entry"", ""payroll_entry_name"")",Simple
+"Hey, what's the posting_date for the Payroll Entry?","frappe.db.get_single_value(""Payroll Entry"", ""posting_date"")",Moderate
+"I need the total_employees for Payroll Entry, can you fetch that?","frappe.db.get_single_value(""Payroll Entry"", ""total_employees"")",Moderate
+Can you get the total_salary from Payroll Entry?,"frappe.db.get_single_value(""Payroll Entry"", ""total_salary"")",Moderate
+Give me the status from Payroll Entry.,"frappe.db.get_single_value(""Payroll Entry"", ""status"")",Simple
+"Hey, what's the employee for the Leave Application?","frappe.db.get_single_value(""Leave Application"", ""employee"")",Moderate
+Retrieve the leave_type from Leave Application.,"frappe.db.get_single_value(""Leave Application"", ""leave_type"")",Moderate
+What is the from_date for the Leave Application?,"frappe.db.get_single_value(""Leave Application"", ""from_date"")",Moderate
+Retrieve the to_date from Leave Application.,"frappe.db.get_single_value(""Leave Application"", ""to_date"")",Moderate
+"Hey, what's the reason for the Leave Application?","frappe.db.get_single_value(""Leave Application"", ""reason"")",Moderate
+Give me the leave_balance from Leave Application.,"frappe.db.get_single_value(""Leave Application"", ""leave_balance"")",Moderate
+Please tell me the timesheet_id for Timesheet.,"frappe.db.get_single_value(""Timesheet"", ""timesheet_id"")",Moderate
+Could you retrieve the employee from Timesheet?,"frappe.db.get_single_value(""Timesheet"", ""employee"")",Moderate
+Give me the total_hours from Timesheet.,"frappe.db.get_single_value(""Timesheet"", ""total_hours"")",Moderate
+Retrieve the status from Timesheet.,"frappe.db.get_single_value(""Timesheet"", ""status"")",Simple
+"Hey, what's the project for the Timesheet?","frappe.db.get_single_value(""Timesheet"", ""project"")",Moderate
+Could you retrieve the item_code from Item?,"frappe.db.get_single_value(""Item"", ""item_code"")",Moderate
+Give me the item_name from Item.,"frappe.db.get_single_value(""Item"", ""item_name"")",Simple
+Could you retrieve the stock_uom from Item?,"frappe.db.get_single_value(""Item"", ""stock_uom"")",Moderate
+Could you retrieve the price from Item?,"frappe.db.get_single_value(""Item"", ""price"")",Moderate
+Give me the description from Item.,"frappe.db.get_single_value(""Item"", ""description"")",Moderate
+Give me the item_group from Item.,"frappe.db.get_single_value(""Item"", ""item_group"")",Moderate
+What is the stock_entry_type for the Stock Entry?,"frappe.db.get_single_value(""Stock Entry"", ""stock_entry_type"")",Moderate
+Can you get the from_warehouse from Stock Entry?,"frappe.db.get_single_value(""Stock Entry"", ""from_warehouse"")",Moderate
+Could you retrieve the to_warehouse from Stock Entry?,"frappe.db.get_single_value(""Stock Entry"", ""to_warehouse"")",Moderate
+Please tell me the quantity for Stock Entry.,"frappe.db.get_single_value(""Stock Entry"", ""quantity"")",Moderate
+"Hey, what's the item_code for the Stock Entry?","frappe.db.get_single_value(""Stock Entry"", ""item_code"")",Moderate
+Can you let me know the posting_date for the Stock Entry?,"frappe.db.get_single_value(""Stock Entry"", ""posting_date"")",Moderate
+What is the warehouse_name for the Warehouse?,"frappe.db.get_single_value(""Warehouse"", ""warehouse_name"")",Simple
+Please tell me the company for Warehouse.,"frappe.db.get_single_value(""Warehouse"", ""company"")",Moderate
+Can you let me know the parent_warehouse for the Warehouse?,"frappe.db.get_single_value(""Warehouse"", ""parent_warehouse"")",Moderate
+Could you retrieve the is_group from Warehouse?,"frappe.db.get_single_value(""Warehouse"", ""is_group"")",Moderate
+Retrieve the location from Warehouse.,"frappe.db.get_single_value(""Warehouse"", ""location"")",Moderate
+Retrieve the voucher_no from Stock Ledger Entry.,"frappe.db.get_single_value(""Stock Ledger Entry"", ""voucher_no"")",Moderate
+Retrieve the item_code from Stock Ledger Entry.,"frappe.db.get_single_value(""Stock Ledger Entry"", ""item_code"")",Moderate
+Please tell me the posting_date for Stock Ledger Entry.,"frappe.db.get_single_value(""Stock Ledger Entry"", ""posting_date"")",Moderate
+Can you let me know the warehouse for the Stock Ledger Entry?,"frappe.db.get_single_value(""Stock Ledger Entry"", ""warehouse"")",Moderate
+Could you retrieve the actual_qty from Stock Ledger Entry?,"frappe.db.get_single_value(""Stock Ledger Entry"", ""actual_qty"")",Moderate
+"Hey, what's the batch_id for the Batch?","frappe.db.get_single_value(""Batch"", ""batch_id"")",Moderate
+Please tell me the item_code for Batch.,"frappe.db.get_single_value(""Batch"", ""item_code"")",Moderate
+"Hey, what's the manufacture_date for the Batch?","frappe.db.get_single_value(""Batch"", ""manufacture_date"")",Moderate
+Retrieve the expiry_date from Batch.,"frappe.db.get_single_value(""Batch"", ""expiry_date"")",Moderate
+Please tell me the batch_qty for Batch.,"frappe.db.get_single_value(""Batch"", ""batch_qty"")",Moderate
+Could you retrieve the serial_no from Serial No?,"frappe.db.get_single_value(""Serial No"", ""serial_no"")",Moderate
+Can you let me know the item_code for the Serial No?,"frappe.db.get_single_value(""Serial No"", ""item_code"")",Moderate
+Give me the warehouse from Serial No.,"frappe.db.get_single_value(""Serial No"", ""warehouse"")",Moderate
+Can you get the purchase_date from Serial No?,"frappe.db.get_single_value(""Serial No"", ""purchase_date"")",Moderate
+Could you retrieve the status from Serial No?,"frappe.db.get_single_value(""Serial No"", ""status"")",Simple
+Could you retrieve the voucher_type from Journal Entry?,"frappe.db.get_single_value(""Journal Entry"", ""voucher_type"")",Moderate
+"Hey, what's the posting_date for the Journal Entry?","frappe.db.get_single_value(""Journal Entry"", ""posting_date"")",Moderate
+Please tell me the account for Journal Entry.,"frappe.db.get_single_value(""Journal Entry"", ""account"")",Moderate
+Give me the debit from Journal Entry.,"frappe.db.get_single_value(""Journal Entry"", ""debit"")",Moderate
+"Hey, what's the credit for the Journal Entry?","frappe.db.get_single_value(""Journal Entry"", ""credit"")",Moderate
+Can you get the remarks from Journal Entry?,"frappe.db.get_single_value(""Journal Entry"", ""remarks"")",Moderate
+Could you retrieve the payment_type from Payment Entry?,"frappe.db.get_single_value(""Payment Entry"", ""payment_type"")",Moderate
+Can you let me know the party for the Payment Entry?,"frappe.db.get_single_value(""Payment Entry"", ""party"")",Moderate
+Can you let me know the amount for the Payment Entry?,"frappe.db.get_single_value(""Payment Entry"", ""amount"")",Simple
+What is the reference_no for the Payment Entry?,"frappe.db.get_single_value(""Payment Entry"", ""reference_no"")",Moderate
+Could you retrieve the mode_of_payment from Payment Entry?,"frappe.db.get_single_value(""Payment Entry"", ""mode_of_payment"")",Moderate
+Retrieve the transaction_date from Payment Entry.,"frappe.db.get_single_value(""Payment Entry"", ""transaction_date"")",Moderate
+Give me the supplier from Purchase Invoice.,"frappe.db.get_single_value(""Purchase Invoice"", ""supplier"")",Moderate
+Could you retrieve the invoice_date from Purchase Invoice?,"frappe.db.get_single_value(""Purchase Invoice"", ""invoice_date"")",Moderate
+Give me the total from Purchase Invoice.,"frappe.db.get_single_value(""Purchase Invoice"", ""total"")",Moderate
+Retrieve the status from Purchase Invoice.,"frappe.db.get_single_value(""Purchase Invoice"", ""status"")",Simple
+Give me the due_date from Purchase Invoice.,"frappe.db.get_single_value(""Purchase Invoice"", ""due_date"")",Simple
+Retrieve the claim_id from Expense Claim.,"frappe.db.get_single_value(""Expense Claim"", ""claim_id"")",Moderate
+Give me the employee from Expense Claim.,"frappe.db.get_single_value(""Expense Claim"", ""employee"")",Moderate
+Give me the expense_amount from Expense Claim.,"frappe.db.get_single_value(""Expense Claim"", ""expense_amount"")",Simple
+Give me the approval_status from Expense Claim.,"frappe.db.get_single_value(""Expense Claim"", ""approval_status"")",Simple
+Please tell me the category for Expense Claim.,"frappe.db.get_single_value(""Expense Claim"", ""category"")",Moderate
+What is the account_name for the Chart of Accounts?,"frappe.db.get_single_value(""Chart of Accounts"", ""account_name"")",Simple
+Give me the parent_account from Chart of Accounts.,"frappe.db.get_single_value(""Chart of Accounts"", ""parent_account"")",Moderate
+"I need the account_type for Chart of Accounts, can you fetch that?","frappe.db.get_single_value(""Chart of Accounts"", ""account_type"")",Moderate
+Give me the currency from Chart of Accounts.,"frappe.db.get_single_value(""Chart of Accounts"", ""currency"")",Moderate
+Retrieve the company from Chart of Accounts.,"frappe.db.get_single_value(""Chart of Accounts"", ""company"")",Moderate
+"I need the subscription_id for Subscription, can you fetch that?","frappe.db.get_single_value(""Subscription"", ""subscription_id"")",Moderate
+"I need the customer for Subscription, can you fetch that?","frappe.db.get_single_value(""Subscription"", ""customer"")",Moderate
+"I need the plan for Subscription, can you fetch that?","frappe.db.get_single_value(""Subscription"", ""plan"")",Moderate
+Please tell me the billing_cycle for Subscription.,"frappe.db.get_single_value(""Subscription"", ""billing_cycle"")",Moderate
+Give me the status from Subscription.,"frappe.db.get_single_value(""Subscription"", ""status"")",Simple
+"Hey, what's the rule_name for the Tax Rule?","frappe.db.get_single_value(""Tax Rule"", ""rule_name"")",Simple
+Can you get the applicable_for from Tax Rule?,"frappe.db.get_single_value(""Tax Rule"", ""applicable_for"")",Moderate
+Please tell me the rate for Tax Rule.,"frappe.db.get_single_value(""Tax Rule"", ""rate"")",Moderate
+Can you let me know the valid_from for the Tax Rule?,"frappe.db.get_single_value(""Tax Rule"", ""valid_from"")",Moderate
+Can you let me know the valid_to for the Tax Rule?,"frappe.db.get_single_value(""Tax Rule"", ""valid_to"")",Moderate
+Retrieve the project_name from Project.,"frappe.db.get_single_value(""Project"", ""project_name"")",Simple
+Can you let me know the customer for the Project?,"frappe.db.get_single_value(""Project"", ""customer"")",Moderate
+"I need the start_date for Project, can you fetch that?","frappe.db.get_single_value(""Project"", ""start_date"")",Moderate
+Give me the end_date from Project.,"frappe.db.get_single_value(""Project"", ""end_date"")",Moderate
+Give me the status from Project.,"frappe.db.get_single_value(""Project"", ""status"")",Simple
+Could you retrieve the budget from Project?,"frappe.db.get_single_value(""Project"", ""budget"")",Moderate
+Please tell me the task_name for Task.,"frappe.db.get_single_value(""Task"", ""task_name"")",Simple
+Please tell me the priority for Task.,"frappe.db.get_single_value(""Task"", ""priority"")",Moderate
+"Hey, what's the project for the Task?","frappe.db.get_single_value(""Task"", ""project"")",Moderate
+Please tell me the status for Task.,"frappe.db.get_single_value(""Task"", ""status"")",Simple
+"I need the due_date for Task, can you fetch that?","frappe.db.get_single_value(""Task"", ""due_date"")",Simple
+"I need the assigned_to for Task, can you fetch that?","frappe.db.get_single_value(""Task"", ""assigned_to"")",Moderate
+"I need the milestone_name for Milestone, can you fetch that?","frappe.db.get_single_value(""Milestone"", ""milestone_name"")",Simple
+Can you let me know the project for the Milestone?,"frappe.db.get_single_value(""Milestone"", ""project"")",Moderate
+Can you get the target_date from Milestone?,"frappe.db.get_single_value(""Milestone"", ""target_date"")",Moderate
+What is the status for the Milestone?,"frappe.db.get_single_value(""Milestone"", ""status"")",Simple
+Give me the ticket_id from Support Ticket.,"frappe.db.get_single_value(""Support Ticket"", ""ticket_id"")",Moderate
+What is the subject for the Support Ticket?,"frappe.db.get_single_value(""Support Ticket"", ""subject"")",Moderate
+Give me the status from Support Ticket.,"frappe.db.get_single_value(""Support Ticket"", ""status"")",Simple
+Can you get the customer from Support Ticket?,"frappe.db.get_single_value(""Support Ticket"", ""customer"")",Moderate
+"Hey, what's the priority for the Support Ticket?","frappe.db.get_single_value(""Support Ticket"", ""priority"")",Moderate
+Can you let me know the resolution_time for the Support Ticket?,"frappe.db.get_single_value(""Support Ticket"", ""resolution_time"")",Moderate
+"Hey, what's the claim_id for the Warranty Claim?","frappe.db.get_single_value(""Warranty Claim"", ""claim_id"")",Moderate
+"I need the product for Warranty Claim, can you fetch that?","frappe.db.get_single_value(""Warranty Claim"", ""product"")",Complex
+Retrieve the customer from Warranty Claim.,"frappe.db.get_single_value(""Warranty Claim"", ""customer"")",Moderate
+Can you let me know the status for the Warranty Claim?,"frappe.db.get_single_value(""Warranty Claim"", ""status"")",Simple
+Retrieve the warranty_expiry from Warranty Claim.,"frappe.db.get_single_value(""Warranty Claim"", ""warranty_expiry"")",Moderate
+Can you get the agreement_name from Service Level Agreement?,"frappe.db.get_single_value(""Service Level Agreement"", ""agreement_name"")",Simple
+Retrieve the customer from Service Level Agreement.,"frappe.db.get_single_value(""Service Level Agreement"", ""customer"")",Moderate
+"Hey, what's the response_time for the Service Level Agreement?","frappe.db.get_single_value(""Service Level Agreement"", ""response_time"")",Moderate
+Could you retrieve the resolution_time from Service Level Agreement?,"frappe.db.get_single_value(""Service Level Agreement"", ""resolution_time"")",Moderate
+Could you retrieve the status from Service Level Agreement?,"frappe.db.get_single_value(""Service Level Agreement"", ""status"")",Simple
+"I need the item for BOM, can you fetch that?","frappe.db.get_single_value(""BOM"", ""item"")",Moderate
+"Hey, what's the quantity for the BOM?","frappe.db.get_single_value(""BOM"", ""quantity"")",Moderate
+Can you get the rate from BOM?,"frappe.db.get_single_value(""BOM"", ""rate"")",Moderate
+Could you retrieve the total_cost from BOM?,"frappe.db.get_single_value(""BOM"", ""total_cost"")",Moderate
+Could you retrieve the is_active from BOM?,"frappe.db.get_single_value(""BOM"", ""is_active"")",Moderate
+Please tell me the order_id for Work Order.,"frappe.db.get_single_value(""Work Order"", ""order_id"")",Complex
+Can you let me know the production_item for the Work Order?,"frappe.db.get_single_value(""Work Order"", ""production_item"")",Complex
+"I need the quantity for Work Order, can you fetch that?","frappe.db.get_single_value(""Work Order"", ""quantity"")",Moderate
+Could you retrieve the status from Work Order?,"frappe.db.get_single_value(""Work Order"", ""status"")",Simple
+Could you retrieve the planned_start_date from Work Order?,"frappe.db.get_single_value(""Work Order"", ""planned_start_date"")",Moderate
+Give me the job_card_id from Job Card.,"frappe.db.get_single_value(""Job Card"", ""job_card_id"")",Moderate
+"I need the operation for Job Card, can you fetch that?","frappe.db.get_single_value(""Job Card"", ""operation"")",Moderate
+"I need the workstation for Job Card, can you fetch that?","frappe.db.get_single_value(""Job Card"", ""workstation"")",Moderate
+Please tell me the status for Job Card.,"frappe.db.get_single_value(""Job Card"", ""status"")",Simple
+"Hey, what's the completed_qty for the Job Card?","frappe.db.get_single_value(""Job Card"", ""completed_qty"")",Moderate
+Could you retrieve the patient_name from Patient?,"frappe.db.get_single_value(""Patient"", ""patient_name"")",Simple
+What is the age for the Patient?,"frappe.db.get_single_value(""Patient"", ""age"")",Moderate
+Retrieve the gender from Patient.,"frappe.db.get_single_value(""Patient"", ""gender"")",Moderate
+"I need the medical_history for Patient, can you fetch that?","frappe.db.get_single_value(""Patient"", ""medical_history"")",Moderate
+Can you let me know the allergies for the Patient?,"frappe.db.get_single_value(""Patient"", ""allergies"")",Moderate
+Can you let me know the doctor for the Prescription?,"frappe.db.get_single_value(""Prescription"", ""doctor"")",Moderate
+Retrieve the patient from Prescription.,"frappe.db.get_single_value(""Prescription"", ""patient"")",Moderate
+Can you let me know the medicines for the Prescription?,"frappe.db.get_single_value(""Prescription"", ""medicines"")",Moderate
+Retrieve the dosage from Prescription.,"frappe.db.get_single_value(""Prescription"", ""dosage"")",Moderate
+Can you let me know the duration for the Prescription?,"frappe.db.get_single_value(""Prescription"", ""duration"")",Moderate
+Can you get the instructions from Prescription?,"frappe.db.get_single_value(""Prescription"", ""instructions"")",Moderate
+Please tell me the test_name for Lab Test.,"frappe.db.get_single_value(""Lab Test"", ""test_name"")",Simple
+Can you get the patient from Lab Test?,"frappe.db.get_single_value(""Lab Test"", ""patient"")",Moderate
+Can you get the sample_collected from Lab Test?,"frappe.db.get_single_value(""Lab Test"", ""sample_collected"")",Moderate
+Can you let me know the result for the Lab Test?,"frappe.db.get_single_value(""Lab Test"", ""result"")",Moderate
+"Hey, what's the status for the Lab Test?","frappe.db.get_single_value(""Lab Test"", ""status"")",Simple
+Please tell me the appointment_id for Appointment.,"frappe.db.get_single_value(""Appointment"", ""appointment_id"")",Moderate
+Give me the doctor from Appointment.,"frappe.db.get_single_value(""Appointment"", ""doctor"")",Moderate
+Could you retrieve the patient from Appointment?,"frappe.db.get_single_value(""Appointment"", ""patient"")",Moderate
+Can you get the scheduled_date from Appointment?,"frappe.db.get_single_value(""Appointment"", ""scheduled_date"")",Moderate
+What is the status for the Appointment?,"frappe.db.get_single_value(""Appointment"", ""status"")",Simple
+Can you get the patient from Vital Signs?,"frappe.db.get_single_value(""Vital Signs"", ""patient"")",Moderate
+Give me the temperature from Vital Signs.,"frappe.db.get_single_value(""Vital Signs"", ""temperature"")",Moderate
+"I need the blood_pressure for Vital Signs, can you fetch that?","frappe.db.get_single_value(""Vital Signs"", ""blood_pressure"")",Moderate
+Give me the pulse from Vital Signs.,"frappe.db.get_single_value(""Vital Signs"", ""pulse"")",Moderate
+Retrieve the respiration_rate from Vital Signs.,"frappe.db.get_single_value(""Vital Signs"", ""respiration_rate"")",Moderate
+What is the student_name for the Student?,"frappe.db.get_single_value(""Student"", ""student_name"")",Simple
+"I need the roll_number for Student, can you fetch that?","frappe.db.get_single_value(""Student"", ""roll_number"")",Moderate
+"Hey, what's the course for the Student?","frappe.db.get_single_value(""Student"", ""course"")",Moderate
+Retrieve the batch from Student.,"frappe.db.get_single_value(""Student"", ""batch"")",Moderate
+Can you let me know the enrollment_date for the Student?,"frappe.db.get_single_value(""Student"", ""enrollment_date"")",Moderate
+Retrieve the instructor_name from Instructor.,"frappe.db.get_single_value(""Instructor"", ""instructor_name"")",Simple
+"Hey, what's the qualification for the Instructor?","frappe.db.get_single_value(""Instructor"", ""qualification"")",Moderate
+Retrieve the experience from Instructor.,"frappe.db.get_single_value(""Instructor"", ""experience"")",Moderate
+Can you get the email from Instructor?,"frappe.db.get_single_value(""Instructor"", ""email"")",Simple
+What is the phone for the Instructor?,"frappe.db.get_single_value(""Instructor"", ""phone"")",Simple
+Could you retrieve the course_name from Course?,"frappe.db.get_single_value(""Course"", ""course_name"")",Simple
+Retrieve the course_code from Course.,"frappe.db.get_single_value(""Course"", ""course_code"")",Moderate
+Retrieve the duration from Course.,"frappe.db.get_single_value(""Course"", ""duration"")",Moderate
+Could you retrieve the description from Course?,"frappe.db.get_single_value(""Course"", ""description"")",Moderate
+What is the credits for the Course?,"frappe.db.get_single_value(""Course"", ""credits"")",Moderate
+Can you get the shipment_id from Shipment?,"frappe.db.get_single_value(""Shipment"", ""shipment_id"")",Moderate
+"I need the origin for Shipment, can you fetch that?","frappe.db.get_single_value(""Shipment"", ""origin"")",Moderate
+Could you retrieve the destination from Shipment?,"frappe.db.get_single_value(""Shipment"", ""destination"")",Moderate
+Give me the status from Shipment.,"frappe.db.get_single_value(""Shipment"", ""status"")",Simple
+Could you retrieve the tracking_number from Shipment?,"frappe.db.get_single_value(""Shipment"", ""tracking_number"")",Moderate
+"I need the vehicle_id for Fleet Management, can you fetch that?","frappe.db.get_single_value(""Fleet Management"", ""vehicle_id"")",Moderate
+What is the model for the Fleet Management?,"frappe.db.get_single_value(""Fleet Management"", ""model"")",Moderate
+Please tell me the year for Fleet Management.,"frappe.db.get_single_value(""Fleet Management"", ""year"")",Moderate
+Give me the assigned_driver from Fleet Management.,"frappe.db.get_single_value(""Fleet Management"", ""assigned_driver"")",Moderate
+What is the last_service_date for the Fleet Management?,"frappe.db.get_single_value(""Fleet Management"", ""last_service_date"")",Moderate
+Retrieve the guest_name from Hotel Reservation.,"frappe.db.get_single_value(""Hotel Reservation"", ""guest_name"")",Simple
+Could you retrieve the check_in from Hotel Reservation?,"frappe.db.get_single_value(""Hotel Reservation"", ""check_in"")",Moderate
+Could you retrieve the check_out from Hotel Reservation?,"frappe.db.get_single_value(""Hotel Reservation"", ""check_out"")",Moderate
+What is the room_type for the Hotel Reservation?,"frappe.db.get_single_value(""Hotel Reservation"", ""room_type"")",Moderate
+Retrieve the booking_reference from Hotel Reservation.,"frappe.db.get_single_value(""Hotel Reservation"", ""booking_reference"")",Moderate
+What is the event_name for the Event?,"frappe.db.get_single_value(""Event"", ""event_name"")",Simple
+"I need the date for Event, can you fetch that?","frappe.db.get_single_value(""Event"", ""date"")",Moderate
+Retrieve the venue from Event.,"frappe.db.get_single_value(""Event"", ""venue"")",Moderate
+What is the organizer for the Event?,"frappe.db.get_single_value(""Event"", ""organizer"")",Moderate
+Retrieve the participants from Event.,"frappe.db.get_single_value(""Event"", ""participants"")",Moderate
+Please tell me the license_key for Software License.,"frappe.db.get_single_value(""Software License"", ""license_key"")",Moderate
+Retrieve the product from Software License.,"frappe.db.get_single_value(""Software License"", ""product"")",Complex
+"Hey, what's the expiry_date for the Software License?","frappe.db.get_single_value(""Software License"", ""expiry_date"")",Moderate
+Please tell me the user_count for Software License.,"frappe.db.get_single_value(""Software License"", ""user_count"")",Moderate
+Can you let me know the issued_to for the Software License?,"frappe.db.get_single_value(""Software License"", ""issued_to"")",Moderate
+Can you let me know the report_id for the Audit Report?,"frappe.db.get_single_value(""Audit Report"", ""report_id"")",Moderate
+Please tell me the audit_type for Audit Report.,"frappe.db.get_single_value(""Audit Report"", ""audit_type"")",Moderate
+Can you let me know the findings for the Audit Report?,"frappe.db.get_single_value(""Audit Report"", ""findings"")",Moderate
+Can you get the recommendations from Audit Report?,"frappe.db.get_single_value(""Audit Report"", ""recommendations"")",Moderate
+Could you retrieve the reviewed_by from Audit Report?,"frappe.db.get_single_value(""Audit Report"", ""reviewed_by"")",Moderate
+Could you retrieve the order_id from E-commerce Order?,"frappe.db.get_single_value(""E-commerce Order"", ""order_id"")",Complex
+"Hey, what's the customer for the E-commerce Order?","frappe.db.get_single_value(""E-commerce Order"", ""customer"")",Moderate
+What is the items for the E-commerce Order?,"frappe.db.get_single_value(""E-commerce Order"", ""items"")",Moderate
+"Hey, what's the order_total for the E-commerce Order?","frappe.db.get_single_value(""E-commerce Order"", ""order_total"")",Moderate
+"Hey, what's the payment_status for the E-commerce Order?","frappe.db.get_single_value(""E-commerce Order"", ""payment_status"")",Simple
+Can you let me know the application_id for the Permit Application?,"frappe.db.get_single_value(""Permit Application"", ""application_id"")",Moderate
+Could you retrieve the applicant from Permit Application?,"frappe.db.get_single_value(""Permit Application"", ""applicant"")",Moderate
+Could you retrieve the status from Permit Application?,"frappe.db.get_single_value(""Permit Application"", ""status"")",Simple
+Give me the approval_date from Permit Application.,"frappe.db.get_single_value(""Permit Application"", ""approval_date"")",Moderate
+Could you retrieve the permit_type from Permit Application?,"frappe.db.get_single_value(""Permit Application"", ""permit_type"")",Moderate
+What is the meeting_id for the Meeting?,"frappe.db.get_single_value(""Meeting"", ""meeting_id"")",Moderate
+What is the agenda for the Meeting?,"frappe.db.get_single_value(""Meeting"", ""agenda"")",Moderate
+Could you retrieve the participants from Meeting?,"frappe.db.get_single_value(""Meeting"", ""participants"")",Moderate
+"I need the date for Meeting, can you fetch that?","frappe.db.get_single_value(""Meeting"", ""date"")",Moderate
+Could you retrieve the time from Meeting?,"frappe.db.get_single_value(""Meeting"", ""time"")",Moderate
+What is the location for the Meeting?,"frappe.db.get_single_value(""Meeting"", ""location"")",Moderate

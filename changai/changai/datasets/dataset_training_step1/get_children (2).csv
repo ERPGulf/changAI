@@ -1,0 +1,1201 @@
+Unnamed: 0,Corrected Customer Question,Corrected Frappe Query
+1,"I need the child records from Event, can you get that?","for child_doc in frappe.get_doc(""Event"", ""ID-040"").get_children():
+    print(child_doc.name)"
+2,Can you let me know the child entries of Journal Entry?,"for child_doc in frappe.get_doc(""Journal Entry"", ""ID-020"").get_children():
+    print(child_doc.name)"
+5,Show the child entries in Work Order.,"for child_doc in frappe.get_doc(""Work Order"", ""ID-031"").get_children():
+    print(child_doc.name)"
+8,"I need the child records from Customer, can you get that?","for child_doc in frappe.get_doc(""Customer"", ""ID-044"").get_children():
+    print(child_doc.name)"
+9,Please tell me the child records for Expense Claim.,"for child_doc in frappe.get_doc(""Expense Claim"", ""ID-026"").get_children():
+    print(child_doc.name)"
+10,Can you let me know the child entries of Purchase Order?,"for child_doc in frappe.get_doc(""Purchase Order"", ""ID-046"").get_children():
+    print(child_doc.name)"
+11,"I need the child records from Supplier, can you get that?","for child_doc in frappe.get_doc(""Supplier"", ""ID-023"").get_children():
+    print(child_doc.name)"
+19,"Hey, can you fetch the child records for Material Request?","for child_doc in frappe.get_doc(""Material Request"", ""ID-045"").get_children():
+    print(child_doc.name)"
+27,What are the child records of Supplier?,"for child_doc in frappe.get_doc(""Supplier"", ""ID-029"").get_children():
+    print(child_doc.name)"
+29,Can you let me know the child entries of Loan?,"for child_doc in frappe.get_doc(""Loan"", ""ID-035"").get_children():
+    print(child_doc.name)"
+31,Can you let me know the child entries of Material Request?,"for child_doc in frappe.get_doc(""Material Request"", ""ID-026"").get_children():
+    print(child_doc.name)"
+34,"I need the child records from Customer, can you get that?","for child_doc in frappe.get_doc(""Customer"", ""ID-041"").get_children():
+    print(child_doc.name)"
+35,Show the child entries in Contract.,"for child_doc in frappe.get_doc(""Contract"", ""ID-013"").get_children():
+    print(child_doc.name)"
+36,What are the child records of Task?,"for child_doc in frappe.get_doc(""Task"", ""ID-033"").get_children():
+    print(child_doc.name)"
+38,Can you fetch the child records of Opportunity?,"for child_doc in frappe.get_doc(""Opportunity"", ""ID-037"").get_children():
+    print(child_doc.name)"
+42,"Hey, can you fetch the child records for Project?","for child_doc in frappe.get_doc(""Project"", ""ID-010"").get_children():
+    print(child_doc.name)"
+44,"I need the child records from Sales Order, can you get that?","for child_doc in frappe.get_doc(""Sales Order"", ""ID-047"").get_children():
+    print(child_doc.name)"
+46,Retrieve all child records for Project.,"for child_doc in frappe.get_doc(""Project"", ""ID-024"").get_children():
+    print(child_doc.name)"
+48,Can you fetch the child records of Material Request?,"for child_doc in frappe.get_doc(""Material Request"", ""ID-034"").get_children():
+    print(child_doc.name)"
+50,Can you let me know the child entries of Project?,"for child_doc in frappe.get_doc(""Project"", ""ID-027"").get_children():
+    print(child_doc.name)"
+54,What are the child records of Warehouse?,"for child_doc in frappe.get_doc(""Warehouse"", ""ID-037"").get_children():
+    print(child_doc.name)"
+55,Can you let me know the child entries of Loan?,"for child_doc in frappe.get_doc(""Loan"", ""ID-024"").get_children():
+    print(child_doc.name)"
+56,Can you let me know the child entries of Contract?,"for child_doc in frappe.get_doc(""Contract"", ""ID-027"").get_children():
+    print(child_doc.name)"
+57,"I need the child records from Lead, can you get that?","for child_doc in frappe.get_doc(""Lead"", ""ID-001"").get_children():
+    print(child_doc.name)"
+58,Could you show me the child entries in Supplier?,"for child_doc in frappe.get_doc(""Supplier"", ""ID-017"").get_children():
+    print(child_doc.name)"
+61,"Hey, can you fetch the child records for Pricing Rule?","for child_doc in frappe.get_doc(""Pricing Rule"", ""ID-002"").get_children():
+    print(child_doc.name)"
+63,What are the child records of Project?,"for child_doc in frappe.get_doc(""Project"", ""ID-002"").get_children():
+    print(child_doc.name)"
+66,"Hey, can you fetch the child records for Timesheet?","for child_doc in frappe.get_doc(""Timesheet"", ""ID-005"").get_children():
+    print(child_doc.name)"
+70,Can you let me know the child entries of Quotation?,"for child_doc in frappe.get_doc(""Quotation"", ""ID-034"").get_children():
+    print(child_doc.name)"
+71,Could you show me the child entries in Asset?,"for child_doc in frappe.get_doc(""Asset"", ""ID-029"").get_children():
+    print(child_doc.name)"
+72,Retrieve all child records for Pricing Rule.,"for child_doc in frappe.get_doc(""Pricing Rule"", ""ID-004"").get_children():
+    print(child_doc.name)"
+73,"Hey, can you fetch the child records for Sales Order?","for child_doc in frappe.get_doc(""Sales Order"", ""ID-002"").get_children():
+    print(child_doc.name)"
+75,Show the child entries in Task.,"for child_doc in frappe.get_doc(""Task"", ""ID-003"").get_children():
+    print(child_doc.name)"
+80,Can you let me know the child entries of Warehouse?,"for child_doc in frappe.get_doc(""Warehouse"", ""ID-021"").get_children():
+    print(child_doc.name)"
+81,Retrieve all child records for Subscription.,"for child_doc in frappe.get_doc(""Subscription"", ""ID-012"").get_children():
+    print(child_doc.name)"
+82,"Hey, can you fetch the child records for Lead?","for child_doc in frappe.get_doc(""Lead"", ""ID-009"").get_children():
+    print(child_doc.name)"
+85,Can you let me know the child entries of Sales Order?,"for child_doc in frappe.get_doc(""Sales Order"", ""ID-021"").get_children():
+    print(child_doc.name)"
+91,Can you fetch the child records of Opportunity?,"for child_doc in frappe.get_doc(""Opportunity"", ""OPP-2024-678"").get_children():
+    print(child_doc.name)"
+92,Could you show me the child entries in Material Request?,"for child_doc in frappe.get_doc(""Material Request"", ""ID-014"").get_children():
+    print(child_doc.name)"
+93,Retrieve all child records for Opportunity.,"for child_doc in frappe.get_doc(""Opportunity"", ""ID-048"").get_children():
+    print(child_doc.name)"
+95,Retrieve all child records for Contract.,"for child_doc in frappe.get_doc(""Contract"", ""ID-005"").get_children():
+    print(child_doc.name)"
+97,Retrieve all child records for Quotation.,"for child_doc in frappe.get_doc(""Quotation"", ""ID-001"").get_children():
+    print(child_doc.name)"
+99,Show the child entries in Material Request.,"for child_doc in frappe.get_doc(""Material Request"", ""MR-2024-234"").get_children():
+    print(child_doc.name)"
+105,What are the child records of Task?,"for child_doc in frappe.get_doc(""Task"", ""ID-011"").get_children():
+    print(child_doc.name)"
+106,Please tell me the child records for Purchase Order.,"for child_doc in frappe.get_doc(""Purchase Order"", ""ID-025"").get_children():
+    print(child_doc.name)"
+107,Retrieve all child records for Subscription.,"for child_doc in frappe.get_doc(""Subscription"", ""ID-025"").get_children():
+    print(child_doc.name)"
+108,Please tell me the child records for Pricing Rule.,"for child_doc in frappe.get_doc(""Pricing Rule"", ""ID-032"").get_children():
+    print(child_doc.name)"
+109,"I need the child records from Customer, can you get that?","for child_doc in frappe.get_doc(""Customer"", ""ID-040"").get_children():
+    print(child_doc.name)"
+110,Show the child entries in Contract.,"for child_doc in frappe.get_doc(""Contract"", ""ID-026"").get_children():
+    print(child_doc.name)"
+112,Can you let me know the child entries of Expense Claim?,"for child_doc in frappe.get_doc(""Expense Claim"", ""ID-042"").get_children():
+    print(child_doc.name)"
+113,"I need the child records from Asset, can you get that?","for child_doc in frappe.get_doc(""Asset"", ""ID-032"").get_children():
+    print(child_doc.name)"
+117,"Hey, can you fetch the child records for Lead?","for child_doc in frappe.get_doc(""Lead"", ""ID-045"").get_children():
+    print(child_doc.name)"
+118,Show the child entries in Task.,"for child_doc in frappe.get_doc(""Task"", ""ID-019"").get_children():
+    print(child_doc.name)"
+120,What are the child records of Contract?,"for child_doc in frappe.get_doc(""Contract"", ""ID-014"").get_children():
+    print(child_doc.name)"
+122,"Hey, can you fetch the child records for Project?","for child_doc in frappe.get_doc(""Project"", ""ID-040"").get_children():
+    print(child_doc.name)"
+127,Could you show me the child entries in Supplier?,"for child_doc in frappe.get_doc(""Supplier"", ""ID-021"").get_children():
+    print(child_doc.name)"
+129,Please tell me the child records for Supplier.,"for child_doc in frappe.get_doc(""Supplier"", ""ID-001"").get_children():
+    print(child_doc.name)"
+134,"I need the child records from Event, can you get that?","for child_doc in frappe.get_doc(""Event"", ""ID-025"").get_children():
+    print(child_doc.name)"
+136,Can you let me know the child entries of Customer?,"for child_doc in frappe.get_doc(""Customer"", ""ID-049"").get_children():
+    print(child_doc.name)"
+137,Please tell me the child records for Material Request.,"for child_doc in frappe.get_doc(""Material Request"", ""ID-033"").get_children():
+    print(child_doc.name)"
+138,Please tell me the child records for Material Request.,"for child_doc in frappe.get_doc(""Material Request"", ""ID-048"").get_children():
+    print(child_doc.name)"
+146,Retrieve all child records for Sales Order.,"for child_doc in frappe.get_doc(""Sales Order"", ""ID-014"").get_children():
+    print(child_doc.name)"
+147,Can you let me know the child entries of Work Order?,"for child_doc in frappe.get_doc(""Work Order"", ""ID-009"").get_children():
+    print(child_doc.name)"
+153,"I need the child records from Subscription, can you get that?","for child_doc in frappe.get_doc(""Subscription"", ""ID-001"").get_children():
+    print(child_doc.name)"
+156,Please tell me the child records for Opportunity.,"for child_doc in frappe.get_doc(""Opportunity"", ""ID-007"").get_children():
+    print(child_doc.name)"
+159,Please tell me the child records for Timesheet.,"for child_doc in frappe.get_doc(""Timesheet"", ""ID-024"").get_children():
+    print(child_doc.name)"
+161,Please tell me the child records for Expense Claim.,"for child_doc in frappe.get_doc(""Expense Claim"", ""ID-048"").get_children():
+    print(child_doc.name)"
+166,"I need the child records from Customer, can you get that?","for child_doc in frappe.get_doc(""Customer"", ""ID-032"").get_children():
+    print(child_doc.name)"
+169,What are the child records of Event?,"for child_doc in frappe.get_doc(""Event"", ""ID-037"").get_children():
+    print(child_doc.name)"
+174,What are the child records of Event?,"for child_doc in frappe.get_doc(""Event"", ""ID-039"").get_children():
+    print(child_doc.name)"
+178,Please tell me the child records for Event.,"for child_doc in frappe.get_doc(""Event"", ""ID-044"").get_children():
+    print(child_doc.name)"
+180,Can you fetch the child records of Timesheet?,"for child_doc in frappe.get_doc(""Timesheet"", ""ID-027"").get_children():
+    print(child_doc.name)"
+184,Could you show me the child entries in Pricing Rule?,"for child_doc in frappe.get_doc(""Pricing Rule"", ""ID-028"").get_children():
+    print(child_doc.name)"
+185,"I need the child records from Warehouse, can you get that?","for child_doc in frappe.get_doc(""Warehouse"", ""ID-038"").get_children():
+    print(child_doc.name)"
+186,Can you let me know the child entries of Timesheet?,"for child_doc in frappe.get_doc(""Timesheet"", ""ID-008"").get_children():
+    print(child_doc.name)"
+188,"Hey, can you fetch the child records for Stock Entry?","for child_doc in frappe.get_doc(""Stock Entry"", ""ID-006"").get_children():
+    print(child_doc.name)"
+192,Can you fetch the child records of Subscription?,"for child_doc in frappe.get_doc(""Subscription"", ""ID-019"").get_children():
+    print(child_doc.name)"
+193,Show the child entries in Contract.,"for child_doc in frappe.get_doc(""Contract"", ""ID-042"").get_children():
+    print(child_doc.name)"
+195,"I need the child records from Purchase Order, can you get that?","for child_doc in frappe.get_doc(""Purchase Order"", ""ID-028"").get_children():
+    print(child_doc.name)"
+197,What are the child records of Subscription?,"for child_doc in frappe.get_doc(""Subscription"", ""ID-034"").get_children():
+    print(child_doc.name)"
+198,Please tell me the child records for Purchase Order.,"for child_doc in frappe.get_doc(""Purchase Order"", ""ID-030"").get_children():
+    print(child_doc.name)"
+205,"Hey, can you fetch the child records for Expense Claim?","for child_doc in frappe.get_doc(""Expense Claim"", ""ID-019"").get_children():
+    print(child_doc.name)"
+207,Can you fetch the child records of Warehouse?,"for child_doc in frappe.get_doc(""Warehouse"", ""ID-018"").get_children():
+    print(child_doc.name)"
+212,"I need the child records from Lead, can you get that?","for child_doc in frappe.get_doc(""Lead"", ""ID-023"").get_children():
+    print(child_doc.name)"
+213,What are the child records of Stock Entry?,"for child_doc in frappe.get_doc(""Stock Entry"", ""ID-023"").get_children():
+    print(child_doc.name)"
+216,"Hey, can you fetch the child records for Event?","for child_doc in frappe.get_doc(""Event"", ""ID-002"").get_children():
+    print(child_doc.name)"
+221,Can you let me know the child entries of Warehouse?,"for child_doc in frappe.get_doc(""Warehouse"", ""ID-043"").get_children():
+    print(child_doc.name)"
+224,Show the child entries in Stock Entry.,"for child_doc in frappe.get_doc(""Stock Entry"", ""ID-011"").get_children():
+    print(child_doc.name)"
+225,Show the child entries in Purchase Order.,"for child_doc in frappe.get_doc(""Purchase Order"", ""ID-012"").get_children():
+    print(child_doc.name)"
+229,Show the child entries in Asset.,"for child_doc in frappe.get_doc(""Asset"", ""ID-037"").get_children():
+    print(child_doc.name)"
+230,Show the child entries in Expense Claim.,"for child_doc in frappe.get_doc(""Expense Claim"", ""ID-023"").get_children():
+    print(child_doc.name)"
+231,Retrieve all child records for Stock Entry.,"for child_doc in frappe.get_doc(""Stock Entry"", ""ID-043"").get_children():
+    print(child_doc.name)"
+235,Could you show me the child entries in Customer?,"for child_doc in frappe.get_doc(""Customer"", ""ID-015"").get_children():
+    print(child_doc.name)"
+237,Can you fetch the child records of Quotation?,"for child_doc in frappe.get_doc(""Quotation"", ""ID-048"").get_children():
+    print(child_doc.name)"
+238,Could you show me the child entries in Stock Entry?,"for child_doc in frappe.get_doc(""Stock Entry"", ""ID-001"").get_children():
+    print(child_doc.name)"
+239,Can you let me know the child entries of Pricing Rule?,"for child_doc in frappe.get_doc(""Pricing Rule"", ""ID-009"").get_children():
+    print(child_doc.name)"
+240,"Hey, can you fetch the child records for Subscription?","for child_doc in frappe.get_doc(""Subscription"", ""ID-024"").get_children():
+    print(child_doc.name)"
+244,Could you show me the child entries in Timesheet?,"for child_doc in frappe.get_doc(""Timesheet"", ""ID-037"").get_children():
+    print(child_doc.name)"
+246,Could you show me the child entries in Project?,"for child_doc in frappe.get_doc(""Project"", ""ID-018"").get_children():
+    print(child_doc.name)"
+250,Retrieve all child records for Expense Claim.,"for child_doc in frappe.get_doc(""Expense Claim"", ""ID-025"").get_children():
+    print(child_doc.name)"
+252,Retrieve all child records for Loan.,"for child_doc in frappe.get_doc(""Loan"", ""ID-022"").get_children():
+    print(child_doc.name)"
+255,Could you show me the child entries in Opportunity?,"for child_doc in frappe.get_doc(""Opportunity"", ""ID-006"").get_children():
+    print(child_doc.name)"
+260,"I need the child records from Loan, can you get that?","for child_doc in frappe.get_doc(""Loan"", ""ID-029"").get_children():
+    print(child_doc.name)"
+264,Can you let me know the child entries of Warehouse?,"for child_doc in frappe.get_doc(""Warehouse"", ""ID-048"").get_children():
+    print(child_doc.name)"
+266,"I need the child records from Work Order, can you get that?","for child_doc in frappe.get_doc(""Work Order"", ""ID-005"").get_children():
+    print(child_doc.name)"
+271,Please tell me the child records for Lead.,"for child_doc in frappe.get_doc(""Lead"", ""ID-036"").get_children():
+    print(child_doc.name)"
+272,Retrieve all child records for Journal Entry.,"for child_doc in frappe.get_doc(""Journal Entry"", ""ID-041"").get_children():
+    print(child_doc.name)"
+274,Show the child entries in Task.,"for child_doc in frappe.get_doc(""Task"", ""ID-018"").get_children():
+    print(child_doc.name)"
+284,What are the child records of Customer?,"for child_doc in frappe.get_doc(""Customer"", ""ID-004"").get_children():
+    print(child_doc.name)"
+289,Show the child entries in Journal Entry.,"for child_doc in frappe.get_doc(""Journal Entry"", ""ID-010"").get_children():
+    print(child_doc.name)"
+292,"I need the child records from Subscription, can you get that?","for child_doc in frappe.get_doc(""Subscription"", ""ID-021"").get_children():
+    print(child_doc.name)"
+293,Can you let me know the child entries of Lead?,"for child_doc in frappe.get_doc(""Lead"", ""ID-024"").get_children():
+    print(child_doc.name)"
+294,Show the child entries in Quotation.,"for child_doc in frappe.get_doc(""Quotation"", ""ID-040"").get_children():
+    print(child_doc.name)"
+296,Can you let me know the child entries of Expense Claim?,"for child_doc in frappe.get_doc(""Expense Claim"", ""ID-032"").get_children():
+    print(child_doc.name)"
+302,Can you let me know the child entries of Project?,"for child_doc in frappe.get_doc(""Project"", ""ID-021"").get_children():
+    print(child_doc.name)"
+303,"Hey, can you fetch the child records for Lead?","for child_doc in frappe.get_doc(""Lead"", ""ID-048"").get_children():
+    print(child_doc.name)"
+304,"I need the child records from Opportunity, can you get that?","for child_doc in frappe.get_doc(""Opportunity"", ""ID-049"").get_children():
+    print(child_doc.name)"
+307,"I need the child records from Asset, can you get that?","for child_doc in frappe.get_doc(""Asset"", ""ID-028"").get_children():
+    print(child_doc.name)"
+308,"Hey, can you fetch the child records for Expense Claim?","for child_doc in frappe.get_doc(""Expense Claim"", ""ID-004"").get_children():
+    print(child_doc.name)"
+310,Show the child entries in Loan.,"for child_doc in frappe.get_doc(""Loan"", ""ID-049"").get_children():
+    print(child_doc.name)"
+311,"Hey, can you fetch the child records for Subscription?","for child_doc in frappe.get_doc(""Subscription"", ""ID-010"").get_children():
+    print(child_doc.name)"
+312,What are the child records of Loan?,"for child_doc in frappe.get_doc(""Loan"", ""ID-002"").get_children():
+    print(child_doc.name)"
+326,Please tell me the child records for Expense Claim.,"for child_doc in frappe.get_doc(""Expense Claim"", ""ID-017"").get_children():
+    print(child_doc.name)"
+329,"Hey, can you fetch the child records for Expense Claim?","for child_doc in frappe.get_doc(""Expense Claim"", ""ID-035"").get_children():
+    print(child_doc.name)"
+333,Please tell me the child records for Timesheet.,"for child_doc in frappe.get_doc(""Timesheet"", ""ID-003"").get_children():
+    print(child_doc.name)"
+334,Retrieve all child records for Purchase Order.,"for child_doc in frappe.get_doc(""Purchase Order"", ""ID-007"").get_children():
+    print(child_doc.name)"
+336,Retrieve all child records for Sales Order.,"for child_doc in frappe.get_doc(""Sales Order"", ""ID-049"").get_children():
+    print(child_doc.name)"
+340,Please tell me the child records for Timesheet.,"for child_doc in frappe.get_doc(""Timesheet"", ""ID-002"").get_children():
+    print(child_doc.name)"
+342,"Hey, can you fetch the child records for Supplier?","for child_doc in frappe.get_doc(""Supplier"", ""ID-011"").get_children():
+    print(child_doc.name)"
+349,"I need the child records from Timesheet, can you get that?","for child_doc in frappe.get_doc(""Timesheet"", ""ID-016"").get_children():
+    print(child_doc.name)"
+354,Show the child entries in Work Order.,"for child_doc in frappe.get_doc(""Work Order"", ""ID-006"").get_children():
+    print(child_doc.name)"
+355,"I need the child records from Timesheet, can you get that?","for child_doc in frappe.get_doc(""Timesheet"", ""ID-034"").get_children():
+    print(child_doc.name)"
+357,"Hey, can you fetch the child records for Sales Order?","for child_doc in frappe.get_doc(""Sales Order"", ""ID-028"").get_children():
+    print(child_doc.name)"
+365,Show the child entries in Quotation.,"for child_doc in frappe.get_doc(""Quotation"", ""QTN-2024-505"").get_children():
+    print(child_doc.name)"
+366,What are the child records of Event?,"for child_doc in frappe.get_doc(""Event"", ""ID-018"").get_children():
+    print(child_doc.name)"
+368,Retrieve all child records for Quotation.,"for child_doc in frappe.get_doc(""Quotation"", ""ID-019"").get_children():
+    print(child_doc.name)"
+369,"I need the child records from Quotation, can you get that?","for child_doc in frappe.get_doc(""Quotation"", ""ID-014"").get_children():
+    print(child_doc.name)"
+371,What are the child records of Asset?,"for child_doc in frappe.get_doc(""Asset"", ""ID-018"").get_children():
+    print(child_doc.name)"
+372,Show the child entries in Contract.,"for child_doc in frappe.get_doc(""Contract"", ""ID-044"").get_children():
+    print(child_doc.name)"
+378,"I need the child records from Loan, can you get that?","for child_doc in frappe.get_doc(""Loan"", ""ID-001"").get_children():
+    print(child_doc.name)"
+380,Show the child entries in Opportunity.,"for child_doc in frappe.get_doc(""Opportunity"", ""ID-029"").get_children():
+    print(child_doc.name)"
+383,Show the child entries in Material Request.,"for child_doc in frappe.get_doc(""Material Request"", ""ID-036"").get_children():
+    print(child_doc.name)"
+384,Retrieve all child records for Timesheet.,"for child_doc in frappe.get_doc(""Timesheet"", ""ID-031"").get_children():
+    print(child_doc.name)"
+385,What are the child records of Pricing Rule?,"for child_doc in frappe.get_doc(""Pricing Rule"", ""ID-026"").get_children():
+    print(child_doc.name)"
+386,Can you let me know the child entries of Sales Order?,"for child_doc in frappe.get_doc(""Sales Order"", ""ID-045"").get_children():
+    print(child_doc.name)"
+387,What are the child records of Quotation?,"for child_doc in frappe.get_doc(""Quotation"", ""ID-020"").get_children():
+    print(child_doc.name)"
+388,Can you let me know the child entries of Material Request?,"for child_doc in frappe.get_doc(""Material Request"", ""ID-010"").get_children():
+    print(child_doc.name)"
+390,Retrieve all child records for Asset.,"for child_doc in frappe.get_doc(""Asset"", ""ID-005"").get_children():
+    print(child_doc.name)"
+391,Could you show me the child entries in Contract?,"for child_doc in frappe.get_doc(""Contract"", ""ID-030"").get_children():
+    print(child_doc.name)"
+392,What are the child records of Supplier?,"for child_doc in frappe.get_doc(""Supplier"", ""ID-045"").get_children():
+    print(child_doc.name)"
+393,What are the child records of Customer?,"for child_doc in frappe.get_doc(""Customer"", ""ID-031"").get_children():
+    print(child_doc.name)"
+396,Please tell me the child records for Warehouse.,"for child_doc in frappe.get_doc(""Warehouse"", ""ID-035"").get_children():
+    print(child_doc.name)"
+399,Can you let me know the child entries of Customer?,"for child_doc in frappe.get_doc(""Customer"", ""ID-003"").get_children():
+    print(child_doc.name)"
+400,Show the child entries in Journal Entry.,"for child_doc in frappe.get_doc(""Journal Entry"", ""ID-039"").get_children():
+    print(child_doc.name)"
+402,Retrieve all child records for Loan.,"for child_doc in frappe.get_doc(""Loan"", ""ID-041"").get_children():
+    print(child_doc.name)"
+404,Can you fetch the child records of Journal Entry?,"for child_doc in frappe.get_doc(""Journal Entry"", ""ID-036"").get_children():
+    print(child_doc.name)"
+405,Show the child entries in Project.,"for child_doc in frappe.get_doc(""Project"", ""ID-009"").get_children():
+    print(child_doc.name)"
+410,Could you show me the child entries in Supplier?,"for child_doc in frappe.get_doc(""Supplier"", ""ID-005"").get_children():
+    print(child_doc.name)"
+411,Could you show me the child entries in Sales Order?,"for child_doc in frappe.get_doc(""Sales Order"", ""ID-029"").get_children():
+    print(child_doc.name)"
+412,Could you show me the child entries in Asset?,"for child_doc in frappe.get_doc(""Asset"", ""ID-006"").get_children():
+    print(child_doc.name)"
+414,Can you let me know the child entries of Journal Entry?,"for child_doc in frappe.get_doc(""Journal Entry"", ""ID-030"").get_children():
+    print(child_doc.name)"
+417,Could you show me the child entries in Quotation?,"for child_doc in frappe.get_doc(""Quotation"", ""ID-044"").get_children():
+    print(child_doc.name)"
+426,What are the child records of Loan?,"for child_doc in frappe.get_doc(""Loan"", ""ID-018"").get_children():
+    print(child_doc.name)"
+427,Show the child entries in Sales Order.,"for child_doc in frappe.get_doc(""Sales Order"", ""ID-040"").get_children():
+    print(child_doc.name)"
+431,"I need the child records from Event, can you get that?","for child_doc in frappe.get_doc(""Event"", ""ID-046"").get_children():
+    print(child_doc.name)"
+435,"I need the child records from Quotation, can you get that?","for child_doc in frappe.get_doc(""Quotation"", ""ID-003"").get_children():
+    print(child_doc.name)"
+437,Show the child entries in Contract.,"for child_doc in frappe.get_doc(""Contract"", ""ID-047"").get_children():
+    print(child_doc.name)"
+438,"Hey, can you fetch the child records for Task?","for child_doc in frappe.get_doc(""Task"", ""ID-006"").get_children():
+    print(child_doc.name)"
+443,Could you show me the child entries in Journal Entry?,"for child_doc in frappe.get_doc(""Journal Entry"", ""ID-029"").get_children():
+    print(child_doc.name)"
+444,What are the child records of Material Request?,"for child_doc in frappe.get_doc(""Material Request"", ""ID-006"").get_children():
+    print(child_doc.name)"
+448,Retrieve all child records for Warehouse.,"for child_doc in frappe.get_doc(""Warehouse"", ""ID-029"").get_children():
+    print(child_doc.name)"
+452,Show the child entries in Project.,"for child_doc in frappe.get_doc(""Project"", ""ID-037"").get_children():
+    print(child_doc.name)"
+453,Show the child entries in Supplier.,"for child_doc in frappe.get_doc(""Supplier"", ""ID-048"").get_children():
+    print(child_doc.name)"
+454,Can you fetch the child records of Material Request?,"for child_doc in frappe.get_doc(""Material Request"", ""ID-040"").get_children():
+    print(child_doc.name)"
+460,Could you show me the child entries in Quotation?,"for child_doc in frappe.get_doc(""Quotation"", ""ID-049"").get_children():
+    print(child_doc.name)"
+465,"Hey, can you fetch the child records for Subscription?","for child_doc in frappe.get_doc(""Subscription"", ""ID-004"").get_children():
+    print(child_doc.name)"
+469,What are the child records of Task?,"for child_doc in frappe.get_doc(""Task"", ""ID-013"").get_children():
+    print(child_doc.name)"
+470,Could you show me the child entries in Warehouse?,"for child_doc in frappe.get_doc(""Warehouse"", ""ID-033"").get_children():
+    print(child_doc.name)"
+471,Show the child entries in Event.,"for child_doc in frappe.get_doc(""Event"", ""ID-027"").get_children():
+    print(child_doc.name)"
+476,What are the child records of Expense Claim?,"for child_doc in frappe.get_doc(""Expense Claim"", ""ID-046"").get_children():
+    print(child_doc.name)"
+480,Can you let me know the child entries of Pricing Rule?,"for child_doc in frappe.get_doc(""Pricing Rule"", ""ID-034"").get_children():
+    print(child_doc.name)"
+481,Can you let me know the child entries of Project?,"for child_doc in frappe.get_doc(""Project"", ""ID-007"").get_children():
+    print(child_doc.name)"
+482,Please tell me the child records for Warehouse.,"for child_doc in frappe.get_doc(""Warehouse"", ""ID-031"").get_children():
+    print(child_doc.name)"
+484,Can you let me know the child entries of Warehouse?,"for child_doc in frappe.get_doc(""Warehouse"", ""ID-045"").get_children():
+    print(child_doc.name)"
+486,Could you show me the child entries in Contract?,"for child_doc in frappe.get_doc(""Contract"", ""ID-029"").get_children():
+    print(child_doc.name)"
+490,Can you fetch the child records of Journal Entry?,"for child_doc in frappe.get_doc(""Journal Entry"", ""ID-002"").get_children():
+    print(child_doc.name)"
+492,"Hey, can you fetch the child records for Warehouse?","for child_doc in frappe.get_doc(""Warehouse"", ""ID-019"").get_children():
+    print(child_doc.name)"
+493,"Hey, can you fetch the child records for Contract?","for child_doc in frappe.get_doc(""Contract"", ""ID-003"").get_children():
+    print(child_doc.name)"
+497,Show the child entries in Customer.,"for child_doc in frappe.get_doc(""Customer"", ""ID-036"").get_children():
+    print(child_doc.name)"
+499,Can you let me know the child entries of Contract?,"for child_doc in frappe.get_doc(""Contract"", ""ID-039"").get_children():
+    print(child_doc.name)"
+504,Please tell me the child records for Supplier.,"for child_doc in frappe.get_doc(""Supplier"", ""ID-004"").get_children():
+    print(child_doc.name)"
+505,Can you fetch the child records of Warehouse?,"for child_doc in frappe.get_doc(""Warehouse"", ""ID-008"").get_children():
+    print(child_doc.name)"
+506,Can you let me know the child entries of Contract?,"for child_doc in frappe.get_doc(""Contract"", ""ID-011"").get_children():
+    print(child_doc.name)"
+507,What are the child records of Purchase Order?,"for child_doc in frappe.get_doc(""Purchase Order"", ""ID-022"").get_children():
+    print(child_doc.name)"
+508,Retrieve all child records for Pricing Rule.,"for child_doc in frappe.get_doc(""Pricing Rule"", ""ID-027"").get_children():
+    print(child_doc.name)"
+509,Can you fetch the child records of Pricing Rule?,"for child_doc in frappe.get_doc(""Pricing Rule"", ""ID-043"").get_children():
+    print(child_doc.name)"
+511,What are the child records of Event?,"for child_doc in frappe.get_doc(""Event"", ""ID-012"").get_children():
+    print(child_doc.name)"
+512,Please tell me the child records for Purchase Order.,"for child_doc in frappe.get_doc(""Purchase Order"", ""ID-023"").get_children():
+    print(child_doc.name)"
+518,Can you fetch the child records of Supplier?,"for child_doc in frappe.get_doc(""Supplier"", ""ID-046"").get_children():
+    print(child_doc.name)"
+524,Could you show me the child entries in Timesheet?,"for child_doc in frappe.get_doc(""Timesheet"", ""ID-020"").get_children():
+    print(child_doc.name)"
+528,Could you show me the child entries in Journal Entry?,"for child_doc in frappe.get_doc(""Journal Entry"", ""ID-038"").get_children():
+    print(child_doc.name)"
+529,What are the child records of Stock Entry?,"for child_doc in frappe.get_doc(""Stock Entry"", ""ID-018"").get_children():
+    print(child_doc.name)"
+531,Can you fetch the child records of Subscription?,"for child_doc in frappe.get_doc(""Subscription"", ""ID-029"").get_children():
+    print(child_doc.name)"
+534,Could you show me the child entries in Project?,"for child_doc in frappe.get_doc(""Project"", ""ID-025"").get_children():
+    print(child_doc.name)"
+539,"Hey, can you fetch the child records for Pricing Rule?","for child_doc in frappe.get_doc(""Pricing Rule"", ""ID-046"").get_children():
+    print(child_doc.name)"
+540,Show the child entries in Work Order.,"for child_doc in frappe.get_doc(""Work Order"", ""ID-026"").get_children():
+    print(child_doc.name)"
+541,What are the child records of Timesheet?,"for child_doc in frappe.get_doc(""Timesheet"", ""ID-046"").get_children():
+    print(child_doc.name)"
+542,"Hey, can you fetch the child records for Asset?","for child_doc in frappe.get_doc(""Asset"", ""ID-023"").get_children():
+    print(child_doc.name)"
+544,Can you fetch the child records of Stock Entry?,"for child_doc in frappe.get_doc(""Stock Entry"", ""ID-048"").get_children():
+    print(child_doc.name)"
+545,Could you show me the child entries in Customer?,"for child_doc in frappe.get_doc(""Customer"", ""ID-045"").get_children():
+    print(child_doc.name)"
+546,"I need the child records from Timesheet, can you get that?","for child_doc in frappe.get_doc(""Timesheet"", ""ID-011"").get_children():
+    print(child_doc.name)"
+547,Please tell me the child records for Loan.,"for child_doc in frappe.get_doc(""Loan"", ""ID-004"").get_children():
+    print(child_doc.name)"
+550,What are the child records of Subscription?,"for child_doc in frappe.get_doc(""Subscription"", ""ID-044"").get_children():
+    print(child_doc.name)"
+551,Please tell me the child records for Stock Entry.,"for child_doc in frappe.get_doc(""Stock Entry"", ""ID-044"").get_children():
+    print(child_doc.name)"
+553,Show the child entries in Timesheet.,"for child_doc in frappe.get_doc(""Timesheet"", ""ID-045"").get_children():
+    print(child_doc.name)"
+554,"I need the child records from Material Request, can you get that?","for child_doc in frappe.get_doc(""Material Request"", ""ID-032"").get_children():
+    print(child_doc.name)"
+558,Can you fetch the child records of Warehouse?,"for child_doc in frappe.get_doc(""Warehouse"", ""ID-007"").get_children():
+    print(child_doc.name)"
+559,Can you fetch the child records of Project?,"for child_doc in frappe.get_doc(""Project"", ""ID-043"").get_children():
+    print(child_doc.name)"
+563,What are the child records of Work Order?,"for child_doc in frappe.get_doc(""Work Order"", ""ID-042"").get_children():
+    print(child_doc.name)"
+568,Retrieve all child records for Customer.,"for child_doc in frappe.get_doc(""Customer"", ""ID-017"").get_children():
+    print(child_doc.name)"
+569,Please tell me the child records for Expense Claim.,"for child_doc in frappe.get_doc(""Expense Claim"", ""ID-009"").get_children():
+    print(child_doc.name)"
+573,Show the child entries in Journal Entry.,"for child_doc in frappe.get_doc(""Journal Entry"", ""ID-046"").get_children():
+    print(child_doc.name)"
+577,Can you let me know the child entries of Customer?,"for child_doc in frappe.get_doc(""Customer"", ""ID-018"").get_children():
+    print(child_doc.name)"
+580,Can you let me know the child entries of Supplier?,"for child_doc in frappe.get_doc(""Supplier"", ""ID-027"").get_children():
+    print(child_doc.name)"
+589,Retrieve all child records for Task.,"for child_doc in frappe.get_doc(""Task"", ""ID-022"").get_children():
+    print(child_doc.name)"
+591,Can you fetch the child records of Customer?,"for child_doc in frappe.get_doc(""Customer"", ""ID-048"").get_children():
+    print(child_doc.name)"
+592,"Hey, can you fetch the child records for Contract?","for child_doc in frappe.get_doc(""Contract"", ""ID-040"").get_children():
+    print(child_doc.name)"
+593,What are the child records of Purchase Order?,"for child_doc in frappe.get_doc(""Purchase Order"", ""ID-045"").get_children():
+    print(child_doc.name)"
+599,Retrieve all child records for Asset.,"for child_doc in frappe.get_doc(""Asset"", ""ID-038"").get_children():
+    print(child_doc.name)"
+600,Retrieve all child records for Event.,"for child_doc in frappe.get_doc(""Event"", ""ID-020"").get_children():
+    print(child_doc.name)"
+601,What are the child records of Customer?,"for child_doc in frappe.get_doc(""Customer"", ""ID-047"").get_children():
+    print(child_doc.name)"
+602,What are the child records of Journal Entry?,"for child_doc in frappe.get_doc(""Journal Entry"", ""ID-021"").get_children():
+    print(child_doc.name)"
+604,Please tell me the child records for Contract.,"for child_doc in frappe.get_doc(""Contract"", ""ID-016"").get_children():
+    print(child_doc.name)"
+605,"I need the child records from Lead, can you get that?","for child_doc in frappe.get_doc(""Lead"", ""ID-012"").get_children():
+    print(child_doc.name)"
+613,"Hey, can you fetch the child records for Project?","for child_doc in frappe.get_doc(""Project"", ""ID-035"").get_children():
+    print(child_doc.name)"
+616,Show the child entries in Lead.,"for child_doc in frappe.get_doc(""Lead"", ""ID-041"").get_children():
+    print(child_doc.name)"
+617,"Hey, can you fetch the child records for Asset?","for child_doc in frappe.get_doc(""Asset"", ""ID-031"").get_children():
+    print(child_doc.name)"
+618,Please tell me the child records for Loan.,"for child_doc in frappe.get_doc(""Loan"", ""ID-013"").get_children():
+    print(child_doc.name)"
+619,Could you show me the child entries in Subscription?,"for child_doc in frappe.get_doc(""Subscription"", ""ID-022"").get_children():
+    print(child_doc.name)"
+624,"Hey, can you fetch the child records for Customer?","for child_doc in frappe.get_doc(""Customer"", ""ID-022"").get_children():
+    print(child_doc.name)"
+626,Retrieve all child records for Journal Entry.,"for child_doc in frappe.get_doc(""Journal Entry"", ""ID-018"").get_children():
+    print(child_doc.name)"
+627,"I need the child records from Task, can you get that?","for child_doc in frappe.get_doc(""Task"", ""ID-042"").get_children():
+    print(child_doc.name)"
+629,"I need the child records from Warehouse, can you get that?","for child_doc in frappe.get_doc(""Warehouse"", ""ID-041"").get_children():
+    print(child_doc.name)"
+630,Retrieve all child records for Work Order.,"for child_doc in frappe.get_doc(""Work Order"", ""ID-044"").get_children():
+    print(child_doc.name)"
+632,Please tell me the child records for Opportunity.,"for child_doc in frappe.get_doc(""Opportunity"", ""ID-004"").get_children():
+    print(child_doc.name)"
+638,"I need the child records from Contract, can you get that?","for child_doc in frappe.get_doc(""Contract"", ""ID-022"").get_children():
+    print(child_doc.name)"
+640,Can you fetch the child records of Project?,"for child_doc in frappe.get_doc(""Project"", ""ID-019"").get_children():
+    print(child_doc.name)"
+645,Show the child entries in Asset.,"for child_doc in frappe.get_doc(""Asset"", ""ID-014"").get_children():
+    print(child_doc.name)"
+646,Could you show me the child entries in Subscription?,"for child_doc in frappe.get_doc(""Subscription"", ""ID-015"").get_children():
+    print(child_doc.name)"
+649,Could you show me the child entries in Timesheet?,"for child_doc in frappe.get_doc(""Timesheet"", ""ID-029"").get_children():
+    print(child_doc.name)"
+655,"Hey, can you fetch the child records for Task?","for child_doc in frappe.get_doc(""Task"", ""ID-015"").get_children():
+    print(child_doc.name)"
+658,Could you show me the child entries in Customer?,"for child_doc in frappe.get_doc(""Customer"", ""ID-008"").get_children():
+    print(child_doc.name)"
+659,Could you show me the child entries in Contract?,"for child_doc in frappe.get_doc(""Contract"", ""ID-015"").get_children():
+    print(child_doc.name)"
+666,Retrieve all child records for Task.,"for child_doc in frappe.get_doc(""Task"", ""ID-027"").get_children():
+    print(child_doc.name)"
+670,Can you let me know the child entries of Subscription?,"for child_doc in frappe.get_doc(""Subscription"", ""ID-014"").get_children():
+    print(child_doc.name)"
+671,What are the child records of Stock Entry?,"for child_doc in frappe.get_doc(""Stock Entry"", ""ID-028"").get_children():
+    print(child_doc.name)"
+673,Show the child entries in Lead.,"for child_doc in frappe.get_doc(""Lead"", ""ID-014"").get_children():
+    print(child_doc.name)"
+675,Could you show me the child entries in Contract?,"for child_doc in frappe.get_doc(""Contract"", ""ID-045"").get_children():
+    print(child_doc.name)"
+676,What are the child records of Task?,"for child_doc in frappe.get_doc(""Task"", ""ID-016"").get_children():
+    print(child_doc.name)"
+679,What are the child records of Work Order?,"for child_doc in frappe.get_doc(""Work Order"", ""ID-022"").get_children():
+    print(child_doc.name)"
+684,Please tell me the child records for Subscription.,"for child_doc in frappe.get_doc(""Subscription"", ""ID-049"").get_children():
+    print(child_doc.name)"
+686,"I need the child records from Expense Claim, can you get that?","for child_doc in frappe.get_doc(""Expense Claim"", ""ID-021"").get_children():
+    print(child_doc.name)"
+687,Can you let me know the child entries of Stock Entry?,"for child_doc in frappe.get_doc(""Stock Entry"", ""ID-020"").get_children():
+    print(child_doc.name)"
+688,"I need the child records from Project, can you get that?","for child_doc in frappe.get_doc(""Project"", ""ID-026"").get_children():
+    print(child_doc.name)"
+690,Please tell me the child records for Sales Order.,"for child_doc in frappe.get_doc(""Sales Order"", ""ID-003"").get_children():
+    print(child_doc.name)"
+696,"I need the child records from Timesheet, can you get that?","for child_doc in frappe.get_doc(""Timesheet"", ""ID-022"").get_children():
+    print(child_doc.name)"
+697,What are the child records of Contract?,"for child_doc in frappe.get_doc(""Contract"", ""ID-046"").get_children():
+    print(child_doc.name)"
+701,Can you let me know the child entries of Opportunity?,"for child_doc in frappe.get_doc(""Opportunity"", ""ID-033"").get_children():
+    print(child_doc.name)"
+702,Retrieve all child records for Supplier.,"for child_doc in frappe.get_doc(""Supplier"", ""ID-020"").get_children():
+    print(child_doc.name)"
+704,"Hey, can you fetch the child records for Purchase Order?","for child_doc in frappe.get_doc(""Purchase Order"", ""ID-010"").get_children():
+    print(child_doc.name)"
+705,Can you let me know the child entries of Asset?,"for child_doc in frappe.get_doc(""Asset"", ""ID-024"").get_children():
+    print(child_doc.name)"
+706,Can you fetch the child records of Expense Claim?,"for child_doc in frappe.get_doc(""Expense Claim"", ""ID-022"").get_children():
+    print(child_doc.name)"
+720,Can you let me know the child entries of Expense Claim?,"for child_doc in frappe.get_doc(""Expense Claim"", ""ID-001"").get_children():
+    print(child_doc.name)"
+721,"I need the child records from Lead, can you get that?","for child_doc in frappe.get_doc(""Lead"", ""ID-037"").get_children():
+    print(child_doc.name)"
+723,Can you fetch the child records of Work Order?,"for child_doc in frappe.get_doc(""Work Order"", ""ID-025"").get_children():
+    print(child_doc.name)"
+724,Can you let me know the child entries of Supplier?,"for child_doc in frappe.get_doc(""Supplier"", ""ID-006"").get_children():
+    print(child_doc.name)"
+726,What are the child records of Lead?,"for child_doc in frappe.get_doc(""Lead"", ""ID-043"").get_children():
+    print(child_doc.name)"
+727,"Hey, can you fetch the child records for Opportunity?","for child_doc in frappe.get_doc(""Opportunity"", ""ID-022"").get_children():
+    print(child_doc.name)"
+729,Can you let me know the child entries of Task?,"for child_doc in frappe.get_doc(""Task"", ""ID-037"").get_children():
+    print(child_doc.name)"
+730,Retrieve all child records for Purchase Order.,"for child_doc in frappe.get_doc(""Purchase Order"", ""ID-042"").get_children():
+    print(child_doc.name)"
+732,"I need the child records from Expense Claim, can you get that?","for child_doc in frappe.get_doc(""Expense Claim"", ""ID-005"").get_children():
+    print(child_doc.name)"
+736,"Hey, can you fetch the child records for Purchase Order?","for child_doc in frappe.get_doc(""Purchase Order"", ""ID-018"").get_children():
+    print(child_doc.name)"
+738,"I need the child records from Pricing Rule, can you get that?","for child_doc in frappe.get_doc(""Pricing Rule"", ""ID-030"").get_children():
+    print(child_doc.name)"
+739,"Hey, can you fetch the child records for Work Order?","for child_doc in frappe.get_doc(""Work Order"", ""ID-003"").get_children():
+    print(child_doc.name)"
+745,Can you fetch the child records of Task?,"for child_doc in frappe.get_doc(""Task"", ""ID-021"").get_children():
+    print(child_doc.name)"
+747,"Hey, can you fetch the child records for Asset?","for child_doc in frappe.get_doc(""Asset"", ""ID-025"").get_children():
+    print(child_doc.name)"
+749,What are the child records of Material Request?,"for child_doc in frappe.get_doc(""Material Request"", ""ID-024"").get_children():
+    print(child_doc.name)"
+759,Can you let me know the child entries of Quotation?,"for child_doc in frappe.get_doc(""Quotation"", ""ID-038"").get_children():
+    print(child_doc.name)"
+761,"Hey, can you fetch the child records for Subscription?","for child_doc in frappe.get_doc(""Subscription"", ""ID-040"").get_children():
+    print(child_doc.name)"
+762,Can you let me know the child entries of Expense Claim?,"for child_doc in frappe.get_doc(""Expense Claim"", ""ID-003"").get_children():
+    print(child_doc.name)"
+767,Could you show me the child entries in Asset?,"for child_doc in frappe.get_doc(""Asset"", ""ID-045"").get_children():
+    print(child_doc.name)"
+768,Retrieve all child records for Expense Claim.,"for child_doc in frappe.get_doc(""Expense Claim"", ""ID-038"").get_children():
+    print(child_doc.name)"
+769,"I need the child records from Pricing Rule, can you get that?","for child_doc in frappe.get_doc(""Pricing Rule"", ""ID-045"").get_children():
+    print(child_doc.name)"
+770,"Hey, can you fetch the child records for Contract?","for child_doc in frappe.get_doc(""Contract"", ""ID-041"").get_children():
+    print(child_doc.name)"
+776,"I need the child records from Loan, can you get that?","for child_doc in frappe.get_doc(""Loan"", ""ID-030"").get_children():
+    print(child_doc.name)"
+777,Show the child entries in Expense Claim.,"for child_doc in frappe.get_doc(""Expense Claim"", ""ID-049"").get_children():
+    print(child_doc.name)"
+779,What are the child records of Task?,"for child_doc in frappe.get_doc(""Task"", ""ID-004"").get_children():
+    print(child_doc.name)"
+783,"Hey, can you fetch the child records for Sales Order?","for child_doc in frappe.get_doc(""Sales Order"", ""ID-043"").get_children():
+    print(child_doc.name)"
+786,Retrieve all child records for Quotation.,"for child_doc in frappe.get_doc(""Quotation"", ""ID-006"").get_children():
+    print(child_doc.name)"
+789,Could you show me the child entries in Loan?,"for child_doc in frappe.get_doc(""Loan"", ""ID-005"").get_children():
+    print(child_doc.name)"
+790,Please tell me the child records for Subscription.,"for child_doc in frappe.get_doc(""Subscription"", ""ID-047"").get_children():
+    print(child_doc.name)"
+791,Can you let me know the child entries of Loan?,"for child_doc in frappe.get_doc(""Loan"", ""ID-039"").get_children():
+    print(child_doc.name)"
+797,"Hey, can you fetch the child records for Contract?","for child_doc in frappe.get_doc(""Contract"", ""ID-034"").get_children():
+    print(child_doc.name)"
+803,What are the child records of Event?,"for child_doc in frappe.get_doc(""Event"", ""ID-021"").get_children():
+    print(child_doc.name)"
+806,Could you show me the child entries in Material Request?,"for child_doc in frappe.get_doc(""Material Request"", ""ID-021"").get_children():
+    print(child_doc.name)"
+812,What are the child records of Customer?,"for child_doc in frappe.get_doc(""Customer"", ""ID-027"").get_children():
+    print(child_doc.name)"
+813,Can you fetch the child records of Subscription?,"for child_doc in frappe.get_doc(""Subscription"", ""ID-006"").get_children():
+    print(child_doc.name)"
+815,"Hey, can you fetch the child records for Material Request?","for child_doc in frappe.get_doc(""Material Request"", ""ID-027"").get_children():
+    print(child_doc.name)"
+818,"Hey, can you fetch the child records for Opportunity?","for child_doc in frappe.get_doc(""Opportunity"", ""ID-018"").get_children():
+    print(child_doc.name)"
+820,Show the child entries in Journal Entry.,"for child_doc in frappe.get_doc(""Journal Entry"", ""ID-037"").get_children():
+    print(child_doc.name)"
+826,Can you fetch the child records of Asset?,"for child_doc in frappe.get_doc(""Asset"", ""ID-036"").get_children():
+    print(child_doc.name)"
+831,Please tell me the child records for Asset.,"for child_doc in frappe.get_doc(""Asset"", ""ID-019"").get_children():
+    print(child_doc.name)"
+832,What are the child records of Event?,"for child_doc in frappe.get_doc(""Event"", ""ID-033"").get_children():
+    print(child_doc.name)"
+834,Show the child entries in Subscription.,"for child_doc in frappe.get_doc(""Subscription"", ""ID-009"").get_children():
+    print(child_doc.name)"
+835,Please tell me the child records for Lead.,"for child_doc in frappe.get_doc(""Lead"", ""ID-031"").get_children():
+    print(child_doc.name)"
+837,What are the child records of Stock Entry?,"for child_doc in frappe.get_doc(""Stock Entry"", ""ID-032"").get_children():
+    print(child_doc.name)"
+838,What are the child records of Supplier?,"for child_doc in frappe.get_doc(""Supplier"", ""ID-037"").get_children():
+    print(child_doc.name)"
+846,What are the child records of Subscription?,"for child_doc in frappe.get_doc(""Subscription"", ""ID-028"").get_children():
+    print(child_doc.name)"
+847,Retrieve all child records for Customer.,"for child_doc in frappe.get_doc(""Customer"", ""ID-019"").get_children():
+    print(child_doc.name)"
+849,Show the child entries in Material Request.,"for child_doc in frappe.get_doc(""Material Request"", ""ID-005"").get_children():
+    print(child_doc.name)"
+857,Can you fetch the child records of Asset?,"for child_doc in frappe.get_doc(""Asset"", ""ID-020"").get_children():
+    print(child_doc.name)"
+858,Could you show me the child entries in Sales Order?,"for child_doc in frappe.get_doc(""Sales Order"", ""SO-2024-050"").get_children():
+    print(child_doc.name)"
+859,Can you let me know the child entries of Work Order?,"for child_doc in frappe.get_doc(""Work Order"", ""ID-049"").get_children():
+    print(child_doc.name)"
+862,What are the child records of Event?,"for child_doc in frappe.get_doc(""Event"", ""ID-001"").get_children():
+    print(child_doc.name)"
+867,Can you let me know the child entries of Pricing Rule?,"for child_doc in frappe.get_doc(""Pricing Rule"", ""ID-040"").get_children():
+    print(child_doc.name)"
+868,Please tell me the child records for Sales Order.,"for child_doc in frappe.get_doc(""Sales Order"", ""ID-013"").get_children():
+    print(child_doc.name)"
+869,Can you fetch the child records of Sales Order?,"for child_doc in frappe.get_doc(""Sales Order"", ""ID-035"").get_children():
+    print(child_doc.name)"
+871,Please tell me the child records for Timesheet.,"for child_doc in frappe.get_doc(""Timesheet"", ""ID-023"").get_children():
+    print(child_doc.name)"
+873,Please tell me the child records for Sales Order.,"for child_doc in frappe.get_doc(""Sales Order"", ""ID-048"").get_children():
+    print(child_doc.name)"
+875,Could you show me the child entries in Loan?,"for child_doc in frappe.get_doc(""Loan"", ""ID-017"").get_children():
+    print(child_doc.name)"
+877,Retrieve all child records for Purchase Order.,"for child_doc in frappe.get_doc(""Purchase Order"", ""ID-038"").get_children():
+    print(child_doc.name)"
+878,"I need the child records from Loan, can you get that?","for child_doc in frappe.get_doc(""Loan"", ""ID-045"").get_children():
+    print(child_doc.name)"
+879,Retrieve all child records for Timesheet.,"for child_doc in frappe.get_doc(""Timesheet"", ""ID-012"").get_children():
+    print(child_doc.name)"
+884,Can you fetch the child records of Warehouse?,"for child_doc in frappe.get_doc(""Warehouse"", ""ID-032"").get_children():
+    print(child_doc.name)"
+888,Retrieve all child records for Loan.,"for child_doc in frappe.get_doc(""Loan"", ""ID-008"").get_children():
+    print(child_doc.name)"
+889,Could you show me the child entries in Subscription?,"for child_doc in frappe.get_doc(""Subscription"", ""ID-013"").get_children():
+    print(child_doc.name)"
+890,Can you let me know the child entries of Customer?,"for child_doc in frappe.get_doc(""Customer"", ""ID-006"").get_children():
+    print(child_doc.name)"
+891,"Hey, can you fetch the child records for Loan?","for child_doc in frappe.get_doc(""Loan"", ""ID-009"").get_children():
+    print(child_doc.name)"
+892,"I need the child records from Supplier, can you get that?","for child_doc in frappe.get_doc(""Supplier"", ""ID-033"").get_children():
+    print(child_doc.name)"
+895,Can you fetch the child records of Work Order?,"for child_doc in frappe.get_doc(""Work Order"", ""ID-037"").get_children():
+    print(child_doc.name)"
+896,Please tell me the child records for Contract.,"for child_doc in frappe.get_doc(""Contract"", ""ID-033"").get_children():
+    print(child_doc.name)"
+897,Show the child entries in Timesheet.,"for child_doc in frappe.get_doc(""Timesheet"", ""ID-025"").get_children():
+    print(child_doc.name)"
+898,Retrieve all child records for Work Order.,"for child_doc in frappe.get_doc(""Work Order"", ""ID-040"").get_children():
+    print(child_doc.name)"
+899,Show the child entries in Stock Entry.,"for child_doc in frappe.get_doc(""Stock Entry"", ""ID-033"").get_children():
+    print(child_doc.name)"
+903,Retrieve all child records for Supplier.,"for child_doc in frappe.get_doc(""Supplier"", ""ID-009"").get_children():
+    print(child_doc.name)"
+906,Please tell me the child records for Sales Order.,"for child_doc in frappe.get_doc(""Sales Order"", ""ID-038"").get_children():
+    print(child_doc.name)"
+909,Show the child entries in Warehouse.,"for child_doc in frappe.get_doc(""Warehouse"", ""ID-015"").get_children():
+    print(child_doc.name)"
+911,Can you fetch the child records of Timesheet?,"for child_doc in frappe.get_doc(""Timesheet"", ""ID-035"").get_children():
+    print(child_doc.name)"
+913,"Hey, can you fetch the child records for Supplier?","for child_doc in frappe.get_doc(""Supplier"", ""ID-042"").get_children():
+    print(child_doc.name)"
+918,Can you let me know the child entries of Task?,"for child_doc in frappe.get_doc(""Task"", ""ID-023"").get_children():
+    print(child_doc.name)"
+919,Retrieve all child records for Supplier.,"for child_doc in frappe.get_doc(""Supplier"", ""ID-025"").get_children():
+    print(child_doc.name)"
+920,"I need the child records from Task, can you get that?","for child_doc in frappe.get_doc(""Task"", ""ID-008"").get_children():
+    print(child_doc.name)"
+927,Can you let me know the child entries of Event?,"for child_doc in frappe.get_doc(""Event"", ""ID-023"").get_children():
+    print(child_doc.name)"
+928,"I need the child records from Stock Entry, can you get that?","for child_doc in frappe.get_doc(""Stock Entry"", ""ID-015"").get_children():
+    print(child_doc.name)"
+933,Show the child entries in Asset.,"for child_doc in frappe.get_doc(""Asset"", ""ID-009"").get_children():
+    print(child_doc.name)"
+935,Show the child entries in Loan.,"for child_doc in frappe.get_doc(""Loan"", ""ID-016"").get_children():
+    print(child_doc.name)"
+943,Could you show me the child entries in Opportunity?,"for child_doc in frappe.get_doc(""Opportunity"", ""ID-026"").get_children():
+    print(child_doc.name)"
+944,Show the child entries in Subscription.,"for child_doc in frappe.get_doc(""Subscription"", ""ID-027"").get_children():
+    print(child_doc.name)"
+946,"Hey, can you fetch the child records for Supplier?","for child_doc in frappe.get_doc(""Supplier"", ""ID-016"").get_children():
+    print(child_doc.name)"
+947,Show the child entries in Purchase Order.,"for child_doc in frappe.get_doc(""Purchase Order"", ""ID-044"").get_children():
+    print(child_doc.name)"
+948,What are the child records of Material Request?,"for child_doc in frappe.get_doc(""Material Request"", ""ID-031"").get_children():
+    print(child_doc.name)"
+950,What are the child records of Supplier?,"for child_doc in frappe.get_doc(""Supplier"", ""ID-049"").get_children():
+    print(child_doc.name)"
+951,Can you fetch the child records of Loan?,"for child_doc in frappe.get_doc(""Loan"", ""ID-027"").get_children():
+    print(child_doc.name)"
+953,Show the child entries in Contract.,"for child_doc in frappe.get_doc(""Contract"", ""ID-038"").get_children():
+    print(child_doc.name)"
+955,Please tell me the child records for Contract.,"for child_doc in frappe.get_doc(""Contract"", ""ID-020"").get_children():
+    print(child_doc.name)"
+956,What are the child records of Contract?,"for child_doc in frappe.get_doc(""Contract"", ""ID-032"").get_children():
+    print(child_doc.name)"
+958,Show the child entries in Subscription.,"for child_doc in frappe.get_doc(""Subscription"", ""ID-035"").get_children():
+    print(child_doc.name)"
+964,What are the child records of Event?,"for child_doc in frappe.get_doc(""Event"", ""ID-014"").get_children():
+    print(child_doc.name)"
+965,Show the child entries in Project.,"for child_doc in frappe.get_doc(""Project"", ""ID-029"").get_children():
+    print(child_doc.name)"
+967,Please tell me the child records for Subscription.,"for child_doc in frappe.get_doc(""Subscription"", ""ID-041"").get_children():
+    print(child_doc.name)"
+970,Retrieve all child records for Purchase Order.,"for child_doc in frappe.get_doc(""Purchase Order"", ""ID-017"").get_children():
+    print(child_doc.name)"
+971,"I need the child records from Sales Order, can you get that?","for child_doc in frappe.get_doc(""Sales Order"", ""ID-037"").get_children():
+    print(child_doc.name)"
+974,Retrieve all child records for Opportunity.,"for child_doc in frappe.get_doc(""Opportunity"", ""ID-031"").get_children():
+    print(child_doc.name)"
+976,"I need the child records from Pricing Rule, can you get that?","for child_doc in frappe.get_doc(""Pricing Rule"", ""ID-003"").get_children():
+    print(child_doc.name)"
+978,Could you show me the child entries in Quotation?,"for child_doc in frappe.get_doc(""Quotation"", ""ID-023"").get_children():
+    print(child_doc.name)"
+979,What are the child records of Customer?,"for child_doc in frappe.get_doc(""Customer"", ""ID-043"").get_children():
+    print(child_doc.name)"
+980,Could you show me the child entries in Stock Entry?,"for child_doc in frappe.get_doc(""Stock Entry"", ""ID-041"").get_children():
+    print(child_doc.name)"
+982,Retrieve all child records for Journal Entry.,"for child_doc in frappe.get_doc(""Journal Entry"", ""ID-013"").get_children():
+    print(child_doc.name)"
+983,"Hey, can you fetch the child records for Asset?","for child_doc in frappe.get_doc(""Asset"", ""ID-046"").get_children():
+    print(child_doc.name)"
+984,Could you show me the child entries in Work Order?,"for child_doc in frappe.get_doc(""Work Order"", ""ID-035"").get_children():
+    print(child_doc.name)"
+987,Retrieve all child records for Loan.,"for child_doc in frappe.get_doc(""Loan"", ""ID-019"").get_children():
+    print(child_doc.name)"
+988,Can you let me know the child entries of Journal Entry?,"for child_doc in frappe.get_doc(""Journal Entry"", ""ID-001"").get_children():
+    print(child_doc.name)"
+989,Please tell me the child records for Opportunity.,"for child_doc in frappe.get_doc(""Opportunity"", ""ID-035"").get_children():
+    print(child_doc.name)"
+990,Retrieve all child records for Quotation.,"for child_doc in frappe.get_doc(""Quotation"", ""ID-009"").get_children():
+    print(child_doc.name)"
+994,"Hey, can you fetch the child records for Project?","for child_doc in frappe.get_doc(""Project"", ""ID-041"").get_children():
+    print(child_doc.name)"
+995,Retrieve all child records for Work Order.,"for child_doc in frappe.get_doc(""Work Order"", ""ID-048"").get_children():
+    print(child_doc.name)"
+997,Could you show me the child entries in Event?,"for child_doc in frappe.get_doc(""Event"", ""ID-019"").get_children():
+    print(child_doc.name)"
+998,Retrieve all child records for Material Request.,"for child_doc in frappe.get_doc(""Material Request"", ""ID-017"").get_children():
+    print(child_doc.name)"
+1004,"I need the child records from Project, can you get that?","for child_doc in frappe.get_doc(""Project"", ""ID-047"").get_children():
+    print(child_doc.name)"
+1006,"Hey, can you fetch the child records for Asset?","for child_doc in frappe.get_doc(""Asset"", ""ID-003"").get_children():
+    print(child_doc.name)"
+1009,Please tell me the child records for Material Request.,"for child_doc in frappe.get_doc(""Material Request"", ""ID-023"").get_children():
+    print(child_doc.name)"
+1010,Retrieve all child records for Pricing Rule.,"for child_doc in frappe.get_doc(""Pricing Rule"", ""ID-021"").get_children():
+    print(child_doc.name)"
+1011,Could you show me the child entries in Expense Claim?,"for child_doc in frappe.get_doc(""Expense Claim"", ""ID-029"").get_children():
+    print(child_doc.name)"
+1014,Show the child entries in Quotation.,"for child_doc in frappe.get_doc(""Quotation"", ""ID-037"").get_children():
+    print(child_doc.name)"
+1015,Could you show me the child entries in Subscription?,"for child_doc in frappe.get_doc(""Subscription"", ""ID-026"").get_children():
+    print(child_doc.name)"
+1017,"I need the child records from Asset, can you get that?","for child_doc in frappe.get_doc(""Asset"", ""ID-027"").get_children():
+    print(child_doc.name)"
+1018,Could you show me the child entries in Supplier?,"for child_doc in frappe.get_doc(""Supplier"", ""ID-013"").get_children():
+    print(child_doc.name)"
+1020,Can you let me know the child entries of Quotation?,"for child_doc in frappe.get_doc(""Quotation"", ""ID-024"").get_children():
+    print(child_doc.name)"
+1023,Can you fetch the child records of Quotation?,"for child_doc in frappe.get_doc(""Quotation"", ""ID-002"").get_children():
+    print(child_doc.name)"
+1024,"Hey, can you fetch the child records for Subscription?","for child_doc in frappe.get_doc(""Subscription"", ""ID-011"").get_children():
+    print(child_doc.name)"
+1028,What are the child records of Loan?,"for child_doc in frappe.get_doc(""Loan"", ""ID-025"").get_children():
+    print(child_doc.name)"
+1029,Show the child entries in Stock Entry.,"for child_doc in frappe.get_doc(""Stock Entry"", ""ID-024"").get_children():
+    print(child_doc.name)"
+1030,"Hey, can you fetch the child records for Subscription?","for child_doc in frappe.get_doc(""Subscription"", ""ID-038"").get_children():
+    print(child_doc.name)"
+1036,"Hey, can you fetch the child records for Lead?","for child_doc in frappe.get_doc(""Lead"", ""ID-020"").get_children():
+    print(child_doc.name)"
+1039,Retrieve all child records for Timesheet.,"for child_doc in frappe.get_doc(""Timesheet"", ""ID-039"").get_children():
+    print(child_doc.name)"
+1041,Can you let me know the child entries of Subscription?,"for child_doc in frappe.get_doc(""Subscription"", ""ID-048"").get_children():
+    print(child_doc.name)"
+1043,Can you fetch the child records of Warehouse?,"for child_doc in frappe.get_doc(""Warehouse"", ""ID-025"").get_children():
+    print(child_doc.name)"
+1047,"I need the child records from Event, can you get that?","for child_doc in frappe.get_doc(""Event"", ""ID-041"").get_children():
+    print(child_doc.name)"
+1048,Can you let me know the child entries of Loan?,"for child_doc in frappe.get_doc(""Loan"", ""ID-014"").get_children():
+    print(child_doc.name)"
+1053,"I need the child records from Opportunity, can you get that?","for child_doc in frappe.get_doc(""Opportunity"", ""ID-036"").get_children():
+    print(child_doc.name)"
+1054,Show the child entries in Loan.,"for child_doc in frappe.get_doc(""Loan"", ""ID-020"").get_children():
+    print(child_doc.name)"
+1055,Show the child entries in Sales Order.,"for child_doc in frappe.get_doc(""Sales Order"", ""ID-017"").get_children():
+    print(child_doc.name)"
+1059,"I need the child records from Pricing Rule, can you get that?","for child_doc in frappe.get_doc(""Pricing Rule"", ""ID-020"").get_children():
+    print(child_doc.name)"
+1061,Show the child entries in Task.,"for child_doc in frappe.get_doc(""Task"", ""ID-001"").get_children():
+    print(child_doc.name)"
+1062,"Hey, can you fetch the child records for Material Request?","for child_doc in frappe.get_doc(""Material Request"", ""ID-025"").get_children():
+    print(child_doc.name)"
+1063,Could you show me the child entries in Expense Claim?,"for child_doc in frappe.get_doc(""Expense Claim"", ""ID-043"").get_children():
+    print(child_doc.name)"
+1066,What are the child records of Project?,"for child_doc in frappe.get_doc(""Project"", ""ID-045"").get_children():
+    print(child_doc.name)"
+1068,Retrieve all child records for Task.,"for child_doc in frappe.get_doc(""Task"", ""ID-036"").get_children():
+    print(child_doc.name)"
+1070,Retrieve all child records for Supplier.,"for child_doc in frappe.get_doc(""Supplier"", ""ID-026"").get_children():
+    print(child_doc.name)"
+1074,Can you fetch the child records of Opportunity?,"for child_doc in frappe.get_doc(""Opportunity"", ""ID-023"").get_children():
+    print(child_doc.name)"
+1076,Can you let me know the child entries of Warehouse?,"for child_doc in frappe.get_doc(""Warehouse"", ""ID-013"").get_children():
+    print(child_doc.name)"
+1079,"Hey, can you fetch the child records for Lead?","for child_doc in frappe.get_doc(""Lead"", ""ID-021"").get_children():
+    print(child_doc.name)"
+1082,"Hey, can you fetch the child records for Expense Claim?","for child_doc in frappe.get_doc(""Expense Claim"", ""ID-018"").get_children():
+    print(child_doc.name)"
+1086,"I need the child records from Journal Entry, can you get that?","for child_doc in frappe.get_doc(""Journal Entry"", ""ID-019"").get_children():
+    print(child_doc.name)"
+1090,Please tell me the child records for Event.,"for child_doc in frappe.get_doc(""Event"", ""ID-047"").get_children():
+    print(child_doc.name)"
+1092,Can you let me know the child entries of Stock Entry?,"for child_doc in frappe.get_doc(""Stock Entry"", ""ID-026"").get_children():
+    print(child_doc.name)"
+1093,"Hey, can you fetch the child records for Work Order?","for child_doc in frappe.get_doc(""Work Order"", ""ID-034"").get_children():
+    print(child_doc.name)"
+1095,Retrieve all child records for Journal Entry.,"for child_doc in frappe.get_doc(""Journal Entry"", ""ID-040"").get_children():
+    print(child_doc.name)"
+1096,Please tell me the child records for Opportunity.,"for child_doc in frappe.get_doc(""Opportunity"", ""ID-027"").get_children():
+    print(child_doc.name)"
+1099,"Hey, can you fetch the child records for Material Request?","for child_doc in frappe.get_doc(""Material Request"", ""ID-015"").get_children():
+    print(child_doc.name)"
+1103,Show the child entries in Work Order.,"for child_doc in frappe.get_doc(""Work Order"", ""ID-017"").get_children():
+    print(child_doc.name)"
+1107,Can you fetch the child records of Opportunity?,"for child_doc in frappe.get_doc(""Opportunity"", ""ID-042"").get_children():
+    print(child_doc.name)"
+1110,Show the child entries in Customer.,"for child_doc in frappe.get_doc(""Customer"", ""ID-034"").get_children():
+    print(child_doc.name)"
+1111,Please tell me the child records for Lead.,"for child_doc in frappe.get_doc(""Lead"", ""ID-008"").get_children():
+    print(child_doc.name)"
+1115,Can you let me know the child entries of Warehouse?,"for child_doc in frappe.get_doc(""Warehouse"", ""ID-002"").get_children():
+    print(child_doc.name)"
+1116,Could you show me the child entries in Pricing Rule?,"for child_doc in frappe.get_doc(""Pricing Rule"", ""ID-016"").get_children():
+    print(child_doc.name)"
+1119,Show the child entries in Warehouse.,"for child_doc in frappe.get_doc(""Warehouse"", ""ID-010"").get_children():
+    print(child_doc.name)"
+1121,Can you fetch the child records of Expense Claim?,"for child_doc in frappe.get_doc(""Expense Claim"", ""ID-034"").get_children():
+    print(child_doc.name)"
+1124,Show the child entries in Material Request.,"for child_doc in frappe.get_doc(""Material Request"", ""ID-020"").get_children():
+    print(child_doc.name)"
+1126,"Hey, can you fetch the child records for Event?","for child_doc in frappe.get_doc(""Event"", ""ID-034"").get_children():
+    print(child_doc.name)"
+1129,Can you fetch the child records of Material Request?,"for child_doc in frappe.get_doc(""Material Request"", ""ID-046"").get_children():
+    print(child_doc.name)"
+1131,What are the child records of Contract?,"for child_doc in frappe.get_doc(""Contract"", ""ID-024"").get_children():
+    print(child_doc.name)"
+1132,Please tell me the child records for Lead.,"for child_doc in frappe.get_doc(""Lead"", ""ID-049"").get_children():
+    print(child_doc.name)"
+1133,Retrieve all child records for Journal Entry.,"for child_doc in frappe.get_doc(""Journal Entry"", ""ID-003"").get_children():
+    print(child_doc.name)"
+1134,Please tell me the child records for Asset.,"for child_doc in frappe.get_doc(""Asset"", ""ID-026"").get_children():
+    print(child_doc.name)"
+1135,Could you show me the child entries in Contract?,"for child_doc in frappe.get_doc(""Contract"", ""ID-002"").get_children():
+    print(child_doc.name)"
+1138,"I need the child records from Customer, can you get that?","for child_doc in frappe.get_doc(""Customer"", ""ID-025"").get_children():
+    print(child_doc.name)"
+1140,"Hey, can you fetch the child records for Stock Entry?","for child_doc in frappe.get_doc(""Stock Entry"", ""ID-002"").get_children():
+    print(child_doc.name)"
+1141,Show the child entries in Subscription.,"for child_doc in frappe.get_doc(""Subscription"", ""ID-020"").get_children():
+    print(child_doc.name)"
+1144,Can you fetch the child records of Project?,"for child_doc in frappe.get_doc(""Project"", ""ID-016"").get_children():
+    print(child_doc.name)"
+1145,Can you let me know the child entries of Warehouse?,"for child_doc in frappe.get_doc(""Warehouse"", ""ID-024"").get_children():
+    print(child_doc.name)"
+1147,Can you fetch the child records of Loan?,"for child_doc in frappe.get_doc(""Loan"", ""ID-010"").get_children():
+    print(child_doc.name)"
+1148,What are the child records of Customer?,"for child_doc in frappe.get_doc(""Customer"", ""ID-030"").get_children():
+    print(child_doc.name)"
+1149,"Hey, can you fetch the child records for Lead?","for child_doc in frappe.get_doc(""Lead"", ""ID-018"").get_children():
+    print(child_doc.name)"
+1150,Could you show me the child entries in Lead?,"for child_doc in frappe.get_doc(""Lead"", ""ID-040"").get_children():
+    print(child_doc.name)"
+1153,Show the child entries in Project.,"for child_doc in frappe.get_doc(""Project"", ""ID-031"").get_children():
+    print(child_doc.name)"
+1155,Can you fetch the child records of Subscription?,"for child_doc in frappe.get_doc(""Subscription"", ""ID-045"").get_children():
+    print(child_doc.name)"
+1158,Retrieve all child records for Event.,"for child_doc in frappe.get_doc(""Event"", ""ID-007"").get_children():
+    print(child_doc.name)"
+1160,Can you fetch the child records of Quotation?,"for child_doc in frappe.get_doc(""Quotation"", ""ID-004"").get_children():
+    print(child_doc.name)"
+1162,"I need the child records from Warehouse, can you get that?","for child_doc in frappe.get_doc(""Warehouse"", ""ID-023"").get_children():
+    print(child_doc.name)"
+1163,Show the child entries in Opportunity.,"for child_doc in frappe.get_doc(""Opportunity"", ""ID-047"").get_children():
+    print(child_doc.name)"
+1164,Can you fetch the child records of Opportunity?,"for child_doc in frappe.get_doc(""Opportunity"", ""ID-010"").get_children():
+    print(child_doc.name)"
+1165,What are the child records of Material Request?,"for child_doc in frappe.get_doc(""Material Request"", ""ID-009"").get_children():
+    print(child_doc.name)"
+1167,"Hey, can you fetch the child records for Opportunity?","for child_doc in frappe.get_doc(""Opportunity"", ""ID-034"").get_children():
+    print(child_doc.name)"
+1170,Could you show me the child entries in Lead?,"for child_doc in frappe.get_doc(""Lead"", ""ID-046"").get_children():
+    print(child_doc.name)"
+1171,Retrieve all child records for Pricing Rule.,"for child_doc in frappe.get_doc(""Pricing Rule"", ""ID-023"").get_children():
+    print(child_doc.name)"
+1172,Can you fetch the child records of Pricing Rule?,"for child_doc in frappe.get_doc(""Pricing Rule"", ""ID-036"").get_children():
+    print(child_doc.name)"
+1173,What are the child records of Customer?,"for child_doc in frappe.get_doc(""Customer"", ""ID-005"").get_children():
+    print(child_doc.name)"
+1174,Could you show me the child entries in Journal Entry?,"for child_doc in frappe.get_doc(""Journal Entry"", ""ID-014"").get_children():
+    print(child_doc.name)"
+1176,"Hey, can you fetch the child records for Expense Claim?","for child_doc in frappe.get_doc(""Expense Claim"", ""ID-047"").get_children():
+    print(child_doc.name)"
+1178,"I need the child records from Event, can you get that?","for child_doc in frappe.get_doc(""Event"", ""ID-003"").get_children():
+    print(child_doc.name)"
+1183,"I need the child records from Material Request, can you get that?","for child_doc in frappe.get_doc(""Material Request"", ""ID-008"").get_children():
+    print(child_doc.name)"
+1187,Can you let me know the child entries of Sales Order?,"for child_doc in frappe.get_doc(""Sales Order"", ""ID-015"").get_children():
+    print(child_doc.name)"
+1193,Retrieve all child records for Expense Claim.,"for child_doc in frappe.get_doc(""Expense Claim"", ""ID-031"").get_children():
+    print(child_doc.name)"
+1194,Please tell me the child records for Contract.,"for child_doc in frappe.get_doc(""Contract"", ""ID-009"").get_children():
+    print(child_doc.name)"
+1203,Could you show me the child entries in Pricing Rule?,"for child_doc in frappe.get_doc(""Pricing Rule"", ""ID-047"").get_children():
+    print(child_doc.name)"
+1205,"I need the child records from Lead, can you get that?","for child_doc in frappe.get_doc(""Lead"", ""ID-010"").get_children():
+    print(child_doc.name)"
+1207,What are the child records of Sales Order?,"for child_doc in frappe.get_doc(""Sales Order"", ""ID-001"").get_children():
+    print(child_doc.name)"
+1210,"I need the child records from Pricing Rule, can you get that?","for child_doc in frappe.get_doc(""Pricing Rule"", ""ID-049"").get_children():
+    print(child_doc.name)"
+1219,What are the child records of Project?,"for child_doc in frappe.get_doc(""Project"", ""ID-049"").get_children():
+    print(child_doc.name)"
+1221,"Hey, can you fetch the child records for Lead?","for child_doc in frappe.get_doc(""Lead"", ""ID-030"").get_children():
+    print(child_doc.name)"
+1223,"Hey, can you fetch the child records for Loan?","for child_doc in frappe.get_doc(""Loan"", ""ID-033"").get_children():
+    print(child_doc.name)"
+1224,Can you let me know the child entries of Quotation?,"for child_doc in frappe.get_doc(""Quotation"", ""ID-030"").get_children():
+    print(child_doc.name)"
+1228,Please tell me the child records for Expense Claim.,"for child_doc in frappe.get_doc(""Expense Claim"", ""ID-014"").get_children():
+    print(child_doc.name)"
+1233,"I need the child records from Asset, can you get that?","for child_doc in frappe.get_doc(""Asset"", ""ID-022"").get_children():
+    print(child_doc.name)"
+1235,Could you show me the child entries in Stock Entry?,"for child_doc in frappe.get_doc(""Stock Entry"", ""ID-012"").get_children():
+    print(child_doc.name)"
+1236,"I need the child records from Customer, can you get that?","for child_doc in frappe.get_doc(""Customer"", ""ID-029"").get_children():
+    print(child_doc.name)"
+1241,Could you show me the child entries in Loan?,"for child_doc in frappe.get_doc(""Loan"", ""ID-034"").get_children():
+    print(child_doc.name)"
+1244,"I need the child records from Task, can you get that?","for child_doc in frappe.get_doc(""Task"", ""ID-044"").get_children():
+    print(child_doc.name)"
+1248,Please tell me the child records for Purchase Order.,"for child_doc in frappe.get_doc(""Purchase Order"", ""ID-024"").get_children():
+    print(child_doc.name)"
+1249,Could you show me the child entries in Event?,"for child_doc in frappe.get_doc(""Event"", ""ID-048"").get_children():
+    print(child_doc.name)"
+1250,Can you let me know the child entries of Pricing Rule?,"for child_doc in frappe.get_doc(""Pricing Rule"", ""ID-025"").get_children():
+    print(child_doc.name)"
+1251,Show the child entries in Project.,"for child_doc in frappe.get_doc(""Project"", ""ID-020"").get_children():
+    print(child_doc.name)"
+1252,Show the child entries in Pricing Rule.,"for child_doc in frappe.get_doc(""Pricing Rule"", ""ID-024"").get_children():
+    print(child_doc.name)"
+1254,Retrieve all child records for Sales Order.,"for child_doc in frappe.get_doc(""Sales Order"", ""ID-012"").get_children():
+    print(child_doc.name)"
+1256,Please tell me the child records for Stock Entry.,"for child_doc in frappe.get_doc(""Stock Entry"", ""ID-034"").get_children():
+    print(child_doc.name)"
+1257,What are the child records of Contract?,"for child_doc in frappe.get_doc(""Contract"", ""ID-018"").get_children():
+    print(child_doc.name)"
+1262,Please tell me the child records for Work Order.,"for child_doc in frappe.get_doc(""Work Order"", ""ID-001"").get_children():
+    print(child_doc.name)"
+1265,What are the child records of Purchase Order?,"for child_doc in frappe.get_doc(""Purchase Order"", ""ID-027"").get_children():
+    print(child_doc.name)"
+1266,"Hey, can you fetch the child records for Asset?","for child_doc in frappe.get_doc(""Asset"", ""ID-012"").get_children():
+    print(child_doc.name)"
+1268,What are the child records of Subscription?,"for child_doc in frappe.get_doc(""Subscription"", ""ID-018"").get_children():
+    print(child_doc.name)"
+1269,Can you let me know the child entries of Project?,"for child_doc in frappe.get_doc(""Project"", ""ID-036"").get_children():
+    print(child_doc.name)"
+1271,Can you fetch the child records of Subscription?,"for child_doc in frappe.get_doc(""Subscription"", ""ID-037"").get_children():
+    print(child_doc.name)"
+1272,Can you fetch the child records of Asset?,"for child_doc in frappe.get_doc(""Asset"", ""ID-041"").get_children():
+    print(child_doc.name)"
+1273,Could you show me the child entries in Loan?,"for child_doc in frappe.get_doc(""Loan"", ""ID-047"").get_children():
+    print(child_doc.name)"
+1274,Can you fetch the child records of Purchase Order?,"for child_doc in frappe.get_doc(""Purchase Order"", ""ID-049"").get_children():
+    print(child_doc.name)"
+1275,"I need the child records from Pricing Rule, can you get that?","for child_doc in frappe.get_doc(""Pricing Rule"", ""ID-031"").get_children():
+    print(child_doc.name)"
+1277,Please tell me the child records for Pricing Rule.,"for child_doc in frappe.get_doc(""Pricing Rule"", ""ID-012"").get_children():
+    print(child_doc.name)"
+1279,Could you show me the child entries in Loan?,"for child_doc in frappe.get_doc(""Loan"", ""ID-015"").get_children():
+    print(child_doc.name)"
+1281,Can you let me know the child entries of Supplier?,"for child_doc in frappe.get_doc(""Supplier"", ""ID-040"").get_children():
+    print(child_doc.name)"
+1282,What are the child records of Subscription?,"for child_doc in frappe.get_doc(""Subscription"", ""ID-016"").get_children():
+    print(child_doc.name)"
+1285,"Hey, can you fetch the child records for Customer?","for child_doc in frappe.get_doc(""Customer"", ""ID-024"").get_children():
+    print(child_doc.name)"
+1293,Can you fetch the child records of Purchase Order?,"for child_doc in frappe.get_doc(""Purchase Order"", ""ID-008"").get_children():
+    print(child_doc.name)"
+1294,"I need the child records from Sales Order, can you get that?","for child_doc in frappe.get_doc(""Sales Order"", ""ID-007"").get_children():
+    print(child_doc.name)"
+1297,Could you show me the child entries in Journal Entry?,"for child_doc in frappe.get_doc(""Journal Entry"", ""ID-007"").get_children():
+    print(child_doc.name)"
+1298,Please tell me the child records for Purchase Order.,"for child_doc in frappe.get_doc(""Purchase Order"", ""ID-037"").get_children():
+    print(child_doc.name)"
+1299,Please tell me the child records for Journal Entry.,"for child_doc in frappe.get_doc(""Journal Entry"", ""ID-033"").get_children():
+    print(child_doc.name)"
+1302,Can you let me know the child entries of Purchase Order?,"for child_doc in frappe.get_doc(""Purchase Order"", ""ID-029"").get_children():
+    print(child_doc.name)"
+1303,Could you show me the child entries in Material Request?,"for child_doc in frappe.get_doc(""Material Request"", ""ID-018"").get_children():
+    print(child_doc.name)"
+1304,"Hey, can you fetch the child records for Pricing Rule?","for child_doc in frappe.get_doc(""Pricing Rule"", ""ID-001"").get_children():
+    print(child_doc.name)"
+1307,Can you let me know the child entries of Subscription?,"for child_doc in frappe.get_doc(""Subscription"", ""ID-023"").get_children():
+    print(child_doc.name)"
+1309,Can you let me know the child entries of Quotation?,"for child_doc in frappe.get_doc(""Quotation"", ""ID-007"").get_children():
+    print(child_doc.name)"
+1310,Retrieve all child records for Task.,"for child_doc in frappe.get_doc(""Task"", ""ID-025"").get_children():
+    print(child_doc.name)"
+1312,Please tell me the child records for Contract.,"for child_doc in frappe.get_doc(""Contract"", ""ID-021"").get_children():
+    print(child_doc.name)"
+1313,What are the child records of Task?,"for child_doc in frappe.get_doc(""Task"", ""ID-026"").get_children():
+    print(child_doc.name)"
+1316,"Hey, can you fetch the child records for Purchase Order?","for child_doc in frappe.get_doc(""Purchase Order"", ""ID-033"").get_children():
+    print(child_doc.name)"
+1317,Can you fetch the child records of Event?,"for child_doc in frappe.get_doc(""Event"", ""ID-042"").get_children():
+    print(child_doc.name)"
+1319,Show the child entries in Opportunity.,"for child_doc in frappe.get_doc(""Opportunity"", ""ID-017"").get_children():
+    print(child_doc.name)"
+1325,Can you let me know the child entries of Quotation?,"for child_doc in frappe.get_doc(""Quotation"", ""ID-042"").get_children():
+    print(child_doc.name)"
+1326,"Hey, can you fetch the child records for Purchase Order?","for child_doc in frappe.get_doc(""Purchase Order"", ""ID-016"").get_children():
+    print(child_doc.name)"
+1334,Can you let me know the child entries of Opportunity?,"for child_doc in frappe.get_doc(""Opportunity"", ""ID-011"").get_children():
+    print(child_doc.name)"
+1336,"Hey, can you fetch the child records for Task?","for child_doc in frappe.get_doc(""Task"", ""ID-002"").get_children():
+    print(child_doc.name)"
+1340,Can you let me know the child entries of Timesheet?,"for child_doc in frappe.get_doc(""Timesheet"", ""ID-048"").get_children():
+    print(child_doc.name)"
+1343,What are the child records of Loan?,"for child_doc in frappe.get_doc(""Loan"", ""ID-040"").get_children():
+    print(child_doc.name)"
+1344,Can you fetch the child records of Timesheet?,"for child_doc in frappe.get_doc(""Timesheet"", ""ID-043"").get_children():
+    print(child_doc.name)"
+1346,Can you fetch the child records of Quotation?,"for child_doc in frappe.get_doc(""Quotation"", ""ID-005"").get_children():
+    print(child_doc.name)"
+1348,Can you fetch the child records of Work Order?,"for child_doc in frappe.get_doc(""Work Order"", ""ID-011"").get_children():
+    print(child_doc.name)"
+1351,What are the child records of Pricing Rule?,"for child_doc in frappe.get_doc(""Pricing Rule"", ""ID-018"").get_children():
+    print(child_doc.name)"
+1353,Retrieve all child records for Work Order.,"for child_doc in frappe.get_doc(""Work Order"", ""ID-038"").get_children():
+    print(child_doc.name)"
+1358,Show the child entries in Purchase Order.,"for child_doc in frappe.get_doc(""Purchase Order"", ""ID-039"").get_children():
+    print(child_doc.name)"
+1359,"Hey, can you fetch the child records for Asset?","for child_doc in frappe.get_doc(""Asset"", ""ID-007"").get_children():
+    print(child_doc.name)"
+1361,Can you let me know the child entries of Expense Claim?,"for child_doc in frappe.get_doc(""Expense Claim"", ""ID-037"").get_children():
+    print(child_doc.name)"
+1364,Show the child entries in Timesheet.,"for child_doc in frappe.get_doc(""Timesheet"", ""ID-006"").get_children():
+    print(child_doc.name)"
+1367,What are the child records of Stock Entry?,"for child_doc in frappe.get_doc(""Stock Entry"", ""ID-047"").get_children():
+    print(child_doc.name)"
+1368,Could you show me the child entries in Opportunity?,"for child_doc in frappe.get_doc(""Opportunity"", ""ID-013"").get_children():
+    print(child_doc.name)"
+1371,"I need the child records from Supplier, can you get that?","for child_doc in frappe.get_doc(""Supplier"", ""ID-044"").get_children():
+    print(child_doc.name)"
+1373,Show the child entries in Quotation.,"for child_doc in frappe.get_doc(""Quotation"", ""ID-031"").get_children():
+    print(child_doc.name)"
+1376,Show the child entries in Stock Entry.,"for child_doc in frappe.get_doc(""Stock Entry"", ""ID-017"").get_children():
+    print(child_doc.name)"
+1379,"Hey, can you fetch the child records for Customer?","for child_doc in frappe.get_doc(""Customer"", ""ID-026"").get_children():
+    print(child_doc.name)"
+1380,Show the child entries in Opportunity.,"for child_doc in frappe.get_doc(""Opportunity"", ""ID-044"").get_children():
+    print(child_doc.name)"
+1381,Can you fetch the child records of Project?,"for child_doc in frappe.get_doc(""Project"", ""ID-001"").get_children():
+    print(child_doc.name)"
+1382,Retrieve all child records for Expense Claim.,"for child_doc in frappe.get_doc(""Expense Claim"", ""ID-020"").get_children():
+    print(child_doc.name)"
+1385,"Hey, can you fetch the child records for Journal Entry?","for child_doc in frappe.get_doc(""Journal Entry"", ""ID-023"").get_children():
+    print(child_doc.name)"
+1389,Retrieve all child records for Warehouse.,"for child_doc in frappe.get_doc(""Warehouse"", ""ID-016"").get_children():
+    print(child_doc.name)"
+1394,Can you let me know the child entries of Timesheet?,"for child_doc in frappe.get_doc(""Timesheet"", ""ID-040"").get_children():
+    print(child_doc.name)"
+1398,What are the child records of Work Order?,"for child_doc in frappe.get_doc(""Work Order"", ""ID-016"").get_children():
+    print(child_doc.name)"
+1399,Can you let me know the child entries of Project?,"for child_doc in frappe.get_doc(""Project"", ""ID-006"").get_children():
+    print(child_doc.name)"
+1402,Retrieve all child records for Asset.,"for child_doc in frappe.get_doc(""Asset"", ""ID-048"").get_children():
+    print(child_doc.name)"
+1403,Retrieve all child records for Project.,"for child_doc in frappe.get_doc(""Project"", ""ID-008"").get_children():
+    print(child_doc.name)"
+1406,Retrieve all child records for Timesheet.,"for child_doc in frappe.get_doc(""Timesheet"", ""ID-028"").get_children():
+    print(child_doc.name)"
+1408,What are the child records of Timesheet?,"for child_doc in frappe.get_doc(""Timesheet"", ""ID-044"").get_children():
+    print(child_doc.name)"
+1411,Show the child entries in Pricing Rule.,"for child_doc in frappe.get_doc(""Pricing Rule"", ""ID-019"").get_children():
+    print(child_doc.name)"
+1413,Could you show me the child entries in Expense Claim?,"for child_doc in frappe.get_doc(""Expense Claim"", ""ID-013"").get_children():
+    print(child_doc.name)"
+1421,Show the child entries in Purchase Order.,"for child_doc in frappe.get_doc(""Purchase Order"", ""ID-043"").get_children():
+    print(child_doc.name)"
+1423,Could you show me the child entries in Timesheet?,"for child_doc in frappe.get_doc(""Timesheet"", ""ID-032"").get_children():
+    print(child_doc.name)"
+1424,Could you show me the child entries in Supplier?,"for child_doc in frappe.get_doc(""Supplier"", ""ID-038"").get_children():
+    print(child_doc.name)"
+1425,Show the child entries in Subscription.,"for child_doc in frappe.get_doc(""Subscription"", ""ID-030"").get_children():
+    print(child_doc.name)"
+1426,"I need the child records from Expense Claim, can you get that?","for child_doc in frappe.get_doc(""Expense Claim"", ""EC-2024-890"").get_children():
+    print(child_doc.name)"
+1427,"I need the child records from Supplier, can you get that?","for child_doc in frappe.get_doc(""Supplier"", ""ID-039"").get_children():
+    print(child_doc.name)"
+1430,"I need the child records from Opportunity, can you get that?","for child_doc in frappe.get_doc(""Opportunity"", ""ID-043"").get_children():
+    print(child_doc.name)"
+1432,Please tell me the child records for Warehouse.,"for child_doc in frappe.get_doc(""Warehouse"", ""ID-026"").get_children():
+    print(child_doc.name)"
+1437,Can you let me know the child entries of Warehouse?,"for child_doc in frappe.get_doc(""Warehouse"", ""ID-009"").get_children():
+    print(child_doc.name)"
+1440,"I need the child records from Purchase Order, can you get that?","for child_doc in frappe.get_doc(""Purchase Order"", ""ID-009"").get_children():
+    print(child_doc.name)"
+1441,Could you show me the child entries in Sales Order?,"for child_doc in frappe.get_doc(""Sales Order"", ""ID-024"").get_children():
+    print(child_doc.name)"
+1446,"Hey, can you fetch the child records for Loan?","for child_doc in frappe.get_doc(""Loan"", ""ID-032"").get_children():
+    print(child_doc.name)"
+1447,"Hey, can you fetch the child records for Lead?","for child_doc in frappe.get_doc(""Lead"", ""ID-015"").get_children():
+    print(child_doc.name)"
+1448,What are the child records of Task?,"for child_doc in frappe.get_doc(""Task"", ""ID-043"").get_children():
+    print(child_doc.name)"
+1449,Can you let me know the child entries of Stock Entry?,"for child_doc in frappe.get_doc(""Stock Entry"", ""ID-021"").get_children():
+    print(child_doc.name)"
+1450,"Hey, can you fetch the child records for Sales Order?","for child_doc in frappe.get_doc(""Sales Order"", ""ID-022"").get_children():
+    print(child_doc.name)"
+1451,Could you show me the child entries in Opportunity?,"for child_doc in frappe.get_doc(""Opportunity"", ""ID-015"").get_children():
+    print(child_doc.name)"
+1453,"I need the child records from Task, can you get that?","for child_doc in frappe.get_doc(""Task"", ""ID-020"").get_children():
+    print(child_doc.name)"
+1454,Could you show me the child entries in Timesheet?,"for child_doc in frappe.get_doc(""Timesheet"", ""ID-018"").get_children():
+    print(child_doc.name)"
+1455,Can you let me know the child entries of Pricing Rule?,"for child_doc in frappe.get_doc(""Pricing Rule"", ""ID-010"").get_children():
+    print(child_doc.name)"
+1458,Retrieve all child records for Timesheet.,"for child_doc in frappe.get_doc(""Timesheet"", ""ID-014"").get_children():
+    print(child_doc.name)"
+1461,Can you let me know the child entries of Quotation?,"for child_doc in frappe.get_doc(""Quotation"", ""ID-033"").get_children():
+    print(child_doc.name)"
+1463,Could you show me the child entries in Material Request?,"for child_doc in frappe.get_doc(""Material Request"", ""ID-003"").get_children():
+    print(child_doc.name)"
+1464,Show the child entries in Material Request.,"for child_doc in frappe.get_doc(""Material Request"", ""ID-030"").get_children():
+    print(child_doc.name)"
+1467,Please tell me the child records for Asset.,"for child_doc in frappe.get_doc(""Asset"", ""ID-040"").get_children():
+    print(child_doc.name)"
+1468,Can you let me know the child entries of Customer?,"for child_doc in frappe.get_doc(""Customer"", ""ID-042"").get_children():
+    print(child_doc.name)"
+1473,"I need the child records from Work Order, can you get that?","for child_doc in frappe.get_doc(""Work Order"", ""ID-024"").get_children():
+    print(child_doc.name)"
+1474,"I need the child records from Loan, can you get that?","for child_doc in frappe.get_doc(""Loan"", ""ID-011"").get_children():
+    print(child_doc.name)"
+1479,"Hey, can you fetch the child records for Quotation?","for child_doc in frappe.get_doc(""Quotation"", ""ID-008"").get_children():
+    print(child_doc.name)"
+1481,Please tell me the child records for Customer.,"for child_doc in frappe.get_doc(""Customer"", ""ID-033"").get_children():
+    print(child_doc.name)"
+1482,Could you show me the child entries in Project?,"for child_doc in frappe.get_doc(""Project"", ""ID-030"").get_children():
+    print(child_doc.name)"
+1485,Could you show me the child entries in Lead?,"for child_doc in frappe.get_doc(""Lead"", ""ID-004"").get_children():
+    print(child_doc.name)"
+1486,"I need the child records from Subscription, can you get that?","for child_doc in frappe.get_doc(""Subscription"", ""ID-008"").get_children():
+    print(child_doc.name)"
+1491,Could you show me the child entries in Quotation?,"for child_doc in frappe.get_doc(""Quotation"", ""ID-012"").get_children():
+    print(child_doc.name)"
+1492,Can you let me know the child entries of Timesheet?,"for child_doc in frappe.get_doc(""Timesheet"", ""ID-026"").get_children():
+    print(child_doc.name)"
+1493,What are the child records of Supplier?,"for child_doc in frappe.get_doc(""Supplier"", ""ID-032"").get_children():
+    print(child_doc.name)"
+1494,Retrieve all child records for Contract.,"for child_doc in frappe.get_doc(""Contract"", ""CNT-2024-909"").get_children():
+    print(child_doc.name)"
