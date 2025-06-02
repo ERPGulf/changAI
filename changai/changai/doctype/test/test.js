@@ -1,5 +1,16 @@
 // Copyright (c) 2025, ERpGulf and contributors
 // For license information, please see license.txt
+
+// frappe.ui.form.on("test", {
+// 	refresh(frm) {
+
+// 	},
+// });
+// Copyright (c) 2025, ERpGulf and contributors
+// For license information, please see license.txt
+frappe.require("/assets/changai/css/changai.css", function () {
+    console.log("✅ test.css loaded");
+});
 $(document).ready(function () {
     console.log("✅ changai.js is loaded and running...");
             if (!$('#chat-window').length) {

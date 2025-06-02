@@ -1182,7 +1182,7 @@
     {
         "input": {
             "doctype": "Closing Stock Balance",
-            "question": "What\u2019s the last recorded stock closing date for warehouse WH-MFG-01?",
+            "question": "What's the last recorded stock closing date for warehouse WH-MFG-01?",
             "fields": [
                 "to_date",
                 "warehouse"

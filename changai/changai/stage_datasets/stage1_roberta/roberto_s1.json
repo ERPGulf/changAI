@@ -245,7 +245,7 @@
   },
   {
     "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
-    "input": "When is payment due for purchase invoice `PINV-00987`?",
+    "input": "When is payment due for purchase invoice `27328293`?",
     "output": "Purchase Invoice"
   },
     {

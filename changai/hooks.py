@@ -25,26 +25,16 @@ app_license = "mit"
 # ------------------
 
 # include js, css files in header of desk.html
-# app_include_css = "/assets/changai/css/changai.css"
-# app_include_js = "/assets/changai/js/changai.js"
 # Include JS globally on all pages
 # Include JS globally on all pages
 app_include_js = ["/assets/changai/js/changai.js"]
 app_include_css = ["/assets/changai/css/changai.css"]
 
-# In hooks.py
-app_include_css = [
-    "https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css"
-]
-app_include_js = [
-    "https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js"
-]
-
 
 
 # include js, css files in header of web templateFriday2000
-# web_include_css = "/assets/changai/css/changai.css"
-# web_include_js = "/assets/changai/js/changai.js"
+web_include_css = "/assets/changai/css/changai.css"
+web_include_js = "/assets/changai/js/changai.js"
 
 # include custom scss in every website theme (without file extension ".scss")
 # website_theme_scss = "changai/public/scss/website"
