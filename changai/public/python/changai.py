@@ -12,6 +12,91 @@ import requests
 import frappe
 load_dotenv()
 
+import os
+import requests
+import json
+
+HUGGINGFACE_API_KEY = os.getenv("HUGGINGFACE_API_KEY")
+headers = {
+    "Authorization": f"Bearer {HUGGINGFACE_API_KEY}",
+    "Content-Type": "application/json"
+}
+
+def call_huggingface_model(model_id, prompt, max_length=512):
+    url = f"https://api-inference.huggingface.co/models/{model_id}"
+    payload = {
+        "inputs": prompt,
+        "parameters": {"max_length": max_length},
+    }
+    response = requests.post(url, headers=headers, json=payload, timeout=60)
+    response.raise_for_status()
+    result = response.json()
+    return result[0]["generated_text"] if isinstance(result, list) else result
+
+def extract_doctype(text):
+    for line in text.split("\n"):
+        if line.lower().startswith("doctype:"):
+            return line.split(":", 1)[1].strip()
+    return None
+
+def build_s2_flan_prompt(doctype, question, fields):
+    return (
+        "Instruction: Select only the correct field(s) from the given top fields that answer the question.\n"
+        f"Doctype: {doctype}\n"
+        f"Question: {question}\n"
+        f"Top Fields: {', '.join(fields)}"
+    )
+
+def build_s3_prompt(doctype, question, fields):
+    return (
+        "Instruction: Generate the correct Frappe query for the given question, using the provided doctype and fields.\n"
+        f"Doctype: {doctype}\n"
+        f"Fields: {', '.join(fields)}\n"
+        f"Question: {question}"
+    )
+
+def full_pipeline(user_question, meta, use_s2_flan=True):
+    try:
+        # Stage 1 - Doctype Classifier (Roberta)
+        s1_prompt = f"Predict the relevant ERPNext Doctype(s) for the question below: {user_question}"
+        s1_output = call_huggingface_model("hyrinmansoor/text2frappe-s1", s1_prompt)
+        doctype = s1_output.strip().split(":")[-1].strip()
+
+        if doctype not in meta:
+            raise ValueError(f"❌ Doctype '{doctype}' not found in metadata.")
+
+        # Stage 2 - Top Field Selection
+        all_fields = list(meta[doctype]["fields"].keys())
+
+        if use_s2_flan:
+            s2_prompt = build_s2_flan_prompt(doctype, user_question, all_fields[:15])
+            s2_output = call_huggingface_model("hyrinmansoor/text2frappe-s2-flan", s2_prompt)
+            fields = [f.strip() for f in s2_output.split(',') if f.strip() in all_fields]
+        else:
+            # For SBERT alternative, use local inference OR another HF model if hosted
+            raise NotImplementedError("SBERT inference via API not supported in this snippet")
+
+        if not fields:
+            raise ValueError("❌ No valid fields detected from S2 stage.")
+
+        # Stage 3 - Frappe Query Generation
+        s3_prompt = build_s3_prompt(doctype, user_question, fields)
+        final_query = call_huggingface_model("hyrinmansoor/text2frappe-s3", s3_prompt)
+
+        return {
+            "success": True,
+            "doctype": doctype,
+            "selected_fields": fields,
+            "generated_query": final_query
+        }
+
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e)
+        }
+
+
 
 
 @frappe.whitelist(allow_guest=False)
