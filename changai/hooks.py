@@ -27,14 +27,14 @@ app_license = "mit"
 # include js, css files in header of desk.html
 # Include JS globally on all pages
 # Include JS globally on all pages
-app_include_js = ["/assets/changai/js/changai.js"]
+app_include_js = ["/assets/changai/js/changai_v2.js"]
 app_include_css = ["/assets/changai/css/changai.css"]
 
 
 
 # include js, css files in header of web templateFriday2000
 web_include_css = "/assets/changai/css/changai.css"
-web_include_js = "/assets/changai/js/changai.js"
+web_include_js = "/assets/changai/js/changai_v2.js"
 
 # include custom scss in every website theme (without file extension ".scss")
 # website_theme_scss = "changai/public/scss/website"

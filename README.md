@@ -1,8 +1,11 @@
-## Changai
+# Frappe Query Generator API (Chatbot Backend)
 
-Changai
+This is a FastAPI-based backend deployed on Hugging Face Spaces that accepts business-style questions and returns the correct Frappe query using FLAN, SBERT, and RoBERTa models.
 
-#### License
+Endpoint: `/query` (POST)
 
-mit# changai
-# changai
+**Input:**
+```json
+{
+  "question": "What's the email of the customer John Smith?"
+}

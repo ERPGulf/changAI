@@ -21,7 +21,7 @@
       "question": "List all sales partners along with their names and commission percentages.",
       "fields": ["partner_name", "commission_rate"]
     },
-    "output": "frappe.get_all('Sales Partner', fields=['partner_name', 'commission_rate'])"
+    "output": "frappe.get_list('Sales Partner', fields=['partner_name', 'commission_rate'])"
   },
   {
     "input": {
@@ -61,7 +61,7 @@
       "question": "Give me a list of partner names and referral codes for email marketing.",
       "fields": ["partner_name", "referral_code"]
     },
-    "output": "frappe.get_all('Sales Partner', fields=['partner_name', 'referral_code'])"
+    "output": "frappe.get_list('Sales Partner',fields=['partner_name', 'referral_code'])"
   },
   {
     "input": {
@@ -243,7 +243,7 @@
     "input": {
       "doctype": "Sales Partner",
       "question": "List all sales partners with a commission rate above 12%.",
-      "fields": ["commission_rate"]
+      "fields": ["name","commission_rate"]
     },
     "output": "frappe.get_all('Sales Partner', filters={'commission_rate': ['>', 12]}, fields=['name','commission_rate'])"
   },
@@ -251,7 +251,7 @@
     "input": {
       "doctype": "Sales Partner",
       "question": "Who are the partners with a commission rate of exactly 10.5%?",
-      "fields": ["commission_rate"]
+      "fields": ["name","commission_rate"]
     },
     "output": "frappe.get_all('Sales Partner', filters={'commission_rate': 10.5}, fields=['name', 'commission_rate'])"
   },
@@ -285,13 +285,13 @@
       "question": "Find all distributors with commission rates between 5% and 15%.",
       "fields": ["partner_name","partner_type", "commission_rate"]
     },
-    "output": "frappe.get_all('Sales Partner', filters={'partner_type': 'distributor', 'commission_rate': ['between', [5, 15]]}, fields=['partner_name', 'commission_rate'])"
+    "output": "frappe.get_all('Sales Partner', filters={'partner_type': 'Distributor', 'commission_rate': ['between', [5, 15]]}, fields=['partner_name', 'commission_rate'])"
   },
   {
     "input": {
       "doctype": "Sales Partner",
       "question": "Which partner offers the highest commission?",
-      "fields": ["commission_rate"]
+      "fields": ["name","commission_rate"]
     },
     "output": "frappe.db.sql('''SELECT name, commission_rate FROM `tabSales Partner` ORDER BY commission_rate DESC LIMIT 1''')"
   },
@@ -394,180 +394,231 @@
   {
     "input": {
       "doctype": "Sales Partner",
-      "question": "What is the short address description for 'CoreLink Distributors'?",
+      "question": "Can you show the address and contact details linked to 'SummitTrade Inc.'?",
       "fields": [
-        "address_desc","partner_name"
+        "address_contacts",
+        "partner_name",
+        "contact_desc",
+        "address_desc",
+        "territory",
+        "contact_html"
       ]
     },
-    "output": "frappe.get_all('Sales Partner', filters={'partner_name': 'CoreLink Distributors'}, fields=['address_desc'])"
+"output": "partner_name = 'SummitTrade Inc.'\\nsales_partner = frappe.get_all(\\n    'Sales Partner',\\n    filters={'partner_name': partner_name},\\n    fields=['name']\\n)\\nif not sales_partner:\\n    print(f\"Sales Partner '{partner_name}' not found.\")\\nelse:\\n    partner_id = sales_partner[0]['name']"
   },
   {
     "input": {
       "doctype": "Sales Partner",
-      "question": "Show the address_desc field for all listed partners.",
+      "question": "Which sales partners have more than one address or contact entry associated with them?",
       "fields": [
-        "address_desc"
-      ]
-    },
-    "output": "frappe.get_all('Sales Partner', fields=['address_desc'])"
-  },
-  {
-    "input": {
-      "doctype": "Sales Partner",
-      "question": "Can I get the address description for every distributor we work with?",
-      "fields": [
-        "address_desc","partner_type"
-      ]
-    },
-    "output": "frappe.get_all('Sales Partner', filters={'partner_type': 'Distributor'}, fields=['address_desc'])"
-  },
-  {
-    "input": {
-      "doctype": "Sales Partner",
-      "question": "Which sales partners have their address_desc starting with 'Suite 3A'?",
-      "fields": [
-        "address_desc"
-      ]
-    },
-    "output": "frappe.get_all('Sales Partner', filters={'address_desc': ['like', 'Suite 3A%']}, fields=['address_desc'])"
-  },
-  {
-    "input": {
-      "doctype": "Sales Partner",
-      "question": "List names and short address descriptions of partners based in Europe.",
-      "fields": [
+        "address_contacts",
         "partner_name",
         "address_desc",
-        "territory"
-      ]
-    },
-    "output": "frappe.get_all('Sales Partner', filters={'territory': 'Europe'}, fields=['partner_name', 'address_desc'])"
-  },
-  {
-    "input": {
-      "doctype": "Sales Partner",
-      "question": "Get me address_desc and territory for all commission agents.",
-      "fields": [
-        "address_desc",
+        "contact_desc",
         "territory",
         "partner_type"
       ]
     },
-    "output": "frappe.get_all('Sales Partner', filters={'partner_type': 'Commission Agent'}, fields=['address_desc', 'territory'])"
+"output": "sales_partners = frappe.get_all('Sales Partner', fields=['name', 'partner_name'])\\n\\nresult = []\\nfor sp in sales_partners:\\n    # Count address records linked to this Sales Partner\\n    address_count = frappe.db.count(\\n        'Dynamic Link',\\n        filters={\\n            'link_doctype': 'Sales Partner',\\n            'link_name': sp['name'],\\n            'parenttype': 'Address'\\n        }\\n    )\\n    # Count contact records linked to this Sales Partner\\n    contact_count = frappe.db.count(\\n        'Dynamic Link',\\n        filters={\\n            'link_doctype': 'Sales Partner',\\n            'link_name': sp['name'],\\n            'parenttype': 'Contact'\\n        }\\n    )\\n    result.append({\\n        'partner_name': sp['partner_name'],\\n        'address_count': address_count,\\n        'contact_count': contact_count\\n    })\\n\\n# Filter partners with more than one address or contact\\nmulti_address_or_contact = [\\n    r for r in result\\n    if r['address_count'] > 1 or r['contact_count'] > 1\\n]\\n\\nprint(\"Sales Partners with more than one address or contact:\")\\nprint(multi_address_or_contact)"
   },
   {
     "input": {
       "doctype": "Sales Partner",
-      "question": "Does 'MarketWide Inc.' have an address description stored?",
+      "question": "List all contact entries found under sales partners based in the UAE.",
       "fields": [
-        "address_desc","partner_name"
+        "address_contacts",
+        "territory",
+        "partner_name",
+        "address_desc",
+        "partner_type",
+        "contact_html"
       ]
     },
-    "output": "frappe.get_all('Sales Partner', filters={'partner_name': 'MarketWide Inc.'}, fields=['address_desc'])"
+    "output": "frappe.get_all('Sales Partner', filters={'territory': 'UAE'}, fields = ['partner_name'])"
   },
   {
     "input": {
       "doctype": "Sales Partner",
-      "question": "Which partners don\u2019t have any address_desc provided?",
+      "question": "Are there any partners without any contact or address entries listed?",
       "fields": [
-        "partner_name","address_desc"
+        "address_contacts",
+        "partner_name",
+        "address_desc",
+        "contact_desc",
+        "territory",
+        "partner_type"
       ]
     },
-    "output": "frappe.get_all('Sales Partner', filters={'address_desc': ['is', '']}, fields=['partner_name'])"
+"output": "sales_partners = frappe.get_all('Sales Partner', fields=['name', 'partner_name'])\\npartners_without_entries = []\\n\\nfor sp in sales_partners:\\n    doc = frappe.get_doc('Sales Partner', sp['name'])\\n    address_contacts = getattr(doc, 'address_contacts', '')\\n    if not address_contacts or not address_contacts.strip():\\n        partners_without_entries.append(sp['partner_name'])\\n\\nprint(\"Partners without any contact or address entries (address_contacts empty):\", partners_without_entries)"
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Fetch the partner name, type, and all contact records for resellers in North America.",
+      "fields": [
+        "partner_name",
+        "partner_type",
+        "territory",
+        "address_contacts",
+        "address_desc",
+        "contact_desc"
+      ]
+    },
+
+    "output": "frappe.get_all('Sales Partner', filters={'partner_type': 'Reseller', 'territory': 'North America'}, fields = ['partner_name', 'partner_type'])"
+  },
+  {
+    "input": {
+      "doctype": "Contact",
+      "question": "How many contact records are stored for the partner 'GreenLink Pvt Ltd'?",
+      "fields": [
+      "name",
+      "middle_name",
+      "last_name",
+      "full_name",
+      "email_id",
+      "user",
+      "address_contact"
+      ]
+    },
+    "output": "frappe.db.count('Contact',filters={'name': 'GreenLink Pvt Ltd'})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Give me a breakdown of sales partners and their total number of linked contact entries.",
+      "fields": [
+        "name",
+        "partner_name",
+        "contact_desc"
+      ]
+    },
+"output": "sales_partners = frappe.get_all('Sales Partner', fields=['name', 'partner_name'])\\nresult = []\\n\\nfor sp in sales_partners:\\n    doc = frappe.get_doc('Sales Partner', sp['name'])\\n       contact_count = len(getattr(doc, 'contact_desc', []))\\n    result.append({\\n        'sales_partner': sp['partner_name'],\\n        'contact_count': contact_count\\n    })\\n\\nprint(result)"
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Do we have any distributors that haven’t added address contacts yet?",
+      "fields": [
+        "name",
+        "address_contacts",
+        "partner_name"
+
+      ]
+    },
+    "output": "sales_partners = frappe.get_all('Sales Partner', fields=['name', 'partner_name'])\\ndistributors_without_contacts = []\\nfor sp in sales_partners:\\n    doc = frappe.get_doc('Sales Partner', sp['name'])\\n    address_contacts = getattr(doc, 'address_contacts', '')\\n    if not address_contacts or not address_contacts.strip():\\n        distributors_without_contacts.append(sp['partner_name'])\\nprint('Distributors without address contacts info (address_contacts empty):', distributors_without_contacts)"
+    },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Which partners don’t have any address_desc provided?",
+      "fields": [
+        "name",
+        "partner_name",
+        "address_desc"
+      ]
+    },
+    "output": "sales_partners = frappe.get_all('Sales Partner', fields=['name', 'partner_name'])\\npartners_without_address_desc = []\\nfor sp in sales_partners:\\n    doc = frappe.get_doc('Sales Partner', sp['name'])\\n    address_desc = getattr(doc, 'address_desc', '')\\n    if not address_desc or not address_desc.strip():\\n        partners_without_address_desc.append(sp['partner_name'])\\nprint('Partners without address_desc provided:', partners_without_address_desc)"
   },
   {
     "input": {
       "doctype": "Sales Partner",
       "question": "Count the number of partners with 'No. 14' in their address description.",
       "fields": [
-        "address_desc"
+        "name",
+        "address_desc",
+        "partner_name"
       ]
     },
-    "output": "frappe.db.count('Sales Partner', {'address_desc': ['like', '%No. 14%']})"
+    "output": "sales_partners = frappe.get_all('Sales Partner', fields=['name'])\\ncount = 0\\nfor sp in sales_partners:\\n    doc = frappe.get_doc('Sales Partner', sp['name'])\\n    address_desc = getattr(doc, 'address_desc', '')\\n    if address_desc and 'No. 14' in address_desc:\\n        count += 1\\nprint(\"Number of partners with 'No. 14' in address description:\", count)"
   },
   {
     "input": {
       "doctype": "Sales Partner",
       "question": "Export the partner name and address_desc of all affiliates in the system.",
       "fields": [
+        "name",
         "partner_name",
-        "address_desc",
-        "partner_type"
+        "address_desc"
       ]
     },
-    "output": "frappe.get_all('Sales Partner', filters={'partner_type': 'Affiliate'}, fields=['partner_name', 'address_desc'])"
+    "output": "sales_partners = frappe.get_all('Sales Partner', fields=['name', 'partner_name'])\\nfor sp in sales_partners:\\n    doc = frappe.get_doc('Sales Partner', sp['name'])\\n    address_desc = getattr(doc, 'address_desc', '')\\n    print(f\"Partner: {sp['partner_name']}\")\\n    print(f\"Address Description:\\n{address_desc}\\n{'-'*40}\")"
   },
   {
     "input": {
       "doctype": "Sales Partner",
       "question": "Show the address_desc field for all listed partners.",
-      "fields": ["address_desc"]
+      "fields": [
+        "name",
+        "address_desc",
+        "partner_name"
+      ]
     },
-    "output": "frappe.get_all('Sales Partner', fields=['address_desc'])"
+    "output": "sales_partners = frappe.get_all('Sales Partner', fields=['name', 'partner_name'])\\n\\nfor sp in sales_partners:\\n    doc = frappe.get_doc('Sales Partner', sp['name'])\\n    address_desc = getattr(doc, 'address_desc', '')\\n    print(f\"Partner: {sp['partner_name']}\")\\n    print(f\"Address Description:\\n{address_desc}\")\\n    print(\"-\" * 40)"
   },
   {
     "input": {
       "doctype": "Sales Partner",
       "question": "Can I get the address description for every distributor we work with?",
-      "fields": ["address_desc","partner_type"]
+      "fields": [
+        "name",
+        "address_desc",
+        "partner_name"
+      ]
     },
-    "output": "frappe.get_all('Sales Partner', filters={'partner_type': 'Distributor'}, fields=['address_desc'])"
+    "output": "sales_partners = frappe.get_all('Sales Partner', fields=['name', 'partner_name'])\\n\\nprint(\"Address Descriptions for All Distributors:\")\\nprint(\"-\" * 50)\\n\\nfor sp in sales_partners:\\n    doc = frappe.get_doc('Sales Partner', sp['name'])\\n    address_desc = getattr(doc, 'address_desc', '')\\n    print(f\"Distributor: {sp['partner_name']}\")\\n    print(f\"Address Description:\\n{address_desc}\")\\n    print(\"-\" * 50)"
+
   },
   {
     "input": {
       "doctype": "Sales Partner",
       "question": "Which sales partners have their address_desc starting with 'Suite 3A'?",
-      "fields": ["address_desc"]
+      "fields": [
+        "name",
+        "address_desc",
+        "partner_name"
+      ]
     },
-    "output": "frappe.get_all('Sales Partner', filters={'address_desc': ['like', 'Suite 3A%']}, fields=['address_desc'])"
+"output": "sales_partners = frappe.get_all('Sales Partner', fields=['name', 'partner_name'])\\nresult = []\\n\\nfor sp in sales_partners:\\n    doc = frappe.get_doc('Sales Partner', sp['name'])\\n    address_desc = getattr(doc, 'address_desc', '')\\n    if address_desc and address_desc.startswith('Suite 3A'):\\n        result.append(sp['partner_name'])\\n\\nprint(\"Sales partners with address_desc starting with 'Suite 3A':\", result)"
   },
   {
     "input": {
       "doctype": "Sales Partner",
       "question": "List names and short address descriptions of partners based in Europe.",
-      "fields": ["partner_name","territory","address_desc"]
+      "fields": [
+        "name",
+        "partner_name",
+        "territory",
+        "address_desc"
+      ]
     },
-    "output": "frappe.get_all('Sales Partner', filters={'territory': 'Europe'}, fields=['partner_name', 'address_desc'])"
+"output": "sales_partners = frappe.get_all('Sales Partner', filters={'territory': 'Europe'}, fields=['name', 'partner_name'])\\nresult = []\\n\\nfor sp in sales_partners:\\n    doc = frappe.get_doc('Sales Partner', sp['name'])\\n    address_desc = getattr(doc, 'address_desc', '')\\n    result.append({\\n        \"partner_name\": sp['partner_name'],\\n        \"address_desc\": address_desc[:100] + \"...\" if len(address_desc) > 100 else address_desc\\n    })\\n\\nprint(\"Partners in Europe with address descriptions:\", result)"
   },
   {
     "input": {
       "doctype": "Sales Partner",
       "question": "Get me address_desc and territory for all commission agents.",
-      "fields": ["address_desc", "territory","partner_type"]
+      "fields": [
+        "name",
+        "address_desc",
+        "territory",
+        "partner_type"
+
+      ]
     },
-    "output": "frappe.get_all('Sales Partner', filters={'partner_type': 'Commission Agent'}, fields=['address_desc', 'territory'])"
+"output": "sales_partners = frappe.get_all('Sales Partner', filters={'partner_type': 'Commission Agent'}, fields=['name', 'territory'])\\nresult = []\\n\\nfor sp in sales_partners:\\n    doc = frappe.get_doc('Sales Partner', sp['name'])\\n    address_desc = getattr(doc, 'address_desc', '')\\n    result.append({\\n        \"address_desc\": address_desc,\\n        \"territory\": sp['territory']\\n    })\\n\\nprint(\"Address descriptions and territories for commission agents:\", result)"
   },
   {
     "input": {
       "doctype": "Sales Partner",
       "question": "Does 'MarketWide Inc.' have an address description stored?",
-      "fields": ["address_desc","partner_name"]
+      "fields": [
+        "name",
+        "address_desc",
+        "partner_name"
+      ]
     },
-    "output": "frappe.get_all('Sales Partner', filters={'partner_name': 'MarketWide Inc.'}, fields=['address_desc'])"
-  },
-  {
-    "input": {
-      "doctype": "Sales Partner",
-      "question": "Which partners don’t have any address_desc provided?",
-      "fields": ["address_desc"]
-    },
-    "output": "frappe.get_all('Sales Partner', filters={'address_desc': ['is', 'null']}, fields=['name'])"
-  },
-  {
-    "input": {
-      "doctype": "Sales Partner",
-      "question": "Count the number of partners with 'No. 14' in their address description.",
-      "fields": ["address_desc"]
-    },
-    "output": "frappe.db.count('Sales Partner', filters={'address_desc': ['like', '%No. 14%']})"
-  },
-  {
-    "input": {
-      "doctype": "Sales Partner",
-      "question": "Export the partner name and address_desc of all affiliates in the system.",
-      "fields": ["partner_name","partner_type","address_desc"]
-    },
-    "output": "frappe.get_all('Sales Partner', filters={'partner_type': 'Affiliate'}, fields=['partner_name', 'address_desc'])"
+"output": "sales_partners = frappe.get_all('Sales Partner', filters={'partner_name': 'MarketWide Inc.'}, fields=['name'])\\nif sales_partners:\\n    doc = frappe.get_doc('Sales Partner', sales_partners[0]['name'])\\n    address_desc = getattr(doc, 'address_desc', '')\\n    print(\"Does 'MarketWide Inc.' have an address description stored?\", bool(address_desc and address_desc.strip()))\\nelse:\\n    print(\"'MarketWide Inc.' not found.\")"
   },
     {
     "input": {
@@ -648,86 +699,6 @@
       "fields": ["commission_rate"]
     },
     "output": "frappe.get_all('Sales Partner', filters={'partner_type': ['in', ['Distributor', 'Affiliate']]}, fields=['commission_rate'])"
-  },
-  {
-    "input": {
-      "doctype": "Sales Partner",
-      "question": "Can I see the contact description for 'FusionTrade Ltd'?",
-      "fields": ["contact_desc"]
-    },
-    "output": "frappe.get_all('Sales Partner', filters={'partner_name': 'FusionTrade Ltd'}, fields=['contact_desc'])"
-  },
-  {
-    "input": {
-      "doctype": "Sales Partner",
-      "question": "List all partners and their contact_desc fields.",
-      "fields": ["contact_desc"]
-    },
-    "output": "frappe.get_all('Sales Partner', fields=['partner_name', 'contact_desc'])"
-  },
-  {
-    "input": {
-      "doctype": "Sales Partner",
-      "question": "Which partners have contact descriptions starting with 'Call'?",
-      "fields": ["contact_desc"]
-    },
-    "output": "frappe.get_all('Sales Partner', filters={'contact_desc': ['like', 'Call%']}, fields=['partner_name', 'contact_desc'])"
-  },
-  {
-    "input": {
-      "doctype": "Sales Partner",
-      "question": "Get contact_desc and website for all distributor-type partners.",
-      "fields": ["contact_desc"]
-    },
-    "output": "frappe.get_all('Sales Partner', filters={'partner_type': 'Distributor'}, fields=['contact_desc', 'website'])"
-  },
-  {
-    "input": {
-      "doctype": "Sales Partner",
-      "question": "Show contact_desc and address_desc for affiliates in our system.",
-      "fields": ["contact_desc"]
-    },
-    "output": "frappe.get_all('Sales Partner', filters={'partner_type': 'Affiliate'}, fields=['contact_desc', 'address_desc'])"
-  },
-  {
-    "input": {
-      "doctype": "Sales Partner",
-      "question": "What’s the contact description for partners located in Asia?",
-      "fields": ["contact_desc"]
-    },
-    "output": "frappe.get_all('Sales Partner', filters={'territory': 'Asia'}, fields=['partner_name', 'contact_desc'])"
-  },
-  {
-    "input": {
-      "doctype": "Sales Partner",
-      "question": "Find all partners where contact_desc contains a phone number.",
-      "fields": ["contact_desc"]
-    },
-    "output": "frappe.get_all('Sales Partner', filters={'contact_desc': ['like', '%+%']}, fields=['partner_name', 'contact_desc'])"
-  },
-  {
-    "input": {
-      "doctype": "Sales Partner",
-      "question": "Count how many partners have no contact_desc set.",
-      "fields": ["contact_desc"]
-    },
-    "output": "frappe.db.count('Sales Partner', filters={'contact_desc': ['is', '']})"
-  },
-  {
-    "input": {
-      "doctype": "Sales Partner",
-      "question": "Export the partner name and contact description of all resellers.",
-      "fields": ["contact_desc"]
-    },
-    "output": "frappe.get_all('Sales Partner', filters={'partner_type': 'Reseller'}, fields=['partner_name', 'contact_desc'])"
-  },
-  {
-    "input": {
-      "doctype": "Sales Partner",
-      "question": "Which partner has the contact_desc 'Email support@globex.com for queries'?",
-      "fields": ["contact_desc"]
-    },
-    "output": "frappe.get_all('Sales Partner', filters={'contact_desc': 'Email support@globex.com for queries'}, fields=['partner_name'])"
   },
   {
     "input": {
@@ -1070,17 +1041,7 @@
   {
     "input": {
       "doctype": "Sales Partner",
-      "question": "What is the referral code assigned to 'Altura Traders'?",
-      "top fields": ["partner_name", "referral_code", "website", "description"],
-      "fields": ["referral_code"]
-    },
-    "output": "frappe.get_value('Sales Partner', {'partner_name': 'Altura Traders'}, 'referral_code')"
-  },
-  {
-    "input": {
-      "doctype": "Sales Partner",
       "question": "List all partners along with their referral_code values.",
-      "top fields": ["name", "referral_code", "partner_type", "commission_rate"],
       "fields": ["name", "referral_code"]
     },
     "output": "frappe.get_all('Sales Partner', fields=['name', 'referral_code'])"
@@ -1089,8 +1050,7 @@
     "input": {
       "doctype": "Sales Partner",
       "question": "Which partners don’t have any referral_code provided in their records?",
-      "top fields": ["name", "referral_code", "logo", "route"],
-      "fields": ["name"]
+      "fields": ["referral_code","name"]
     },
     "output": "frappe.get_all('Sales Partner', filters={'referral_code': ''}, fields=['name'])"
   },
@@ -1098,7 +1058,6 @@
     "input": {
       "doctype": "Sales Partner",
       "question": "Find partners who have referral codes starting with 'AFF-'.",
-      "top fields": ["name", "referral_code", "targets", "description"],
       "fields": ["name", "referral_code"]
     },
     "output": "frappe.get_all('Sales Partner', filters={'referral_code': ['like', 'AFF-%']}, fields=['name', 'referral_code'])"
@@ -1106,56 +1065,42 @@
   {
     "input": {
       "doctype": "Sales Partner",
-      "question": "Does 'Zenith Connect' have a referral_code assigned?",
-      "top fields": ["partner_name", "referral_code", "introduction", "show_in_website"],
-      "fields": ["referral_code"]
-    },
-    "output": "frappe.get_value('Sales Partner', {'partner_name': 'Zenith Connect'}, 'referral_code')"
-  },
-  {
-    "input": {
-      "doctype": "Sales Partner",
       "question": "Get the referral_code and website for all affiliate-type partners.",
-      "top fields": ["referral_code", "website", "partner_type", "address_contacts"],
-      "fields": ["referral_code", "website"]
+      "fields": ["partner_type","referral_code", "website"]
     },
     "output": "frappe.get_all('Sales Partner', filters={'partner_type': 'Affiliate'}, fields=['referral_code', 'website'])"
   },
   {
     "input": {
       "doctype": "Sales Partner",
-      "question": "Which sales partners use 'REF-9082-XP' as their referral code?",
-      "top fields": ["referral_code", "route", "contact_desc", "logo"],
-      "fields": ["name"]
-    },
-    "output": "frappe.get_all('Sales Partner', filters={'referral_code': 'REF-9082-XP'}, fields=['name'])"
-  },
-  {
-    "input": {
-      "doctype": "Sales Partner",
       "question": "Export partner_name and referral_code for all partners in Qatar.",
-      "top fields": ["partner_name", "referral_code", "territory", "website"],
-      "fields": ["partner_name", "referral_code"]
+      "fields": ["territory","partner_name", "referral_code"]
     },
     "output": "frappe.get_all('Sales Partner', filters={'territory': 'Qatar'}, fields=['partner_name', 'referral_code'])"
   },
   {
     "input": {
       "doctype": "Sales Partner",
-      "question": "Count how many partners have valid referral codes stored.",
-      "top fields": ["name", "referral_code", "show_in_website", "description"],
-      "fields": ["referral_code"]
+      "question": "What is the referral code assigned to 'Altura Traders'?",
+      "fields": ["partner_name","referral_code"]
     },
-    "output": "frappe.db.count('Sales Partner', {'referral_code': ['!=', '']})"
+    "output": "frappe.get_value('Sales Partner', {'partner_name': 'Altura Traders'}, 'referral_code')"
   },
   {
     "input": {
       "doctype": "Sales Partner",
-      "question": "Which referral_code corresponds to the partner 'BridgeGlobal Inc.'?",
-      "top fields": ["partner_name", "referral_code", "partner_type", "introduction"],
+      "question": "Does 'Zenith Connect' have a referral_code assigned?",
+      "fields": ["partner_name","referral_code"]
+    },
+    "output": "frappe.get_value('Sales Partner', {'partner_name': 'Zenith Connect'}, 'referral_code')"
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Count how many partners have valid referral codes stored.",
       "fields": ["referral_code"]
     },
-    "output": "frappe.get_value('Sales Partner', {'partner_name': 'BridgeGlobal Inc.'}, 'referral_code')"
+    "output": "frappe.db.count('Sales Partner', {'referral_code': ['!=', '']})"
   },
   
   {
@@ -1398,12 +1343,11 @@
     },
     "output": "frappe.get_all('Sales Partner', filters={'introduction': ['like', '%global%']}, fields=['name'])"
   },
-  
   {
     "input": {
       "doctype": "Supplier",
       "question": "What is the naming pattern used to generate supplier IDs?",
-      "top fields": ["naming_series", "supplier_name", "supplier_type", "country"]
+      "fields": ["naming_series"]
     },
     "output": "frappe.get_single_value('Supplier', 'naming_series')"
   },
@@ -1411,7 +1355,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Can you show me how supplier codes are automatically generated?",
-      "top fields": ["naming_series", "tax_id", "supplier_group", "language"]
+      "fields": ["naming_series"]
     },
     "output": "frappe.get_single_value('Supplier', 'naming_series')"
   },
@@ -1419,7 +1363,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Which document controls the prefix used for new supplier entries?",
-      "top fields": ["naming_series", "default_currency", "supplier_name", "image"]
+      "fields": ["naming_series"]
     },
     "output": "frappe.get_single_value('Supplier', 'naming_series')"
   },
@@ -1427,7 +1371,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Find out how supplier numbers are structured in the system.",
-      "top fields": ["naming_series", "default_price_list", "is_internal_supplier", "supplier_group"]
+      "fields": ["naming_series"]
     },
     "output": "frappe.get_single_value('Supplier', 'naming_series')"
   },
@@ -1435,7 +1379,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Where is the supplier ID format like 'SUP-.YYYY.-' defined?",
-      "top fields": ["naming_series", "tax_id", "email_id", "supplier_type"]
+      "fields": ["naming_series"]
     },
     "output": "frappe.get_single_value('Supplier', 'naming_series')"
   },
@@ -1443,7 +1387,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "How are suppliers named when records are created?",
-      "top fields": ["naming_series", "is_transporter", "default_currency", "supplier_name"]
+      "fields": ["naming_series"]
     },
     "output": "frappe.get_single_value('Supplier', 'naming_series')"
   },
@@ -1451,7 +1395,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "What format is used for supplier auto-generated names?",
-      "top fields": ["naming_series", "supplier_type", "default_currency", "supplier_group"]
+      "fields": ["naming_series"]
     },
     "output": "frappe.get_single_value('Supplier', 'naming_series')"
   },
@@ -1459,7 +1403,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Is there a setting that defines how new supplier records are named?",
-      "top fields": ["naming_series", "payment_terms", "default_bank_account", "represents_company"]
+      "fields": ["naming_series"]
     },
     "output": "frappe.get_single_value('Supplier', 'naming_series')"
   },
@@ -2125,7 +2069,7 @@
         "default_price_list"
       ]
     },
-    "output": "frappe.get_all('Sales Partner', filters={'default_price_list': ['is', 'null']}, fields = ['partner_name'])"
+    "output": "frappe.get_all('Sales Partner', filters={'default_price_list': ['=', 'null']}, fields = ['partner_name'])"
   },
   {
     "input": {
@@ -2161,7 +2105,7 @@
         "default_price_list"
       ]
     },
-    "output": "frappe.get_all('Sales Partner', filters={'partner_type': 'Distributor', 'default_price_list': ['is', 'null']}, fields = ['partner_name'])"
+    "output": "frappe.get_all('Sales Partner', filters={'partner_type': 'Distributor', 'default_price_list': ['=', 'null']}, fields = ['partner_name'])"
   },
   {
     "input": {
@@ -2229,7 +2173,7 @@
       "question": "Are there any suppliers that haven’t set up a default bank account yet?",
       "fields": ["default_bank_account", "supplier_name"]
     },
-    "output": "frappe.get_all('Supplier', filters={'default_bank_account': ['is', 'null']}, fields=['supplier_name'])"
+    "output": "frappe.get_all('Supplier', filters={'default_bank_account': ['=', 'null']}, fields=['supplier_name'])"
   },
   {
     "input": {
@@ -2309,7 +2253,7 @@
       "question": "Do we have any suppliers that do not represent a company?",
       "fields": ["supplier_name", "represents_company"]
     },
-    "output": "frappe.get_all('Supplier', filters={'represents_company': ['is', 'null']}, fields=['supplier_name'])"
+    "output": "frappe.get_all('Supplier', filters={'represents_company': ['=', 'null']}, fields=['supplier_name'])"
   },
   {
     "input": {
@@ -2413,7 +2357,7 @@
       "question": "Do we have any suppliers not linked to any company?",
       "fields": ["supplier_name", "companies"]
     },
-    "output": "frappe.get_all('Supplier', filters={'companies': ['is', 'null']}, fields=['supplier_name'])"
+    "output": "frappe.get_all('Supplier', filters={'companies': ['=', 'null']}, fields=['supplier_name'])"
   },
   {
     "input": {
@@ -2493,7 +2437,7 @@
       "question": "Which suppliers have not provided any business description yet?",
       "fields": ["supplier_name"]
     },
-    "output": "frappe.get_all('Supplier', filters={'supplier_details': ['is', 'null']}, fields=['supplier_name'])"
+    "output": "frappe.get_all('Supplier', filters={'supplier_details': ['=', 'null']}, fields=['supplier_name'])"
   },
   {
     "input": {
@@ -2589,7 +2533,7 @@
       "question": "Which suppliers have not set any language preference?",
       "fields": ["language", "supplier_name"]
     },
-    "output": "frappe.get_all('Supplier', filters={'language': ['is', 'null']}, fields=['supplier_name'])"
+    "output": "frappe.get_all('Supplier', filters={'language': ['=', 'null']}, fields=['supplier_name'])"
   },
   {
     "input": {
@@ -2645,7 +2589,7 @@
       "question": "Which internal suppliers have no tax ID provided?",
       "fields": ["is_internal_supplier", "tax_id", "supplier_name"]
     },
-    "output": "frappe.get_all('Supplier', filters={'is_internal_supplier': 1, 'tax_id': ['is', 'null']}, fields=['supplier_name'])"
+    "output": "frappe.get_all('Supplier', filters={'is_internal_supplier': 1, 'tax_id': ['=', 'null']}, fields=['supplier_name'])"
   },
   {
     "input": {
@@ -2709,7 +2653,7 @@
       "question": "Are there any suppliers without a defined tax category?",
       "fields": ["tax_category", "supplier_name"]
     },
-    "output": "frappe.get_all('Supplier', filters={'tax_category': ['is', 'null']}, fields = ['supplier_name'])"
+    "output": "frappe.get_all('Supplier', filters={'tax_category': ['=', 'null']}, fields = ['supplier_name'])"
   },
   {
     "input": {
@@ -2813,7 +2757,7 @@
       "question": "Which suppliers do not have any tax withholding category assigned?",
       "fields": ["supplier_name", "tax_withholding_category"]
     },
-    "output": "frappe.get_all('Supplier', filters={'tax_withholding_category': ['is', 'null']}, fields=['supplier_name'])"
+    "output": "frappe.get_all('Supplier', filters={'tax_withholding_category': ['=', 'null']}, fields=['supplier_name'])"
   },
   {
     "input": {
@@ -2847,167 +2791,7 @@
     },
     "output": "frappe.get_all('Supplier', filters={'tax_id': ['like', '%VAT%']}, fields=['supplier_name', 'tax_withholding_category'])"
   },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Which suppliers have saved address contact records?",
-      "fields": ["supplier_name", "address_contacts"]
-    },
-    
-    "output": "frappe.get_all('Supplier', filters={'address_contacts': ['!=', '']}, fields=['supplier_name', 'address_contacts'])"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Get names and contact blocks of suppliers.",
-      "fields": ["supplier_name", "address_contacts"]
-    },
-    "output": "frappe.get_all('Supplier', fields=['supplier_name', 'address_contacts'])"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Show supplier names with missing address contacts.",
-      "fields": ["supplier_name", "address_contacts"]
-    },
-    "output": "frappe.get_all('Supplier', filters={'address_contacts': ['is', 'null']}, fields=['supplier_name'])"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Which internal suppliers have filled in address contacts?",
-      "fields": ["is_internal_supplier", "address_contacts", "supplier_name"]
-    },
-    "output": "frappe.get_all('Supplier', filters={'is_internal_supplier': 1, 'address_contacts': ['!=', '']}, fields=['supplier_name'])"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Give address contact details of suppliers from Qatar.",
-      "fields": ["supplier_name", "address_contacts", "country"]
-    },
-    "output": "frappe.get_all('Supplier', filters={'country': 'Qatar'}, fields=['supplier_name', 'address_contacts'])"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Do any transporters have address contact information listed?",
-      "fields": ["is_transporter", "address_contacts", "supplier_name"]
-    },
-    "output": "frappe.get_all('Supplier', filters={'is_transporter': 1, 'address_contacts': ['!=', '']}, fields=['supplier_name'])"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Get email and address contact fields for suppliers.",
-      "fields": ["supplier_name", "email_id", "address_contacts"]
-    },
-    "output": "frappe.get_all('Supplier', fields=['supplier_name', 'email_id', 'address_contacts'])"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "List the address contact info and mobile numbers of all suppliers.",
-      "fields": ["supplier_name", "mobile_no", "address_contacts"]
-    },
-    "output": "frappe.get_all('Supplier', fields=['supplier_name', 'mobile_no', 'address_contacts'])"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Can you find suppliers with address contacts containing more than one line?",
-      "fields": ["supplier_name", "address_contacts"]
-    },
-    "output": "frappe.get_all('Supplier', filters={'address_contacts': ['like', '%\\n%']}, fields=['supplier_name', 'address_contacts'])"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Fetch address contact and hold status for all suppliers.",
-      "fields": ["supplier_name", "address_contacts", "on_hold"]
-    },
-    "output": "frappe.get_all('Supplier', fields=['supplier_name', 'address_contacts', 'on_hold'])"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Which suppliers have a primary address saved?",
-      "top fields": ["supplier_name", "supplier_primary_address"]
-    },
-    "output": "frappe.get_all('Supplier', filters={'supplier_primary_address': ['!=', '']}, fields=['supplier_name', 'supplier_primary_address'])"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "List the suppliers and their registered primary addresses.",
-      "top fields": ["supplier_name", "supplier_primary_address"]
-    },
-    "output": "frappe.get_all('Supplier', fields=['supplier_name', 'supplier_primary_address'])"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Show all suppliers that do not have a primary address assigned.",
-      "top fields": ["supplier_name", "supplier_primary_address"]
-    },
-    "output": "frappe.get_all('Supplier', filters={'supplier_primary_address': ['is', 'null']}, fields=['supplier_name'])"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Do any Indian suppliers have a registered primary address?",
-      "top fields": ["supplier_name", "supplier_primary_address"]
-    },
-    "output": "frappe.get_all('Supplier', filters={'country': 'India', 'supplier_primary_address': ['!=', '']}, fields=['supplier_name', 'supplier_primary_address'])"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Which internal suppliers have a specified primary address?",
-      "top fields": ["supplier_name", "supplier_primary_address"]
-    },
-    "output": "frappe.get_all('Supplier', filters={'is_internal_supplier': 1, 'supplier_primary_address': ['!=', '']}, fields=['supplier_name'])"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Get suppliers with both primary address and contact person set.",
-      "top fields": ["supplier_name", "supplier_primary_address", "supplier_primary_contact"]
-    },
-    "output": "frappe.get_all('Supplier', filters={'supplier_primary_address': ['!=', ''], 'supplier_primary_contact': ['!=', '']}, fields=['supplier_name'])"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Find primary address and email for each supplier.",
-      "top fields": ["supplier_name", "supplier_primary_address", "email_id"]
-    },
-    "output": "frappe.get_all('Supplier', fields=['supplier_name', 'supplier_primary_address', 'email_id'])"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Which suppliers have the same primary and billing address?",
-      "top fields": ["supplier_name", "supplier_primary_address", "primary_address"]
-    },
-    "output": "frappe.get_all('Supplier', filters={'supplier_primary_address': ['=', 'primary_address']}, fields=['supplier_name'])"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Are there suppliers with a defined primary address and website?",
-      "top fields": ["supplier_name", "supplier_primary_address", "website"]
-    },
-    "output": "frappe.get_all('Supplier', filters={'supplier_primary_address': ['!=', ''], 'website': ['!=', '']}, fields=['supplier_name'])"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Show suppliers along with their names, emails, and primary addresses.",
-      "top fields": ["supplier_name", "email_id", "supplier_primary_address"]
-    },
-    "output": "frappe.get_all('Supplier', fields=['supplier_name', 'email_id', 'supplier_primary_address'])"
-  },
+
   {
     "input": {
       "doctype": "Supplier",
@@ -3015,6 +2799,166 @@
       "fields": ["supplier_name", "primary_address"]
     },
     "output": "frappe.get_all('Supplier', filters={'primary_address': ['!=', '']}, fields=['supplier_name', 'primary_address'])"
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Which suppliers have a primary address saved?",
+      "fields": ["supplier_name", "supplier_primary_address"]
+    },
+    "output": "frappe.get_all('Supplier', filters={'supplier_primary_address': ['!=', '']}, fields=['supplier_name', 'supplier_primary_address'])"
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Which suppliers are marked with a warning for POS?",
+      "fields": ["warn_pos"]
+    },
+    "output": "frappe.get_all('Supplier', filters={'warn_pos': 1}, fields=['warn_pos'])"
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Get the list of suppliers and whether they trigger POS warnings.",
+      "fields": ["warn_pos"]
+    },
+    "output": "frappe.get_all('Supplier', fields=['warn_pos'])"
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "List Indian suppliers with POS warnings enabled.",
+      "fields": ["warn_pos","country"]
+    },
+    "output": "frappe.get_all('Supplier', filters={'country': 'India', 'warn_pos': 1}, fields=['warn_pos'])"
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Who are the suppliers that are not flagged for POS?",
+      "fields": ["warn_pos"]
+    },
+    "output": "frappe.get_all('Supplier', filters={'warn_pos': 0}, fields=['warn_pos'])"
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Which disabled suppliers also have POS warnings turned on?",
+      "fields": ["warn_pos","disabled"]
+    },
+    "output": "frappe.get_all('Supplier', filters={'disabled': 1, 'warn_pos': 1}, fields=['warn_pos'])"
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Show suppliers with POS warning flags and their emails.",
+      "fields": ["warn_pos", "email_id"]
+    },
+    "output": "frappe.get_all('Supplier', filters={'warn_pos': 1}, fields=['warn_pos', 'email_id'])"
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Find the supplier group of all those with POS warnings active.",
+      "fields": ["warn_pos", "supplier_group"]
+    },
+    "output": "frappe.get_all('Supplier', filters={'warn_pos': 1}, fields=['warn_pos', 'supplier_group'])"
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Are there suppliers flagged for POS but not frozen?",
+      "fields": ["warn_pos","is_frozen"]
+    },
+    "output": "frappe.get_all('Supplier', filters={'warn_pos': 1, 'is_frozen': 0}, fields=['warn_pos'])"
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Retrieve suppliers with POS warnings and their primary contacts.",
+      "fields": ["warn_pos", "supplier_primary_contact"]
+    },
+    "output": "frappe.get_all('Supplier', filters={'warn_pos': 1}, fields=['warn_pos', 'supplier_primary_contact'])"
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "List suppliers from Qatar who are warned for POS.",
+      "fields": ["warn_pos","country"]
+    },
+    "output": "frappe.get_all('Supplier', filters={'country': 'Qatar', 'warn_pos': 1}, fields=['warn_pos'])"
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "List the suppliers and their registered primary addresses.",
+      "fields": ["supplier_name", "supplier_primary_address"]
+    },
+    "output": "frappe.get_all('Supplier', fields=['supplier_name', 'supplier_primary_address'])"
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Show all suppliers that do not have a primary address assigned.",
+      "fields": ["supplier_name","supplier_primary_address"]
+    },
+    "output": "frappe.get_all('Supplier', filters={'supplier_primary_address': ['=', 'null']}, fields=['supplier_name'])"
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Do any Indian suppliers have a registered primary address?",
+      "fields": ["supplier_name", "supplier_primary_address","country"]
+    },
+    "output": "frappe.get_all('Supplier', filters={'country': 'India', 'supplier_primary_address': ['!=', '']}, fields=['supplier_name', 'supplier_primary_address'])"
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Which internal suppliers have a specified primary address?",
+      "fields": ["supplier_name","is_internal_supplier","supplier_primary_address"]
+    },
+    "output": "frappe.get_all('Supplier', filters={'is_internal_supplier': 1, 'supplier_primary_address': ['!=', '']}, fields=['supplier_name'])"
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Get suppliers with both primary address and contact person set.",
+      "fields": ["supplier_name","supplier_primary_address","supplier_primary_contact"]
+    },
+    "output": "frappe.get_all('Supplier', filters={'supplier_primary_address': ['!=', ''], 'supplier_primary_contact': ['!=', '']}, fields=['supplier_name'])"
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Find primary address and email for each supplier.",
+      "fields": ["supplier_name", "supplier_primary_address", "email_id"]
+    },
+    "output": "frappe.get_all('Supplier', fields=['supplier_name', 'supplier_primary_address', 'email_id'])"
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Which suppliers have the same primary and billing address?",
+      "fields": ["supplier_primary_address","primary_address","supplier_name"]
+    },
+    "output": "frappe.get_all('Supplier', filters={'supplier_primary_address': ['=', 'primary_address']}, fields=['supplier_name'])"
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Are there suppliers with a defined primary address and website?",
+      "fields": ["supplier_name","supplier_primary_address","website"]
+    },
+    "output": "frappe.get_all('Supplier', filters={'supplier_primary_address': ['!=', ''], 'website': ['!=', '']}, fields=['supplier_name'])"
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Show suppliers along with their names, emails, and primary addresses.",
+      "fields": ["supplier_name", "email_id", "supplier_primary_address"]
+    },
+    "output": "frappe.get_all('Supplier', fields=['supplier_name', 'email_id', 'supplier_primary_address'])"
   },
   {
     "input": {
@@ -3030,7 +2974,7 @@
       "question": "Find suppliers that don’t have any billing address saved.",
       "fields": ["supplier_name", "primary_address"]
     },
-    "output": "frappe.get_all('Supplier', filters={'primary_address': ['is', 'null']}, fields=['supplier_name'])"
+    "output": "frappe.get_all('Supplier', filters={'primary_address': ['=', 'null']}, fields=['supplier_name'])"
   },
   {
     "input": {
@@ -3110,7 +3054,7 @@
       "question": "Find all suppliers without a primary contact assigned.",
       "fields": ["supplier_name", "supplier_primary_contact"]
     },
-    "output": "frappe.get_all('Supplier', filters={'supplier_primary_contact': ['is', 'null']}, fields=['supplier_name'])"
+    "output": "frappe.get_all('Supplier', filters={'supplier_primary_contact': ['=', 'null']}, fields=['supplier_name'])"
   },
   {
     "input": {
@@ -3158,7 +3102,7 @@
       "question": "Are there any suppliers without email but with a contact person listed?",
       "fields": ["email_id", "supplier_primary_contact", "supplier_name"]
     },
-    "output": "frappe.get_all('Supplier', filters={'email_id': ['is', 'null'], 'supplier_primary_contact': ['!=', '']}, fields=['supplier_name'])"
+    "output": "frappe.get_all('Supplier', filters={'email_id': ['=', 'null'], 'supplier_primary_contact': ['!=', '']}, fields=['supplier_name'])"
   },
   {
     "input": {
@@ -3182,7 +3126,7 @@
       "question": "Which suppliers have not provided a mobile number?",
       "fields": ["supplier_name", "mobile_no"]
     },
-    "output": "frappe.get_all('Supplier', filters={'mobile_no': ['is', 'null']}, fields=['supplier_name'])"
+    "output": "frappe.get_all('Supplier', filters={'mobile_no': ['=', 'null']}, fields=['supplier_name'])"
   },
   {
     "input": {
@@ -3230,7 +3174,7 @@
       "question": "Find suppliers where the mobile number and email are both missing.",
       "fields": ["mobile_no", "email_id"]
     },
-    "output": "frappe.get_all('Supplier', filters={'mobile_no': ['is', 'null'], 'email_id': ['is', 'null']}, fields=['supplier_name'])"
+    "output": "frappe.get_all('Supplier', filters={'mobile_no': ['=', 'null'], 'email_id': ['=', 'null']}, fields=['supplier_name'])"
   },
   {
     "input": {
@@ -3252,7 +3196,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Show me all suppliers with their email addresses.",
-      "fields used": ["supplier_name", "email_id"]
+      "fields": ["supplier_name", "email_id"]
     },
     "output": "frappe.get_all('Supplier', fields=['supplier_name', 'email_id'])"
   },
@@ -3260,15 +3204,15 @@
     "input": {
       "doctype": "Supplier",
       "question": "Which suppliers have not provided an email address?",
-      "fields used": ["supplier_name", "email_id"]
+      "fields": ["supplier_name", "email_id"]
     },
-    "output": "frappe.get_all('Supplier', filters={'email_id': ['is', 'null']}, fields=['supplier_name'])"
+    "output": "frappe.get_all('Supplier', filters={'email_id': ['=', 'null']}, fields=['supplier_name'])"
   },
   {
     "input": {
       "doctype": "Supplier",
       "question": "List suppliers whose email contains 'procure'.",
-      "fields used": ["supplier_name", "email_id"]
+      "fields": ["supplier_name", "email_id"]
     },
     "output": "frappe.get_all('Supplier', filters={'email_id': ['like', '%procure%']}, fields=['supplier_name', 'email_id'])"
   },
@@ -3276,7 +3220,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Get internal suppliers and their email contacts.",
-      "fields used": ["supplier_name", "is_internal_supplier", "email_id"]
+      "fields": ["supplier_name", "is_internal_supplier", "email_id"]
     },
     "output": "frappe.get_all('Supplier', filters={'is_internal_supplier': 1}, fields=['supplier_name', 'email_id'])"
   },
@@ -3284,7 +3228,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Show suppliers whose email ends with '@gmail.com'.",
-      "fields used": ["supplier_name", "email_id"]
+      "fields": ["supplier_name", "email_id"]
     },
     "output": "frappe.get_all('Supplier', filters={'email_id': ['like', '%@gmail.com']}, fields=['supplier_name', 'email_id'])"
   },
@@ -3292,7 +3236,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Which suppliers from Qatar have their email ID registered?",
-      "fields used": ["supplier_name", "country", "email_id"]
+      "fields": ["supplier_name", "country", "email_id"]
     },
     "output": "frappe.get_all('Supplier', filters={'country': 'Qatar', 'email_id': ['!=', '']}, fields=['supplier_name', 'email_id'])"
   },
@@ -3300,7 +3244,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "List suppliers with both email and website available.",
-      "fields used": ["email_id", "website", "supplier_name"]
+      "fields": ["email_id", "website", "supplier_name"]
     },
     "output": "frappe.get_all('Supplier', filters={'email_id': ['!=', ''], 'website': ['!=', '']}, fields=['supplier_name'])"
   },
@@ -3308,7 +3252,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Do any suppliers use a common domain in their email addresses?",
-      "fields used": ["supplier_name", "email_id"]
+      "fields": ["supplier_name", "email_id"]
     },
     "output": "frappe.get_all('Supplier', filters={'email_id': ['like', '%@%']}, fields=['supplier_name', 'email_id'])"
   },
@@ -3316,15 +3260,15 @@
     "input": {
       "doctype": "Supplier",
       "question": "Find suppliers where both mobile number and email are missing.",
-      "fields used": ["supplier_name", "mobile_no", "email_id"]
+      "fields": ["supplier_name", "mobile_no", "email_id"]
     },
-    "output": "frappe.get_all('Supplier', filters={'mobile_no': ['is', 'null'], 'email_id': ['is', 'null']}, fields=['supplier_name'])"
+    "output": "frappe.get_all('Supplier', filters={'mobile_no': ['=', 'null'], 'email_id': ['=', 'null']}, fields=['supplier_name'])"
   },
   {
     "input": {
       "doctype": "Supplier",
       "question": "Which suppliers have the same email as their contact person?",
-      "fields used": ["supplier_name", "email_id", "supplier_primary_contact"]
+      "fields": ["supplier_name", "email_id", "supplier_primary_contact"]
     },
     "output": "frappe.get_all('Supplier', filters={'email_id': ['=', 'supplier_primary_contact']}, fields=['supplier_name'])"
   },
@@ -3342,7 +3286,7 @@
       "question": "Which suppliers do not have any payment terms specified?",
       "fields": ["supplier_name", "payment_terms"]
     },
-    "output": "frappe.get_all('Supplier', filters={'payment_terms': ['is', 'null']}, fields=['supplier_name'])"
+    "output": "frappe.get_all('Supplier', filters={'payment_terms': ['=', 'null']}, fields=['supplier_name'])"
   },
   {
     "input": {
@@ -3390,7 +3334,7 @@
       "question": "Show me suppliers where payment terms are missing but price list is available.",
       "fields": ["supplier_name", "payment_terms", "default_price_list"]
     },
-    "output": "frappe.get_all('Supplier', filters={'payment_terms': ['is', 'null'], 'default_price_list': ['!=', '']}, fields=['supplier_name'])"
+    "output": "frappe.get_all('Supplier', filters={'payment_terms': ['=', 'null'], 'default_price_list': ['!=', '']}, fields=['supplier_name'])"
   },
   {
     "input": {
@@ -3422,7 +3366,7 @@
       "question": "Which suppliers do not have any account details configured?",
       "fields": ["supplier_name", "accounts"]
     },
-    "output": "frappe.get_all('Supplier', filters={'accounts': ['is', 'null']}, fields=['supplier_name'])"
+    "output": "frappe.get_all('Supplier', filters={'accounts': ['=', 'null']}, fields=['supplier_name'])"
   },
   {
     "input": {
@@ -3492,7 +3436,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Which suppliers allow creating purchase invoices without a purchase order?",
-      "top fields": ["supplier_name", "allow_purchase_invoice_creation_without_purchase_order"]
+      "fields": ["supplier_name","allow_purchase_invoice_creation_without_purchase_order"]
     },
     "output": "frappe.get_all('Supplier', filters={'allow_purchase_invoice_creation_without_purchase_order': 1}, fields=['supplier_name'])"
   },
@@ -3500,7 +3444,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "List all suppliers who require a purchase order for creating invoices.",
-      "top fields": ["supplier_name", "allow_purchase_invoice_creation_without_purchase_order"]
+      "fields": ["supplier_name","allow_purchase_invoice_creation_without_purchase_order"]
     },
     "output": "frappe.get_all('Supplier', filters={'allow_purchase_invoice_creation_without_purchase_order': 0}, fields=['supplier_name'])"
   },
@@ -3508,7 +3452,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Get the setting status for creating invoices without purchase orders for each supplier.",
-      "top fields": ["supplier_name", "allow_purchase_invoice_creation_without_purchase_order"]
+      "fields": ["supplier_name", "allow_purchase_invoice_creation_without_purchase_order"]
     },
     "output": "frappe.get_all('Supplier', fields=['supplier_name', 'allow_purchase_invoice_creation_without_purchase_order'])"
   },
@@ -3516,7 +3460,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Show me suppliers from India who allow invoices without POs.",
-      "top fields": ["supplier_name", "country", "allow_purchase_invoice_creation_without_purchase_order"]
+      "fields": ["supplier_name","allow_purchase_invoice_creation_without_purchase_order","country"]
     },
     "output": "frappe.get_all('Supplier', filters={'country': 'India', 'allow_purchase_invoice_creation_without_purchase_order': 1}, fields=['supplier_name'])"
   },
@@ -3524,7 +3468,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Are there internal suppliers who allow bypassing purchase orders?",
-      "top fields": ["supplier_name", "is_internal_supplier", "allow_purchase_invoice_creation_without_purchase_order"]
+      "fields": ["supplier_name","is_internal_supplier","allow_purchase_invoice_creation_without_purchase_order"]
     },
     "output": "frappe.get_all('Supplier', filters={'is_internal_supplier': 1, 'allow_purchase_invoice_creation_without_purchase_order': 1}, fields=['supplier_name'])"
   },
@@ -3532,7 +3476,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Which suppliers with email addresses allow skipping POs for invoices?",
-      "top fields": ["supplier_name", "email_id", "allow_purchase_invoice_creation_without_purchase_order"]
+      "fields": ["supplier_name", "email_id","allow_purchase_invoice_creation_without_purchase_order"]
     },
     "output": "frappe.get_all('Supplier', filters={'allow_purchase_invoice_creation_without_purchase_order': 1}, fields=['supplier_name', 'email_id'])"
   },
@@ -3540,7 +3484,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Fetch supplier names and invoice policy flags regarding POs.",
-      "top fields": ["supplier_name", "allow_purchase_invoice_creation_without_purchase_order"]
+      "fields": ["supplier_name", "allow_purchase_invoice_creation_without_purchase_order"]
     },
     "output": "frappe.get_all('Supplier', fields=['supplier_name', 'allow_purchase_invoice_creation_without_purchase_order'])"
   },
@@ -3548,7 +3492,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Find suppliers grouped by supplier type who allow invoice creation without POs.",
-      "top fields": ["supplier_name", "supplier_type", "allow_purchase_invoice_creation_without_purchase_order"]
+      "fields": ["supplier_name", "supplier_type","allow_purchase_invoice_creation_without_purchase_order"]
     },
     "output": "frappe.get_all('Supplier', filters={'allow_purchase_invoice_creation_without_purchase_order': 1}, fields=['supplier_name', 'supplier_type'])"
   },
@@ -3556,7 +3500,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Which suppliers do not allow creating invoices before purchase orders?",
-      "top fields": ["supplier_name", "allow_purchase_invoice_creation_without_purchase_order"]
+      "fields": ["supplier_name","allow_purchase_invoice_creation_without_purchase_order"]
     },
     "output": "frappe.get_all('Supplier', filters={'allow_purchase_invoice_creation_without_purchase_order': 0}, fields=['supplier_name'])"
   },
@@ -3564,7 +3508,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Can you show suppliers and their PO invoice policy side by side?",
-      "top fields": ["supplier_name", "allow_purchase_invoice_creation_without_purchase_order"]
+      "fields": ["supplier_name", "allow_purchase_invoice_creation_without_purchase_order"]
     },
     "output": "frappe.get_all('Supplier', fields=['supplier_name', 'allow_purchase_invoice_creation_without_purchase_order'])"
   },
@@ -3572,7 +3516,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Which suppliers allow creating invoices without a purchase receipt?",
-      "top fields": ["supplier_name", "allow_purchase_invoice_creation_without_purchase_receipt"]
+      "fields": ["supplier_name","allow_purchase_invoice_creation_without_purchase_receipt"]
     },
     "output": "frappe.get_all('Supplier', filters={'allow_purchase_invoice_creation_without_purchase_receipt': 1}, fields=['supplier_name'])"
   },
@@ -3580,7 +3524,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "List suppliers who require a receipt before invoicing.",
-      "top fields": ["supplier_name", "allow_purchase_invoice_creation_without_purchase_receipt"]
+      "fields": ["supplier_name","allow_purchase_invoice_creation_without_purchase_receipt"]
     },
     "output": "frappe.get_all('Supplier', filters={'allow_purchase_invoice_creation_without_purchase_receipt': 0}, fields=['supplier_name'])"
   },
@@ -3588,7 +3532,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Get supplier names and their invoice creation policy with respect to receipts.",
-      "top fields": ["supplier_name", "allow_purchase_invoice_creation_without_purchase_receipt"]
+      "fields": ["supplier_name", "allow_purchase_invoice_creation_without_purchase_receipt"]
     },
     "output": "frappe.get_all('Supplier', fields=['supplier_name', 'allow_purchase_invoice_creation_without_purchase_receipt'])"
   },
@@ -3596,7 +3540,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Show internal suppliers who can skip purchase receipts while invoicing.",
-      "top fields": ["supplier_name", "is_internal_supplier", "allow_purchase_invoice_creation_without_purchase_receipt"]
+      "fields": ["supplier_name","is_internal_supplier","allow_purchase_invoice_creation_without_purchase_receipt"]
     },
     "output": "frappe.get_all('Supplier', filters={'is_internal_supplier': 1, 'allow_purchase_invoice_creation_without_purchase_receipt': 1}, fields=['supplier_name'])"
   },
@@ -3604,7 +3548,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Which Indian suppliers allow invoice creation without purchase receipts?",
-      "top fields": ["supplier_name", "country", "allow_purchase_invoice_creation_without_purchase_receipt"]
+      "fields": ["supplier_name","country","allow_purchase_invoice_creation_without_purchase_receipt"]
     },
     "output": "frappe.get_all('Supplier', filters={'country': 'India', 'allow_purchase_invoice_creation_without_purchase_receipt': 1}, fields=['supplier_name'])"
   },
@@ -3612,7 +3556,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Find suppliers and whether they allow skipping receipts for invoices.",
-      "top fields": ["supplier_name", "allow_purchase_invoice_creation_without_purchase_receipt"]
+      "fields": ["supplier_name", "allow_purchase_invoice_creation_without_purchase_receipt"]
     },
     "output": "frappe.get_all('Supplier', fields=['supplier_name', 'allow_purchase_invoice_creation_without_purchase_receipt'])"
   },
@@ -3620,7 +3564,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Can you show suppliers with their country and invoice receipt policy?",
-      "top fields": ["supplier_name", "country", "allow_purchase_invoice_creation_without_purchase_receipt"]
+      "fields": ["supplier_name", "country", "allow_purchase_invoice_creation_without_purchase_receipt"]
     },
     "output": "frappe.get_all('Supplier', fields=['supplier_name', 'country', 'allow_purchase_invoice_creation_without_purchase_receipt'])"
   },
@@ -3628,7 +3572,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Suppliers who don’t allow invoices without receipts?",
-      "top fields": ["supplier_name", "allow_purchase_invoice_creation_without_purchase_receipt"]
+      "fields": ["supplier_name","allow_purchase_invoice_creation_without_purchase_receipt"]
     },
     "output": "frappe.get_all('Supplier', filters={'allow_purchase_invoice_creation_without_purchase_receipt': 0}, fields=['supplier_name'])"
   },
@@ -3636,7 +3580,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Which suppliers and their invoice policy on receipts?",
-      "top fields": ["supplier_name", "allow_purchase_invoice_creation_without_purchase_receipt"]
+      "fields": ["supplier_name", "allow_purchase_invoice_creation_without_purchase_receipt"]
     },
     "output": "frappe.get_all('Supplier', fields=['supplier_name', 'allow_purchase_invoice_creation_without_purchase_receipt'])"
   },
@@ -3644,7 +3588,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "List all suppliers with their invoice without receipt setting and emails.",
-      "top fields": ["supplier_name", "email_id", "allow_purchase_invoice_creation_without_purchase_receipt"]
+      "fields": ["supplier_name", "email_id", "allow_purchase_invoice_creation_without_purchase_receipt"]
     },
     "output": "frappe.get_all('Supplier', fields=['supplier_name', 'email_id', 'allow_purchase_invoice_creation_without_purchase_receipt'])"
   },
@@ -3652,7 +3596,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Which suppliers are currently frozen and inactive?",
-      "top fields": ["supplier_name", "is_frozen"]
+      "fields": ["supplier_name", "is_frozen"]
     },
     "output": "frappe.get_all('Supplier', filters={'is_frozen': 1}, fields=['supplier_name', 'is_frozen'])"
   },
@@ -3660,7 +3604,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "List frozen suppliers along with their email and group.",
-      "top fields": ["supplier_name", "is_frozen", "email_id", "supplier_group"]
+      "fields": ["supplier_name", "is_frozen", "email_id", "supplier_group"]
     },
     "output": "frappe.get_all('Supplier', filters={'is_frozen': 1}, fields=['supplier_name', 'email_id', 'supplier_group', 'is_frozen'])"
   },
@@ -3668,7 +3612,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Show suppliers that are not frozen.",
-      "top fields": ["supplier_name", "is_frozen"]
+      "fields": ["supplier_name", "is_frozen"]
     },
     "output": "frappe.get_all('Supplier', filters={'is_frozen': 0}, fields=['supplier_name', 'is_frozen'])"
   },
@@ -3676,7 +3620,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Get a list of suppliers and whether they are frozen or not.",
-      "top fields": ["supplier_name", "is_frozen"]
+      "fields": ["supplier_name", "is_frozen"]
     },
     "output": "frappe.get_all('Supplier', fields=['supplier_name', 'is_frozen'])"
   },
@@ -3684,7 +3628,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Which internal suppliers are marked as frozen?",
-      "top fields": ["supplier_name", "is_frozen", "is_internal_supplier"]
+      "fields": ["supplier_name", "is_frozen", "is_internal_supplier"]
     },
     "output": "frappe.get_all('Supplier', filters={'is_internal_supplier': 1, 'is_frozen': 1}, fields=['supplier_name', 'is_frozen', 'is_internal_supplier'])"
   },
@@ -3692,7 +3636,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Suppliers from India who are frozen?",
-      "top fields": ["supplier_name", "is_frozen", "country"]
+      "fields": ["supplier_name", "is_frozen", "country"]
     },
     "output": "frappe.get_all('Supplier', filters={'country': 'India', 'is_frozen': 1}, fields=['supplier_name', 'country', 'is_frozen'])"
   },
@@ -3700,7 +3644,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "List suppliers and their frozen status along with email ID.",
-      "top fields": ["supplier_name", "is_frozen", "email_id"]
+      "fields": ["supplier_name", "is_frozen", "email_id"]
     },
     "output": "frappe.get_all('Supplier', fields=['supplier_name', 'is_frozen', 'email_id'])"
   },
@@ -3708,7 +3652,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Who are the frozen suppliers that also have pending RFQs?",
-      "top fields": ["supplier_name", "is_frozen", "warn_rfqs"]
+      "fields": ["supplier_name", "is_frozen", "warn_rfqs"]
     },
     "output": "frappe.get_all('Supplier', filters={'is_frozen': 1, 'warn_rfqs': 1}, fields=['supplier_name', 'is_frozen', 'warn_rfqs'])"
   },
@@ -3716,7 +3660,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Get frozen suppliers and check their payment terms.",
-      "top fields": ["supplier_name", "is_frozen", "payment_terms"]
+      "fields": ["supplier_name", "is_frozen", "payment_terms"]
     },
     "output": "frappe.get_all('Supplier', filters={'is_frozen': 1}, fields=['supplier_name', 'payment_terms', 'is_frozen'])"
   },
@@ -3724,7 +3668,7 @@
     "input": {
       "doctype": "Supplier",
       "question": "Provide a list of all suppliers with frozen status and country.",
-      "top fields": ["supplier_name", "is_frozen", "country"]
+      "fields": ["supplier_name", "is_frozen", "country"]
     },
     "output": "frappe.get_all('Supplier', fields=['supplier_name', 'is_frozen', 'country'])"
   },
@@ -3888,86 +3832,7 @@
     },
     "output": "frappe.get_all('Supplier', filters={'country': 'Qatar', 'warn_rfqs': 1}, fields=['supplier_name'])"
   },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Which suppliers are marked with a warning for POS?",
-      "top fields": ["warn_pos"]
-    },
-    "output": "frappe.get_all('Supplier', filters={'warn_pos': 1}, fields=['warn_pos'])"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Get the list of suppliers and whether they trigger POS warnings.",
-      "top fields": ["warn_pos"]
-    },
-    "output": "frappe.get_all('Supplier', fields=['warn_pos'])"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "List Indian suppliers with POS warnings enabled.",
-      "top fields": ["warn_pos"]
-    },
-    "output": "frappe.get_all('Supplier', filters={'country': 'India', 'warn_pos': 1}, fields=['warn_pos'])"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Who are the suppliers that are not flagged for POS?",
-      "top fields": ["warn_pos"]
-    },
-    "output": "frappe.get_all('Supplier', filters={'warn_pos': 0}, fields=['warn_pos'])"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Which disabled suppliers also have POS warnings turned on?",
-      "top fields": ["warn_pos"]
-    },
-    "output": "frappe.get_all('Supplier', filters={'disabled': 1, 'warn_pos': 1}, fields=['warn_pos'])"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Show suppliers with POS warning flags and their emails.",
-      "top fields": ["warn_pos"]
-    },
-    "output": "frappe.get_all('Supplier', filters={'warn_pos': 1}, fields=['warn_pos', 'email_id'])"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Find the supplier group of all those with POS warnings active.",
-      "top fields": ["warn_pos"]
-    },
-    "output": "frappe.get_all('Supplier', filters={'warn_pos': 1}, fields=['warn_pos', 'supplier_group'])"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Are there suppliers flagged for POS but not frozen?",
-      "top fields": ["warn_pos"]
-    },
-    "output": "frappe.get_all('Supplier', filters={'warn_pos': 1, 'is_frozen': 0}, fields=['warn_pos'])"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Retrieve suppliers with POS warnings and their primary contacts.",
-      "top fields": ["warn_pos"]
-    },
-    "output": "frappe.get_all('Supplier', filters={'warn_pos': 1}, fields=['warn_pos', 'supplier_primary_contact'])"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "List suppliers from Qatar who are warned for POS.",
-      "top fields": ["warn_pos"]
-    },
-    "output": "frappe.get_all('Supplier', filters={'country': 'Qatar', 'warn_pos': 1}, fields=['warn_pos'])"
-  },
+
   {
     "input": {
       "doctype": "Supplier",
@@ -4211,72 +4076,82 @@
   {
     "input": {
       "doctype": "Supplier",
-      "question": "Which suppliers are on hold due to a specific hold type?"
+      "question": "Which suppliers are marked with a warning for POS?",
+      "fields": ["warn_pos"]
     },
-    "output": "frappe.get_all('Supplier', filters={'on_hold': 1, 'hold_type': ['!=', '']}, fields=['supplier_name', 'hold_type'])"
+    "output": "frappe.get_all('Supplier', filters={'warn_pos': 1}, fields=['warn_pos'])"
   },
   {
     "input": {
       "doctype": "Supplier",
-      "question": "Get the list of suppliers along with their hold type."
+      "question": "Get the list of suppliers and whether they trigger POS warnings.",
+      "fields": ["warn_pos"]
     },
-    "output": "frappe.get_all('Supplier', fields=['supplier_name', 'hold_type'])"
+    "output": "frappe.get_all('Supplier', fields=['warn_pos'])"
   },
   {
     "input": {
       "doctype": "Supplier",
-      "question": "Find suppliers where the hold type is 'Credit Limit Exceeded'."
+      "question": "List Indian suppliers with POS warnings enabled.",
+      "fields": ["warn_pos","country"]
     },
-    "output": "frappe.get_all('Supplier', filters={'hold_type': 'Credit Limit Exceeded'}, fields=['supplier_name', 'hold_type'])"
+    "output": "frappe.get_all('Supplier', filters={'country': 'India', 'warn_pos': 1}, fields=['warn_pos'])"
   },
   {
     "input": {
       "doctype": "Supplier",
-      "question": "Which suppliers have both a hold type and release date defined?"
+      "question": "Who are the suppliers that are not flagged for POS?",
+      "fields": ["warn_pos"]
     },
-    "output": "frappe.get_all('Supplier', filters={'hold_type': ['!=', ''], 'release_date': ['!=', '']}, fields=['supplier_name', 'hold_type', 'release_date'])"
+    "output": "frappe.get_all('Supplier', filters={'warn_pos': 0}, fields=['warn_pos'])"
   },
   {
     "input": {
       "doctype": "Supplier",
-      "question": "List the suppliers who are on hold due to overdue payments."
+      "question": "Which disabled suppliers also have POS warnings turned on?",
+      "fields": ["warn_pos","disabled"]
     },
-    "output": "frappe.get_all('Supplier', filters={'on_hold': 1, 'hold_type': 'Overdue Payments'}, fields=['supplier_name', 'hold_type'])"
+    "output": "frappe.get_all('Supplier', filters={'disabled': 1, 'warn_pos': 1}, fields=['warn_pos'])"
   },
   {
     "input": {
       "doctype": "Supplier",
-      "question": "Are there any internal suppliers with a hold type assigned?"
+      "question": "Show suppliers with POS warning flags and their emails.",
+      "fields": ["warn_pos", "email_id"]
     },
-    "output": "frappe.get_all('Supplier', filters={'is_internal_supplier': 1, 'hold_type': ['!=', '']}, fields=['supplier_name', 'hold_type'])"
+    "output": "frappe.get_all('Supplier', filters={'warn_pos': 1}, fields=['warn_pos', 'email_id'])"
   },
   {
     "input": {
       "doctype": "Supplier",
-      "question": "Give me the hold types for transporters on hold."
+      "question": "Find the supplier group of all those with POS warnings active.",
+      "fields": ["warn_pos", "supplier_group"]
     },
-    "output": "frappe.get_all('Supplier', filters={'is_transporter': 1, 'on_hold': 1}, fields=['supplier_name', 'hold_type'])"
+    "output": "frappe.get_all('Supplier', filters={'warn_pos': 1}, fields=['warn_pos', 'supplier_group'])"
   },
   {
     "input": {
       "doctype": "Supplier",
-      "question": "Get the names and hold types of disabled suppliers."
+      "question": "Are there suppliers flagged for POS but not frozen?",
+      "fields": ["warn_pos","is_frozen"]
     },
-    "output": "frappe.get_all('Supplier', filters={'disabled': 1, 'hold_type': ['!=', '']}, fields=['supplier_name', 'hold_type'])"
+    "output": "frappe.get_all('Supplier', filters={'warn_pos': 1, 'is_frozen': 0}, fields=['warn_pos'])"
   },
   {
     "input": {
       "doctype": "Supplier",
-      "question": "Show suppliers on hold with unknown hold type values."
+      "question": "Retrieve suppliers with POS warnings and their primary contacts.",
+      "fields": ["warn_pos", "supplier_primary_contact"]
     },
-    "output": "frappe.get_all('Supplier', filters={'on_hold': 1, 'hold_type': ['is', 'null']}, fields=['supplier_name'])"
+    "output": "frappe.get_all('Supplier', filters={'warn_pos': 1}, fields=['warn_pos', 'supplier_primary_contact'])"
   },
   {
     "input": {
       "doctype": "Supplier",
-      "question": "List all supplier names and their current hold type."
+      "question": "List suppliers from Qatar who are warned for POS.",
+      "fields": ["warn_pos","country"]
     },
-    "output": "frappe.get_all('Supplier', fields=['supplier_name', 'hold_type'])"
+    "output": "frappe.get_all('Supplier', filters={'country': 'Qatar', 'warn_pos': 1}, fields=['warn_pos'])"
   },
   {
     "input": {
@@ -4348,7 +4223,7 @@
       "question": "Which suppliers have no release date set?",
       "fields": ["supplier_name", "release_date"]
     },
-    "output": "frappe.get_all('Supplier', filters={'release_date': ['is', 'null']}, fields=['supplier_name'])"
+    "output": "frappe.get_all('Supplier', filters={'release_date': ['=', 'null']}, fields=['supplier_name'])"
   },
   {
     "input": {
@@ -4460,7 +4335,7 @@
       "question": "Which sales invoices are missing the title?",
       "fields": ["title","name"]
     },
-    "output": "frappe.get_all('Sales Invoice', filters={'title': ['is', 'null']}, fields=['name'])"
+    "output": "frappe.get_all('Sales Invoice', filters={'title': ['=', 'null']}, fields=['name'])"
   },
   {
     "input": {
@@ -4540,7 +4415,7 @@
       "question": "Show invoices that don't have any naming series set.",
       "fields": ["naming_series"]
     },
-    "output": "frappe.get_all('Sales Invoice', filters={'naming_series': ['is', 'null']}, fields=['naming_series'])"
+    "output": "frappe.get_all('Sales Invoice', filters={'naming_series': ['=', 'null']}, fields=['naming_series'])"
   },
   {
     "input": {
@@ -4602,7 +4477,7 @@
     "input": {
       "doctype": "Sales Invoice",
       "question": "List all sales invoices along with their customer names.",
-      "top fields": ["name", "customer"]
+      "fields": ["name", "customer"]
     },
     "output": "frappe.get_all('Sales Invoice', fields=['name', 'customer'])"
   },
@@ -4610,7 +4485,7 @@
     "input": {
       "doctype": "Sales Invoice",
       "question": "Which invoices are made for the customer Gulf Tech Solutions?",
-      "top fields": ["name", "customer"]
+      "fields": ["name", "customer"]
     },
     "output": "frappe.get_all('Sales Invoice', filters={'customer': 'Gulf Tech Solutions'}, fields=['name', 'customer'])"
   },
@@ -4618,15 +4493,15 @@
     "input": {
       "doctype": "Sales Invoice",
       "question": "Find all invoices where the customer field is empty.",
-      "top fields": ["name", "customer"]
+      "fields": ["name", "customer"]
     },
-    "output": "frappe.get_all('Sales Invoice', filters={'customer': ['is', 'null']}, fields=['name'])"
+    "output": "frappe.get_all('Sales Invoice', filters={'customer': ['=', 'null']}, fields=['name'])"
   },
   {
     "input": {
       "doctype": "Sales Invoice",
       "question": "Which customers have invoices with grand total above 10,000?",
-      "top fields": ["name", "customer", "grand_total"]
+      "fields": ["name", "customer", "grand_total"]
     },
     "output": "frappe.get_all('Sales Invoice', filters={'grand_total': ['>', 10000]}, fields=['name', 'customer', 'grand_total'])"
   },
@@ -4634,7 +4509,7 @@
     "input": {
       "doctype": "Sales Invoice",
       "question": "Show all POS invoices with customer details.",
-      "top fields": ["name", "customer", "is_pos"]
+      "fields": ["name", "customer", "is_pos"]
     },
     "output": "frappe.get_all('Sales Invoice', filters={'is_pos': 1}, fields=['name', 'customer'])"
   },
@@ -4642,7 +4517,7 @@
     "input": {
       "doctype": "Sales Invoice",
       "question": "List customers with invoices dated after April 1st, 2025.",
-      "top fields": ["name", "customer", "posting_date"]
+      "fields": ["name", "customer", "posting_date"]
     },
     "output": "frappe.get_all('Sales Invoice', filters={'posting_date': ['>', '2025-04-01']}, fields=['name', 'customer', 'posting_date'])"
   },
@@ -4650,7 +4525,7 @@
     "input": {
       "doctype": "Sales Invoice",
       "question": "Do any customers have more than one invoice posted today?",
-      "top fields": ["customer", "posting_date"]
+      "fields": ["customer", "posting_date"]
     },
     "output": "frappe.get_all('Sales Invoice', filters={'posting_date': frappe.utils.today()}, fields=['customer'])"
   },
@@ -4658,7 +4533,7 @@
     "input": {
       "doctype": "Sales Invoice",
       "question": "Get the customer and company for each sales invoice.",
-      "top fields": ["name", "customer", "company"]
+      "fields": ["name", "customer", "company"]
     },
     "output": "frappe.get_all('Sales Invoice', fields=['name', 'customer', 'company'])"
   },
@@ -4666,7 +4541,7 @@
     "input": {
       "doctype": "Sales Invoice",
       "question": "Which invoices have customers from the Qatar region?",
-      "top fields": ["name", "customer"]
+      "fields": ["name", "customer"]
     },
     "output": "frappe.get_all('Sales Invoice', filters={'customer': ['like', '%Qatar%']}, fields=['name', 'customer'])"
   },
@@ -4674,7 +4549,7 @@
     "input": {
       "doctype": "Sales Invoice",
       "question": "List invoices where the customer and customer_name are different.",
-      "top fields": ["name", "customer", "customer_name"]
+      "fields": ["name", "customer", "customer_name"]
     },
     "output": "frappe.get_all('Sales Invoice', filters={'customer': ['!=', 'customer_name']}, fields=['name', 'customer', 'customer_name'])"
   },
@@ -4692,7 +4567,7 @@
       "question": "Which sales invoices are missing a tax ID?",
       "fields": ["name","tax_id"]
     },
-    "output": "frappe.get_all('Sales Invoice', filters={'tax_id': ['is', 'null']}, fields=['name'])"
+    "output": "frappe.get_all('Sales Invoice', filters={'tax_id': ['=', 'null']}, fields=['name'])"
   },
   {
     "input": {
@@ -4860,7 +4735,7 @@
       "question": "Which invoices are missing the company tax ID?",
       "fields": ["name"]
     },
-    "output": "frappe.get_all('Sales Invoice', filters={'company_tax_id': ['is', 'null']}, fields=['name'])"
+    "output": "frappe.get_all('Sales Invoice', filters={'company_tax_id': ['=', 'null']}, fields=['name'])"
   },
   {
     "input": {
@@ -11053,7 +10928,7 @@
       "question": "How many invoices do not specify any cash bank account?",
       "fields": ["cash_bank_account"]
     },
-    "output": "frappe.db.count('Sales Invoice', filters={'cash_bank_account': ['is', 'null']})"
+    "output": "frappe.db.count('Sales Invoice', filters={'cash_bank_account': ['=', 'null']})"
   },
   {
     "input": {
@@ -12231,6 +12106,86 @@
     },
     "output": "import datetime\nstart = datetime.date(datetime.date.today().year, 1, 1)\nend = datetime.date(datetime.date.today().year, 1, 31)\nfrappe.get_all('Sales Invoice', filters={'posting_date': ['between', [start, end]]}, fields=['write_off_account'])"
   },
+    {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List all invoices with an auto repeat set.",
+      "fields": ["name", "auto_repeat"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'auto_repeat': ['!=', '']}, fields=['name', 'auto_repeat'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Count invoices with auto repeat.",
+      "fields": ["auto_repeat"]
+    },
+    "output": "frappe.db.count('Sales Invoice', filters={'auto_repeat': ['!=', '']})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if any invoice has a specific auto repeat, e.g., 'AUTOREP-0001'.",
+      "fields": ["auto_repeat"]
+    },
+    "output": "frappe.db.exists('Sales Invoice', {'auto_repeat': 'AUTOREP-0001'})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Get the value of auto repeat for a specific invoice.",
+      "fields": ["auto_repeat"]
+    },
+    "output": "frappe.db.get_value('Sales Invoice', 'SINV-0001', 'auto_repeat')"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Retrieve invoices with their auto repeat and customer.",
+      "fields": ["name", "auto_repeat", "customer"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'auto_repeat': ['!=', '']}, fields=['name', 'auto_repeat', 'customer'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Find invoices with a specific auto repeat and a specific customer.",
+      "fields": ["name", "auto_repeat", "customer"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'auto_repeat': 'AUTOREP-0001', 'customer': 'ABC Corp'}, fields=['name', 'auto_repeat', 'customer'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with auto repeat and their to date.",
+      "fields": ["name", "auto_repeat", "to_date"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'auto_repeat': ['!=', '']}, fields=['name', 'auto_repeat', 'to_date'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if a specific invoice has a specific auto repeat.",
+      "fields": ["auto_repeat"]
+    },
+    "output": "frappe.db.get_value('Sales Invoice', 'SINV-0001', 'auto_repeat') == 'AUTOREP-0001'"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with a specific auto repeat and their from date.",
+      "fields": ["name", "auto_repeat", "from_date"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'auto_repeat': 'AUTOREP-0001'}, fields=['name', 'auto_repeat', 'from_date'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show a single invoice document with an auto repeat.",
+      "fields": ["name", "auto_repeat"]
+    },
+    "output": "frappe.get_doc('Sales Invoice', {'auto_repeat': ['!=', ''], 'name': ['like', '%SINV%']}, fields=['name', 'auto_repeat'])"
+  },
   {
     "input": {
       "doctype": "Sales Invoice",
@@ -12573,7 +12528,7 @@
       "question": "Show invoices where no loyalty program was assigned.",
       "fields": ["loyalty_program"]
     },
-    "output": "frappe.get_all('Sales Invoice', filters={'loyalty_program': ['is', 'null']}, fields=['loyalty_program'])"
+    "output": "frappe.get_all('Sales Invoice', filters={'loyalty_program': ['=', 'null']}, fields=['loyalty_program'])"
   },
   {
     "input": {
@@ -12629,7 +12584,7 @@
       "question": "Get invoices not linked to any loyalty program this quarter.",
       "fields": ["loyalty_program", "posting_date"]
     },
-    "output": "import datetime\ntoday = datetime.date.today()\nq_start = datetime.date(today.year, 1 + 3 * ((today.month - 1) // 3), 1)\nfrappe.get_all('Sales Invoice', filters={'posting_date': ['>=', q_start], 'loyalty_program': ['is', 'null']}, fields=['loyalty_program', 'posting_date'])"
+    "output": "import datetime\ntoday = datetime.date.today()\nq_start = datetime.date(today.year, 1 + 3 * ((today.month - 1) // 3), 1)\nfrappe.get_all('Sales Invoice', filters={'posting_date': ['>=', q_start], 'loyalty_program': ['=', 'null']}, fields=['loyalty_program', 'posting_date'])"
   },
   {
     "input": {
@@ -13379,7 +13334,7 @@
     "input": {
       "doctype": "Sales Invoice",
       "question": "How many invoices were shipped to any address?",
-      "fields": []
+      "fields": ["shipping_address_name"]
     },
     "output": "frappe.db.count('Sales Invoice', filters={'shipping_address_name': ['!=', '']})"
   },
@@ -13459,7 +13414,7 @@
     "input": {
       "doctype": "Sales Invoice",
       "question": "How many invoices have no shipping address set?",
-      "fields": []
+      "fields": ["shipping_address"]
     },
     "output": "frappe.db.count('Sales Invoice', filters={'shipping_address': ''})"
   },
@@ -13467,7 +13422,7 @@
     "input": {
       "doctype": "Sales Invoice",
       "question": "List invoices with valid shipping addresses posted in June.",
-      "fields": ["shipping_address", "name"]
+      "fields": ["posting_date","shipping_address", "name"]
     },
     "output": "import datetime\nstart = datetime.date(datetime.date.today().year, 6, 1)\nend = datetime.date(datetime.date.today().year, 6, 30)\nfrappe.get_all('Sales Invoice', filters={'posting_date': ['between', [start, end]], 'shipping_address': ['!=', '']}, fields=['shipping_address', 'name'])"
   },
@@ -13547,7 +13502,7 @@
     "input": {
       "doctype": "Sales Invoice",
       "question": "Which Q1 invoices had dispatch addresses filled?",
-      "fields": ["dispatch_address_name", "name"]
+      "fields": ["dispatch_address_name","posting_date", "name"]
     },
     "output": "import datetime\nstart = datetime.date(datetime.date.today().year, 1, 1)\nend = datetime.date(datetime.date.today().year, 3, 31)\nfrappe.get_all('Sales Invoice', filters={'posting_date': ['between', [start, end]], 'dispatch_address_name': ['!=', '']}, fields=['dispatch_address_name', 'name'])"
   },
@@ -13563,7 +13518,7 @@
     "input": {
       "doctype": "Sales Invoice",
       "question": "Dispatch address names used in POS invoices?",
-      "fields": ["dispatch_address_name", "name"]
+      "fields": ["dispatch_address_name","is_pos","name"]
     },
     "output": "frappe.get_all('Sales Invoice', filters={'is_pos': 1, 'dispatch_address_name': ['!=', '']}, fields=['dispatch_address_name', 'name'])"
   },
@@ -13571,7 +13526,7 @@
     "input": {
       "doctype": "Sales Invoice",
       "question": "Which customers had invoices with dispatch to DIS-ADDR-0025?",
-      "fields": ["customer"]
+      "fields": ["customer","dispatch_address_name"]
     },
     "output": "frappe.get_all('Sales Invoice', filters={'dispatch_address_name': 'DIS-ADDR-0025'}, fields=['customer'], distinct=True)"
   },
@@ -13595,7 +13550,7 @@
     "input": {
       "doctype": "Sales Invoice",
       "question": "List unique dispatch address names from invoices posted in May.",
-      "fields": ["dispatch_address_name"]
+      "fields": ["dispatch_address_name","posting_date"]
     },
     "output": "import datetime\nstart = datetime.date(datetime.date.today().year, 5, 1)\nend = datetime.date(datetime.date.today().year, 5, 31)\nfrappe.get_all('Sales Invoice', filters={'posting_date': ['between', [start, end]]}, fields=['dispatch_address_name'], distinct=True)"
   },
@@ -13619,7 +13574,7 @@
     "input": {
       "doctype": "Sales Invoice",
       "question": "How many invoices do not have dispatch addresses filled?",
-      "fields": []
+      "fields": ["dispatch_address"]
     },
     "output": "frappe.db.count('Sales Invoice', filters={'dispatch_address': ''})"
   },
@@ -13627,7 +13582,7 @@
     "input": {
       "doctype": "Sales Invoice",
       "question": "Invoices in Q4 with dispatch addresses recorded?",
-      "fields": ["dispatch_address", "name"]
+      "fields": ["dispatch_address","posting_date", "name"]
     },
     "output": "import datetime\nstart = datetime.date(datetime.date.today().year, 10, 1)\nend = datetime.date(datetime.date.today().year, 12, 31)\nfrappe.get_all('Sales Invoice', filters={'posting_date': ['between', [start, end]], 'dispatch_address': ['!=', '']}, fields=['dispatch_address', 'name'])"
   },
@@ -13635,7 +13590,7 @@
     "input": {
       "doctype": "Sales Invoice",
       "question": "Which POS invoices used dispatch addresses?",
-      "fields": ["dispatch_address", "name"]
+      "fields": ["dispatch_address","is_pos", "name"]
     },
     "output": "frappe.get_all('Sales Invoice', filters={'is_pos': 1, 'dispatch_address': ['!=', '']}, fields=['dispatch_address', 'name'])"
   },
@@ -13643,7 +13598,7 @@
     "input": {
       "doctype": "Sales Invoice",
       "question": "Customers who received invoices at dispatch address containing 'Mall'?",
-      "fields": ["customer"]
+      "fields": ["customer","dispatch_address"]
     },
     "output": "frappe.get_all('Sales Invoice', filters={'dispatch_address': ['like', '%Mall%']}, fields=['customer'], distinct=True)"
   },
@@ -13667,7 +13622,7 @@
     "input": {
       "doctype": "Sales Invoice",
       "question": "Show invoices with dispatch addresses recorded this week.",
-      "fields": ["dispatch_address", "name"]
+      "fields": ["dispatch_address","posting_date", "name"]
     },
     "output": "import datetime\nstart = datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday())\nfrappe.get_all('Sales Invoice', filters={'posting_date': ['>=', start], 'dispatch_address': ['!=', '']}, fields=['dispatch_address', 'name'])"
   },
@@ -13715,7 +13670,7 @@
     "input": {
       "doctype": "Sales Invoice",
       "question": "Which invoices in Q1 used company addresses with 'Doha'?",
-      "fields": ["name", "company_address"]
+      "fields": ["name","posting_date","company_address"]
     },
     "output": "import datetime\nstart = datetime.date(datetime.date.today().year, 1, 1)\nend = datetime.date(datetime.date.today().year, 3, 31)\nfrappe.get_all('Sales Invoice', filters={'posting_date': ['between', [start, end]], 'company_address': ['like', '%Doha%']}, fields=['name', 'company_address'])"
   },
@@ -14406,5 +14361,2344 @@
       "fields": ["po_no", "posting_date", "name"]
     },
     "output": "import datetime\nfrappe.get_all('Sales Invoice', filters={'posting_date': datetime.date.today(), 'po_no': ['!=', '']}, fields=['name', 'po_no'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Which invoices include additional details mentioning 'urgent delivery'?",
+      "fields": ["more_info", "name"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'more_info': ['like', '%urgent delivery%']}, fields=['name', 'more_info'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices created this month with non-empty more info fields.",
+      "fields": ["more_info", "posting_date", "name"]
+    },
+    "output": "import datetime\nstart = datetime.date.today().replace(day=1)\nfrappe.get_all('Sales Invoice', filters={'posting_date': ['>=', start], 'more_info': ['!=', '']}, fields=['name', 'more_info'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Return POS invoices with extra information recorded.",
+      "fields": ["is_pos", "more_info", "name"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'is_pos': 1, 'more_info': ['!=', '']}, fields=['name', 'more_info'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Find invoices containing 'VAT exempt' in their more info section.",
+      "fields": ["more_info", "name"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'more_info': ['like', '%VAT exempt%']}, fields=['name', 'more_info'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show return invoices that included any more info notes.",
+      "fields": ["is_return", "more_info"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'is_return': 1, 'more_info': ['!=', '']}, fields=['is_return', 'more_info'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "How many invoices have no additional information mentioned?",
+      "fields": ["more_info"]
+    },
+    "output": "frappe.db.count('Sales Invoice', filters={'more_info': ''})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Which Q4 invoices contained any note in more_info?",
+      "fields": ["more_info", "posting_date", "name"]
+    },
+    "output": "import datetime\nstart = datetime.date(datetime.date.today().year, 10, 1)\nend = datetime.date(datetime.date.today().year, 12, 31)\nfrappe.get_all('Sales Invoice', filters={'posting_date': ['between', [start, end]], 'more_info': ['!=', '']}, fields=['name', 'more_info'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Fetch invoices with 'Delivered by hand' mentioned in the more_info field.",
+      "fields": ["more_info", "name"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'more_info': ['like', '%Delivered by hand%']}, fields=['name', 'more_info'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Any invoices this week with notes in more_info?",
+      "fields": ["more_info", "posting_date", "name"]
+    },
+    "output": "import datetime\nstart = datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday())\nfrappe.get_all('Sales Invoice', filters={'posting_date': ['>=', start], 'more_info': ['!=', '']}, fields=['name', 'more_info'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List customers who had invoices with anything mentioned in the more_info field.",
+      "fields": ["customer"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'more_info': ['!=', '']}, fields=['customer'], distinct=True)"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List all invoices posted to the 'Debtors - HTS' account.",
+      "fields": ["name", "debit_to"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'debit_to': 'Debtors - HTS'}, fields=['name', 'debit_to'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Which invoices were posted to any account starting with 'Debtors'?",
+      "fields": ["name", "debit_to"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'debit_to': ['like', 'Debtors%']}, fields=['name', 'debit_to'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show POS invoices where the debit_to account is set.",
+      "fields": ["name", "debit_to"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'is_pos': 1, 'debit_to': ['!=', '']}, fields=['debit_to', 'name'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Find invoices where the debit account is not set.",
+      "fields": ["name", "debit_to"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'debit_to': ''}, fields=['name', 'debit_to'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Fetch all invoices created this quarter with debit_to value filled.",
+      "fields": ["name", "debit_to"]
+    },
+    "output": "import datetime\nfrom datetime import date\nmonth = date.today().month\nquarter = ((month - 1) // 3 + 1)\nstart = datetime.date(date.today().year, 3 * quarter - 2, 1)\nend = datetime.date(date.today().year, 3 * quarter + 1, 0)\nfrappe.get_all('Sales Invoice', filters={'posting_date': ['between', [start, end]], 'debit_to': ['!=', '']}, fields=['name', 'debit_to'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Any invoices where debit_to account is 'Accounts Receivable - HTS'?",
+      "fields": ["debit_to"]
+    },
+    "output": "frappe.db.exists('Sales Invoice', {'debit_to': 'Accounts Receivable - HTS'})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show return invoices with non-empty debit_to account.",
+      "fields": ["is_return", "debit_to"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'is_return': 1, 'debit_to': ['!=', '']}, fields=['is_return', 'debit_to'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "How many invoices this month use any debit_to account?",
+      "fields": ["debit_to"]
+    },
+    "output": "import datetime\nstart = datetime.date.today().replace(day=1)\nfrappe.db.count('Sales Invoice', filters={'posting_date': ['>=', start], 'debit_to': ['!=', '']})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Which companies posted invoices to 'Receivables - HTS'?",
+      "fields": ["company"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'debit_to': 'Receivables - HTS'}, fields=['company'], distinct=True)"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Invoices today with valid debit_to accounts?",
+      "fields": ["name", "debit_to"]
+    },
+    "output": "import datetime\nfrappe.get_all('Sales Invoice', filters={'posting_date': datetime.date.today(), 'debit_to': ['!=', '']}, fields=['name', 'debit_to'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List all invoices made in QAR currency.",
+      "fields": ["name", "party_account_currency"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'party_account_currency': 'QAR'}, fields=['name', 'party_account_currency'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Which invoices have party account currency set to USD?",
+      "fields": ["name", "party_account_currency"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'party_account_currency': 'USD'}, fields=['name', 'party_account_currency'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show invoices with non-empty party account currency field.",
+      "fields": ["name", "party_account_currency"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'party_account_currency': ['!=', '']}, fields=['name', 'party_account_currency'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Which POS invoices were recorded in foreign currency?",
+      "fields": ["name", "party_account_currency"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'is_pos': 1, 'party_account_currency': ['!=', 'QAR']}, fields=['name', 'party_account_currency'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Invoices created this month with party currency set.",
+      "fields": ["name", "party_account_currency"]
+    },
+    "output": "import datetime\nstart = datetime.date.today().replace(day=1)\nfrappe.get_all('Sales Invoice', filters={'posting_date': ['>=', start], 'party_account_currency': ['!=', '']}, fields=['name', 'party_account_currency'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show return invoices using USD as party currency.",
+      "fields": ["name", "party_account_currency"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'is_return': 1, 'party_account_currency': 'USD'}, fields=['name', 'party_account_currency'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Any invoice using currency code like 'EUR%'?",
+      "fields": ["party_account_currency"]
+    },
+    "output": "frappe.db.exists('Sales Invoice', {'party_account_currency': ['like', 'EUR%']})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Get list of companies who issued invoices in USD.",
+      "fields": ["company"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'party_account_currency': 'USD'}, fields=['company'], distinct=True)"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Count how many invoices were issued with no party currency.",
+      "fields": ["party_account_currency"]
+    },
+    "output": "frappe.db.count('Sales Invoice', filters={'party_account_currency': ''})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Invoices today in QAR currency?",
+      "fields": ["name", "party_account_currency"]
+    },
+    "output": "import datetime\nfrappe.get_all('Sales Invoice', filters={'posting_date': datetime.date.today(), 'party_account_currency': 'QAR'}, fields=['name', 'party_account_currency'])"
+  },
+    {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show invoices that are marked as opening balances.",
+      "fields": ["name", "is_opening"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'is_opening': 'Yes'}, fields=['name', 'is_opening'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Which customers have invoices flagged as opening?",
+      "fields": ["customer"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'is_opening': 'Yes'}, fields=['customer'], distinct=True)"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Find invoices that are not marked as opening.",
+      "fields": ["name", "is_opening"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'is_opening': 'No'}, fields=['name', 'is_opening'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Any opening invoices created this month?",
+      "fields": ["name", "is_opening"]
+    },
+    "output": "import datetime\nstart = datetime.date.today().replace(day=1)\nfrappe.get_all('Sales Invoice', filters={'is_opening': 'Yes', 'posting_date': ['>=', start]}, fields=['name', 'is_opening'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List all POS invoices that are opening invoices.",
+      "fields": ["name", "is_opening"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'is_opening': 'Yes', 'is_pos': 1}, fields=['name', 'is_opening'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Count opening invoices for customer 'Al Rawabi'.",
+      "fields": ["is_opening", "customer"]
+    },
+    "output": "frappe.db.count('Sales Invoice', filters={'is_opening': 'Yes', 'customer': 'Al Rawabi'})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Were any opening invoices posted today?",
+      "fields": ["name", "is_opening"]
+    },
+    "output": "import datetime\nfrappe.get_all('Sales Invoice', filters={'is_opening': 'Yes', 'posting_date': datetime.date.today()}, fields=['name', 'is_opening'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Which companies generated opening invoices in Q1?",
+      "fields": ["company"]
+    },
+    "output": "import datetime\nstart = datetime.date(datetime.date.today().year, 1, 1)\nend = datetime.date(datetime.date.today().year, 3, 31)\nfrappe.get_all('Sales Invoice', filters={'is_opening': 'Yes', 'posting_date': ['between', [start, end]]}, fields=['company'], distinct=True)"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Do any return invoices have is_opening marked?",
+      "fields": ["name", "is_opening"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'is_return': 1, 'is_opening': 'Yes'}, fields=['name', 'is_opening'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Export names of invoices not marked as opening.",
+      "fields": ["name"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'is_opening': 'No'}, fields=['name'])"
+  },
+    {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Which invoices specify an unrealized profit/loss account?",
+      "fields": ["name", "unrealized_profit_loss_account"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'unrealized_profit_loss_account': ['!=', '']}, fields=['name', 'unrealized_profit_loss_account'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices where unrealized profit/loss account is not set.",
+      "fields": ["name","unrealized_profit_loss_account"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'unrealized_profit_loss_account': ''}, fields=['name'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Invoices posted this year with a specified unrealized P/L account?",
+      "fields": ["name", "unrealized_profit_loss_account","posting_date"]
+    },
+    "output": "import datetime\nstart = datetime.date(datetime.date.today().year, 1, 1)\nfrappe.get_all('Sales Invoice', filters={'posting_date': ['>=', start], 'unrealized_profit_loss_account': ['!=', '']}, fields=['name', 'unrealized_profit_loss_account'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Return invoices linked to 'Exchange Diff Account - UAE'.",
+      "fields": ["name", "unrealized_profit_loss_account"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'unrealized_profit_loss_account': 'Exchange Diff Account - UAE'}, fields=['name', 'unrealized_profit_loss_account'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "POS invoices with unrealized profit/loss account recorded?",
+      "fields": ["name", "unrealized_profit_loss_account"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'is_pos': 1, 'unrealized_profit_loss_account': ['!=', '']}, fields=['name', 'unrealized_profit_loss_account'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "How many return invoices have non-empty unrealized P/L account?",
+      "fields": ["is_return", "unrealized_profit_loss_account"]
+    },
+    "output": "frappe.db.count('Sales Invoice', filters={'is_return': 1, 'unrealized_profit_loss_account': ['!=', '']})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Export invoice numbers for Q2 with unrealized profit/loss account set.",
+      "fields": ["name", "unrealized_profit_loss_account"]
+    },
+    "output": "import datetime\nstart = datetime.date(datetime.date.today().year, 4, 1)\nend = datetime.date(datetime.date.today().year, 6, 30)\nfrappe.get_all('Sales Invoice', filters={'posting_date': ['between', [start, end]], 'unrealized_profit_loss_account': ['!=', '']}, fields=['name', 'unrealized_profit_loss_account'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List companies with invoices referencing unrealized profit/loss accounts.",
+      "fields": ["company"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'unrealized_profit_loss_account': ['!=', '']}, fields=['company'], distinct=True)"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Find invoices tagged with any unrealized P/L account from last month.",
+      "fields": ["name", "unrealized_profit_loss_account"]
+    },
+    "output": "import datetime\nfrom dateutil.relativedelta import relativedelta\ntoday = datetime.date.today()\nstart = (today.replace(day=1) - relativedelta(months=1))\nend = today.replace(day=1) - datetime.timedelta(days=1)\nfrappe.get_all('Sales Invoice', filters={'posting_date': ['between', [start, end]], 'unrealized_profit_loss_account': ['!=', '']}, fields=['name', 'unrealized_profit_loss_account'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Do invoices from Al Maktoum Ltd. include unrealized profit/loss accounts?",
+      "fields": ["name", "unrealized_profit_loss_account","customer"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'customer': 'Al Maktoum Ltd.', 'unrealized_profit_loss_account': ['!=', '']}, fields=['name', 'unrealized_profit_loss_account'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Which invoices mention an against income account?",
+      "fields": ["name", "against_income_account"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'against_income_account': ['!=', '']}, fields=['name', 'against_income_account'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show invoices with no against income account linked.",
+      "fields": ["name"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'against_income_account': ''}, fields=['name'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Find all Q2 invoices using an against income account.",
+      "fields": ["name", "against_income_account","posting_date"]
+    },
+    "output": "import datetime\nstart = datetime.date(datetime.date.today().year, 4, 1)\nend = datetime.date(datetime.date.today().year, 6, 30)\nfrappe.get_all('Sales Invoice', filters={'posting_date': ['between', [start, end]], 'against_income_account': ['!=', '']}, fields=['name', 'against_income_account'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Which invoices are tagged with 'Sales - UAE' as the against income account?",
+      "fields": ["name", "against_income_account"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'against_income_account': 'Sales - UAE'}, fields=['name', 'against_income_account'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Any return invoices having an against income account?",
+      "fields": ["name", "against_income_account","is_return"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'is_return': 1, 'against_income_account': ['!=', '']}, fields=['name', 'against_income_account'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List POS invoices where against income account was assigned.",
+      "fields": ["name", "against_income_account","is_pos"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'is_pos': 1, 'against_income_account': ['!=', '']}, fields=['name', 'against_income_account'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "How many invoices from March had against income accounts?",
+      "fields": ["against_income_account","posting_date"]
+    },
+    "output": "import datetime\nstart = datetime.date(datetime.date.today().year, 3, 1)\nend = datetime.date(datetime.date.today().year, 3, 31)\nfrappe.db.count('Sales Invoice', filters={'posting_date': ['between', [start, end]], 'against_income_account': ['!=', '']})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Export customer list who had invoices with against income account set.",
+      "fields": ["customer"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'against_income_account': ['!=', '']}, fields=['customer'], distinct=True)"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Invoices using any income account starting with 'Sales%'?",
+      "fields": ["name", "against_income_account"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'against_income_account': ['like', 'Sales%']}, fields=['name', 'against_income_account'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Which companies posted invoices with against income accounts last month?",
+      "fields": ["company"]
+    },
+    "output": "import datetime\nfrom dateutil.relativedelta import relativedelta\ntoday = datetime.date.today()\nstart = today.replace(day=1) - relativedelta(months=1)\nend = today.replace(day=1) - datetime.timedelta(days=1)\nfrappe.get_all('Sales Invoice', filters={'posting_date': ['between', [start, end]], 'against_income_account': ['!=', '']}, fields=['company'], distinct=True)"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List all invoices with sales partner assigned.",
+      "fields": ["name", "sales_partner"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'sales_partner': ['!=', '']}, fields=['name', 'sales_partner'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show invoices where the sales partner is not specified.",
+      "fields": ["name", "sales_partner"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'sales_partner': ['=', '']}, fields=['name', 'sales_partner'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Which invoices have a specific sales partner 'ABC Corp'?",
+      "fields": ["name", "sales_partner"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'sales_partner': 'ABC Corp'}, fields=['name', 'sales_partner'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Retrieve invoices with sales partner and their posting dates.",
+      "fields": ["name", "sales_partner", "posting_date"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'sales_partner': ['!=', '']}, fields=['name', 'sales_partner', 'posting_date'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Display invoices by sales partner for a particular company.",
+      "fields": ["name", "sales_partner", "company"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'sales_partner': ['!=', ''], 'company': 'XYZ Ltd'}, fields=['name', 'sales_partner', 'company'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Count invoices that have any sales partner assigned.",
+      "fields": ["sales_partner"]
+    },
+    "output": "frappe.db.count('Sales Invoice', filters={'sales_partner': ['!=', '']})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices and their customers for a specific sales partner.",
+      "fields": ["name", "customer", "sales_partner"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'sales_partner': 'ABC Corp'}, fields=['name', 'customer', 'sales_partner'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show invoices with sales partner, sorted by posting date.",
+      "fields": ["name", "sales_partner", "posting_date"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'sales_partner': ['!=', '']}, fields=['name', 'sales_partner', 'posting_date'], order_by='posting_date')"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Find invoices where sales partner is not set and company is 'XYZ Ltd'.",
+      "fields": ["name", "sales_partner", "company"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'sales_partner': ['=', ''], 'company': 'XYZ Ltd'}, fields=['name', 'sales_partner', 'company'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Get all invoices with sales partner and their status.",
+      "fields": ["name", "sales_partner", "status"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'sales_partner': ['!=', '']}, fields=['name', 'sales_partner', 'status'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with non-zero amount eligible for commission.",
+      "fields": ["name", "amount_eligible_for_commission"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'amount_eligible_for_commission': ['>', 0]}, fields=['name', 'amount_eligible_for_commission'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show invoices where amount eligible for commission is greater than $1000.",
+      "fields": ["name", "amount_eligible_for_commission"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'amount_eligible_for_commission': ['>', 1000]}, fields=['name', 'amount_eligible_for_commission'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Which invoices have a specific amount eligible for commission, e.g., $500?",
+      "fields": ["name", "amount_eligible_for_commission"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'amount_eligible_for_commission': 500}, fields=['name', 'amount_eligible_for_commission'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Retrieve invoices with their amount eligible for commission and posting date.",
+      "fields": ["name", "amount_eligible_for_commission", "posting_date"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'amount_eligible_for_commission': ['>', 0]}, fields=['name', 'amount_eligible_for_commission', 'posting_date'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Display invoices by sales partner and their amount eligible for commission.",
+      "fields": ["name", "sales_partner", "amount_eligible_for_commission"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'amount_eligible_for_commission': ['>', 0]}, fields=['name', 'sales_partner', 'amount_eligible_for_commission'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Count invoices with amount eligible for commission above $1500.",
+      "fields": ["amount_eligible_for_commission"]
+    },
+    "output": "frappe.db.count('Sales Invoice', filters={'amount_eligible_for_commission': ['>', 1500]})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices and their customer for invoices with amount eligible for commission between $200 and $1000.",
+      "fields": ["name", "customer", "amount_eligible_for_commission"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'amount_eligible_for_commission': ['between', [200, 1000]]}, fields=['name', 'customer', 'amount_eligible_for_commission'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show invoices with amount eligible for commission and their commission rate.",
+      "fields": ["name", "amount_eligible_for_commission", "commission_rate"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'amount_eligible_for_commission': ['>', 0]}, fields=['name', 'amount_eligible_for_commission', 'commission_rate'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Find invoices where amount eligible for commission is non-zero and sales partner is 'ABC Corp'.",
+      "fields": ["name", "sales_partner", "amount_eligible_for_commission"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'amount_eligible_for_commission': ['>', 0], 'sales_partner': 'ABC Corp'}, fields=['name', 'sales_partner', 'amount_eligible_for_commission'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Get all invoices with amount eligible for commission and their customer name.",
+      "fields": ["name", "customer", "amount_eligible_for_commission"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'amount_eligible_for_commission': ['>', 0]}, fields=['name', 'customer', 'amount_eligible_for_commission'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with a commission rate set.",
+      "fields": ["name", "commission_rate"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'commission_rate': ['!=', 0]}, fields=['name', 'commission_rate'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show invoices with commission rate greater than 5%.",
+      "fields": ["name", "commission_rate"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'commission_rate': ['>', 5]}, fields=['name', 'commission_rate'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Which invoices have a specific commission rate, e.g., 7%?",
+      "fields": ["name", "commission_rate"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'commission_rate': 7}, fields=['name', 'commission_rate'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Retrieve invoices with their commission rate and posting date.",
+      "fields": ["name", "commission_rate", "posting_date"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'commission_rate': ['!=', 0]}, fields=['name', 'commission_rate', 'posting_date'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Display invoices by sales partner and their commission rate.",
+      "fields": ["name", "sales_partner", "commission_rate"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'commission_rate': ['!=', 0]}, fields=['name', 'sales_partner', 'commission_rate'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Count invoices with commission rate above 10%.",
+      "fields": ["commission_rate"]
+    },
+    "output": "frappe.db.count('Sales Invoice', filters={'commission_rate': ['>', 10]})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices and their customer for invoices with commission rate between 3% and 8%.",
+      "fields": ["name", "customer", "commission_rate"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'commission_rate': ['between', [3, 8]]}, fields=['name', 'customer', 'commission_rate'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show invoices with commission rate and their amount eligible for commission.",
+      "fields": ["name", "commission_rate", "amount_eligible_for_commission"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'commission_rate': ['!=', 0]}, fields=['name', 'commission_rate', 'amount_eligible_for_commission'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Find invoices where commission rate is non-zero and sales partner is 'ABC Corp'.",
+      "fields": ["name", "sales_partner", "commission_rate"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'commission_rate': ['!=', 0], 'sales_partner': 'ABC Corp'}, fields=['name', 'sales_partner', 'commission_rate'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Get all invoices with commission rate and their customer name.",
+      "fields": ["name", "customer", "commission_rate"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'commission_rate': ['!=', 0]}, fields=['name', 'customer', 'commission_rate'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with a total commission set.",
+      "fields": ["name", "total_commission"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'total_commission': ['!=', 0]}, fields=['name', 'total_commission'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show invoices with total commission greater than $200.",
+      "fields": ["name", "total_commission"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'total_commission': ['>', 200]}, fields=['name', 'total_commission'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Which invoices have a specific total commission, e.g., $500?",
+      "fields": ["name", "total_commission"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'total_commission': 500}, fields=['name', 'total_commission'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Retrieve invoices with their total commission and sales partner.",
+      "fields": ["name", "total_commission", "sales_partner"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'total_commission': ['!=', 0]}, fields=['name', 'total_commission', 'sales_partner'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Display invoices by sales partner and their total commission.",
+      "fields": ["name", "sales_partner", "total_commission"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'total_commission': ['!=', 0]}, fields=['name', 'sales_partner', 'total_commission'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Count invoices with total commission above $300.",
+      "fields": ["total_commission"]
+    },
+    "output": "frappe.db.count('Sales Invoice', filters={'total_commission': ['>', 300]})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices and their customer for invoices with total commission between $100 and $500.",
+      "fields": ["name", "customer", "total_commission"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'total_commission': ['between', [100, 500]]}, fields=['name', 'customer', 'total_commission'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show invoices with total commission and their amount eligible for commission.",
+      "fields": ["name", "total_commission", "amount_commission"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'total_commission': ['!=', 0]}, fields=['name', 'total_commission', 'amount_eligible_for_commission'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Find invoices where total commission is non-zero and sales partner is 'ABC Corp'.",
+      "fields": ["name", "sales_partner", "total_commission"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'total_commission': ['!=', 0], 'sales_partner': 'ABC Corp'}, fields=['name', 'sales_partner', 'total_commission'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Get all invoices with total commission and their customer name.",
+      "fields": ["name", "customer", "total_commission"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'total_commission': ['!=', 0]}, fields=['name', 'customer', 'total_commission'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices assigned to any sales team.",
+      "fields": ["name", "sales_team"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'sales_team': ['!=', '']}, fields=['name', 'sales_team'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show invoices not assigned to any sales team.",
+      "fields": ["name", "sales_team"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'sales_team': ['=', '']}, fields=['name', 'sales_team'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Which invoices are assigned to a specific sales team, e.g., 'West Region'?",
+      "fields": ["name", "sales_team"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'sales_team': 'West Region'}, fields=['name', 'sales_team'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Retrieve invoices with their sales team and customer.",
+      "fields": ["name", "sales_team", "customer"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'sales_team': ['!=', '']}, fields=['name', 'sales_team', 'customer'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Display invoices by sales team and their posting date.",
+      "fields": ["name", "sales_team", "posting_date"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'sales_team': ['!=', '']}, fields=['name', 'sales_team', 'posting_date'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Count invoices assigned to any sales team.",
+      "fields": ["sales_team"]
+    },
+    "output": "frappe.db.count('Sales Invoice', filters={'sales_team': ['!=', '']})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices and their status for a specific sales team.",
+      "fields": ["name", "sales_team", "status"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'sales_team': 'West Region'}, fields=['name', 'sales_team', 'status'])"
+  },
+   {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show invoices with sales team and sales partner.",
+      "top_fields": ["sales_team", "name","sales_partner"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'sales_team': ['!=', '']}, fields=['name', 'sales_team', 'sales_partner'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Find invoices assigned to a specific sales team and customer.",
+      "top_fields": ["sales_team", "name", "customer"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'sales_team': 'West Region', 'customer': 'ABC Corp'}, fields=['name', 'sales_team', 'customer'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Get all invoices with sales team and their posting date and status.",
+      "top_fields": ["sales_team", "name","posting_date", "status"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'sales_team': ['!=', '']}, fields=['name', 'sales_team', 'posting_date', 'status'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List all invoices where edit printing settings is enabled.",
+      "fields": ["name", "edit_printing_settings"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'edit_printing_settings': 1}, fields=['name', 'edit_printing_settings'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Count invoices with edit printing settings enabled.",
+      "fields": ["edit_printing_settings"]
+    },
+    "output": "frappe.db.count('Sales Invoice', filters={'edit_printing_settings': 1})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if any invoice has edit printing settings enabled.",
+      "fields": ["edit_printing_settings"]
+    },
+    "output": "frappe.db.exists('Sales Invoice', {'edit_printing_settings': 1})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Get the value of edit printing settings for a specific invoice.",
+      "fields": ["edit_printing_settings"]
+    },
+    "output": "frappe.db.get_value('Sales Invoice', 'SINV-0001', 'edit_printing_settings')"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Retrieve invoices with edit printing settings enabled and their letter head.",
+      "fields": ["name", "letter_head"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'edit_printing_settings': 1}, fields=['name', 'letter_head'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with edit printing settings enabled and their print heading.",
+      "fields": ["name", "select_print_heading"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'edit_printing_settings': 1}, fields=['name', 'select_print_heading'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show a single invoice document with edit printing settings enabled.",
+      "fields": ["name","edit_printing_settings"]
+    },
+    "output": "frappe.get_doc('Sales Invoice', {'edit_printing_settings': 1, 'name': ['like', '%SINV%']}, fields=['name'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Find invoices with edit printing settings enabled and a specific status.",
+      "fields": ["name", "status","edit_printing_settings"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'edit_printing_settings': 1, 'status': 'Submitted'}, fields=['name', 'status'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if a specific invoice has edit printing settings enabled.",
+      "fields": ["edit_printing_settings"]
+    },
+    "output": "frappe.db.get_value('Sales Invoice', 'SINV-0001', 'edit_printing_settings')"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with edit printing settings enabled and their customer.",
+      "fields": ["name", "customer","edit_printing_settings"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'edit_printing_settings': 1}, fields=['name', 'customer'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List all invoices using a specific letter head, e.g., 'Standard'.",
+      "fields": ["name", "letter_head"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'letter_head': 'Standard'}, fields=['name', 'letter_head'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Count invoices using any letter head.",
+      "fields": ["letter_head"]
+    },
+    "output": "frappe.db.count('Sales Invoice', filters={'letter_head': ['!=', '']})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if any invoice uses a specific letter head, e.g., 'Company'.",
+      "fields": ["letter_head"]
+    },
+    "output": "frappe.db.exists('Sales Invoice', {'letter_head': 'Company'})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Get the value of letter head for a specific invoice.",
+      "fields": ["letter_head"]
+    },
+    "output": "frappe.db.get_value('Sales Invoice', 'SINV-0001', 'letter_head')"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Retrieve invoices with their letter head and customer.",
+      "fields": ["name", "letter_head", "customer"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'letter_head': ['!=', '']}, fields=['name', 'letter_head', 'customer'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with a specific letter head and their status.",
+      "fields": ["name", "letter_head", "status"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'letter_head': 'Standard'}, fields=['name', 'letter_head', 'status'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show a single invoice document using a specific letter head.",
+      "fields": ["name", "letter_head"]
+    },
+    "output": "frappe.get_doc('Sales Invoice', {'letter_head': 'Standard', 'name': ['like', '%SINV%']}, fields=['name', 'letter_head'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Find invoices with a specific letter head and a specific customer.",
+      "fields": ["name", "letter_head", "customer"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'letter_head': 'Standard', 'customer': 'ABC Corp'}, fields=['name', 'letter_head', 'customer'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with letter head and edit printing settings.",
+      "fields": ["name", "letter_head", "edit_printing_settings"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'letter_head': ['!=', '']}, fields=['name', 'letter_head', 'edit_printing_settings'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if a specific invoice uses a specific letter head.",
+      "fields": ["letter_head"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'letter_head': 'Standard'}, fields=['name', 'letter_head'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List all invoices where group same items is enabled.",
+      "fields": ["name", "group_same_items"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'group_same_items': 1}, fields=['name', 'group_same_items'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Count invoices with group same items enabled.",
+      "fields": ["group_same_items"]
+    },
+    "output": "frappe.db.count('Sales Invoice', filters={'group_same_items': 1})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if any invoice has group same items enabled.",
+      "fields": ["group_same_items"]
+    },
+    "output": "frappe.db.exists('Sales Invoice', {'group_same_items': 1})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Get the value of group same items for a specific invoice.",
+      "fields": ["group_same_items"]
+    },
+    "output": "frappe.db.get_value('Sales Invoice', 'SINV-0001', 'group_same_items')"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Retrieve invoices with group same items enabled and their customer.",
+      "fields": ["name", "customer"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'group_same_items': 1}, fields=['name', 'customer'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with group same items enabled and their letter head.",
+      "fields": ["name", "letter_head"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'group_same_items': 1}, fields=['name', 'letter_head'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show a single invoice document with group same items enabled.",
+      "fields": ["name","group_same_items"]
+    },
+    "output": "frappe.get_doc('Sales Invoice', {'group_same_items': 1, 'name': ['like', '%SINV%']}, fields=['name'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Find invoices with group same items enabled and a specific customer.",
+      "fields": ["name", "customer","group_same_items"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'group_same_items': 1, 'customer': 'ABC Corp'}, fields=['name', 'customer'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with group same items enabled and their edit printing settings.",
+      "fields": ["name", "edit_printing_settings"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'group_same_items': 1}, fields=['name', 'edit_printing_settings'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if a specific invoice has group same items enabled.",
+      "fields": ["name","group_same_items"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'group_same_items': 1}, fields=['name', 'group_same_items'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List all invoices using a specific print heading, e.g., 'Invoice'.",
+      "fields": ["name", "select_print_heading"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'select_print_heading': 'Invoice'}, fields=['name', 'select_print_heading'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Count invoices using any print heading.",
+      "fields": ["select_print_heading"]
+    },
+    "output": "frappe.db.count('Sales Invoice', filters={'select_print_heading': ['!=', '']})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if any invoice uses a specific print heading, e.g., 'Proforma'.",
+      "fields": ["select_print_heading"]
+    },
+    "output": "frappe.db.exists('Sales Invoice', {'select_print_heading': 'Proforma'})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Get the value of select print heading for a specific invoice.",
+      "fields": ["select_print_heading"]
+    },
+    "output": "frappe.db.get_value('Sales Invoice', 'SINV-0001', 'select_print_heading')"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Retrieve invoices with their select print heading and customer.",
+      "fields": ["name", "select_print_heading", "customer"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'select_print_heading': ['!=', '']}, fields=['name', 'select_print_heading', 'customer'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with a specific print heading and their group same items setting.",
+      "fields": ["name", "select_print_heading", "group_same_items"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'select_print_heading': 'Invoice'}, fields=['name', 'select_print_heading', 'group_same_items'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show a single invoice document using a specific print heading.",
+      "fields": ["name", "select_print_heading"]
+    },
+    "output": "frappe.get_doc('Sales Invoice', {'select_print_heading': 'Invoice', 'name': ['like', '%SINV%']}, fields=['name', 'select_print_heading'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Find invoices with a specific print heading and a specific customer.",
+      "fields": ["name", "select_print_heading", "customer"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'select_print_heading': 'Invoice', 'customer': 'ABC Corp'}, fields=['name', 'select_print_heading', 'customer'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with select print heading and edit printing settings.",
+      "fields": ["name", "select_print_heading", "edit_printing_settings"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'select_print_heading': ['!=', '']}, fields=['name', 'select_print_heading', 'edit_printing_settings'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if a specific invoice uses a specific print heading.",
+      "fields": ["select_print_heading","name"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'select_print_heading': 'Invoice'}, fields=['name', 'select_print_heading'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List all invoices using a specific language, e.g., 'English'.",
+      "fields": ["name", "language"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'language': 'English'}, fields=['name', 'language'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Count invoices using any language.",
+      "fields": ["language"]
+    },
+    "output": "frappe.db.count('Sales Invoice', filters={'language': ['!=', '']})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if any invoice uses a specific language, e.g., 'French'.",
+      "fields": ["language"]
+    },
+    "output": "frappe.db.exists('Sales Invoice', {'language': 'French'})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Get the value of language for a specific invoice.",
+      "fields": ["language"]
+    },
+    "output": "frappe.db.get_value('Sales Invoice', 'SINV-0001', 'language')"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Retrieve invoices with their language and customer.",
+      "fields": ["name", "language", "customer"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'language': ['!=', '']}, fields=['name', 'language', 'customer'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with a specific language and their status.",
+      "fields": ["name", "language", "status"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'language': 'English'}, fields=['name', 'language', 'status'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show a single invoice document using a specific language.",
+      "fields": ["name", "language"]
+    },
+    "output": "frappe.get_doc('Sales Invoice', {'language': 'English', 'name': ['like', '%SINV%']}, fields=['name', 'language'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Find invoices with a specific language and a specific customer.",
+      "fields": ["name", "language", "customer"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'language': 'English', 'customer': 'ABC Corp'}, fields=['name', 'language', 'customer'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with language and select print heading.",
+      "fields": ["name", "language", "select_print_heading"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'language': ['!=', '']}, fields=['name', 'language', 'select_print_heading'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if a specific invoice uses a specific language.",
+      "fields": ["language","name"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'language': 'English'}, fields=['name', 'language'])'"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List all invoices with a subscription set.",
+      "fields": ["name", "subscription"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'subscription': ['!=', '']}, fields=['name', 'subscription'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Count invoices with a subscription.",
+      "fields": ["subscription"]
+    },
+    "output": "frappe.db.count('Sales Invoice', filters={'subscription': ['!=', '']})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if any invoice has a specific subscription, e.g., 'SUB-0001'.",
+      "fields": ["subscription"]
+    },
+    "output": "frappe.db.exists('Sales Invoice', {'subscription': 'SUB-0001'})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Get the value of subscription for a specific invoice.",
+      "fields": ["subscription"]
+    },
+    "output": "frappe.db.get_value('Sales Invoice', 'SINV-0001', 'subscription')"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Retrieve invoices with their subscription and customer.",
+      "fields": ["name", "subscription", "customer"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'subscription': ['!=', '']}, fields=['name', 'subscription', 'customer'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with a specific subscription and their status.",
+      "fields": ["name", "subscription", "status"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'subscription': 'SUB-0001'}, fields=['name', 'subscription', 'status'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show a single invoice document with a subscription.",
+      "fields": ["name", "subscription"]
+    },
+    "output": "frappe.get_doc('Sales Invoice', {'subscription': ['!=', ''], 'name': ['like', '%SINV%']}, fields=['name', 'subscription'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Find invoices with a specific subscription and a specific customer.",
+      "fields": ["name", "subscription", "customer"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'subscription': 'SUB-0001', 'customer': 'ABC Corp'}, fields=['name', 'subscription', 'customer'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with subscription and their language.",
+      "fields": ["name", "subscription", "language"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'subscription': ['!=', '']}, fields=['name', 'subscription', 'language'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if a specific invoice has a specific subscription.",
+      "fields": ["subscription"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'subscription': 'SUB-0001'}, fields=['name', 'subscription'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List all invoices with a from date set.",
+      "fields": ["name", "from_date"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'from_date': ['!=', None]}, fields=['name', 'from_date'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Count invoices with a from date after 2023-01-01.",
+      "fields": ["from_date"]
+    },
+    "output": "frappe.db.count('Sales Invoice', filters={'from_date': ['>', '2023-01-01']})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if any invoice has a specific from date, e.g., '2024-01-01'.",
+      "fields": ["from_date"]
+    },
+    "output": "frappe.db.exists('Sales Invoice', {'from_date': '2024-01-01')"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Get the value of from date for a specific invoice.",
+      "fields": ["from_date"]
+    },
+    "output": "frappe.db.get_value('Sales Invoice', 'SINV-0001', 'from_date')"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Retrieve invoices with their from date and customer.",
+      "fields": ["name", "from_date", "customer"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'from_date': ['!=', None]}, fields=['name', 'from_date', 'customer'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with a from date within a specific range, e.g., between 2023-01-01 and 2023-12-31.",
+      "fields": ["name", "from_date"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'from_date': ['between', ['2023-01-01', '2023-12-31']]}, fields=['name', 'from_date'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show a single invoice document with a from date.",
+      "fields": ["name", "from_date"]
+    },
+    "output": "frappe.get_doc('Sales Invoice', {'from_date': ['!=', None], 'name': ['like', '%SINV%']}, fields=['name', 'from_date'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Find invoices with a specific from date and a specific customer.",
+      "fields": ["name", "from_date", "customer"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'from_date': '2024-01-01', 'customer': 'ABC Corp'}, fields=['name', 'from_date', 'customer'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with from date and subscription.",
+      "fields": ["name", "from_date", "subscription"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'from_date': ['!=', None]}, fields=['name', 'from_date', 'subscription'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if a specific invoice has a from date after 2023-01-01.",
+      "fields": ["from_date"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'from_date': ['>', '2023-01-01']}, fields=['name', 'from_date'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List all invoices with a to date set.",
+      "fields": ["name", "to_date"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'to_date': ['!=', None]}, fields=['name', 'to_date'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Count invoices with a to date before 2024-12-31.",
+      "fields": ["to_date"]
+    },
+    "output": "frappe.db.count('Sales Invoice', filters={'to_date': ['<', '2024-12-31']})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if any invoice has a specific to date, e.g., '2024-06-30'.",
+      "fields": ["to_date"]
+    },
+    "output": "frappe.db.exists('Sales Invoice', {'to_date': '2024-06-30'})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Get the value of to date for a specific invoice.",
+      "fields": ["to_date"]
+    },
+    "output": "frappe.db.get_value('Sales Invoice', 'SINV-0001', 'to_date')"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Retrieve invoices with their to date and customer.",
+      "fields": ["name", "to_date", "customer"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'to_date': ['!=', None]}, fields=['name', 'to_date', 'customer'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with a to date within a specific range, e.g., between 2023-01-01 and 2023-12-31.",
+      "fields": ["name", "to_date"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'to_date': ['between', ['2023-01-01', '2023-12-31']]}, fields=['name', 'to_date'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show a single invoice document with a to date.",
+      "fields": ["name", "to_date"]
+    },
+    "output": "frappe.get_doc('Sales Invoice', {'to_date': ['!=', None], 'name': ['like', '%SINV%']}, fields=['name', 'to_date'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Find invoices with a specific to date and a specific customer.",
+      "fields": ["name", "to_date", "customer"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'to_date': '2024-06-30', 'customer': 'ABC Corp'}, fields=['name', 'to_date', 'customer'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with to date and auto repeat.",
+      "fields": ["name", "to_date", "auto_repeat"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'to_date': ['!=', None], 'fields': ['name', 'to_date', 'auto_repeat']})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if a specific invoice has a to date before 2024-12-31.",
+      "fields": ["to_date"]
+    },
+    "output": "frappe.db.get_list('Sales Invoice', filters={'to_date': ['<', '2024-12-31']}, fields=['name', 'to_date'])'"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List all invoices with more information set.",
+      "fields": ["name", "more_information"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'more_information': ['!=', '']}, fields=['name', 'more_information'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Count invoices with more information.",
+      "fields": ["more_information"]
+    },
+    "output": "frappe.db.count('Sales Invoice', filters={'more_information': ['!=', '']})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if any invoice has more information set.",
+      "fields": ["more_information"]
+    },
+    "output": "frappe.db.exists('Sales Invoice', {'more_information': ['!=', '']})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Get the value of more information for a specific invoice.",
+      "fields": ["more_information"]
+    },
+    "output": "frappe.db.get_value('Sales Invoice', 'SINV-0001', 'more_information')"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Retrieve invoices with more information and update auto repeat reference.",
+      "fields": ["name", "more_information", "update_auto_repeat_reference"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'more_information': ['!=', '']}, fields=['name', 'more_information', 'update_auto_repeat_reference'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with more information and their auto repeat.",
+      "fields": ["name", "more_information", "auto_repeat"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'more_information': ['!=', '']}, fields=['name', 'more_information', 'auto_repeat'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show a single invoice document with more information.",
+      "fields": ["name", "more_information"]
+    },
+    "output": "frappe.get_doc('Sales Invoice', {'more_information': ['!=', ''], 'name': ['like', '%SINV%']}, fields=['name', 'more_information'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Find invoices with more information and a specific auto repeat.",
+      "fields": ["name", "more_information", "auto_repeat"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'more_information': ['!=', ''], 'auto_repeat': 'AUTOREP-0001'}, fields=['name', 'more_information', 'auto_repeat'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with more information and their to date.",
+      "fields": ["name", "more_information", "to_date"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'more_information': ['!=', '']}, fields=['name', 'more_information', 'to_date'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if a specific invoice has more information set.",
+      "fields": ["more_information"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'more_information': ['!=', '']}, fields=['name', 'more_information'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List all invoices with a specific status, e.g., 'Submitted'.",
+      "fields": ["name", "status"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'status': 'Submitted'}, fields=['name', 'status'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Count invoices with status 'Draft'.",
+      "fields": ["status"]
+    },
+    "output": "frappe.db.count('Sales Invoice', filters={'status': 'Draft'})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if any invoice has status 'Cancelled'.",
+      "fields": ["status"]
+    },
+    "output": "frappe.db.exists('Sales Invoice', {'status': 'Cancelled'})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Get the value of status for a specific invoice.",
+      "fields": ["status"]
+    },
+    "output": "frappe.db.get_value('Sales Invoice', 'SINV-0001', 'status')"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Retrieve invoices with status 'Submitted' and customer.",
+      "fields": ["name", "status", "customer"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'status': 'Submitted'}, fields=['name', 'status', 'customer'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with status 'Paid' and their to date.",
+      "fields": ["name", "status", "to_date"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'status': 'Paid'}, fields=['name', 'status', 'to_date'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show a single invoice document with status 'Submitted'.",
+      "fields": ["name", "status"]
+    },
+    "output": "frappe.get_doc('Sales Invoice', {'status': 'Submitted', 'name': ['like', '%SINV%']}, fields=['name', 'status'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Find invoices with status 'Submitted' and a specific auto repeat.",
+      "fields": ["name", "status", "auto_repeat"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'status': 'Submitted', 'auto_repeat': 'AUTOREP-0001'}, fields=['name', 'status', 'auto_repeat'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with status 'Paid' and more information.",
+      "fields": ["name", "status", "more_information"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'status': 'Paid'}, fields=['name', 'status', 'more_information'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if a specific invoice has status 'Submitted'.",
+      "fields": ["status"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'status': 'Submitted'}, fields=['name', 'status'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List all invoices with an inter company invoice reference set.",
+      "fields": ["name", "inter_company_invoice_reference"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'inter_company_invoice_reference': ['!=', '']}, fields=['name', 'inter_company_invoice_reference'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Count invoices with an inter company invoice reference.",
+      "fields": ["inter_company_invoice_reference"]
+    },
+    "output": "frappe.db.count('Sales Invoice', filters={'inter_company_invoice_reference': ['!=', '']})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if any invoice has a specific inter company invoice reference, e.g., 'PUR-0001'.",
+      "fields": ["inter_company_invoice_reference"]
+    },
+    "output": "frappe.db.exists('Sales Invoice', {'inter_company_invoice_reference': 'PUR-0001'})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Get the value of inter company invoice reference for a specific invoice.",
+      "fields": ["inter_company_invoice_reference"]
+    },
+    "output": "frappe.db.get_value('Sales Invoice', 'SINV-0001', 'inter_company_invoice_reference')"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Retrieve invoices with inter company invoice reference and status.",
+      "fields": ["name", "inter_company_invoice_reference", "status"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'inter_company_invoice_reference': ['!=', '']}, fields=['name', 'inter_company_invoice_reference', 'status'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with inter company invoice reference and more information.",
+      "fields": ["name", "inter_company_invoice_reference", "more_information"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'inter_company_invoice_reference': ['!=', '']}, fields=['name', 'inter_company_invoice_reference', 'more_information'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show a single invoice document with inter company invoice reference.",
+      "fields": ["name", "inter_company_invoice_reference"]
+    },
+    "output": "frappe.get_doc('Sales Invoice', {'inter_company_invoice_reference': ['!=', ''], 'name': ['like', '%SINV%']}, fields=['name', 'inter_company_invoice_reference'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Find invoices with inter company invoice reference and a specific status.",
+      "fields": ["name", "inter_company_invoice_reference", "status"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'inter_company_invoice_reference': ['!=', ''], 'status': 'Submitted'}, fields=['name', 'inter_company_invoice_reference', 'status'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with inter company invoice reference and their update auto repeat reference.",
+      "fields": ["name", "inter_company_invoice_reference", "update_auto_repeat_reference"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'inter_company_invoice_reference': ['!=', '']}, fields=['name', 'inter_company_invoice_reference', 'update_auto_repeat_reference'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if a specific invoice has an inter company invoice reference.",
+      "fields": ["inter_company_invoice_reference"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'inter_company_invoice_reference': ['!=', '']}, fields=['name', 'inter_company_invoice_reference'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List all invoices linked to a specific campaign, e.g., 'CAM-0001'.",
+      "fields": ["name", "campaign"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'campaign': 'CAM-0001'}, fields=['name', 'campaign'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Count invoices associated with any campaign.",
+      "fields": ["campaign"]
+    },
+    "output": "frappe.db.count('Sales Invoice', filters={'campaign': ['!=', '']})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if any invoice is linked to a specific campaign, e.g., 'CAM-0001'.",
+      "fields": ["campaign"]
+    },
+    "output": "frappe.db.exists('Sales Invoice', {'campaign': 'CAM-0001'})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Get the value of campaign for a specific invoice.",
+      "fields": ["campaign"]
+    },
+    "output": "frappe.db.get_value('Sales Invoice', 'SINV-0001', 'campaign')"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Retrieve invoices with campaign and status.",
+      "fields": ["name", "campaign", "status"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'campaign': ['!=', '']}, fields=['name', 'campaign', 'status'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with campaign and inter company invoice reference.",
+      "fields": ["name", "campaign", "inter_company_invoice_reference"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'campaign': ['!=', '']}, fields=['name', 'campaign', 'inter_company_invoice_reference'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show a single invoice document linked to a campaign.",
+      "fields": ["name", "campaign"]
+    },
+    "output": "frappe.get_doc('Sales Invoice', {'campaign': ['!=', ''], 'name': ['like', '%SINV%']}, fields=['name', 'campaign'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Find invoices with campaign and a specific status.",
+      "fields": ["name", "campaign", "status"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'campaign': ['!=', ''], 'status': 'Submitted'}, fields=['name', 'campaign', 'status'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with campaign and more information.",
+      "fields": ["name", "campaign", "more_information"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'campaign': ['!=', '']}, fields=['name', 'campaign', 'more_information'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if a specific invoice is linked to a campaign.",
+      "fields": ["campaign"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'campaign': ['!=', '']}, fields=['name', 'campaign'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List all invoices representing a specific company, e.g., 'ABC Corp'.",
+      "fields": ["name", "represents_company"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'represents_company': 'ABC Corp'}, fields=['name', 'represents_company'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Count invoices representing any company.",
+      "fields": ["represents_company"]
+    },
+    "output": "frappe.db.count('Sales Invoice', filters={'represents_company': ['!=', '']})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if any invoice represents a specific company, e.g., 'ABC Corp'.",
+      "fields": ["represents_company"]
+    },
+    "output": "frappe.db.exists('Sales Invoice', {'represents_company': 'ABC Corp'})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Get the value of represents company for a specific invoice.",
+      "fields": ["represents_company"]
+    },
+    "output": "frappe.db.get_value('Sales Invoice', 'SINV-0001', 'represents_company')"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Retrieve invoices representing a company and their status.",
+      "fields": ["name", "represents_company", "status"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'represents_company': ['!=', '']}, fields=['name', 'represents_company', 'status'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices representing a company and their campaign.",
+      "fields": ["name", "represents_company", "campaign"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'represents_company': ['!=', '']}, fields=['name', 'represents_company', 'campaign'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show a single invoice document representing a company.",
+      "fields": ["name", "represents_company"]
+    },
+    "output": "frappe.get_doc('Sales Invoice', {'represents_company': ['!=', ''], 'name': ['like', '%SINV%']}, fields=['name', 'represents_company'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Find invoices representing a company and a specific status.",
+      "fields": ["name", "represents_company", "status"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'represents_company': ['!=', ''], 'status': 'Submitted'}, fields=['name', 'represents_company', 'status'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices representing a company and their inter company invoice reference.",
+      "fields": ["name", "represents_company", "inter_company_invoice_reference"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'represents_company': ['!=', '']}, fields=['name', 'represents_company', 'inter_company_invoice_reference'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if a specific invoice represents a company.",
+      "fields": ["represents_company"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'represents_company': ['!=', '']}, fields=['name', 'represents_company'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List all invoices created from a specific source, e.g., 'Sales Order'.",
+      "fields": ["name", "source"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'source': 'Sales Order'}, fields=['name', 'source'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Count invoices created from any source.",
+      "fields": ["source"]
+    },
+    "output": "frappe.db.count('Sales Invoice', filters={'source': ['!=', '']})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if any invoice is created from a specific source, e.g., 'Delivery Note'.",
+      "fields": ["source"]
+    },
+    "output": "frappe.db.exists('Sales Invoice', {'source': 'Delivery Note'})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Get the value of source for a specific invoice.",
+      "fields": ["source"]
+    },
+    "output": "frappe.db.get_value('Sales Invoice', 'SINV-0001', 'source')"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Retrieve invoices with source and represents company.",
+      "fields": ["name", "source", "represents_company"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'source': ['!=', '']}, fields=['name', 'source', 'represents_company'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with source and campaign.",
+      "fields": ["name", "source", "campaign"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'source': ['!=', '']}, fields=['name', 'source', 'campaign'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show a single invoice document created from a specific source.",
+      "fields": ["name", "source"]
+    },
+    "output": "frappe.get_doc('Sales Invoice', {'source': ['!=', ''], 'name': ['like', '%SINV%']}, fields=['name', 'source'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Find invoices with source and a specific status.",
+      "fields": ["name", "source", "status"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'source': ['!=', ''], 'status': 'Submitted'}, fields=['name', 'source', 'status'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with source and inter company invoice reference.",
+      "fields": ["name", "source", "inter_company_invoice_reference"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'source': ['!=', '']}, fields=['name', 'source', 'inter_company_invoice_reference'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if a specific invoice is created from a source.",
+      "fields": ["source"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'source': ['!=', '']}, fields=['name', 'source'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List all invoices for a specific customer group, e.g., 'Individual'.",
+      "fields": ["name", "customer_group"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'customer_group': 'Individual'}, fields=['name', 'customer_group'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Count invoices for any customer group.",
+      "fields": ["customer_group"]
+    },
+    "output": "frappe.db.count('Sales Invoice', filters={'customer_group': ['!=', '']})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if any invoice belongs to a specific customer group, e.g., 'Individual'.",
+      "fields": ["customer_group"]
+    },
+    "output": "frappe.db.exists('Sales Invoice', {'customer_group': 'Individual'})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Retrieve invoices for a customer group and campaign.",
+      "fields": ["name", "customer_group", "campaign"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'customer_group': ['!=', '']}, fields=['name', 'customer_group', 'campaign'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices for a customer group and source.",
+      "fields": ["name", "customer_group", "source"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'customer_group': ['!=', '']}, fields=['name', 'customer_group', 'source'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show a single invoice document for a customer group.",
+      "fields": ["name", "customer_group"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'customer_group': ['!=', ''], 'name': ['like', '%SINV%']}, fields=['name', 'customer_group'], limit=1)"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Find invoices for a customer group and a specific represents_company.",
+      "fields": ["name", "customer_group", "represents_company"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'customer_group': ['!=', ''], 'represents_company': 'ABC Corp'}, fields=['name', 'customer_group', 'represents_company'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices for a customer group and their inter company invoice reference.",
+      "fields": ["name", "customer_group", "inter_company_invoice_reference"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'customer_group': ['!=', '']}, fields=['name', 'customer_group', 'inter_company_invoice_reference'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List all invoices where is_internal_customer is set to 1 (True).",
+      "fields": ["name", "is_internal_customer"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'is_internal_customer': 1}, fields=['name', 'is_internal_customer'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Count invoices where is_internal_customer is set to 1 (True).",
+      "fields": ["is_internal_customer"]
+    },
+    "output": "frappe.db.count('Sales Invoice', filters={'is_internal_customer': 1})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if any invoice has is_internal_customer set to 1 (True).",
+      "fields": ["is_internal_customer"]
+    },
+    "output": "frappe.db.exists('Sales Invoice', {'is_internal_customer': 1})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Retrieve invoices where is_internal_customer is set and customer is specified.",
+      "fields": ["name", "is_internal_customer", "customer"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'is_internal_customer': 1, 'customer': ['!=', '']}, fields=['name', 'is_internal_customer', 'customer'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices where is_internal_customer is set and customer_group is specified.",
+      "fields": ["name", "is_internal_customer", "customer_group"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'is_internal_customer': 1, 'customer_group': ['!=', '']}, fields=['name', 'is_internal_customer', 'customer_group'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show a single invoice document where is_internal_customer is set.",
+      "fields": ["name", "is_internal_customer"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'is_internal_customer': 1}, fields=['name', 'is_internal_customer'], limit=1)"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Find invoices where is_internal_customer is set and company is specified.",
+      "fields": ["name", "is_internal_customer", "company"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'is_internal_customer': 1, 'company': ['!=', '']}, fields=['name', 'is_internal_customer', 'company'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices where is_internal_customer is set and source is specified.",
+      "fields": ["name", "is_internal_customer", "source"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'is_internal_customer': 1, 'source': ['!=', '']}, fields=['name', 'is_internal_customer', 'source'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List all invoices where is_discounted is set to 1 (True).",
+      "fields": ["name", "is_discounted"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'is_discounted': 1}, fields=['name', 'is_discounted'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Count invoices where is_discounted is set to 1 (True).",
+      "fields": ["is_discounted"]
+    },
+    "output": "frappe.db.count('Sales Invoice', filters={'is_discounted': 1})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if any invoice has is_discounted set to 1 (True).",
+      "fields": ["is_discounted"]
+    },
+    "output": "frappe.db.exists('Sales Invoice', {'is_discounted': 1})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Retrieve invoices where is_discounted is set and customer is specified.",
+      "fields": ["name", "is_discounted", "customer"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'is_discounted': 1, 'customer': ['!=', '']}, fields=['name', 'is_discounted', 'customer'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices where is_discounted is set and discount_amount is greater than 0.",
+      "fields": ["name", "is_discounted", "discount_amount"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'is_discounted': 1, 'discount_amount': ['>', 0]}, fields=['name', 'is_discounted', 'discount_amount'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show a single invoice document where is_discounted is set.",
+      "fields": ["name", "is_discounted"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'is_discounted': 1}, fields=['name', 'is_discounted'], limit=1)"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Find invoices where is_discounted is set and grand_total is above a certain value, e.g., 1000.",
+      "fields": ["name", "is_discounted", "grand_total"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'is_discounted': 1, 'grand_total': ['>', 1000]}, fields=['name', 'is_discounted', 'grand_total'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices where is_discounted is set and source is specified.",
+      "fields": ["name", "is_discounted", "source"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'is_discounted': 1, 'source': ['!=', '']}, fields=['name', 'is_discounted', 'source'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List all invoices with update auto repeat reference set.",
+      "fields": ["name", "update_auto_repeat_reference"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'update_auto_repeat_reference': 1}, fields=['name', 'update_auto_repeat_reference'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Count invoices with update auto repeat reference enabled.",
+      "fields": ["update_auto_repeat_reference"]
+    },
+    "output": "frappe.db.count('Sales Invoice', filters={'update_auto_repeat_reference': 1})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if any invoice has update auto repeat reference enabled.",
+      "fields": ["update_auto_repeat_reference"]
+    },
+    "output": "frappe.db.exists('Sales Invoice', {'update_auto_repeat_reference': 1})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Get the value of update auto repeat reference for a specific invoice.",
+      "fields": ["update_auto_repeat_reference"]
+    },
+    "output": "frappe.db.get_value('Sales Invoice', 'SINV-0001', 'update_auto_repeat_reference')"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Retrieve invoices with update auto repeat reference and auto repeat.",
+      "fields": ["name", "update_auto_repeat_reference", "auto_repeat"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'update_auto_repeat_reference': 1}, fields=['name', 'update_auto_repeat_reference', 'auto_repeat'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with update auto repeat reference and their from date.",
+      "fields": ["name", "update_auto_repeat_reference", "from_date"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'update_auto_repeat_reference': 1}, fields=['name', 'update_auto_repeat_reference', 'from_date'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show a single invoice document with update auto repeat reference enabled.",
+      "fields": ["name", "update_auto_repeat_reference"]
+    },
+    "output": "frappe.get_doc('Sales Invoice', {'update_auto_repeat_reference': 1, 'name': ['like', '%SINV%']}, fields=['name', 'update_auto_repeat_reference'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Find invoices with update auto repeat reference and a specific auto repeat.",
+      "fields": ["name", "update_auto_repeat_reference", "auto_repeat"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'update_auto_repeat_reference': 1, 'auto_repeat': 'AUTOREP-0001'}, fields=['name', 'update_auto_repeat_reference', 'auto_repeat'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices with update auto repeat reference and their to date.",
+      "fields": ["name", "update_auto_repeat_reference", "to_date"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'update_auto_repeat_reference': 1}, fields=['name', 'update_auto_repeat_reference', 'to_date'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if a specific invoice has update auto repeat reference enabled.",
+      "fields": ["update_auto_repeat_reference"]
+    },
+    "output": "frappe.db.get_value('Sales Invoice', 'SINV-0001', 'update_auto_repeat_reference') == 1"
+  },
+  
+    {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List all invoices where remarks is not empty.",
+      "fields": ["name", "remarks"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'remarks': ['!=', '']}, fields=['name', 'remarks'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Count invoices where remarks is not empty.",
+      "fields": ["remarks"]
+    },
+    "output": "frappe.db.count('Sales Invoice', filters={'remarks': ['!=', '']})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Check if any invoice has remarks set.",
+      "fields": ["remarks"]
+    },
+    "output": "frappe.db.exists('Sales Invoice', {'remarks': ['!=', '']})"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Retrieve invoices where remarks is not empty and customer is specified.",
+      "fields": ["name", "remarks", "customer"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'remarks': ['!=', ''], 'customer': ['!=', '']}, fields=['name', 'remarks', 'customer'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices where remarks is not empty and customer_name is specified.",
+      "fields": ["name", "remarks", "customer_name"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'remarks': ['!=', ''], 'customer_name': ['!=', '']}, fields=['name', 'remarks', 'customer_name'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Show a single invoice document where remarks is not empty.",
+      "fields": ["name", "remarks"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'remarks': ['!=', '']}, fields=['name', 'remarks'], limit=1)"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "Find invoices where remarks is not empty and posting_date is after a certain date, e.g., '2023-01-01'.",
+      "fields": ["name", "remarks", "posting_date"]
+    },
+    "output": "frappe.get_list('Sales Invoice', filters={'remarks': ['!=', ''], 'posting_date': ['>', '2023-01-01']}, fields=['name', 'remarks', 'posting_date'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice",
+      "question": "List invoices where remarks is not empty and source is specified.",
+      "fields": ["name", "remarks", "source"]
+    },
+    "output": "frappe.get_all('Sales Invoice', filters={'remarks': ['!=', ''], 'source': ['!=', '']}, fields=['name', 'remarks', 'source'])"
   }
+  
+
 ]

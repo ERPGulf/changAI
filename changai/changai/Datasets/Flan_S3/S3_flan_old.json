@@ -26752,54 +26752,6 @@
         "output": "frappe.db.count('Item Tax', {'tax_category': 'Export'})"
     },
     {
-        "input": "How do I create tax rules for sales and purchase transactions in ERPNext?",
-        "output": "Tax Rule"
-    },
-    {
-        "input": "Can I apply tax rules for shopping cart transactions in ERPNext?",
-        "output": "Tax Rule"
-    },
-    {
-        "input": "Where can I configure the tax category and customer group for tax rules in ERPNext?",
-        "output": "Tax Rule"
-    },
-    {
-        "input": "How do I link a sales tax template to a tax rule in ERPNext?",
-        "output": "Tax Rule"
-    },
-    {
-        "input": "How can I specify the billing address fields for tax rules in ERPNext?",
-        "output": "Tax Rule"
-    },
-    {
-        "input": "Where do I define the shipping country and state for tax rules in ERPNext?",
-        "output": "Tax Rule"
-    },
-    {
-        "input": "How do I apply tax rules based on item groups and customer groups in ERPNext?",
-        "output": "Tax Rule"
-    },
-    {
-        "input": "How do I set up tax rules that apply only to specific suppliers in ERPNext?",
-        "output": "Tax Rule"
-    },
-    {
-        "input": "Can I define tax rates for different billing cities and counties in ERPNext?",
-        "output": "Tax Rule"
-    },
-    {
-        "input": "How do I apply a tax rule for purchases based on the supplier group in ERPNext?",
-        "output": "Tax Rule"
-    },
-    {
-        "input": "Where can I configure the tax rates for different items in ERPNext's tax rule settings?",
-        "output": "Tax Rule"
-    },
-    {
-        "input": "How do I add multiple tax rates to a single tax rule in ERPNext?",
-        "output": "Tax Rule"
-    },
-    {
         "input": {
             "doctype": "Assignment Rule",
             "question": "List all assignment rules that are currently disabled.",

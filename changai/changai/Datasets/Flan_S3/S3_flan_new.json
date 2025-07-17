@@ -3333,13 +3333,14 @@
         "expected_value_after_useful_life"
       ]
     },
-    "output": "frappe.get_all('Asset Finance Book', filters={{}}, fields=['expected_value_after_useful_life'])"
+    "output": "frappe.get_all('Asset Finance Book', fields=['name', 'expected_value_after_useful_life'])"
   },
   {
     "input": {
       "doctype": "Asset Finance Book",
       "question": "Retrieve the expected post-depreciation value for asset AFB-2024-004.",
       "fields": [
+        "finance_book",
         "expected_value_after_useful_life",
         "finance_book"
       ]
@@ -3351,6 +3352,7 @@
       "doctype": "Asset Finance Book",
       "question": "Show the expected value and depreciation frequency for AFB-204.",
       "fields": [
+        "finance_book",
         "expected_value_after_useful_life",
         "frequency_of_depreciation"
       ]
@@ -3362,6 +3364,7 @@
       "doctype": "Asset Finance Book",
       "question": "What will be the final estimated asset value and the annual depreciation rate for asset AFB-775?",
       "fields": [
+        "finance_book",
         "expected_value_after_useful_life",
         "rate_of_depreciation"
       ]
@@ -3373,6 +3376,7 @@
       "doctype": "Asset Finance Book",
       "question": "Give me the expected value and the depreciation method for AFB-001.",
       "fields": [
+        "finance_book",
         "expected_value_after_useful_life",
         "depreciation_method"
       ]
@@ -3384,6 +3388,7 @@
       "doctype": "Asset Finance Book",
       "question": "Find the salvage percent and expected post-life value for AFB-122.",
       "fields": [
+        "finance_book",
         "expected_value_after_useful_life",
         "salvage_value_percentage"
       ]
@@ -3406,6 +3411,7 @@
       "doctype": "Asset Finance Book",
       "question": "Give details of depreciation method and expected asset value after use for AFB-091.",
       "fields": [
+        "finance_book",
         "expected_value_after_useful_life",
         "depreciation_method"
       ]
@@ -3417,6 +3423,7 @@
       "doctype": "Asset Finance Book",
       "question": "Fetch the future asset value and value after depreciation for AFB-995.",
       "fields": [
+        "finance_book",
         "expected_value_after_useful_life",
         "value_after_depreciation"
       ]
@@ -3438,6 +3445,7 @@
       "doctype": "Asset Finance Book",
       "question": "Show the post-depreciation value for asset AFB-4021.",
       "fields": [
+        "name",
         "value_after_depreciation"
       ]
     },
@@ -3480,6 +3488,7 @@
       "doctype": "Asset Finance Book",
       "question": "For asset FIN-8902, what’s the remaining value after monthly depreciation?",
       "fields": [
+        "name",
         "value_after_depreciation",
         "frequency_of_depreciation"
       ]
@@ -3501,8 +3510,8 @@
       "doctype": "Asset Finance Book",
       "question": "Show value of asset AFB-999 after its useful life ends.",
       "fields": [
-        "value_after_depreciation",
-        "expected_value_after_useful_life"
+        "name",
+        "value_after_depreciation"
       ]
     },
     "output": "frappe.get_all('Asset Finance Book', filters={'name': 'AFB-999'}, fields=['value_after_depreciation'])"
@@ -3571,16 +3580,16 @@
   {
     "input": {
       "doctype": "Blanket Order",
-      "question": "Show the naming format logic applied to blanket order IDs in ABC Pvt Ltd.",
-      "fields": ["naming_series"]
+      "question": "Show the naming format logic applied to blanket order IDs in Buekx Pvt Ltd.",
+      "fields": ["naming_series","company"]
     },
-    "output": "frappe.get_all('Blanket Order', filters={'company': 'ABC Pvt Ltd'}, fields=['naming_series'])"
+    "output": "frappe.get_all('Blanket Order', filters={'company': 'Buekx Pvt Ltd'}, fields=['naming_series'])"
   },
   {
     "input": {
       "doctype": "Blanket Order",
       "question": "Which field ensures sequential numbering of long-term supplier agreements?",
-      "fields": ["naming_series"]
+      "fields": ["naming_series","blanket_order_type"]
     },
     "output": "frappe.get_all('Blanket Order', filters={'blanket_order_type': 'Supplier'}, fields=['naming_series'])"
   },
