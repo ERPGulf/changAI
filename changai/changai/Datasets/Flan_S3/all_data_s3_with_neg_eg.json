@@ -1,36 +1,493 @@
 [
   {
+    "doctype": "Sales Invoice",
+    "question": "How many sales invoices did we create last month?",
+    "fields": [
+      "posting_date (Date)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n    SELECT COUNT(*)\n    FROM [BT]tabSales Invoice[BT]\n    WHERE MONTH(posting_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)\n      AND YEAR(posting_date) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH)\n\"\"\")"
+  },
+  {
+    "doctype": "Sales Invoice",
+    "question": "Total invoice amount for the current week",
+    "fields": [
+      "grand_total (Currency)",
+      "posting_date (Date)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n    SELECT SUM(grand_total)\n    FROM [BT]tabSales Invoice[BT]\n    WHERE WEEK(posting_date) = WEEK(CURDATE())\n      AND YEAR(posting_date) = YEAR(CURDATE())\n\"\"\")"
+  },
+  {
+    "doctype": "Sales Invoice",
+    "question": "Which customer got the biggest invoice last quarter?",
+    "fields": [
+      "customer (Link → Customer)",
+      "grand_total (Currency)",
+      "posting_date (Date)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n    SELECT customer, grand_total\n    FROM [BT]tabSales Invoice[BT]\n    WHERE QUARTER(posting_date) = QUARTER(CURRENT_DATE - INTERVAL 1 QUARTER)\n      AND YEAR(posting_date) = YEAR(CURRENT_DATE - INTERVAL 1 QUARTER)\n    ORDER BY grand_total DESC\n    LIMIT 1\n\"\"\")"
+  },
+  {
+    "doctype": "Sales Invoice",
+    "question": "List all invoices where we gave additional discounts.",
+    "fields": [
+      "additional_discount_percentage (Float)",
+      "discount_amount (Currency)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n    SELECT name, additional_discount_percentage, discount_amount\n    FROM [BT]tabSales Invoice[BT]\n    WHERE additional_discount_percentage > 0\n       OR discount_amount > 0\n\"\"\")"
+  },
+  {
+    "doctype": "Sales Invoice",
+    "question": "How many POS sales did we do this month?",
+    "fields": [
+      "is_pos (Check)",
+      "posting_date (Date)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n    SELECT COUNT(*)\n    FROM [BT]tabSales Invoice[BT]\n    WHERE is_pos = 1\n      AND MONTH(posting_date) = MONTH(CURDATE())\n      AND YEAR(posting_date) = YEAR(CURDATE())\n\"\"\")"
+  },
+  {
+    "doctype": "Sales Invoice",
+    "question": "Which invoices were paid in cash?",
+    "fields": [
+      "cash_bank_account (Link → Account)",
+      "paid_amount (Currency)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n    SELECT name, paid_amount, cash_bank_account\n    FROM [BT]tabSales Invoice[BT]\n    WHERE cash_bank_account IS NOT NULL\n      AND paid_amount > 0\n\"\"\")"
+  },
+  {
+    "doctype": "Sales Invoice",
+    "question": "What was the total outstanding amount at the end of last week?",
+    "fields": [
+      "outstanding_amount (Currency)",
+      "posting_date (Date)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n    SELECT SUM(outstanding_amount)\n    FROM [BT]tabSales Invoice[BT]\n    WHERE posting_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 1 WEEK)\n                           AND CURDATE()\n\"\"\")"
+  },
+  {
+    "doctype": "Sales Invoice",
+    "question": "List invoices where customer used loyalty points.",
+    "fields": [
+      "redeem_loyalty_points (Check)",
+      "loyalty_points (Int)",
+      "loyalty_amount (Currency)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n    SELECT name, loyalty_points, loyalty_amount\n    FROM [BT]tabSales Invoice[BT]\n    WHERE redeem_loyalty_points = 1\n\"\"\")"
+  },
+  {
+    "doctype": "Sales Invoice",
+    "question": "How many returns did we get this quarter?",
+    "fields": [
+      "is_return (Check)",
+      "posting_date (Date)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n    SELECT COUNT(*)\n    FROM [BT]tabSales Invoice[BT]\n    WHERE is_return = 1\n      AND QUARTER(posting_date) = QUARTER(CURDATE())\n      AND YEAR(posting_date) = YEAR(CURDATE())\n\"\"\")"
+  },
+  {
+    "doctype": "Sales Invoice",
+    "question": "What’s the total commission earned by sales partners this year?",
+    "fields": [
+      "total_commission (Currency)",
+      "sales_partner (Link → Sales Partner)",
+      "posting_date (Date)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n    SELECT SUM(total_commission)\n    FROM [BT]tabSales Invoice[BT]\n    WHERE posting_date BETWEEN DATE_FORMAT(NOW(), '%Y-01-01') AND CURDATE()\n\"\"\")"
+  },
+  {
+    "question": "What was the total revenue last week?",
+    "doctype": "Sales Invoice",
+    "fields": [
+      "grand_total (Currency)",
+      "posting_date (Date)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n    SELECT SUM(grand_total)\n    FROM [BT]tabSales Invoice[BT]\n    WHERE posting_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 7 DAY) AND CURDATE()\n\"\"\")"
+  },
+  {
+    "question": "Which customer paid the highest invoice this year?",
+    "doctype": "Sales Invoice",
+    "fields": [
+      "customer (Link → Customer)",
+      "grand_total (Currency)",
+      "posting_date (Date)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n    SELECT customer, grand_total\n    FROM [BT]tabSales Invoice[BT]\n    WHERE YEAR(posting_date) = YEAR(CURDATE())\n    ORDER BY grand_total DESC\n    LIMIT 1\n\"\"\")"
+  },
+  {
+    "question": "How much discount was given in total this month?",
+    "doctype": "Sales Invoice",
+    "fields": [
+      "discount_amount (Currency)",
+      "additional_discount_percentage (Float)",
+      "posting_date (Date)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n    SELECT SUM(discount_amount)\n    FROM [BT]tabSales Invoice[BT]\n    WHERE MONTH(posting_date) = MONTH(CURDATE())\n      AND YEAR(posting_date) = YEAR(CURDATE())\n\"\"\")"
+  },
+  {
+    "question": "How many invoices were paid in cash this month?",
+    "doctype": "Sales Invoice",
+    "fields": [
+      "cash_bank_account (Link → Account)",
+      "posting_date (Date)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n    SELECT COUNT(*)\n    FROM [BT]tabSales Invoice[BT]\n    WHERE cash_bank_account IS NOT NULL\n      AND MONTH(posting_date) = MONTH(CURDATE())\n      AND YEAR(posting_date) = YEAR(CURDATE())\n\"\"\")"
+  },
+  {
+    "question": "How many overdue invoices do we have right now?",
+    "doctype": "Sales Invoice",
+    "fields": [
+      "due_date (Date)",
+      "outstanding_amount (Currency)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n    SELECT COUNT(*)\n    FROM [BT]tabSales Invoice[BT]\n    WHERE due_date < CURDATE()\n      AND outstanding_amount > 0\n\"\"\")"
+  },
+  {
+    "question": "How many invoices were returned this month?",
+    "doctype": "Sales Invoice",
+    "fields": [
+      "is_return (Check)",
+      "posting_date (Date)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n    SELECT COUNT(*)\n    FROM [BT]tabSales Invoice[BT]\n    WHERE is_return = 1\n      AND MONTH(posting_date) = MONTH(CURDATE())\n      AND YEAR(posting_date) = YEAR(CURDATE())\n\"\"\")"
+  },
+  {
+    "question": "What’s the total outstanding amount from all customers?",
+    "doctype": "Sales Invoice",
+    "fields": [
+      "outstanding_amount (Currency)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n    SELECT SUM(outstanding_amount)\n    FROM [BT]tabSales Invoice[BT]\n\"\"\")"
+  },
+  [
+  {
+    "question": "How many sales orders did we receive last quarter?",
+    "doctype": "Sales Order",
+    "fields": [
+      "transaction_date (Date)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n    SELECT COUNT(*)\n    FROM [BT]tabSales Order[BT]\n    WHERE QUARTER(transaction_date) = QUARTER(CURDATE() - INTERVAL 1 QUARTER)\n      AND YEAR(transaction_date) = YEAR(CURDATE() - INTERVAL 1 QUARTER)\n\"\"\")"
+  },
+  {
+    "question": "What’s the total value of sales orders this month?",
+    "doctype": "Sales Order",
+    "fields": [
+      "grand_total (Currency)",
+      "transaction_date (Date)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n    SELECT SUM(grand_total)\n    FROM [BT]tabSales Order[BT]\n    WHERE MONTH(transaction_date) = MONTH(CURDATE())\n      AND YEAR(transaction_date) = YEAR(CURDATE())\n\"\"\")"
+  },
+  {
+    "question": "Which customer placed the biggest sales order this year?",
+    "doctype": "Sales Order",
+    "fields": [
+      "customer (Link → Customer)",
+      "grand_total (Currency)",
+      "transaction_date (Date)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n    SELECT customer, grand_total\n    FROM [BT]tabSales Order[BT]\n    WHERE YEAR(transaction_date) = YEAR(CURDATE())\n    ORDER BY grand_total DESC\n    LIMIT 1\n\"\"\")"
+  },
+  {
+    "question": "How many sales orders were fully billed this month?",
+    "doctype": "Sales Order",
+    "fields": [
+      "per_billed (Percent)",
+      "transaction_date (Date)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n    SELECT COUNT(*)\n    FROM [BT]tabSales Order[BT]\n    WHERE per_billed = 100\n      AND MONTH(transaction_date) = MONTH(CURDATE())\n      AND YEAR(transaction_date) = YEAR(CURDATE())\n\"\"\")"
+  },
+  {
+    "question": "How many orders are partially delivered?",
+    "doctype": "Sales Order",
+    "fields": [
+      "per_delivered (Percent)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n    SELECT COUNT(*)\n    FROM [BT]tabSales Order[BT]\n    WHERE per_delivered > 0 AND per_delivered < 100\n\"\"\")"
+  },
+  {
+    "question": "What’s the average order quantity this week?",
+    "doctype": "Sales Order",
+    "fields": [
+      "total_qty (Float)",
+      "transaction_date (Date)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n    SELECT AVG(total_qty)\n    FROM [BT]tabSales Order[BT]\n    WHERE WEEK(transaction_date) = WEEK(CURDATE())\n      AND YEAR(transaction_date) = YEAR(CURDATE())\n\"\"\")"
+  },
+  {
+    "question": "How many internal customer orders were created this month?",
+    "doctype": "Sales Order",
+    "fields": [
+      "is_internal_customer (Check)",
+      "transaction_date (Date)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n    SELECT COUNT(*)\n    FROM [BT]tabSales Order[BT]\n    WHERE is_internal_customer = 1\n      AND MONTH(transaction_date) = MONTH(CURDATE())\n      AND YEAR(transaction_date) = YEAR(CURDATE())\n\"\"\")"
+  },
+  {
+    "question": "Which sales partner generated the most commission this quarter?",
+    "doctype": "Sales Order",
+    "fields": [
+      "sales_partner (Link → Sales Partner)",
+      "total_commission (Currency)",
+      "transaction_date (Date)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n    SELECT sales_partner, SUM(total_commission) AS commission\n    FROM [BT]tabSales Order[BT]\n    WHERE QUARTER(transaction_date) = QUARTER(CURDATE())\n      AND YEAR(transaction_date) = YEAR(CURDATE())\n    GROUP BY sales_partner\n    ORDER BY commission DESC\n    LIMIT 1\n\"\"\")"
+  },
+  {
+    "question": "How many orders include loyalty points?",
+    "doctype": "Sales Order",
+    "fields": [
+      "loyalty_points (Int)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n    SELECT COUNT(*)\n    FROM [BT]tabSales Order[BT]\n    WHERE loyalty_points > 0\n\"\"\")"
+  },
+  {
+    "question": "What’s the total discount amount given in sales orders this month?",
+    "doctype": "Sales Order",
+    "fields": [
+      "discount_amount (Currency)",
+      "transaction_date (Date)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n    SELECT SUM(discount_amount)\n    FROM [BT]tabSales Order[BT]\n    WHERE MONTH(transaction_date) = MONTH(CURDATE())\n      AND YEAR(transaction_date) = YEAR(CURDATE())\n\"\"\")"
+  },
+  {
+    "question": "How many sales orders have been fully delivered this year?",
+    "doctype": "Sales Order",
+    "fields": [
+      "per_delivered (Percent)",
+      "transaction_date (Date)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n  SELECT COUNT(*)\n  FROM [BT]tabSales Order[BT]\n  WHERE per_delivered = 100\n    AND YEAR(transaction_date) = YEAR(CURDATE())\n\"\"\")"
+  },
+  {
+    "question": "Which customer placed the most sales orders last month?",
+    "doctype": "Sales Order",
+    "fields": [
+      "customer (Link → Customer)",
+      "transaction_date (Date)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n  SELECT customer, COUNT(*) AS order_count\n  FROM [BT]tabSales Order[BT]\n  WHERE MONTH(transaction_date) = MONTH(CURDATE() - INTERVAL 1 MONTH)\n    AND YEAR(transaction_date) = YEAR(CURDATE() - INTERVAL 1 MONTH)\n  GROUP BY customer\n  ORDER BY order_count DESC\n  LIMIT 1\n\"\"\")"
+  },
+  {
+    "question": "What is the total value of internal customer orders this quarter?",
+    "doctype": "Sales Order",
+    "fields": [
+      "is_internal_customer (Check)",
+      "grand_total (Currency)",
+      "transaction_date (Date)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n  SELECT SUM(grand_total)\n  FROM [BT]tabSales Order[BT]\n  WHERE is_internal_customer = 1\n    AND QUARTER(transaction_date) = QUARTER(CURDATE())\n    AND YEAR(transaction_date) = YEAR(CURDATE())\n\"\"\")"
+  },
+  {
+    "question": "How many orders were billed but not fully delivered?",
+    "doctype": "Sales Order",
+    "fields": [
+      "per_billed (Percent)",
+      "per_delivered (Percent)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n  SELECT COUNT(*)\n  FROM [BT]tabSales Order[BT]\n  WHERE per_billed = 100 AND per_delivered < 100\n\"\"\")"
+  },
+  {
+    "question": "How many sales orders were created without a PO number?",
+    "doctype": "Sales Order",
+    "fields": [
+      "po_no (Data)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n  SELECT COUNT(*)\n  FROM [BT]tabSales Order[BT]\n  WHERE po_no IS NULL OR po_no = ''\n\"\"\")"
+  },
+  {
+    "question": "How many customers got more than one sales order this week?",
+    "doctype": "Sales Order",
+    "fields": [
+      "customer (Link → Customer)",
+      "transaction_date (Date)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n  SELECT customer\n  FROM [BT]tabSales Order[BT]\n  WHERE WEEK(transaction_date) = WEEK(CURDATE())\n    AND YEAR(transaction_date) = YEAR(CURDATE())\n  GROUP BY customer\n  HAVING COUNT(*) > 1\n\"\"\")"
+  },
+  {
+    "question": "Which sales order has the highest discount this month?",
+    "doctype": "Sales Order",
+    "fields": [
+      "discount_amount (Currency)",
+      "transaction_date (Date)",
+      "name (Data)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n  SELECT name, discount_amount\n  FROM [BT]tabSales Order[BT]\n  WHERE MONTH(transaction_date) = MONTH(CURDATE())\n    AND YEAR(transaction_date) = YEAR(CURDATE())\n  ORDER BY discount_amount DESC\n  LIMIT 1\n\"\"\")"
+  },
+  {
+    "question": "What’s the total number of loyalty points used this year?",
+    "doctype": "Sales Order",
+    "fields": [
+      "loyalty_points (Int)",
+      "transaction_date (Date)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n  SELECT SUM(loyalty_points)\n  FROM [BT]tabSales Order[BT]\n  WHERE YEAR(transaction_date) = YEAR(CURDATE())\n\"\"\")"
+  },
+  {
+    "question": "How many sales orders were submitted with missing delivery date?",
+    "doctype": "Sales Order",
+    "fields": [
+      "delivery_date (Date)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n  SELECT COUNT(*)\n  FROM [BT]tabSales Order[BT]\n  WHERE delivery_date IS NULL\n\"\"\")"
+  },
+  {
+    "question": "How many orders were submitted this weekend?",
+    "doctype": "Sales Order",
+    "fields": [
+      "transaction_date (Date)"
+    ],
+    "output": "frappe.db.sql(\"\"\"\n  SELECT COUNT(*)\n  FROM [BT]tabSales Order[BT]\n  WHERE WEEKDAY(transaction_date) IN (5, 6)\n    AND YEAR(transaction_date) = YEAR(CURDATE())\n    AND MONTH(transaction_date) = MONTH(CURDATE())\n\"\"\")"
+  },
+   {
     "input": {
-      "doctype": "Company",
-      "question": "List companies that have set a depreciation expense account.",
+      "doctype": "Sales Partner",
+      "question": "How many sales partners are active?",
       "fields": [
-        "depreciation_expense_account",
-        "company_name"
+        "show_in_website"
       ]
     },
-    "output": "frappe.get_all('Company', filters={'depreciation_expense_account': ['!=', '']}, fields=['company_name'])"
+    "output": "frappe.db.sql(\"\"\"SELECT COUNT(*) FROM `tabSales Partner` WHERE show_in_website = 1\"\"\")"
   },
   {
     "input": {
-      "doctype": "Company",
-      "question": "Get all companies with a set parent company.",
+      "doctype": "Sales Partner",
+      "question": "Which partner has the highest commission rate?",
       "fields": [
-        "parent_company",
-        "company_name"
+        "partner_name",
+        "commission_rate"
       ]
     },
-    "output": "frappe.get_all('Company', filters={'parent_company': ['!=', '']}, fields=['company_name', 'parent_company'])"
+    "output": "frappe.db.sql(\"\"\"SELECT partner_name FROM `tabSales Partner` ORDER BY commission_rate DESC LIMIT 1\"\"\")"
   },
   {
     "input": {
-      "doctype": "Company",
-      "question": "Show company names and creation chart info for companies created from existing templates.",
+      "doctype": "Sales Partner",
+      "question": "List all sales partners in territory 'East'.",
       "fields": [
-        "company_name",
-        "create_chart_of_accounts_based_on"
+        "partner_name",
+        "territory"
       ]
     },
-    "output": "frappe.get_all('Company', filters={'create_chart_of_accounts_based_on': ['!=', '']}, fields=['company_name', 'create_chart_of_accounts_based_on'])"
+    "output": "frappe.db.sql(\"\"\"SELECT partner_name FROM `tabSales Partner` WHERE territory = 'East'\"\"\")"
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "What is the commission rate of John Smith?",
+      "fields": [
+        "partner_name",
+        "commission_rate"
+      ]
+    },
+    "output": "frappe.db.sql(\"\"\"SELECT commission_rate FROM `tabSales Partner` WHERE partner_name = 'John Smith'\"\"\")"
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Which sales partners have zero commission rate?",
+      "fields": [
+        "partner_name",
+        "commission_rate"
+      ]
+    },
+    "output": "frappe.db.sql(\"\"\"SELECT partner_name FROM `tabSales Partner` WHERE commission_rate = 0\"\"\")"
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "How many partners have websites listed?",
+      "fields": [
+        "website"
+      ]
+    },
+    "output": "frappe.db.sql(\"\"\"SELECT COUNT(*) FROM `tabSales Partner` WHERE website IS NOT NULL AND website != ''\"\"\")"
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "List top 5 partners by commission rate.",
+      "fields": [
+        "partner_name",
+        "commission_rate"
+      ]
+    },
+    "output": "frappe.db.sql(\"\"\"SELECT partner_name FROM `tabSales Partner` ORDER BY commission_rate DESC LIMIT 5\"\"\")"
+  },
+  {
+    "input": {
+      "doctype": "Sales Order",
+      "question": "How many sales orders did we receive last month?",
+      "fields": ["transaction_date"]
+    },
+    "output": "frappe.db.sql(\"\"\"SELECT COUNT(*) FROM `tabSales Order` WHERE MONTH(transaction_date) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND YEAR(transaction_date) = YEAR(CURDATE() - INTERVAL 1 MONTH)\"\"\")"
+  },
+  {
+    "input": {
+      "doctype": "Sales Order",
+      "question": "What is the total grand total of all sales orders placed this week?",
+      "fields": ["transaction_date", "grand_total"]
+    },
+    "output": "frappe.db.sql(\"\"\"SELECT SUM(grand_total) FROM `tabSales Order` WHERE YEARWEEK(transaction_date, 1) = YEARWEEK(CURDATE(), 1)\"\"\")"
+  },
+  {
+    "input": {
+      "doctype": "Sales Order",
+      "question": "Which customer placed the highest sales order last quarter?",
+      "fields": ["customer", "grand_total", "transaction_date"]
+    },
+    "output": "frappe.db.sql(\"\"\"SELECT customer FROM `tabSales Order` WHERE QUARTER(transaction_date) = QUARTER(CURDATE() - INTERVAL 1 QUARTER) AND YEAR(transaction_date) = YEAR(CURDATE() - INTERVAL 1 QUARTER) ORDER BY grand_total DESC LIMIT 1\"\"\")"
+  },
+  {
+    "input": {
+      "doctype": "Sales Order",
+      "question": "How many internal customer orders were created this year?",
+      "fields": ["transaction_date", "is_internal_customer"]
+    },
+    "output": "frappe.db.sql(\"\"\"SELECT COUNT(*) FROM `tabSales Order` WHERE is_internal_customer = 1 AND YEAR(transaction_date) = YEAR(CURDATE())\"\"\")"
+  },
+  {
+    "input": {
+      "doctype": "Sales Order",
+      "question": "What’s the total discount amount offered this month?",
+      "fields": ["transaction_date", "discount_amount"]
+    },
+    "output": "frappe.db.sql(\"\"\"SELECT SUM(discount_amount) FROM `tabSales Order` WHERE MONTH(transaction_date) = MONTH(CURDATE()) AND YEAR(transaction_date) = YEAR(CURDATE())\"\"\")"
+  },
+  {
+    "input": {
+      "doctype": "Sales Order",
+      "question": "Which campaign generated the most sales last quarter?",
+      "fields": ["campaign", "grand_total", "transaction_date"]
+    },
+    "output": "frappe.db.sql(\"\"\"SELECT campaign, SUM(grand_total) AS total FROM `tabSales Order` WHERE QUARTER(transaction_date) = QUARTER(CURDATE() - INTERVAL 1 QUARTER) AND YEAR(transaction_date) = YEAR(CURDATE() - INTERVAL 1 QUARTER) GROUP BY campaign ORDER BY total DESC LIMIT 1\"\"\")"
+  },
+  {
+    "input": {
+      "doctype": "Sales Order",
+      "question": "Top 3 territories by sales volume this month?",
+      "fields": ["territory", "grand_total", "transaction_date"]
+    },
+    "output": "frappe.db.sql(\"\"\"SELECT territory, SUM(grand_total) AS total FROM `tabSales Order` WHERE MONTH(transaction_date) = MONTH(CURDATE()) AND YEAR(transaction_date) = YEAR(CURDATE()) GROUP BY territory ORDER BY total DESC LIMIT 3\"\"\")"
+  },
+  {
+    "input": {
+      "doctype": "Sales Order",
+      "question": "What is the average order value for this week?",
+      "fields": ["transaction_date", "grand_total"]
+    },
+    "output": "frappe.db.sql(\"\"\"SELECT AVG(grand_total) FROM `tabSales Order` WHERE YEARWEEK(transaction_date, 1) = YEARWEEK(CURDATE(), 1)\"\"\")"
+  },
+  {
+    "input": {
+      "doctype": "Sales Order",
+      "question": "How many orders used the coupon code 'FESTIVE10' this year?",
+      "fields": ["coupon_code", "transaction_date"]
+    },
+    "output": "frappe.db.sql(\"\"\"SELECT COUNT(*) FROM `tabSales Order` WHERE coupon_code = 'FESTIVE10' AND YEAR(transaction_date) = YEAR(CURDATE())\"\"\")"
+  },
+  {
+    "input": {
+      "doctype": "Sales Order",
+      "question": "Which customer has the highest cumulative sales this year?",
+      "fields": ["customer", "grand_total", "transaction_date"]
+    },
+    "output": "frappe.db.sql(\"\"\"SELECT customer, SUM(grand_total) AS total FROM `tabSales Order` WHERE YEAR(transaction_date) = YEAR(CURDATE()) GROUP BY customer ORDER BY total DESC LIMIT 1\"\"\")"
   },
   {
     "input": {
@@ -558,7 +1015,8 @@
       ]
     },
     "output": "frappe.get_all('Company', filters={'company_description': ['like', '%manufacturing%']}, fields=['company_name'])"
-  },  {
+  },
+  {
     "input": {
       "doctype": "Company",
       "question": "List companies whose domain is 'techwave.com'.",
@@ -2301,35 +2759,83 @@
   },
   {
     "input": {
-      "doctype": "Purchase Order",
-      "question": "Which purchase orders were shipped to the 'Qatar Logistics Hub' shipping address?",
-      "fields": [
-        "shipping_address"
-      ]
+      "doctype": "Supplier",
+      "question": "How many suppliers are there in total?",
+      "fields": [""]
     },
-    "output": "frappe.get_all('Purchase Order', filters={'shipping_address': 'Qatar Logistics Hub'}, fields=['name', 'supplier', 'grand_total'])"
+    "output": "frappe.db.sql(\"\"\"SELECT COUNT(*) FROM `tabSupplier`\"\"\")"
   },
   {
     "input": {
-      "doctype": "Purchase Order",
-      "question": "Get the contact person's name and email for PO-9008.",
-      "fields": [
-        "contact_person",
-        "contact_email"
-      ]
+      "doctype": "Supplier",
+      "question": "How many suppliers were added this year?",
+      "fields": ["creation (Datetime)"]
     },
-    "output": "frappe.get_value('Purchase Order', {'name': 'PO-9008'}, ['contact_person', 'contact_email'])"
+    "output": "frappe.db.sql(\"\"\"SELECT COUNT(*) FROM `tabSupplier` WHERE YEAR(creation) = YEAR(CURDATE())\"\"\")"
   },
   {
     "input": {
-      "doctype": "Purchase Order",
-      "question": "Do we have any POs created this year with billing address as 'Finance Department, HQ'?",
-      "fields": [
-        "billing_address",
-        "transaction_date"
-      ]
+      "doctype": "Supplier",
+      "question": "List all suppliers from India.",
+      "fields": ["country (Link)"]
     },
-    "output": "frappe.db.exists('Purchase Order', {'billing_address': 'Finance Department, HQ', 'transaction_date': ['>=', frappe.utils.get_first_day(frappe.utils.nowdate()).replace(month=1, day=1)]})"
+    "output": "frappe.db.sql(\"\"\"SELECT name FROM `tabSupplier` WHERE country = 'India'\"\"\")"
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "How many suppliers belong to the 'Raw Material' group?",
+      "fields": ["supplier_group (Link)"]
+    },
+    "output": "frappe.db.sql(\"\"\"SELECT COUNT(*) FROM `tabSupplier` WHERE supplier_group = 'Raw Material'\"\"\")"
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Which country has the most suppliers?",
+      "fields": ["country (Link)"]
+    },
+    "output": "frappe.db.sql(\"\"\"SELECT country, COUNT(*) as total FROM `tabSupplier` GROUP BY country ORDER BY total DESC LIMIT 1\"\"\")"
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "How many suppliers were added last quarter?",
+      "fields": ["creation (Datetime)"]
+    },
+    "output": "frappe.db.sql(\"\"\"SELECT COUNT(*) FROM `tabSupplier` WHERE QUARTER(creation) = QUARTER(CURDATE() - INTERVAL 1 QUARTER) AND YEAR(creation) = YEAR(CURDATE())\"\"\")"
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "List internal suppliers only.",
+      "fields": ["is_internal_supplier (Check)"]
+    },
+    "output": "frappe.db.sql(\"\"\"SELECT name FROM `tabSupplier` WHERE is_internal_supplier = 1\"\"\")"
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "How many suppliers are from 'Germany' and use 'EUR' as currency?",
+      "fields": ["country (Link)", "default_currency (Link)"]
+    },
+    "output": "frappe.db.sql(\"\"\"SELECT COUNT(*) FROM `tabSupplier` WHERE country = 'Germany' AND default_currency = 'EUR'\"\"\")"
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Which supplier was added most recently?",
+      "fields": ["supplier_name (Data)", "creation (Datetime)"]
+    },
+    "output": "frappe.db.sql(\"\"\"SELECT supplier_name FROM `tabSupplier` ORDER BY creation DESC LIMIT 1\"\"\")"
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "How many 'Local' suppliers were added this month?",
+      "fields": ["supplier_type (Select)", "creation (Datetime)"]
+    },
+    "output": "frappe.db.sql(\"\"\"SELECT COUNT(*) FROM `tabSupplier` WHERE supplier_type = 'Local' AND MONTH(creation) = MONTH(CURDATE()) AND YEAR(creation) = YEAR(CURDATE())\"\"\")"
   },
   {
     "input": {
@@ -5775,78 +6281,6 @@
   },
   {
     "input": {
-      "doctype": "Supplier",
-      "question": "Does a supplier named 'hyundai Traders' exist?",
-      "fields": [
-        "name"
-      ]
-    },
-    "output": "frappe.db.exists('Supplier', 'hyundai Traders')"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Get the email address of supplier 'D-Mart'.",
-      "fields": [
-        "email_id"
-      ]
-    },
-    "output": "frappe.db.get_value('Supplier', 'D-Mart', 'email_id')"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "How many suppliers are currently disabled?",
-      "fields": [
-        "name"
-      ]
-    },
-    "output": "frappe.db.count('Supplier', filters={ 'disabled': 1 })"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Retrieve full record of supplier 'Omega Supplies'.",
-      "fields": [
-        "*"
-      ]
-    },
-    "output": "frappe.get_doc('Supplier', 'Omega Supplies')"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "List suppliers grouped by supplier group with their count.",
-      "fields": [
-        "supplier_group",
-        "count"
-      ]
-    },
-    "output": "frappe.db.sql(\"\"\"SELECT supplier_group, COUNT(*) as count FROM `tabSupplier` GROUP BY supplier_group\"\"\")"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Get all suppliers whose name starts with 'X'.",
-      "fields": [
-        "name"
-      ]
-    },
-    "output": "frappe.db.sql(\"\"\"SELECT name FROM `tabSupplier` WHERE name LIKE 'X%'\"\"\")"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Give me a list of the first 5 suppliers sorted by creation date.",
-      "fields": [
-        "name",
-        "creation"
-      ]
-    },
-    "output": "frappe.get_list('Supplier', fields=['name', 'creation'], order_by='creation asc', limit=5)"
-  },
-  {
-    "input": {
       "doctype": "Sales Invoice",
       "question": "What was our quarterly sales revenue trend for the last 2 years?",
       "fields": [
@@ -6084,38 +6518,7 @@
     },
     "output": "frappe.db.sql(\"\"\"SELECT customer, COUNT(*) as repeat_orders FROM `tabSales Invoice` GROUP BY customer HAVING repeat_orders > 1 ORDER BY repeat_orders DESC LIMIT 1\"\"\")"
   },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Check if any supplier has payment terms set to 'Immediate'.",
-      "fields": [
-        "payment_terms"
-      ]
-    },
-    "output": "frappe.db.exists('Supplier', { 'payment_terms': 'Immediate' })"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "How many suppliers have not provided a mobile number?",
-      "fields": [
-        "mobile_no"
-      ]
-    },
-    "output": "frappe.db.count('Supplier', filters={ 'mobile_no': '' })"
-  },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Get name and tax ID of the last modified supplier.",
-      "fields": [
-        "name",
-        "tax_id"
-      ]
-    },
-    "output": "frappe.get_list('Supplier', fields=['name', 'tax_id'], order_by='modified desc', limit=1)"
-  },
-  {
+{
     "input": {
       "doctype": "Purchase Invoice",
       "question": "Which invoices used warehouse 'Central Warehouse'?",
@@ -10461,17 +10864,7 @@
     },
     "output": "frappe.db.get_value('Customer', {'customer_name': 'Globe Enterprises'}, 'tax_id')"
   },
-  {
-    "input": {
-      "doctype": "Supplier",
-      "question": "Can you show me the GST details for supplier 'NorthStar Pvt Ltd'?",
-      "fields": [
-        "tax_id",
-        "supplier_name"
-      ]
-    },
-    "output": "frappe.db.get_value('Supplier', {'supplier_name': 'NorthStar Pvt Ltd'}, 'tax_id')"
-  },
+ 
   {
     "input": {
       "doctype": "Quotation",
