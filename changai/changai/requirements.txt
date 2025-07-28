@@ -1,8 +1,0 @@
-transformers
-sentence-transformers
-torch
-accelerate
-sentencepiece
-numpy
-json 
-os

@@ -1,0 +1,454 @@
+[
+ {
+  "content": null,
+  "docstatus": 0,
+  "doctype": "Page",
+  "icon": null,
+  "modified": "2017-05-03 05:59:33.702308",
+  "module": "Printing",
+  "name": "print-format-builder",
+  "page_name": "print-format-builder",
+  "restrict_to_domain": null,
+  "roles": [
+   {
+    "parent": "print-format-builder",
+    "parentfield": "roles",
+    "parenttype": "Page",
+    "role": "System Manager"
+   }
+  ],
+  "script": null,
+  "standard": "Yes",
+  "style": null,
+  "system_page": 0,
+  "title": "Print Format Builder"
+ },
+ {
+  "content": null,
+  "docstatus": 0,
+  "doctype": "Page",
+  "icon": null,
+  "modified": "2015-09-24 01:26:06.225378",
+  "module": "Desk",
+  "name": "backups",
+  "page_name": "backups",
+  "restrict_to_domain": null,
+  "roles": [
+   {
+    "parent": "backups",
+    "parentfield": "roles",
+    "parenttype": "Page",
+    "role": "System Manager"
+   }
+  ],
+  "script": null,
+  "standard": "Yes",
+  "style": null,
+  "system_page": 0,
+  "title": "Download Backups"
+ },
+ {
+  "content": null,
+  "docstatus": 0,
+  "doctype": "Page",
+  "icon": null,
+  "modified": "2016-07-14 06:39:09.096256",
+  "module": "Stock",
+  "name": "stock-balance",
+  "page_name": "stock-balance",
+  "restrict_to_domain": null,
+  "roles": [
+   {
+    "parent": "stock-balance",
+    "parentfield": "roles",
+    "parenttype": "Page",
+    "role": "Stock User"
+   }
+  ],
+  "script": null,
+  "standard": "Yes",
+  "style": null,
+  "system_page": 0,
+  "title": "Stock Summary"
+ },
+ {
+  "content": null,
+  "docstatus": 0,
+  "doctype": "Page",
+  "icon": null,
+  "modified": "2019-09-27 17:44:51.909947",
+  "module": "Desk",
+  "name": "leaderboard",
+  "page_name": "leaderboard",
+  "restrict_to_domain": null,
+  "roles": [],
+  "script": null,
+  "standard": "Yes",
+  "style": null,
+  "system_page": 0,
+  "title": "Leaderboard"
+ },
+ {
+  "content": null,
+  "docstatus": 0,
+  "doctype": "Page",
+  "icon": null,
+  "modified": "2020-12-16 12:29:08.610352",
+  "module": "Core",
+  "name": "dashboard-view",
+  "page_name": "dashboard-view",
+  "restrict_to_domain": null,
+  "roles": [],
+  "script": null,
+  "standard": "Yes",
+  "style": null,
+  "system_page": 0,
+  "title": "Dashboard"
+ },
+ {
+  "content": null,
+  "docstatus": 0,
+  "doctype": "Page",
+  "icon": null,
+  "modified": "2020-03-02 15:17:13.041650",
+  "module": "Desk",
+  "name": "user-profile",
+  "page_name": "user-profile",
+  "restrict_to_domain": null,
+  "roles": [
+   {
+    "parent": "user-profile",
+    "parentfield": "roles",
+    "parenttype": "Page",
+    "role": "All"
+   }
+  ],
+  "script": null,
+  "standard": "Yes",
+  "style": null,
+  "system_page": 0,
+  "title": "User Profile"
+ },
+ {
+  "content": null,
+  "docstatus": 0,
+  "doctype": "Page",
+  "icon": null,
+  "modified": "2019-07-29 13:24:38.201981",
+  "module": "Manufacturing",
+  "name": "bom-comparison-tool",
+  "page_name": "bom-comparison-tool",
+  "restrict_to_domain": "Manufacturing",
+  "roles": [
+   {
+    "parent": "bom-comparison-tool",
+    "parentfield": "roles",
+    "parenttype": "Page",
+    "role": "System Manager"
+   },
+   {
+    "parent": "bom-comparison-tool",
+    "parentfield": "roles",
+    "parenttype": "Page",
+    "role": "Manufacturing User"
+   },
+   {
+    "parent": "bom-comparison-tool",
+    "parentfield": "roles",
+    "parenttype": "Page",
+    "role": "Manufacturing Manager"
+   }
+  ],
+  "script": null,
+  "standard": "Yes",
+  "style": null,
+  "system_page": 0,
+  "title": "BOM Comparison Tool"
+ },
+ {
+  "content": null,
+  "docstatus": 0,
+  "doctype": "Page",
+  "icon": null,
+  "modified": "2020-06-01 15:41:06.348380",
+  "module": "Selling",
+  "name": "point-of-sale",
+  "page_name": "point-of-sale",
+  "restrict_to_domain": "Retail",
+  "roles": [
+   {
+    "parent": "point-of-sale",
+    "parentfield": "roles",
+    "parenttype": "Page",
+    "role": "Accounts User"
+   },
+   {
+    "parent": "point-of-sale",
+    "parentfield": "roles",
+    "parenttype": "Page",
+    "role": "Accounts Manager"
+   },
+   {
+    "parent": "point-of-sale",
+    "parentfield": "roles",
+    "parenttype": "Page",
+    "role": "Sales User"
+   },
+   {
+    "parent": "point-of-sale",
+    "parentfield": "roles",
+    "parenttype": "Page",
+    "role": "Sales Manager"
+   }
+  ],
+  "script": null,
+  "standard": "Yes",
+  "style": null,
+  "system_page": 0,
+  "title": "Point Of Sale"
+ },
+ {
+  "content": null,
+  "docstatus": 0,
+  "doctype": "Page",
+  "icon": null,
+  "modified": "2020-10-09 17:23:15.163030",
+  "module": "Printing",
+  "name": "print",
+  "page_name": "print",
+  "restrict_to_domain": null,
+  "roles": [],
+  "script": null,
+  "standard": "Yes",
+  "style": null,
+  "system_page": 0,
+  "title": null
+ },
+ {
+  "content": null,
+  "docstatus": 0,
+  "doctype": "Page",
+  "icon": null,
+  "modified": "2020-11-25 11:07:54.056208",
+  "module": "Stock",
+  "name": "warehouse-capacity-summary",
+  "page_name": "warehouse-capacity-summary",
+  "restrict_to_domain": null,
+  "roles": [
+   {
+    "parent": "warehouse-capacity-summary",
+    "parentfield": "roles",
+    "parenttype": "Page",
+    "role": "Stock User"
+   },
+   {
+    "parent": "warehouse-capacity-summary",
+    "parentfield": "roles",
+    "parenttype": "Page",
+    "role": "Stock Manager"
+   }
+  ],
+  "script": null,
+  "standard": "Yes",
+  "style": null,
+  "system_page": 0,
+  "title": "Warehouse Capacity Summary"
+ },
+ {
+  "content": null,
+  "docstatus": 0,
+  "doctype": "Page",
+  "icon": null,
+  "modified": "2021-07-10 12:22:16.138485",
+  "module": "Printing",
+  "name": "print-format-builder-beta",
+  "page_name": "print-format-builder-beta",
+  "restrict_to_domain": null,
+  "roles": [
+   {
+    "parent": "print-format-builder-beta",
+    "parentfield": "roles",
+    "parenttype": "Page",
+    "role": "System Manager"
+   }
+  ],
+  "script": null,
+  "standard": "Yes",
+  "style": null,
+  "system_page": 0,
+  "title": null
+ },
+ {
+  "content": null,
+  "docstatus": 0,
+  "doctype": "Page",
+  "icon": null,
+  "modified": "2023-05-01 13:02:17.223595",
+  "module": "Workflow",
+  "name": "workflow-builder",
+  "page_name": "workflow-builder",
+  "restrict_to_domain": null,
+  "roles": [
+   {
+    "parent": "workflow-builder",
+    "parentfield": "roles",
+    "parenttype": "Page",
+    "role": "System Manager"
+   }
+  ],
+  "script": null,
+  "standard": "Yes",
+  "style": null,
+  "system_page": 0,
+  "title": "Workflow Builder"
+ },
+ {
+  "content": null,
+  "docstatus": 0,
+  "doctype": "Page",
+  "icon": null,
+  "modified": "2023-10-06 15:18:00.622073",
+  "module": "Manufacturing",
+  "name": "visual-plant-floor",
+  "page_name": "visual-plant-floor",
+  "restrict_to_domain": null,
+  "roles": [
+   {
+    "parent": "visual-plant-floor",
+    "parentfield": "roles",
+    "parenttype": "Page",
+    "role": "Manufacturing User"
+   },
+   {
+    "parent": "visual-plant-floor",
+    "parentfield": "roles",
+    "parenttype": "Page",
+    "role": "Manufacturing Manager"
+   },
+   {
+    "parent": "visual-plant-floor",
+    "parentfield": "roles",
+    "parenttype": "Page",
+    "role": "Operator"
+   }
+  ],
+  "script": null,
+  "standard": "Yes",
+  "style": null,
+  "system_page": 0,
+  "title": "Visual Plant Floor"
+ },
+ {
+  "content": null,
+  "docstatus": 0,
+  "doctype": "Page",
+  "icon": "🤖",
+  "modified": "2025-07-28 09:40:55.935820",
+  "module": "Changai",
+  "name": "changai-vue",
+  "page_name": "changai-vue",
+  "restrict_to_domain": null,
+  "roles": [
+   {
+    "parent": "changai-vue",
+    "parentfield": "roles",
+    "parenttype": "Page",
+    "role": "System Manager"
+   }
+  ],
+  "script": null,
+  "standard": "No",
+  "style": null,
+  "system_page": 0,
+  "title": "Changai Vue"
+ },
+ {
+  "content": null,
+  "docstatus": 0,
+  "doctype": "Page",
+  "icon": null,
+  "modified": "2025-07-23 17:54:06.302367",
+  "module": "Changai",
+  "name": "test",
+  "page_name": "test",
+  "restrict_to_domain": null,
+  "roles": [],
+  "script": null,
+  "standard": "Yes",
+  "style": null,
+  "system_page": 1,
+  "title": "changai vue"
+ },
+ {
+  "content": null,
+  "docstatus": 0,
+  "doctype": "Page",
+  "icon": "fa fa-lock",
+  "modified": "2013-07-11 14:43:43",
+  "module": "Core",
+  "name": "permission-manager",
+  "page_name": "permission-manager",
+  "restrict_to_domain": null,
+  "roles": [
+   {
+    "parent": "permission-manager",
+    "parentfield": "roles",
+    "parenttype": "Page",
+    "role": "System Manager"
+   }
+  ],
+  "script": null,
+  "standard": "Yes",
+  "style": null,
+  "system_page": 0,
+  "title": "Role Permissions Manager"
+ },
+ {
+  "content": null,
+  "docstatus": 0,
+  "doctype": "Page",
+  "icon": "fa fa-filter",
+  "modified": "2013-10-04 13:17:18",
+  "module": "Selling",
+  "name": "sales-funnel",
+  "page_name": "sales-funnel",
+  "restrict_to_domain": null,
+  "roles": [
+   {
+    "parent": "sales-funnel",
+    "parentfield": "roles",
+    "parenttype": "Page",
+    "role": "Sales Manager"
+   }
+  ],
+  "script": null,
+  "standard": "Yes",
+  "style": null,
+  "system_page": 0,
+  "title": "Sales Funnel"
+ },
+ {
+  "content": null,
+  "docstatus": 0,
+  "doctype": "Page",
+  "icon": null,
+  "modified": "2017-04-12 18:45:00.774654",
+  "module": "Desk",
+  "name": "setup-wizard",
+  "page_name": "setup-wizard",
+  "restrict_to_domain": null,
+  "roles": [
+   {
+    "parent": "setup-wizard",
+    "parentfield": "roles",
+    "parenttype": "Page",
+    "role": "System Manager"
+   }
+  ],
+  "script": null,
+  "standard": "Yes",
+  "style": null,
+  "system_page": 1,
+  "title": "Setup Wizard"
+ }
+]

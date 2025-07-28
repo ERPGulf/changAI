@@ -1,9 +1,0 @@
-name: roberta-model
-description: Run RoBERTa model using Replicate
-input:
-  text:
-    type: string
-    description: Input text for the model
-output:
-  type: string
-predict: main:predict
