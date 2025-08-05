@@ -1,0 +1,1807 @@
+[
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many customers do we have?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices were created last month?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How much of item 'Mango Juice' was sold this week?",
+        "output": "Delivery Note, Delivery Note Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customer purchased the most last week?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many sales returns happened this quarter?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices were created today?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which territory has the most customers?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total sales amount this month?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many delivery notes were issued last week?",
+        "output": "Delivery Note"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the highest invoice amount this year?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which sales partner has the highest commission rate?",
+        "output": "Sales Partner"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which item has the highest valuation rate?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices were made yesterday?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total grand total of all invoices issued last quarter?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many active stock items do we have?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many customers belong to the 'Retail' customer group?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the average invoice amount this month?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many quotations were created this week?",
+        "output": "Quotation"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices were marked as return invoices this year?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total quantity delivered last month?",
+        "output": "Delivery Note"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices were issued in the first quarter?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customer has the highest total invoiced value this year?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many items are marked as sales items?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customer group has the most customers?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many quotations were created in the last 7 days?",
+        "output": "Quotation"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total outstanding amount from all invoices?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which company has issued the most invoices?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total quantity ordered this year?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices are in submitted state?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customer has placed the highest number of sales orders?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices were paid in full this month?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many items are disabled and not for sale?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many customers have loyalty programs assigned?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total discount amount given this week?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which company delivered the most quantity last quarter?",
+        "output": "Delivery Note"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many return invoices were created in the last 30 days?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total quoted amount this month?",
+        "output": "Quotation"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many items have valuation rate above 100?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total number of sales orders that are fully billed?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which item generated the highest revenue this year?",
+        "output": "Sales Invoice, Sales Invoice Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many deliveries were done for internal customers this quarter?",
+        "output": "Delivery Note"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many items are tracked by serial numbers?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many customers have no tax ID specified?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total tax charged this week?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customer received the most deliveries last month?",
+        "output": "Delivery Note"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many quotations were lost this year?",
+        "output": "Quotation"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which month had the highest total invoice amount this year?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many items have batch tracking enabled?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many customers belong to the 'Wholesale' customer group?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many customers do not have an assigned territory?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the average order value this month?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many sales partners have a commission rate above 10%?",
+        "output": "Sales Partner"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices were created in the current financial quarter?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total number of quotations sent to customers in the last 10 days?",
+        "output": "Quotation"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many items have warranty period specified?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which territory received the most deliveries this year?",
+        "output": "Delivery Note"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many cash invoices were created today?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which item has the highest standard rate?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices were created this weekend (Saturday and Sunday)?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices were created on the first day of this month?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customer has the longest name?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many stock items allow negative stock?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customer has the highest outstanding invoice balance?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many sales orders were placed between the 1st and 15th of this month?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which delivery note had the highest total amount last week?",
+        "output": "Delivery Note"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many customers were created this year?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which currency was used the most in invoices this quarter?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many service items do we have?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many sales orders have been partially billed?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total discount amount on quotations this year?",
+        "output": "Quotation"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many POS invoices were created last month?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many items are linked to the 'Electronics' item group?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices have no discount applied?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many customers were created this year?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which currency was used the most in invoices this quarter?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many service items do we have?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many sales orders have been partially billed?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the average delivery quantity this month?",
+        "output": "Delivery Note"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many sales partners are linked to the Middle East territory?",
+        "output": "Sales Partner"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices were created on weekends this quarter?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many items have safety stock defined?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customer group has the fewest customers?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total invoiced amount in Q2 this year?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices were marked as overdue this month?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which item group has the highest number of items?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total number of fully billed sales orders?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customer has the most unpaid invoices this year?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many quotations were created this weekend?",
+        "output": "Quotation"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many deliveries were made last quarter?",
+        "output": "Delivery Note"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many items are taxable?",
+        "output": "Item, Item Tax"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices were made in foreign currencies this year?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many customers have 'Retail' in their name?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the highest invoice total recorded this year?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the average invoice amount for this fiscal year?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which item has the highest total quantity sold through sales orders this quarter?",
+        "output": "Sales Order, Sales Order Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the maximum discount amount given on a single invoice this month?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which item has the highest standard rate among stock items?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total revenue generated from POS invoices last month?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many unique customers placed sales orders in the current quarter?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customer generated the highest total invoice amount this year?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices were created for 'Cash' mode of payment this week?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the average quantity per item sold this month?",
+        "output": "Sales Invoice, Sales Invoice Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customer placed the largest single sales order this year?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which day this month had the highest invoice count?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the average valuation rate of stock items?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many sales orders were fully delivered last quarter?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which territory has the most customers?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What percentage of invoices this year are returns?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total amount of partially billed orders this month?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many items are both stock items and have warranty period defined?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the minimum invoiced amount in the past 7 days?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many orders this year exceeded 100,000 in value?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many customers were created in the last 30 days?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What was the total tax amount on all invoices issued last month?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customer placed the most sales orders this year?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices had a grand total greater than 50,000 this quarter?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the average delivery percentage of orders placed this month?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the highest invoiced amount recorded so far this year?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customer group has the highest number of customers?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many orders are exactly 50% billed?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the average weight per unit of all items?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices were posted on weekends in the past month?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices were created today?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the highest billing percentage recorded this year?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many items have a reorder level set?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which month this year had the highest total invoice amount?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many new customers were added this quarter?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total value of orders pending delivery this month?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices were created without a customer name?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the minimum standard rate among all active items?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many orders were partially billed in the last 15 days?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customer has the lowest total invoice amount this year?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices were marked as return in the last 10 days?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total value of fully billed orders this year?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many items have no valuation rate defined?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the average number of invoices created per week this quarter?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many customers belong to the 'Retail' customer group?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which day in the last month had the fewest orders?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customer has the most invoice returns this year?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total number of items with a warranty period over 12 months?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many sales orders were placed on Sundays this month?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total invoice amount for customers from Qatar this quarter?",
+        "output": "Sales Invoice, Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many items are inactive and not part of any item group?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices were created without any items this year?",
+        "output": "Sales Invoice, Sales Invoice Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customer placed the largest single order by value this month?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many items are marked as stock items but have no stock unit defined?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the average grand total of invoices per customer this year?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many customers have not placed any sales orders in the last 6 months?",
+        "output": "Customer, Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many orders were placed with zero items in them?",
+        "output": "Sales Order, Sales Order Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which item generated the most revenue this year?",
+        "output": "Sales Invoice, Sales Invoice Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many items were created in the last 30 days?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which item was ordered the most this month by quantity?",
+        "output": "Sales Order, Sales Order Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total discount amount given in all invoices this quarter?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the average tax per invoice this quarter?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which item had the highest quantity ordered this year?",
+        "output": "Sales Order, Sales Order Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many items are currently marked as variants?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many unique customers were invoiced last month?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which territory has the most customers?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many orders were cancelled in the last 7 days?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which item has the highest total amount in invoices this quarter?",
+        "output": "Sales Invoice, Sales Invoice Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total number of stock items with valuation rate above 100?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customer placed the earliest order this year?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total invoice amount for cash customers this month?",
+        "output": "Sales Invoice, Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many return invoices were created this month?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the average order value for the current quarter?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many customers are from the 'Doha' territory?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which item had the least revenue last month?",
+        "output": "Sales Invoice, Sales Invoice Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many orders were placed for items above quantity 100 this year?",
+        "output": "Sales Order, Sales Order Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total number of disabled items in the system?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customer received the highest total discount this quarter?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customer placed the most number of orders in the last 60 days?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many items have a standard rate set over 500?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices had a grand total greater than 10000 this year?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices this year had zero tax?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customer generated the most revenue from sales orders in the current quarter?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many non-stock items have been created this year?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the average invoice value for each territory this year?",
+        "output": "Sales Invoice, Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customer type has the highest number of customers?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many orders had more than 5 unique items this year?",
+        "output": "Sales Order, Sales Order Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which item had the lowest sales revenue this quarter?",
+        "output": "Sales Invoice, Sales Invoice Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many items have valuation rate less than 50?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What percentage of invoices this year are return invoices?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many sales orders were placed in the last 10 days?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices were paid in full this month?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the maximum order amount placed last week?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many customers were created this quarter?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which item generated the most revenue this year?",
+        "output": "Sales Invoice, Sales Invoice Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many orders were delivered partially this month?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many items are marked as stock items?",
+        "output": "Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total discount given across all invoices this quarter?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customer placed the highest value order in the past 30 days?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many customers have loyalty points greater than 1000?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices were created for cash customers last month?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many purchase invoices were created this month?",
+        "output": "Purchase Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total value of purchase orders for this quarter?",
+        "output": "Purchase Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many suppliers are from the 'India' country?",
+        "output": "Supplier"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many purchase receipts were submitted in the last 30 days?",
+        "output": "Purchase Receipt"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the average amount of purchase invoices paid this year?",
+        "output": "Purchase Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which supplier had the highest total PO value last month?",
+        "output": "Purchase Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many suppliers were added this year?",
+        "output": "Supplier"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the maximum quantity received for any item this month?",
+        "output": "Purchase Receipt, Purchase Receipt Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many purchase invoices are overdue (outstanding and past due date)?",
+        "output": "Purchase Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many purchase orders are partially received?",
+        "output": "Purchase Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which supplier received the most payment this year?",
+        "output": "Purchase Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many purchase orders were fully billed this quarter?",
+        "output": "Purchase Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which supplier was most active in the last 60 days based on invoice count?",
+        "output": "Purchase Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total quantity received for all items this month?",
+        "output": "Purchase Receipt, Purchase Receipt Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many purchase invoices have a discount applied this year?",
+        "output": "Purchase Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the minimum order value recorded this year?",
+        "output": "Purchase Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many suppliers haven't had any invoices this year?",
+        "output": "Supplier, Purchase Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which item was received the most this quarter?",
+        "output": "Purchase Receipt, Purchase Receipt Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total outstanding amount from all suppliers?",
+        "output": "Purchase Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which supplier has the most pending (not received) orders?",
+        "output": "Purchase Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many purchase invoices were unpaid at the end of last month?",
+        "output": "Purchase Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total quantity ordered this month across all items?",
+        "output": "Purchase Order, Purchase Order Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many new suppliers were added in the last quarter?",
+        "output": "Supplier"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the average quantity received per receipt this year?",
+        "output": "Purchase Receipt, Purchase Receipt Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the highest single invoice amount this year?",
+        "output": "Purchase Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which item was ordered the least in the last 90 days?",
+        "output": "Purchase Order, Purchase Order Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which country has the most suppliers in the system?",
+        "output": "Supplier"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many receipts were created for item code 'ITEM-001' this year?",
+        "output": "Purchase Receipt, Purchase Receipt Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices had discounts more than 500 this quarter?",
+        "output": "Purchase Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which supplier had the lowest average PO value last month?",
+        "output": "Purchase Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many material transfers occurred this year?",
+        "output": "Stock Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which item was delivered the most last month?",
+        "output": "Delivery Note, Delivery Note Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many warehouses are currently marked as group warehouses?",
+        "output": "Warehouse"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total quantity of inward stock for item 'ITEM-001' this quarter?",
+        "output": "Stock Ledger Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which warehouse received the most items via material receipt this year?",
+        "output": "Stock Entry, Stock Entry Detail"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total number of delivery notes issued this month?",
+        "output": "Delivery Note"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many warehouses were created in the last 6 months?",
+        "output": "Warehouse"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which item had the highest stock consumption last quarter?",
+        "output": "Stock Ledger Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many stock entries had more than 5 items in them?",
+        "output": "Stock Entry, Stock Entry Detail"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customer received the highest quantity of goods this year?",
+        "output": "Delivery Note, Delivery Note Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total stock value of all inward entries this year?",
+        "output": "Stock Ledger Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many delivery notes were issued to customers in Doha this quarter?",
+        "output": "Delivery Note"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which item had the highest inward quantity in material receipts last month?",
+        "output": "Stock Entry, Stock Entry Detail"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many warehouses have been inactive (no stock movement) for the past 90 days?",
+        "output": "Warehouse, Stock Ledger Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total quantity of deliveries made for item 'ITEM-002' this year?",
+        "output": "Delivery Note, Delivery Note Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which purpose had the most stock entries this month?",
+        "output": "Stock Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many stock ledger entries were recorded for warehouse 'Main Warehouse' last quarter?",
+        "output": "Stock Ledger Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many items were moved in material issue entries this year?",
+        "output": "Stock Entry, Stock Entry Detail"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which warehouse had the highest total outgoing stock last year?",
+        "output": "Stock Ledger Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many unique items were delivered last 30 days?",
+        "output": "Delivery Note, Delivery Note Item"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many payment entries were submitted last month?",
+        "output": "Payment Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total credit amount recorded this quarter?",
+        "output": "Journal Entry, Journal Entry Account"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which account had the highest debit total last year?",
+        "output": "GL Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many payment entries are still unpaid?",
+        "output": "Payment Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the average debit per journal entry this year?",
+        "output": "Journal Entry, Journal Entry Account"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which party type has received the most payments this year?",
+        "output": "Payment Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many GL entries were recorded for the account 'Cash' this month?",
+        "output": "GL Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which journal entry has the highest net credit?",
+        "output": "Journal Entry Account"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How much tax has been withheld in the current quarter?",
+        "output": "Tax Withheld Vouchers"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many payment entries exceeded 50,000 in amount this year?",
+        "output": "Payment Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many payment entries were submitted last month?",
+        "output": "Payment Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total credit amount recorded this quarter?",
+        "output": "Journal Entry, Journal Entry Account"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which account had the highest debit total last year?",
+        "output": "GL Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many payment entries are still unpaid?",
+        "output": "Payment Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the average debit per journal entry this year?",
+        "output": "Journal Entry, Journal Entry Account"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which party type has received the most payments this year?",
+        "output": "Payment Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many GL entries were recorded for the account 'Cash' this month?",
+        "output": "GL Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which journal entry has the highest net credit?",
+        "output": "Journal Entry Account"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How much tax has been withheld in the current quarter?",
+        "output": "Tax Withheld Vouchers"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many payment entries exceeded 50,000 in amount this year?",
+        "output": "Payment Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many payment entries were made for the mode of payment 'Cash' this quarter?",
+        "output": "Payment Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total net movement for the account 'Accounts Receivable' last quarter?",
+        "output": "GL Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many journal entries had more than 3 line items this year?",
+        "output": "Journal Entry Account"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which company had the most GL entries last month?",
+        "output": "GL Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the average paid amount per entry this year?",
+        "output": "Payment Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many unique accounts were used in GL entries this year?",
+        "output": "GL Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which supplier received the largest single payment this year?",
+        "output": "Payment Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total number of GL entries where debit and credit are both greater than zero this quarter?",
+        "output": "GL Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many sales invoices were generated this month?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total amount of payments received last week?",
+        "output": "Payment Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customer placed the highest number of sales orders this quarter?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total debit value posted this year?",
+        "output": "Journal Entry, Journal Entry Account"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many purchase invoices exceeded a grand total of 50,000 this year?",
+        "output": "Purchase Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the average discount given per invoice in the last 30 days?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many payment entries were linked to sales invoices this quarter?",
+        "output": "Payment Entry Reference, Payment Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many confirmed orders were placed in the last 90 days?",
+        "output": "Sales Order"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which account had the maximum credit posted this month?",
+        "output": "GL Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many journal entries were posted manually this week?",
+        "output": "Journal Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many customers were added this quarter?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many customers belong to the Retail customer group?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total number of disabled customers?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which territory has the most customers?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many employees joined this year?",
+        "output": "Employee"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the average number of employees per department?",
+        "output": "Employee"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which department has the highest number of employees?",
+        "output": "Employee"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many employees are currently active?",
+        "output": "Employee"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many employees have retired already?",
+        "output": "Employee"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which branch has the most employees currently working?",
+        "output": "Employee"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many customers were added last month?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customer group has the least number of customers?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many customers are linked to the 'Qatar' territory?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customer group has the most disabled customers?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many employees joined last quarter?",
+        "output": "Employee"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the average number of employees per branch?",
+        "output": "Employee"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which department has the least number of active employees?",
+        "output": "Employee"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many employees joined in the last 90 days?",
+        "output": "Employee"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many unique departments are currently in the system?",
+        "output": "Department"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which branch had the most new joiners in the current year?",
+        "output": "Employee"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many customers were added last month?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customer group has the least number of customers?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many customers are linked to the 'Qatar' territory?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customer group has the most disabled customers?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many employees joined last quarter?",
+        "output": "Employee"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the average number of employees per branch?",
+        "output": "Employee"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which department has the least number of active employees?",
+        "output": "Employee"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many employees joined in the last 90 days?",
+        "output": "Employee"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many unique departments are currently in the system?",
+        "output": "Department"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which branch had the most new joiners in the current year?",
+        "output": "Employee"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many customers have been added in the last 30 days?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customers have not been updated in the last 6 months?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many customers were created before 2023?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many customers were disabled in the last 60 days?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many employees joined in the last 60 days?",
+        "output": "Employee"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which employees joined before 2020?",
+        "output": "Employee"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many employees have been marked 'Left' in the last quarter?",
+        "output": "Employee"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which departments have not had any new employees this year?",
+        "output": "Department, Employee"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many employees joined exactly one year ago?",
+        "output": "Employee"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many customers were created in the same month last year?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many payment entries are overdue as of today?",
+        "output": "Payment Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which department has the highest number of active employees?",
+        "output": "Employee"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many new customers joined last month?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the average number of items moved per stock entry this quarter?",
+        "output": "Stock Entry, Stock Entry Detail"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many journal entries were created for the account 'Accounts Receivable' this year?",
+        "output": "Journal Entry, Journal Entry Account"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which project has the most overdue tasks?",
+        "output": "Task"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total amount collected this month?",
+        "output": "Payment Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the average length of service for active employees?",
+        "output": "Employee"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many projects were completed in the last 90 days?",
+        "output": "Project"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customer was added most recently?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which 3 customers had the highest payments this year?",
+        "output": "Payment Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which project has the highest number of tasks?",
+        "output": "Task"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which department has the lowest number of active employees?",
+        "output": "Employee"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total quantity moved in stock entries this month?",
+        "output": "Stock Entry, Stock Entry Detail"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many journal entries were made per account this quarter?",
+        "output": "Journal Entry, Journal Entry Account"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Compare total payments between this month and last month.",
+        "output": "Payment Entry"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Who is the longest-serving active employee?",
+        "output": "Employee"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which 2 projects have the most overdue tasks?",
+        "output": "Task"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total number of customers per territory?",
+        "output": "Customer"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the highest amount posted in a single journal entry this year?",
+        "output": "Journal Entry, Journal Entry Account"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many leads were qualified this month?",
+        "output": "Lead"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total opportunity amount created last quarter?",
+        "output": "Opportunity"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which opportunity has the highest probability this year?",
+        "output": "Opportunity"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many leads came from the website this week?",
+        "output": "Lead"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many primary contacts exist in the system?",
+        "output": "Contact"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total number of active BOMs in the system?",
+        "output": "BOM"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the average quantity used in BOMs created this year?",
+        "output": "BOM"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which operation has the longest total operation time?",
+        "output": "Operation"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many routings are currently disabled?",
+        "output": "Routing"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which industry has the most number of leads?",
+        "output": "Lead"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many new leads were added in the past 14 days?",
+        "output": "Lead"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the average opportunity amount from 'Email' source leads this year?",
+        "output": "Opportunity"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which territory brought in the highest number of leads last month?",
+        "output": "Lead"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many opportunities are still in the 'Open' stage?",
+        "output": "Opportunity"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many contacts are linked to companies?",
+        "output": "Contact"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which BOM has the highest total cost?",
+        "output": "BOM"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total number of operations assigned to the 'Assembly Workstation'?",
+        "output": "Operation"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "List the top 3 routing names used in the system.",
+        "output": "Routing"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many opportunities were created this quarter with probability over 80%?",
+        "output": "Opportunity"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which lead owner has the most qualified leads?",
+        "output": "Lead"
+    }
+]

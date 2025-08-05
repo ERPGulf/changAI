@@ -1,0 +1,1593 @@
+[
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Who is the sales partner named 'BrightEdge Corp'?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Give name, website link of  partner who referred 'NovaTech'?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List all sales partners along with their names and commission percentages.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Identify the distributor with the partner name 'QatarSuppliers Ltd.'",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Show me the names and types of all sales partners listed on the website.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which partner with the name 'Omega Resale' has a commission rate above 10%?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Find all partners where the name contains the word 'Global'.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Give me a list of partner names and referral codes for email marketing.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "What is the partner name and their introduction text for 'MavenConnect'?",
+    "output": "Sales Partner"
+  },
+    {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "What role does 'EliteMark Inc.' play in our partner network—are they a distributor or a reseller?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Get me a list of all commission agents we work with currently.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which sales partners are marked as affiliates in the database?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Are there any dealers from the Middle East region in our list of partners?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Find out the partner type for 'ResellXperts Pvt Ltd'.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Do we have any partners of type 'affiliate' who referred customers?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List all resellers whose websites are displayed publicly.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which partner types do we work with across different territories?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Give me the names and partner types of all entities earning over 8% commission.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Are there more resellers than distributors in the system?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "What type of sales partner is 'EliteMark Inc.'—a distributor or a reseller?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Show me all partners who are listed as commission agents.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which sales partners have the partner type set as affiliate?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Find all dealer-type partners operating in the 'GCC' territory.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "What is the partner type associated with 'ResellXperts Pvt Ltd'?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Do we have any affiliates who referred new customers this quarter?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List all resellers whose websites are publicly visible on our portal.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which partner types do we currently work with across all operational territories?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Give me the names and partner types of every partner earning over 10% commission.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Between resellers and distributors, which type has the higher count in our system?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which region is 'Alpha Distributors' assigned to?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Give me the territory and commission rate for 'Skyline Partners'.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "In which markets are our affiliate partners most active?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List partners operating in 'Southeast Asia' and show their partner type.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Find all sales partners assigned to the 'GCC' territory.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List the names and territories of all partners visible on our website.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "What’s the combined list of regions covered by our resellers and distributors?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Do we have any sales partners working in both Europe and Asia?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "What is the commission rate set for 'ResellXperts Pvt Ltd'?",
+    "output": "Sales Partner"
+  },
+    {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List all sales partners with a commission rate above 12%.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Show partners with commission rates above 8% operating in 'South Asia'.",
+    "output": "Sales Partner"
+  },
+    {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Show partners with commission rates above 8% operating in 'South Asia'.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which partner offers the highest commission?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Do any of the top-performing partners have a commission rate below 5%?",
+    "output": "Sales Partner"
+  },  
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Is there a partner with 0% commission rate in the system?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Find all distributors with commission rates between 5% and 15%.",
+    "output": "Sales Partner"
+  },  
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Who are the partners with a commission rate of exactly 10.5%?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Give me names and commission rates of partners who are resellers.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "How many partners are listed under the 'Europe' territory?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which regions have the most commission agents listed?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which territory does the sales partner 'GlobeLink' belong to?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List all sales partners working in the APAC region.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "How many sales partners are assigned to the 'GCC' territory?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Are there any partners in Europe with a commission rate above 12%?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Show me the partner names and territories of all distributors.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which partner types are most common in the Middle East region?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Give me all the sales partners sorted by their assigned territory.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Is 'North America' a territory used by any of our sales partners?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Fetch names and commission rates of partners operating in Asia.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Compare the number of partners in Africa and Europe.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "What is the commission rate offered to 'BrightStar Associates'?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List all sales partners earning more than 12% commission.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which partners have the highest commission rates in the reseller category?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Do we have any affiliates with zero commission rate?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Show partner names, types, and commission rates for website-visible partners.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Who are the top five partners ranked by commission rate?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "What is the average commission offered across all sales partners?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Retrieve the commission rate and partner type for 'FusionCom'.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which partner types receive more than 10% commission on average?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Compare the commission rates of partners operating in 'Europe' and 'Asia'.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "How many partners are set with commission rates between 5% and 15%?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Can you show the address and contact details linked to 'SummitTrade Inc.'?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which sales partners have more than one address or contact entry associated with them?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List all contact entries found under sales partners based in the UAE.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Are there any partners without any contact or address entries listed?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Fetch the partner name, type, and all contact records for resellers in North America.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "How many contact records are stored for the partner 'GreenLink Pvt Ltd'?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Give me a breakdown of sales partners and their total number of linked contact entries.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Do we have any distributors that haven’t added address contacts yet?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Show me all partners whose address_contacts field includes both phone and email.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "What contact information exists for partners with active referral codes and visible websites?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "What is the short address description for 'CoreLink Distributors'?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Show the address_desc field for all listed partners.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which sales partners have their address_desc starting with 'Suite 3A'?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List names and short address descriptions of partners based in Europe.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Get me address_desc and territory for all commission agents.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Does 'MarketWide Inc.' have an address description stored?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Count the number of partners with 'No. 14' in their address description.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Export the partner name and address_desc of all affiliates in the system.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "What is the short address description for 'CoreLink Distributors'?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Show the address_desc field for all listed partners.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Can I get the address description for every distributor we work with?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List names and short address descriptions of partners based in Europe.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Get me address_desc and territory for all commission agents.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which partners don\u2019t have any address_desc provided?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which partners don’t have any address_desc provided?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Count the number of partners with 'No. 14' in their address description.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Export the partner name and address_desc of all affiliates in the system.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "What is the contact description of 'OptiReach Enterprises'?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List all sales partners and show their contact descriptions.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Do we have contact_desc details for every reseller listed?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Show me names and contact descriptions of distributors in the Middle East.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which partner has a contact_desc starting with 'Main Office at'?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Get the partner name and their contact description for everyone showing on the website.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Find partners where the contact_desc is missing or incomplete.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "What does the contact description say for 'VibeConnect Limited'?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "How many sales partners do not have contact descriptions?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Export the partner name, type, and contact description for all affiliates.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "What is the description given for 'Orbit Trade Solutions' in our partner records?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Show me the general description field of all registered sales partners.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List all partner descriptions that mention logistics or supply chain.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Is there a description for 'NorthStar Traders' in our sales partner database?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "What descriptions do we have for partners marked as affiliates?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Find the partner names and their descriptions for those operating in Southeast Asia.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which partners have descriptions longer than 250 characters?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Do we have any resellers with detailed company background descriptions?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Fetch all partner descriptions that include the phrase 'B2B expansion'.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Between 'QuickReach' and 'Global Matrix Ltd', whose description includes export operations?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "What is the description given for 'Orbit Trade Solutions' in our partner records?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List all partners along with their descriptions.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which partners include the word 'logistics' in their description?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Can you show the name and description of each partner based in Asia?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Get me the description and partner type for affiliates in our list.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Do we have a partner with 'ecommerce' mentioned in the description?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Compare the descriptions of 'BrightLeaf Group' and 'CoreBridge Alliance'.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Show me names and descriptions of all partners who earn over 15% commission.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "What’s the official description of our partner 'LogiMax Pvt Ltd'?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Find all partners who have empty or missing descriptions.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "How much commission does 'TradeSphere Global' earn?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List all sales partners earning more than 10% commission.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "What’s the commission rate for our distributor 'BrightWave Solutions'?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Show names and commission percentages of all commission agents.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Find partners earning less than or equal to 5% commission.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Is there any partner with exactly 12% commission?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Give me the partner name, website, and commission percentage for all resellers.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Compare the commission rates between 'TradeWing Pvt Ltd' and 'GlobalReach Partners'.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "What are the commission rates for all partners based in 'MENA' region?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Are distributors earning more commission than affiliates?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Show me the contact details displayed for 'Orbit Connect Pvt Ltd'.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which sales partners have formatted contact information available?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Do we store contact HTML for each partner profile?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Get a list of all partners with their HTML-based contact blocks.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which partners have both their formatted contacts and website links listed?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Give me the contact block and territory for all resellers.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Find partners who have provided both contact HTML and introduction.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which distributors display formatted contact blocks on their partner profile?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Give me names and formatted contact details for all partners in Asia.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Export partner names along with their HTML contact info and partner type.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Can I see the contact description for 'FusionTrade Ltd'?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List all partners and their contact_desc fields.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which partners have contact descriptions starting with 'Call'?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Get contact_desc and website for all distributor-type partners.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Show contact_desc and address_desc for affiliates in our system.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "What’s the contact description for partners located in Asia?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Find all partners where contact_desc contains a phone number.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Count how many partners have no contact_desc set.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Export the partner name and contact description of all resellers.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which partner has the contact_desc 'Email support@globex.com for queries'?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "What are the sales targets assigned to 'NextGen Trading Inc.'?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Show me all sales partners who have quarterly targets specified.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Do we have any partners without any sales targets?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List all distributor-type partners and the targets assigned to them.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which sales partners have exceeded their targets this year?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Can you give me names and sales targets for all European partners?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Find the partners who failed to meet their targets last quarter.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "How many partners have annual targets above $500,000?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Who are our top-performing partners in terms of meeting targets?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Compare the targets assigned to resellers vs distributors.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "What is the official website of 'Torotta Avlaye'?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List all partners whose websites end with '.com.qa'.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Do any of our reseller partners have websites listed?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Show partner names and their websites for those visible to the public.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which partners have no website provided in their records?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Get me a list of partner websites containing the word 'global'.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Can you find all distributor partners and display their website URLs?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Do we have any affiliate partners with websites ending in '.org'?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Between 'Resell360' and 'OmniPartners', which one has a listed website?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which partner has the website 'www.synergylink.com'?",
+    "output": "Sales Partner"
+  },
+  
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "What is the referral code assigned to 'Altura Traders'?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List all partners along with their referral_code values.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which partners don’t have any referral_code provided in their records?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Find partners who have referral codes starting with 'AFF-'.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Does 'Zenith Connect' have a referral_code assigned?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Get the referral_code and website for all affiliate-type partners.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which sales partners use 'REF-9082-XP' as their referral code?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Export partner_name and referral_code for all partners in Qatar.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Count how many partners have valid referral codes stored.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which referral_code corresponds to the partner 'BridgeGlobal Inc.'?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "What is the route path assigned to 'GlobalLink Solutions' on our website?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List all sales partners whose route starts with '/partners/'.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Show me the partner names and their corresponding web route paths.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which partners have unique route entries configured for the site?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Do we have any partners using the default route value or an empty one?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Between 'TradeBridge' and 'MarketScope', who has a custom route defined?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Give me all route entries that contain the word 'exclusive'.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which sales partner has the URL route '/partner-profile/gcc-distributor'?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Export all visible partners on the website along with their route links.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Are there any route fields duplicated across different partners?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "What is the external website link provided for 'BlueOcean Vendors'?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List the partner_website URLs of all partners visible to customers.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Can I view the official external sites for all commission agents?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Get partner names and partner_website links for reseller-type entries.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which partners do not have a partner_website listed yet?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Are there any affiliate partners whose websites contain 'tradehub'?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Between 'NetBridge Ltd' and 'MarketSpark', who has a valid partner_website?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Show all partner_website URLs that end in '.tech' domain.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Do any of the partners have a link to 'https://affiliateworld.org' in their records?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Fetch the partner_website and contact description for partners in South America.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "What is the introduction note for 'Orbit Traders' in our sales partner list?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Show me all partners along with their introduction texts.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which sales partners have introduction messages starting with 'Leading exporter'?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List the name and introduction for every commission agent.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which partners don't have any introduction filled in?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Provide all introductions for partners in the European region.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Give me the partner names and their introductions who were added this month.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Export a list of reseller-type partners and their introduction fields.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Check if 'GlobeX Trade Corp' has an introduction field entered.",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "How many sales partners have included an introduction message?",
+    "output": "Sales Partner"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "What is the naming pattern used to generate supplier IDs?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Can you show me how supplier codes are automatically generated?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which document controls the prefix used for new supplier entries?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Find out how supplier numbers are structured in the system.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Where is the supplier ID format like 'SUP-.YYYY.-' defined?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "How are suppliers named when records are created?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "What format is used for supplier auto-generated names?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Is there a setting that defines how new supplier records are named?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which doctype includes the naming_series for vendors?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "What is the naming pattern for the vendors?",
+    "output": "Supplier"
+  },
+
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Who is the vendor with code SUP-00015? ",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Pull up a list of suppliers based in Germany for vendor negotiations.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which supplier is linked to purchase order PO-332? We need this for payment processing.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Show me the supplier name for internal transport services.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Get the supplier name and mobile number for 'Metallic Edge Corp'.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Find the supplier that uses the email 'supplies@techlink.io'.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Get me the supplier name and default currency for vendors that are marked frozen in the system.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Check the supplier name and primary contact for vendor ID SUP-00021.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List all active suppliers under the 'Raw Material' group.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "I need supplier names and email IDs for transport service providers.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which country is 'Atlantic Trade Co.' registered in?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List all suppliers located in the United Arab Emirates.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Get suppliers from India and Bangladesh for textile sourcing.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Show me vendors registered in countries outside the EU.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Do we have any suppliers from South Korea?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Filter all supplier entries that mention 'Germany' as their country.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "How many suppliers are currently registered in China?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Export list of suppliers along with their country of operation.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which vendors are based in Australia and New Zealand?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Who are our suppliers from Latin American countries?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which supplier group does 'Fresh Agro Supplies' fall under?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List all suppliers categorized under 'Raw Material Vendors'.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "How many suppliers do we have in the 'Importers' group?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Get the supplier names and their groups for all active vendors from India.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Show the group classification for suppliers that are transport service providers.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Do we have any local suppliers under the 'Capital Equipment' group?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Pull all supplier records under the 'Utilities & Services' group with payment terms set.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which groups include suppliers from China or Taiwan?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Give me a breakdown of supplier counts per group for this fiscal year.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "For each supplier group, show the default currency and the number of associated suppliers.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Are there any suppliers who also handle transportation services for us?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which vendors are marked as transport providers for our delivery operations?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Pull up supplier names along with their transport service status for audit purposes.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Show transport status and type for all active vendors.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which suppliers in our system provide transport services along with their products?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List supplier name, group, and transport status for review.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which vendors don’t provide transport services but outsource deliveries?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Show me all suppliers with their names and whether they handle transportation.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Get the supplier name, type, and transport capability status for construction vendors.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which of our suppliers also operate as logistics partners?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Find suppliers who haven't uploaded their business image yet.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Pull the image and default currency info for active suppliers.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which vendors have profile pictures and valid email addresses?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Do any suppliers have images associated with their company profiles?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Get me the profile pictures and contact details of key international vendors.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which vendors have uploaded a profile image in the system?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Show me the supplier name and image for all internal suppliers.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List suppliers along with their logos for catalog publishing.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Do we have image records for vendors categorized as 'Transport Services'?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Get the name, type, and image of all disabled suppliers.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List all suppliers with a configured default bank account.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which suppliers don't have any default bank account set?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Get the names and default bank accounts of all internal suppliers.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Pull all disabled suppliers who still have default bank accounts linked.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which vendors use 'HSBC Main' as their default bank?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Retrieve the supplier name, currency, and bank account for international suppliers.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Get all suppliers with both a default bank account and a tax ID.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Give me a list of all vendors and their bank accounts for payment processing.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Are there any suppliers with missing bank and price list setup?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List internal suppliers who have a bank account but no tax ID.",
+    "output": "Supplier"
+  },
+
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List all suppliers with a configured default bank account.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which suppliers don't have any default bank account set?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Get the names and default bank accounts of all internal suppliers.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Pull all disabled suppliers who still have default bank accounts linked.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which vendors use 'HSBC Main' as their default bank?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Retrieve the supplier name, currency, and bank account for international suppliers.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Get all suppliers with both a default bank account and a tax ID.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Give me a list of all vendors and their bank accounts for payment processing.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Are there any suppliers with missing bank and price list setup?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List internal suppliers who have a bank account but no tax ID.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which suppliers have a default price list configured for transactions?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Find suppliers who don't have any price list assigned yet.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Pull the name and default price list for all active vendors.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which vendors are linked to the 'International Buying' price list?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List the default currency and price list of each internal supplier.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Get names and price list data for suppliers grouped as 'Export Vendors'.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Are there any suppliers who have price list but no bank account?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Show vendors with price lists meant for local procurement.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Give me a report of supplier name, default price list, and tax ID for compliance review.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Fetch all suppliers with both a default price list and tax category set.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "What is the default bank account associated with each supplier?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Get supplier names along with their default bank accounts.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Which internal suppliers have a default bank account listed?",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Show me the name, currency, and default bank account for all active suppliers.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Find suppliers who have no default bank account setup but are not frozen.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Pull suppliers with both a valid default bank account and price list.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "List suppliers that are not disabled and have bank details set for default transactions.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Show me the suppliers who represent companies and have default bank accounts set.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Export supplier names and their bank accounts used for automatic payments.",
+    "output": "Supplier"
+  },
+  {
+    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+    "input": "Do any vendors lack a default bank account for incoming payment setups?",
+    "output": "Supplier"
+  }
+
+
+]
+ 

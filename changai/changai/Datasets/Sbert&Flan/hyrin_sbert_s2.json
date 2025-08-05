@@ -1,0 +1,3102 @@
+[
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Who is the sales partner named 'BrightEdge Corp'?",
+    "positive": "",
+    "negatives": [
+      "partner_name: Full name of the sales partner entity.",
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "commission_rate: Percentage of commission offered.",
+      "website: Partner’s website link."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Give name, website link of partner who referred 'NovaTech'?",
+    "positive": "partner_name: Full name of the sales partner entity.\nwebsite: Partner’s website link.",
+    "negatives": [
+      "commission_rate: Percentage of commission offered.",
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "territory: Region or market assigned to the partner."
+    ]
+  },
+      {
+    "anchor": "Doctype: Sales Partner\nQuestion: Give name, website link of partner who referred 'NovaTech'?",
+    "positive": "website: Partner’s website link.",
+    "negatives": [
+      "commission_rate: Percentage of commission offered.",
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "territory: Region or market assigned to the partner."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: Give name, website link of partner who referred 'NovaTech'?",
+    "positive": "referral_code: Unique code used for referral tracking.",
+    "negatives": [
+      "commission_rate: Percentage of commission offered.",
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "territory: Region or market assigned to the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: List all sales partners along with their  names and commission percentages.",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "contact_html: Formatted display of contact details.",
+      "logo: Logo image of the partner.",
+      "referral_code: Unique code used for referral tracking."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: List all sales partners along with their  names and commission percentages.",
+    "positive": "commission_rate: Percentage of commission offered.",
+    "negatives": [
+      "contact_html: Formatted display of contact details.",
+      "logo: Logo image of the partner.",
+      "referral_code: Unique code used for referral tracking."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Identify the distributor with the partner name 'QatarSuppliers Ltd.'",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "territory: Region or market assigned to the partner.",
+      "targets: Annual or periodic sales targets.",
+      "partner_type: Type of sales partner like distributor or reseller."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Show me the names and types of all sales partners listed on the website.",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "description: Description about the partner.",
+      "route: Website route or URL mapping.",
+      "targets: Annual or periodic sales targets."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Show me the names and types of all sales partners listed on the website.",
+    "positive": "partner_type: Type of sales partner like distributor or reseller.",
+    "negatives": [
+      "description: Description about the partner.",
+      "route: Website route or URL mapping.",
+      "targets: Annual or periodic sales targets."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: Show me the names and types of all sales partners listed on the website.",
+    "positive": "show_in_website: Flag indicating if the partner appears on the website.",
+    "negatives": [
+      "description: Description about the partner.",
+      "route: Website route or URL mapping.",
+      "targets: Annual or periodic sales targets."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Which partner with the name 'Omega Resale' has a commission rate above 10%?",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "logo: Logo image of the partner.",
+      "show_in_website: Flag indicating if the partner appears on the website.",
+      "partner_website: Website URL of the sales partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Which partner with the name 'Omega Resale' has a commission rate above 10%?",
+    "positive": "commission_rate: Percentage of commission offered.",
+    "negatives": [
+      "logo: Logo image of the partner.",
+      "show_in_website: Flag indicating if the partner appears on the website.",
+      "partner_website: Website URL of the sales partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Find all partners where the name contains the word 'Global'.",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "territory: Region or market assigned to the partner.",
+      "description: Description about the partner.",
+      "address_contacts: Child table for address and contact link."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Give me a list of partner names and referral codes for email marketing.",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "partner_website: Website URL of the sales partner.",
+      "route: Website route or URL mapping.",
+      "commission_rate: Percentage of commission offered."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Give me a list of partner names and referral codes for email marketing.",
+    "positive": "referral_code: Unique code used for referral tracking.",
+    "negatives": [
+      "partner_website: Website URL of the sales partner.",
+      "route: Website route or URL mapping.",
+      "commission_rate: Percentage of commission offered."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: What is the partner name and their introduction text for 'MavenConnect'?",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "contact_html: Formatted display of contact details.",
+      "website: Partner’s website link.",
+      "targets: Annual or periodic sales targets."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: What is the partner name and their introduction text for 'MavenConnect'?",
+    "positive": "introduction: Brief introduction of the partner.",
+    "negatives": [
+      "contact_html: Formatted display of contact details.",
+      "website: Partner’s website link.",
+      "targets: Annual or periodic sales targets."
+    ]
+  },
+    {
+      "anchor": "Doctype: Sales Partner\nQuestion: What type of sales partner is 'EliteMark Inc.'—a distributor or a reseller?",
+      "positive": "partner_type: Type of sales partner like distributor or reseller.",
+      "negatives": [
+        "territory: Region or market assigned to the partner.",
+        "referral_code: Unique code used for referral tracking.",
+        "commission_rate: Percentage of commission offered."
+      ]
+    },
+        {
+      "anchor": "Doctype: Sales Partner\nQuestion: What type of sales partner is 'EliteMark Inc.'—a distributor or a reseller?",
+      "positive": "partner_name: Full name of the sales partner entity.",
+      "negatives": [
+        "territory: Region or market assigned to the partner.",
+        "referral_code: Unique code used for referral tracking.",
+        "commission_rate: Percentage of commission offered."
+      ]
+    },
+    {
+      "anchor": "Doctype: Sales Partner\nQuestion: Show me all partners who are listed as commission agents.",
+      "positive": "partner_name: Full name of the sales partner entity.",
+      "negatives": [
+        "logo: Logo image of the partner.",
+        "contact_desc: Short description of the partner's contact details.",
+        "show_in_website: Flag indicating if the partner appears on the website."
+      ]
+    },
+        {
+      "anchor": "Doctype: Sales Partner\nQuestion: Show me all partners who are listed as commission agents.",
+      "positive": "partner_type: Type of sales partner like distributor or reseller.",
+      "negatives": [
+        "logo: Logo image of the partner.",
+        "contact_desc: Short description of the partner's contact details.",
+        "show_in_website: Flag indicating if the partner appears on the website."
+      ]
+    },
+    {
+      "anchor": "Doctype: Sales Partner\nQuestion: Which sales partners have the partner type set as affiliate?",
+      "positive": "partner_name: Full name of the sales partner entity.",
+      "negatives": [
+        "description: Description about the partner.",
+        "targets: Annual or periodic sales targets.",
+        "partner_website: Website URL of the sales partner."
+      ]
+    },
+        {
+      "anchor": "Doctype: Sales Partner\nQuestion: Which sales partners have the partner type set as affiliate?",
+      "positive": "partner_type: Type of sales partner like distributor or reseller.",
+      "negatives": [
+        "description: Description about the partner.",
+        "targets: Annual or periodic sales targets.",
+        "partner_website: Website URL of the sales partner."
+      ]
+    },
+    {
+      "anchor": "Doctype: Sales Partner\nQuestion: Find all dealer-type partners operating in the 'GCC' territory.",
+      "positive": "partner_type: Type of sales partner like distributor or reseller.",
+      "negatives": [
+        "address_desc: Short description of the partner's address.",
+        "contact_html: Formatted display of contact details.",
+        "route: Website route or URL mapping."
+      ]
+    },
+        {
+      "anchor": "Doctype: Sales Partner\nQuestion: Find all dealer-type partners operating in the 'GCC' territory.",
+      "positive": "partner_name: Full name of the sales partner entity.",
+      "negatives": [
+        "address_desc: Short description of the partner's address.",
+        "contact_html: Formatted display of contact details.",
+        "route: Website route or URL mapping."
+      ]
+    },
+        {
+      "anchor": "Doctype: Sales Partner\nQuestion: Find all dealer-type partners operating in the 'GCC' territory.",
+      "positive": "territory: Region or market assigned to the partner.",
+      "negatives": [
+        "address_desc: Short description of the partner's address.",
+        "contact_html: Formatted display of contact details.",
+        "route: Website route or URL mapping."
+      ]
+    },
+    {
+      "anchor": "Doctype: Sales Partner\nQuestion: What is the partner type associated with 'ResellXperts Pvt Ltd'?",
+      "positive": "partner_type: Type of sales partner like distributor or reseller.",
+      "negatives": [
+        "introduction: Brief introduction of the partner.",
+        "targets: Annual or periodic sales targets.",
+        "territory : Region or market assigned to the partner."
+      ]
+    },
+        {
+      "anchor": "Doctype: Sales Partner\nQuestion: What is the partner type associated with 'ResellXperts Pvt Ltd'?",
+      "positive": "partner_name: Full name of the sales partner entity.",
+      "negatives": [
+        "introduction: Brief introduction of the partner.",
+        "targets: Annual or periodic sales targets.",
+        "description: Description about the partner."
+      ]
+    },
+    {
+      "anchor": "Doctype: Sales Partner\nQuestion: Do we have any affiliates who referred new customers this quarter?",
+      "positive": "partner_type: Type of sales partner like distributor or reseller.",
+      "negatives": [
+        "website: Partner’s website link.",
+        "address_contacts: Child table for address and contact link.",
+        "commission_rate: Percentage of commission offered."
+      ]
+    },
+        {
+      "anchor": "Doctype: Sales Partner\nQuestion: Do we have any affiliates who referred new customers this quarter?",
+      "positive": "referral_code: Unique code used for referral tracking.",
+      "negatives": [
+        "website: Partner’s website link.",
+        "address_contacts: Child table for address and contact link.",
+        "commission_rate: Percentage of commission offered."
+      ]
+    },
+    {
+      "anchor": "Doctype: Sales Partner\nQuestion: List all resellers whose websites are publicly visible on our portal.",
+      "positive": "partner_type: Type of sales partner like distributor or reseller.",
+      "negatives": [
+        "route: Website route or URL mapping.",
+        "logo: Logo image of the partner.",
+        "description: Description about the partner."
+      ]
+    },
+        {
+      "anchor": "Doctype: Sales Partner\nQuestion: List all resellers whose websites are publicly visible on our portal.",
+      "positive": "show_in_website: Flag indicating if the partner appears on the website.",
+      "negatives": [
+        "route: Website route or URL mapping.",
+        "logo: Logo image of the partner.",
+        "description: Description about the partner."
+      ]
+    },
+            {
+      "anchor": "Doctype: Sales Partner\nQuestion: List all resellers whose websites are publicly visible on our portal.",
+      "positive": "partner_name: Full name of the sales partner entity.",
+      "negatives": [
+        "route: Website route or URL mapping.",
+        "logo: Logo image of the partner.",
+        "description: Description about the partner."
+      ]
+    },
+    {
+      "anchor": "Doctype: Sales Partner\nQuestion: Which partner types do we currently work with across all operational territories?",
+      "positive": "territory: Region or market assigned to the partner.",
+      "negatives": [
+        "partner_name: Full name of the sales partner entity.",
+        "targets: Annual or periodic sales targets.",
+        "contact_desc: Short description of the partner's contact details."
+      ]
+    },
+        {
+      "anchor": "Doctype: Sales Partner\nQuestion: Which partner types do we currently work with across all operational territories?",
+      "positive": "partner_type: Type of sales partner like distributor or reseller.",
+      "negatives": [
+        "partner_name: Full name of the sales partner entity.",
+        "targets: Annual or periodic sales targets.",
+        "contact_desc: Short description of the partner's contact details."
+      ]
+    },
+    {
+      "anchor": "Doctype: Sales Partner\nQuestion: Give me the names and partner types of every partner earning over 10% commission.",
+      "positive": "partner_name: Full name of the sales partner entity.",
+      "negatives": [
+        "route: Website route or URL mapping.",
+        "introduction: Brief introduction of the partner.",
+        "logo: Logo image of the partner."
+      ]
+    },
+    {
+      "anchor": "Doctype: Sales Partner\nQuestion: Give me the names and partner types of every partner earning over 10% commission.",
+      "positive": "commission_rate: Percentage of commission offered.",
+      "negatives": [
+        "route: Website route or URL mapping.",
+        "introduction: Brief introduction of the partner.",
+        "logo: Logo image of the partner."
+      ]
+    },
+        {
+      "anchor": "Doctype: Sales Partner\nQuestion: Give me the names and partner types of every partner earning over 10% commission.",
+      "positive": "partner_type: Type of sales partner like distributor or reseller.",
+      "negatives": [
+        "route: Website route or URL mapping.",
+        "introduction: Brief introduction of the partner.",
+        "logo: Logo image of the partner."
+      ]
+    },
+
+    {
+      "anchor": "Doctype: Sales Partner\nQuestion: Between resellers and distributors, which type has the higher count in our system?",
+      "positive": "partner_type: Type of sales partner like distributor or reseller.",
+      "negatives": [
+        "partner_website: Website URL of the sales partner.",
+        "referral_code: Unique code used for referral tracking.",
+        "territory: Region or market assigned to the partner."
+      ]
+    },
+      {
+        "anchor": "Doctype: Sales Partner\nQuestion: Which region is 'Alpha Distributors' assigned to?",
+        "positive": "territory: Region or market assigned to the partner.",
+        "negatives": [
+          "partner_type: Type of sales partner like distributor or reseller.",
+          "commission_rate: Percentage of commission offered.",
+          "website: Partner’s website link."
+        ]
+      },
+      {
+        "anchor": "Doctype: Sales Partner\nQuestion: Give me the territory and commission rate for 'Skyline Partners'.",
+        "positive": "territory: Region or market assigned to the partner.",
+        "negatives": [
+          "address_html: Formatted HTML address block.",
+          "referral_code: Unique code used for referral tracking.",
+          "logo: Logo image of the partner."
+        ]
+      },
+            {
+        "anchor": "Doctype: Sales Partner\nQuestion: Give me the territory and commission rate for 'Skyline Partners'.",
+        "positive": "commission_rate: Percentage of commission offered.",
+        "negatives": [
+          "address_html: Formatted HTML address block.",
+          "referral_code: Unique code used for referral tracking.",
+          "logo: Logo image of the partner."
+        ]
+      },
+      {
+        "anchor": "Doctype: Sales Partner\nQuestion: In which markets are our affiliate partners most active?",
+        "positive": "territory: Region or market assigned to the partner.",
+        "negatives": [
+          "partner_name: Full name of the sales partner entity.",
+          "contact_desc: Short description of the partner's contact details.",
+          "partner_website: Website URL of the sales partner."
+        ]
+      },
+      {
+        "anchor": "Doctype: Sales Partner\nQuestion: In which markets are our affiliate partners most active?",
+        "positive": "partner_type: Type of sales partner like distributor or reseller.",
+        "negatives": [
+          "partner_name: Full name of the sales partner entity.",
+          "contact_desc: Short description of the partner's contact details.",
+          "partner_website: Website URL of the sales partner."
+        ]
+      },
+      {
+        "anchor": "Doctype: Sales Partner\nQuestion: List partners operating in 'Southeast Asia' and show their partner type.",
+        "positive": "territory: Region or market assigned to the partner.",
+        "negatives": [
+          "targets: Annual or periodic sales targets.",
+          "introduction: Brief introduction of the partner.",
+          "contact_html: Formatted display of contact details."
+        ]
+      },
+      {
+        "anchor": "Doctype: Sales Partner\nQuestion: List partners operating in 'Southeast Asia' and show their partner type.",
+        "positive": "partner_name: Full name of the sales partner entity.",
+        "negatives": [
+          "targets: Annual or periodic sales targets.",
+          "introduction: Brief introduction of the partner.",
+          "contact_html: Formatted display of contact details."
+        ]
+      },
+            {
+        "anchor": "Doctype: Sales Partner\nQuestion: List partners operating in 'Southeast Asia' and show their partner type.",
+        "positive": "partner_type: Type of sales partner like distributor or reseller.",
+        "negatives": [
+          "targets: Annual or periodic sales targets.",
+          "introduction: Brief introduction of the partner.",
+          "contact_html: Formatted display of contact details."
+        ]
+      },
+      {
+        "anchor": "Doctype: Sales Partner\nQuestion: Find all sales partners assigned to the 'GCC' territory.",
+        "positive": "territory: Region or market assigned to the partner.",
+        "negatives": [
+          "description: Description about the partner.",
+          "introduction: Brief introduction of the partner.",
+          "commission_rate: Percentage of commission offered."
+        ]
+      },
+      {
+        "anchor": "Doctype: Sales Partner\nQuestion: Find all sales partners assigned to the 'GCC' territory.",
+        "positive": "partner_name: Full name of the sales partner entity.",
+        "negatives": [
+          "description: Description about the partner.",
+          "commission_rate: Percentage of commission offered.",
+          "introduction: Brief introduction of the partner."
+        ]
+      },
+      {
+        "anchor": "Doctype: Sales Partner\nQuestion: How many partners are listed under the 'Europe' territory?",
+        "positive": "territory: Region or market assigned to the partner.",
+        "negatives": [
+          "route: Website route or URL mapping.",
+          "partner_website: Website URL of the sales partner.",
+          "address_desc: Short description of the partner's address."
+        ]
+      },
+      {
+        "anchor": "Doctype: Sales Partner\nQuestion: Which regions have the most commission agents listed?",
+        "positive": "territory: Region or market assigned to the partner.",
+        "negatives": [
+          "referral_code: Unique code used for referral tracking.",
+          "contact_desc: Short description of the partner's contact details.",
+          "address_desc: Short description of the partner's address."
+        ]
+      },
+      {
+        "anchor": "Doctype: Sales Partner\nQuestion: Which regions have the most commission agents listed?",
+        "positive": "partner_type: Type of sales partner like distributor or reseller.",
+        "negatives": [
+          "referral_code: Unique code used for referral tracking.",
+          "contact_desc: Short description of the partner's contact details.",
+          "address_desc: Short description of the partner's address."
+        ]
+      },
+      {
+        "anchor": "Doctype: Sales Partner\nQuestion: List the names and territories of all partners visible on our website.",
+        "positive": "partner_name: Full name of the sales partner entity.",
+        "negatives": [
+          "commission_rate: Percentage of commission offered.",
+          "logo: Logo image of the partner.",
+          "route: Website route or URL mapping."
+        ]
+      },
+      {
+        "anchor": "Doctype: Sales Partner\nQuestion: List the names and territories of all partners visible on our website.",
+        "positive": "territory: Region or market assigned to the partner.",
+        "negatives": [
+          "commission_rate: Percentage of commission offered.",
+          "logo: Logo image of the partner.",
+          "route: Website route or URL mapping."
+        ]
+      },
+            {
+        "anchor": "Doctype: Sales Partner\nQuestion: List the names and territories of all partners visible on our website.",
+        "positive": "show_in_website: Flag indicating if the partner appears on the website.",
+        "negatives": [
+          "commission_rate: Percentage of commission offered.",
+          "logo: Logo image of the partner.",
+          "route: Website route or URL mapping."
+        ]
+      },
+      {
+        "anchor": "Doctype: Sales Partner\nQuestion: What’s the combined list of regions covered by our resellers and distributors?",
+        "positive": "territory: Region or market assigned to the partner.",
+        "negatives": [
+          "route: Website route or URL mapping.",
+          "address_contacts: Child table for address and contact link."
+        ]
+      },
+            {
+        "anchor": "Doctype: Sales Partner\nQuestion: What’s the combined list of regions covered by our resellers and distributors?",
+        "positive": "partner_type: Type of sales partner like distributor or reseller.",
+        "negatives": [
+          "route: Website route or URL mapping.",
+          "address_contacts: Child table for address and contact link."
+        ]
+      },
+      {
+        "anchor": "Doctype: Sales Partner\nQuestion: Do we have any sales partners working in both Europe and Asia?",
+        "positive": "territory: Region or market assigned to the partner.",
+        "negatives": [
+          "description: Description about the partner.",
+          "partner_website: Website URL of the sales partner.",
+          "address_html: Formatted HTML address block."
+        ]
+      },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: What is the commission rate set for 'ResellXperts Pvt Ltd'?",
+    "positive": "commission_rate: Percentage of commission offered.",
+    "negatives": [
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "territory: Region or market assigned to the partner.",
+      "website: Partner’s website link."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: List all sales partners with a commission rate above 12%.",
+    "positive": "commission_rate: Percentage of commission offered.",
+    "negatives": [
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "route: Website route or URL mapping.",
+      "address_desc: Short description of the partner's address."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Who are the partners with a commission rate of exactly 10.5%?",
+    "positive": "commission_rate: Percentage of commission offered.",
+    "negatives": [
+      "description: Description about the partner.",
+      "partner_website: Website URL of the sales partner.",
+      "contact_desc: Short description of the partner's contact details."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Give me names and commission rates of partners who are resellers.",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "logo: Logo image of the partner.",
+      "route: Website route or URL mapping.",
+      "targets: Annual or periodic sales targets."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: Give me names and commission rates of partners who are resellers.",
+    "positive": "commission_rate: Percentage of commission offered.",
+    "negatives": [
+      "logo: Logo image of the partner.",
+      "route: Website route or URL mapping.",
+      "targets: Annual or periodic sales targets."
+    ]
+  },
+      {
+    "anchor": "Doctype: Sales Partner\nQuestion: Give me names and commission rates of partners who are resellers.",
+    "positive": "partner_type: Type of sales partner like distributor or reseller.",
+    "negatives": [
+      "logo: Logo image of the partner.",
+      "route: Website route or URL mapping.",
+      "targets: Annual or periodic sales targets."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Show partners with commission rates above 8% operating in 'South Asia'.",
+    "positive": "commission_rate: Percentage of commission offered.",
+    "negatives": [
+      "contact_html: Formatted display of contact details.",
+      "introduction: Brief introduction of the partner.",
+      "referral_code: Unique code used for referral tracking."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: Show partners with commission rates above 8% operating in 'South Asia'.",
+    "positive": "territory: Region or market assigned to the partner.",
+    "negatives": [
+      "contact_html: Formatted display of contact details.",
+      "introduction: Brief introduction of the partner.",
+      "referral_code: Unique code used for referral tracking."
+    ]
+  },
+      {
+    "anchor": "Doctype: Sales Partner\nQuestion: Show partners with commission rates above 8% operating in 'South Asia'.",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "contact_html: Formatted display of contact details.",
+      "introduction: Brief introduction of the partner.",
+      "referral_code: Unique code used for referral tracking."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Is there a partner with 0% commission rate in the system?",
+    "positive": "commission_rate: Percentage of commission offered.",
+    "negatives": [
+      "address_html: Full HTML representation of the partner’s address.",
+      "description: Description about the partner.",
+      "partner_type: Type of sales partner like distributor or reseller."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Find all distributors with commission rates between 5% and 15%.",
+    "positive": "commission_rate: Percentage of commission offered.",
+    "negatives": [
+      "referral_code: Unique code used for referral tracking.",
+      "route: Website route or URL mapping.",
+      "address_contacts: Child table for address and contact link."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: Find all distributors with commission rates between 5% and 15%.",
+    "positive": "partner_type: Type of sales partner like distributor or reseller.",
+    "negatives": [
+      "referral_code: Unique code used for referral tracking.",
+      "route: Website route or URL mapping.",
+      "address_contacts: Child table for address and contact link."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Which partner offers the highest commission?",
+    "positive": "commission_rate: Percentage of commission offered.",
+    "negatives": [
+      "targets: Annual or periodic sales targets.",
+      "partner_website: Website URL of the sales partner.",
+      "contact_desc: Short description of the partner's contact details."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Do any of the top-performing partners have a commission rate below 5%?",
+    "positive": "commission_rate: Percentage of commission offered.",
+    "negatives": [
+      "introduction: Brief introduction of the partner.",
+      "logo: Logo image of the partner.",
+      "partner_website: Website URL of the sales partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Show partner names, types, and commission rates for website-visible partners.",
+    "positive": "commission_rate: Percentage of commission offered.",
+    "negatives": [
+      "route: Website route or URL mapping.",
+      "description: Description about the partner.",
+      "contact_html: Formatted display of contact details."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: Show partner names, types, and commission rates for website-visible partners.",
+    "positive": "partner_type: Type of sales partner like distributor or reseller.",
+    "negatives": [
+      "route: Website route or URL mapping.",
+      "description: Description about the partner.",
+      "contact_html: Formatted display of contact details."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: Show partner names, types, and commission rates for website-visible partners.",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "route: Website route or URL mapping.",
+      "description: Description about the partner.",
+      "contact_html: Formatted display of contact details."
+    ]
+  },
+      {
+    "anchor": "Doctype: Sales Partner\nQuestion: Show partner names, types, and commission rates for website-visible partners.",
+    "positive": "show_in_website: Flag indicating if the partner appears on the website.",
+    "negatives": [
+      "route: Website route or URL mapping.",
+      "description: Description about the partner.",
+      "contact_html: Formatted display of contact details."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Can you show the address and contact details linked to 'SummitTrade Inc.'?",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "commission_rate: Percentage of commission offered.",
+      "website: Partner’s website link."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: Can you show the address and contact details linked to 'SummitTrade Inc.'?",
+    "positive": "address_contacts: Child table for address and contact link.",
+    "negatives": [
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "commission_rate: Percentage of commission offered.",
+      "website: Partner’s website link."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Which sales partners have more than one address or contact entry associated with them?",
+    "positive": "address_contacts: Child table for address and contact link.",
+    "negatives": [
+      "referral_code: Unique code used for referral tracking.",
+      "logo: Logo image of the partner.",
+      "introduction: Brief introduction of the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: List all contact entries found under sales partners based in the UAE.",
+    "positive": "territory: Region or market assigned to the partner.",
+    "negatives": [
+      "commission_rate: Percentage of commission offered.",
+      "description: Description about the partner.",
+      "route: Website route or URL mapping."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: List all contact entries found under sales partners based in the UAE.",
+    "positive": "address_contacts: Child table for address and contact link.",
+    "negatives": [
+      "commission_rate: Percentage of commission offered.",
+      "description: Description about the partner.",
+      "route: Website route or URL mapping."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Are there any partners without any contact or address entries listed?",
+    "positive": "address_contacts: Child table for address and contact link.",
+    "negatives": [
+      "show_in_website: Flag indicating if the partner appears on the website.",
+      "partner_name: Full name of the sales partner entity.",
+      "partner_website: Website URL of the sales partner."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: Are there any partners without any contact or address entries listed?",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "show_in_website: Flag indicating if the partner appears on the website.",
+      "partner_name: Full name of the sales partner entity.",
+      "partner_website: Website URL of the sales partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Fetch the partner name, type, and all contact records for resellers in North America.",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "logo: Logo image of the partner.",
+      "contact_desc: Short description of the partner's contact details.",
+      "referral_code: Unique code used for referral tracking."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: Fetch the partner name, type, and all contact records for resellers in North America.",
+    "positive": "partner_type: Type of sales partner like distributor or reseller.",
+    "negatives": [
+      "logo: Logo image of the partner.",
+      "contact_desc: Short description of the partner's contact details.",
+      "referral_code: Unique code used for referral tracking."
+    ]
+  },
+      {
+    "anchor": "Doctype: Sales Partner\nQuestion: Fetch the partner name, type, and all contact records for resellers in North America.",
+    "positive": "address_contacts: Child table for address and contact link.",
+    "negatives": [
+      "logo: Logo image of the partner.",
+      "contact_desc: Short description of the partner's contact details.",
+      "referral_code: Unique code used for referral tracking."
+    ]
+  },
+        {
+    "anchor": "Doctype: Sales Partner\nQuestion: Fetch the partner name, type, and all contact records for resellers in North America.",
+    "positive": "territory: Region or market assigned to the partner.",
+    "negatives": [
+      "logo: Logo image of the partner.",
+      "contact_desc: Short description of the partner's contact details.",
+      "referral_code: Unique code used for referral tracking."
+    ]
+  },
+
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: How many contact records are stored for the partner 'GreenLink Pvt Ltd'?",
+    "positive": "address_contacts: Child table for address and contact link.",
+    "negatives": [
+      "description: Description about the partner.",
+      "introduction: Brief introduction of the partner.",
+      "commission_rate: Percentage of commission offered."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: How many contact records are stored for the partner 'GreenLink Pvt Ltd'?",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "description: Description about the partner.",
+      "introduction: Brief introduction of the partner.",
+      "commission_rate: Percentage of commission offered."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Give me a breakdown of sales partners and their total number of linked contact entries.",
+    "positive": "address_contacts: Child table for address and contact link.",
+    "negatives": [
+      "contact_html: Formatted display of contact details.",
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "website: Partner’s website link."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: Give me a breakdown of sales partners and their total number of linked contact entries.",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "contact_html: Formatted display of contact details.",
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "website: Partner’s website link."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Do we have any distributors that haven’t added address contacts yet?",
+    "positive": "address_contacts: Child table for address and contact link.",
+    "negatives": [
+      "route: Website route or URL mapping.",
+      "logo: Logo image of the partner.",
+      "referral_code: Unique code used for referral tracking."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: Do we have any distributors that haven’t added address contacts yet?",
+    "positive": "partner_type: Type of sales partner like distributor or reseller.",
+    "negatives": [
+      "route: Website route or URL mapping.",
+      "logo: Logo image of the partner.",
+      "referral_code: Unique code used for referral tracking."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Show me all partners whose address_contacts field includes both phone and email.",
+    "positive": "address_contacts: Child table for address and contact link.",
+    "negatives": [
+      "contact_html: Formatted display of contact details.",
+      "partner_website: Website URL of the sales partner.",
+      "description: Description about the partner."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: Show me all partners whose address_contacts field includes both phone and email.",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "contact_html: Formatted display of contact details.",
+      "partner_website: Website URL of the sales partner.",
+      "description: Description about the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: What contact information exists for partners with active referral codes and visible websites?",
+    "positive": "address_contacts: Child table for address and contact link.",
+    "negatives": [
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "route: Website route or URL mapping.",
+      "commission_rate: Percentage of commission offered."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: What contact information exists for partners with active referral codes and visible websites?",
+    "positive": "referral_code: Unique code used for referral tracking.",
+    "negatives": [
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "route: Website route or URL mapping.",
+      "commission_rate: Percentage of commission offered."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: What contact information exists for partners with active referral codes and visible websites?",
+    "positive": "show_in_website: Flag indicating if the partner appears on the website.",
+    "negatives": [
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "route: Website route or URL mapping.",
+      "commission_rate: Percentage of commission offered."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: What is the short address description for 'CoreLink Distributors'?",
+    "positive": "address_desc: Short description of the partner's address.",
+    "negatives": [
+      "partner_name: Full name of the sales partner entity.",
+      "territory: Region or market assigned to the partner.",
+      "website: Partner\u2019s website link."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: What is the short address description for 'CoreLink Distributors'?",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "partner_name: Full name of the sales partner entity.",
+      "territory: Region or market assigned to the partner.",
+      "website: Partner\u2019s website link."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Show the address_desc field for all listed partners.",
+    "positive": "address_desc: Short description of the partner's address.",
+    "negatives": [
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "referral_code: Unique code used for referral tracking.",
+      "description: Description about the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Can I get the address description for every distributor we work with?",
+    "positive": "address_desc: Short description of the partner's address.",
+    "negatives": [
+      "commission_rate: Percentage of commission offered.",
+      "route: Website route or URL mapping.",
+      "logo: Logo image of the partner."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: Can I get the address description for every distributor we work with?",
+    "positive": "partner_type: Type of sales partner like distributor or reseller.",
+    "negatives": [
+      "commission_rate: Percentage of commission offered.",
+      "route: Website route or URL mapping.",
+      "logo: Logo image of the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Which sales partners have their address_desc starting with 'Suite 3A'?",
+    "positive": "address_desc: Short description of the partner's address.",
+    "negatives": [
+      "partner_website: Website URL of the sales partner.",
+      "contact_html: Formatted display of contact details.",
+      "introduction: Brief introduction of the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: List names and short address descriptions of partners based in Europe.",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "targets: Annual or periodic sales targets.",
+      "contact_desc: Short description of the partner's contact details.",
+      "referral_code: Unique code used for referral tracking."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: List names and short address descriptions of partners based in Europe.",
+    "positive": "address_desc: Short description of the partner's address.",
+    "negatives": [
+      "targets: Annual or periodic sales targets.",
+      "contact_desc: Short description of the partner's contact details.",
+      "referral_code: Unique code used for referral tracking."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: List names and short address descriptions of partners based in Europe.",
+    "positive": "territory: Region or market assigned to the partner.",
+    "negatives": [
+      "targets: Annual or periodic sales targets.",
+      "contact_desc: Short description of the partner's contact details.",
+      "referral_code: Unique code used for referral tracking."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Get me address_desc and territory for all commission agents.",
+    "positive": "territory: Region or market assigned to the partner.",
+    "negatives": [
+      "introduction: Brief introduction of the partner.",
+      "show_in_website: Flag indicating if the partner appears on the website.",
+      "partner_type: Type of sales partner like distributor or reseller."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: Get me address_desc and territory for all commission agents.",
+    "positive": "address_desc: Short description of the partner's address.",
+    "negatives": [
+      "introduction: Brief introduction of the partner.",
+      "show_in_website: Flag indicating if the partner appears on the website.",
+      "partner_type: Type of sales partner like distributor or reseller."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Get me address_desc and territory for all commission agents.",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "introduction: Brief introduction of the partner.",
+      "show_in_website: Flag indicating if the partner appears on the website.",
+      "partner_type: Type of sales partner like distributor or reseller."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Does 'MarketWide Inc.' have an address description stored?",
+    "positive": "address_desc: Short description of the partner's address.",
+    "negatives": [
+      "logo: Logo image of the partner.",
+      "website: Partner\u2019s website link.",
+      "partner_type: Type of sales partner like distributor or reseller."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Does 'MarketWide Inc.' have an address description stored?",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "logo: Logo image of the partner.",
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "website: Partner\u2019s website link."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Which partners don\u2019t have any address_desc provided?",
+    "positive": "address_desc: Short description of the partner's address.",
+    "negatives": [
+      "contact_desc: Short description of the partner's contact details.",
+      "referral_code: Unique code used for referral tracking.",
+      "route: Website route or URL mapping."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Which partners don\u2019t have any address_desc provided?",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "contact_desc: Short description of the partner's contact details.",
+      "referral_code: Unique code used for referral tracking.",
+      "route: Website route or URL mapping."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Count the number of partners with 'No. 14' in their address description.",
+    "positive": "address_desc: Short description of the partner's address.",
+    "negatives": [
+      "contact_html: Formatted display of contact details.",
+      "description: Description about the partner.",
+      "partner_type: Type of sales partner like distributor or reseller."
+    ]
+  },  
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Show the address_desc field for all listed partners.",
+    "positive": "address_desc: Short description of the partner's address.",
+    "negatives": [
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "referral_code: Unique code used for referral tracking.",
+      "description: Description about the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Which sales partners have their address_desc starting with 'Suite 3A'?",
+    "positive": "address_desc: Short description of the partner's address.",
+    "negatives": [
+      "partner_website: Website URL of the sales partner.",
+      "contact_html: Formatted display of contact details.",
+      "introduction: Brief introduction of the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: List names and short address descriptions of partners based in Europe.",
+    "positive": "address_desc: Short description of the partner's address.",
+    "negatives": [
+      "targets: Annual or periodic sales targets.",
+      "contact_desc: Short description of the partner's contact details.",
+      "referral_code: Unique code used for referral tracking."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Get me address_desc and territory for all commission agents.",
+    "positive": "address_desc: Short description of the partner's address.",
+    "negatives": [
+      "introduction: Brief introduction of the partner.",
+      "show_in_website: Flag indicating if the partner appears on the website.",
+      "partner_type: Type of sales partner like distributor or reseller."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Get me address_desc and territory for all commission agents.",
+    "positive": "territory: Region or market assigned to the partner.",
+    "negatives": [
+      "introduction: Brief introduction of the partner.",
+      "show_in_website: Flag indicating if the partner appears on the website.",
+      "partner_type: Type of sales partner like distributor or reseller."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Get me address_desc and territory for all commission agents.",
+    "positive": "partner_type: Region or market assigned to the partner.",
+    "negatives": [
+      "introduction: Brief introduction of the partner.",
+      "show_in_website: Flag indicating if the partner appears on the website.",
+      "partner_type: Type of sales partner like distributor or reseller."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Does 'MarketWide Inc.' have an address description stored?",
+    "positive": "address_desc: Short description of the partner's address.",
+    "negatives": [
+      "logo: Logo image of the partner.",
+      "website: Partner’s website link.",
+      "referral_code: Unique code used for referral tracking."
+
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Does 'MarketWide Inc.' have an address description stored?",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "logo: Logo image of the partner.",
+      "referral_code: Unique code used for referral tracking.",
+      "website: Partner’s website link."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Which partners don’t have any address_desc provided?",
+    "positive": "address_desc: Short description of the partner's address.",
+    "negatives": [
+      "contact_desc: Short description of the partner's contact details.",
+      "referral_code: Unique code used for referral tracking.",
+      "route: Website route or URL mapping."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Count the number of partners with 'No. 14' in their address description.",
+    "positive": "address_desc: Short description of the partner's address.",
+    "negatives": [
+      "contact_html: Formatted display of contact details.",
+      "description: Description about the partner.",
+      "partner_type: Type of sales partner like distributor or reseller."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Export the partner name and address_desc of all affiliates in the system.",
+    "positive": "address_desc: Short description of the partner's address.",
+    "negatives": [
+      "partner_website: Website URL of the sales partner.",
+      "route: Website route or URL mapping.",
+      "introduction: Brief introduction of the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Export the partner name and address_desc of all affiliates in the system.",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "partner_website: Website URL of the sales partner.",
+      "route: Website route or URL mapping.",
+      "introduction: Brief introduction of the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Export the partner name and address_desc of all affiliates in the system.",
+    "positive": "partner_type: Type of sales partner like distributor or reseller.",
+    "negatives": [
+      "partner_website: Website URL of the sales partner.",
+      "route: Website route or URL mapping.",
+      "introduction: Brief introduction of the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: What is the contact description of 'OptiReach Enterprises'?",
+    "positive": "contact_desc: Short description of the partner's contact details.",
+    "negatives": [
+      "partner_name: Full name of the sales partner entity.",
+      "address_desc: Short description of the partner's address.",
+      "referral_code: Unique code used for referral tracking."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: List all sales partners and show their contact descriptions.",
+    "positive": "contact_desc: Short description of the partner's contact details.",
+    "negatives": [
+      "logo: Logo image of the partner.",
+      "commission_rate: Percentage of commission offered.",
+      "territory: Region or market assigned to the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Do we have contact_desc details for every reseller listed?",
+    "positive": "contact_desc: Short description of the partner's contact details.",
+    "negatives": [
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "route: Website route or URL mapping.",
+      "description: Description about the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Show me names and contact descriptions of distributors in the Middle East.",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "address_desc: Short description of the partner's address.",
+      "referral_code: Unique code used for referral tracking.",
+      "targets: Annual or periodic sales targets."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: Show me names and contact descriptions of distributors in the Middle East.",
+    "positive": "contact_desc: Short description of the partner's contact details.",
+    "negatives": [
+      "address_desc: Short description of the partner's address.",
+      "referral_code: Unique code used for referral tracking.",
+      "targets: Annual or periodic sales targets."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Which partner has a contact_desc starting with 'Main Office at'?",
+    "positive": "contact_desc: Short description of the partner's contact details.",
+    "negatives": [
+      "route: Website route or URL mapping.",
+      "website: Partner’s website link.",
+      "introduction: Brief introduction of the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Get the partner name and their contact description for everyone showing on the website.",
+    "positive": "contact_desc: Short description of the partner's contact details.",
+    "negatives": [
+      "logo: Logo image of the partner.",
+      "partner_website: Website URL of the sales partner.",
+      "referral_code: Unique code used for referral tracking."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: Get the partner name and their contact description for everyone showing on the website.",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "logo: Logo image of the partner.",
+      "partner_website: Website URL of the sales partner.",
+      "referral_code: Unique code used for referral tracking."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Find partners where the contact_desc is missing or incomplete.",
+    "positive": "contact_desc: Short description of the partner's contact details.",
+    "negatives": [
+      "introduction: Brief introduction of the partner.",
+      "route: Website route or URL mapping.",
+      "address_contacts: Child table for address and contact link."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: What does the contact description say for 'VibeConnect Limited'?",
+    "positive": "contact_desc: Short description of the partner's contact details.",
+    "negatives": [
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "address_desc: Short description of the partner's address.",
+      "logo: Logo image of the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: How many sales partners do not have contact descriptions?",
+    "positive": "contact_desc: Short description of the partner's contact details.",
+    "negatives": [
+      "description: Description about the partner.",
+      "targets: Annual or periodic sales targets.",
+      "referral_code: Unique code used for referral tracking."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Export the partner name, type, and contact description for all affiliates.",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "route: Website route or URL mapping.",
+      "referral_code: Unique code used for referral tracking.",
+      "commission_rate: Percentage of commission offered."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: Export the partner name, type, and contact description for all affiliates.",
+    "positive": "partner_type: Type of sales partner like distributor or reseller.",
+    "negatives": [
+      "route: Website route or URL mapping.",
+      "referral_code: Unique code used for referral tracking.",
+      "commission_rate: Percentage of commission offered."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: Export the partner name, type, and contact description for all affiliates.",
+    "positive": "contact_desc: Short description of the partner's contact details.",
+    "negatives": [
+      "route: Website route or URL mapping.",
+      "referral_code: Unique code used for referral tracking.",
+      "commission_rate: Percentage of commission offered."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: What is the description given for 'Orbit Trade Solutions' in our partner records?",
+    "positive": "description: Description about the partner.",
+    "negatives": [
+      "partner_name: Full name of the sales partner entity.",
+      "route: Website route or URL mapping.",
+      "referral_code: Unique code used for referral tracking."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: List all partners along with their descriptions.",
+    "positive": "description: Description about the partner.",
+    "negatives": [
+      "territory: Region or market assigned to the partner.",
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "website: Partner’s website link."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Which partners include the word 'logistics' in their description?",
+    "positive": "description: Description about the partner.",
+    "negatives": [
+      "introduction: Brief introduction of the partner.",
+      "address_desc: Short description of the partner's address.",
+      "partner_name: Full name of the sales partner entity."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Can you show the name and description of each partner based in Asia?",
+    "positive": "description: Description about the partner.",
+    "negatives": [
+      "territory: Region or market assigned to the partner.",
+      "commission_rate: Percentage of commission offered.",
+      "logo: Logo image of the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Can you show the name and description of each partner based in Asia?",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "territory: Region or market assigned to the partner.",
+      "commission_rate: Percentage of commission offered.",
+      "logo: Logo image of the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Get me the description and partner type for affiliates in our list.",
+    "positive": "description: Description about the partner.",
+    "negatives": [
+      "referral_code: Unique code used for referral tracking.",
+      "introduction: Brief introduction of the partner.",
+      "contact_desc: Short description of the partner's contact details."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Get me the description and partner type for affiliates in our list.",
+    "positive": "partner_type: Type of sales partner like distributor or reseller.",
+    "negatives": [
+      "referral_code: Unique code used for referral tracking.",
+      "introduction: Brief introduction of the partner.",
+      "contact_desc: Short description of the partner's contact details."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Do we have a partner with 'ecommerce' mentioned in the description?",
+    "positive": "description: Description about the partner.",
+    "negatives": [
+      "partner_website: Website URL of the sales partner.",
+      "route: Website route or URL mapping.",
+      "logo: Logo image of the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Compare the descriptions of 'BrightLeaf Group' and 'CoreBridge Alliance'.",
+    "positive": "description: Description about the partner.",
+    "negatives": [
+      "partner_name: Full name of the sales partner entity.",
+      "referral_code: Unique code used for referral tracking.",
+      "address_desc: Short description of the partner's address."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Show me names and descriptions of all partners who earn over 15% commission.",
+    "positive": "description: Description about the partner.",
+    "negatives": [
+      "logo: Logo image of the partner.",
+      "route: Website route or URL mapping.",
+      "contact_html: Formatted display of contact details."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Show me names and descriptions of all partners who earn over 15% commission.",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "logo: Logo image of the partner.",
+      "route: Website route or URL mapping.",
+      "contact_html: Formatted display of contact details."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: What’s the official description of our partner 'LogiMax Pvt Ltd'?",
+    "positive": "description: Description about the partner.",
+    "negatives": [
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "contact_desc: Short description of the partner's contact details.",
+      "introduction: Brief introduction of the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Find all partners who have empty or missing descriptions.",
+    "positive": "description: Description about the partner.",
+    "negatives": [
+      "route: Website route or URL mapping.",
+      "show_in_website: Flag indicating if the partner appears on the website.",
+      "contact_html: Formatted display of contact details."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: How much commission does 'TradeSphere Global' earn?",
+    "positive": "commission_rate: Percentage of commission offered.",
+    "negatives": [
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "website: Partner’s website link.",
+      "description: Description about the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: How much commission does 'TradeSphere Global' earn?",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "website: Partner’s website link.",
+      "description: Description about the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: List all sales partners earning more than 10% commission.",
+    "positive": "commission_rate: Percentage of commission offered.",
+    "negatives": [
+      "territory: Region or market assigned to the partner.",
+      "description: Description about the partner.",
+      "logo: Logo image of the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: What’s the commission rate for our distributor 'BrightWave Solutions'?",
+    "positive": "commission_rate: Percentage of commission offered.",
+    "negatives": [
+      "referral_code: Unique code used for referral tracking.",
+      "show_in_website: Flag indicating if the partner appears on the website.",
+      "route: Website route or URL mapping."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Show names and commission percentages of all commission agents.",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "address_desc: Short description of the partner's address.",
+      "partner_website: Website URL of the sales partner.",
+      "targets: Annual or periodic sales targets."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: Show names and commission percentages of all commission agents.",
+    "positive": "partner_type: Type of sales partner like distributor or reseller.",
+    "negatives": [
+      "address_desc: Short description of the partner's address.",
+      "partner_website: Website URL of the sales partner.",
+      "targets: Annual or periodic sales targets."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Show names and commission percentages of all commission agents.",
+    "positive": "commission_rate: Percentage of commission offered.",
+    "negatives": [
+      "address_desc: Short description of the partner's address.",
+      "partner_website: Website URL of the sales partner.",
+      "targets: Annual or periodic sales targets."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Find partners earning less than or equal to 5% commission.",
+    "positive": "commission_rate: Percentage of commission offered.",
+    "negatives": [
+      "logo: Logo image of the partner.",
+      "description: Description about the partner.",
+      "partner_type: Type of sales partner like distributor or reseller."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Is there any partner with exactly 12% commission?",
+    "positive": "commission_rate: Percentage of commission offered.",
+    "negatives": [
+      "introduction: Brief introduction of the partner.",
+      "territory: Region or market assigned to the partner.",
+      "referral_code: Unique code used for referral tracking."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Give me the partner name, website, and commission percentage for all resellers.",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "address_contacts: Child table for address and contact link.",
+      "contact_html: Formatted display of contact details."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Give me the partner name, website, and commission percentage for all resellers.",
+    "positive": "website: Partner’s website link.",
+    "negatives": [
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "address_contacts: Child table for address and contact link.",
+      "contact_html: Formatted display of contact details."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Give me the partner name, website, and commission percentage for all resellers.",
+    "positive": "commission_rate: Percentage of commission offered.",
+    "negatives": [
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "address_contacts: Child table for address and contact link.",
+      "contact_html: Formatted display of contact details."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Compare the commission rates between 'TradeWing Pvt Ltd' and 'GlobalReach Partners'.",
+    "positive": "commission_rate: Percentage of commission offered.",
+    "negatives": [
+      "logo: Logo image of the partner.",
+      "targets: Annual or periodic sales targets.",
+      "partner_name: Full name of the sales partner entity."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: What are the commission rates for all partners based in 'MENA' region?",
+    "positive": "commission_rate: Percentage of commission offered.",
+    "negatives": [
+      "territory: Region or market assigned to the partner.",
+      "website: Partner’s website link.",
+      "contact_html: Formatted display of contact details."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Are distributors earning more commission than affiliates?",
+    "positive": "commission_rate: Percentage of commission offered.",
+    "negatives": [
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "route: Website route or URL mapping.",
+      "referral_code: Unique code used for referral tracking."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Show me the contact details displayed for 'Orbit Connect Pvt Ltd'.",
+    "positive": "contact_html: Formatted display of contact details.",
+    "negatives": [
+      "partner_name: Full name of the sales partner entity.",
+      "website: Partner’s website link.",
+      "partner_type: Type of sales partner like distributor or reseller."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Which sales partners have formatted contact information available?",
+    "positive": "contact_html: Formatted display of contact details.",
+    "negatives": [
+      "introduction: Brief introduction of the partner.",
+      "referral_code: Unique code used for referral tracking.",
+      "commission_rate: Percentage of commission offered."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Do we store contact HTML for each partner profile?",
+    "positive": "contact_html: Formatted display of contact details.",
+    "negatives": [
+      "territory: Region or market assigned to the partner.",
+      "address_desc: Short description of the partner's address.",
+      "logo: Logo image of the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Get a list of all partners with their HTML-based contact blocks.",
+    "positive": "contact_html: Formatted display of contact details.",
+    "negatives": [
+      "show_in_website: Flag indicating if the partner appears on the website.",
+      "partner_website: Website URL of the sales partner.",
+      "description: Description about the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Which partners have both their formatted contacts and website links listed?",
+    "positive": "contact_html: Formatted display of contact details.",
+    "negatives": [
+      "territory: Region or market assigned to the partner.",
+      "description: Description about the partner.",
+      "introduction: Brief introduction of the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Which partners have both their formatted contacts and website links listed?",
+    "positive": "website: Partner’s website link.",
+    "negatives": [
+      "territory: Region or market assigned to the partner.",
+      "description: Description about the partner.",
+      "introduction: Brief introduction of the partner."
+    ]
+  },
+
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Give me the contact block and territory for all resellers.",
+    "positive": "contact_html: Formatted display of contact details.",
+    "negatives": [
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "route: Website route or URL mapping.",
+      "targets: Annual or periodic sales targets."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Give me the contact block and territory for all resellers.",
+    "positive": "territory: Region or market assigned to the partner.",
+    "negatives": [
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "route: Website route or URL mapping.",
+      "targets: Annual or periodic sales targets."
+    ]
+  },
+
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Find partners who have provided both contact HTML and introduction.",
+    "positive": "contact_html: Formatted display of contact details.",
+    "negatives": [
+      "logo: Logo image of the partner.",
+      "route: Website route or URL mapping.",
+      "referral_code: Unique code used for referral tracking."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Find partners who have provided both contact HTML and introduction.",
+    "positive": "introduction: Brief introduction of the partner.",
+    "negatives": [
+      "logo: Logo image of the partner.",
+      "route: Website route or URL mapping.",
+      "referral_code: Unique code used for referral tracking."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Can you give me names and sales targets for all European partners?",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "territory: Region or market assigned to the partner.",
+      "route: Website route or URL mapping.",
+      "referral_code: Unique code used for referral tracking."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Can you give me names and sales targets for all European partners?",
+    "positive": "targets: Annual or periodic sales targets.",
+    "negatives": [
+      "territory: Region or market assigned to the partner.",
+      "route: Website route or URL mapping.",
+      "referral_code: Unique code used for referral tracking."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: List all distributor-type partners and the targets assigned to them.",
+    "positive": "partner_type: Type of sales partner like distributor or reseller.",
+    "negatives": [
+      "website: Partner’s website link.",
+      "referral_code: Unique code used for referral tracking.",
+      "contact_html: Formatted display of contact details."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: List all distributor-type partners and the targets assigned to them.",
+    "positive": "targets: Annual or periodic sales targets.",
+    "negatives": [
+      "website: Partner’s website link.",
+      "referral_code: Unique code used for referral tracking.",
+      "contact_html: Formatted display of contact details."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Who are our top-performing partners in terms of meeting targets?",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "commission_rate: Percentage of commission offered.",
+      "partner_website: Website URL of the sales partner.",
+      "description: Description about the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Who are our top-performing partners in terms of meeting targets?",
+    "positive": "targets: Annual or periodic sales targets.",
+    "negatives": [
+      "commission_rate: Percentage of commission offered.",
+      "partner_website: Website URL of the sales partner.",
+      "description: Description about the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Compare the targets assigned to resellers vs distributors.",
+    "positive": "partner_type: Type of sales partner like distributor or reseller.",
+    "negatives": [
+      "partner_website: Website URL of the sales partner.",
+      "route: Website route or URL mapping.",
+      "contact_desc: Short description of the partner's contact details."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Compare the targets assigned to resellers vs distributors.",
+    "positive": "targets: Annual or periodic sales targets.",
+    "negatives": [
+      "partner_website: Website URL of the sales partner.",
+      "route: Website route or URL mapping.",
+      "contact_desc: Short description of the partner's contact details."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: What is the official website of 'Torotta Avlaye'?",
+    "positive": "website: Partner’s website link.",
+    "negatives": [
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "referral_code: Unique code used for referral tracking.",
+      "introduction: Brief introduction of the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: List all partners whose websites end with '.com.qa'.",
+    "positive": "website: Partner’s website link.",
+    "negatives": [
+      "route: Website route or URL mapping.",
+      "logo: Logo image of the partner.",
+      "description: Description about the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Do any of our reseller partners have websites listed?",
+    "positive": "website: Partner’s website link.",
+    "negatives": [
+      "commission_rate: Percentage of commission offered.",
+      "introduction: Brief introduction of the partner.",
+      "address_desc: Short description of the partner's address."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: Do any of our reseller partners have websites listed?",
+    "positive": "partner_type: Type of sales partner like distributor or reseller.",
+    "negatives": [
+      "commission_rate: Percentage of commission offered.",
+      "introduction: Brief introduction of the partner.",
+      "address_desc: Short description of the partner's address."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: Show partner names and their websites for those visible to the public.",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "route: Website route or URL mapping.",
+      "description: Description about the partner.",
+      "introduction: Brief introduction of the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Show partner names and their websites for those visible to the public.",
+    "positive": "website: Partner’s website link.",
+    "negatives": [
+      "route: Website route or URL mapping.",
+      "description: Description about the partner.",
+      "introduction: Brief introduction of the partner."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: Show partner names and their websites for those visible to the public.",
+    "positive": "show_in_website: Flag indicating if the partner appears on the website.",
+    "negatives": [
+      "route: Website route or URL mapping.",
+      "description: Description about the partner.",
+      "introduction: Brief introduction of the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Which partners have no website provided in their records?",
+    "positive": "website: Partner’s website link.",
+    "negatives": [
+      "contact_html: Formatted display of contact details.",
+      "address_desc: Short description of the partner's address.",
+      "route: Website route or URL mapping."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Get me a list of partner websites containing the word 'global'.",
+    "positive": "website: Partner’s website link.",
+    "negatives": [
+      "partner_name: Full name of the sales partner entity.",
+      "route: Website route or URL mapping.",
+      "introduction: Brief introduction of the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Can you find all distributor partners and display their website URLs?",
+    "positive": "partner_type: Type of sales partner like distributor or reseller.",
+    "negatives": [
+      "targets: Annual or periodic sales targets.",
+      "contact_desc: Short description of the partner's contact details.",
+      "logo: Logo image of the partner."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: Can you find all distributor partners and display their website URLs?",
+    "positive": "website: Partner’s website link.",
+    "negatives": [
+      "targets: Annual or periodic sales targets.",
+      "contact_desc: Short description of the partner's contact details.",
+      "logo: Logo image of the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Do we have any affiliate partners with websites ending in '.org'?",
+    "positive": "partner_type: Type of sales partner like distributor or reseller.",
+    "negatives": [
+      "logo: Logo image of the partner.",
+      "introduction: Brief introduction of the partner.",
+      "route: Website route or URL mapping."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: Do we have any affiliate partners with websites ending in '.org'?",
+    "positive": "website: Partner’s website link.",
+    "negatives": [
+      "logo: Logo image of the partner.",
+      "introduction: Brief introduction of the partner.",
+      "route: Website route or URL mapping."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Between 'Resell360' and 'OmniPartners', which one has a listed website?",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "commission_rate: Percentage of commission offered.",
+      "route: Website route or URL mapping.",
+      "referral_code: Unique code used for referral tracking."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: Between 'Resell360' and 'OmniPartners', which one has a listed website?",
+    "positive": "website: Partner’s website link.",
+    "negatives": [
+      "commission_rate: Percentage of commission offered.",
+      "route: Website route or URL mapping.",
+      "referral_code: Unique code used for referral tracking."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Which partner has the website 'www.synergylink.com'?",
+    "positive": "website: Partner’s website link.",
+    "negatives": [
+      "route: Website route or URL mapping.",
+      "introduction: Brief introduction of the partner.",
+      "contact_html: Formatted display of contact details."
+    ]
+  },
+    {
+    "anchor": "Doctype: Sales Partner\nQuestion: Which partner has the website 'www.synergylink.com'?",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "route: Website route or URL mapping.",
+      "introduction: Brief introduction of the partner.",
+      "contact_html: Formatted display of contact details."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: What is the referral code assigned to 'Altura Traders'?",
+    "positive": "referral_code: Unique code used for referral tracking.",
+    "negatives": [
+      "partner_name: Full name of the sales partner entity.",
+      "website: Partner’s website link.",
+      "description: Description about the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: List all partners along with their referral_code values.",
+    "positive": "referral_code: Unique code used for referral tracking.",
+    "negatives": [
+      "territory: Region or market assigned to the partner.",
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "commission_rate: Percentage of commission offered."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Which partners don’t have any referral_code provided in their records?",
+    "positive": "referral_code: Unique code used for referral tracking.",
+    "negatives": [
+      "address_desc: Short description of the partner's address.",
+      "logo: Logo image of the partner.",
+      "route: Website route or URL mapping."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Find partners who have referral codes starting with 'AFF-'.",
+    "positive": "referral_code: Unique code used for referral tracking.",
+    "negatives": [
+      "targets: Annual or periodic sales targets.",
+      "description: Description about the partner.",
+      "partner_website: Website URL of the sales partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Does 'Zenith Connect' have a referral_code assigned?",
+    "positive": "referral_code: Unique code used for referral tracking.",
+    "negatives": [
+      "partner_name: Full name of the sales partner entity.",
+      "introduction: Brief introduction of the partner.",
+      "show_in_website: Flag indicating if the partner appears on the website."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Get the referral_code and website for all affiliate-type partners.",
+    "positive": "referral_code: Unique code used for referral tracking.",
+    "negatives": [
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "commission_rate: Percentage of commission offered.",
+      "address_contacts: Contact address of the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Get the referral_code and website for all affiliate-type partners.",
+    "positive": "website: Partner’s website link.",
+    "negatives": [
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "commission_rate: Percentage of commission offered.",
+      "address_contacts: Contact address of the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Which sales partners use 'REF-9082-XP' as their referral code?",
+    "positive": "referral_code: Unique code used for referral tracking.",
+    "negatives": [
+      "route: Website route or URL mapping.",
+      "contact_desc: Short description of the partner's contact details.",
+      "logo: Logo image of the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Export partner_name and referral_code for all partners in Qatar.",
+    "positive": "referral_code: Unique code used for referral tracking.",
+    "negatives": [
+      "territory: Region or market assigned to the partner.",
+      "website: Partner’s website link.",
+      "contact_html: Formatted display of contact details."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Export partner_name and referral_code for all partners in Qatar.",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "territory: Region or market assigned to the partner.",
+      "website: Partner’s website link.",
+      "contact_html: Formatted display of contact details."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Count how many partners have valid referral codes stored.",
+    "positive": "referral_code: Unique code used for referral tracking.",
+    "negatives": [
+      "show_in_website: Flag indicating if the partner appears on the website.",
+      "description: Description about the partner.",
+      "address_desc: Short description of the partner's address."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Which referral_code corresponds to the partner 'BridgeGlobal Inc.'?",
+    "positive": "referral_code: Unique code used for referral tracking.",
+    "negatives": [
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "introduction: Brief introduction of the partner.",
+      "targets: Annual or periodic sales targets."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: What is the route path assigned to 'GlobalLink Solutions' on our website?",
+    "positive": "route: Website route or URL mapping.",
+    "negatives": [
+      "website: Partner’s website link.",
+      "partner_name: Full name of the sales partner entity.",
+      "introduction: Brief introduction of the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: List all sales partners whose route starts with '/partners/'.",
+    "positive": "route: Website route or URL mapping.",
+    "negatives": [
+      "referral_code: Unique code used for referral tracking.",
+      "commission_rate: Percentage of commission offered.",
+      "partner_type: Type of sales partner like distributor or reseller."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Show me the partner names and their corresponding web route paths.",
+    "positive": "route: Website route or URL mapping.",
+    "negatives": [
+      "show_in_website: Flag indicating if the partner appears on the website.",
+      "website: Partner’s website link.",
+      "description: Description about the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Which partners have unique route entries configured for the site?",
+    "positive": "route: Website route or URL mapping.",
+    "negatives": [
+      "contact_html: Formatted display of contact details.",
+      "logo: Logo image of the partner.",
+      "partner_type: Type of sales partner like distributor or reseller."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Do we have any partners using the default route value or an empty one?",
+    "positive": "route: Website route or URL mapping.",
+    "negatives": [
+      "address_desc: Short description of the partner's address.",
+      "description: Description about the partner.",
+      "commission_rate: Percentage of commission offered."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Between 'TradeBridge' and 'MarketScope', who has a custom route defined?",
+    "positive": "route: Website route or URL mapping.",
+    "negatives": [
+      "partner_name: Full name of the sales partner entity.",
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "referral_code: Unique code used for referral tracking."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Give me all route entries that contain the word 'exclusive'.",
+    "positive": "route: Website route or URL mapping.",
+    "negatives": [
+      "targets: Annual or periodic sales targets.",
+      "introduction: Brief introduction of the partner.",
+      "partner_website: Website URL of the sales partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Which sales partner has the URL route '/partner-profile/gcc-distributor'?",
+    "positive": "route: Website route or URL mapping.",
+    "negatives": [
+      "website: Partner’s website link.",
+      "show_in_website: Flag indicating if the partner appears on the website.",
+      "partner_name: Full name of the sales partner entity."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Export all visible partners on the website along with their route links.",
+    "positive": "route: Website route or URL mapping.",
+    "negatives": [
+      "show_in_website: Flag indicating if the partner appears on the website.",
+      "logo: Logo image of the partner.",
+      "description: Description about the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Are there any route fields duplicated across different partners?",
+    "positive": "route: Website route or URL mapping.",
+    "negatives": [
+      "contact_desc: Short description of the partner's contact details.",
+      "referral_code: Unique code used for referral tracking.",
+      "website: Partner’s website link."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: What is the external website link provided for 'BlueOcean Vendors'?",
+    "positive": "partner_website: External website URL of the partner.",
+    "negatives": [
+      "partner_name: Full name of the sales partner.",
+      "route: Website route or URL mapping.",
+      "logo: Logo image of the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: List the partner_website URLs of all partners visible to customers.",
+    "positive": "partner_website: External website URL of the partner.",
+    "negatives": [
+      "show_in_website: Flag indicating visibility on public site.",
+      "website: Main website field of the partner.",
+      "contact_desc: Short description of the contact."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Can I view the official external sites for all commission agents?",
+    "positive": "partner_website: External website URL of the partner.",
+    "negatives": [
+      "commission_rate: Percentage of commission offered.",
+      "referral_code: Unique code used for referrals.",
+      "website: Main website of the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Get partner names and partner_website links for reseller-type entries.",
+    "positive": "partner_website: External website URL of the partner.",
+    "negatives": [
+      "partner_type: Type of partner like reseller or distributor.",
+      "referral_code: Unique code used for referrals.",
+      "route: Website route mapping."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Get partner names and partner_website links for reseller-type entries.",
+    "positive": "partner_name: Full name of the sales partner.",
+    "negatives": [
+      "partner_type: Type of partner like reseller or distributor.",
+      "referral_code: Unique code used for referrals.",
+      "route: Website route mapping."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Which partners do not have a partner_website listed yet?",
+    "positive": "partner_website: External website URL of the partner.",
+    "negatives": [
+      "description: Description about the partner.",
+      "contact_html: Formatted display of contact info.",
+      "logo: Logo image of the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Are there any affiliate partners whose websites contain 'tradehub'?",
+    "positive": "partner_website: External website URL of the partner.",
+    "negatives": [
+      "partner_type: Type of partner like affiliate or reseller.",
+      "website: Main website of the partner.",
+      "route: Website route mapping."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Between 'NetBridge Ltd' and 'MarketSpark', who has a valid partner_website?",
+    "positive": "partner_website: External website URL of the partner.",
+    "negatives": [
+      "partner_name: Full name of the sales partner.",
+      "introduction: Introduction about the partner.",
+      "route: Website route mapping."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Show all partner_website URLs that end in '.tech' domain.",
+    "positive": "partner_website: External website URL of the partner.",
+    "negatives": [
+      "route: Website route or URL mapping.",
+      "website: Main website field.",
+      "referral_code: Unique referral identifier."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Do any of the partners have a link to 'https://affiliateworld.org' in their records?",
+    "positive": "partner_website: External website URL of the partner.",
+    "negatives": [
+      "website: Main website of the partner.",
+      "route: Internal route on our portal.",
+      "description: Partner description."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Fetch the partner_website and contact description for partners in South America.",
+    "positive": "partner_website: External website URL of the partner.",
+    "negatives": [
+      "territory: Operational region of the partner.",
+      "description: Partner description.",
+      "route: Website route mapping."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Fetch the partner_website and contact description for partners in South America.",
+    "positive": "contact_desc: Short description of the partner's contact details.",
+    "negatives": [
+      "territory: Operational region of the partner.",
+      "description: Partner description.",
+      "route: Website route mapping."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: What is the introduction note for 'Orbit Traders' in our sales partner list?",
+    "positive": "introduction: Brief introduction of the partner.",
+    "negatives": [
+      "description: Description about the partner.",
+      "contact_html: Formatted display of contact details.",
+      "address_desc: Short description of the partner's address."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Show me all partners along with their introduction texts.",
+    "positive": "introduction: Brief introduction of the partner.",
+    "negatives": [
+      "website: Partner’s website link.",
+      "route: Website route or URL mapping.",
+      "logo: Logo image of the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Which sales partners have introduction messages starting with 'Leading exporter'?",
+    "positive": "introduction: Brief introduction of the partner.",
+    "negatives": [
+      "contact_desc: Short description of the partner's contact details.",
+      "referral_code: Unique code used for referral tracking.",
+      "route: Website route or URL mapping."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: List the name and introduction for every commission agent.",
+    "positive": "introduction: Brief introduction of the partner.",
+    "negatives": [
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "targets: Annual or periodic sales targets.",
+      "contact_html: Formatted display of contact details."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: List the name and introduction for every commission agent.",
+    "positive": "partner_name: Full name of the sales partner entity.",
+    "negatives": [
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "targets: Annual or periodic sales targets.",
+      "contact_html: Formatted display of contact details."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Which partners don't have any introduction filled in?",
+    "positive": "introduction: Brief introduction of the partner.",
+    "negatives": [
+      "contact_html: Formatted display of contact details.",
+      "route: Website route or URL mapping.",
+      "partner_website: Website URL of the sales partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Provide all introductions for partners in the European region.",
+    "positive": "introduction: Brief introduction of the partner.",
+    "negatives": [
+      "territory: Region or market assigned to the partner.",
+      "website: Partner’s website link.",
+      "route: Website route or URL mapping."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Export a list of reseller-type partners and their introduction fields.",
+    "positive": "introduction: Brief introduction of the partner.",
+    "negatives": [
+      "partner_type: Type of sales partner like distributor or reseller.",
+      "commission_rate: Percentage of commission offered.",
+      "description: Description about the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Export a list of reseller-type partners and their introduction fields.",
+    "positive": "partner_type: Type of sales partner like distributor or reseller.",
+    "negatives": [
+      "introduction: Brief introduction of the partner.",
+      "commission_rate: Percentage of commission offered.",
+      "description: Description about the partner."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: Check if 'GlobeX Trade Corp' has an introduction field entered.",
+    "positive": "introduction: Brief introduction of the partner.",
+    "negatives": [
+      "partner_name: Full name of the sales partner entity.",
+      "route: Website route or URL mapping.",
+      "contact_desc: Short description of the partner's contact details."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Partner\nQuestion: How many sales partners have included an introduction message?",
+    "positive": "introduction: Brief introduction of the partner.",
+    "negatives": [
+      "partner_website: Website URL of the sales partner.",
+      "show_in_website: Flag indicating if the partner appears on the website.",
+      "contact_html: Formatted display of contact details."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: What is the naming pattern used to generate supplier IDs?",
+    "positive": "naming_series: Pattern used to auto-generate supplier IDs.",
+    "negatives": [
+      "supplier_type: Classification of the supplier such as Company or Individual.",
+      "country: Country where the supplier is based.",
+      "supplier_name: Full legal name of the supplier."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Can you show me how supplier codes are automatically generated?",
+    "positive": "naming_series: Pattern used to auto-generate supplier IDs.",
+    "negatives": [
+      "language: Preferred language for communication.",
+      "image: Image/logo associated with the supplier.",
+      "tax_id: Tax identification number of the supplier."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Which document controls the prefix used for new supplier entries?",
+    "positive": "naming_series: Pattern used to auto-generate supplier IDs.",
+    "negatives": [
+      "is_transporter: Indicates if the supplier is a transporter.",
+      "supplier_group: Category/group of suppliers.",
+      "default_currency: Currency used by the supplier."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Find out how supplier numbers are structured in the system.",
+    "positive": "naming_series: Pattern used to auto-generate supplier IDs.",
+    "negatives": [
+      "default_price_list: Default price list associated with the supplier.",
+      "disabled: Status flag indicating if the supplier is inactive.",
+      "supplier_details: Additional notes or description about the supplier."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Where is the supplier ID format like 'SUP-.YYYY.-' defined?",
+    "positive": "naming_series: Pattern used to auto-generate supplier IDs.",
+    "negatives": [
+      "email_id: Primary email ID of the supplier.",
+      "mobile_no: Mobile phone number of the supplier.",
+      "represents_company: Company that the supplier is representing."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: How are suppliers named when records are created?",
+    "positive": "naming_series: Pattern used to auto-generate supplier IDs.",
+    "negatives": [
+      "accounts: List of default accounts related to the supplier.",
+      "portal_users: List of users with access to the supplier portal.",
+      "on_hold: Whether transactions with the supplier are on hold."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: What format is used for supplier auto-generated names?",
+    "positive": "naming_series: Pattern used to auto-generate supplier IDs.",
+    "negatives": [
+      "hold_type: Type of hold applied on the supplier.",
+      "release_date: Date when hold will be lifted.",
+      "allow_purchase_invoice_creation_without_purchase_order: Permission flag."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Is there a setting that defines how new supplier records are named?",
+    "positive": "naming_series: Pattern used to auto-generate supplier IDs.",
+    "negatives": [
+      "payment_terms: Default payment terms for the supplier.",
+      "default_bank_account: Bank account used for payments.",
+      "website: Supplier’s website URL."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Which doctype includes the naming series for vendors?",
+    "positive": "naming_series: Pattern used to auto-generate supplier IDs.",
+    "negatives": [
+      "tax_category: Tax category applicable to the supplier.",
+      "supplier_primary_address: Primary address reference.",
+      "supplier_primary_contact: Main contact person for the supplier."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: What is the naming pattern for the vendors?",
+    "positive": "naming_series: Pattern used to auto-generate supplier IDs.",
+    "negatives": [
+      "is_frozen: Indicates if edits are blocked for this supplier.",
+      "warn_rfqs: Warn user before sending RFQs to this supplier.",
+      "prevent_pos: Prevent this supplier from being used in POS."
+    ]
+  },
+  [
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Who is the vendor with code SUP-00015?",
+    "positive": "supplier_name: Registered name of the supplier.",
+    "negatives": [
+      "supplier_type: Type of supplier.",
+      "default_currency: Default currency used.",
+      "email_id: Contact email of the supplier."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Pull up a list of suppliers based in Germany for vendor negotiations.",
+    "positive": "supplier_name: Registered name of the supplier.",
+    "negatives": [
+      "country: Country where supplier is located.",
+      "supplier_group: Supplier group classification.",
+      "is_internal_supplier: Whether supplier is internal or not."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Which supplier is linked to purchase order PO-332?",
+    "positive": "supplier_name: Registered name of the supplier.",
+    "negatives": [
+      "default_bank_account: Bank account assigned to supplier.",
+      "payment_terms: Terms agreed for payment.",
+      "tax_id: Tax Identification Number of the supplier."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Show me the supplier name for internal transport services.",
+    "positive": "supplier_name: Registered name of the supplier.",
+    "negatives": [
+      "is_transporter: Whether the supplier provides transport services.",
+      "supplier_type: Type of supplier.",
+      "mobile_no: Mobile contact number."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Get the supplier name for 'Metallic Edge Corp'.",
+    "positive": "supplier_name: Registered name of the supplier.",
+    "negatives": [
+      "mobile_no: Mobile contact number.",
+      "language: Preferred language of communication.",
+      "tax_category: Assigned tax category."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Get the mobile number for 'Metallic Edge Corp'.",
+    "positive": "mobile_no: Mobile contact number.",
+    "negatives": [
+      "supplier_name: Registered name of the supplier.",
+      "supplier_type: Type of supplier.",
+      "tax_id: Supplier’s tax identification number."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Find the supplier that uses the email 'supplies@techlink.io'.",
+    "positive": "supplier_name: Registered name of the supplier.",
+    "negatives": [
+      "email_id: Supplier’s email address.",
+      "supplier_type: Type of supplier.",
+      "is_frozen: Whether supplier is frozen."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Get me the supplier name for vendors that are marked frozen in the system.",
+    "positive": "supplier_name: Registered name of the supplier.",
+    "negatives": [
+      "is_frozen: Whether supplier is frozen.",
+      "default_currency: Default currency of the supplier.",
+      "represents_company: Company the supplier represents."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Get me the default currency for vendors that are marked frozen in the system.",
+    "positive": "default_currency: Currency used for transactions.",
+    "negatives": [
+      "supplier_name: Registered name of the supplier.",
+      "is_frozen: Whether supplier is frozen.",
+      "language: Preferred communication language."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Check the supplier name for vendor ID SUP-00021.",
+    "positive": "supplier_name: Registered name of the supplier.",
+    "negatives": [
+      "supplier_primary_address: Main address of supplier.",
+      "primary_address: System-marked primary address.",
+      "email_id: Supplier's contact email."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Check the primary contact for vendor ID SUP-00021.",
+    "positive": "supplier_primary_contact: Main contact person.",
+    "negatives": [
+      "supplier_name: Registered name of the supplier.",
+      "language: Communication language.",
+      "supplier_group: Supplier category/group."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: List all active suppliers under the 'Raw Material' group.",
+    "positive": "supplier_name: Registered name of the supplier.",
+    "negatives": [
+      "supplier_group: Supplier group classification.",
+      "disabled: Whether supplier is disabled.",
+      "on_hold: If supplier is currently on hold."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: I need supplier names for transport service providers.",
+    "positive": "supplier_name: Registered name of the supplier.",
+    "negatives": [
+      "is_transporter: Whether the supplier provides transport.",
+      "partner_type: Sales partner classification.",
+      "warn_pos: Flag to warn on POS transactions."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: I need email IDs for transport service providers.",
+    "positive": "email_id: Supplier's contact email.",
+    "negatives": [
+      "supplier_name: Registered name of the supplier.",
+      "mobile_no: Supplier's mobile number.",
+      "language: Preferred language."
+    ]
+  },
+    {
+    "anchor": "Doctype: Supplier\nQuestion: What is the naming pattern used to generate supplier IDs?",
+    "positive": "naming_series: Pattern used to auto-generate supplier IDs.",
+    "negatives": [
+      "supplier_type: Classification of the supplier such as Company or Individual.",
+      "country: Country where the supplier is based.",
+      "supplier_name: Full legal name of the supplier."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Can you show me how supplier codes are automatically generated?",
+    "positive": "naming_series: Pattern used to auto-generate supplier IDs.",
+    "negatives": [
+      "language: Preferred language for communication.",
+      "image: Image/logo associated with the supplier.",
+      "tax_id: Tax identification number of the supplier."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Which document controls the prefix used for new supplier entries?",
+    "positive": "naming_series: Pattern used to auto-generate supplier IDs.",
+    "negatives": [
+      "is_transporter: Indicates if the supplier is a transporter.",
+      "supplier_group: Category/group of suppliers.",
+      "default_currency: Currency used by the supplier."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Find out how supplier numbers are structured in the system.",
+    "positive": "naming_series: Pattern used to auto-generate supplier IDs.",
+    "negatives": [
+      "default_price_list: Default price list associated with the supplier.",
+      "disabled: Status flag indicating if the supplier is inactive.",
+      "supplier_details: Additional notes or description about the supplier."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Where is the supplier ID format like 'SUP-.YYYY.-' defined?",
+    "positive": "naming_series: Pattern used to auto-generate supplier IDs.",
+    "negatives": [
+      "email_id: Primary email ID of the supplier.",
+      "mobile_no: Mobile phone number of the supplier.",
+      "represents_company: Company that the supplier is representing."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: How are suppliers named when records are created?",
+    "positive": "naming_series: Pattern used to auto-generate supplier IDs.",
+    "negatives": [
+      "accounts: List of default accounts related to the supplier.",
+      "portal_users: List of users with access to the supplier portal.",
+      "on_hold: Whether transactions with the supplier are on hold."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: What format is used for supplier auto-generated names?",
+    "positive": "naming_series: Pattern used to auto-generate supplier IDs.",
+    "negatives": [
+      "hold_type: Type of hold applied on the supplier.",
+      "release_date: Date when hold will be lifted.",
+      "allow_purchase_invoice_creation_without_purchase_order: Permission flag."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Is there a setting that defines how new supplier records are named?",
+    "positive": "naming_series: Pattern used to auto-generate supplier IDs.",
+    "negatives": [
+      "payment_terms: Default payment terms for the supplier.",
+      "default_bank_account: Bank account used for payments.",
+      "website: Supplier’s website URL."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Which doctype includes the naming_series for vendors?",
+    "positive": "naming_series: Pattern used to auto-generate supplier IDs.",
+    "negatives": [
+      "tax_category: Tax category applicable to the supplier.",
+      "supplier_primary_address: Primary address reference.",
+      "supplier_primary_contact: Main contact person for the supplier."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: What is the naming pattern for the vendors?",
+    "positive": "naming_series: Pattern used to auto-generate supplier IDs.",
+    "negatives": [
+      "is_frozen: Indicates if edits are blocked for this supplier.",
+      "warn_rfqs: Warn user before sending RFQs to this supplier.",
+      "prevent_pos: Prevent this supplier from being used in POS."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Which country is 'Atlantic Trade Co.' registered in?",
+    "positive": "country: Country where the supplier is registered.",
+    "negatives": [
+      "supplier_name: Name of the supplier.",
+      "default_currency: Supplier's preferred currency.",
+      "tax_id: Supplier’s tax registration number."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: List all suppliers located in the United Arab Emirates.",
+    "positive": "country: Country where the supplier is registered.",
+    "negatives": [
+      "default_price_list: Standard price list assigned to supplier.",
+      "supplier_group: Category of the supplier.",
+      "language: Language preference of the supplier."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Get suppliers from India and Bangladesh for textile sourcing.",
+    "positive": "country: Country where the supplier is registered.",
+    "negatives": [
+      "supplier_type: Type of supplier such as Manufacturer or Retailer.",
+      "image: Profile image of the supplier.",
+      "supplier_name: Name of the supplier."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Show me vendors registered in countries outside the EU.",
+    "positive": "country: Country where the supplier is registered.",
+    "negatives": [
+      "mobile_no: Mobile contact of the supplier.",
+      "email_id: Email address of the supplier.",
+      "supplier_type: Type of supplier."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Do we have any suppliers from South Korea?",
+    "positive": "country: Country where the supplier is registered.",
+    "negatives": [
+      "supplier_group: Category of the supplier.",
+      "is_internal_supplier: Flag if supplier is internal.",
+      "language: Preferred language."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Filter all supplier entries that mention 'Germany' as their country.",
+    "positive": "country: Country where the supplier is registered.",
+    "negatives": [
+      "is_frozen: Indicates if the supplier is frozen.",
+      "website: Supplier’s website.",
+      "naming_series: Auto naming prefix."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: How many suppliers are currently registered in China?",
+    "positive": "country: Country where the supplier is registered.",
+    "negatives": [
+      "represents_company: Company linked to the supplier.",
+      "default_bank_account: Bank account preferred by supplier.",
+      "is_transporter: Indicates if the supplier is a transporter."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Export list of suppliers along with their country of operation.",
+    "positive": "country: Country where the supplier is registered.",
+    "negatives": [
+      "supplier_details: Additional supplier details.",
+      "supplier_type: Type of supplier.",
+      "supplier_group: Supplier category."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Export list of suppliers along with their country of operation.",
+    "positive": "supplier_name: Name of the supplier.",
+    "negatives": [
+      "supplier_group: Category of the supplier.",
+      "supplier_type: Supplier classification.",
+      "image: Supplier image."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Which vendors are based in Australia and New Zealand?",
+    "positive": "country: Country where the supplier is registered.",
+    "negatives": [
+      "is_frozen: Indicates if supplier is frozen.",
+      "mobile_no: Supplier's mobile contact.",
+      "tax_id: Tax ID of the supplier."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Who are our suppliers from Latin American countries?",
+    "positive": "country: Country where the supplier is registered.",
+    "negatives": [
+      "default_currency: Preferred currency.",
+      "language: Preferred communication language.",
+      "payment_terms: Standard payment terms."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Which supplier group does 'Fresh Agro Supplies' fall under?",
+    "positive": "supplier_group: Category of the supplier such as 'Raw Material Vendor'.",
+    "negatives": [
+      "supplier_name: Name of the supplier entity.",
+      "country: Country where the supplier is based.",
+      "supplier_type: Type like Company or Individual."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: List all suppliers categorized under 'Raw Material Vendors'.",
+    "positive": "supplier_group: Category of the supplier such as 'Raw Material Vendor'.",
+    "negatives": [
+      "default_currency: Preferred currency of transactions.",
+      "supplier_type: Type like Company or Individual.",
+      "mobile_no: Contact number of the supplier."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: How many suppliers do we have in the 'Importers' group?",
+    "positive": "supplier_group: Category of the supplier such as 'Raw Material Vendor'.",
+    "negatives": [
+      "email_id: Supplier's email address.",
+      "image: Profile image or logo of the supplier.",
+      "is_internal_supplier: Whether the supplier is internal or external."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Get the supplier names and their groups for all active vendors from India.",
+    "positive": "supplier_group: Category of the supplier such as 'Raw Material Vendor'.",
+    "negatives": [
+      "country: Country where the supplier is based.",
+      "supplier_name: Name of the supplier entity.",
+      "supplier_type: Type like Company or Individual."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Get the supplier names and their groups for all active vendors from India.",
+    "positive": "supplier_name: Name of the supplier entity.",
+    "negatives": [
+      "country: Country where the supplier is based.",
+      "supplier_group: Category of the supplier such as 'Raw Material Vendor'.",
+      "supplier_type: Type like Company or Individual."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Show the group classification for suppliers that are transport service providers.",
+    "positive": "supplier_group: Category of the supplier such as 'Raw Material Vendor'.",
+    "negatives": [
+      "is_transporter: Indicates if the supplier is a transporter.",
+      "tax_id: Supplier’s tax identification number.",
+      "supplier_type: Type like Company or Individual."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Do we have any local suppliers under the 'Capital Equipment' group?",
+    "positive": "supplier_group: Category of the supplier such as 'Raw Material Vendor'.",
+    "negatives": [
+      "supplier_type: Type like Company or Individual.",
+      "country: Country where the supplier is based.",
+      "tax_category: Tax category applicable to supplier."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Pull all supplier records under the 'Utilities & Services' group with payment terms set.",
+    "positive": "supplier_group: Category of the supplier such as 'Raw Material Vendor'.",
+    "negatives": [
+      "payment_terms: Terms agreed upon for payment.",
+      "mobile_no: Contact number of the supplier.",
+      "language: Preferred language for communication."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Pull all supplier records under the 'Utilities & Services' group with payment terms set.",
+    "positive": "payment_terms: Terms agreed upon for payment.",
+    "negatives": [
+      "supplier_group: Category of the supplier such as 'Raw Material Vendor'.",
+      "mobile_no: Contact number of the supplier.",
+      "language: Preferred language for communication."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: For each supplier group, show the default currency and the number of associated suppliers.",
+    "positive": "supplier_group: Category of the supplier such as 'Raw Material Vendor'.",
+    "negatives": [
+      "default_currency: Preferred currency of transactions.",
+      "email_id: Supplier’s email address.",
+      "tax_id: Supplier’s tax identification number."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: For each supplier group, show the default currency and the number of associated suppliers.",
+    "positive": "default_currency: Preferred currency of transactions.",
+    "negatives": [
+      "supplier_group: Category of the supplier such as 'Raw Material Vendor'.",
+      "email_id: Supplier’s email address.",
+      "tax_id: Supplier’s tax identification number."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Are there any suppliers who also handle transportation services for us?",
+    "positive": "is_transporter: Indicates if the supplier also acts as a transporter.",
+    "negatives": [
+      "supplier_type: Category such as Manufacturer or Contractor.",
+      "supplier_group: Group to which the supplier belongs.",
+      "default_currency: Preferred transaction currency of the supplier."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Which vendors are marked as transport providers for our delivery operations?",
+    "positive": "is_transporter: Indicates if the supplier also acts as a transporter.",
+    "negatives": [
+      "represents_company: Linked company represented by the supplier.",
+      "mobile_no: Supplier’s primary mobile contact.",
+      "tax_id: Tax Identification Number of the supplier."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Can you pull up a list of active suppliers who also offer transportation?",
+    "positive": "is_transporter: Indicates if the supplier also acts as a transporter.",
+    "negatives": [
+      "is_frozen: Marks whether the supplier is locked for transactions.",
+      "payment_terms: Standard payment terms used.",
+      "address_html: HTML summary of supplier address."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: I need the names of companies that supply goods and manage their own transport.",
+    "positive": "is_transporter: Indicates if the supplier also acts as a transporter.",
+    "negatives": [
+      "supplier_name: Full name of the supplier.",
+      "portal_users: Users with access to supplier portal.",
+      "image: Uploaded logo or image of the supplier."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Which suppliers in our system provide transport services along with their products?",
+    "positive": "is_transporter: Indicates if the supplier also acts as a transporter.",
+    "negatives": [
+      "supplier_primary_address: Primary address linked to the supplier.",
+      "language: Preferred language for communication.",
+      "tax_withholding_category: Linked withholding category."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Can you find suppliers who handle invoicing but don’t offer transportation?",
+    "positive": "is_transporter: Indicates if the supplier also acts as a transporter.",
+    "negatives": [
+      "allow_purchase_invoice_creation_without_purchase_order: Invoice rule.",
+      "disabled: Flag to indicate inactive supplier.",
+      "default_price_list: Default price list linked to supplier."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Which vendors don’t provide transport services but outsource deliveries?",
+    "positive": "is_transporter: Indicates if the supplier also acts as a transporter.",
+    "negatives": [
+      "default_bank_account: Bank account used by supplier.",
+      "warn_rfqs: Whether to warn user before RFQ creation.",
+      "hold_type: Reason for placing the supplier on hold."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Show me all transport providers from our supplier database that work with construction projects.",
+    "positive": "is_transporter: Indicates if the supplier also acts as a transporter.",
+    "negatives": [
+      "default_currency: Preferred transaction currency of the supplier.",
+      "email_id: Supplier’s primary email address.",
+      "naming_series: Naming pattern used for supplier IDs."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Pull up supplier names along with their transport service status for audit purposes.",
+    "positive": "is_transporter: Indicates if the supplier also acts as a transporter.",
+    "negatives": [
+      "companies: List of companies this supplier belongs to.",
+      "prevent_pos: Block supplier from POS transactions.",
+      "release_date: Date supplier hold was lifted."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Which of our suppliers also operate as logistics partners?",
+    "positive": "is_transporter: Indicates if the supplier also acts as a transporter.",
+    "negatives": [
+      "default_accounts_section: Section name for accounting settings.",
+      "supplier_group: Group to which the supplier belongs.",
+      "contact_and_address_tab: Label for the address/contact section."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Which vendors have uploaded a profile image in the system?",
+    "positive": [
+      "image: Profile or logo image representing the supplier."
+    ],
+    "negatives": [
+      "supplier_name: The official name of the supplier.",
+      "supplier_type: Type of supplier such as Company or Individual.",
+      "supplier_group: Classification category the supplier belongs to.",
+      "language: Preferred communication language with this supplier."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Show me the supplier name and image for all internal suppliers.",
+    "positive": [
+      "supplier_name: The official name of the supplier.",
+      "image: Profile or logo image representing the supplier."
+    ],
+    "negatives": [
+      "is_internal_supplier: Indicates if the supplier is part of the same organization.",
+      "supplier_type: Type of supplier such as Company or Individual.",
+      "supplier_group: Classification category the supplier belongs to."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: List suppliers along with their logos for catalog publishing.",
+    "positive": [
+      "supplier_name: The official name of the supplier.",
+      "image: Profile or logo image representing the supplier."
+    ],
+    "negatives": [
+      "supplier_group: Classification category the supplier belongs to.",
+      "language: Preferred communication language with this supplier.",
+      "website: Supplier’s website URL."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Do we have image records for vendors categorized as 'Transport Services'?",
+    "positive": [
+      "image: Profile or logo image representing the supplier."
+    ],
+    "negatives": [
+      "supplier_type: Type of supplier such as Company or Individual.",
+      "supplier_group: Classification category the supplier belongs to.",
+      "is_transporter: Indicates whether the supplier provides transport services."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Get the name, type, and image of all disabled suppliers.",
+    "positive": [
+      "supplier_name: The official name of the supplier.",
+      "supplier_type: Type of supplier such as Company or Individual.",
+      "image: Profile or logo image representing the supplier."
+    ],
+    "negatives": [
+      "disabled: Marks the supplier as inactive or no longer in use.",
+      "country: Country where the supplier is based."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Find suppliers who haven't uploaded their business image yet.",
+    "positive": [
+      "image: Profile or logo image representing the supplier."
+    ],
+    "negatives": [
+      "supplier_name: The official name of the supplier.",
+      "supplier_type: Type of supplier such as Company or Individual.",
+      "supplier_group: Classification category the supplier belongs to.",
+      "represents_company: Specifies the internal company that this supplier is representing."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Pull the image and default currency info for active suppliers.",
+    "positive": [
+      "image: Profile or logo image representing the supplier.",
+      "default_currency: Default currency used for transactions with this supplier."
+    ],
+    "negatives": [
+      "disabled: Marks the supplier as inactive or no longer in use.",
+      "supplier_name: The official name of the supplier.",
+      "supplier_group: Classification category the supplier belongs to."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Which vendors have profile pictures and valid email addresses?",
+    "positive": [
+      "image: Profile or logo image representing the supplier.",
+      "email_id: Primary email address for the supplier."
+    ],
+    "negatives": [
+      "supplier_name: The official name of the supplier.",
+      "mobile_no: Primary mobile number for the supplier.",
+      "represents_company: Specifies the internal company the supplier represents."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Do any suppliers have images associated with their company profiles?",
+    "positive": [
+      "image: Profile or logo image representing the supplier."
+    ],
+    "negatives": [
+      "supplier_name: The official name of the supplier.",
+      "represents_company: Specifies the internal company the supplier represents.",
+      "supplier_type: Type of supplier such as Company or Individual.",
+      "supplier_group: Classification category the supplier belongs to."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Get me the profile pictures and contact details of key international vendors.",
+    "positive": [
+      "image: Profile or logo image representing the supplier.",
+      "mobile_no: Primary mobile number for the supplier.",
+      "email_id: Primary email address for the supplier."
+    ],
+    "negatives": [
+      "country: Country where the supplier is based.",
+      "supplier_type: Type of supplier such as Company or Individual.",
+      "supplier_name: The official name of the supplier.",
+      "website: Supplier’s website URL."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: What is the default bank account associated with each supplier?",
+    "positive": [
+      "default_bank_account: Bank account to which payments are made by default."
+    ],
+    "negatives": [
+      "default_currency: Default currency used for transactions with this supplier.",
+      "accounts: List of default ledger accounts used when booking transactions with this supplier.",
+      "supplier_type: Type of supplier such as Company or Individual.",
+      "payment_terms: Defines the payment terms or credit period applicable to the supplier."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Get supplier names along with their default bank accounts.",
+    "positive": [
+      "supplier_name: The official name of the supplier.",
+      "default_bank_account: Bank account to which payments are made by default."
+    ],
+    "negatives": [
+      "email_id: Primary email address for the supplier.",
+      "default_currency: Default currency used for transactions with this supplier.",
+      "mobile_no: Primary mobile number for the supplier.",
+      "language: Preferred communication language with this supplier."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Which internal suppliers have a default bank account listed?",
+    "positive": [
+      "is_internal_supplier: Indicates if the supplier is part of the same organization.",
+      "default_bank_account: Bank account to which payments are made by default."
+    ],
+    "negatives": [
+      "represents_company: Specifies the internal company that this supplier is representing.",
+      "disabled: Marks the supplier as inactive or no longer in use.",
+      "tax_id: The tax identification number of the supplier.",
+      "supplier_group: Classification category the supplier belongs to."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Show me the name, currency, and default bank account for all active suppliers.",
+    "positive": [
+      "supplier_name: The official name of the supplier.",
+      "default_currency: Default currency used for transactions with this supplier.",
+      "default_bank_account: Bank account to which payments are made by default.",
+      "disabled: Marks the supplier as inactive or no longer in use."
+    ],
+    "negatives": [
+      "email_id: Primary email address for the supplier.",
+      "is_frozen: Prevents any further transactions or changes for this supplier if enabled.",
+      "image: Profile or logo image representing the supplier.",
+      "supplier_type: Type of supplier such as Company or Individual."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Find suppliers who have no default bank account setup but are not frozen.",
+    "positive": [
+      "default_bank_account: Bank account to which payments are made by default.",
+      "is_frozen: Prevents any further transactions or changes for this supplier if enabled."
+    ],
+    "negatives": [
+      "on_hold: Indicates if the supplier is currently on hold.",
+      "default_price_list: Default price list to be used in purchase transactions.",
+      "supplier_group: Classification category the supplier belongs to.",
+      "tax_category: Tax category used to determine applicable tax rules for transactions."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Pull suppliers with both a valid default bank account and price list.",
+    "positive": [
+      "default_bank_account: Bank account to which payments are made by default.",
+      "default_price_list: Default price list to be used in purchase transactions."
+    ],
+    "negatives": [
+      "default_currency: Default currency used for transactions with this supplier.",
+      "supplier_name: The official name of the supplier.",
+      "language: Preferred communication language with this supplier.",
+      "represents_company: Specifies the internal company that this supplier is representing."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: List suppliers that are not disabled and have bank details set for default transactions.",
+    "positive": [
+      "default_bank_account: Bank account to which payments are made by default.",
+      "disabled: Marks the supplier as inactive or no longer in use."
+    ],
+    "negatives": [
+      "is_transporter: Indicates whether the supplier provides transport services.",
+      "supplier_primary_contact: Link to the supplier’s main contact person.",
+      "tax_withholding_category: Category for tax withholding applicable to the supplier.",
+      "warn_pos: Displays a warning during Point of Sale (POS) operations involving this supplier."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Show me the suppliers who represent companies and have default bank accounts set.",
+    "positive": [
+      "represents_company: Specifies the internal company that this supplier is representing.",
+      "default_bank_account: Bank account to which payments are made by default."
+    ],
+    "negatives": [
+      "website: Supplier’s website URL.",
+      "accounts: List of default ledger accounts used when booking transactions with this supplier.",
+      "mobile_no: Primary mobile number for the supplier.",
+      "supplier_group: Classification category the supplier belongs to."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Export supplier names and their bank accounts used for automatic payments.",
+    "positive": [
+      "supplier_name: The official name of the supplier.",
+      "default_bank_account: Bank account to which payments are made by default."
+    ],
+    "negatives": [
+      "email_id: Primary email address for the supplier.",
+      "is_internal_supplier: Indicates if the supplier is part of the same organization.",
+      "default_currency: Default currency used for transactions with this supplier.",
+      "supplier_type: Type of supplier such as Company or Individual."
+    ]
+  },
+  {
+    "anchor": "Doctype: Supplier\nQuestion: Do any vendors lack a default bank account for incoming payment setups?",
+    "positive": [
+      "default_bank_account: Bank account to which payments are made by default."
+    ],
+    "negatives": [
+      "supplier_name: The official name of the supplier.",
+      "payment_terms: Defines the payment terms or credit period applicable to the supplier.",
+      "supplier_primary_address: Link to the supplier’s main address record.",
+      "tax_id: The tax identification number of the supplier."
+    ]
+  }
+]

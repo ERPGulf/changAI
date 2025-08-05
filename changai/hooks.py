@@ -31,14 +31,13 @@ app_license = "mit"
 # Include JS globally on all pages
 app_include_js = ["/assets/changai/js/changai.js"]
 app_include_css = ["/assets/changai/css/changai.css"]
-
 # In hooks.py
-app_include_css = [
-    "https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css"
-]
-app_include_js = [
-    "https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js"
-]
+# app_include_css = [
+#     "https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css"
+# ]
+# app_include_js = [
+#     "https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js"
+# ]
 
 
 

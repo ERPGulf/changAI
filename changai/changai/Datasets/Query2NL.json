@@ -1,0 +1,606 @@
+[
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"shipment_id\": \"SHIP-2045\", \"shipment_name\": \"SHIP-2045\", \"origin\": \"Doha Warehouse\", \"destination\": \"Dubai Hub\", \"departure_date\": \"2025-07-10\", \"arrival_estimate\": \"2025-07-15\", \"battery_unit\": 5, \"is_fragile\": false, \"status\": \"In Transit\"}",
+        "response": "Shipment SHIP-2045 is currently in transit from Doha Warehouse to Dubai Hub, carrying 5 battery units. It departed on July 10, 2025, and is expected to arrive by July 15, 2025. The shipment is not marked as fragile."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"invoice_id\": \"INV-9001\", \"client\": \"GreenTech\", \"due_date\": \"2025-08-01\"}",
+        "response": "The invoice INV-9001 is issued to GreenTech and is due on August 1, 2025."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"employee_name\": \"Ali Khan\", \"present_days\": 18, \"leave_days\": 3}",
+        "response": "Ali Khan was present for 18 days and took 3 days off."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"shipment_id\": \"SHIP-3052\", \"shipment_name\": \"SHIP-3052\", \"origin\": \"Riyadh Depot\", \"destination\": \"Jeddah Hub\", \"departure_date\": \"2025-07-12\", \"arrival_estimate\": \"2025-07-14\", \"battery_unit\": 3, \"is_fragile\": true, \"status\": \"Dispatched\"}",
+        "response": "Shipment SHIP-3052 has been dispatched from Riyadh Depot to Jeddah Hub. It contains 3 fragile battery units and left on July 12, 2025. It is expected to arrive by July 14, 2025."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"client\": \"FutureWorks\", \"project\": \"Solar Grid Expansion\", \"status\": \"Completed\", \"completion_date\": \"2025-07-01\"}",
+        "response": "FutureWorks' Solar Grid Expansion project was completed on July 1, 2025."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"employee_name\": \"Ali\", \"present_days\": 22}",
+        "response": "Ali was present for 22 days."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"customer_name\": \"GreenTech\", \"status\": \"Active\"}",
+        "response": "GreenTech is currently an active customer."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"invoice_id\": \"INV-102\", \"amount\": 1200}",
+        "response": "Invoice INV-102 has a total amount of 1200."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"project\": \"Solar Panel Deployment\", \"owner\": \"Samiya\"}",
+        "response": "The project Solar Panel Deployment is owned by Samiya."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"payment_status\": \"Paid\"}",
+        "response": "The payment has been marked as paid."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"order_id\": \"ORD-1003\", \"status\": \"Cancelled\"}",
+        "response": "Order ORD-1003 has been cancelled."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"ticket_id\": \"T-204\", \"status\": \"Pending\"}",
+        "response": "Ticket T-204 is still pending."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"employee_name\": \"Sara\", \"leave_days\": 4}",
+        "response": "Sara took 4 days of leave."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"warehouse\": \"Dubai Hub\", \"stock_item\": \"Laptop\", \"available\": 10}",
+        "response": "Dubai Hub has 10 laptops available."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"name\": \"EMP-009\", \"employee_name\": \"Zara Ali\", \"designation\": \"HR Manager\", \"status\": \"Active\"}",
+        "response": "Employee Zara Ali (EMP-009) is an active HR Manager."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: [{\"name\": \"SUP-001\", \"supplier_name\": \"Alpha Inc.\"}, {\"name\": \"SUP-002\", \"supplier_name\": \"Beta LLC\"}]",
+        "response": "There are two suppliers: Alpha Inc. and Beta LLC."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"count\": 0}",
+        "response": "No matching records were found."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"total\": null, \"currency\": \"USD\"}",
+        "response": "The total amount is not available, but the currency is USD."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"name\": \"PRJ-4502\", \"project_name\": \"ERP Upgrade\", \"completion\": 95}",
+        "response": "The project 'ERP Upgrade' (PRJ-4502) is 95% complete."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: []",
+        "response": "The response returned an empty list of results."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"success\": false, \"error\": \"Invalid document ID\"}",
+        "response": "The request failed due to an invalid document ID."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"doc\": {\"name\": \"INV-2030\", \"customer\": \"GreenTech\", \"total\": 8200}}",
+        "response": "Invoice INV-2030 was issued to GreenTech for a total of 8200."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"data\": {\"items\": [{\"item_code\": \"ITM-001\", \"qty\": 10}, {\"item_code\": \"ITM-002\", \"qty\": 5}]}}",
+        "response": "The order includes 10 units of ITM-001 and 5 units of ITM-002."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"exists\": true}",
+        "response": "The requested record exists in the system."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"exists\": false}",
+        "response": "The record does not exist in the system."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"employee\": {\"id\": \"EMP-105\", \"name\": \"Salim\", \"doj\": \"2022-04-01\"}}",
+        "response": "Employee Salim (EMP-105) joined the company on April 1, 2022."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"updated\": true, \"name\": \"CUS-1203\"}",
+        "response": "The customer record CUS-1203 was successfully updated."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"updated\": false, \"error\": \"Permission denied\"}",
+        "response": "The update failed due to permission denial."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"log\": [\"Connected to database\", \"Validated request\", \"Data retrieved successfully\"]}",
+        "response": "The system logs show successful connection, validation, and data retrieval."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"order_id\": \"ORD-1005\", \"delivered\": true, \"delivered_on\": \"2025-07-08\"}",
+        "response": "Order ORD-1005 was successfully delivered on July 8, 2025."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"order_id\": \"ORD-1005\", \"delivered\": false}",
+        "response": "Order ORD-1005 has not yet been delivered."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"result\": {\"items\": [], \"count\": 0}}",
+        "response": "There are no items found in the result."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"record\": {\"invoice_id\": \"INV-1009\", \"paid\": true, \"payment_date\": \"2025-06-30\"}}",
+        "response": "Invoice INV-1009 has been paid on June 30, 2025."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"record\": {\"invoice_id\": \"INV-1010\", \"paid\": false}}",
+        "response": "Invoice INV-1010 is still unpaid."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"shipment_id\": \"SHIP-500\", \"status\": \"Delivered\"}",
+        "response": "Shipment SHIP-500 has been delivered."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"invoice_id\": \"INV-2001\", \"customer\": \"Zen Corp\", \"due_date\": \"2025-08-15\", \"status\": \"Unpaid\"}",
+        "response": "Zen Corp's invoice INV-2001 is due on August 15, 2025, and is currently unpaid."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"employee\": \"Reema\", \"present_days\": 18, \"leave_days\": 2}",
+        "response": "Reema was present for 18 days and took 2 days of leave."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"project\": \"Cloud Migration\", \"deadline\": \"2025-09-30\", \"status\": \"In Progress\"}",
+        "response": "The Cloud Migration project is currently in progress and is due by September 30, 2025."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"ticket_id\": \"TCK-409\", \"assigned_to\": \"Mohammed\", \"issue\": \"Access Denied\", \"status\": \"Open\"}",
+        "response": "Ticket TCK-409 about access denied is currently open and assigned to Mohammed."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"shipment_id\": \"SHIP-2045\", \"departure\": \"Doha\", \"destination\": \"Dubai\", \"status\": \"In Transit\"}",
+        "response": "Shipment SHIP-2045 is currently in transit from Doha to Dubai."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"item\": \"Projector\", \"quantity\": 3, \"location\": \"Main Office\"}",
+        "response": "There are 3 projectors available at the Main Office."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"meeting_date\": \"2025-08-10\", \"attendees\": 5}",
+        "response": "A meeting is scheduled on August 10, 2025 with 5 attendees."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"client\": \"Infotech Ltd.\", \"last_payment\": \"2025-06-01\", \"payment_status\": \"Overdue\"}",
+        "response": "Infotech Ltd.'s last payment on June 1, 2025 is now overdue."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"stock_item\": \"Router\", \"available\": 6, \"reserved\": 2}",
+        "response": "There are 6 routers in stock, of which 2 are reserved."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"shipment\": \"SHIP-600\", \"departure\": \"Riyadh\", \"arrival\": \"Muscat\", \"fragile\": true}",
+        "response": "Shipment SHIP-600 is marked as fragile and is traveling from Riyadh to Muscat."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"shipment_id\": \"SHIP-9002\", \"name\": \"Battery Pack\", \"origin\": \"Doha Warehouse\", \"destination\": \"Abu Dhabi Hub\", \"departure_date\": \"2025-07-10\", \"arrival_estimate\": \"2025-07-15\", \"is_fragile\": false, \"status\": \"In Transit\"}",
+        "response": "Shipment SHIP-9002 carrying Battery Pack departed from Doha Warehouse and is en route to Abu Dhabi Hub. It left on July 10, 2025, and is expected to arrive by July 15. It is not marked as fragile."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"employee_name\": \"Ali Khan\", \"present_days\": 18, \"leave_days\": 3, \"working_location\": \"Remote\"}",
+        "response": "Ali Khan, working remotely, was present for 18 days and took 3 days off."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"invoice_id\": \"INV-9001\", \"client\": \"GreenTech\", \"due_date\": \"2025-08-01\", \"amount\": 4500, \"currency\": \"USD\", \"status\": \"Pending\"}",
+        "response": "GreenTech's invoice INV-9001, worth 4500 USD, is due by August 1, 2025 and is currently pending."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"ticket_id\": \"T-989\", \"issue\": \"System Outage\", \"impact_level\": \"High\", \"assigned_to\": \"Lina\", \"status\": \"Escalated\"}",
+        "response": "Ticket T-989 reporting a high-impact system outage has been escalated and is assigned to Lina."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"order_id\": \"ORD-777\", \"items\": 12, \"total_value\": 12500, \"currency\": \"QAR\", \"expected_delivery\": \"2025-09-01\"}",
+        "response": "Order ORD-777 includes 12 items with a total value of 12,500 QAR and is expected to be delivered by September 1, 2025."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"meeting_id\": \"MT-220\", \"organizer\": \"Huda\", \"agenda\": \"Budget Review\", \"date\": \"2025-07-25\", \"location\": \"Boardroom\"}",
+        "response": "Meeting MT-220 on Budget Review is scheduled on July 25, 2025 in the Boardroom and will be organized by Huda."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"asset\": \"Server Unit 3\", \"last_maintenance\": \"2025-06-15\", \"next_maintenance\": \"2025-09-15\", \"status\": \"Operational\"}",
+        "response": "Server Unit 3 is currently operational. Last maintenance was on June 15, 2025, and the next is scheduled for September 15, 2025."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"shipment\": \"SHIP-991\", \"origin\": \"Berlin\", \"destination\": \"Rome\", \"delayed\": true, \"delay_reason\": \"Customs Hold\"}",
+        "response": "Shipment SHIP-991 from Berlin to Rome is delayed due to a customs hold."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"customer\": \"Gulf Traders\", \"outstanding_balance\": 7800, \"last_invoice_date\": \"2025-06-10\", \"risk_status\": \"Medium\"}",
+        "response": "Gulf Traders has an outstanding balance of 7800 as of the last invoice dated June 10, 2025, with a medium risk profile."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"project\": \"AI Assistant\", \"completion\": 85, \"milestone\": \"Phase 3 Review\", \"status\": \"Pending Approval\"}",
+        "response": "The AI Assistant project is 85% complete and pending approval at the Phase 3 Review milestone."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"employee_name\": \"Fatima\", \"present_days\": 20, \"leave_days\": 1}",
+        "response": "Fatima was present for 20 days and took 1 day off."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"invoice_id\": \"INV-3044\", \"client\": \"SkyNet\", \"amount\": 7200, \"currency\": \"QAR\", \"due_date\": \"2025-09-01\", \"status\": \"Paid\"}",
+        "response": "SkyNet's invoice INV-3044 of 7200 QAR was paid and was due on September 1, 2025."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"shipment_id\": \"SHIP-9021\", \"origin\": \"Muscat Warehouse\", \"destination\": \"Kuwait Hub\", \"status\": \"Delayed\", \"delay_reason\": \"Mechanical Inspection\"}",
+        "response": "Shipment SHIP-9021 from Muscat Warehouse to Kuwait Hub is delayed due to a mechanical inspection."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"order_id\": \"ORD-884\", \"items\": 7, \"total_value\": 9450, \"currency\": \"USD\", \"expected_delivery\": \"2025-08-30\"}",
+        "response": "Order ORD-884 includes 7 items totaling 9450 USD, expected to be delivered by August 30, 2025."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"ticket_id\": \"TCK-502\", \"issue\": \"Login Failure\", \"status\": \"Resolved\", \"assigned_to\": \"Imran\"}",
+        "response": "Ticket TCK-502 regarding a login failure was resolved and handled by Imran."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"employee_name\": \"Zahra\", \"present_days\": 22}",
+        "response": "Zahra was present for 22 days."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"shipment_id\": \"SHIP-2211\", \"departure_date\": \"2025-07-20\", \"arrival_estimate\": \"2025-07-25\", \"battery_unit\": 2, \"is_fragile\": true, \"status\": \"In Transit\"}",
+        "response": "Shipment SHIP-2211 carrying 2 fragile battery units departed on July 20, 2025 and is expected to arrive by July 25. It is currently in transit."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"project\": \"Data Center Migration\", \"status\": \"Pending Approval\", \"milestone\": \"Phase 2 Sign-off\"}",
+        "response": "The Data Center Migration project is awaiting approval at the Phase 2 Sign-off milestone."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"ticket_id\": \"TCK-808\", \"issue\": \"Firewall Configuration Error\", \"status\": \"Escalated\", \"assigned_to\": \"Amina\"}",
+        "response": "Ticket TCK-808 regarding a firewall configuration error has been escalated and is assigned to Amina."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"shipment_id\": \"SHIP-7810\", \"origin\": \"Qatar Warehouse\", \"destination\": \"Amman Hub\", \"departure_date\": \"2025-07-28\", \"arrival_estimate\": \"2025-08-02\", \"is_fragile\": true, \"battery_unit\": 4, \"status\": \"In Transit\"}",
+        "response": "Shipment SHIP-7810 carrying 4 fragile battery units is in transit from Qatar Warehouse to Amman Hub. It left on July 28, 2025, and is expected to arrive by August 2."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"invoice_id\": \"INV-2090\", \"client\": \"NextGen Solutions\", \"due_date\": \"2025-07-15\", \"status\": \"Overdue\"}",
+        "response": "Invoice INV-2090 for NextGen Solutions was due on July 15, 2025 and is now overdue."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"employee\": \"Hassan\", \"present_days\": 16, \"leave_days\": 6, \"working_location\": \"On-site\"}",
+        "response": "Hassan, working on-site, was present for 16 days and took 6 days of leave."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"asset\": \"Cooling Unit CX2\", \"last_maintenance\": \"2025-06-05\", \"next_maintenance\": \"2025-09-05\", \"status\": \"Needs Inspection\"}",
+        "response": "Cooling Unit CX2 is due for inspection. It was last maintained on June 5, 2025, and the next check is scheduled for September 5, 2025."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"order_id\": \"ORD-1120\", \"customer\": \"AlphaTech\", \"items\": 20, \"total_value\": 20000, \"currency\": \"USD\", \"expected_delivery\": \"2025-08-10\"}",
+        "response": "AlphaTech's order ORD-1120 includes 20 items valued at 20,000 USD and is expected to be delivered by August 10, 2025."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"ticket_id\": \"T-455\", \"issue\": \"Software License Expiry\", \"status\": \"Pending\", \"priority\": \"High\"}",
+        "response": "Ticket T-455 regarding software license expiry is pending with high priority."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"client\": \"EcoWave\", \"project\": \"Wind Turbine Analytics\", \"completion\": 40, \"status\": \"In Progress\"}",
+        "response": "EcoWave's Wind Turbine Analytics project is in progress with 40% completion."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"shipment_id\": \"SHIP-3103\", \"origin\": \"Dubai Warehouse\", \"destination\": \"Bahrain Hub\", \"status\": \"Delivered\", \"delivery_date\": \"2025-07-27\"}",
+        "response": "Shipment SHIP-3103 from Dubai Warehouse was delivered to Bahrain Hub on July 27, 2025."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"meeting_id\": \"MTG-401\", \"topic\": \"Annual Review\", \"date\": \"2025-08-05\", \"time\": \"10:00 AM\", \"location\": \"Main Conference Room\"}",
+        "response": "The Annual Review meeting (MTG-401) is scheduled for August 5, 2025 at 10:00 AM in the Main Conference Room."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"invoice_id\": \"INV-5500\", \"client\": \"BrightTech\", \"status\": \"Paid\", \"payment_date\": \"2025-07-20\"}",
+        "response": "Invoice INV-5500 for BrightTech was marked as paid on July 20, 2025."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"employee_name\": \"Sana\", \"leave_days\": 5}",
+        "response": "Sana took 5 days off."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"stock_item\": \"Ethernet Cables\", \"available\": 50, \"reserved\": 15, \"location\": \"Server Room A\"}",
+        "response": "There are 50 Ethernet Cables in Server Room A, of which 15 are reserved."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"shipment\": \"SHIP-888\", \"fragile\": true, \"origin\": \"Jeddah Port\", \"destination\": \"Kuwait Hub\"}",
+        "response": "Shipment SHIP-888 marked as fragile is en route from Jeddah Port to Kuwait Hub."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"project\": \"Digital Audit Upgrade\", \"owner\": \"Kareem\", \"status\": \"In Progress\", \"completion\": 60}",
+        "response": "The Digital Audit Upgrade project owned by Kareem is currently in progress with 60% completion."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"meeting_id\": \"MTG-103\", \"date\": \"2025-08-18\", \"location\": \"Zoom\", \"topic\": \"Compliance Checklist\"}",
+        "response": "Meeting MTG-103 on Compliance Checklist is scheduled for August 18, 2025 via Zoom."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"ticket_id\": \"T-554\", \"status\": \"Closed\"}",
+        "response": "Ticket T-554 has been closed."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"client\": \"Sunrise Energy\", \"project\": \"EV Infrastructure\", \"completion_date\": \"2025-06-22\", \"status\": \"Completed\"}",
+        "response": "Sunrise Energy's EV Infrastructure project was completed on June 22, 2025."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"asset\": \"Printer A4\", \"last_maintenance\": \"2025-05-10\", \"next_maintenance\": \"2025-08-10\", \"status\": \"Operational\"}",
+        "response": "Printer A4 is operational. Its last maintenance was on May 10, 2025 and the next is scheduled for August 10, 2025."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"name\": \"LEAD-1032\", \"lead_name\": \"Mohammed Al Razi\", \"status\": \"Converted\", \"source\": \"Website\"}",
+        "response": "Lead Mohammed Al Razi (LEAD-1032) came from the website and has been converted."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"employee\": \"EMP-3021\", \"present_days\": 20, \"leave_days\": 2, \"working_days\": 22}",
+        "response": "Employee EMP-3021 was present for 20 out of 22 working days and took 2 days off."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"employee\": \"EMP-023\", \"employee_name\": \"Imran Saeed\", \"doj\": \"2023-03-12\", \"resigned\": true}",
+        "response": "Employee Imran Saeed (EMP-023), who joined on March 12, 2023, has resigned."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: []",
+        "response": "No records found."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"project\": \"Solar Setup\", \"completion\": 100, \"status\": \"Completed\"}",
+        "response": "The 'Solar Setup' project is completed with 100% progress."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"attendance\": {\"employee\": \"EMP-055\", \"present\": 21, \"absent\": 1, \"leave\": 2}}",
+        "response": "Employee EMP-055 was present for 21 days, absent for 1 day, and on leave for 2 days."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"doctype\": \"Invoice\", \"count\": 0}",
+        "response": "There are no invoices found."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"asset\": \"Printer A4\", \"last_maintenance\": \"2025-05-10\", \"next_maintenance\": \"2025-08-10\", \"status\": \"Operational\"}",
+        "response": "Printer A4 is operational. Its last maintenance was on May 10, 2025 and the next is scheduled for August 10, 2025."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"name\": \"LEAD-1032\", \"lead_name\": \"Mohammed Al Razi\", \"status\": \"Converted\", \"source\": \"Website\"}",
+        "response": "Lead Mohammed Al Razi (LEAD-1032) came from the website and has been converted."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"employee\": \"EMP-3021\", \"present_days\": 20, \"leave_days\": 2, \"working_days\": 22}",
+        "response": "Employee EMP-3021 was present for 20 out of 22 working days and took 2 days off."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"employee\": \"EMP-023\", \"employee_name\": \"Imran Saeed\", \"doj\": \"2023-03-12\", \"resigned\": true}",
+        "response": "Employee Imran Saeed (EMP-023), who joined on March 12, 2023, has resigned."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: []",
+        "response": "No records found."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"project\": \"Solar Setup\", \"completion\": 100, \"status\": \"Completed\"}",
+        "response": "The 'Solar Setup' project is completed with 100% progress."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"attendance\": {\"employee\": \"EMP-055\", \"present\": 21, \"absent\": 1, \"leave\": 2}}",
+        "response": "Employee EMP-055 was present for 21 days, absent for 1 day, and on leave for 2 days."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"doctype\": \"Invoice\", \"count\": 0}",
+        "response": "There are no invoices found."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"user\": \"john@example.com\", \"role\": \"Accounts Manager\", \"last_login\": \"2025-07-09 08:45:00\"}",
+        "response": "User john@example.com has the role of Accounts Manager and last logged in at 8:45 AM on July 9, 2025."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"payments\": [{\"invoice\": \"INV-901\", \"amount\": 2000, \"mode\": \"Bank Transfer\"}, {\"invoice\": \"INV-902\", \"amount\": 1500, \"mode\": \"Cash\"}]}",
+        "response": "Payments recorded: 2000 via Bank Transfer for INV-901 and 1500 via Cash for INV-902."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"is_valid\": false, \"reason\": \"Customer not found\"}",
+        "response": "Invalid operation: Customer not found."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"customer\": \"TechNova\", \"orders\": []}",
+        "response": "TechNova has not placed any orders yet."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"workflow\": {\"name\": \"Leave Approval\", \"steps\": [\"Applied\", \"Manager Approval\", \"HR Approval\", \"Approved\"]}}",
+        "response": "The Leave Approval workflow consists of the following steps: Applied, Manager Approval, HR Approval, and Approved."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"name\": \"PR-1005\", \"doctype\": \"Purchase Receipt\", \"status\": \"Draft\"}",
+        "response": "Purchase Receipt PR-1005 is currently in Draft status."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"item_code\": \"ITEM-789\", \"stock_qty\": 0, \"reorder_level\": 5}",
+        "response": "Item ITEM-789 is out of stock and below the reorder level of 5."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"doctype\": \"Employee\", \"name\": \"EMP-200\", \"field_errors\": {\"email\": \"Invalid format\", \"date_of_joining\": \"Cannot be in the future\"}}",
+        "response": "Employee EMP-200 has field errors: Email format is invalid, and the joining date cannot be in the future."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"doctype\": \"Customer\", \"total_count\": 3, \"results\": [{\"name\": \"CUST-001\", \"customer_name\": \"Delta Corp\"}, {\"name\": \"CUST-002\", \"customer_name\": \"Nova Ltd\"}, {\"name\": \"CUST-003\", \"customer_name\": \"Orion Pvt\"}]}",
+        "response": "There are 3 customers: Delta Corp, Nova Ltd, and Orion Pvt."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"item\": \"Steel Rod\", \"serial_numbers\": []}",
+        "response": "Steel Rod has no assigned serial numbers."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"file_uploaded\": true, \"file_url\": \"/files/invoice_INV-784.pdf\"}",
+        "response": "File uploaded successfully. Accessible at /files/invoice_INV-784.pdf."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"employee\": \"EMP-110\", \"tasks\": null}",
+        "response": "No tasks assigned to employee EMP-110."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"error\": \"Permission Denied\", \"reason\": \"User lacks read access\"}",
+        "response": "Permission denied: User lacks read access."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"report_name\": \"Monthly Sales\", \"status\": \"Failed\", \"error_log\": \"Column 'amount' not found\"}",
+        "response": "The 'Monthly Sales' report failed due to missing column 'amount'."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"supplier\": \"SUP-009\", \"status\": \"Blacklisted\", \"reason\": \"Repeated delays\"}",
+        "response": "Supplier SUP-009 is blacklisted due to repeated delays."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"user\": \"admin@example.com\", \"enabled\": true, \"roles\": [\"System Manager\", \"HR User\"]}",
+        "response": "User admin@example.com is active and has roles: System Manager and HR User."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"doctype\": \"Leave Application\", \"fields\": [\"employee\", \"from_date\", \"to_date\", \"status\"]}",
+        "response": "Leave Application contains fields like employee, from_date, to_date, and status."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"leave_days\": 0, \"message\": \"No leave balance available\"}",
+        "response": "The employee has no leave balance available."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"name\": \"TASK-056\", \"subject\": \"Server Migration\", \"status\": \"Completed\", \"owner\": null}",
+        "response": "Task 'Server Migration' (TASK-056) is completed, but owner information is missing."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: [{\"item_code\": \"ITM-001\", \"qty\": 5}, {\"item_code\": \"ITM-002\", \"qty\": 10}]",
+        "response": "Two items returned: 5 units of ITM-001 and 10 units of ITM-002."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"doctype\": \"Sales Order\", \"count\": 0}",
+        "response": "There are no Sales Order records available."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"message\": \"DocType not found\", \"code\": 404}",
+        "response": "Error: DocType not found (404)."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"item_name\": \"Copper Wire\", \"warehouse\": \"Central Store\", \"available_qty\": 0}",
+        "response": "Copper Wire is currently out of stock in Central Store."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"batch_no\": \"BATCH-2025A\", \"expiry_date\": null, \"valid\": false}",
+        "response": "Batch BATCH-2025A is invalid or has missing expiry information."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"record_type\": \"Timesheet\", \"duration_hours\": 8, \"billable\": true}",
+        "response": "A billable timesheet of 8 hours has been recorded."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"customer\": \"FreshMart\", \"outstanding_balance\": 0, \"last_payment\": \"2025-06-30\"}",
+        "response": "Customer FreshMart has no outstanding balance. The last payment was made on June 30, 2025."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"items\": [{\"item_code\": \"ITM-001\", \"qty\": 5}, {\"item_code\": \"ITM-002\", \"qty\": 10}]}",
+        "response": "The response includes 5 units of ITM-001 and 10 units of ITM-002."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"total_records\": 0}",
+        "response": "There are no records to display."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"invoice\": \"INV-888\", \"status\": \"Cancelled\"}",
+        "response": "Invoice INV-888 has been cancelled."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"success\": false, \"error\": \"Document not found\"}",
+        "response": "The operation failed: Document not found."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"purchase_order\": {\"po_no\": \"PO-5531\", \"supplier\": \"Galaxy Supplies\", \"items\": 4, \"total_amount\": 7800}}",
+        "response": "Purchase Order PO-5531 from Galaxy Supplies includes 4 items totaling 7800."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"data\": [{\"task\": \"Design UI\", \"status\": \"Completed\"}, {\"task\": \"Implement Backend\", \"status\": \"Pending\"}]}",
+        "response": "Design UI is completed, while Implement Backend is still pending."
+    },
+    {
+        "prompt": "Convert response to natural language\nInput: {\"attendance\": {\"employee\": \"EMP-903\", \"date\": \"2025-07-08\", \"status\": \"Half Day\"}}",
+        "response": "Employee EMP-903 marked half-day attendance on July 8, 2025."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"grand_total\": 5300}",
+        "response": "The grand total is 5300."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"exists\": true}",
+        "response": "The record exists."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: 12",
+        "response": "There are 12 records matching the criteria."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: [{\"subject\": \"Leave request\", \"status\": \"Pending\"}, {\"subject\": \"Reimbursement\", \"status\": \"Approved\"}]",
+        "response": "There are two issues: one pending leave request and one approved reimbursement."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"name\": \"INV-5001\", \"customer\": \"Gulf Traders\", \"grand_total\": 9500, \"items\": [{\"item_code\": \"CABLE-10M\", \"qty\": 3, \"amount\": 4500}, {\"item_code\": \"ROUTER-AC\", \"qty\": 2, \"amount\": 5000}]}",
+        "response": "Invoice INV-5001 for Gulf Traders totals 9500 and includes 3 units of CABLE-10M and 2 units of ROUTER-AC."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: [{\"customer\": \"GreenTech\", \"total\": 12000}, {\"customer\": \"Infotech\", \"total\": 11000}, {\"customer\": \"Zen Corp\", \"total\": 10500}]",
+        "response": "Top customers by sales are: GreenTech with 12,000, Infotech with 11,000, and Zen Corp with 10,500."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"customer\": \"GlobalLink\", \"status\": \"Overdue\"}",
+        "response": "GlobalLink has an overdue status."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"name\": \"SHIP-991\", \"delayed\": true, \"delay_reason\": \"Weather disruption\"}",
+        "response": "Shipment SHIP-991 is delayed due to weather disruption."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: []",
+        "response": "No records were found."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"payment_status\": \"Paid\", \"payment_date\": null}",
+        "response": "The payment is marked as paid, but the payment date is missing."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"project\": \"AI Upgrade\", \"completion\": 92, \"milestone\": \"Testing Phase\", \"status\": \"Ongoing\"}",
+        "response": "The AI Upgrade project is 92% complete and currently in the Testing Phase."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"location\": \"Doha Warehouse\", \"stock_items\": [{\"item\": \"Laptop\", \"qty\": 20}, {\"item\": \"Router\", \"qty\": 10}]}",
+        "response": "Doha Warehouse has 20 laptops and 10 routers in stock."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"shipment_id\": \"SHIP-8001\", \"status\": \"Delivered\", \"delivered_on\": \"2025-07-08\"}",
+        "response": "Shipment SHIP-8001 was delivered on July 8, 2025."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"invoice_id\": \"INV-7002\", \"client\": \"BlueOcean\", \"status\": \"Cancelled\", \"amount\": 3000}",
+        "response": "Invoice INV-7002 for BlueOcean was cancelled. The total was 3000."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"assigned_to\": \"Farah\", \"ticket_id\": \"T-512\", \"issue\": \"Login Failure\", \"priority\": \"High\", \"status\": \"In Progress\"}",
+        "response": "Ticket T-512 (High priority login failure) is currently being handled by Farah."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"customer\": \"Zen Corp\", \"recent_orders\": []}",
+        "response": "Zen Corp has no recent orders."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"project\": \"IoT Rollout\", \"milestones\": [{\"title\": \"Prototype\", \"status\": \"Completed\"}, {\"title\": \"Pilot Test\", \"status\": \"Ongoing\"}, {\"title\": \"Full Deployment\", \"status\": \"Pending\"}]}",
+        "response": "The IoT Rollout project has completed the prototype, is currently pilot testing, and is pending full deployment."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"employee\": \"Ahmed\", \"attendances\": [{\"date\": \"2025-07-01\", \"status\": \"Present\"}, {\"date\": \"2025-07-02\", \"status\": \"Leave\"}, {\"date\": \"2025-07-03\", \"status\": \"Present\"}]}",
+        "response": "Ahmed was present on July 1 and 3, and on leave on July 2."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"invoice_id\": \"INV-1111\", \"amount\": 2300, \"status\": \"Overdue\"}",
+        "response": "Invoice INV-1111 of amount 2300 is currently overdue."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"stock_item\": \"Smartphones\", \"available\": 14, \"reserved\": 4}",
+        "response": "There are 14 smartphones in stock, with 4 already reserved."
+    },
+    {
+        "prompt": "Convert the following data into a user-friendly sentence:\nInput: {\"shipment\": \"SHIP-3030\", \"origin\": \"Dubai Port\", \"destination\": \"Manama Depot\", \"fragile\": false}",
+        "response": "Shipment SHIP-3030 is traveling from Dubai Port to Manama Depot and is not marked as fragile."
+    }
+]
