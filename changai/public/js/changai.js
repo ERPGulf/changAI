@@ -1,258 +1,244 @@
-// Copyright (c) 2025, ERpGulf and contributors
-// For license information, please see license.txt
-$(document).ready(function () {
-            if (!$('#chat-window').length) {
-                $('body').append(`
-                    <div id="chat-window" style="display: none;">
-                        <div id="chat-header">
-                            <div class="chat-header-container">
-                                <span># changai</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black" class="bi bi-robot" viewBox="0 0 16 16">
-                                    <path d="M6 12.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5M3 8.062C3 6.76 4.235 5.765 5.53 5.886a26.6 26.6 0 0 0 4.94 0C11.765 5.765 13 6.76 13 8.062v1.157a.93.93 0 0 1-.765.935c-.845.147-2.34.346-4.235.346s-3.39-.2-4.235-.346A.93.93 0 0 1 3 9.219zm4.542-.827a.25.25 0 0 0-.217.068l-.92.9a25 25 0 0 1-1.871-.183.25.25 0 0 0-.068.495c.55.076 1.232.149 2.02.193a.25.25 0 0 0 .189-.071l.754-.736.847 1.71a.25.25 0 0 0 .404.062l.932-.97a25 25 0 0 0 1.922-.188.25.25 0 0 0-.068-.495c-.538.074-1.207.145-1.98.189a.25.25 0 0 0-.166.076l-.754.785-.842-1.7a.25.25 0 0 0-.182-.135"/>
-                                    <path d="M8.5 1.866a1 1 0 1 0-1 0V3h-2A4.5 4.5 0 0 0 1 7.5V8a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1v1a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-1a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1v-.5A4.5 4.5 0 0 0 10.5 3h-2zM14 7.5V13a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7.5A3.5 3.5 0 0 1 5.5 4h5A3.5 3.5 0 0 1 14 7.5"/>
-                                </svg>
-                            </div>
-                            <button id="close-chat">✖</button>
-                        </div>
-                        <div id="chat-messages" class="no-scrollbar"></div>
-                        <div id="chat-input-container">
-                            <input type="text" id="chat-input" placeholder="Type a message...">
-                            <button id="send-button">➤</button>
-                        </div>
-                    </div>
-                `);
-                if (!$('#floating-chat-button').length) {
-                    $('body').append(`
-                        <div id="floating-chat-button">
-                            <i class="fa fa-comments"></i>
-                        </div>
-                    `);
-    
-                    $('#floating-chat-button').on('click', function() {
-                        toggleChatWindow();
-                    });
+// Insert chatbot HTML template into body
+document.addEventListener('DOMContentLoaded', () => {
+    const chatbotHTML = `
+  <button id="chatbot-toggler" class="chatbot-toggler">
+    <span class="material-symbols-rounded" id="chatbot-toggle-icon">mode_comment</span>
+  </button>
+
+  <div class="chatbot-popup" id="chatbot-popup">
+    <div class="chat-header">
+      <div class="header-info">
+        <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 1024 1024">
+          <path d="M738.3 287.6H285.7c-59 0-106.8 47.8-106.8 106.8v303.1c0 59 47.8 106.8 106.8 106.8h81.5v111.1c0 .7.8 1.1 1.4.7l166.9-110.6 41.8-.8h117.4l43.6-.4c59 0 106.8-47.8 106.8-106.8V394.5c0-59-47.8-106.9-106.8-106.9zM351.7 448.2c0-29.5 23.9-53.5 53.5-53.5s53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5-53.5-23.9-53.5-53.5zm157.9 267.1c-67.8 0-123.8-47.5-132.3-109h264.6c-8.6 61.5-64.5 109-132.3 109zm110-213.7c-29.5 0-53.5-23.9-53.5-53.5s23.9-53.5 53.5-53.5 53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5zM867.2 644.5V453.1h26.5c19.4 0 35.1 15.7 35.1 35.1v121.1c0 19.4-15.7 35.1-35.1 35.1h-26.5zM95.2 609.4V488.2c0-19.4 15.7-35.1 35.1-35.1h26.5v191.3h-26.5c-19.4 0-35.1-15.7-35.1-35.1zM561.5 149.6c0 23.4-15.6 43.3-36.9 49.7v44.9h-30v-44.9c-21.4-6.5-36.9-26.3-36.9-49.7 0-28.6 23.3-51.9 51.9-51.9s51.9 23.3 51.9 51.9z"/>
+        </svg>
+        <h2 class="logo-text">Changai</h2>
+      </div>
+      <button id="chatbot-close-btn" class="material-symbols-rounded" title="Close">keyboard_arrow_down</button>
+    </div>
+
+    <div class="tab_box">
+      <button id="tab-chat" class="tab_btn active">Chat</button>
+      <button id="tab-debug" class="tab_btn">Debug</button>
+    </div>
+
+    <div class="chat-body" id="chat-body">
+
+      <div id="chat-messages"></div>
+    </div>
+
+    <div class="chat-footer">
+      <form id="chat-form" class="chat-form" autocomplete="off">
+        <input type="text" id="chat-input" class="message-input" placeholder="Message..." required />
+        <button type="submit" class="material-symbols-rounded">arrow_upward</button>
+      </form>
+    </div>
+  </div>
+  `;
+
+    document.body.insertAdjacentHTML('beforeend', chatbotHTML);
+    const API_URL = "https://hyrin.erpgulf.com:7061/api/method/changai.changai.api.prediction_pipeline.fetch_data_from_server"
+
+    let showChatbot = false;
+    let activeTab = 'chat';
+    const chatHistory = [];
+    const debugLogs = [];
+    let welcomeShown = false;
+
+    const chatbotPopup = document.getElementById('chatbot-popup');
+    const chatbotToggler = document.getElementById('chatbot-toggler');
+    const toggleIcon = document.getElementById('chatbot-toggle-icon');
+    const closeBtn = document.getElementById('chatbot-close-btn');
+    const tabChatBtn = document.getElementById('tab-chat');
+    const tabDebugBtn = document.getElementById('tab-debug');
+    const chatMessagesContainer = document.getElementById('chat-body');
+    const chatForm = document.getElementById('chat-form');
+    const chatInput = document.getElementById('chat-input');
+
+
+    function renderMessages() {
+        const container = document.getElementById('chat-messages');
+        container.innerHTML = '';
+
+        if (activeTab === 'chat') {
+            // ✅ Add welcome message only once
+
+            const welcome = document.createElement('div');
+            welcome.className = 'messageCon bot-message';
+            welcome.innerHTML = `
+  <div class="messageCon bot-message">
+    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 1024 1024">
+      <path d="M738.3 287.6H285.7c-59 0-106.8 47.8-106.8 106.8v303.1c0 59 47.8 106.8 106.8 106.8h81.5v111.1c0 .7.8 1.1 1.4.7l166.9-110.6 41.8-.8h117.4l43.6-.4c59 0 106.8-47.8 106.8-106.8V394.5c0-59-47.8-106.9-106.8-106.9zM351.7 448.2c0-29.5 23.9-53.5 53.5-53.5s53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5-53.5-23.9-53.5-53.5zm157.9 267.1c-67.8 0-123.8-47.5-132.3-109h264.6c-8.6 61.5-64.5 109-132.3 109zm110-213.7c-29.5 0-53.5-23.9-53.5-53.5s23.9-53.5 53.5-53.5 53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5zM867.2 644.5V453.1h26.5c19.4 0 35.1 15.7 35.1 35.1v121.1c0 19.4-15.7 35.1-35.1 35.1h-26.5zM95.2 609.4V488.2c0-19.4 15.7-35.1 35.1-35.1h26.5v191.3h-26.5c-19.4 0-35.1-15.7-35.1-35.1zM561.5 149.6c0 23.4-15.6 43.3-36.9 49.7v44.9h-30v-44.9c-21.4-6.5-36.9-26.3-36.9-49.7 0-28.6 23.3-51.9 51.9-51.9s51.9 23.3 51.9 51.9z" />
+    </svg>
+    <p class="message-text">Hello there 👋 I am Changai, your ERP assistant</p>
+  </div>
+`;
+
+            container.appendChild(welcome);
+            chatHistory.forEach(msg => {
+                const div = document.createElement('div');
+                div.className = `messageCon ${msg.role === 'user' ? 'user-message' : 'bot-message'}`;
+                if (msg.role === 'model') {
+                    div.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 1024 1024">
+      <path d="M738.3 287.6H285.7c-59 0-106.8 47.8-106.8 106.8v303.1c0 59 47.8 106.8 106.8 106.8h81.5v111.1c0 .7.8 1.1 1.4.7l166.9-110.6 41.8-.8h117.4l43.6-.4c59 0 106.8-47.8 106.8-106.8V394.5c0-59-47.8-106.9-106.8-106.9zM351.7 448.2c0-29.5 23.9-53.5 53.5-53.5s53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5-53.5-23.9-53.5-53.5zm157.9 267.1c-67.8 0-123.8-47.5-132.3-109h264.6c-8.6 61.5-64.5 109-132.3 109zm110-213.7c-29.5 0-53.5-23.9-53.5-53.5s23.9-53.5 53.5-53.5 53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5zM867.2 644.5V453.1h26.5c19.4 0 35.1 15.7 35.1 35.1v121.1c0 19.4-15.7 35.1-35.1 35.1h-26.5zM95.2 609.4V488.2c0-19.4 15.7-35.1 35.1-35.1h26.5v191.3h-26.5c-19.4 0-35.1-15.7-35.1-35.1zM561.5 149.6c0 23.4-15.6 43.3-36.9 49.7v44.9h-30v-44.9c-21.4-6.5-36.9-26.3-36.9-49.7 0-28.6 23.3-51.9 51.9-51.9s51.9 23.3 51.9 51.9z" />
+    </svg>
+    <p class="message-text">${msg.text}</p>
+    `;
+                } else {
+                    div.innerHTML = `<p class="message-text">${msg.text}</p>`;
                 }
-                let chatOpen = localStorage.getItem("chatOpen");
-                if (chatOpen === "true") {
-                    $('#chat-window').show();
-                }
-                $('#close-chat').on('click', function() {
-                    console.log("Hiding Chat Window...");
-                    $('#chat-window').fadeOut();
-                    localStorage.setItem("chatOpen", "false");
-                });
-                $('#send-button').on('click', function() {
-                    sendMessage();
-                });
-                $('#chat-input').on('keypress', function(event) {
-                    if (event.which === 13) {
-                        sendMessage();
-                    }
-                });
-                loadChatHistory();
-                setTimeout(() => {
-                    scrollToBottom();
-                }, 300);
-            }
-        });
-
-function toggleChatWindow() {
-    let chatWindow = $('#chat-window');
-    let chatButton = $('#floating-chat-button');
-
-    if (chatWindow.is(':visible')) {
-        chatWindow.fadeOut(300, function() {
-            chatButton.fadeIn(300);
-        });
-    } else {
-        let buttonPosition = chatButton.offset();
-
-        chatWindow.css({
-            bottom: $(window).height() - buttonPosition.top - chatButton.outerHeight(),
-            right: $(window).width() - buttonPosition.left - chatButton.outerWidth()
-        });
-
-        chatButton.fadeOut(200, function() {
-            chatWindow.fadeIn(300).addClass('fadeIn');
-        });
-    }
-}
-$(document).on('click', '#close-chat', function() {
-    console.log("Closing Chat...");
-    $('#chat-window').fadeOut(300, function() {
-        $('#floating-chat-button').fadeIn(300);
-    });
-});
-function getFormattedTimestamp() {
-    let now = new Date();
-    let hours = now.getHours();
-    let minutes = now.getMinutes();
-    let ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12 || 12;
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    let timeString = `${hours}:${minutes} ${ampm}`;
-    let dateString = now.toLocaleDateString("en-GB", { day: 'numeric', month: 'long', year: 'numeric' });
-    return { date: dateString, time: timeString };
-}
-function sendMessage() {
-    let inputField = $('#chat-input');
-    let message = inputField.val().trim();
-    if (message === "") return;
-    let timestamp = getFormattedTimestamp();
-    let chatMessages = $('#chat-messages');
-    let savedChat = localStorage.getItem("chatHistory");
-    let messages = savedChat ? JSON.parse(savedChat) : [];
-    let lastMessageDate = chatMessages.children(".chat-date:last").text();
-    if (lastMessageDate !== timestamp.date) {
-        chatMessages.append(`<div class="chat-date">${timestamp.date}</div>`);
-        messages.push({ date: timestamp.date, type: "separator" });
-    }
-    chatMessages.append(`
-        <div class="userchat-message user-message">
-            <div class="chat-header-container">
-                    <div class="chat-header">
-                        <span class="message-username">Administrator</span>
-                        <span class="timestamp">${timestamp.time}</span>
-                    </div>
-            </div>
-            <div class="chat-message-container user-container">
-                <p class="message-text">${message}</p>
-            </div>
-        </div>
-    `);
-    messages.push({
-        sender: "Administrator",
-        timestamp: timestamp.time,
-        text: message,
-        date: timestamp.date
-    });
-
-    localStorage.setItem("chatHistory", JSON.stringify(messages));
-    inputField.val("");
-    scrollToBottom();
-    chatMessages.append(`
-        <div id="typing-indicator" class="chat-message ai-message">
-            <div class="chat-header">
-                    <span class="message-username">Changai</span>
-                    <span class="timestamp">${getFormattedTimestamp().time}</span>
-            </div>
-            <div class="typing-indicator">
-                <span></span><span></span><span></span>
-            </div>
-        </div>
-    `);
-    scrollToBottom();
-    frappe.call({
-        method: "changai.public.python.changai.query_huggingface",
-        args: { user_input: message },
-        async: true,
-        callback: function(response) {
-            $('#typing-indicator').remove();
-            if (response && response.message && response.message.success) {
-                console.log("Raw Response from Model:", response.message.response);
-                let aiTimestamp = getFormattedTimestamp();
-                let chat_response = response.message.response
-                .replace(/\\n/g, "<br>")
-                // .replace(/\\"/g, '"')
-                .replace(/\/\/.*/g, "")
-                .trim();
-
-                chatMessages.append(`
-                    <div class="chat-message ai-message">
-                        <div class="chat-header-container">
-                            <div class="chat-header">
-                                <span class="message-username">Changai</span>
-                                <span class="timestamp">${getFormattedTimestamp().time}</span>
-                            </div>
-                        </div>
-                        <div class="chat-message-container">
-                            <p class="message-text">${chat_response}</p>
-                        </div>
-                    </div>
-                `);
-                messages.push({
-                    sender: "Changai",
-                    timestamp: aiTimestamp.time,
-                    text: chat_response,
-                    date: aiTimestamp.date
-                });
-
-                localStorage.setItem("chatHistory", JSON.stringify(messages));
-            } else {
-                console.error("Error in API Response:", response);
-                chatMessages.append(`
-                    <div class="chat-message error-message">
-                        <p class="message-text">⚠️ Changai failed to respond. Please try again.</p>
-                    </div>
-                `);
-            }
-            scrollToBottom();
-        },
-        error: function(xhr, status, error) {
-            console.error("API Call Failed:", error);
-            chatMessages.append(`
-                <div class="chat-message error-message">
-                    <p class="message-text">🚨 Server error! Please refresh and try again.</p>
-                </div>
-            `);
+                container.appendChild(div);
+                // scrollToBottom()
+            });
         }
-    });
-} 
-function saveChatHistory() {
-    let messages = [];
-    $('#chat-messages .userchat-message').each(function() {
-        let messageDate = $(this).prev('.chat-date').text().trim();
-        messages.push({
-            sender: $(this).find('.message-username').text(),
-            timestamp: $(this).find('.timestamp').text(),
-            text: $(this).find('.message-text').text(),
-            date: messageDate
-        });
-    });
 
-    localStorage.setItem("chatHistory", JSON.stringify(messages));
-}
-function scrollToBottom() {
-    let chatMessages = $('#chat-messages');
-    chatMessages.animate({ scrollTop: chatMessages.prop("scrollHeight") }, 500); /* Smooth animation */
-}
+        else if (activeTab === 'debug') {
+            if (debugLogs.length === 0) {
+                const p = document.createElement('p');
+                p.className = 'message-text';
+                p.textContent = 'No debug data yet.';
+                container.appendChild(p);
+            } else {
+                debugLogs.forEach(log => {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'debug-query';
 
-function loadChatHistory() {
-    let savedChat = localStorage.getItem("chatHistory");
-    if (savedChat) {
-        let messages = JSON.parse(savedChat);
-        let chatMessages = $('#chat-messages');
-        chatMessages.html("");
+                    const pre = document.createElement('pre');
+                    pre.className = 'message-text';
+                    pre.textContent = JSON.stringify(log, null, 2);
 
-        let lastDate = "";
-
-        messages.forEach(msg => {
-            if (!msg.sender || !msg.text || !msg.timestamp) {
-                return;
+                    wrapper.appendChild(pre);
+                    container.appendChild(wrapper);
+                });
             }
-            if (msg.date !== lastDate) {
-                chatMessages.append(`<div class="chat-date">${msg.date}</div>`);
-                lastDate = msg.date;
-            }
-            let messageType = msg.sender.toLowerCase() === "administrator" ? "user-message" : "ai-message";
-            let messageClass = msg.sender.toLowerCase() === "administrator" ? "userchat-message" : "chat-message";
-            chatMessages.append(`
-                <div class="${messageClass} ${messageType}">
-                    <div class="message-header">
-                        <span class="message-username">${msg.sender}</span>
-                        <span class="timestamp">${msg.timestamp}</span>
-                    </div>
-                    <div class="chat-message-container ${messageType}">
-                        <p class="message-text">${msg.text}</p>
-                    </div>
-                </div>
-            `);
-        });
-        setTimeout(() => {
-            $('.user-message .chat-message-container').css("background", "#DCF8C6");
-            $('.ai-message .chat-message-container').css("background", "#FFFFFF");
-            scrollToBottom();
-        }, 50);
+        }
+
     }
-}
+    async function generateBotResponse(history, userMsg) {
+        async function updateHistory(text) {
+            const filtered = chatHistory.filter(m => m.text !== "Thinking...");
+            chatHistory.length = 0;
+            chatHistory.push(...filtered, { role: "model", text });
+        }
 
+        try {
+            const API_URL = await frappe.db.get_single_value("Settings", "backend_url");
+            const reqOpts = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Frappe-CSRF-Token": frappe.csrf_token
+                },
+                body: JSON.stringify({ qstn: userMsg }),
+            };
+            const res = await fetch(API_URL, reqOpts);
+            const data = await res.json();
+            if (!res.ok) {
+                console.error("Backend Error Response:", data);
+                throw new Error(data.message?.error || "Something went wrong!!");
+            }
+            let responseText = "";
+
+            if (data.message?.response) {
+                responseText = data.message.response;
+            } else if (data.message?.query_data) {
+                responseText = data.message.query_data;
+            } else {
+                responseText = "No valid response from server.";
+            }
+
+            updateHistory(responseText);
+            debugLogs.push({
+                user: userMsg,
+                response: responseText,
+                doctype: data.message?.doctype,
+                top_fields: data.message?.top_fields,
+                fields: data.message?.fields,
+                query: data.message?.query,
+                data: data.message?.data
+            });
+            renderMessages();
+            scrollToBottom();
+
+        } catch (error) {
+            console.error("API Error:", error);
+            const filtered = chatHistory.filter(m => m.text !== "Thinking...");
+            chatHistory.length = 0;
+            chatHistory.push(...filtered, { role: "model", text: error.message });
+            debugLogs.push({ user: userMsg, error: error.message });
+            renderMessages();
+            scrollToBottom();
+        }
+    }
+
+
+    async function setChatHistory(message) {
+        chatHistory.push({ role: 'user', text: message });
+        renderMessages();
+        scrollToBottom();
+        setTimeout(() => {
+            chatHistory.push({ role: 'model', text: 'Thinking...' });
+            renderMessages();
+            scrollToBottom();
+            generateBotResponse([...chatHistory, { role: 'user', text: message }], message);
+        }, 600);
+    }
+
+    function scrollToBottom() {
+        chatMessagesContainer.scrollTo({
+            top: chatMessagesContainer.scrollHeight,
+            behavior: 'smooth',
+        });
+    }
+
+    function toggleChatbot(forceShow) {
+        const shouldShow = typeof forceShow === 'boolean' ? forceShow : !chatbotPopup.classList.contains('show');
+
+        if (shouldShow) {
+            chatbotPopup.classList.add('show');
+            chatbotToggler.classList.add('show');
+            toggleIcon.textContent = 'close';
+
+            // ✅ Call renderMessages here
+            renderMessages();
+
+            scrollToBottom(); // optional, if you want to scroll
+
+        } else {
+            chatbotPopup.classList.remove('show');
+            chatbotToggler.classList.remove('show');
+            toggleIcon.textContent = 'mode_comment';
+        }
+    }
+
+    chatbotToggler.addEventListener('click', () => toggleChatbot());
+
+    closeBtn.addEventListener('click', () => toggleChatbot(false));
+
+    chatForm.addEventListener('submit', e => {
+        e.preventDefault();
+        const message = chatInput.value.trim();
+        if (!message) return;
+        chatInput.value = '';
+        setChatHistory(message);
+    });
+
+    tabChatBtn.addEventListener('click', () => {
+        activeTab = 'chat';
+        tabChatBtn.classList.add('active');
+        tabDebugBtn.classList.remove('active');
+        // Show chat; clear debug if needed
+        renderMessages();
+    });
+
+    tabDebugBtn.addEventListener('click', () => {
+        activeTab = 'debug';
+        tabDebugBtn.classList.add('active');
+        tabChatBtn.classList.remove('active');
+        renderMessages();
+
+    });
+
+    // Initially hide chatbot popup
+    toggleChatbot(false);
+});

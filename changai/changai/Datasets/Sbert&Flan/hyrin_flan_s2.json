@@ -1,0 +1,2247 @@
+[
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Who is the sales partner named 'BrightEdge Corp'?",
+      "top fields": [
+        "partner_name",
+        "territory",
+        "partner_type",
+        "referral_code"
+      ]
+    },
+    "output": []
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Give name , website link of  partner who referred 'NovaTech'?",
+      "top fields": [
+        "partner_name",
+        "website",
+        "referral_code",
+        "partner_website",
+        "partner_type"
+      ]
+    },
+    "output": ["partner_name", "website","referral_code"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "List all sales partners along with their names and commission percentages.",
+      "top fields": [
+        "partner_name",
+        "commission_rate",
+        "partner_type",
+        "territory"
+      ]
+    },
+    "output": [
+      "partner_name",
+      "commission_rate"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Identify the distributor with the partner name 'QatarSuppliers Ltd.'",
+      "top fields": [
+        "partner_name",
+        "partner_type",
+        "territory",
+        "description"
+      ]
+    },
+    "output": [
+      "partner_name"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Show me the names and types of all sales partners listed on the website.",
+      "top fields": [
+        "partner_name",
+        "partner_type",
+        "show_in_website",
+        "website"
+      ]
+    },
+    "output": [
+      "partner_name",
+      "partner_type",
+      "show_in_website"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Which partner with the name 'Omega Resale' has a commission rate above 10%?",
+      "top fields": [
+        "partner_name",
+        "commission_rate",
+        "referral_code",
+        "partner_type"
+      ]
+    },
+    "output": [
+      "partner_name",
+      "commission_rate"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Find all partners where the name contains the word 'Global'.",
+      "top fields": [
+        "partner_name",
+        "territory",
+        "description",
+        "partner_website"
+      ]
+    },
+    "output": [
+      "partner_name"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Give me a list of partner names and referral codes for email marketing.",
+      "top fields": [
+        "partner_name",
+        "referral_code",
+        "website",
+        "contact_desc"
+      ]
+    },
+    "output": [
+      "partner_name",
+      "referral_code"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "What is the partner name and their introduction text for 'MavenConnect'?",
+      "top fields": [
+        "partner_name",
+        "introduction",
+        "description",
+        "website"
+      ]
+    },
+    "output": [
+      "partner_name",
+      "introduction"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "What type of sales partner is 'EliteMark Inc.'—a distributor or a reseller?",
+      "top fields": [
+        "partner_type",
+        "partner_name",
+        "territory",
+        "commission_rate"
+      ]
+    },
+    "output": [
+      "partner_name","partner_type"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Show me all partners who are listed as commission agents.",
+      "top fields": [
+        "partner_type",
+        "partner_name",
+        "commission_rate",
+        "territory"
+      ]
+    },
+    "output": [
+      "partner_name","partner_type"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Which sales partners have the partner type set as affiliate?",
+      "top fields": [
+        "partner_type",
+        "partner_name",
+        "show_in_website",
+        "referral_code"
+      ]
+    },
+    "output": [
+     "partner_name","partner_type"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Find all dealer-type partners operating in the 'GCC' territory.",
+      "top fields": [
+        "partner_type",
+        "territory",
+        "partner_name",
+        "commission_rate"
+      ]
+    },
+    "output": [
+      "partner_name",
+      "partner_type",
+      "territory"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "What is the partner type associated with 'ResellXperts Pvt Ltd'?",
+      "top fields": [
+        "partner_name",
+        "partner_type",
+        "territory",
+        "referral_code"
+      ]
+    },
+    "output": [
+      "partner_name","partner_type"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Do we have any affiliates who referred new customers this quarter?",
+      "top fields": [
+        "partner_type",
+        "referral_code",
+        "commission_rate",
+        "territory"
+      ]
+    },
+    "output": [
+      "partner_type",
+      "referral_code"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "List all resellers whose websites are publicly visible on our portal.",
+      "top fields": [
+        "partner_type",
+        "show_in_website",
+        "partner_name",
+        "website"
+      ]
+    },
+    "output": [
+      "partner_name",
+      "partner_type",
+      "show_in_website"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Which partner types do we currently work with across all operational territories?",
+      "top fields": [
+        "partner_type",
+        "territory",
+        "partner_name",
+        "commission_rate"
+      ]
+    },
+    "output": [
+      "partner_type",
+      "territory"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Give me the names and partner types of every partner earning over 10% commission.",
+      "top fields": [
+        "partner_name",
+        "partner_type",
+        "commission_rate",
+        "referral_code"
+      ]
+    },
+    "output": [
+      "partner_name",
+      "partner_type",
+      "commission_rate"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Between resellers and distributors, which type has the higher count in our system?",
+      "top fields": [
+        "partner_type",
+        "partner_name",
+        "territory",
+        "show_in_website"
+      ]
+    },
+    "output": [
+      "partner_type"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Which region is 'Alpha Distributors' assigned to?",
+      "top fields": ["territory", "partner_name", "partner_type", "commission_rate"]
+    },
+    "output": ["territory"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Give me the territory and commission rate for 'Skyline Partners'.",
+      "top fields": ["territory", "commission_rate", "partner_name", "partner_type"]
+    },
+    "output": ["territory", "commission_rate"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "In which markets are our affiliate partners most active?",
+      "top fields": ["territory", "partner_type", "partner_name", "targets"]
+    },
+    "output": ["territory","partner_type"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "List partners operating in 'Southeast Asia' and show their partner type.",
+      "top fields": ["territory", "partner_type", "partner_name", "commission_rate"]
+    },
+    "output": ["territory", "partner_type","partner_name"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Find all sales partners assigned to the 'GCC' territory.",
+      "top fields": ["territory", "partner_name", "partner_type", "referral_code"]
+    },
+    "output": ["partner_name","territory"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "How many partners are listed under the 'Europe' territory?",
+      "top fields": ["territory", "partner_type", "partner_name", "commission_rate"]
+    },
+    "output": ["territory"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Which regions have the most commission agents listed?",
+      "top fields": ["territory", "partner_type", "commission_rate", "partner_name"]
+    },
+    "output": ["territory","partner_type"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "List the names and territories of all partners visible on our website.",
+      "top fields": ["partner_name", "territory", "show_in_website", "partner_type"]
+    },
+    "output": ["partner_name", "territory","show_in_website"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "What’s the combined list of regions covered by our resellers and distributors?",
+      "top fields": ["territory", "partner_type", "partner_name", "commission_rate"]
+    },
+    "output": ["territory","partner_type"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "What is the commission rate set for 'ResellXperts Pvt Ltd'?",
+      "top fields": ["commission_rate","territory", "partner_name", "partner_type"]
+    },
+    "output": ["commission_rate"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Can you show the address and contact details linked to 'SummitTrade Inc.'?",
+      "top fields": ["address_contacts", "partner_name", "territory", "partner_type"]
+    },
+    "output": ["address_contacts","partner_name"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Give me names and commission rates of partners who are resellers.",
+      "top fields": ["commission_rate", "partner_name", "territory", "partner_type"]
+    },
+    "output": ["commission_rate","partner_type","partner_name"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Is there a partner with 0% commission rate in the system?",
+      "top fields": ["commission_rate", "partner_name", "territory", "partner_type"]
+    },
+    "output": ["commission_rate"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Find all distributors with commission rates between 5% and 15%.",
+      "top fields": ["commission_rate", "partner_name", "territory", "partner_type"]
+    },
+    "output": ["partner_name","partner_type", "commission_rate"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Show partners with commission rates above 8% operating in 'South Asia'.",
+      "top fields": ["commission_rate", "partner_name", "territory", "partner_type"]
+    },
+    "output": ["partner_name", "commission_rate", "territory"]
+  },
+    {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Which partner offers the highest commission?",
+      "top fields": ["commission_rate","territory","partner_name", "partner_type"]
+    },
+    "output": ["commission_rate"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Do any of the top-performing partners have a commission rate below 5%?",
+      "top fields": ["commission_rate","territory","partner_name", "partner_type"]
+    },
+    "output": ["commission_rate"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Show partner names, types, and commission rates for website-visible partners.",
+      "top fields": ["commission_rate","show_in_website","partner_name", "partner_type","territory"]
+    },
+    "output": ["partner_type","show_in_website","partner_name","commission_rate"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Who are the partners with a commission rate of exactly 10.5%?",
+      "top fields": ["commission_rate", "partner_name", "territory", "partner_type"]
+    },
+    "output": ["commission_rate"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "List all sales partners with a commission rate above 12%.?",
+      "top fields": ["commission_rate", "territory", "partner_type","address_contacts"]
+    },
+    "output": ["commission_rate"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Which sales partners have more than one address or contact entry associated with them?",
+      "top fields": ["address_contacts", "partner_name", "territory", "partner_type"]
+    },
+    "output": ["address_contacts","partner_name"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "List all contact entries found under sales partners based in the UAE.",
+      "top fields": ["address_contacts", "territory", "partner_name", "partner_type"]
+    },
+    "output": ["address_contacts", "territory"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Are there any partners without any contact or address entries listed?",
+      "top fields": ["address_contacts", "partner_name", "show_in_website", "partner_type"]
+    },
+    "output": ["address_contacts"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Fetch the partner name, type, and all contact records for resellers in North America.",
+      "top fields": ["partner_name", "partner_type", "territory", "address_contacts", "contact_html", "partner_website"]
+    },
+    "output": ["partner_name", "partner_type", "territory", "address_contacts"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "How many contact records are stored for the partner 'GreenLink Pvt Ltd'?",
+      "top fields": ["address_contacts", "partner_name", "commission_rate", "territory"]
+    },
+    "output": ["partner_type", "address_contacts"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Give me a breakdown of sales partners and their total number of linked contact entries.",
+      "top fields": ["address_contacts", "partner_name", "partner_type", "referral_code"]
+    },
+    "output": ["address_contacts", "partner_name"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Do we have any distributors that haven’t added address contacts yet?",
+      "top fields": ["partner_type", "address_contacts", "territory", "show_in_website"]
+    },
+    "output": ["partner_type", "address_contacts"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Show me all partners whose address_contacts field includes both phone and email.",
+      "top fields": ["address_contacts", "contact_html", "partner_name", "partner_website"]
+    },
+    "output": ["address_contacts","partner_name"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "What contact information exists for partners with active referral codes and visible websites?",
+      "top fields": ["address_contacts", "referral_code", "show_in_website", "partner_name"]
+    },
+    "output": ["address_contacts", "referral_code", "show_in_website"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "What is the short address description for 'CoreLink Distributors'?",
+      "top fields": [
+        "address_desc",
+        "partner_name",
+        "territory",
+        "website"
+      ]
+    },
+    "output": [
+      "address_desc","partner_name"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Show the address_desc field for all listed partners.",
+      "top fields": [
+        "address_desc",
+        "partner_type",
+        "referral_code",
+        "description"
+      ]
+    },
+    "output": [
+      "address_desc"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Can I get the address description for every distributor we work with?",
+      "top fields": [
+        "address_desc",
+        "commission_rate",
+        "route",
+        "logo"
+      ]
+    },
+    "output": [
+      "address_desc","partner_type"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Which sales partners have their address_desc starting with 'Suite 3A'?",
+      "top fields": [
+        "address_desc",
+        "partner_website",
+        "contact_html",
+        "introduction"
+      ]
+    },
+    "output": [
+      "address_desc"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "List names and short address descriptions of partners based in Europe.",
+      "top fields": [
+        "address_desc",
+        "territory",
+        "targets",
+        "contact_desc",
+        "referral_code"
+      ]
+    },
+    "output": [
+      "address_desc", "territory","partner_type"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Get me address_desc and territory for all commission agents.",
+      "top fields": [
+        "address_desc",
+        "territory",
+        "introduction",
+        "partner_type"
+      ]
+    },
+    "output": [
+      "address_desc",
+      "territory",
+      "partner_type"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Does 'MarketWide Inc.' have an address description stored?",
+      "top fields": [
+        "address_desc",
+        "logo",
+        "website",
+        "partner_name"
+      ]
+    },
+    "output": [
+      "address_desc","partner_name"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Which partners don\u2019t have any address_desc provided?",
+      "top fields": [
+        "address_desc",
+        "partner_name",
+        "contact_desc",
+        "referral_code",
+        "route"
+      ]
+    },
+    "output": [
+      "address_desc","partner_name"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Export the partner name and address_desc of all affiliates in the system.",
+      "top fields": [
+        "address_desc",
+        "partner_name",
+        "route",
+        "introduction"
+      ]
+    },
+    "output": [
+      "address_desc",
+      "partner_name"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "What is the short address description for 'CoreLink Distributors'?",
+      "top fields": [
+        "address_desc",
+        "partner_name",
+        "territory",
+        "website"
+      ]
+    },
+    "output": [
+      "address_desc"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Show the address_desc field for all listed partners.",
+      "top fields": [
+        "address_desc",
+        "partner_type",
+        "referral_code",
+        "description"
+      ]
+    },
+    "output": [
+      "address_desc"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Can I get the address description for every distributor we work with?",
+      "top fields": [
+        "address_desc",
+        "commission_rate",
+        "route",
+        "logo"
+      ]
+    },
+    "output": [
+      "address_desc"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Which sales partners have their address_desc starting with 'Suite 3A'?",
+      "top fields": [
+        "address_desc",
+        "partner_website",
+        "contact_html",
+        "introduction"
+      ]
+    },
+    "output": [
+      "address_desc"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "List names and short address descriptions of partners based in Europe.",
+      "top fields": [
+        "address_desc",
+        "targets",
+        "territory",
+        "contact_desc",
+        "referral_code"
+      ]
+    },
+    "output": [
+      "address_desc","partner_name","territory"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Get me address_desc and territory for all commission agents.",
+      "top fields": [
+        "address_desc",
+        "partner_type",
+        "territory",
+        "introduction",
+        "show_in_website"
+      ]
+    },
+    "output": [
+      "address_desc",
+      "territory",
+      "partner_type"
+    ]
+  },
+
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Which partners don’t have any address_desc provided?",
+      "top fields": [
+        "address_desc",
+        "contact_desc",
+        "referral_code",
+        "route"
+      ]
+    },
+    "output": [
+      "address_desc"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Count the number of partners with 'No. 14' in their address description.",
+      "top fields": [
+        "address_desc",
+        "contact_html",
+        "description",
+        "partner_type"
+      ]
+    },
+    "output": [
+      "address_desc"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Export the partner name and address_desc of all affiliates in the system.",
+      "top fields": [
+        "address_desc",
+        "partner_name",
+        "partner_website",
+        "introduction"
+      ]
+    },
+    "output": [
+      "address_desc",
+      "partner_name",
+      "partner_type"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Can I see the contact description for 'FusionTrade Ltd'?",
+      "top fields": ["contact_desc", "partner_name", "website", "contact_html"]
+    },
+    "output": ["contact_desc"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "List all partners and their contact_desc fields.",
+      "top fields": ["contact_desc", "partner_name", "contact_html", "address_desc"]
+    },
+    "output": ["contact_desc"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Which partners have contact descriptions starting with 'Call'?",
+      "top fields": ["contact_desc", "contact_html", "description", "introduction"]
+    },
+    "output": ["contact_desc"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Get contact description and website for all distributor-type partners.",
+      "top fields": ["contact_desc", "website", "partner_type", "route"]
+    },
+    "output": ["contact_desc", "website"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Show contact and address description for affiliates in our system.",
+      "top fields": ["contact_desc", "address_desc", "partner_type", "referral_code"]
+    },
+    "output": ["contact_desc", "address_desc"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "What’s the contact description for partners located in Asia?",
+      "top fields": ["contact_desc", "territory", "address_desc", "partner_name"]
+    },
+    "output": ["contact_desc"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Find all partners where contact description contains a phone number.",
+      "top fields": ["contact_desc", "contact_html", "description", "referral_code"]
+    },
+    "output": ["contact_desc"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Count how many partners have no contact description set.",
+      "top fields": ["contact_desc", "partner_name", "targets", "territory"]
+    },
+    "output": ["contact_desc"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Export the partner name and contact description of all resellers.",
+      "top fields": ["partner_name", "contact_desc", "partner_type", "commission_rate"]
+    },
+    "output": ["partner_name", "contact_desc"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Which partner has the contact description 'Email support@globex.com for queries'?",
+      "top fields": ["contact_desc", "contact_html", "website", "description"]
+    },
+    "output": ["contact_desc"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "What is the description given for 'Orbit Trade Solutions' in our partner records?",
+      "top fields": [
+        "description",
+        "partner_name",
+        "referral_code",
+        "route"
+      ]
+    },
+    "output": ["description"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "List all partners along with their descriptions.",
+      "top fields": [
+        "description",
+        "territory",
+        "partner_type",
+        "website"
+      ]
+    },
+    "output": ["description"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Which partners include the word 'logistics' in their description?",
+      "top fields": [
+        "description",
+        "introduction",
+        "address_desc",
+        "partner_name"
+      ]
+    },
+    "output": ["description"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Can you show the name and description of each partner based in Asia?",
+      "top fields": [
+        "description",
+        "partner_name",
+        "territory",
+        "logo"
+      ]
+    },
+    "output": ["partner_name","description"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Can you show the name and description of each partner based in Asia?",
+      "top fields": [
+        "description",
+        "partner_name",
+        "territory",
+        "logo"
+      ]
+    },
+    "output": ["partner_name","description"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Get me the description and partner type for affiliates in our list.",
+      "top fields": [
+        "description",
+        "partner_type",
+        "referral_code",
+        "contact_desc"
+      ]
+    },
+    "output": ["description","partner_type"]
+  },
+
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Do we have a partner with 'ecommerce' mentioned in the description?",
+      "top fields": [
+        "description",
+        "partner_website",
+        "route",
+        "logo"
+      ]
+    },
+    "output": ["description"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Compare the descriptions of 'BrightLeaf Group' and 'CoreBridge Alliance'.",
+      "top fields": [
+        "description",
+        "partner_name",
+        "address_desc",
+        "referral_code"
+      ]
+    },
+    "output": ["description"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Show me names and descriptions of all partners who earn over 15% commission.",
+      "top fields": [
+        "description",
+        "partner_name",
+        "contact_html",
+        "route"
+      ]
+    },
+    "output": ["description"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Show me names and descriptions of all partners who earn over 15% commission.",
+      "top fields": [
+        "description",
+        "partner_name",
+        "contact_html",
+        "route"
+      ]
+    },
+    "output": ["partner_name"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "What’s the official description of our partner 'LogiMax Pvt Ltd'?",
+      "top fields": [
+        "description",
+        "partner_type",
+        "introduction",
+        "contact_desc"
+      ]
+    },
+    "output": ["description"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Find all partners who have empty or missing descriptions.",
+      "top fields": [
+        "description",
+        "route",
+        "show_in_website",
+        "contact_html"
+      ]
+    },
+    "output": ["description"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "How much commission does 'TradeSphere Global' earn?",
+      "top fields": ["commission_rate", "partner_type", "partner_name", "website"]
+    },
+    "output": ["commission_rate","partner_name"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "List all sales partners earning more than 10% commission.",
+      "top fields": ["commission_rate", "territory", "logo", "description"]
+    },
+    "output": ["commission_rate"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "What’s the commission rate for our distributor 'BrightWave Solutions'?",
+      "top fields": ["commission_rate", "partner_type", "referral_code", "route","partner_name"]
+    },
+    "output": ["commission_rate","partner_name","partner_type"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Show names and commission percentages of all commission agents.",
+      "top fields": ["partner_name", "commission_rate", "partner_type", "referral_code"]
+    },
+    "output": ["partner_name", "partner_type","commission_rate"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Find partners earning less than or equal to 5% commission.",
+      "top fields": ["commission_rate", "partner_type", "territory", "logo"]
+    },
+    "output": ["commission_rate"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Is there any partner with exactly 12% commission?",
+      "top fields": ["commission_rate", "introduction", "territory", "referral_code"]
+    },
+    "output": ["commission_rate"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Give me the partner name, website, and commission percentage for all resellers.",
+      "top fields": ["partner_name", "website", "commission_rate", "partner_type"]
+    },
+    "output": ["partner_name","website","commission_rate"]
+    },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Compare the commission rates between 'TradeWing Pvt Ltd' and 'GlobalReach Partners'.",
+      "top fields": ["commission_rate", "partner_name", "targets", "logo"]
+    },
+    "output": ["commission_rate"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "What are the commission rates for all partners based in 'MENA' region?",
+      "top fields": ["commission_rate", "territory", "website", "contact_html"]
+    },
+    "output": ["commission_rate"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Are distributors earning more commission than affiliates?",
+      "top fields": ["commission_rate", "partner_type", "route", "referral_code"]
+    },
+    "output": ["commission_rate"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Show me the contact details displayed for 'Orbit Connect Pvt Ltd'.",
+      "top fields": [
+        "contact_html",
+        "website",
+        "partner_name",
+        "introduction"
+      ]
+    },
+    "output": [
+      "contact_html"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Which sales partners have formatted contact information available?",
+      "top fields": [
+        "contact_html",
+        "commission_rate",
+        "partner_type",
+        "referral_code"
+      ]
+    },
+    "output": [
+      "contact_html"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Do we store contact HTML for each partner profile?",
+      "top fields": [
+        "contact_html",
+        "description",
+        "address_desc",
+        "logo"
+      ]
+    },
+    "output": [
+      "contact_html"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Get a list of all partners with their HTML-based contact blocks.",
+      "top fields": [
+        "contact_html",
+        "partner_website",
+        "description",
+        "show_in_website"
+      ]
+    },
+    "output": [
+      "contact_html"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Which partners have both their formatted contacts and website links listed?",
+      "top fields": [
+        "contact_html",
+        "website",
+        "introduction",
+        "partner_type"
+      ]
+    },
+    "output": [
+      "contact_html",
+      "website"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Give me the contact block and territory for all resellers.",
+      "top fields": [
+        "contact_html",
+        "territory",
+        "partner_type",
+        "referral_code"
+      ]
+    },
+    "output": [
+      "contact_html",
+      "territory"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Find partners who have provided both contact HTML and introduction.",
+      "top fields": [
+        "contact_html",
+        "introduction",
+        "description",
+        "address_desc"
+      ]
+    },
+    "output": [
+      "contact_html",
+      "introduction"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "What are the targets set for each of our sales partners?",
+      "top fields": [
+        "targets",
+        "territory",
+        "partner_name",
+        "commission_rate"
+      ]
+    },
+    "output": [
+      "targets"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Give me the list of all partners along with their sales targets.",
+      "top fields": [
+        "partner_name",
+        "targets",
+        "territory",
+        "partner_type"
+      ]
+    },
+    "output": [
+      "partner_name",
+      "targets"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Show targets assigned to distributor-type partners across all territories.",
+      "top fields": [
+        "partner_type",
+        "targets",
+        "territory",
+        "partner_name"
+      ]
+    },
+    "output": [
+      "partner_type",
+      "targets"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Which partner has the highest sales target set for this year?",
+      "top fields": [
+        "partner_name",
+        "targets",
+        "territory",
+        "commission_rate"
+      ]
+    },
+    "output": [
+      "partner_name",
+      "targets"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "List partner names and their targets who operate in the UAE region.",
+      "top fields": [
+        "territory",
+        "partner_name",
+        "targets",
+        "partner_type"
+      ]
+    },
+    "output": [
+      "partner_name",
+      "targets"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Can you show me partner types and the targets they are expected to meet?",
+      "top fields": [
+        "partner_type",
+        "targets",
+        "territory",
+        "commission_rate"
+      ]
+    },
+    "output": [
+      "partner_type",
+      "targets"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Give me all partners marked as affiliates with targets above QAR 500,000.",
+      "top fields": [
+        "partner_type",
+        "targets",
+        "partner_name",
+        "commission_rate"
+      ]
+    },
+    "output": [
+      "partner_type",
+      "targets"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Which of our resellers have sales targets for the upcoming quarter?",
+      "top fields": [
+        "partner_type",
+        "targets",
+        "territory",
+        "route"
+      ]
+    },
+    "output": [
+      "partner_type",
+      "targets"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Compare sales targets across partner types and list the top performers.",
+      "top fields": [
+        "targets",
+        "partner_type",
+        "partner_name",
+        "territory"
+      ]
+    },
+    "output": [
+      "partner_type",
+      "targets"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Do we have any partners without any assigned sales targets?",
+      "top fields": [
+        "targets",
+        "partner_name",
+        "territory",
+        "description"
+      ]
+    },
+    "output": [
+      "targets"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "What is the official website of 'Torotta Avlaye'?",
+      "top fields": ["partner_name", "website", "partner_type", "referral_code"]
+    },
+    "output": ["website"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "List all partners whose websites end with '.com.qa'.",
+      "top fields": ["name", "website", "route", "show_in_website", "logo"]
+    },
+    "output": ["website"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Do any of our reseller partners have websites listed?",
+      "top fields": ["partner_type", "website", "commission_rate", "introduction"]
+    },
+    "output": ["website"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Show partner names and their websites for those visible to the public.",
+      "top fields": ["partner_name", "website", "show_in_website", "route", "description"]
+    },
+    "output": ["partner_name", "website"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Which partners have no website provided in their records?",
+      "top fields": ["name", "website", "address_desc", "contact_html", "introduction"]
+    },
+    "output": ["website"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Get me a list of partner websites containing the word 'global'.",
+      "top fields": ["website", "logo", "partner_name", "route"]
+    },
+    "output": ["partner_name", "website"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Can you find all distributor partners and display their website URLs?",
+      "top fields": ["partner_type", "website", "targets", "contact_desc"]
+    },
+    "output": ["website"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Do we have any affiliate partners with websites ending in '.org'?",
+      "top fields": ["partner_type", "website", "introduction", "logo"]
+    },
+    "output": ["website"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Between 'Resell360' and 'OmniPartners', which one has a listed website?",
+      "top fields": ["partner_name", "website", "commission_rate", "referral_code"]
+    },
+    "output": ["partner_name", "website"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Which partner has the website 'www.synergylink.com'?",
+      "top fields": ["partner_name", "website", "route", "introduction", "contact_html"]
+    },
+    "output": ["partner_name", "website"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "What is the referral code assigned to 'Altura Traders'?",
+      "top fields": ["partner_name", "referral_code", "website", "description"]
+    },
+    "output": ["referral_code"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "List all partners along with their referral_code values.",
+      "top fields": ["name", "referral_code", "partner_type", "commission_rate"]
+    },
+    "output": ["referral_code"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Which partners don’t have any referral_code provided in their records?",
+      "top fields": ["name", "referral_code", "logo", "route"]
+    },
+    "output": ["referral_code"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Find partners who have referral codes starting with 'AFF-'.",
+      "top fields": ["name", "referral_code", "targets", "description"]
+    },
+    "output": ["referral_code"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Does 'Zenith Connect' have a referral_code assigned?",
+      "top fields": ["partner_name", "referral_code", "introduction", "show_in_website"]
+    },
+    "output": ["referral_code"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Get the referral_code and website for all affiliate-type partners.",
+      "top fields": ["referral_code", "website", "partner_type", "address_contacts"]
+    },
+    "output": ["referral_code", "website"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Which sales partners use 'REF-9082-XP' as their referral code?",
+      "top fields": ["referral_code", "route", "contact_desc", "logo"]
+    },
+    "output": ["referral_code"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Export partner_name and referral_code for all partners in Qatar.",
+      "top fields": ["partner_name", "referral_code", "territory", "website"]
+    },
+    "output": ["partner_name", "referral_code"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Count how many partners have valid referral codes stored.",
+      "top fields": ["name", "referral_code", "show_in_website", "description"]
+    },
+    "output": ["referral_code"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Which referral_code corresponds to the partner 'BridgeGlobal Inc.'?",
+      "top fields": ["partner_name", "referral_code", "partner_type", "introduction"]
+    },
+    "output": ["referral_code"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "What is the route path assigned to 'GlobalLink Solutions' on our website?",
+      "top fields": ["route", "website", "partner_name", "introduction"]
+    },
+    "output": ["route"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "List all sales partners whose route starts with '/partners/'.",
+      "top fields": ["route", "referral_code", "commission_rate", "partner_type"]
+    },
+    "output": ["route"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Show me the partner names and their corresponding web route paths.",
+      "top fields": ["route", "partner_name", "website", "description", "show_in_website"]
+    },
+    "output": ["partner_name", "route"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Which partners have unique route entries configured for the site?",
+      "top fields": ["route", "contact_html", "logo", "partner_type"]
+    },
+    "output": ["route"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Do we have any partners using the default route value or an empty one?",
+      "top fields": ["route", "address_desc", "description", "commission_rate"]
+    },
+    "output": ["route"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Between 'TradeBridge' and 'MarketScope', who has a custom route defined?",
+      "top fields": ["partner_name", "route", "partner_type", "referral_code"]
+    },
+    "output": ["partner_name", "route"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Give me all route entries that contain the word 'exclusive'.",
+      "top fields": ["route", "targets", "introduction", "partner_website"]
+    },
+    "output": ["route"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Which sales partner has the URL route '/partner-profile/gcc-distributor'?",
+      "top fields": ["route", "website", "partner_name", "show_in_website"]
+    },
+    "output": ["partner_name", "route"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Export all visible partners on the website along with their route links.",
+      "top fields": ["partner_name", "route", "logo", "show_in_website", "description"]
+    },
+    "output": ["partner_name", "route"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Are there any route fields duplicated across different partners?",
+      "top fields": ["route", "contact_desc", "referral_code", "website"]
+    },
+    "output": ["route"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "What is the external website link provided for 'BlueOcean Vendors'?",
+      "top fields": ["partner_name", "partner_website", "route", "logo"]
+    },
+    "output": ["partner_website"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "List the partner_website URLs of all partners visible to customers.",
+      "top fields": ["partner_website", "show_in_website", "website", "contact_desc"]
+    },
+    "output": ["partner_website"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Can I view the official external sites for all commission agents?",
+      "top fields": ["partner_website", "commission_rate", "referral_code", "website"]
+    },
+    "output": ["partner_website"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Get partner names and partner_website links for reseller-type entries.",
+      "top fields": ["partner_name", "partner_website", "partner_type", "referral_code", "route"]
+    },
+    "output": ["partner_name", "partner_website"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Which partners do not have a partner_website listed yet?",
+      "top fields": ["partner_website", "description", "contact_html", "logo"]
+    },
+    "output": ["partner_website"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Are there any affiliate partners whose websites contain 'tradehub'?",
+      "top fields": ["partner_type", "partner_website", "website", "route"]
+    },
+    "output": ["partner_website"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Between 'NetBridge Ltd' and 'MarketSpark', who has a valid partner_website?",
+      "top fields": ["partner_name", "partner_website", "introduction", "route"]
+    },
+    "output": ["partner_website"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Show all partner_website URLs that end in '.tech' domain.",
+      "top fields": ["partner_website", "route", "website", "referral_code"]
+    },
+    "output": ["partner_website"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Do any of the partners have a link to 'https://affiliateworld.org' in their records?",
+      "top fields": ["partner_website", "website", "route", "description"]
+    },
+    "output": ["partner_website"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Fetch the partner_website and contact description for partners in South America.",
+      "top fields": ["partner_website", "contact_desc", "territory", "route"]
+    },
+    "output": ["partner_website", "contact_desc"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "What is the introduction note for 'Orbit Traders' in our sales partner list?",
+      "top fields": ["partner_name", "introduction", "description", "contact_html"]
+    },
+    "output": ["introduction"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Show me all partners along with their introduction texts.",
+      "top fields": ["name", "introduction", "website", "route", "logo"]
+    },
+    "output": ["introduction"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Which sales partners have introduction messages starting with 'Leading exporter'?",
+      "top fields": ["introduction", "contact_desc", "referral_code", "route"]
+    },
+    "output": ["introduction"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "List the name and introduction for every commission agent.",
+      "top fields": ["partner_name", "introduction", "partner_type", "targets", "contact_html"]
+    },
+    "output": ["partner_name", "introduction"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Which partners don't have any introduction filled in?",
+      "top fields": ["name", "introduction", "contact_html", "route", "partner_website"]
+    },
+    "output": ["introduction"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Provide all introductions for partners in the European region.",
+      "top fields": ["territory", "website", "route", "introduction"]
+    },
+    "output": ["introduction"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Export a list of reseller-type partners and their introduction fields.",
+      "top fields": ["partner_type", "commission_rate", "description", "introduction"]
+    },
+    "output": ["partner_type", "introduction"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "Check if 'GlobeX Trade Corp' has an introduction field entered.",
+      "top fields": ["partner_name", "route", "contact_desc", "introduction"]
+    },
+    "output": ["introduction"]
+  },
+  {
+    "input": {
+      "doctype": "Sales Partner",
+      "question": "How many sales partners have included an introduction message?",
+      "top fields": ["introduction", "partner_website", "show_in_website", "contact_html"]
+    },
+    "output": ["introduction"]
+  },
+
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Who is the vendor with code SUP-00015? I need their registered name for invoicing.",
+      "top fields": ["supplier_name", "naming_series", "is_frozen"]
+    },
+    "output": ["supplier_name"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Pull up a list of suppliers based in Germany for vendor negotiations.",
+      "top fields": ["supplier_name", "country", "supplier_group"]
+    },
+    "output": ["supplier_name"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Show me the supplier name for internal transport services. We need to update the contract.",
+      "top fields": ["supplier_name", "is_transporter", "supplier_type"]
+    },
+    "output": ["supplier_name"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Get the supplier name and mobile number for 'Metallic Edge Corp'.",
+      "top fields": ["supplier_name", "mobile_no", "email_id"]
+    },
+    "output": ["supplier_name", "mobile_no"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Find the supplier that uses the email 'supplies@techlink.io'.",
+      "top fields": ["supplier_name", "email_id", "supplier_type"]
+    },
+    "output": ["supplier_name"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Get me the supplier name and default currency for vendors that are marked frozen in the system.",
+      "top fields": ["supplier_name", "default_currency", "is_frozen"]
+    },
+    "output": ["supplier_name", "default_currency"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Check the supplier name and primary contact for vendor ID SUP-00021.",
+      "top fields": ["supplier_name", "supplier_primary_contact", "supplier_primary_address"]
+    },
+    "output": ["supplier_name", "supplier_primary_contact"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "List all active suppliers under the 'Raw Material' group.",
+      "top fields": ["supplier_name", "supplier_group", "disabled", "on_hold"]
+    },
+    "output": ["supplier_name"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "I need supplier names and email IDs for transport service providers.",
+      "top fields": ["supplier_name", "email_id", "is_transporter"]
+    },
+    "output": ["supplier_name", "email_id"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Which country is 'Atlantic Trade Co.' registered in?",
+      "top fields": ["supplier_name", "country", "default_currency", "tax_id"]
+    },
+    "output": ["country"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "List all suppliers located in the United Arab Emirates.",
+      "top fields": ["supplier_name", "country", "supplier_group", "language"]
+    },
+    "output": ["country"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Get suppliers from India and Bangladesh for textile sourcing.",
+      "top fields": ["supplier_name", "country", "supplier_type", "image"]
+    },
+    "output": ["country"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Show me vendors registered in countries outside the EU.",
+      "top fields": ["supplier_name", "country", "supplier_type", "email_id"]
+    },
+    "output": ["country"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Do we have any suppliers from South Korea?",
+      "top fields": ["supplier_name", "country", "language", "supplier_group"]
+    },
+    "output": ["country"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Filter all supplier entries that mention 'Germany' as their country.",
+      "top fields": ["supplier_name", "country", "website", "naming_series"]
+    },
+    "output": ["country"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "How many suppliers are currently registered in China?",
+      "top fields": ["supplier_name", "country", "represents_company", "is_transporter"]
+    },
+    "output": ["country"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Export list of suppliers along with their country of operation.",
+      "top fields": ["supplier_name", "country", "supplier_details", "supplier_type"]
+    },
+    "output": ["supplier_name", "country"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Which vendors are based in Australia and New Zealand?",
+      "top fields": ["supplier_name", "country", "tax_id", "mobile_no"]
+    },
+    "output": ["country"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Who are our suppliers from Latin American countries?",
+      "top fields": ["supplier_name", "country", "language", "payment_terms"]
+    },
+    "output": ["country"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Which supplier group does 'Fresh Agro Supplies' fall under?",
+      "top fields": ["supplier_group", "supplier_name", "country", "supplier_type"]
+    },
+    "output": ["supplier_group"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "List all suppliers categorized under 'Raw Material Vendors'.",
+      "top fields": ["supplier_group", "default_currency", "mobile_no", "supplier_type"]
+    },
+    "output": ["supplier_group"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "How many suppliers do we have in the 'Importers' group?",
+      "top fields": ["supplier_group", "email_id", "image", "is_internal_supplier"]
+    },
+    "output": ["supplier_group"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Get the supplier names and their groups for all active vendors from India.",
+      "top fields": ["supplier_group", "supplier_name", "country", "supplier_type"]
+    },
+    "output": ["supplier_name", "supplier_group"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Show the group classification for suppliers that are transport service providers.",
+      "top fields": ["supplier_group", "is_transporter", "supplier_type", "tax_id"]
+    },
+    "output": ["supplier_group"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Do we have any local suppliers under the 'Capital Equipment' group?",
+      "top fields": ["supplier_group", "supplier_type", "country", "tax_category"]
+    },
+    "output": ["supplier_group"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Pull all supplier records under the 'Utilities & Services' group with payment terms set.",
+      "top fields": ["supplier_group", "payment_terms", "mobile_no", "language"]
+    },
+    "output": ["supplier_group", "payment_terms"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "For each supplier group, show the default currency and the number of associated suppliers.",
+      "top fields": ["supplier_group", "default_currency", "email_id", "tax_id"]
+    },
+    "output": ["supplier_group", "default_currency"]
+  },
+
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Are there any suppliers who also handle transportation services for us?",
+      "top fields": ["is_transporter", "supplier_type", "supplier_group", "supplier_name"]
+    },
+    "output": ["is_transporter"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Which vendors are marked as transport providers for our delivery operations?",
+      "top fields": ["is_transporter", "supplier_type", "supplier_group", "supplier_name"]
+    },
+    "output": ["is_transporter"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Pull up supplier names along with their transport service status for audit purposes.",
+      "top fields": ["is_transporter", "supplier_name", "supplier_type", "mobile_no"]
+    },
+    "output": ["supplier_name", "is_transporter"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Show transport status and type for all active vendors.",
+      "top fields": ["is_transporter", "supplier_type", "supplier_name", "supplier_group"]
+    },
+    "output": ["is_transporter", "supplier_type"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Which suppliers in our system provide transport services along with their products?",
+      "top fields": ["is_transporter", "supplier_type", "supplier_group", "supplier_name"]
+    },
+    "output": ["is_transporter"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "List supplier name, group, and transport status for review.",
+      "top fields": ["is_transporter", "supplier_group", "supplier_name", "supplier_type"]
+    },
+    "output": ["supplier_name", "supplier_group", "is_transporter"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Which vendors don’t provide transport services but outsource deliveries?",
+      "top fields": ["is_transporter", "supplier_type", "supplier_group", "supplier_name"]
+    },
+    "output": ["is_transporter"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Show me all suppliers with their names and whether they handle transportation.",
+      "top fields": ["supplier_name", "is_transporter", "supplier_type", "default_currency"]
+    },
+    "output": ["supplier_name", "is_transporter"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Get the supplier name, type, and transport capability status for construction vendors.",
+      "top fields": ["is_transporter", "supplier_type", "supplier_name", "supplier_group"]
+    },
+    "output": ["supplier_name", "supplier_type", "is_transporter"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Which of our suppliers also operate as logistics partners?",
+      "top fields": ["is_transporter", "supplier_type", "supplier_group", "supplier_name"]
+    },
+    "output": ["is_transporter"]
+  },
+   {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Which vendors have uploaded a profile image in the system?",
+      "top fields": ["image", "supplier_name", "supplier_type", "supplier_group"]
+    },
+    "output": ["image"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Show me the supplier name and image for all internal suppliers.",
+      "top fields": ["supplier_name", "image", "is_internal_supplier", "supplier_type"]
+    },
+    "output": ["supplier_name", "image"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "List suppliers along with their logos for catalog publishing.",
+      "top fields": ["image", "supplier_name", "supplier_group", "language"]
+    },
+    "output": ["supplier_name", "image"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Do we have image records for vendors categorized as 'Transport Services'?",
+      "top fields": ["image", "supplier_type", "supplier_group", "is_transporter"]
+    },
+    "output": ["image"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Get the name, type, and image of all disabled suppliers.",
+      "top fields": ["supplier_name", "image", "supplier_type", "disabled"]
+    },
+    "output": ["supplier_name", "supplier_type", "image"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Find suppliers who haven't uploaded their business image yet.",
+      "top fields": ["supplier_name", "image", "supplier_group", "supplier_type"]
+    },
+    "output": ["image"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Pull the image and default currency info for active suppliers.",
+      "top fields": ["image", "default_currency", "supplier_name", "disabled"]
+    },
+    "output": ["image", "default_currency"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Which vendors have profile pictures and valid email addresses?",
+      "top fields": ["image", "email_id", "supplier_name", "mobile_no"]
+    },
+    "output": ["image", "email_id"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Do any suppliers have images associated with their company profiles?",
+      "top fields": ["image", "supplier_name", "represents_company", "supplier_type"]
+    },
+    "output": ["image"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Get me the profile pictures and contact details of key international vendors.",
+      "top fields": ["image", "mobile_no", "email_id", "country"]
+    },
+    "output": ["image", "mobile_no", "email_id"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "List all suppliers with a configured default bank account.",
+      "top fields": ["default_bank_account", "supplier_name", "supplier_type", "supplier_group"]
+    },
+    "output": ["default_bank_account"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Which suppliers don't have any default bank account set?",
+      "top fields": ["default_bank_account", "supplier_name", "supplier_group", "disabled"]
+    },
+    "output": ["default_bank_account"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Get the names and default bank accounts of all internal suppliers.",
+      "top fields": ["supplier_name", "default_bank_account", "is_internal_supplier", "supplier_type"]
+    },
+    "output": ["supplier_name", "default_bank_account"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Pull all disabled suppliers who still have default bank accounts linked.",
+      "top fields": ["supplier_name", "disabled", "default_bank_account", "country"]
+    },
+    "output": ["supplier_name", "default_bank_account"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Which vendors use 'HSBC Main' as their default bank?",
+      "top fields": ["supplier_name", "default_bank_account", "supplier_group", "tax_id"]
+    },
+    "output": ["default_bank_account"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Retrieve the supplier name, currency, and bank account for international suppliers.",
+      "top fields": ["supplier_name", "default_currency", "default_bank_account", "country"]
+    },
+    "output": ["supplier_name", "default_currency", "default_bank_account"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Get all suppliers with both a default bank account and a tax ID.",
+      "top fields": ["supplier_name", "default_bank_account", "tax_id", "supplier_type"]
+    },
+    "output": ["default_bank_account", "tax_id"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Give me a list of all vendors and their bank accounts for payment processing.",
+      "top fields": ["supplier_name", "default_bank_account", "payment_terms", "language"]
+    },
+    "output": ["supplier_name", "default_bank_account"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "Are there any suppliers with missing bank and price list setup?",
+      "top fields": ["supplier_name", "default_bank_account", "default_price_list", "supplier_type"]
+    },
+    "output": ["default_bank_account", "default_price_list"]
+  },
+  {
+    "input": {
+      "doctype": "Supplier",
+      "question": "List internal suppliers who have a bank account but no tax ID.",
+      "top fields": ["is_internal_supplier", "default_bank_account", "tax_id", "supplier_name"]
+    },
+    "output": ["default_bank_account"]
+  }
+
+
+]

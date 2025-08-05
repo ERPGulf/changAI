@@ -1,0 +1,671 @@
+customer 1000
+customers 1000
+employee 1000
+employees 1000
+invoice 1000
+invoices 1000
+with 1000
+list 1000
+sales 1000
+number 1000
+are 1000
+how 1000
+you 1000
+all 1000
+purchase 1000
+profit 1000
+SI-0001 1000
+what's 1000
+child 1000
+loss 1000
+gross 900
+net 900
+compare 800
+bought 850
+most 850
+pens 600
+mangos 600
+quarters 700
+variation 700
+exchange 800
+rate 800
+year 900
+years 900
+month 900
+months 900
+price 850
+increase 850
+happened 800
+last 900
+order 1000
+orders 1000
+product 1000
+products 1000
+amount 950
+discount 900
+quantity 950
+unit 900
+stock 950
+inventory 1000
+reorder 850
+supplier 950
+suppliers 950
+shipment 850
+shipping 900
+received 950
+delivered 950
+return 900
+returns 900
+payment 1000
+payments 1000
+paid 950
+unpaid 900
+balance 950
+credit 900
+debit 900
+account 1000
+accounts 1000
+ledger 950
+journal 950
+entry 900
+entries 900
+financial 1000
+statement 950
+statements 950
+report 1000
+reports 1000
+reporting 1000
+analytics 950
+data 1000
+dashboard 950
+tracking 950
+update 900
+updated 900
+status 950
+approval 900
+approved 900
+rejected 900
+pending 950
+review 900
+budget 950
+forecast 900
+costing 900
+expenses 1000
+expense 1000
+revenue 1000
+income 950
+estimate 850
+actual 900
+variance 900
+hr 1000
+human 950
+resources 950
+staff 950
+attendance 900
+leave 900
+leaves 900
+payroll 1000
+salary 1000
+salaries 1000
+deduction 900
+deductions 900
+bonus 850
+recruitment 900
+hiring 850
+training 900
+performance 950
+reviewed 900
+evaluation 900
+assets 950
+asset 950
+depreciation 900
+liability 900
+liabilities 900
+audit 900
+compliance 850
+tax 1000
+taxes 1000
+vat 950
+gst 950
+customs 900
+import 900
+export 900
+category 950
+categories 950
+region 900
+country 900
+location 900
+warehouse 950
+warehouses 950
+logistics 950
+transport 900
+route 850
+delivery 950
+scheduled 900
+timeline 850
+project 1000
+projects 1000
+task 950
+tasks 950
+deadline 900
+milestone 900
+resources 950
+allocated 900
+utilization 900
+calendar 850
+event 850
+events 850
+notify 850
+notification 850
+access 950
+permissions 900
+users 950
+user 950
+role 950
+roles 950
+security 900
+settings 850
+config 850
+configuration 850
+integration 900
+system 1000
+systems 1000
+module 950
+modules 950
+version 850
+update 900
+support 900
+issue 900
+issues 900
+ticket 850
+tickets 850
+resolution 850
+closed 850
+open 850
+escalated 850
+internal 900
+external 900
+client 1000
+clients 1000
+vendor 1000
+vendors 1000
+contract 950
+contracts 950
+agreement 900
+terms 900
+conditions 900
+policy 850
+procedure 850
+workflow 900
+automation 850
+sync 850
+backup 850
+restore 850
+database 900
+query 850
+queries 850
+record 950
+records 950
+history 950
+activity 900
+log 850
+logs 850
+message 850
+messages 850
+email 900
+mail 900
+sms 850
+alert 850
+alerts 850
+reminder 850
+reminders 850
+schedule 900
+scheduled 900
+calendar 850
+date 950
+dates 950
+time 950
+period 900
+duration 850
+value 950
+values 950
+entry 900
+entries 900
+approval 900
+approvals 900
+process 1000
+procedure 850
+standard 900
+guideline 850
+template 850
+templates 850
+form 950
+forms 950
+field 950
+fields 950
+input 950
+output 950
+summary 900
+detail 900
+details 900
+option 900
+options 900
+select 900
+selection 900
+filter 900
+filters 900
+search 950
+find 950
+match 850
+matches 850
+result 900
+results 900
+total 950
+average 900
+minimum 900
+maximum 900
+count 900
+ranking 850
+group 900
+groups 900
+category 950
+categories 950
+tag 850
+tags 850
+status 950
+active 900
+inactive 900
+enabled 900
+disabled 900
+function 850
+feature 850
+features 850
+setting 850
+settings 850
+change 900
+changes 900
+update 900
+updated 900
+delete 850
+deleted 850
+remove 850
+removed 850
+insert 850
+added 850
+add 850
+create 900
+created 900
+build 850
+built 850
+run 850
+executed 850
+execute 850
+processing 900
+completed 900
+finish 900
+finished 900
+start 900
+started 900
+begin 900
+began 900
+done 900
+error 850
+failed 850
+fail 850
+success 900
+successful 900
+retry 850
+submitted 900
+submission 900
+sent 900
+received 950
+responded 900
+response 900
+feedback 900
+comment 850
+comments 850
+note 850
+notes 850
+how 1000
+many 1000
+invoices 1000
+were 950
+created 950
+last 980
+month 980
+customers 1000
+do 950
+we 980
+have 1000
+which 950
+territory 900
+has 950
+the 1000
+most 970
+total 1000
+sales 1000
+amount 1000
+this 980
+delivery 950
+notes 950
+issued 950
+week 940
+highest 950
+invoice 1000
+year 980
+partner 950
+commission 950
+rate 950
+yesterday 940
+q1 950
+q4 950
+5 1000
+8 1000
+28 1000
+3 1000
+6 1000
+2022 1000
+23901 1000
+10 1000
+top 1000
+most 1000
+recent 1000
+show 1000
+who 1000
+items 1000
+partners 1000
+id 1000
+sales 1000
+average 1000
+salary 1000
+invoices 1000
+invoice 1000
+days 1000
+customers 1000
+names 1000
+name 1000
+spend 1000
+profit  1000
+get 1000
+contacts 1000
+forecasting 900
+transactions 1000
+journal entry 950
+asset value 950
+asset class 900
+cost center 950
+profit center 950
+reconciliation 900
+debit note 950
+credit note 950
+aging report 900
+sales order 1000
+purchase order 1000
+material request 950
+item group 950
+bom 900
+bill of materials 950
+stock entry 1000
+valuation rate 950
+actual quantity 900
+requested quantity 900
+consumption 900
+mrp 950
+stock ledger 1000
+serial number 950
+batch number 950
+unit price 1000
+delivery note 1000
+sales invoice 1000
+purchase invoice 1000
+journal voucher 1000
+bank account 950
+bank reconciliation 950
+cash flow 950
+payment entry 1000
+supplier invoice 1000
+customer invoice 1000
+shipment tracking 950
+customer group 950
+item code 1000
+item name 1000
+project name 950
+task name 950
+lead 900
+opportunity 900
+quotation 950
+sales pipeline 950
+sales team 900
+fiscal year 950
+cost allocation 900
+payment schedule 950
+asset depreciation 950
+hr policy 900
+leave application 950
+attendance request 950
+employee salary 1000
+monthly salary 1000
+salary component 950
+loan application 950
+department 950
+designation 950
+promotion 900
+appraisal 950
+goal setting 900
+performance review 950
+employee feedback 950
+leave balance 950
+leave ledger 950
+daily timesheet 950
+job applicant 950
+job opening 950
+skills 950
+education 950
+experience 950
+probation 900
+exit interview 900
+resignation letter 950
+contract duration 900
+taxable amount 950
+net payable 1000
+invoice amount 1000
+payment terms 950
+supplier balance 950
+customer balance 950
+goods receipt 950
+goods issue 950
+advance payment 950
+post-dated cheque 900
+cheque number 950
+reference number 950
+voucher type 950
+audit trail 1000
+activity log 950
+user permission 950
+role assignment 950
+workflow state 950
+workflow transition 950
+approval log 950
+project timeline 900
+task status 950
+milestone status 900
+total amount 1000
+net amount 1000
+tax amount 1000
+rounded total 950
+outstanding amount 1000
+paid amount 1000
+received amount 1000
+due date 950
+posting date 950
+document status 950
+reference document 950
+linked document 950
+recurring entry 900
+recurring invoice 900
+sales pipeline	1000
+deal size	1000
+customer lifetime value	1000
+lead source	1000
+follow-up	1000
+campaign	1000
+target	1000
+quota	1000
+conversion rate	1000
+opportunity stage	1000
+inventory aging	1000
+cycle count	1000
+bin location	1000
+item variant	1000
+item bundle	1000
+overstock	1000
+understock	1000
+inventory turnover	1000
+non-moving stock	1000
+trial balance	1000
+opening balance	1000
+closing balance	1000
+cash ledger	1000
+chart of accounts	1000
+fiscal year	1000
+accrual	1000
+provision	1000
+write-off	1000
+interest	1000
+tax bracket	1000
+vendor rating	1000
+procurement cycle	1000
+purchase requisition	1000
+procurement plan	1000
+purchase return	1000
+cost per unit	1000
+CTC	1000
+PF deduction	1000
+ESI	1000
+gratuity	1000
+salary slip	1000
+pay period	1000
+onboarding	1000
+offboarding	1000
+shift	1000
+roster	1000
+task priority	1000
+Gantt chart	1000
+resource allocation	1000
+project status	1000
+time log	1000
+issue tracker	1000
+hey there	1000
+sup	1000
+wassup	1000
+yo there	1000
+howdy partner	1000
+gm	1000
+gn	1000
+gmorning	1000
+g’day	1000
+how’s everything	1000
+what’s cracking	1000
+what’s good	1000
+feeling okay?	1000
+been a while	1000
+how have you been	1000
+hope all is well	1000
+anything I can do?	1000
+nice chatting with you	1000
+you too!	1000
+same here	1000
+many thanks	1000
+cheers	1000
+tnx	1000
+big thanks	1000
+thankies	1000
+appreciate ya	1000
+major thanks	1000
+show me	1000
+fetch	1000
+pull	1000
+bring up	1000
+get me	1000
+can I see	1000
+give me	1000
+display	1000
+tell me about	1000
+help me with	1000
+where can I find	1000
+I want to know	1000
+how many of	1000
+list all	1000
+count of	1000
+what’s the status	1000
+update status	1000
+check status	1000
+who is responsible	1000
+when was it created	1000
+when was it updated	1000
+mark as done	1000
+delete this	1000
+resend	1000
+show summary	1000
+show full details	1000
+
+
+
+morning 1000
+evening 1000
+good 1000
+what 1000
+how are you 1000
+how are u 1000
+hw are u 1000
+there 1000
+hii 1000
+have a good day 1000
+have a great day 1000
+what is your name? 1000
+how's it going 1000
+what's up 1000
+what's going on 1000
+how are things 1000
+good morning 1000
+good afternoon 1000
+good evening 1000
+hello there 1000
+who are you 1000
+nice to see you 1000
+howdy 1000
+what's new 1000
+long time no see 1000
+hope you're well 1000
+greetings 1000
+thank you 1000
+thanks 1000
+thanks a lot 1000
+thank you very much 1000
+thx 1000
+ty 1000
+appreciate it 1000
+much appreciated 1000
+can 1000
+your 950
+help 1000
+bye 1000
+goodbye 1000
+see you 1000
+talk to you later 1000
+have a nice day 1000
+hello 1000
+hi 1000
+heyy 1000
+yo 1000
+you're welcome 1000
+you are welcome 1000
+no problem 1000
+no worries 1000
+anytime 1000
+sure 1000
+my pleasure 1000
+of course 1000
+don't mention it 1000
+thank you so much 1000
+what is your task 1000
