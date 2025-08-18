@@ -21,14 +21,17 @@
     },
     {
         "input": {
-            "doctype": "Delivery Note",
+            "doctype": [
+                "Sales Invoice",
+                "Sales Invoice Item"
+            ],
             "question": "How much of item 'Mango Juice' was sold this week?",
             "fields": [
                 "posting_date",
                 "items"
             ]
         },
-        "output": "frappe.db.sql(\"\"\"SELECT SUM(item.qty) FROM [BT]tabDelivery Note[BT] dn JOIN [BT]tabDelivery Note Item[BT] item ON item.parent = dn.name WHERE item.item_name = 'Mango Juice' AND WEEK(dn.posting_date) = WEEK(CURDATE()) AND YEAR(dn.posting_date) = YEAR(CURDATE())\"\"\")"
+        "output": "frappe.db.sql(\"\"\"SELECT SUM(sii.qty) FROM `tabSales Invoice Item` sii JOIN `tabSales Invoice` si ON sii.parent = si.name WHERE sii.item_name = 'Mango Juice' AND WEEK(si.posting_date) = WEEK(CURDATE()) AND YEAR(si.posting_date) = YEAR(CURDATE()) AND si.docstatus = 1\"\"\")"
     },
     {
         "input": {

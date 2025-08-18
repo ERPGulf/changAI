@@ -74,7 +74,13 @@
       "enable_provisional_accounting_for_non_stock_items",
       "default_inventory_account",
       "default_in_transit_warehouse",
-      "default_operating_cost_account"
+      "default_operating_cost_account",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Serial and Batch Bundle": {
@@ -103,7 +109,13 @@
       "returned_against",
       "is_cancelled",
       "is_rejected",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Pricing Rule": {
@@ -174,7 +186,13 @@
       "priority",
       "pricing_rule_help",
       "promotional_scheme_id",
-      "promotional_scheme"
+      "promotional_scheme",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Quality Inspection": {
@@ -205,7 +223,13 @@
       "verified_by",
       "remarks",
       "amended_from",
-      "letter_head"
+      "letter_head",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Raven Workspace": {
@@ -218,7 +242,13 @@
       "can_only_join_via_invite",
       "description",
       "logo",
-      "only_admins_can_create_channels"
+      "only_admins_can_create_channels",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Asset": {
@@ -281,7 +311,13 @@
       "purchase_amount",
       "default_finance_book",
       "depr_entry_posting_status",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Employee": {
@@ -361,7 +397,13 @@
       "feedback",
       "lft",
       "rgt",
-      "old_parent"
+      "old_parent",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Sales Order": {
@@ -476,7 +518,13 @@
       "source",
       "inter_company_order_reference",
       "campaign",
-      "party_account_currency"
+      "party_account_currency",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Sales Invoice": {
@@ -629,7 +677,13 @@
       "customer_group",
       "is_internal_customer",
       "is_discounted",
-      "remarks"
+      "remarks",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Item": {
@@ -712,7 +766,13 @@
       "customer_code",
       "default_item_manufacturer",
       "default_manufacturer_part_no",
-      "total_projected_qty"
+      "total_projected_qty",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Payment Entry": {
@@ -790,7 +850,13 @@
       "in_words",
       "auto_repeat",
       "amended_from",
-      "title"
+      "title",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Lead": {
@@ -842,7 +908,13 @@
       "unsubscribed",
       "blog_subscriber",
       "notes",
-      "notes_html"
+      "notes_html",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "POS Profile": {
@@ -888,7 +960,13 @@
       "tax_category",
       "apply_discount_on",
       "cost_center",
-      "dimension_col_break"
+      "dimension_col_break",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Serial No": {
@@ -920,7 +998,13 @@
       "more_info",
       "company",
       "work_order",
-      "purchase_document_no"
+      "purchase_document_no",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Stock Entry Type": {
@@ -930,7 +1014,13 @@
       "name",
       "purpose",
       "add_to_transit",
-      "is_standard"
+      "is_standard",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Purchase Invoice": {
@@ -1081,7 +1171,13 @@
       "inter_company_invoice_reference",
       "is_old_subcontracting_flow",
       "remarks",
-      "connections_tab"
+      "connections_tab",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Asset Capitalization": {
@@ -1107,7 +1203,7 @@
       "target_serial_no",
       "amended_from",
       "target_is_fixed_asset",
-      "target_has_batch_no",
+      "target_",
       "target_has_serial_no",
       "stock_items",
       "stock_items_total",
@@ -1118,7 +1214,13 @@
       "total_value",
       "target_incoming_rate",
       "cost_center",
-      "target_fixed_asset_account"
+      "target_fixed_asset_account",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Process Payment Reconciliation Log": {
@@ -1133,7 +1235,13 @@
       "total_allocations",
       "reconciled_entries",
       "error_log",
-      "allocations"
+      "allocations",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Process Payment Reconciliation": {
@@ -1154,7 +1262,13 @@
       "bank_cash_account",
       "status",
       "error_log",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Raven Message Reaction": {
@@ -1166,7 +1280,13 @@
       "reaction_escaped",
       "message",
       "channel_id",
-      "is_custom"
+      "is_custom",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Raven Custom Emoji": {
@@ -1176,7 +1296,13 @@
       "name",
       "image",
       "emoji_name",
-      "keywords"
+      "keywords",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Payment Request": {
@@ -1228,7 +1354,13 @@
       "payment_channel",
       "payment_order",
       "amended_from",
-      "phone_number"
+      "phone_number",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Stock Ledger Entry": {
@@ -1266,7 +1398,13 @@
       "is_cancelled",
       "to_rename",
       "serial_no",
-      "batch_no"
+      "batch_no",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Closing Stock Balance": {
@@ -1284,7 +1422,13 @@
       "include_uom",
       "warehouse",
       "warehouse_type",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Raven Document Notification": {
@@ -1299,7 +1443,13 @@
       "document_type",
       "condition",
       "recipients",
-      "message"
+      "message",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Raven Message": {
@@ -1332,7 +1482,13 @@
       "is_bot_message",
       "bot",
       "hide_link_preview",
-      "notification"
+      "notification",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Competitor": {
@@ -1341,7 +1497,13 @@
     "fields": [
       "name",
       "competitor_name",
-      "website"
+      "website",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Quotation Lost Reason": {
@@ -1349,7 +1511,13 @@
     "description": "Standard ERPNext doctype for Quotation Lost Reason",
     "fields": [
       "name",
-      "order_lost_reason"
+      "order_lost_reason",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Raven Channel": {
@@ -1375,7 +1543,13 @@
       "pinned_messages_string",
       "is_ai_thread",
       "openai_thread_id",
-      "thread_bot"
+      "thread_bot",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Raven AI Function": {
@@ -1393,7 +1567,13 @@
       "strict",
       "parameters",
       "params",
-      "function_definition"
+      "function_definition",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Raven Bot AI Prompt": {
@@ -1404,7 +1584,13 @@
       "prompt",
       "naming_series",
       "raven_bot",
-      "is_global"
+      "is_global",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Raven Bot Instruction Template": {
@@ -1414,7 +1600,13 @@
       "name",
       "template_name",
       "dynamic_instructions",
-      "instruction"
+      "instruction",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Raven Bot": {
@@ -1436,7 +1628,13 @@
       "enable_file_search",
       "instruction",
       "dynamic_instructions",
-      "bot_functions"
+      "bot_functions",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Raven Scheduler Event": {
@@ -1453,7 +1651,13 @@
       "channel",
       "dm",
       "content",
-      "scheduler_event_id"
+      "scheduler_event_id",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Raven Message Action": {
@@ -1469,7 +1673,13 @@
       "title",
       "description",
       "success_message",
-      "fields"
+      "fields",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Subcontracting Receipt": {
@@ -1539,7 +1749,13 @@
       "transporter_name",
       "lr_no",
       "lr_date",
-      "tab_connections"
+      "tab_connections",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Subcontracting Order": {
@@ -1586,7 +1802,13 @@
       "per_received",
       "select_print_heading",
       "letter_head",
-      "tab_connections"
+      "tab_connections",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Blanket Order": {
@@ -1608,7 +1830,13 @@
       "items",
       "amended_from",
       "tc_name",
-      "terms"
+      "terms",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Production Plan": {
@@ -1661,7 +1889,13 @@
       "total_produced_qty",
       "status",
       "warehouses",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Raven Channel Member": {
@@ -1676,7 +1910,13 @@
       "is_synced",
       "linked_doctype",
       "linked_document",
-      "allow_notifications"
+      "allow_notifications",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Item Attribute": {
@@ -1690,7 +1930,13 @@
       "from_range",
       "increment",
       "to_range",
-      "item_attribute_values"
+      "item_attribute_values",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Dunning": {
@@ -1731,7 +1977,13 @@
       "contact_mobile",
       "contact_email",
       "company_address",
-      "company_address_display"
+      "company_address_display",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "POS Invoice": {
@@ -1877,7 +2129,13 @@
       "to_date",
       "auto_repeat",
       "update_auto_repeat_reference",
-      "against_income_account"
+      "against_income_account",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Delivery Note": {
@@ -2001,7 +2259,13 @@
       "campaign",
       "excise_page",
       "instructions",
-      "connections_tab"
+      "connections_tab",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Quotation": {
@@ -2097,7 +2361,13 @@
       "opportunity",
       "supplier_quotation",
       "enq_det",
-      "connections_tab"
+      "connections_tab",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Code List": {
@@ -2112,7 +2382,13 @@
       "version",
       "publisher",
       "publisher_id",
-      "description"
+      "description",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Raven Workspace Member": {
@@ -2122,7 +2398,13 @@
       "name",
       "user",
       "is_admin",
-      "workspace"
+      "workspace",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Purchase Receipt": {
@@ -2237,7 +2519,13 @@
       "amended_from",
       "is_old_subcontracting_flow",
       "other_details",
-      "connections_tab"
+      "connections_tab",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Newsletter": {
@@ -2268,7 +2556,13 @@
       "schedule_sending",
       "schedule_send",
       "published",
-      "route"
+      "route",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Common Code": {
@@ -2281,7 +2575,13 @@
       "common_code",
       "description",
       "additional_data",
-      "applies_to"
+      "applies_to",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Advance Payment Ledger Entry": {
@@ -2296,7 +2596,13 @@
       "against_voucher_no",
       "amount",
       "currency",
-      "event"
+      "event",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Bank Account": {
@@ -2323,7 +2629,13 @@
       "contact_html",
       "integration_id",
       "last_integration_date",
-      "mask"
+      "mask",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Webhook": {
@@ -2358,7 +2670,13 @@
       "webhook_json",
       "preview_document",
       "meets_condition",
-      "preview_request_body"
+      "preview_request_body",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Raven User": {
@@ -2377,7 +2695,13 @@
       "pinned_channels",
       "availability_status",
       "custom_status",
-      "chat_style"
+      "chat_style",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Web Form": {
@@ -2423,7 +2747,13 @@
       "meta_description",
       "meta_image",
       "client_script",
-      "custom_css"
+      "custom_css",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Unreconcile Payment": {
@@ -2436,7 +2766,13 @@
       "voucher_no",
       "get_allocations",
       "allocations",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Custom Field": {
@@ -2497,7 +2833,13 @@
       "description",
       "permlevel",
       "width",
-      "columns"
+      "columns",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "User": {
@@ -2587,7 +2929,13 @@
       "generate_keys",
       "api_secret",
       "onboarding_status",
-      "connections_tab"
+      "connections_tab",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Asset Maintenance Log": {
@@ -2613,7 +2961,13 @@
       "completion_date",
       "description",
       "actions_performed",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "BOM Creator": {
@@ -2644,7 +2998,13 @@
       "remarks",
       "status",
       "error_log",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Plant Floor": {
@@ -2656,7 +3016,13 @@
       "stock_summary",
       "floor_name",
       "company",
-      "warehouse"
+      "warehouse",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Role": {
@@ -2670,7 +3036,13 @@
       "disabled",
       "is_custom",
       "desk_access",
-      "two_factor_auth"
+      "two_factor_auth",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Period Closing Voucher": {
@@ -2687,7 +3059,13 @@
       "closing_account_head",
       "gle_processing_status",
       "remarks",
-      "error_message"
+      "error_message",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Social Login Key": {
@@ -2714,7 +3092,13 @@
       "client_information",
       "api_endpoint_args",
       "auth_url_data",
-      "user_id_property"
+      "user_id_property",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Report": {
@@ -2739,7 +3123,13 @@
       "javascript",
       "json",
       "permission_rules",
-      "roles"
+      "roles",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "GL Entry": {
@@ -2778,7 +3168,13 @@
       "is_advance",
       "to_rename",
       "is_cancelled",
-      "remarks"
+      "remarks",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "List View Settings": {
@@ -2793,7 +3189,13 @@
       "allow_edit",
       "total_fields",
       "fields_html",
-      "fields"
+      "fields",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Brand": {
@@ -2805,7 +3207,13 @@
       "image",
       "description",
       "defaults",
-      "brand_defaults"
+      "brand_defaults",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Opportunity": {
@@ -2869,7 +3277,13 @@
       "all_activities_html",
       "notes_html",
       "notes",
-      "dashboard_tab"
+      "dashboard_tab",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Account": {
@@ -2894,7 +3308,13 @@
       "lft",
       "rgt",
       "old_parent",
-      "include_in_gross"
+      "include_in_gross",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Warehouse": {
@@ -2927,7 +3347,13 @@
       "tree_details",
       "lft",
       "rgt",
-      "old_parent"
+      "old_parent",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Pick List": {
@@ -2954,7 +3380,13 @@
       "locations",
       "amended_from",
       "group_same_items",
-      "status"
+      "status",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Stock Entry": {
@@ -3022,7 +3454,13 @@
       "amended_from",
       "credit_note",
       "is_return",
-      "tab_connections"
+      "tab_connections",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Asset Value Adjustment": {
@@ -3042,7 +3480,13 @@
       "difference_account",
       "journal_entry",
       "cost_center",
-      "dimension_col_break"
+      "dimension_col_break",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Notification Log": {
@@ -3061,7 +3505,13 @@
       "attachment_link",
       "open_reference_document",
       "from_user",
-      "link"
+      "link",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Journal Entry": {
@@ -3117,7 +3567,13 @@
       "is_opening",
       "stock_entry",
       "auto_repeat",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Putaway Rule": {
@@ -3135,7 +3591,13 @@
       "uom",
       "conversion_factor",
       "stock_uom",
-      "stock_capacity"
+      "stock_capacity",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Inventory Dimension": {
@@ -3157,7 +3619,13 @@
       "condition",
       "reqd",
       "mandatory_depends_on",
-      "html_19"
+      "html_19",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Notification": {
@@ -3193,7 +3661,13 @@
       "message_examples",
       "view_properties",
       "attach_print",
-      "print_format"
+      "print_format",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Repost Item Valuation": {
@@ -3221,7 +3695,13 @@
       "total_reposting_count",
       "current_index",
       "gl_reposting_index",
-      "affected_transactions"
+      "affected_transactions",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Bank Statement Import": {
@@ -3249,7 +3729,13 @@
       "reference_doctype",
       "import_type",
       "submit_after_import",
-      "mute_emails"
+      "mute_emails",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Workstation": {
@@ -3277,7 +3763,13 @@
       "holiday_list",
       "working_hours",
       "total_working_hours",
-      "connections_tab"
+      "connections_tab",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Customer": {
@@ -3334,7 +3826,13 @@
       "dn_required",
       "is_frozen",
       "disabled",
-      "portal_users"
+      "portal_users",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Asset Repair": {
@@ -3362,7 +3860,13 @@
       "description",
       "actions_performed",
       "downtime",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Department": {
@@ -3377,7 +3881,13 @@
       "disabled",
       "lft",
       "rgt",
-      "old_parent"
+      "old_parent",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Language": {
@@ -3389,7 +3899,13 @@
       "language_code",
       "language_name",
       "flag",
-      "based_on"
+      "based_on",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Repost Payment Ledger": {
@@ -3404,7 +3920,13 @@
       "repost_status",
       "repost_error_log",
       "repost_vouchers",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Repost Accounting Ledger": {
@@ -3415,7 +3937,13 @@
       "company",
       "delete_cancelled_entries",
       "vouchers",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "BOM": {
@@ -3478,7 +4006,13 @@
       "bom_creator",
       "bom_creator_item",
       "amended_from",
-      "connections_tab"
+      "connections_tab",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Dashboard Chart": {
@@ -3516,7 +4050,13 @@
       "custom_options",
       "color",
       "last_synced_on",
-      "roles"
+      "roles",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Vehicle": {
@@ -3546,7 +4086,13 @@
       "color",
       "wheels",
       "doors",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Workspace": {
@@ -3573,7 +4119,13 @@
       "links",
       "quick_lists",
       "custom_blocks",
-      "roles"
+      "roles",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Fiscal Year": {
@@ -3587,7 +4139,13 @@
       "year_start_date",
       "year_end_date",
       "companies",
-      "auto_created"
+      "auto_created",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Recorder": {
@@ -3607,7 +4165,13 @@
       "form_dict",
       "suggested_indexes",
       "sql_queries",
-      "profile"
+      "profile",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "File": {
@@ -3633,7 +4197,13 @@
       "old_parent",
       "content_hash",
       "uploaded_to_dropbox",
-      "uploaded_to_google_drive"
+      "uploaded_to_google_drive",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Supplier": {
@@ -3680,7 +4250,13 @@
       "on_hold",
       "hold_type",
       "release_date",
-      "portal_users"
+      "portal_users",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Data Import Log": {
@@ -3694,7 +4270,13 @@
       "docname",
       "messages",
       "exception",
-      "log_index"
+      "log_index",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "OAuth Client": {
@@ -3717,7 +4299,13 @@
       "sb_advanced",
       "grant_type",
       "cb_2",
-      "response_type"
+      "response_type",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Project": {
@@ -3770,7 +4358,13 @@
       "daily_time_to_send",
       "day_to_send",
       "weekly_time_to_send",
-      "message"
+      "message",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Cost Center": {
@@ -3788,7 +4382,13 @@
       "disabled",
       "lft",
       "rgt",
-      "old_parent"
+      "old_parent",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Lower Deduction Certificate": {
@@ -3805,7 +4405,13 @@
       "valid_from",
       "valid_upto",
       "rate",
-      "certificate_limit"
+      "certificate_limit",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Web Page": {
@@ -3846,7 +4452,12 @@
       "enable_comments",
       "sb2",
       "header",
-      "breadcrumbs"
+      "breadcrumbs",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus"
     ]
   },
   "Letter Head": {
@@ -3871,7 +4482,13 @@
       "footer_align",
       "header_script",
       "footer_script",
-      "instructions"
+      "instructions",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Ledger Health": {
@@ -3883,7 +4500,13 @@
       "voucher_no",
       "checked_on",
       "debit_credit_mismatch",
-      "general_and_payment_ledger_mismatch"
+      "general_and_payment_ledger_mismatch",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Changelog Feed": {
@@ -3894,7 +4517,13 @@
       "title",
       "app_name",
       "link",
-      "posting_timestamp"
+      "posting_timestamp",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Server Script": {
@@ -3915,7 +4544,13 @@
       "enable_rate_limit",
       "rate_limit_count",
       "rate_limit_seconds",
-      "help_html"
+      "help_html",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Raven Poll Vote": {
@@ -3925,7 +4560,13 @@
       "name",
       "user_id",
       "poll_id",
-      "option"
+      "option",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Payment Terms Template": {
@@ -3935,7 +4576,13 @@
       "name",
       "template_name",
       "allocate_payment_based_on_payment_terms",
-      "terms"
+      "terms",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Item Price": {
@@ -3963,7 +4610,13 @@
       "lead_time_days",
       "valid_upto",
       "note",
-      "reference"
+      "reference",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Raven Poll": {
@@ -3976,7 +4629,13 @@
       "is_anonymous",
       "is_multi_choice",
       "is_disabled",
-      "total_votes"
+      "total_votes",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Supplier Quotation": {
@@ -4063,7 +4722,13 @@
       "more_info",
       "is_subcontracted",
       "opportunity",
-      "connections_tab"
+      "connections_tab",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Transaction Deletion Record": {
@@ -4082,7 +4747,13 @@
       "doctypes",
       "doctypes_to_be_ignored",
       "amended_from",
-      "process_in_single_transaction"
+      "process_in_single_transaction",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Purchase Order": {
@@ -4199,7 +4870,13 @@
       "party_account_currency",
       "inter_company_order_reference",
       "is_old_subcontracting_flow",
-      "connections_tab"
+      "connections_tab",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Console Log": {
@@ -4209,7 +4886,13 @@
       "name",
       "script",
       "type",
-      "committed"
+      "committed",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Prepared Report": {
@@ -4226,7 +4909,13 @@
       "error_message",
       "filters_sb",
       "filters",
-      "filter_values"
+      "filter_values",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "RQ Worker": {
@@ -4245,7 +4934,13 @@
       "birth_date",
       "last_heartbeat",
       "total_working_time",
-      "utilization_percent"
+      "utilization_percent",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Activity Log": {
@@ -4268,7 +4963,13 @@
       "link_doctype",
       "link_name",
       "user",
-      "full_name"
+      "full_name",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Raven Webhook": {
@@ -4299,7 +5000,13 @@
       "webhook_headers",
       "sb_webhook_data",
       "webhook_data",
-      "webhook"
+      "webhook",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Work Order": {
@@ -4361,7 +5068,13 @@
       "production_plan_sub_assembly_item",
       "product_bundle_item",
       "amended_from",
-      "connections_tab"
+      "connections_tab",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Communication": {
@@ -4408,7 +5121,13 @@
       "email_status",
       "has_attachment",
       "rating",
-      "feedback_request"
+      "feedback_request",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Stock Reservation Entry": {
@@ -4436,7 +5155,13 @@
       "company",
       "project",
       "status",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Auto Email Report": {
@@ -4467,7 +5192,13 @@
       "sender",
       "frequency",
       "format",
-      "description"
+      "description",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Data Import": {
@@ -4491,7 +5222,13 @@
       "import_warnings",
       "import_preview",
       "show_failed_logs",
-      "import_log_preview"
+      "import_log_preview",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Price List": {
@@ -4506,7 +5243,13 @@
       "buying",
       "selling",
       "price_not_uom_dependent",
-      "countries"
+      "countries",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Item Group": {
@@ -4525,7 +5268,13 @@
       "taxes",
       "lft",
       "old_parent",
-      "rgt"
+      "rgt",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Monthly Distribution": {
@@ -4535,7 +5284,13 @@
       "name",
       "distribution_id",
       "fiscal_year",
-      "percentages"
+      "percentages",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Sales Person": {
@@ -4555,7 +5310,13 @@
       "lft",
       "rgt",
       "old_parent",
-      "targets"
+      "targets",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Product Bundle": {
@@ -4567,7 +5328,13 @@
       "description",
       "disabled",
       "items",
-      "about"
+      "about",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Currency": {
@@ -4582,7 +5349,13 @@
       "smallest_currency_fraction_value",
       "symbol",
       "symbol_on_right",
-      "number_format"
+      "number_format",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Purchase Taxes and Charges Template": {
@@ -4595,7 +5368,13 @@
       "disabled",
       "company",
       "tax_category",
-      "taxes"
+      "taxes",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Sales Taxes and Charges Template": {
@@ -4608,7 +5387,13 @@
       "disabled",
       "company",
       "tax_category",
-      "taxes"
+      "taxes",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Terms and Conditions": {
@@ -4621,7 +5406,13 @@
       "selling",
       "buying",
       "terms",
-      "terms_and_conditions_help"
+      "terms_and_conditions_help",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Bin": {
@@ -4643,7 +5434,13 @@
       "reserved_stock",
       "stock_uom",
       "valuation_rate",
-      "stock_value"
+      "stock_value",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Subscription Plan": {
@@ -4662,7 +5459,13 @@
       "product_price_id",
       "payment_gateway",
       "cost_center",
-      "dimension_col_break"
+      "dimension_col_break",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "RQ Job": {
@@ -4679,7 +5482,13 @@
       "time_taken",
       "started_at",
       "ended_at",
-      "exc_info"
+      "exc_info",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Asset Depreciation Schedule": {
@@ -4705,7 +5514,13 @@
       "depreciation_schedule",
       "notes",
       "status",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Task": {
@@ -4754,7 +5569,13 @@
       "lft",
       "rgt",
       "old_parent",
-      "template_task"
+      "template_task",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Help Article": {
@@ -4772,7 +5593,13 @@
       "route",
       "helpful",
       "cb_00",
-      "not_helpful"
+      "not_helpful",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Subscription": {
@@ -4810,7 +5637,13 @@
       "cb_2",
       "additional_discount_percentage",
       "additional_discount_amount",
-      "cost_center"
+      "cost_center",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Cashier Closing": {
@@ -4829,7 +5662,13 @@
       "outstanding_amount",
       "payments",
       "net_amount",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Web Template": {
@@ -4841,7 +5680,13 @@
       "standard",
       "module",
       "template",
-      "fields"
+      "fields",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Email Template": {
@@ -4853,7 +5698,13 @@
       "use_html",
       "response_html",
       "response",
-      "email_reply_help"
+      "email_reply_help",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Print Format": {
@@ -4886,7 +5737,13 @@
       "print_format_help",
       "format_data",
       "print_format_builder",
-      "print_format_builder_beta"
+      "print_format_builder_beta",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Note": {
@@ -4900,7 +5757,13 @@
       "notify_on_every_login",
       "expire_notification_on",
       "content",
-      "seen_by"
+      "seen_by",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Page": {
@@ -4916,7 +5779,13 @@
       "module",
       "restrict_to_domain",
       "standard",
-      "roles"
+      "roles",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Contact": {
@@ -4955,7 +5824,13 @@
       "is_billing_contact",
       "more_info",
       "department",
-      "unsubscribed"
+      "unsubscribed",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Version": {
@@ -4966,7 +5841,13 @@
       "ref_doctype",
       "docname",
       "data",
-      "table_html"
+      "table_html",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Workflow": {
@@ -4984,7 +5865,13 @@
       "transition_rules",
       "transitions",
       "workflow_state_field",
-      "workflow_data"
+      "workflow_data",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Error Log": {
@@ -4997,7 +5884,13 @@
       "reference_name",
       "method",
       "error",
-      "trace_id"
+      "trace_id",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Milestone": {
@@ -5009,7 +5902,13 @@
       "reference_name",
       "track_field",
       "value",
-      "milestone_tracker"
+      "milestone_tracker",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Module Def": {
@@ -5022,7 +5921,13 @@
       "package",
       "app_name",
       "restrict_to_domain",
-      "connections_tab"
+      "connections_tab",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Client Script": {
@@ -5035,7 +5940,13 @@
       "module",
       "enabled",
       "script",
-      "sample"
+      "sample",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Workflow State": {
@@ -5045,7 +5956,13 @@
       "name",
       "workflow_state_name",
       "icon",
-      "style"
+      "style",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Google Contacts": {
@@ -5064,7 +5981,13 @@
       "next_sync_token",
       "sync",
       "pull_from_google_contacts",
-      "push_to_google_contacts"
+      "push_to_google_contacts",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Milestone Tracker": {
@@ -5074,7 +5997,13 @@
       "name",
       "document_type",
       "track_field",
-      "disabled"
+      "disabled",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Route History": {
@@ -5083,7 +6012,13 @@
     "fields": [
       "name",
       "route",
-      "user"
+      "user",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "DocType": {
@@ -5165,7 +6100,13 @@
       "engine",
       "migration_hash",
       "fields",
-      "connections_tab"
+      "connections_tab",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Bisect Nodes": {
@@ -5181,7 +6122,13 @@
       "difference",
       "balance_sheet_summary",
       "profit_loss_summary",
-      "generated"
+      "generated",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Notification Settings": {
@@ -5200,7 +6147,13 @@
       "enable_email_event_reminders",
       "user",
       "seen",
-      "energy_points_system_notifications"
+      "energy_points_system_notifications",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Asset Shift Allocation": {
@@ -5212,7 +6165,13 @@
       "naming_series",
       "finance_book",
       "amended_from",
-      "depreciation_schedule"
+      "depreciation_schedule",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Asset Shift Factor": {
@@ -5222,7 +6181,13 @@
       "name",
       "shift_name",
       "shift_factor",
-      "default"
+      "default",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Warranty Claim": {
@@ -5261,7 +6226,13 @@
       "company",
       "complaint_raised_by",
       "from_company",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Email Group Member": {
@@ -5271,7 +6242,13 @@
       "name",
       "email_group",
       "email",
-      "unsubscribed"
+      "unsubscribed",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Email Group": {
@@ -5284,7 +6261,13 @@
       "confirmation_email_template",
       "welcome_email_template",
       "welcome_url",
-      "add_query_parameters"
+      "add_query_parameters",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Address": {
@@ -5311,7 +6294,13 @@
       "disabled",
       "linked_with",
       "is_your_company_address",
-      "links"
+      "links",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Bank Transaction": {
@@ -5339,7 +6328,13 @@
       "party",
       "bank_party_name",
       "bank_party_account_number",
-      "bank_party_iban"
+      "bank_party_iban",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Bulk Transaction Log": {
@@ -5350,7 +6345,13 @@
       "date",
       "log_entries",
       "succeeded",
-      "failed"
+      "failed",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Bulk Transaction Log Detail": {
@@ -5365,7 +6366,13 @@
       "transaction_status",
       "error_description",
       "to_doctype",
-      "retried"
+      "retried",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Number Card": {
@@ -5391,7 +6398,13 @@
       "stats_time_interval",
       "filters_json",
       "dynamic_filters_json",
-      "color"
+      "color",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Batch": {
@@ -5418,7 +6431,13 @@
       "reference_name",
       "description",
       "qty_to_produce",
-      "produced_qty"
+      "produced_qty",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Scheduled Job Log": {
@@ -5429,7 +6448,13 @@
       "status",
       "scheduled_job_type",
       "details",
-      "debug_log"
+      "debug_log",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Request for Quotation": {
@@ -5463,7 +6488,13 @@
       "select_print_heading",
       "letter_head",
       "more_info",
-      "opportunity"
+      "opportunity",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Payment Ledger Entry": {
@@ -5489,7 +6520,13 @@
       "account_currency",
       "amount_in_account_currency",
       "delinked",
-      "remarks"
+      "remarks",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Scheduled Job Type": {
@@ -5504,7 +6541,13 @@
       "cron_format",
       "create_log",
       "last_execution",
-      "next_execution"
+      "next_execution",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Integration Request": {
@@ -5523,7 +6566,13 @@
       "output",
       "error",
       "reference_doctype",
-      "reference_docname"
+      "reference_docname",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "ToDo": {
@@ -5548,7 +6597,13 @@
       "assigned_by",
       "assigned_by_full_name",
       "sender",
-      "assignment_rule"
+      "assignment_rule",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Delivery Trip": {
@@ -5574,7 +6629,13 @@
       "optimize_route",
       "status",
       "cb_more_info",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Asset Activity": {
@@ -5585,7 +6646,13 @@
       "asset",
       "date",
       "user",
-      "subject"
+      "subject",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Process Subscription": {
@@ -5595,7 +6662,13 @@
       "name",
       "posting_date",
       "subscription",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Material Request": {
@@ -5627,7 +6700,13 @@
       "reference",
       "job_card",
       "work_order",
-      "connections_tab"
+      "connections_tab",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Authorization Rule": {
@@ -5646,7 +6725,13 @@
       "system_user",
       "to_designation",
       "approving_role",
-      "approving_user"
+      "approving_user",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Subcontracting BOM": {
@@ -5662,7 +6747,13 @@
       "service_item",
       "service_item_qty",
       "service_item_uom",
-      "conversion_factor"
+      "conversion_factor",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Location": {
@@ -5686,7 +6777,13 @@
       "tree_details",
       "lft",
       "rgt",
-      "old_parent"
+      "old_parent",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Submission Queue": {
@@ -5701,7 +6798,13 @@
       "ended_at",
       "ref_doctype",
       "ref_docname",
-      "exception"
+      "exception",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Dashboard": {
@@ -5715,7 +6818,13 @@
       "module",
       "charts",
       "chart_options",
-      "cards"
+      "cards",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Document Follow": {
@@ -5725,7 +6834,13 @@
       "name",
       "ref_doctype",
       "ref_docname",
-      "user"
+      "user",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Quality Meeting": {
@@ -5738,7 +6853,13 @@
       "sb_00",
       "agenda",
       "sb_01",
-      "minutes"
+      "minutes",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Quality Procedure": {
@@ -5755,7 +6876,13 @@
       "is_group",
       "rgt",
       "lft",
-      "old_parent"
+      "old_parent",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Quality Goal": {
@@ -5770,7 +6897,13 @@
       "weekday",
       "date",
       "sb_01",
-      "objectives"
+      "objectives",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Quality Review": {
@@ -5786,7 +6919,13 @@
       "sb_00",
       "reviews",
       "sb_01",
-      "additional_information"
+      "additional_information",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Quality Action": {
@@ -5803,7 +6942,13 @@
       "goal",
       "procedure",
       "sb_00",
-      "resolutions"
+      "resolutions",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Energy Point Log": {
@@ -5820,7 +6965,13 @@
       "reverted",
       "revert_of",
       "reason",
-      "seen"
+      "seen",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Workflow Action": {
@@ -5835,7 +6986,13 @@
       "completed_by_role",
       "completed_by",
       "permitted_roles",
-      "user"
+      "user",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "List Filter": {
@@ -5846,7 +7003,13 @@
       "filter_name",
       "reference_doctype",
       "for_user",
-      "filters"
+      "filters",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Calendar View": {
@@ -5858,7 +7021,13 @@
       "subject_field",
       "start_date_field",
       "end_date_field",
-      "all_day"
+      "all_day",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Kanban Board": {
@@ -5872,7 +7041,13 @@
       "private",
       "show_labels",
       "filters",
-      "fields"
+      "fields",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Marketing Campaign": {
@@ -5880,7 +7055,13 @@
     "description": "Standard ERPNext doctype for Marketing Campaign",
     "fields": [
       "name",
-      "campaign_description"
+      "campaign_description",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Network Printer Settings": {
@@ -5890,7 +7071,13 @@
       "name",
       "server_ip",
       "port",
-      "printer_name"
+      "printer_name",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "User Group": {
@@ -5898,7 +7085,13 @@
     "description": "Standard ERPNext doctype for User Group",
     "fields": [
       "name",
-      "user_group_members"
+      "user_group_members",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "DocType Layout": {
@@ -5909,7 +7102,13 @@
       "document_type",
       "route",
       "fields",
-      "client_script"
+      "client_script",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Module Onboarding": {
@@ -5924,7 +7123,13 @@
       "success_message",
       "documentation_url",
       "is_complete",
-      "steps"
+      "steps",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Onboarding Step": {
@@ -5954,7 +7159,13 @@
       "validate_action",
       "field",
       "value_to_validate",
-      "video_url"
+      "video_url",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Dashboard Settings": {
@@ -5963,7 +7174,13 @@
     "fields": [
       "name",
       "user",
-      "chart_config"
+      "chart_config",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Google Calendar": {
@@ -5983,7 +7200,13 @@
       "google_calendar_id",
       "refresh_token",
       "authorization_code",
-      "next_sync_token"
+      "next_sync_token",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Quality Feedback": {
@@ -5996,7 +7219,13 @@
       "document_type",
       "document_name",
       "sb_00",
-      "parameters"
+      "parameters",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Service Level Agreement": {
@@ -6020,7 +7249,13 @@
       "sla_fulfilled_on",
       "pause_sla_on",
       "holiday_list",
-      "support_and_resolution"
+      "support_and_resolution",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Reminder": {
@@ -6033,7 +7268,13 @@
       "description",
       "reminder_doctype",
       "reminder_docname",
-      "notified"
+      "notified",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Custom HTML Block": {
@@ -6047,7 +7288,13 @@
       "js_message",
       "script",
       "style",
-      "roles"
+      "roles",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Form Tour": {
@@ -6072,7 +7319,13 @@
       "first_document",
       "include_name_field",
       "page_route",
-      "steps"
+      "steps",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "POS Closing Entry": {
@@ -6097,7 +7350,13 @@
       "total_quantity",
       "taxes",
       "error_message",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Non Conformance": {
@@ -6112,7 +7371,13 @@
       "status",
       "details",
       "corrective_action",
-      "preventive_action"
+      "preventive_action",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Comment": {
@@ -6130,7 +7395,13 @@
       "reference_name",
       "reference_owner",
       "content",
-      "ip_address"
+      "ip_address",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Holiday List": {
@@ -6150,7 +7421,13 @@
       "subdivision",
       "get_local_holidays",
       "holidays",
-      "color"
+      "color",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Item Tax Template": {
@@ -6161,7 +7438,13 @@
       "title",
       "company",
       "disabled",
-      "taxes"
+      "taxes",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Job Card": {
@@ -6219,7 +7502,13 @@
       "started_time",
       "current_time",
       "amended_from",
-      "connections_tab"
+      "connections_tab",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Project Update": {
@@ -6233,7 +7522,13 @@
       "date",
       "time",
       "users",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Asset Movement": {
@@ -6248,7 +7543,13 @@
       "reference",
       "reference_doctype",
       "reference_name",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Event": {
@@ -6288,7 +7589,13 @@
       "sunday",
       "description",
       "participants",
-      "event_participants"
+      "event_participants",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Exchange Rate Revaluation": {
@@ -6304,7 +7611,13 @@
       "gain_loss_unbooked",
       "gain_loss_booked",
       "total_gain_loss",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "DocShare": {
@@ -6320,7 +7633,13 @@
       "share",
       "submit",
       "everyone",
-      "notify_by_email"
+      "notify_by_email",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Email Queue": {
@@ -6346,7 +7665,13 @@
       "expose_recipients",
       "attachments",
       "retry",
-      "email_account"
+      "email_account",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Accounting Dimension Filter": {
@@ -6361,7 +7686,13 @@
       "allow_or_restrict",
       "accounts",
       "dimensions",
-      "dimension_filter_help"
+      "dimension_filter_help",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Patch Log": {
@@ -6371,7 +7702,13 @@
       "name",
       "patch",
       "skipped",
-      "traceback"
+      "traceback",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Email Account": {
@@ -6433,7 +7770,13 @@
       "brand_logo",
       "uidvalidity",
       "uidnext",
-      "no_failed"
+      "no_failed",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Email Domain": {
@@ -6455,7 +7798,13 @@
       "use_tls",
       "use_ssl_for_outgoing",
       "smtp_port",
-      "append_emails_to_sent_folder"
+      "append_emails_to_sent_folder",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Installation Note": {
@@ -6482,7 +7831,13 @@
       "amended_from",
       "remarks",
       "item_details",
-      "items"
+      "items",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Maintenance Visit": {
@@ -6514,7 +7869,13 @@
       "customer_address",
       "contact_person",
       "territory",
-      "customer_group"
+      "customer_group",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Maintenance Schedule": {
@@ -6542,7 +7903,13 @@
       "territory",
       "customer_group",
       "company",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Customer Group": {
@@ -6561,7 +7928,13 @@
       "old_parent",
       "default_receivable_account",
       "accounts",
-      "credit_limits"
+      "credit_limits",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Webhook Request Log": {
@@ -6576,7 +7949,13 @@
       "user",
       "url",
       "response",
-      "error"
+      "error",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Packing Slip": {
@@ -6599,7 +7978,13 @@
       "letter_head_details",
       "letter_head",
       "misc_details",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Document Naming Rule": {
@@ -6613,7 +7998,13 @@
       "conditions",
       "prefix",
       "counter",
-      "prefix_digits"
+      "prefix_digits",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Timesheet": {
@@ -6651,7 +8042,13 @@
       "total_costing_amount",
       "per_billed",
       "note",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Workflow Action Master": {
@@ -6659,7 +8056,13 @@
     "description": "Workflow Action Master",
     "fields": [
       "name",
-      "workflow_action_name"
+      "workflow_action_name",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Shareholder": {
@@ -6676,7 +8079,13 @@
       "address_html",
       "contact_html",
       "share_balance",
-      "contact_list"
+      "contact_list",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "OAuth Bearer Token": {
@@ -6691,7 +8100,13 @@
       "refresh_token",
       "expiration_time",
       "expires_in",
-      "status"
+      "status",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Web Page View": {
@@ -6709,7 +8124,13 @@
       "source",
       "campaign",
       "medium",
-      "visitor_id"
+      "visitor_id",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Account Closing Balance": {
@@ -6729,7 +8150,13 @@
       "company",
       "finance_book",
       "period_closing_voucher",
-      "is_period_closing_voucher_entry"
+      "is_period_closing_voucher_entry",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Custom DocPerm": {
@@ -6756,7 +8183,13 @@
       "import",
       "share",
       "print",
-      "email"
+      "email",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Blog Post": {
@@ -6786,7 +8219,13 @@
       "meta_title",
       "meta_description",
       "meta_image",
-      "google_preview"
+      "google_preview",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Party Specific Item": {
@@ -6797,7 +8236,13 @@
       "party_type",
       "party",
       "restrict_based_on",
-      "based_on_value"
+      "based_on_value",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Industry Type": {
@@ -6805,7 +8250,13 @@
     "description": "Standard ERPNext doctype for Industry Type",
     "fields": [
       "name",
-      "industry"
+      "industry",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Designation": {
@@ -6814,7 +8265,13 @@
     "fields": [
       "name",
       "designation_name",
-      "description"
+      "description",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Sales Stage": {
@@ -6822,7 +8279,13 @@
     "description": "Standard ERPNext doctype for Sales Stage",
     "fields": [
       "name",
-      "stage_name"
+      "stage_name",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Sales Partner Type": {
@@ -6830,7 +8293,13 @@
     "description": "Standard ERPNext doctype for Sales Partner Type",
     "fields": [
       "name",
-      "sales_partner_type"
+      "sales_partner_type",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Lead Source": {
@@ -6839,7 +8308,13 @@
     "fields": [
       "name",
       "source_name",
-      "details"
+      "details",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Token Cache": {
@@ -6856,7 +8331,13 @@
       "state",
       "scopes",
       "success_uri",
-      "token_type"
+      "token_type",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Territory": {
@@ -6872,7 +8353,13 @@
       "lft",
       "rgt",
       "old_parent",
-      "targets"
+      "targets",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Supplier Group": {
@@ -6888,7 +8375,13 @@
       "accounts",
       "lft",
       "rgt",
-      "old_parent"
+      "old_parent",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Appointment": {
@@ -6905,7 +8398,13 @@
       "customer_details",
       "appointment_with",
       "party",
-      "calendar_event"
+      "calendar_event",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Incoterm": {
@@ -6915,7 +8414,13 @@
       "name",
       "code",
       "title",
-      "description"
+      "description",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Shipment": {
@@ -6969,7 +8474,13 @@
       "awb_number",
       "tracking_status",
       "tracking_status_info",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Workstation Type": {
@@ -6984,7 +8495,13 @@
       "hour_rate_rent",
       "hour_rate_labour",
       "hour_rate",
-      "description"
+      "description",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Website Theme": {
@@ -7011,7 +8528,13 @@
       "ignored_apps",
       "theme_scss",
       "theme_url",
-      "js"
+      "js",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Blogger": {
@@ -7024,7 +8547,13 @@
       "full_name",
       "user",
       "bio",
-      "avatar"
+      "avatar",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Blog Category": {
@@ -7036,7 +8565,13 @@
       "title",
       "description",
       "route",
-      "preview_image"
+      "preview_image",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Prospect": {
@@ -7062,7 +8597,13 @@
       "open_activities_html",
       "all_activities_html",
       "notes_html",
-      "notes"
+      "notes",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Budget": {
@@ -7087,7 +8628,13 @@
       "applicable_on_booking_actual_expenses",
       "action_if_annual_budget_exceeded",
       "action_if_accumulated_monthly_budget_exceeded",
-      "accounts"
+      "accounts",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "View Log": {
@@ -7097,7 +8644,13 @@
       "name",
       "viewed_by",
       "reference_doctype",
-      "reference_name"
+      "reference_name",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Task Type": {
@@ -7106,7 +8659,13 @@
     "fields": [
       "name",
       "weight",
-      "description"
+      "description",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Salutation": {
@@ -7114,7 +8673,13 @@
     "description": "Standard ERPNext doctype for Salutation",
     "fields": [
       "name",
-      "salutation"
+      "salutation",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Gender": {
@@ -7122,7 +8687,13 @@
     "description": "Standard ERPNext doctype for Gender",
     "fields": [
       "name",
-      "gender"
+      "gender",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Country": {
@@ -7134,7 +8705,13 @@
       "date_format",
       "time_format",
       "time_zones",
-      "code"
+      "code",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Transaction Log": {
@@ -7151,7 +8728,13 @@
       "transaction_hash",
       "chaining_hash",
       "data",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Success Action": {
@@ -7164,7 +8747,13 @@
       "message",
       "next_actions_html",
       "next_actions",
-      "action_timeout"
+      "action_timeout",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Custom Role": {
@@ -7177,7 +8766,13 @@
       "permission_rules",
       "roles",
       "response",
-      "ref_doctype"
+      "ref_doctype",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Unhandled Email": {
@@ -7189,7 +8784,13 @@
       "uid",
       "reason",
       "message_id",
-      "raw"
+      "raw",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Email Unsubscribe": {
@@ -7200,7 +8801,13 @@
       "email",
       "reference_doctype",
       "reference_name",
-      "global_unsubscribe"
+      "global_unsubscribe",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Email Rule": {
@@ -7209,7 +8816,13 @@
     "fields": [
       "name",
       "email_id",
-      "is_spam"
+      "is_spam",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Print Style": {
@@ -7221,7 +8834,13 @@
       "disabled",
       "standard",
       "css",
-      "preview"
+      "preview",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Desktop Icon": {
@@ -7246,7 +8865,12 @@
       "color",
       "icon",
       "reverse",
-      "idx"
+      "idx",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus"
     ]
   },
   "Help Category": {
@@ -7258,7 +8882,13 @@
       "category_description",
       "published",
       "help_articles",
-      "route"
+      "route",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Website Slideshow": {
@@ -7269,7 +8899,13 @@
       "slideshow_name",
       "sb0",
       "slideshow_items",
-      "header"
+      "header",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Website Sidebar": {
@@ -7278,7 +8914,13 @@
     "fields": [
       "name",
       "title",
-      "sidebar_items"
+      "sidebar_items",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Address Template": {
@@ -7288,7 +8930,13 @@
       "name",
       "country",
       "is_default",
-      "template"
+      "template",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "POS Invoice Merge Log": {
@@ -7305,7 +8953,13 @@
       "pos_invoices",
       "consolidated_invoice",
       "consolidated_credit_note",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Translation": {
@@ -7319,7 +8973,13 @@
       "context",
       "translated_text",
       "contribution_status",
-      "contribution_docname"
+      "contribution_docname",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Driver": {
@@ -7339,7 +8999,13 @@
       "issuing_date",
       "expiry_date",
       "driving_license_categories",
-      "driving_license_category"
+      "driving_license_category",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "BOM Update Log": {
@@ -7355,7 +9021,13 @@
       "current_level",
       "processed_boms",
       "bom_batches",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Access Log": {
@@ -7374,7 +9046,13 @@
       "filters",
       "show_report",
       "page",
-      "columns"
+      "columns",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Deleted Document": {
@@ -7386,7 +9064,13 @@
       "deleted_doctype",
       "restored",
       "new_name",
-      "data"
+      "data",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "User Type": {
@@ -7401,7 +9085,13 @@
       "user_doctypes",
       "custom_select_doctypes",
       "select_doctypes",
-      "user_type_modules"
+      "user_type_modules",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Stock Reconciliation": {
@@ -7425,7 +9115,13 @@
       "difference_amount",
       "amended_from",
       "cost_center",
-      "dimension_col_break"
+      "dimension_col_break",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Call Log": {
@@ -7449,7 +9145,13 @@
       "recording_html",
       "type_of_call",
       "summary",
-      "links"
+      "links",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Property Setter": {
@@ -7468,7 +9170,13 @@
       "property",
       "property_type",
       "value",
-      "default_value"
+      "default_value",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Telephony Call Type": {
@@ -7477,7 +9185,13 @@
     "fields": [
       "name",
       "call_type",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Opportunity Lost Reason": {
@@ -7485,7 +9199,13 @@
     "description": "Standard ERPNext doctype for Opportunity Lost Reason",
     "fields": [
       "name",
-      "lost_reason"
+      "lost_reason",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Cost Center Allocation": {
@@ -7497,7 +9217,13 @@
       "company",
       "valid_from",
       "allocation_percentages",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Tax Category": {
@@ -7506,7 +9232,13 @@
     "fields": [
       "name",
       "title",
-      "disabled"
+      "disabled",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Document Share Key": {
@@ -7517,7 +9249,13 @@
       "reference_doctype",
       "reference_docname",
       "key",
-      "expires_on"
+      "expires_on",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Connected App": {
@@ -7539,7 +9277,13 @@
       "cb_02",
       "userinfo_uri",
       "introspection_uri",
-      "query_parameters"
+      "query_parameters",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "User Permission": {
@@ -7553,7 +9297,13 @@
       "is_default",
       "apply_to_all_doctypes",
       "applicable_for",
-      "hide_descendants"
+      "hide_descendants",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Personal Data Deletion Request": {
@@ -7564,7 +9314,13 @@
       "email",
       "status",
       "anonymization_matrix",
-      "deletion_steps"
+      "deletion_steps",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Ledger Merge": {
@@ -7578,7 +9334,13 @@
       "company",
       "status",
       "is_group",
-      "merge_accounts"
+      "merge_accounts",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Module Profile": {
@@ -7588,7 +9350,13 @@
       "name",
       "module_profile_name",
       "module_html",
-      "block_modules"
+      "block_modules",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Role Profile": {
@@ -7598,7 +9366,13 @@
       "name",
       "role_profile",
       "roles_html",
-      "roles"
+      "roles",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Email Flag Queue": {
@@ -7610,7 +9384,13 @@
       "communication",
       "action",
       "email_account",
-      "uid"
+      "uid",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Operation": {
@@ -7626,7 +9406,13 @@
       "batch_size",
       "sub_operations",
       "total_operation_time",
-      "description"
+      "description",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Issue": {
@@ -7673,7 +9459,13 @@
       "company",
       "via_customer_portal",
       "attachment",
-      "content_type"
+      "content_type",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Dunning Type": {
@@ -7688,7 +9480,13 @@
       "rate_of_interest",
       "dunning_letter_text",
       "income_account",
-      "cost_center"
+      "cost_center",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Supplier Scorecard Criteria": {
@@ -7699,7 +9497,13 @@
       "criteria_name",
       "max_score",
       "formula",
-      "weight"
+      "weight",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Print Format Field Template": {
@@ -7712,7 +9516,13 @@
       "template_file",
       "module",
       "standard",
-      "template"
+      "template",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "UOM": {
@@ -7722,7 +9532,13 @@
       "name",
       "enabled",
       "uom_name",
-      "must_be_whole_number"
+      "must_be_whole_number",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Discussion Topic": {
@@ -7732,7 +9548,13 @@
       "name",
       "title",
       "reference_doctype",
-      "reference_docname"
+      "reference_docname",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Discussion Reply": {
@@ -7741,7 +9563,13 @@
     "fields": [
       "name",
       "topic",
-      "reply"
+      "reply",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Tag Link": {
@@ -7752,7 +9580,13 @@
       "document_type",
       "document_name",
       "tag",
-      "title"
+      "title",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Package Import": {
@@ -7763,7 +9597,13 @@
       "attach_package",
       "activate",
       "force",
-      "log"
+      "log",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Package Release": {
@@ -7777,7 +9617,13 @@
       "major",
       "minor",
       "patch",
-      "release_notes"
+      "release_notes",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Package": {
@@ -7788,7 +9634,13 @@
       "package_name",
       "readme",
       "license_type",
-      "license"
+      "license",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Party Link": {
@@ -7799,7 +9651,13 @@
       "primary_role",
       "secondary_role",
       "primary_party",
-      "secondary_party"
+      "secondary_party",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Tax Withholding Category": {
@@ -7812,7 +9670,13 @@
       "consider_party_ledger_amount",
       "tax_on_excess_amount",
       "rates",
-      "accounts"
+      "accounts",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Assignment Rule": {
@@ -7833,7 +9697,13 @@
       "rule",
       "field",
       "users",
-      "last_user"
+      "last_user",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "South Africa VAT Settings": {
@@ -7842,7 +9712,13 @@
     "fields": [
       "name",
       "company",
-      "vat_accounts"
+      "vat_accounts",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Campaign": {
@@ -7854,7 +9730,13 @@
       "campaign_name",
       "naming_series",
       "campaign_schedules",
-      "description"
+      "description",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Tax Rule": {
@@ -7887,7 +9769,13 @@
       "from_date",
       "to_date",
       "priority",
-      "company"
+      "company",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Slack Webhook URL": {
@@ -7897,7 +9785,13 @@
       "name",
       "webhook_name",
       "webhook_url",
-      "show_document_link"
+      "show_document_link",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Promotional Scheme": {
@@ -7931,7 +9825,13 @@
       "company",
       "currency",
       "price_discount_slabs",
-      "product_discount_slabs"
+      "product_discount_slabs",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "OAuth Authorization Code": {
@@ -7948,7 +9848,13 @@
       "validity",
       "nonce",
       "code_challenge",
-      "code_challenge_method"
+      "code_challenge_method",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Import Supplier Invoice": {
@@ -7964,7 +9870,13 @@
       "default_buying_price_list",
       "zip_file",
       "import_invoices",
-      "status"
+      "status",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Asset Category": {
@@ -7977,7 +9889,13 @@
       "enable_cwip_accounting",
       "finance_book_detail",
       "finance_books",
-      "accounts"
+      "accounts",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Quality Inspection Parameter": {
@@ -7987,7 +9905,13 @@
       "name",
       "parameter",
       "parameter_group",
-      "description"
+      "description",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Payment Term": {
@@ -8005,7 +9929,13 @@
       "discount",
       "discount_validity_based_on",
       "discount_validity",
-      "description"
+      "description",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Accounting Dimension": {
@@ -8017,7 +9947,13 @@
       "label",
       "fieldname",
       "dimension_defaults",
-      "disabled"
+      "disabled",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Quality Inspection Parameter Group": {
@@ -8025,7 +9961,13 @@
     "description": "Standard ERPNext doctype for Quality Inspection Parameter Group",
     "fields": [
       "name",
-      "group_name"
+      "group_name",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Landed Cost Voucher": {
@@ -8046,7 +9988,13 @@
       "distribute_charges_based_on",
       "amended_from",
       "sec_break2",
-      "landed_cost_help"
+      "landed_cost_help",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Asset Maintenance Team": {
@@ -8058,7 +10006,13 @@
       "maintenance_manager",
       "maintenance_manager_name",
       "company",
-      "maintenance_team_members"
+      "maintenance_team_members",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Auto Repeat": {
@@ -8086,7 +10040,13 @@
       "message",
       "preview_message",
       "print_format",
-      "status"
+      "status",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "UAE VAT Settings": {
@@ -8095,7 +10055,13 @@
     "fields": [
       "name",
       "company",
-      "uae_vat_accounts"
+      "uae_vat_accounts",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Voice Call Settings": {
@@ -8107,7 +10073,13 @@
       "call_receiving_device",
       "greeting_message",
       "agent_busy_message",
-      "agent_unavailable_message"
+      "agent_unavailable_message",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Contract": {
@@ -8144,7 +10116,13 @@
       "document_type",
       "cb_links",
       "document_name",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Contract Template": {
@@ -8157,7 +10135,13 @@
       "sb_fulfilment",
       "requires_fulfilment",
       "fulfilment_terms",
-      "contract_template_help"
+      "contract_template_help",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Incoming Call Settings": {
@@ -8169,7 +10153,13 @@
       "greeting_message",
       "agent_busy_message",
       "agent_unavailable_message",
-      "call_handling_schedule"
+      "call_handling_schedule",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Communication Medium": {
@@ -8182,7 +10172,13 @@
       "catch_all",
       "provider",
       "disabled",
-      "timeslots"
+      "timeslots",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Quality Feedback Template": {
@@ -8192,7 +10188,13 @@
       "name",
       "template",
       "sb_00",
-      "parameters"
+      "parameters",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Shipment Parcel Template": {
@@ -8204,7 +10206,13 @@
       "length",
       "width",
       "height",
-      "weight"
+      "weight",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Payment Gateway Account": {
@@ -8219,7 +10227,13 @@
       "currency",
       "payment_request_message",
       "message",
-      "message_examples"
+      "message_examples",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Mode of Payment": {
@@ -8230,7 +10244,13 @@
       "mode_of_payment",
       "enabled",
       "type",
-      "accounts"
+      "accounts",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Domain": {
@@ -8238,7 +10258,13 @@
     "description": "Standard ERPNext doctype for Domain",
     "fields": [
       "name",
-      "domain"
+      "domain",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Video": {
@@ -8257,7 +10283,13 @@
       "dislike_count",
       "comment_count",
       "description",
-      "image"
+      "image",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Process Deferred Accounting": {
@@ -8271,7 +10303,13 @@
       "posting_date",
       "start_date",
       "end_date",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Email Digest": {
@@ -8315,7 +10353,13 @@
       "calendar_events",
       "todo_list",
       "notifications",
-      "add_quote"
+      "add_quote",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Bank": {
@@ -8330,7 +10374,13 @@
       "address_html",
       "contact_html",
       "bank_transaction_mapping",
-      "plaid_access_token"
+      "plaid_access_token",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Email Campaign": {
@@ -8344,7 +10394,13 @@
       "sender",
       "start_date",
       "end_date",
-      "status"
+      "status",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Dashboard Chart Source": {
@@ -8354,7 +10410,13 @@
       "name",
       "source_name",
       "module",
-      "timeseries"
+      "timeseries",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Customs Tariff Number": {
@@ -8363,7 +10425,13 @@
     "fields": [
       "name",
       "tariff_number",
-      "description"
+      "description",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "POS Opening Entry": {
@@ -8381,7 +10449,13 @@
       "pos_closing_entry",
       "user",
       "balance_details",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Asset Maintenance": {
@@ -8397,7 +10471,13 @@
       "maintenance_team",
       "maintenance_manager",
       "maintenance_manager_name",
-      "asset_maintenance_tasks"
+      "asset_maintenance_tasks",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Downtime Entry": {
@@ -8412,7 +10492,13 @@
       "to_time",
       "downtime",
       "stop_reason",
-      "remarks"
+      "remarks",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Journal Entry Template": {
@@ -8426,7 +10512,13 @@
       "company",
       "is_opening",
       "multi_currency",
-      "accounts"
+      "accounts",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Quality Inspection Template": {
@@ -8435,7 +10527,13 @@
     "fields": [
       "name",
       "quality_inspection_template_name",
-      "item_quality_inspection_parameter"
+      "item_quality_inspection_parameter",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Project Template": {
@@ -8444,7 +10542,13 @@
     "fields": [
       "name",
       "project_type",
-      "tasks"
+      "tasks",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Color": {
@@ -8452,7 +10556,13 @@
     "description": "Standard ERPNext doctype for Color",
     "fields": [
       "name",
-      "color"
+      "color",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Bank Account Type": {
@@ -8460,7 +10570,13 @@
     "description": "Standard ERPNext doctype for Bank Account Type",
     "fields": [
       "name",
-      "account_type"
+      "account_type",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Item Manufacturer": {
@@ -8473,7 +10589,13 @@
       "manufacturer_part_no",
       "item_name",
       "description",
-      "is_default"
+      "is_default",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Payment Order": {
@@ -8490,7 +10612,13 @@
       "company_bank_account",
       "account",
       "references",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Loyalty Point Entry": {
@@ -8508,7 +10636,13 @@
       "purchase_amount",
       "expiry_date",
       "posting_date",
-      "company"
+      "company",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Share Transfer": {
@@ -8532,7 +10666,13 @@
       "amount",
       "company",
       "remarks",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Website Route Meta": {
@@ -8540,7 +10680,13 @@
     "description": "Standard ERPNext doctype for Website Route Meta",
     "fields": [
       "name",
-      "meta_tags"
+      "meta_tags",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Energy Point Rule": {
@@ -8559,7 +10705,13 @@
       "multiplier_field",
       "max_points",
       "apply_only_once",
-      "condition"
+      "condition",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Coupon Code": {
@@ -8578,7 +10730,13 @@
       "maximum_use",
       "used",
       "description",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Sales Partner": {
@@ -8603,7 +10761,13 @@
       "logo",
       "partner_website",
       "introduction",
-      "description"
+      "description",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Tag": {
@@ -8611,7 +10775,13 @@
     "description": "Standard ERPNext doctype for Tag",
     "fields": [
       "name",
-      "description"
+      "description",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Accounting Period": {
@@ -8623,7 +10793,13 @@
       "start_date",
       "end_date",
       "company",
-      "closed_documents"
+      "closed_documents",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Manufacturer": {
@@ -8639,7 +10815,13 @@
       "address_contacts",
       "address_html",
       "contact_html",
-      "notes"
+      "notes",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Issue Type": {
@@ -8647,7 +10829,13 @@
     "description": "Standard ERPNext doctype for Issue Type",
     "fields": [
       "name",
-      "description"
+      "description",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Invoice Discounting": {
@@ -8670,7 +10858,13 @@
       "accounts_receivable_credit",
       "accounts_receivable_discounted",
       "accounts_receivable_unpaid",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Warehouse Type": {
@@ -8678,7 +10872,13 @@
     "description": "Standard ERPNext doctype for Warehouse Type",
     "fields": [
       "name",
-      "description"
+      "description",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Loyalty Program": {
@@ -8701,7 +10901,13 @@
       "expense_account",
       "company",
       "cost_center",
-      "loyalty_program_help"
+      "loyalty_program_help",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Shipping Rule": {
@@ -8718,7 +10924,13 @@
       "calculate_based_on",
       "shipping_amount",
       "conditions",
-      "countries"
+      "countries",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Issue Priority": {
@@ -8726,7 +10938,13 @@
     "description": "Standard ERPNext doctype for Issue Priority",
     "fields": [
       "name",
-      "description"
+      "description",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Personal Data Download Request": {
@@ -8736,7 +10954,13 @@
       "name",
       "user",
       "user_name",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Activity Cost": {
@@ -8750,7 +10974,13 @@
       "department",
       "billing_rate",
       "costing_rate",
-      "title"
+      "title",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Supplier Scorecard Period": {
@@ -8767,7 +10997,13 @@
       "variables",
       "sec_ref",
       "scorecard",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Supplier Scorecard": {
@@ -8793,7 +11029,13 @@
       "prevent_pos",
       "notify_supplier",
       "notify_employee",
-      "employee"
+      "employee",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Supplier Scorecard Standing": {
@@ -8811,7 +11053,13 @@
       "prevent_pos",
       "notify_supplier",
       "notify_employee",
-      "employee_link"
+      "employee_link",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Employee Group": {
@@ -8820,7 +11068,13 @@
     "fields": [
       "name",
       "employee_group_name",
-      "employee_list"
+      "employee_list",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Bank Account Subtype": {
@@ -8828,7 +11082,13 @@
     "description": "Standard ERPNext doctype for Bank Account Subtype",
     "fields": [
       "name",
-      "account_subtype"
+      "account_subtype",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Market Segment": {
@@ -8836,7 +11096,13 @@
     "description": "Standard ERPNext doctype for Market Segment",
     "fields": [
       "name",
-      "market_segment"
+      "market_segment",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Bank Guarantee": {
@@ -8869,7 +11135,13 @@
       "margin_money",
       "charges",
       "fixed_deposit_number",
-      "amended_from"
+      "amended_from",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "UOM Conversion Factor": {
@@ -8880,7 +11152,13 @@
       "category",
       "from_uom",
       "to_uom",
-      "value"
+      "value",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "SMS Log": {
@@ -8895,7 +11173,13 @@
       "no_of_requested_sms",
       "requested_numbers",
       "no_of_sent_sms",
-      "sent_to"
+      "sent_to",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Routing": {
@@ -8905,7 +11189,13 @@
       "name",
       "routing_name",
       "disabled",
-      "operations"
+      "operations",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Share Type": {
@@ -8914,7 +11204,13 @@
     "fields": [
       "name",
       "title",
-      "description"
+      "description",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Item Alternative": {
@@ -8926,7 +11222,13 @@
       "alternative_item_code",
       "two_way",
       "item_name",
-      "alternative_item_name"
+      "alternative_item_name",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Currency Exchange": {
@@ -8939,7 +11241,13 @@
       "to_currency",
       "exchange_rate",
       "for_buying",
-      "for_selling"
+      "for_selling",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Finance Book": {
@@ -8947,7 +11255,13 @@
     "description": "Standard ERPNext doctype for Finance Book",
     "fields": [
       "name",
-      "finance_book_name"
+      "finance_book_name",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "UOM Category": {
@@ -8955,7 +11269,13 @@
     "description": "Standard ERPNext doctype for UOM Category",
     "fields": [
       "name",
-      "category_name"
+      "category_name",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Party Type": {
@@ -8964,7 +11284,13 @@
     "fields": [
       "name",
       "party_type",
-      "account_type"
+      "account_type",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Opportunity Type": {
@@ -8972,7 +11298,13 @@
     "description": "Standard ERPNext doctype for Opportunity Type",
     "fields": [
       "name",
-      "description"
+      "description",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Project Type": {
@@ -8981,7 +11313,13 @@
     "fields": [
       "name",
       "project_type",
-      "description"
+      "description",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Activity Type": {
@@ -8992,7 +11330,13 @@
       "activity_type",
       "costing_rate",
       "billing_rate",
-      "disabled"
+      "disabled",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Branch": {
@@ -9000,7 +11344,13 @@
     "description": "Standard ERPNext doctype for Branch",
     "fields": [
       "name",
-      "branch"
+      "branch",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   },
   "Cheque Print Template": {
@@ -9045,7 +11395,13 @@
       "signatory_from_top_edge",
       "signatory_from_left_edge",
       "preview",
-      "cheque_print_preview"
+      "cheque_print_preview",
+      "owner",
+      "creation",
+      "modified",
+      "modified_by",
+      "docstatus",
+      "idx"
     ]
   }
 }

@@ -5,181 +5,232 @@ Welcome to the **alpha version** of Changai - an AI-powered assistant that conve
 
 > ⚠️ This release is intended for internal testing and feedback only.  
 
-> Please read the known issues section carefully before using.
+> Please read the known issues section carefully before use.
 
 ---
 
-## 📌 Table of Contents
+## ✨ Features
 
-- \[What It Does](#-what-it-does)  
-- \[Currently Supported Queries](#-currently-supported-queries)  
-- \[Known Issues and Limitations](#-known-issues-and-limitations)  
-- \[Installation](#-installation)  
-- \[Usage](#-usage)  
-- \[Metadata Format](#-metadata-format)  
-- \[Feedback](#-feedback)
-- \[Contributions](#-contributions)
+* Natural language → ERPNext query conversion
+* Multi-model NLP pipeline (**Hugging Face models**)
+* Local inference **or** remote inference via **Replicate API**
+* Jinja2-based templates for conversational responses
+* Extendable for new doctypes and queries
+* Built-in dataset + Colab training workflows
+* Conversational handling for small talk and ERP queries
+
+---
+
+### 💬 Conversational Handling
+
+Changai seamlessly manages both casual interactions and ERP-related queries.
+
+Small talk (e.g., greetings) is handled through predefined responses.
+
+ERP queries are identified using business keywords and spelling correction.
+
+Valid queries are processed by the prediction pipeline, which generates and executes the corresponding Frappe query.
+
+Responses are returned in a natural, conversational format for better user experience.
+
+## 🧠 Pipeline & Models
+
+Changai uses **four fine-tuned Hugging Face models**, trained in **Google Colab** and deployed locally or on Replicate:
+
+| Stage                            | Model                                                     | Role                                 |
+| -------------------------------- | --------------------------------------------------------- | ------------------------------------ |
+| **1. Doctype Detection**         | `hyrinmansoor/text2frappe-s1-roberta` *(RoBERTa)*         | Detect target ERPNext Doctype        |
+| **2. Relevant Field Prediction** | `hyrinmansoor/text2frappe-s2-sbert` *(SBERT)*             | Suggest semantically relevant fields |
+| **3. Exact Field Selection**     | `hyrinmansoor/text2frappe-s2-flan-field` *(Flan-T5 base)* | Select metadata-validated fields     |
+| **4. Query Generation**          | `hyrinmansoor/text2frappe-s3-flan-query` *(Flan-T5 base)* | Generate executable SQL query        |
+
 ---
 
 ## ⚙️ What It Does
 
-- Understands natural questions like \_"How many contacts do we have?"\_  
-- Distinguishes types of inputs - small talk, complete and incomplete questions
-- Identifies the appropriate **Doctype**  
-- Predicts relevant **fields** 
-- Generates valid **Frappe database queries** such as:  
-    - `frappe.get\_list`
-    - `frappe.db.get\_value`
-    - `frappe.get\_all`
-    - `frappe.db.sql`
-    - `frappe.db.exists`
-- Formats results using **Jinja2-based conversational templates** to make output responses more human-friendly.
+* Understands natural ERP-related questions like:
+  *“How many contacts do we have?”*
+* Distinguishes **small talk, complete & incomplete queries**
+* Identifies the right **Doctype**
+* Predicts relevant **fields**
+* Generates valid Frappe queries using **`frappe.db.sql`**
+* Formats output using **Jinja2 templates** for natural replies
 
 ---
 
-## 🧾 Conversational Templates with Jinja2
+## 🧾 Conversational Templates
 
-To generate human-readable responses, we use **Jinja2 templates** that render the raw query results into conversational outputs.  
-This makes the chatbot responses feel more natural and business-friendly.
+Responses are formatted with **Jinja2 templates** for human-friendly answers.
 
 Example:
-> Template: `"There are {{ count }} contacts registered in the system."`  
-> Output: `"There are 154 contacts registered in the system."`
 
-Templates are defined in the `/templates` directory and are applied after Frappe query execution.  
-You can customize responses easily by editing the templates without touching the model logic.
+* **Template:** `"There are {{ count }} contacts registered in the system."`
+* **Output:** `"There are 154 contacts registered in the system."`
 
 ---
 
-## ✅ Currently Supported Queries
+## ✅ Currently Supported Query types
 
-This alpha release reliably supports a **small, pre-approved set of queries**. Others may work, but are not guaranteed.
+This alpha release supports a **limited set of queries** reliably:
 
-#### ✔ Examples that work:
-- How many companies do we have?  
-- How many contacts do we have?  
-- Get the address of supplier `SUP-0002`.  
-- How many primary contacts exist in the system?  
-- List purchase orders with discount above 10,000.  
-- How many routings are currently disabled?  
-- How many contacts are linked to companies?  
-- Get all employees.
+✔ Examples:
 
----
+* Get all employees.
+* How many sales invoices were issued in the last quarter?
+* How many sales invoices are there?
+* How many sales invoices have discounts?
+* How many Sales invoices are unpaid?
+* How many companies do we have?
+* How many contacts do we have?
+* Get the address of supplier `SUP-0002`.
+* How many primary contacts exist in the system?
+* List purchase orders with discount above 10,000.
+* How many routings are currently disabled?
+* How many contacts are linked to companies?
 
-## ⚠️ Known Issues and Limitations
-
-> 💡 These issues are expected during the alpha phase.
-
-### ❗ Query Errors
-Some queries may result in exceptions such as:
-- `IndexError`
-- `Unknown column`
-- `Invalid field name`
-
-These usually stem from inaccurate field prediction or incomplete metadata validation.
-
-### 🧠 Field Prediction Issues
-- The model may **hallucinate non-existent fields**, even with a clean metadata file.
-- Better alignment with metadata is in progress.
-
-### 📄 Doctype Support Issues
-- The model is currently trained with **standard doctypes** in the metadata file.
-- Better alignment with other doctypes is in progress.
-
-### 📦 Meta File Required
-
-The chatbot **requires a clean, correct metadata file** (CSV or JSON).  
-It must:
-- Include only valid doctype-fieldname pairs
-- **Exclude layout fields** (e.g. Section Break, Tab, Column Break, etc.)
-- Follow consistent formatting
-
-### 🔧 Partial Query Method Support
-The chatbot attempts to generate:
-- `frappe.get\_list`
-- `frappe.db.get\_value`
-- `frappe.db.exists`
-- `frappe.get\_all`
-- `frappe.db.sql`
-
-However, due to ongoing refinement, **some queries may still fail**.
-
-### 🛠 Fixes In Progress
-- More accurate field prediction using metadata
-- Cleaner, user-friendly error messages
-- Fallback suggestions on failure
-- Expanded query style and intent support
-- Widen support for all doctypes
 
 ---
+🚀 Deployment
 
-## 🧰 Installation
+Changai’s models are containerized with Docker and packaged using Cog for reproducible inference.
+They are deployed on Replicate, where each version runs in an isolated environment and is accessible via the Replicate API.
 
-### 1. Clone the repo
+The serving logic is defined in predict.py (model loading, inference, query generation).
+
+Using cog push, the models are published to Replicate under a unique version ID.
+
+## 🛠️ Installation Guide
+
+### 1. 🔹 Local Development (Training / Testing)
 
 ```bash
 git clone https://github.com/ERPGulf/changai.git
 cd changai
-```
 
-### 2. Create and activate environment
-Using Conda:
-```bash
-conda create -n erp-bot python=3.11
-conda activate erp-bot
-```
+# Create environment
+python3 -m venv venv
+source venv/bin/activate   # macOS/Linux
+venv\Scripts\activate      # Windows
 
-### 3. Install dependencies
-
-```bash
+# Install dependencies
 pip install -r requirements.txt
+```
+
+➡️ Train models in **Google Colab (GPU recommended)**.
+➡️ Export trained weights to local or Docker.
+
+---
+
+### 2. 🔹 Run via Replicate (Inference / Production)
+
+1. Install **Cog**
+
+   ```bash
+   pip install cog
+   ```
+
+2. Login
+
+   ```bash
+   replicate login
+   ```
+
+3. Push model
+
+   ```bash
+   cog push r8.im/<username>/<model-name>
+   ```
+
+4. Call API
+
+**Python**
+
+```python
+import replicate
+
+output = replicate.run(
+    "your-username/erp-chatbot:VERSION_ID",
+    input={"question": "How many sales invoices last month?"}
+)
+print(output)
+```
+
+**cURL**
+
+```bash
+curl -s \
+  -H "Authorization: Token $REPLICATE_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"input": {"question": "Get all employees"}}' \
+  https://api.replicate.com/v1/predictions
 ```
 
 ---
 
 ## 🚀 Usage
-### Run the main script
+
+Run locally:
 
 ```bash
 python app.py
 ```
-### Sample API input:
+
+**Sample Input:**
+
 ```json
 {
-    "question": "How many contacts do we have?",
-    "meta\_file\_path": "metadata.csv"
+  "question": "How many contacts do we have?",
+  "meta_file_path": "metadata.csv"
 }
 ```
-### Sample response:
+
+**Sample Response:**
+
 ```json
 {
-    "query": "frappe.db.sql(\"SELECT COUNT(name) FROM `tabContact`\")",
-    "doctype": "Contact",
-    "top fields": {},
-    "fields": ["count(name)"],
-    "query_data": "There are {{ count }} contacts in the system.",
-    "data": {
-        "count": 154
-    }
+  "query": "frappe.db.sql(\"SELECT COUNT(name) FROM `tabContact`\")",
+  "doctype": "Contact",
+  "fields": ["count(name)"],
+  "data": {"count": 154},
+  "query_data": "There are {{ count }} contacts in the system."
 }
 ```
-💬 **Final output**:  
+
+💬 Final output:
+
 > "There are 154 contacts in the system."
+
 ---
 
-## 🧾 Metadata Format
-Your metadata file (CSV or JSON) must follow this structure:
+## 📄 Metadata Format
 
-### CSV Format
-| doctype        | fieldname       |
-| -------------- | --------------- |
-| Company        | name            |
-| Company        | industry        |
-| Contact        | email_id        |
-| Purchase Order | discount_amount |
+Metadata file (CSV/JSON) must list **valid doctype-fieldname pairs**.
 
->Make sure the metadata provided is clean.
+**CSV Example**
+
+| doctype        | fieldname        |
+| -------------- | ---------------- |
+| Company        | name             |
+| Company        | industry         |
+| Contact        | email\_id        |
+| Purchase Order | discount\_amount |
+
+⚠️ Must exclude layout fields (e.g. Section Break, Tab, etc.)
+
+---
+
+## ⚠️ Known Issues
+
+* ❗ **Query Errors**: e.g. `IndexError`, `Unknown column`, `Invalid field name`
+* 🧠 **Field Prediction**: may hallucinate non-existent fields
+* 📄 **Doctype Coverage**: limited to trained doctypes only
+* 📦 **Metadata Dependency**: requires clean, correct metadata file
+
+➡️ Fixes in progress:
+
+* Stronger metadata validation
+* User-friendly error handling
+* Expanded doctype/query support
 
 ---
 

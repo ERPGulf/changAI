@@ -1,12 +1,12 @@
 [
   {
     "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
-    "input": "Who is the sales partner named 'BrightEdge Corp'?",
+    "input": "Who is the sales partner named 'Grant Plastics Ltd'?",
     "output": "Sales Partner"
   },
   {
     "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
-    "input": "Give name, website link of  partner who referred 'NovaTech'?",
+    "input": "Give name, website link of  partner who referred 'Palmer Productions'?",
     "output": "Sales Partner"
   },
   {
@@ -44,7 +44,7 @@
     "input": "What is the partner name and their introduction text for 'MavenConnect'?",
     "output": "Sales Partner"
   },
-    {
+  {
     "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
     "input": "What role does 'EliteMark Inc.' play in our partner network—are they a distributor or a reseller?",
     "output": "Sales Partner"
@@ -189,7 +189,7 @@
     "input": "What is the commission rate set for 'ResellXperts Pvt Ltd'?",
     "output": "Sales Partner"
   },
-    {
+  {
     "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
     "input": "List all sales partners with a commission rate above 12%.",
     "output": "Sales Partner"
@@ -199,7 +199,7 @@
     "input": "Show partners with commission rates above 8% operating in 'South Asia'.",
     "output": "Sales Partner"
   },
-    {
+  {
     "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
     "input": "Show partners with commission rates above 8% operating in 'South Asia'.",
     "output": "Sales Partner"
@@ -213,7 +213,7 @@
     "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
     "input": "Do any of the top-performing partners have a commission rate below 5%?",
     "output": "Sales Partner"
-  },  
+  },
   {
     "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
     "input": "Is there a partner with 0% commission rate in the system?",
@@ -223,7 +223,7 @@
     "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
     "input": "Find all distributors with commission rates between 5% and 15%.",
     "output": "Sales Partner"
-  },  
+  },
   {
     "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
     "input": "Who are the partners with a commission rate of exactly 10.5%?",
@@ -884,7 +884,6 @@
     "input": "Which partner has the website 'www.synergylink.com'?",
     "output": "Sales Partner"
   },
-  
   {
     "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
     "input": "What is the referral code assigned to 'Altura Traders'?",
@@ -1135,7 +1134,6 @@
     "input": "What is the naming pattern for the vendors?",
     "output": "Supplier"
   },
-
   {
     "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
     "input": "Who is the vendor with code SUP-00015? ",
@@ -1436,7 +1434,6 @@
     "input": "List internal suppliers who have a bank account but no tax ID.",
     "output": "Supplier"
   },
-
   {
     "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
     "input": "List all suppliers with a configured default bank account.",
@@ -1587,7 +1584,4 @@
     "input": "Do any vendors lack a default bank account for incoming payment setups?",
     "output": "Supplier"
   }
-
-
 ]
- 

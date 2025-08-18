@@ -1803,5 +1803,165 @@
         "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
         "input": "Which lead owner has the most qualified leads?",
         "output": "Lead"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many Sales Invoices do we have?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the average invoice amount this month?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "List all invoices created today.",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many sales invoices marked as returns were recorded this quarter?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total revenue from sales invoices this year?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which customer has the highest total invoice amount this year?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices were submitted last week?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "List all submitted Sales Invoices from this month.",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Show total invoice amount for each customer this year.",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many Sales Invoices were created last quarter?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "List all invoices with status 'Overdue'.",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "What is the total revenue from submitted invoices this fiscal year?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Show average invoice amount per month for the current year.",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "List all invoices created between January and March.",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which invoices were marked as returns this month?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices were cancelled last week?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "List all invoices with total amount greater than ₹50,000.",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Show all invoices linked to customer 'Acme Corp'.",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices were created today?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "List invoices with due date in the next 7 days.",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Show all draft invoices created this week.",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "Which invoices were paid this month?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many Sales Invoices were created this month?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices were submitted last week?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices are currently in draft status?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices were cancelled this quarter?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices were marked as returns this year?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices were created today?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices are overdue as of now?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices were paid this month?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices were created for customer 'Acme Corp' this year?",
+        "output": "Sales Invoice"
+    },
+    {
+        "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
+        "input": "How many invoices have a total amount above ₹1,00,000?",
+        "output": "Sales Invoice"
     }
 ]
