@@ -1,9 +1,9 @@
 customer 1000
 customers 1000
-company 1000
-ABC 1000
 employee 1000
 employees 1000
+company 1000
+ABC 1000
 invoice 1000
 invoices 1000
 with 1000

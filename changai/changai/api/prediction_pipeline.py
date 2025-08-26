@@ -153,31 +153,24 @@ STOP_WORDS = {
 
 @frappe.whitelist(allow_guest=True)
 def correct_sentence(text):
-
-    # Load SpaCy once (not inside the function, to avoid reloading each call)
     nlp = spacy.load("en_core_web_sm")
-    """Corrects misspelled ERP keywords while preserving entities like company names, people, places, etc."""
 
-    # Load ERP dictionary
-    custom_dictionary = (
-        "/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/erp_dictionary.txt"
-    )
+    custom_dictionary = "/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/erp_dictionary.txt"
     sym_spell = SymSpell(max_dictionary_edit_distance=2, prefix_length=7)
     sym_spell.load_dictionary(custom_dictionary, term_index=0, count_index=1)
 
     stopwords_set = STOP_WORDS
 
-    # Identify probable IDs
     def is_probable_id(word):
         return (
-            bool(re.search(r"[A-Za-z]", word)) and bool(re.search(r"\d", word))
-        ) or bool(re.search(r"[_\-]", word))
+            (bool(re.search(r"[A-Za-z]", word)) and bool(re.search(r"\d", word)))
+            or bool(re.search(r"[_\-]", word))
+        )
 
-    # --- STEP 1: Extract entities using SpaCy ---
     doc = nlp(text)
     entities = [(ent.text, ent.start_char, ent.end_char) for ent in doc.ents]
+    print("🔎 Entities found:", entities)
 
-    # Replace entities with placeholders
     text_to_correct = text
     placeholder_map = {}
     for i, (ent_text, _, _) in enumerate(entities):
@@ -185,8 +178,9 @@ def correct_sentence(text):
         text_to_correct = text_to_correct.replace(ent_text, placeholder)
         placeholder_map[placeholder] = ent_text
 
-    # --- STEP 2: Tokenize and correct ---
     tokens = re.findall(r"\b[\w\-']+\b|[^\w\s]", text_to_correct)
+    print("✂ Tokens:", tokens)
+
     corrected_tokens = []
 
     for token in tokens:
@@ -198,10 +192,10 @@ def correct_sentence(text):
             corrected_tokens.append(token)
             continue
 
-        # Only correct ERP dictionary words
-        suggestions = sym_spell.lookup(
-            token.lower(), Verbosity.CLOSEST, max_edit_distance=2
-        )
+        # Lookup
+        suggestions = sym_spell.lookup(token.lower(), Verbosity.CLOSEST, max_edit_distance=2)
+        print(f"💡 Suggestions for '{token}':", [s.term for s in suggestions])
+
         corrected = suggestions[0].term if suggestions else token
 
         if token.istitle():
@@ -217,6 +211,7 @@ def correct_sentence(text):
     for placeholder, ent_text in placeholder_map.items():
         corrected_text = corrected_text.replace(placeholder, ent_text)
 
+    print("✅ Final corrected:", corrected_text)
     return corrected_text
 
 
@@ -251,7 +246,7 @@ def fuzzy_intent_router(text):
             else:
                 return {
                     "type": "Greeting",
-                    "response": "Hello! How can I assist you today?",
+                    "response": random.choice(non_erp_responses),
                 }
 
     return {
@@ -437,7 +432,7 @@ Here are the first few:
         {%- if data[0] is mapping and (data[0].values()|first is number) -%}
             {%- set record = data[0] -%}
             {%- set key = record.keys()|list|first -%}
-I found {{ record[key] }} {{ key.replace('_', ' ') }}.
+I found {{ record[key] }} {{ "record" if record[key] == 1 else "records" }}.
         {# Otherwise use normal formatting #}
         {%- else -%}
 Result found:
