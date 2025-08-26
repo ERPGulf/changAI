@@ -19,7 +19,7 @@ Welcome to the **alpha version** of Changai - an AI-powered assistant that conve
 * Built-in dataset + Colab training workflows
 * Conversational handling for small talk and ERP queries
 
----
+--------
 
 ### 💬 Conversational Handling
 
