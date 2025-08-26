@@ -1,0 +1,410 @@
+[
+    {
+        "input": {
+            "doctype": "Sales Order",
+            "question": "List all canceled sales orders",
+            "fields": [
+                "name",
+                "status",
+                "docstatus"
+            ]
+        },
+        "output": "frappe.db.sql('SELECT name, status FROM `tabSales Order` WHERE docstatus = 2', as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": "Sales Invoice",
+            "question": "What is the total tax collected from sales invoices this year?",
+            "fields": [
+                "total_taxes_and_charges",
+                "docstatus",
+                "posting_date"
+            ]
+        },
+        "output": "frappe.db.sql(\"SELECT SUM(total_taxes_and_charges) AS total_tax_collected FROM `tabSales Invoice` WHERE docstatus = 1 AND YEAR(posting_date) = YEAR(CURDATE())\", as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": "Sales Order",
+            "question": "Which sales team members generated the highest revenue last quarter?",
+            "fields": [
+                "name",
+                "sales_team",
+                "total",
+                "transaction_date",
+                "docstatus"
+            ]
+        },
+        "output": "frappe.db.sql(\"\"\"\nSELECT sales_team, SUM(total) AS total_revenue\nFROM `tabSales Order`\nWHERE docstatus = 1\nAND transaction_date >= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)\nGROUP BY sales_team\nORDER BY total_revenue DESC\nLIMIT 10\n\"\"\", as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": "Sales Order",
+            "question": "Which sales team members generated the highest revenue last quarter?",
+            "fields": [
+                "name",
+                "total",
+                "transaction_date",
+                "docstatus",
+                "sales_person"
+            ]
+        },
+        "output": "frappe.db.sql(\"\"\"\nSELECT st.sales_person, SUM(so.total) AS total_revenue\nFROM `tabSales Order` so\nJOIN `tabSales Team` st ON st.parent = so.name\nWHERE so.docstatus = 1\n  AND so.transaction_date >= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)\nGROUP BY st.sales_person\nORDER BY total_revenue DESC\nLIMIT 10\n\"\"\", as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": "Sales Invoice",
+            "question": "What is the monthly sales trend for the last year?",
+            "fields": [
+                "posting_date",
+                "total",
+                "docstatus"
+            ]
+        },
+        "output": "frappe.db.sql(\"\"\"\nSELECT DATE_FORMAT(posting_date, '%Y-%m') AS month, SUM(total) AS monthly_sales\nFROM `tabSales Invoice`\nWHERE docstatus = 1\n  AND posting_date >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)\nGROUP BY month\nORDER BY month\n\"\"\", as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": "Sales Order",
+            "question": "List all customers with pending sales orders.",
+            "fields": [
+                "customer",
+                "status",
+                "docstatus"
+            ]
+        },
+        "output": "frappe.db.sql(\"SELECT DISTINCT customer FROM `tabSales Order` WHERE docstatus = 1 AND status = 'To Deliver and Bill'\", as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": "Sales Order",
+            "question": "Which sales orders have the highest discount applied?",
+            "fields": [
+                "discount_amount",
+                "additional_discount_percentage",
+                "docstatus"
+            ]
+        },
+        "output": "frappe.db.sql(\"SELECT name, discount_amount, additional_discount_percentage FROM `tabSales Order` WHERE docstatus = 1 ORDER BY discount_amount DESC, additional_discount_percentage DESC LIMIT 10\", as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": "Sales Order",
+            "question": "How many sales orders are delayed beyond expected delivery date?",
+            "fields": [
+                "delivery_date",
+                "status",
+                "transaction_date",
+                "docstatus"
+            ]
+        },
+        "output": "frappe.db.sql(\"SELECT COUNT(name) AS delayed_orders_count FROM `tabSales Order` WHERE docstatus = 1 AND status != 'Completed' AND delivery_date < CURDATE()\", as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": "Sales Order",
+            "question": "What is the average delivery time for sales orders?",
+            "fields": [
+                "transaction_date",
+                "delivery_date",
+                "docstatus"
+            ]
+        },
+        "output": "frappe.db.sql(\"SELECT AVG(DATEDIFF(delivery_date, transaction_date)) AS avg_delivery_days FROM `tabSales Order` WHERE docstatus = 1\", as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": "Purchase Order",
+            "question": "List purchase orders with partial delivery.",
+            "fields": [
+                "per_received",
+                "status",
+                "docstatus"
+            ]
+        },
+        "output": "frappe.db.sql(\"SELECT name, per_received, status FROM `tabPurchase Order` WHERE docstatus = 1 AND per_received > 0 AND per_received < 100\", as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": "Purchase Invoice",
+            "question": "What is the payment status of purchase invoices by supplier?",
+            "fields": [
+                "supplier",
+                "is_paid",
+                "docstatus"
+            ]
+        },
+        "output": "frappe.db.sql(\"SELECT supplier, is_paid FROM `tabPurchase Invoice` WHERE docstatus = 1\", as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": "Item",
+            "question": "Which items have the longest supplier lead times?",
+            "fields": [
+                "item_code",
+                "item_name",
+                "lead_time_days",
+                "supplier_items"
+            ]
+        },
+        "output": "frappe.db.sql(\"SELECT item_code, item_name, lead_time_days FROM `tabItem` ORDER BY lead_time_days DESC LIMIT 10\", as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": "Purchase Invoice",
+            "question": "What is the total purchase return value this year?",
+            "fields": [
+                "is_return",
+                "total",
+                "posting_date",
+                "docstatus"
+            ]
+        },
+        "output": "frappe.db.sql(\"SELECT SUM(total) AS total_purchase_return FROM `tabPurchase Invoice` WHERE docstatus = 1 AND is_return = 1 AND YEAR(posting_date) = YEAR(CURDATE())\", as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": "Purchase Order",
+            "question": "List purchase orders pending receipt of goods.",
+            "fields": [
+                "name",
+                "status",
+                "per_received",
+                "docstatus"
+            ]
+        },
+        "output": "frappe.db.sql(\"SELECT name, status, per_received FROM `tabPurchase Order` WHERE docstatus = 1 AND (status = 'To Receive and Bill' OR per_received < 100)\", as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": "Purchase Invoice",
+            "question": "How many purchase invoices are overdue for payment?",
+            "fields": [
+                "due_date",
+                "status",
+                "docstatus"
+            ]
+        },
+        "output": "frappe.db.sql(\"SELECT COUNT(name) AS overdue_invoices_count FROM `tabPurchase Invoice` WHERE docstatus = 1 AND due_date < CURDATE() AND status != 'Paid'\", as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": "Purchase Invoice",
+            "question": "Which suppliers have the best on-time delivery performance?",
+            "fields": [
+                "name",
+                "supplier",
+                "posting_date",
+                "due_date",
+                "docstatus"
+            ]
+        },
+        "output": "frappe.db.sql(\"SELECT name, supplier, posting_date, due_date FROM `tabPurchase Invoice` WHERE docstatus = 1 ORDER BY CASE WHEN posting_date <= due_date THEN 0 ELSE 1 END, posting_date\", as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": "Purchase Invoice",
+            "question": "What is the average purchase order value?",
+            "fields": [
+                "total",
+                "base_total",
+                "docstatus"
+            ]
+        },
+        "output": "frappe.db.sql(\"SELECT AVG(total) AS avg_total, AVG(base_total) AS avg_base_total FROM `tabPurchase Invoice` WHERE docstatus = 1\", as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": "Warehouse",
+            "question": "List warehouses with negative stock balances.",
+            "fields": [
+                "name",
+                "disabled"
+            ]
+        },
+        "output": "frappe.db.sql(\"SELECT name, disabled FROM `tabWarehouse` WHERE stock_balance < 0\", as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": "Item",
+            "question": "Which items have the highest holding cost?",
+            "fields": [
+                "name",
+                "valuation_rate",
+                "standard_rate"
+            ]
+        },
+        "output": "frappe.db.sql(\"SELECT name, valuation_rate, standard_rate FROM `tabItem` ORDER BY standard_rate DESC, valuation_rate DESC LIMIT 10\", as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": "Stock Ledger Entry",
+            "question": "How many stock reconciliation entries were made last month?",
+            "fields": [
+                "name",
+                "posting_date",
+                "is_adjustment_entry",
+                "voucher_type"
+            ]
+        },
+        "output": "frappe.db.sql(\"SELECT COUNT(name) AS reconciliation_count FROM `tabStock Ledger Entry` WHERE is_adjustment_entry = 1 AND voucher_type = 'Stock Reconciliation' AND posting_date >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) AND posting_date < CURDATE() AND docstatus = 1\", as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": "Stock Ledger Entry",
+            "question": "What is the total quantity of damaged stock?",
+            "fields": [
+                "name",
+                "actual_qty",
+                "is_adjustment_entry",
+                "posting_date",
+                "voucher_type",
+                "warehouse",
+                "docstatus"
+            ]
+        },
+        "output": "frappe.db.sql(\"\"\"SELECT name, actual_qty, is_adjustment_entry, posting_date, voucher_type, warehouse FROM `tabStock Ledger Entry` WHERE is_adjustment_entry = 1 AND docstatus = 1\"\"\", as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": "Stock Ledger Entry",
+            "question": "How many stock reconciliations were made in the last month?",
+            "fields": [
+                "name",
+                "is_adjustment_entry",
+                "voucher_type",
+                "posting_date",
+                "docstatus"
+            ]
+        },
+        "output": "frappe.db.sql(\"\"\"SELECT name, COUNT(name) AS reconciliation_count FROM `tabStock Ledger Entry` WHERE is_adjustment_entry = 1 AND voucher_type = 'Stock Reconciliation' AND posting_date >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) AND posting_date < CURDATE() AND docstatus = 1\"\"\", as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": "Item",
+            "question": "List items with expiry dates within next X days.",
+            "fields": [
+                "name",
+                "has_expiry_date",
+                "end_of_life"
+            ]
+        },
+        "output": "frappe.db.sql(\"\"\"SELECT name, has_expiry_date, end_of_life FROM `tabItem` WHERE has_expiry_date = 1 AND end_of_life <= DATE_ADD(CURDATE(), INTERVAL X DAY)\"\"\", as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": "Warehouse",
+            "question": "Which warehouses have the highest stock discrepancies?",
+            "fields": [
+                "name",
+                "disabled"
+            ]
+        },
+        "output": "frappe.db.sql(\"\"\"SELECT w.name, w.disabled, (COALESCE(b.actual_qty, 0) - COALESCE(b.projected_qty, 0)) AS stock_discrepancy FROM `tabWarehouse` w LEFT JOIN `tabBin` b ON b.warehouse = w.name ORDER BY stock_discrepancy DESC\"\"\", as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": "Stock Ledger Entry",
+            "question": "What is the turnover rate for key inventory items?",
+            "fields": [
+                "name",
+                "item_code",
+                "posting_date",
+                "actual_qty",
+                "warehouse"
+            ]
+        },
+        "output": "frappe.db.sql(\"\"\"SELECT item_code, warehouse, COUNT(name) AS transaction_count, SUM(actual_qty) AS total_qty, (SUM(actual_qty) / COUNT(DISTINCT posting_date)) AS turnover_rate FROM `tabStock Ledger Entry` GROUP BY item_code, warehouse ORDER BY turnover_rate DESC\"\"\", as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": "Purchase Invoice",
+            "question": "List all unpaid vendor bills older than 60 days.",
+            "fields": [
+                "name",
+                "outstanding_amount"
+            ]
+        },
+        "output": "frappe.db.sql(\"\"\"SELECT name, outstanding_amount FROM `tabPurchase Invoice` WHERE outstanding_amount > 0 AND due_date < CURDATE() - INTERVAL 60 DAY ORDER BY due_date ASC\"\"\", as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": "Item",
+            "question": "Which items have the highest valuation rate in inventory?",
+            "fields": [
+                "valuation_rate",
+                "name"
+            ]
+        },
+        "output": "frappe.db.sql(\"\"\"SELECT valuation_rate, name FROM `tabItem` ORDER BY valuation_rate DESC\"\"\", as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": [
+                "Warehouse",
+                "Stock Ledger Entry"
+            ],
+            "question": "What is the distribution of stock quantities across warehouses?",
+            "fields": [
+                "name",
+                "warehouse"
+            ]
+        },
+        "output": "frappe.db.sql(\"\"\"SELECT w.name AS warehouse_name, SUM(sle.actual_qty) AS total_qty FROM `tabWarehouse` w LEFT JOIN `tabStock Ledger Entry` sle ON sle.warehouse = w.name GROUP BY w.name\"\"\", as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": [
+                "Bin",
+                "Stock Ledger Entry"
+            ],
+            "question": "List items with stock discrepancies between physical and system counts.",
+            "fields": [
+                "item_code",
+                "warehouse",
+                "actual_qty"
+            ]
+        },
+        "output": "frappe.db.sql(\"\"\"SELECT b.item_code, b.warehouse, b.actual_qty AS system_qty, SUM(sle.actual_qty) AS ledger_qty FROM `tabBin` b LEFT JOIN `tabStock Ledger Entry` sle ON sle.item_code = b.item_code AND sle.warehouse = b.warehouse GROUP BY b.item_code, b.warehouse HAVING ABS(ledger_qty - system_qty) > 0\"\"\", as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": [
+                "Item",
+                "Item Reorder"
+            ],
+            "question": "What is the average replenishment time for critical items?",
+            "fields": [
+                "name",
+                "lead_time_days",
+                "warehouse",
+                "warehouse_reorder_level"
+            ]
+        },
+        "output": "frappe.db.sql(\"\"\"SELECT i.name, i.lead_time_days, ir.warehouse, ir.warehouse_reorder_level FROM `tabItem` i LEFT JOIN `tabItem Reorder` ir ON ir.parent = i.name WHERE ir.warehouse_reorder_level IS NOT NULL AND i.lead_time_days IS NOT NULL\"\"\", as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": "Stock Ledger Entry",
+            "question": "How many stock adjustments were made last month?",
+            "fields": [
+                "name"
+            ]
+        },
+        "output": "frappe.db.sql(\"\"\"SELECT COUNT(name) AS total_adjustments FROM `tabStock Ledger Entry` WHERE posting_date >= DATE_FORMAT(CURDATE() - INTERVAL 1 MONTH, '%Y-%m-01') AND posting_date < DATE_FORMAT(CURDATE(), '%Y-%m-01')\"\"\", as_dict=True)"
+    },
+    {
+        "input": {
+            "doctype": [
+                "Item",
+                "Stock Ledger Entry"
+            ],
+            "question": "Show items with expired batches or near expiry.",
+            "fields": [
+                "has_expiry_date",
+                "batch_no"
+            ]
+        },
+        "output": "frappe.db.sql(\"\"\"SELECT i.name, i.has_expiry_date, sle.batch_no FROM `tabItem` i JOIN `tabStock Ledger Entry` sle ON sle.item_code = i.item_code WHERE i.has_expiry_date = 1 AND sle.batch_no IS NOT NULL AND sle.expiry_date <= CURDATE() + INTERVAL 30 DAY\"\"\", as_dict=True)"
+    }
+]
