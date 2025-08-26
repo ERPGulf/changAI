@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 renderMessages();
                 scrollToBottom();
             }
-        }, 5000);
+        }, 12000);
 
         // Call bot response
         generateBotResponse(message, thinkingMsg, warmingTimeout);

@@ -76,7 +76,7 @@ This alpha release supports a **limited set of queries** reliably:
 ✔ Examples:
 
 * Get all employees.
-* How many sales invoices were issued in the last quarter?
+* How many sales orders were created last week?
 * How many sales invoices are there?
 * How many sales invoices have discounts?
 * How many Sales invoices are unpaid?

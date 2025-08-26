@@ -8,15 +8,17 @@ import random
 import json
 import requests
 import frappe
+import spacy
 import jinja2
 import nltk
-from symspellpy.symspellpy import SymSpell,Verbosity
+from symspellpy.symspellpy import SymSpell, Verbosity
+
 nltk.download("punkt", quiet=True)
 
 
 def load_pleasantry_responses():
     """Load pleasantry responses"""
-    path="/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/pleasantry.json"
+    path = "/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/pleasantry.json"
     try:
         with open(path, "r", encoding="utf-8") as f:
             return json.load(f)
@@ -27,7 +29,11 @@ def load_pleasantry_responses():
 
 def load_business_keywords():
     """load business keywords"""
-    with open("/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/business_keywords.json", "r",encoding="utf-8") as f:
+    with open(
+        "/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/business_keywords.json",
+        "r",
+        encoding="utf-8",
+    ) as f:
         return set(json.load(f)["business_keywords"])
 
 
@@ -90,35 +96,97 @@ non_erp_responses = [
 
 
 STOP_WORDS = {
-    "a", "an", "the", "is", "are", "was", "were", "i", "you", "me", "my", "made", "all",
-    "he", "she", "it", "we", "they", "them", "their", "our", "what", "who", "than", "more",
-    "when", "where", "why", "how", "your", "for", "can", "which", "much", "due", "to", "of",
-    "in", "on", "at", "with", "from", "by", "and", "or", "but", "do", "does", "did", "have",
-    "has", "had"
+    "a",
+    "an",
+    "the",
+    "is",
+    "are",
+    "was",
+    "were",
+    "i",
+    "you",
+    "me",
+    "my",
+    "made",
+    "all",
+    "he",
+    "she",
+    "it",
+    "we",
+    "they",
+    "them",
+    "their",
+    "our",
+    "what",
+    "who",
+    "than",
+    "more",
+    "when",
+    "where",
+    "why",
+    "how",
+    "your",
+    "for",
+    "can",
+    "which",
+    "much",
+    "due",
+    "to",
+    "of",
+    "in",
+    "on",
+    "at",
+    "with",
+    "from",
+    "by",
+    "and",
+    "or",
+    "but",
+    "do",
+    "does",
+    "did",
+    "have",
+    "has",
+    "had",
 }
 
 
 @frappe.whitelist(allow_guest=True)
 def correct_sentence(text):
-    """Corrects misspelled keywords in a sentence using the SymSpell library,
-    while preserving structured ERP identifiers."""
 
+    # Load SpaCy once (not inside the function, to avoid reloading each call)
+    nlp = spacy.load("en_core_web_sm")
+    """Corrects misspelled ERP keywords while preserving entities like company names, people, places, etc."""
+
+    # Load ERP dictionary
     custom_dictionary = (
         "/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/erp_dictionary.txt"
     )
-
     sym_spell = SymSpell(max_dictionary_edit_distance=2, prefix_length=7)
     sym_spell.load_dictionary(custom_dictionary, term_index=0, count_index=1)
 
     stopwords_set = STOP_WORDS
 
+    # Identify probable IDs
     def is_probable_id(word):
         return (
             bool(re.search(r"[A-Za-z]", word)) and bool(re.search(r"\d", word))
         ) or bool(re.search(r"[_\-]", word))
 
-    tokens = re.findall(r"\b[\w\-']+\b|[^\w\s]", text)
+    # --- STEP 1: Extract entities using SpaCy ---
+    doc = nlp(text)
+    entities = [(ent.text, ent.start_char, ent.end_char) for ent in doc.ents]
 
+    # Replace entities with placeholders
+    text_to_correct = text
+    placeholder_map = {}
+    for i, (ent_text, _, _) in enumerate(entities):
+        placeholder = f"__ENTITY{i}__"
+        text_to_correct = text_to_correct.replace(ent_text, placeholder)
+        placeholder_map[placeholder] = ent_text
+
+    # --- STEP 2: Tokenize and correct ---
+    tokens = re.findall(r"\b[\w\-']+\b|[^\w\s]", text_to_correct)
     corrected_tokens = []
 
     for token in tokens:
@@ -130,6 +198,7 @@ def correct_sentence(text):
             corrected_tokens.append(token)
             continue
 
+        # Only correct ERP dictionary words
         suggestions = sym_spell.lookup(
             token.lower(), Verbosity.CLOSEST, max_edit_distance=2
         )
@@ -142,7 +211,13 @@ def correct_sentence(text):
 
         corrected_tokens.append(corrected)
 
-    return " ".join(corrected_tokens)
+    corrected_text = " ".join(corrected_tokens)
+
+    # --- STEP 3: Restore entities ---
+    for placeholder, ent_text in placeholder_map.items():
+        corrected_text = corrected_text.replace(placeholder, ent_text)
+
+    return corrected_text
 
 
 @frappe.whitelist(allow_guest=True)
@@ -199,6 +274,21 @@ def run_query(query):
         return {"success": False, "response": str(e)}
 
 
+import datetime
+
+
+@frappe.whitelist(allow_guest=True)
+def sanitize_dates(obj):
+    if isinstance(obj, list):
+        return [sanitize_dates(i) for i in obj]
+    elif isinstance(obj, dict):
+        return {k: sanitize_dates(v) for k, v in obj.items()}
+    elif isinstance(obj, (datetime.date, datetime.datetime)):
+        return obj.isoformat()
+    else:
+        return obj
+
+
 @frappe.whitelist(allow_guest=True)
 def fetch_data_from_server(qstn):
     """
@@ -207,9 +297,7 @@ def fetch_data_from_server(qstn):
     """
     response_msg = fuzzy_intent_router(qstn)
     if response_msg["type"] in ("Greeting", "Other"):
-        return {
-            "response":response_msg["response"]
-        }
+        return {"response": response_msg["response"]}
     try:
         token = frappe.db.get_single_value("Settings", "token")
         api_url = frappe.db.get_single_value("Settings", "prediction_url")
@@ -230,18 +318,20 @@ def fetch_data_from_server(qstn):
         response_data = response.json()
         query = response_data["output"]["frappe_query"].replace("[BT]", "`")
         query_result = run_query(query)
+        query_result["response"] = sanitize_dates(query_result["response"])
         doc = response_data["output"]["predicted_doctype"]
         user_template = format_data_conversationally(query_result["response"], doc)
-        frappe.get_doc({
-        "doctype": "Changai Query Log",
-        "question":response_msg["corrected"],
-        "doc":doc,
-        "query":query,
-        "top_fields":json.dumps(response_data["output"]["top_fields"]),
-        "fields":json.dumps(response_data["output"]["selected_fields"]),
-        "response":json.dumps(query_result["response"]) or user_template
-        
-    }).insert(ignore_permissions=True)
+        frappe.get_doc(
+            {
+                "doctype": "Changai Query Log",
+                "question": response_msg["corrected"],
+                "doc": doc,
+                "query": query,
+                "top_fields": json.dumps(response_data["output"]["top_fields"]),
+                "fields": json.dumps(response_data["output"]["selected_fields"]),
+                "response": json.dumps(query_result["response"]) or user_template,
+            }
+        ).insert(ignore_permissions=True)
         return {
             "corrcetd_qstn": response_msg["corrected"],
             "query": query,
@@ -260,60 +350,121 @@ def format_data_conversationally(user_data, doctype=None):
     """
     Formats user data using the single, powerful conversational Jinja2 template.
     """
-    conversational_template ="""
+    conversational_template = """
 {#- MACRO to format a single record conversationally -#}
-{%- macro format_record(record, doctype) -%}
+{%- macro format_record(record, doctype=None, concise=False) -%}
     {%- if record is mapping -%}
+
+        {# Case: has name and status #}
         {%- if 'name' in record and 'status' in record -%}
-            The {{ doctype if doctype else 'record' }} '{{ record.name }}' has a status of '{{ record.status }}'.
+            {%- if concise -%}
+{{ record.status }}
+            {%- else -%}
+The {{ doctype or 'record' }} '{{ record.name }}' is currently marked as '{{ record.status }}'.
+            {%- endif -%}
+
+        {# Case: has name, description, and multiple fields #}
         {%- elif 'name' in record and record|length > 2 and 'description' in record -%}
-            Here are the details for {{ doctype if doctype else 'record' }} '{{ record.name }}': {{ record.get('description', '') }}
+            {%- if concise -%}
+{{ record.description }}
+            {%- else -%}
+Here are the details for {{ doctype or 'record' }} '{{ record.name }}': {{ record.description }}
+            {%- endif -%}
+
+        {# Case: has subject #}
         {%- elif 'subject' in record -%}
-            Here are the details for '{{ record.subject }}'.
+            {%- if concise -%}
+{{ record.subject }}
+            {%- else -%}
+Take a look at the details for '{{ record.subject }}'.
+            {%- endif -%}
+
+        {# Case: has title #}
         {%- elif 'title' in record -%}
-            Here are the details for '{{ record.title }}'.
+            {%- if concise -%}
+{{ record.title }}
+            {%- else -%}
+Here’s what I found for '{{ record.title }}'.
+            {%- endif -%}
+
+        {# Case: has only name #}
         {%- elif 'name' in record -%}
-            The result is '{{ record.name }}'.
+            {%- if concise -%}
+{{ record.name }}
+            {%- else -%}
+The {{ doctype or 'record' }} is '{{ record.name }}'.
+            {%- endif -%}
+
+        {# Default case: show first value or fallback #}
         {%- else -%}
-            The {{ doctype if doctype else 'result' }} is {{ record.values()|first if record.values()|first is not none else 'not available' }}.
+            {{ record.values()|first or 'Information not available' }}
+
         {%- endif -%}
+
+    {# If not a mapping, just display it #}
     {%- else -%}
-        {{ record }}
+        {{ record or 'Information not available' }}
     {%- endif -%}
 {%- endmacro -%}
 
-{%- if data is sequence and data is not mapping and data is not string -%}
+
+{#- MAIN RESPONSE TEMPLATE -#}
+
+{# Case 1: Error string detection (check first) #}
+{%- if data is string and ('DoesNotExistError' in data or 'not found' in data or 'OperationalError' in data) -%}
+    I encountered an error. The system returned this message: {{ data }}
+
+{# Case 2: Sequence of results #}
+{%- elif data is sequence and data is not mapping and data is not string -%}
+    {%- set display_count = 5 -%}
+
+    {# Case: multiple results #}
     {%- if data|length > 1 -%}
-        I found {{ data|length }} results. Here are the first few:
-        {%- for item in data[:3] %}
-        - {{ format_record(item, doctype) | trim }}
-        {%- endfor %}
+I found {{ data|length }} results.
+
+Here are the first few:
+{% for item in data[:display_count] %}
+{{ loop.index }}. {{ format_record(item, doctype, concise=True) }}
+{% endfor %}
+{%- if data|length > display_count -%}
+...and {{ data|length - display_count }} more not shown.
+{%- endif -%}
+
+    {# Case: single item in list #}
     {%- elif data|length == 1 -%}
-        I found one result:
-        - {{ format_record(data[0], doctype) | trim }}
+
+        {# If it’s a dictionary with a numeric value (count) #}
+        {%- if data[0] is mapping and (data[0].values()|first is number) -%}
+            {%- set record = data[0] -%}
+            {%- set key = record.keys()|list|first -%}
+I found {{ record[key] }} {{ key.replace('_', ' ') }}.
+        {# Otherwise use normal formatting #}
+        {%- else -%}
+Result found:
+{{ format_record(data[0], doctype) | trim }}
+        {%- endif -%}
+
     {%- else -%}
-        I couldn't find any records for {{ doctype or 'your query' }}.
+I couldn’t find any records for {{ doctype or 'your query' }}.
     {%- endif -%}
-{#- 2. Handle single dictionary results (from get_doc or similar) -#}
+
+
+
+
+{# Case 3: Single dictionary result #}
 {%- elif data is mapping -%}
     {{ format_record(data, doctype) | trim }}
 
-{# Case 4: Error string detection #}
-{%- elif data is string and ('DoesNotExistError' in data or 'not found' in data or 'OperationalError' in data) -%}
-    I encountered an error. The system returned this message: {{ data }}
-
-{# Case 5: Simple value #}
+{# Case 4: Simple value #}
 {%- else -%}
-    The result for your query is {{ data if data is not none and data != '' else 'null' }}.
+    The result for your query is {{ data if data is not none and data != '' else 'Information not available' }}.
 {%- endif -%}
 """
 
     if isinstance(user_data, dict) and user_data.get("success") is False:
         return f":x: Error: {user_data.get('error', 'Unknown error')}"
     env = jinja2.Environment(
-        trim_blocks=True,
-        lstrip_blocks=True,
-        extensions=['jinja2.ext.do']
+        trim_blocks=True, lstrip_blocks=True, extensions=["jinja2.ext.do"]
     )
     template = env.from_string(conversational_template)
     return template.render(data=user_data, doctype=doctype)

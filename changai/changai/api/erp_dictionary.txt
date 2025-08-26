@@ -1,13 +1,18 @@
 customer 1000
 customers 1000
+company 1000
+ABC 1000
 employee 1000
 employees 1000
 invoice 1000
 invoices 1000
 with 1000
 list 1000
+ctc 1000
 sales 1000
 number 1000
+overdue 1000
+tasks 1000
 are 1000
 how 1000
 you 1000
@@ -609,10 +614,11 @@ resend	1000
 show summary	1000
 show full details	1000
 
-
-
+ABC 1000
+hye 1000
 morning 1000
 evening 1000
+u 1000
 good 1000
 what 1000
 how are you 1000

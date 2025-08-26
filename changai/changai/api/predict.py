@@ -2,15 +2,17 @@
 # https://cog.run/python
 import json
 from transformers import (
-RobertaTokenizerFast,
-RobertaForSequenceClassification,
-T5Tokenizer,
-T5ForConditionalGeneration,
+    RobertaTokenizerFast,
+    RobertaForSequenceClassification,
+    T5Tokenizer,
+    T5ForConditionalGeneration,
 )
 import torch
+
 torch._dynamo.config.suppress_errors = True
 
 import torch
+
 # import cog
 # from sentence_transformers import SentenceTransformer,util
 # from cog import BasePredictor, Input, Path
@@ -21,10 +23,11 @@ SBERT_REPO = "hyrinmansoor/text2frappe-s2-sbert"
 FLANS2_REPO = "hyrinmansoor/text2frappe-s2-flan-field"
 FLANS3_REPO = "hyrinmansoor/text2frappe-s3-flan-query"
 
+
 class Predictor(BasePredictor):
     def setup(self):
         """Load the model into memory to make running multiple predictions efficient"""
-        self.tokenizer_s1=RobertaTokenizerFast.from_pretrained(ROBERTO_REPO)
+        self.tokenizer_s1 = RobertaTokenizerFast.from_pretrained(ROBERTO_REPO)
         self.model_s1 = RobertaForSequenceClassification.from_pretrained(ROBERTO_REPO)
 
         self.sbert = SentenceTransformer(SBERT_REPO)
@@ -35,10 +38,10 @@ class Predictor(BasePredictor):
         self.tokenizer_s3 = T5Tokenizer.from_pretrained(FLANS3_REPO)
         self.model_s3 = T5ForConditionalGeneration.from_pretrained(FLANS3_REPO)
         with open("meta.json") as f:
-            self.meta=json.load(f)
+            self.meta = json.load(f)
         # Load Meta and Dcotypes IDs.
         with open("id2label.json") as f:
-            self.id2label=json.load(f)
+            self.id2label = json.load(f)
 
     def predict_doctype(self, question):
         try:
@@ -89,8 +92,7 @@ class Predictor(BasePredictor):
         decoded = decoded.replace("<pad>", "").replace("</s>", "").strip()
         return decoded
 
-
-    def predict(self, user_input: str = Input(description="User question"))->dict:
+    def predict(self, user_input: str = Input(description="User question")) -> dict:
         question = user_input
         doctype = self.predict_doctype(question)
         top_fields = self.get_top_k_fields(question, doctype)

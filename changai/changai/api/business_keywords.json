@@ -1,6 +1,9 @@
 {
     "business_keywords": [
         "contacts",
+        "percentage",
+        "projects",
+        "overdue", 
         "products",
         "items",
         "stock",
@@ -31,6 +34,10 @@
         "variation",
         "exchange",
         "routings",
+        "mangoes",
+        "tasks",
+        "sold",
+        "last",
         "how many employees",
         "how many records",
         "number of records",
