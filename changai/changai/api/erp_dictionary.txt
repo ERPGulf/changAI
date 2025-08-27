@@ -13,14 +13,8 @@ sales 1000
 number 1000
 overdue 1000
 tasks 1000
-are 1000
-how 1000
-you 1000
-all 1000
 purchase 1000
 profit 1000
-SI-0001 1000
-what's 1000
 child 1000
 loss 1000
 gross 900
@@ -166,8 +160,6 @@ access 950
 permissions 900
 users 950
 user 950
-role 950
-roles 950
 security 900
 settings 850
 config 850
@@ -313,7 +305,6 @@ start 900
 started 900
 begin 900
 began 900
-done 900
 error 850
 failed 850
 fail 850
@@ -323,6 +314,7 @@ retry 850
 submitted 900
 submission 900
 sent 900
+joke 100
 received 950
 responded 900
 response 900
@@ -331,7 +323,6 @@ comment 850
 comments 850
 note 850
 notes 850
-how 1000
 many 1000
 invoices 1000
 were 950
@@ -372,7 +363,6 @@ q4 950
 2022 1000
 23901 1000
 10 1000
-top 1000
 most 1000
 recent 1000
 show 1000
@@ -546,7 +536,6 @@ purchase return	1000
 cost per unit	1000
 CTC	1000
 PF deduction	1000
-ESI	1000
 gratuity	1000
 salary slip	1000
 pay period	1000
@@ -574,7 +563,6 @@ what’s cracking	1000
 what’s good	1000
 feeling okay?	1000
 been a while	1000
-how have you been	1000
 hope all is well	1000
 anything I can do?	1000
 nice chatting with you	1000
