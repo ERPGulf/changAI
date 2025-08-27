@@ -19,10 +19,8 @@
 
 #chatbot-toggle-icon {
     font-size: 18px;
-    /* or any smaller size you want */
 }
 
-/* Rotate toggler icon when active */
 #chatbot-toggler.show {
     transform: rotate(90deg);
 }
@@ -44,7 +42,7 @@
 }
 @font-face {
   font-family: 'Material Symbols Rounded';
-  src: url('../assets/fonts/MaterialSymbolsRounded[FILL,GRAD,opsz,wght].ttf') format('truetype');
+  src: url('../assets/fonts/MaterialSymbolsRounded.ttf') format('truetype');
 }
 .material-symbols-rounded {
   font-family: 'Material Symbols Rounded';
@@ -73,14 +71,12 @@
     z-index: 9999;
 }
 
-/* Show popup when active */
 .chatbot-popup.show {
     opacity: 1;
     transform: scale(1);
     pointer-events: auto;
 }
 
-/* Rest of your styles remain unchanged */
 .chatbot-popup .chat-header {
     display: flex;
     background: #6d4fc2;

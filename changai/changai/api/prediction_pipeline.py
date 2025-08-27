@@ -10,166 +10,137 @@ import requests
 import frappe
 import spacy
 import jinja2
-import nltk
 from symspellpy.symspellpy import SymSpell, Verbosity
 
-nltk.download("punkt", quiet=True)
 
+nlp = spacy.load("en_core_web_sm", disable=["tagger", "parser"])
+sym_spell = SymSpell(max_dictionary_edit_distance=2, prefix_length=7)
+custom_dictionary = "/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/erp_dictionary.txt"
+sym_spell.load_dictionary(custom_dictionary, term_index=0, count_index=1)
 
-def load_pleasantry_responses():
-    """Load pleasantry responses"""
-    path = "/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/pleasantry.json"
-    try:
-        with open(path, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except (json.JSONDecodeError, IOError) as e:
-        frappe.log_error(f"Error loading pleasantries: {str(e)}", "Pleasantry Loader")
-        return {}
+# Load pleasantries once
+pleasantry_file_path = "/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/pleasantry.json"
+with open(pleasantry_file_path, "r", encoding="utf-8") as f:
+    PLEASANTRIES = sorted(json.load(f).items(), key=lambda x: len(x[0]), reverse=True)
+# Cache compiled patterns once at startup
+COMPILED_PLEASANTRIES = [
+    (re.compile(pattern, re.IGNORECASE), response)
+    for pattern, response in PLEASANTRIES
+]
 
+def fast_match_pleasantry(text):
+    clean_text = text.lower().strip()
+    for compiled_pattern, response in COMPILED_PLEASANTRIES:
+        if compiled_pattern.fullmatch(clean_text):
+            return response
+    return None
 
-def load_business_keywords():
-    """load business keywords"""
-    with open(
-        "/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/business_keywords.json",
-        "r",
-        encoding="utf-8",
-    ) as f:
-        return set(json.load(f)["business_keywords"])
+# Load business keywords once
+business_keywords_file = "/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/business_keywords.json"
+with open(business_keywords_file, "r", encoding="utf-8") as f:
+    BUSINESS_KEYWORDS = {kw.lower() for kw in json.load(f)["business_keywords"]}
 
-
-sorted_pleasantries = sorted(load_pleasantry_responses().keys(), key=len, reverse=True)
 non_erp_responses = [
     "I'm here to assist with ERP-related queries such as sales, purchases, and inventory.",
     "Please ask a question related to business data or reports.",
     "I'm focused on business operations—try asking about invoices, customers, or stock.",
     "My scope is limited to ERP functions. Let me know how I can help with business data.",
-    "I'm designed to handle ERP queries. Could you rephrase that in a business context?",
-    (
-        "Let's keep it ERP-focused—try asking about your sales, "
-        "profit, or purchase orders."
-    ),
-    (
-        "I'm built to assist with your business workflows. "
-        "Please ask something related to operations or finance."
-    ),
-    (
-        "I can help best with ERP questions—like sales trends, "
-        "supplier performance, or customer insights."
-    ),
-    (
-        "Currently, I’m focused on ERP support. Try asking about your "
-        "documents, reports, or data analysis."
-    ),
-    (
-        "I'm tailored to answer ERP-related queries. Think along the lines "
-        "of orders, ledgers, or deliveries."
-    ),
-    (
-        "My expertise is business operations. Let’s talk about inventory, "
-        "billing, or employee records."
-    ),
-    (
-        "That sounds interesting, but I work best with ERP-related topics—"
-        "such as transactions and analytics."
-    ),
-    (
-        "ERP is my specialty. If you need help with invoices, reports, or "
-        "stock levels, I’ve got you covered."
-    ),
-    (
-        "I’m tuned to understand your business systems. Want help with "
-        "finance, HR, or logistics?"
-    ),
-    (
-        "I handle business-focused questions. Please try asking about "
-        "workflows or key metrics."
-    ),
-    (
-        "I assist with enterprise data. Try questions related to productivity, "
-        "revenue, or customer activity."
-    ),
-    (
-        "My role is to simplify your ERP interactions. How about something "
-        "on operations or compliance?"
-    ),
+    "I'm designed to handle ERP queries. Could you rephrase that in a business context?"
 ]
-
-
 STOP_WORDS = {
-    "a",
-    "an",
-    "the",
-    "is",
-    "are",
-    "was",
-    "were",
-    "i",
-    "you",
-    "me",
-    "my",
-    "made",
-    "all",
-    "he",
-    "she",
-    "it",
-    "we",
-    "they",
-    "them",
-    "their",
-    "our",
-    "what",
-    "who",
-    "than",
-    "more",
-    "when",
-    "where",
-    "why",
-    "how",
-    "your",
-    "for",
-    "can",
-    "which",
-    "much",
-    "due",
-    "to",
-    "of",
-    "in",
-    "on",
-    "at",
-    "with",
-    "from",
-    "by",
-    "and",
-    "or",
-    "but",
-    "do",
-    "does",
-    "did",
-    "have",
-    "has",
-    "had",
+    # Pronouns
+    "tell","as","a","all",
+    "i", "me", "my", "mine", "myself",
+    "you", "your", "yours", "yourself", "yourselves",
+    "he", "him", "his", "himself",
+    "she", "her", "hers", "herself",
+    "it", "its", "itself",
+    "we", "us", "our", "ours", "ourselves",
+    "they", "them", "their", "theirs", "themselves",
+
+    # Articles & determiners
+    "a", "an", "the", "this", "that", "these", "those", "such",
+
+    # Auxiliary & modal verbs
+    "is", "am", "are", "was", "were", "be", "being", "been",
+    "do", "does", "did", "doing",
+    "have", "has", "had", "having",
+    "will", "would", "shall", "should", "can", "could", "may", "might", "must",
+
+    # Conjunctions
+    "and", "or", "but", "if", "because", "while", "although", "though", "unless", 
+    "until", "since", "so", "yet",
+
+    # Prepositions
+    "in", "on", "at", "by", "for", "with", "about", "against", 
+    "between", "into", "through", "during", "before", "after",
+    "above", "below", "to", "from", "up", "down", "out", "off", "over", "under","of",
+
+    # Question words
+    "what", "which", "who", "whom", "whose", 
+    "when", "where", "why", "how",
+
+    # Degree / comparison
+    "than", "more", "most", "much", "many", "few", "less", "least", "enough",
+
+    # Common fillers
+    "ok", "okay", "well", "like", "just", "really", "very", "also", "too", "still",
+
+    # Contractions / informal
+    "what's", "that's", "it's", "there's", "here's", "let's", "who's", "where's", 
+    "how's", "i'm", "you're", "he's", "she's", "we're", "they're",
+    "i've", "you've", "we've", "they've",
+    "i'll", "you'll", "he'll", "she'll", "we'll", "they'll",
+    "i'd", "you'd", "he'd", "she'd", "we'd", "they'd",
 }
 
 
 @frappe.whitelist(allow_guest=True)
-def correct_sentence(text):
-    nlp = spacy.load("en_core_web_sm")
+def load_pleasantry_responses():
+    """Load pleasantry responses"""
+    try:
+        with open(pleasantry_file_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (json.JSONDecodeError, IOError) as e:
+        frappe.log_error(f"Error loading pleasantries: {str(e)}", "Pleasantry Loader")
+        return {}
 
-    custom_dictionary = "/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/erp_dictionary.txt"
-    sym_spell = SymSpell(max_dictionary_edit_distance=2, prefix_length=7)
-    sym_spell.load_dictionary(custom_dictionary, term_index=0, count_index=1)
+@frappe.whitelist(allow_guest=True)
+def get_sorted_pleasantries():
+    """Return sorted (pattern, response) pairs"""
+    data =PLEASANTRIES
+    return sorted(data.items(), key=lambda x: len(x[0]), reverse=True)
+
+
+@frappe.whitelist(allow_guest=True)
+def load_business_keywords():
+    """load business keywords"""
+    with open(
+        business_keywords_file,
+        "r",
+        encoding="utf-8",
+    ) as f:
+        return set(json.load(f)["business_keywords"])
+
+def extract_entities(text):
+    # Detect simple entities: IDs, codes, dates
+    return re.findall(r"\b[A-Z]{2,}-\d+\b|\b\d{4}-\d{2}-\d{2}\b", text)
+
+
+@frappe.whitelist(allow_guest=True)
+def correct_sentence(text):
 
     stopwords_set = STOP_WORDS
-
-    def is_probable_id(word):
-        return (
-            (bool(re.search(r"[A-Za-z]", word)) and bool(re.search(r"\d", word)))
-            or bool(re.search(r"[_\-]", word))
-        )
+    # entities=extract_entities(text)
+    # def is_probable_id(word):
+    #     return (
+    #         (bool(re.search(r"[A-Za-z]", word)) and bool(re.search(r"\d", word)))
+    #         or bool(re.search(r"[_\-]", word))
+    #     )
 
     doc = nlp(text)
     entities = [(ent.text, ent.start_char, ent.end_char) for ent in doc.ents]
-    print("🔎 Entities found:", entities)
+
 
     text_to_correct = text
     placeholder_map = {}
@@ -188,7 +159,7 @@ def correct_sentence(text):
             corrected_tokens.append(token)
             continue
 
-        if is_probable_id(token) or token.lower() in stopwords_set or token.isdigit():
+        if token.lower() in stopwords_set or token.isdigit():
             corrected_tokens.append(token)
             continue
 
@@ -217,11 +188,16 @@ def correct_sentence(text):
 
 @frappe.whitelist(allow_guest=True)
 def match_pleasantry(text):
-    """Checks whether the input matches any predefined pleasantry responses."""
     clean_text = text.lower().strip()
-    for pattern, response in load_pleasantry_responses().items():
-        if re.match(pattern, clean_text):
-            return response
+    pleasantries =PLEASANTRIES
+    for pattern, response in pleasantries.items():
+        try:
+            if re.fullmatch(pattern, clean_text):  
+                return response
+        except re.error:
+            # If pattern is not a valid regex, treat it as exact match
+            if pattern.lower() == clean_text:
+                return response
     return None
 
 
@@ -232,10 +208,10 @@ def fuzzy_intent_router(text):
     corrected_text_lower = corrected_text.lower()
     corrected_words = set(re.findall(r"\b\w+\b", corrected_text_lower))
 
-    if set(load_business_keywords()) & corrected_words:
+    if BUSINESS_KEYWORDS & corrected_words:
         return {"type": "ERP", "response": 0, "corrected": corrected_text}
 
-    for pleasantry in sorted_pleasantries:
+    for pleasantry in get_sorted_pleasantries():
         if re.search(
             r"(?<!\w)" + re.escape(pleasantry) + r"(?!\w)", corrected_text_lower
         ):
@@ -248,6 +224,31 @@ def fuzzy_intent_router(text):
                     "type": "Greeting",
                     "response": random.choice(non_erp_responses),
                 }
+
+    return {
+        "type": "Other",
+        "response": random.choice(non_erp_responses),
+        "corrected": corrected_text,
+    }
+
+
+@frappe.whitelist(allow_guest=True)
+def fuzzy_intent_router_1(text):
+    """Responds to a user question with a fuzzy match"""
+    corrected_text = correct_sentence(text)
+    corrected_text_lower = corrected_text.lower()
+
+    corrected_words = set(re.findall(r"\b\w+\b", corrected_text_lower))
+    # business_keywords = {kw.lower() for kw in load_business_keywords()}
+
+    # ERP keywords
+    if BUSINESS_KEYWORDS & corrected_words:
+        return {"type": "ERP", "response": 0, "corrected": corrected_text}
+    safe_text = re.sub(r"[^\w\s]", "", corrected_text_lower) 
+    for pattern, response in PLEASANTRIES:
+        if re.search(pattern, safe_text):
+            return {"type": "Greeting", "response": response, "corrected": corrected_text}
+    
 
     return {
         "type": "Other",
@@ -290,7 +291,7 @@ def fetch_data_from_server(qstn):
     Handles a user question by detecting greetings or sending it to a prediction API.
     Returns either a greeting response, ERP query results, or an error message.
     """
-    response_msg = fuzzy_intent_router(qstn)
+    response_msg = fuzzy_intent_router_1(qstn)
     if response_msg["type"] in ("Greeting", "Other"):
         return {"response": response_msg["response"]}
     try:
