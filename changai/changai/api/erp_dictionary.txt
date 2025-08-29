@@ -625,6 +625,7 @@ good morning 1000
 good afternoon 1000
 good evening 1000
 hello there 1000
+afternoon 1000
 who are you 1000
 nice to see you 1000
 howdy 1000
@@ -652,8 +653,7 @@ hello 1000
 hi 1000
 heyy 1000
 yo 1000
-you're welcome 1000
-you are welcome 1000
+welcome 1000
 no problem 1000
 no worries 1000
 anytime 1000
