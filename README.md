@@ -1,7 +1,7 @@
 #  ERP Chatbot - Alpha Release  
-**Changai - ERPNext Natural Language Interface**
+**ChangAI - ERPNext Natural Language Interface**
 
-Welcome to the **alpha version** of Changai - an AI-powered assistant that converts natural language queries into executable Frappe queries, executes them, and returns results in human-friendly language, using a fine-tuned multi-model pipeline. Built to simplify ERP access for business users with no technical knowledge.
+Welcome to the **alpha version** of ChangAI - an AI-powered assistant that converts natural language queries into executable Frappe queries, executes them, and returns results in human-friendly language, using a fine-tuned multi-model pipeline. Built to simplify ERP access for business users with no technical knowledge.
 
 > ⚠️ This release is intended for internal testing and feedback only.  
 
@@ -23,7 +23,7 @@ Welcome to the **alpha version** of Changai - an AI-powered assistant that conve
 
 ### 💬 Conversational Handling
 
-Changai seamlessly manages both casual interactions and ERP-related queries.
+ChangAI seamlessly manages both casual interactions and ERP-related queries.
 
 Small talk (e.g., greetings) is handled through predefined responses.
 
@@ -35,7 +35,7 @@ Responses are returned in a natural, conversational format for better user exper
 
 ## 🧠 Pipeline & Models
 
-Changai uses **four fine-tuned Hugging Face models**, trained in **Google Colab** and deployed locally or on Replicate:
+ChangAI uses **four fine-tuned Hugging Face models**, trained in **Google Colab** and deployed locally or on Replicate:
 
 | Stage                            | Model                                                     | Role                                 |
 | -------------------------------- | --------------------------------------------------------- | ------------------------------------ |
@@ -92,7 +92,7 @@ This alpha release supports a **limited set of queries** reliably:
 ---
 🚀 Deployment
 
-Changai’s models are containerized with Docker and packaged using Cog for reproducible inference.
+ChangAI’s models are containerized with Docker and packaged using Cog for reproducible inference.
 They are deployed on Replicate, where each version runs in an isolated environment and is accessible via the Replicate API.
 
 The serving logic is defined in predict.py (model loading, inference, query generation).
@@ -104,8 +104,8 @@ Using cog push, the models are published to Replicate under a unique version ID.
 ### 1. 🔹 Local Development (Training / Testing)
 
 ```bash
-git clone https://github.com/ERPGulf/changai.git
-cd changai
+git clone https://github.com/ERPGulf/Changai.git
+cd ChangAI
 
 # Create environment
 python3 -m venv venv
@@ -289,7 +289,7 @@ Please report:
 
 ### 📮 Report issues via:
 
-- **GitHub Issues**: [https://github.com/ERPGulf/changai/issues](https://github.com/ERPGulf/changai/issues)
+- **GitHub Issues**: [https://github.com/ERPGulf/ChangAI/issues](https://github.com/ERPGulf/ChangAI/issues)
 
 ---
 

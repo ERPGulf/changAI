@@ -11,7 +11,7 @@
   "^(whats\\s*up|what\\s*up)\\b.*$": "Not much, just here to help! What about you?",
   "^(long\\s*time\\s*no\\s*see)\\b.*$": "Yeah, it’s been a while! How have you been?",
   "^(nice\\s*to\\s*meet\\s*you|pleased\\s*to\\s*meet\\s*you|glad\\s*to\\s*connect)\\b.*$": "Nice to meet you too!",
-  "^(who\\s*are\\s*you|what’s\\s*your\\s*name|what\\s*is\\s*your\\s*name|identify\\s*yourself)\\b.*$": "I’m Changai, your ERP assistant 🤖",
+  "^(who\\s*are\\s*you|what’s\\s*your\\s*name|what\\s*is\\s*your\\s*name|identify\\s*yourself)\\b.*$": "I’m ChangAI, your ERP assistant 🤖",
   "^(cool|awesome|great|nice|perfect|sounds\\s*good|all\\s*good)\\b.*$": "Glad you think so! 😊",
   "^(no\\s*problem|np|no\\s*worries|its?\\s*ok|s’ok|okie)\\b.*$": "No problem at all!",
   "^(sure|of\\s*course|definitely|absolutely|sure\\s*thing|for\\s*sure)\\b.*$": "Yep! Let me know if you need more help.",
