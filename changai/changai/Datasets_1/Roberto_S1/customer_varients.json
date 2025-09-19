@@ -1,0 +1,122 @@
+[
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "how many active customers do we have?", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "count of active customers?", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "no of clients active rn", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "active customers how many now", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "total active clients we got", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "any active customers count", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "show active buyers number", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "how many accounts still active", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "list active customers count", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "give me active members total", "output": ["Customer"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "right now active clients count", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "customers currently active num", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "total active buyers right?", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "count how many active accnts", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "clients active overall?", "output": ["Customer"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "show me actives in customer list", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "how many customer active total?", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "what’s count of active clients", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "buyers actives how many now", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "any idea total active members", "output": ["Customer"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "pls tell me active customers num", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "accounts active right now?", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "how many active cust we got", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "buyers currently live total", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "no of customers active pls", "output": ["Customer"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "total active clients overall", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "act customers total?", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "how many members still active", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "active accounts show total", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "cnt of active consumers", "output": ["Customer"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "current active clients number", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "do we have active customers num", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "give active buyers count", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "active users in customers how many", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "total number act clients rn", "output": ["Customer"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "customers that are active show num", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "how many live accounts we got", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "count of all active cust", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "buyers act total right?", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "any active members count", "output": ["Customer"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "clients still active total", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "show active customers overall", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "how many accounts active overall", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "buyers active now cnt", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "give me customers act total", "output": ["Customer"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "clients active number overall", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "how many active cust today", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "active cust count needed", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "cust total actives now?", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "show me all active cust", "output": ["Customer"] },
+  [
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "current members cnt now", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "customers present count total", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "how many live buyers total", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "clients existing list size", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "open accounts num needed", "output": ["Customer"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "show total valid buyers", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "customers still current number", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "total ongoing consumers pls", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "any present clients cnt", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "give me num of live customers", "output": ["Customer"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "show clients existing cnt", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "buyers running count overall", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "total accounts open right?", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "no of working members", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "customers live list count", "output": ["Customer"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "valid buyers cnt now", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "clients total existing?", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "show me total enabled accounts", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "buyers present num pls", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "customers open show num", "output": ["Customer"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "clients right now ongoing", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "customers overall current count", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "how many live client total", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "buyers existing num rn", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "members continuing count", "output": ["Customer"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "accounts still valid cnt", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "total clients enabled now", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "show working buyers num rn", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "give me present customers total", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "current clients cnt today", "output": ["Customer"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "customers num open overall", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "ongoing buyers cnt", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "how many cust valid now", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "cust continuing list count", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "members currently valid total", "output": ["Customer"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "consumers working right now?", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "how many customers still in service", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "give me enabled client number", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "buyers present count", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "cust live right now how many", "output": ["Customer"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "total accounts ongoing", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "customers existing overall count", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "present cust total now", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "how many live customers total", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "any clients working list count", "output": ["Customer"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "buyers continuing count overall", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "clients open now total", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "customers still enabled how many", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "count valid consumers today", "output": ["Customer"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "show total current customers", "output": ["Customer"] }
+]
+
+]
