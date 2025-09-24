@@ -2,7 +2,16 @@
 document.addEventListener('DOMContentLoaded', () => {
     const chatbotHTML = `
   <button id="chatbot-toggler" class="chatbot-toggler">
-    <span class="material-symbols-rounded" id="chatbot-toggle-icon">mode_comment</span>
+    <svg class="icon icon-chat" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+        <path
+        d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8l-4 4v-4H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"
+        fill="currentColor" stroke="currentColor" stroke-width="2s"
+        stroke-linecap="miter" stroke-linejoin="miter" />
+    </svg>
+  <!-- close (X) -->
+    <svg class="icon icon-close" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none">
+        <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
   </button>
 
   <div class="chatbot-popup" id="chatbot-popup">
@@ -13,23 +22,32 @@ document.addEventListener('DOMContentLoaded', () => {
         </svg>
         <h2 class="logo-text">ChangAI</h2>
       </div>
-      <button id="chatbot-close-btn" class="material-symbols-rounded" title="Close">keyboard_arrow_down</button>
-    </div>
+      <button id="chatbot-arrowdown-btn">
+  <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+  <path d="M6 9l6 6 6-6"/>
+</svg>
+</button>
 
+    </div>
     <div class="tab_box">
       <button id="tab-chat" class="tab_btn active">Chat</button>
       <button id="tab-debug" class="tab_btn">Debug</button>
     </div>
 
     <div class="chat-body" id="chat-body">
-
       <div id="chat-messages"></div>
     </div>
 
     <div class="chat-footer">
       <form id="chat-form" class="chat-form" autocomplete="off">
         <input type="text" id="chat-input" class="message-input" placeholder="Message..." required />
-        <button type="submit" class="material-symbols-rounded">arrow_upward</button>
+        <button type="submit" id="chatbot-send-btn" title="Send">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+            <path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.59 5.58L20 12l-8-8-8 8z"/>
+        </svg>
+        </button>
+
+
       </form>
     </div>
   </div>
@@ -40,9 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const debugLogs = [];
     const chatbotPopup = document.getElementById('chatbot-popup');
     const chatbotToggler = document.getElementById('chatbot-toggler');
-    const toggleIcon = document.getElementById('chatbot-toggle-icon');
-    const closeBtn = document.getElementById('chatbot-close-btn');
     const tabChatBtn = document.getElementById('tab-chat');
+    const closeBtn = document.getElementById('chatbot-arrowdown-btn');
     const tabDebugBtn = document.getElementById('tab-debug');
     const chatMessagesContainer = document.getElementById('chat-body');
     const chatForm = document.getElementById('chat-form');
@@ -186,24 +203,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const shouldShow = typeof forceShow === 'boolean' ? forceShow : !chatbotPopup.classList.contains('show');
 
         if (shouldShow) {
+            chatbotToggler.setAttribute('aria-pressed', 'true');
             chatbotPopup.classList.add('show');
             chatbotToggler.classList.add('show');
-            toggleIcon.textContent = 'close';
 
             // ✅ Call renderMessages here
             renderMessages();
             scrollToBottom();
 
         } else {
+            chatbotToggler.setAttribute('aria-pressed', 'false');
             chatbotPopup.classList.remove('show');
             chatbotToggler.classList.remove('show');
-            toggleIcon.textContent = 'mode_comment';
         }
     }
 
+    if (closeBtn) closeBtn.addEventListener('click', () => toggleChatbot(false));
     chatbotToggler.addEventListener('click', () => toggleChatbot());
-
-    closeBtn.addEventListener('click', () => toggleChatbot(false));
 
     chatForm.addEventListener('submit', e => {
         e.preventDefault();

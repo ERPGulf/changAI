@@ -67,27 +67,33 @@ Example:
 * **Template:** `"There are {{ count }} contacts registered in the system."`
 * **Output:** `"There are 154 contacts registered in the system."`
 
+
 ---
-
-## ✅ Currently Supported Query types
-
-This alpha release supports a **limited set of queries** reliably:
 
 ✔ Examples:
 
-* Get all employees.
-* How many sales orders were created last week?
-* How many sales invoices are there?
+* How many customers do we have?
+* Get all sales invoices.
+* Active employees count?
 * How many sales invoices have discounts?
-* How many Sales invoices are unpaid?
-* How many companies do we have?
-* How many contacts do we have?
-* Get the address of supplier `SUP-0002`.
-* How many primary contacts exist in the system?
-* List purchase orders with discount above 10,000.
-* How many routings are currently disabled?
-* How many contacts are linked to companies?
-
+* List all employees.
+* Who is the customer on the last invoice?
+* List item names within stock.
+* Show names of the disabled customers.
+* What is the total value of all sales orders?
+* List delivery date of all sales orders.
+* Get all names and grand total of all sales invoices.
+* Sales invoices not paid yet.
+* Show item names of all items.
+* Show item codes of all items.
+* Count of suppliers we work with.
+* List items with valuation rate above 700.
+* List items with valuation rate above 100.
+* Sales orders created today.
+* Customers created this month.
+* List all suppliers and their default currency.
+* Suppliers with default currency USD.
+* Show stock entries from past 7 days.
 
 ---
 🚀 Deployment
