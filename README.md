@@ -1,5 +1,5 @@
 #  ERP Chatbot - Alpha Release  
-**ChangAI - ERPNext Natural Language Interface**
+****ChangAI - ERPNext Natural Language Interface**
 
 Welcome to the **alpha version** of ChangAI - an AI-powered assistant that converts natural language queries into executable Frappe queries, executes them, and returns results in human-friendly language, using a fine-tuned multi-model pipeline. Built to simplify ERP access for business users with no technical knowledge.
 
