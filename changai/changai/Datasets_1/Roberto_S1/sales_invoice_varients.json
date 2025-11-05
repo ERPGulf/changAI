@@ -1,0 +1,128 @@
+[
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "How many invoices are still unpaid?", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "count of unpaid invoices?", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "how many bills pending?", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "number of invoices due now", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "open invoices count?", "output": ["Sales Invoice"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "show me outstanding invoices", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "unpaid bills total?", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "invoices not paid yet count", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "how many receipts are due", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "pending invoices overall", "output": ["Sales Invoice"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "invoices balance left?", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "bills awaiting payment count", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "total outstanding slips", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "how many sales docs are unpaid", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "unpaid statements count?", "output": ["Sales Invoice"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "any bills left unpaid?", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "show all invoices pending now", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "number of records still due", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "open bills count pls", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "how many invoices balance left", "output": ["Sales Invoice"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "count of unpaid receipts", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "bills not cleared total", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "outstanding invoices how many", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "pending slips total number", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "still unpaid invoices list count", "output": ["Sales Invoice"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "any invoices waiting for payment", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "bills outstanding as of now?", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "receipts unpaid count needed", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "total unpaid sales invoices", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "open customer bills number", "output": ["Sales Invoice"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "due invoices total count", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "how many slips are pending", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "balance left invoices", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "show pending sales docs count", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "not paid invoices how many", "output": ["Sales Invoice"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "open receipts total now", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "due bills number please", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "pending customer invoices total", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "still due slips count", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "any unpaid bills yet?", "output": ["Sales Invoice"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "sales invoices not cleared", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "records pending count now", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "unpaid docs list total", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "any invoices balance pending", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "due receipts still open", "output": ["Sales Invoice"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "pending invoices total figure", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "not paid bills how many left", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "total invoices to be cleared", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "show me outstanding records", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "unsettled invoices count?", "output": ["Sales Invoice"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "count invoices still unpaid", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "bills unpaid till now", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "open statements number", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "unpaid receipts total count", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "remaining invoices not paid", "output": ["Sales Invoice"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "how many bills open still", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "pending invoices figure now", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "receipts waiting payment", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "outstanding docs how many total", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "sales invoices pending payment", "output": ["Sales Invoice"] },
+  [
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "how many invoices still waiting?", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "show unpaid bills total now", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "invoices to be paid count", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "not settled receipts figure", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "how many slips open balance", "output": ["Sales Invoice"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "pending invoices number list", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "count unpaid customer bills", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "bills still due in system", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "receipts not yet paid count", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "sales invoices awaiting payment", "output": ["Sales Invoice"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "open invoices figure total", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "unpaid docs in records now", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "outstanding bills total today", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "remaining sales slips unpaid", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "how many invoices are due?", "output": ["Sales Invoice"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "due bills still open count", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "total invoices not cleared yet", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "unpaid sales docs figure", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "how many open receipts now", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "outstanding invoices current count", "output": ["Sales Invoice"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "pending sales invoices figure", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "unpaid records left total", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "any invoices left not paid", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "bills still open number", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "receipts balance pending now", "output": ["Sales Invoice"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "count open invoices right now", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "sales docs unpaid till date", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "total unpaid customer slips", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "invoices with dues left?", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "pending receipts number pls", "output": ["Sales Invoice"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "bills to clear total now", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "not paid records cnt", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "open invoices left unpaid", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "any outstanding receipts total", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "how many bills remain due", "output": ["Sales Invoice"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "sales invoices balance figure", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "number of unpaid docs today", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "any open slips unpaid count", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "due invoices total as of now", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "count bills not settled", "output": ["Sales Invoice"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "receipts to be cleared number", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "unpaid sales records total", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "how many outstanding bills rn", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "invoices awaiting clearance count", "output": ["Sales Invoice"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "pending docs overall figure", "output": ["Sales Invoice"] }
+
+]

@@ -33231,34 +33231,7 @@
       "Campaign"
     ]
   },
-  {
-    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
-    "input": "Show the latest performance assessment for 'John Smith'.",
-    "output": [
-      "Employee Assessment"
-    ]
-  },
-  {
-    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
-    "input": "List employees due for performance reviews this month.",
-    "output": [
-      "Employee Assessment"
-    ]
-  },
-  {
-    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
-    "input": "What's the overall performance rating of the sales team?",
-    "output": [
-      "Employee Assessment"
-    ]
-  },
-  {
-    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
-    "input": "Show assessments from the last review cycle.",
-    "output": [
-      "Employee Assessment"
-    ]
-  },
+
   {
     "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
     "input": "How do I log a warranty claim for a faulty product from a customer?",
@@ -51296,48 +51269,6 @@
   },
   {
     "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
-    "input": "Show the leave allocation for 'John Smith' for this year.",
-    "output": [
-      "Leave Allocation"
-    ]
-  },
-  {
-    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
-    "input": "List all employees with available leave balance.",
-    "output": [
-      "Leave Allocation"
-    ]
-  },
-  {
-    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
-    "input": "What kind of time off can employees get?",
-    "output": [
-      "Leave Allocation"
-    ]
-  },
-  {
-    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
-    "input": "How much sick time do we get?",
-    "output": [
-      "Leave Allocation"
-    ]
-  },
-  {
-    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
-    "input": "Show all time off policies.",
-    "output": [
-      "Leave Allocation"
-    ]
-  },
-  {
-    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
-    "input": "Find the score on performance from the last review for 'Ayan'.",
-    "output": [
-      "Employee Assessment"
-    ]
-  },
-  {
-    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
     "input": "How many leads did we generate from the 'Winter Promo' campaign?",
     "output": [
       "Campaign"
@@ -52174,20 +52105,6 @@
     "input": "Show all taxes applied on sales to domestic customers.",
     "output": [
       "Sales Taxes and Charges Template"
-    ]
-  },
-  {
-    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
-    "input": "Show all outstanding invoices to be collected.",
-    "output": [
-      "Accounts Receivable"
-    ]
-  },
-  {
-    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
-    "input": "What are the aging details of receivables from 'Beta Corp'?",
-    "output": [
-      "Accounts Receivable"
     ]
   },
   {
@@ -58288,13 +58205,7 @@
       "Process Statement Of Accounts"
     ]
   },
-  {
-    "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
-    "input": "Can you filter the accounts receivable statement only for the South Territory and cost center?",
-    "output": [
-      "Process Statement Of Accounts"
-    ]
-  },
+
   {
     "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.",
     "input": "Have we excluded exchange rate revaluation journals from the current statement?",

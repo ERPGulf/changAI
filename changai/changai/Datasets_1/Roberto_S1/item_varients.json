@@ -1,0 +1,55 @@
+[
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "list item all", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "all stock show", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "products list now pls", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "show me goods list", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "items?? show me", "output": ["Item"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "goods list full all", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "inventory show all items", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "tell me what items we have", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "stock items?? give list", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "all products in store??", "output": ["Item"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "goods total show list", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "products items all show", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "all all items list me", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "stuff in stock??", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "inventory goods?? show full", "output": ["Item"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "list every single item", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "show me all product names", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "items available now??", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "goods we hav in stock", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "all items tell me pls", "output": ["Item"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "inventory stuff list now", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "items full data show", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "products record list", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "give me all stock names", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "items stored total?", "output": ["Item"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "list everything we store", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "goods inventory full??", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "stock catalog list show", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "every item name show", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "all goods available pls", "output": ["Item"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "products total show now", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "list of items stock show", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "inventory things?? list me", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "goods items full stock", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "products list complete", "output": ["Item"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "give me goods all", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "items record total list", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "show me items in stock", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "all things in inventory", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "stock products list now", "output": ["Item"] },
+
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "inventory items?? tell all", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "items?? full catalog pls", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "show stock items?? now", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "products?? list everything", "output": ["Item"] },
+  { "instruction": "Predict the relevant ERPNext Doctype(s) for the question below.", "input": "list me all goods quickly", "output": ["Item"] }
+]
