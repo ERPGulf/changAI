@@ -1,4 +1,3 @@
-# imports
 import os,glob,yaml,numpy as np
 from langchain_community.vectorstores import FAISS
 from langchain_core.documents import Document
@@ -13,7 +12,6 @@ CONFIG=get_settings()
 BASE=f"{CONFIG['ROOT_PATH']}/changai/changai/changai/cards_v2"
 
 
-#load yaml files from card folder
 def load_yaml_dir(path):
   out=[]
   for fp in glob.glob(os.path.join(path,"*.yaml")):
@@ -38,7 +36,6 @@ def _md_serialize_labels(labels):
 def _md_serialize_filters(filters):
     if not filters:
         return ""
-    # Flatten dicts like {"name": ["A. Williams", "A. W."]} -> "name=A. Williams,A. W."
     parts = []
     for key, val in (filters or {}).items():
         if isinstance(val, (list, tuple)):
