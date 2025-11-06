@@ -1,0 +1,6 @@
+metric: "total_revenue"
+description: "Sum of invoice totals for submitted invoices"
+table: "tabSales Invoice"
+expression: "SUM(grand_total)"
+default_filters:
+  docstatus: 1

@@ -1,0 +1,3 @@
+currencies:
+  SAR: "`currency` = 'SAR'"
+  USD: "`currency` = 'USD'"

@@ -1,0 +1,5 @@
+periods:
+  this_month:
+    filter_sql: "BETWEEN DATE_FORMAT(CURDATE(), '%Y-%m-01') AND LAST_DAY(CURDATE())"
+  this_year:
+    filter_sql: "YEAR({date_field}) = YEAR(CURDATE())"

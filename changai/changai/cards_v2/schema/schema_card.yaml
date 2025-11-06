@@ -1,0 +1,3510 @@
+- table: "tabSales Invoice"
+  synonyms_en:
+    - "customer bill"
+    - "sales receipt"
+    - "invoice"
+    - "sales document"
+    - "billing record"
+    - "transaction slip"
+  description: "Record of goods or services sold to a customer, including pricing, taxes, and payment terms."
+  fields:
+    - name: "name"
+      type: "VARCHAR"
+      role: ["id"]
+      description: "Invoice ID / primary key"
+      synonyms_en: ["invoice id", "invoice number","inv no","bill number","si id"]
+      synonyms_ar: ["رقم الفاتورة", "معرّف الفاتورة", "رمز الفاتورة", "تسلسل الفاتورة"]
+
+    - name: "creation"
+      type: "DATETIME"
+      role: ["system"]
+      description: "Timestamp when the invoice was created"
+      synonyms_en: ["created at", "creation time", "invoice created on", "created date"]
+      synonyms_ar: ["تاريخ الإنشاء", "وقت الإنشاء", "تم الإنشاء في"]
+
+    - name: "modified"
+      type: "DATETIME"
+      role: ["system"]
+      description: "Timestamp when the invoice was last modified"
+      synonyms_en: ["updated at", "last updated", "last modified", "modified time"]
+      synonyms_ar: ["تاريخ التعديل", "آخر تحديث", "تم التعديل في"]
+
+    - name: "modified_by"
+      type: "VARCHAR"
+      role: ["system"]
+      description: "User who last modified the invoice"
+      synonyms_en: ["updated by", "modified user", "last editor", "edited by"]
+      synonyms_ar: ["تم التعديل بواسطة", "آخر من عدّل", "المحرر"]
+
+    - name: "owner"
+      type: "VARCHAR"
+      role: ["system"]
+      description: "User who originally created the invoice"
+      synonyms_en: ["created by", "invoice owner", "initiated by", "creator"]
+      synonyms_ar: ["تم الإنشاء بواسطة", "مالك الفاتورة", "المنشئ"]
+
+    - name: "docstatus"
+      type: "INT"
+      role: ["lifecycle"]
+      description: "Document status: 0=Draft, 1=Submitted, 2=Cancelled"
+      synonyms_en: ["status code", "submission state", "document state", "invoice status"]
+      synonyms_ar: ["حالة المستند", "رمز الحالة", "حالة الفاتورة", "حالة الإرسال"]
+    - name: "idx"
+      type: "INT"
+      role: ["system"]
+      description: "Index used internally for ordering child records"
+      synonyms_en: ["record index", "internal index", "row index", "order number"]
+      synonyms_ar: ["فهرس السجل", "الترتيب الداخلي", "رقم الصف", "رقم الفهرس"]
+
+    - name: "title"
+      type: "VARCHAR"
+      role: ["display"]
+      description: "Display title of the invoice, defaults to customer name"
+      synonyms_en: ["invoice title", "display title", "invoice heading", "bill title"]
+      synonyms_ar: ["عنوان الفاتورة", "العنوان الظاهر", "رأس الفاتورة"]
+
+    - name: "naming_series"
+      type: "VARCHAR"
+      role: ["system"]
+      description: "Naming series used for invoice ID generation"
+      synonyms_en: ["invoice series", "numbering format", "naming pattern", "ID prefix"]
+      synonyms_ar: ["سلسلة التسمية", "نمط الترقيم", "نمط التسمية", "بادئة رقم الفاتورة"]
+
+    - name: "customer"
+      type: "VARCHAR"
+      role: ["party_id"]
+      description: "Link to Customer master (ID)"
+      synonyms_en: ["client", "buyer", "consumer", "patron", "purchaser"]
+      synonyms_ar: ["عميل", "مشتري", "مستهلك", "زبون", "الطرف"]
+
+    - name: "customer_name"
+      type: "TEXT"
+      role: ["party", "dimension"]
+      description: "Customer display name"
+      synonyms_en: ["client", "buyer", "customer", "customer name", "client name"]
+      synonyms_ar: ["العميل", "اسم العميل", "اسم الزبون", "اسم المشتري"]
+
+    - name: "tax_id"
+      type: "VARCHAR"
+      role: ["tax", "identifier"]
+      description: "Tax identification number of the customer"
+      synonyms_en: ["tax id", "tax identification number", "TIN", "VAT number", "tax number"]
+      synonyms_ar: ["رقم الضريبة", "رقم التعريف الضريبي", "الرقم الضريبي", "رقم ضريبة القيمة المضافة"]
+
+    - name: "company"
+      type: "VARCHAR"
+      role: ["org", "filter"]
+      description: "Company for which the invoice is recorded"
+      synonyms_en: ["company", "organization", "business unit", "legal entity"]
+      synonyms_ar: ["الشركة", "المنظمة", "الوحدة التجارية", "الكيان القانوني"]
+
+    - name: "company_tax_id"
+      type: "VARCHAR"
+      role: ["tax", "identifier"]
+      description: "Company's tax identification number"
+      synonyms_en: ["company tax id", "VAT number", "company tax number", "TIN", "tax registration"]
+      synonyms_ar: ["الرقم الضريبي للشركة", "رقم ضريبة الشركة", "الرقم الضريبي", "رقم التسجيل الضريبي"]
+
+    - name: "posting_date"
+      type: "DATE"
+      role: ["date", "filter"]
+      description: "Accounting date of the invoice"
+      synonyms_en: ["invoice date", "posting date", "sales date", "bill date"]
+      synonyms_ar: ["تاريخ الفاتورة", "تاريخ التسجيل", "تاريخ البيع", "تاريخ الإدخال المحاسبي"]
+
+    - name: "posting_time"
+      type: "TIME"
+      role: ["time", "filter"]
+      description: "Time of day when the invoice was posted"
+      synonyms_en: ["invoice time", "posting time", "sales time", "bill time"]
+      synonyms_ar: ["وقت الفاتورة", "وقت التسجيل", "وقت البيع", "وقت الإدخال"]
+
+    - name: "set_posting_time"
+      type: "INT"
+      role: ["flag"]
+      description: "Indicates whether manual posting time was set (1) or system default was used (0)"
+      synonyms_en: ["manual posting time", "set time flag", "custom time indicator"]
+      synonyms_ar: ["تحديد وقت التسجيل يدويًا", "تفعيل وقت التسجيل", "علامة وقت مخصص"]
+
+    - name: "due_date"
+      type: "DATE"
+      role: ["date", "filter"]
+      description: "Payment due date for the invoice"
+      synonyms_en: ["due date", "payment due", "last payment date", "invoice deadline"]
+      synonyms_ar: ["تاريخ الاستحقاق", "تاريخ السداد", "آخر موعد للدفع", "تاريخ الاستحقاق المالي"]
+
+    - name: "is_pos"
+      type: "INT"
+      role: ["flag"]
+      description: "Indicates if invoice was created from POS (Point of Sale)"
+      synonyms_en: ["pos flag", "point of sale", "is POS invoice", "retail invoice"]
+      synonyms_ar: ["فاتورة نقطة البيع", "علامة نقطة البيع", "فاتورة بيع مباشر"]
+
+    - name: "pos_profile"
+      type: "VARCHAR"
+      role: ["reference"]
+      description: "POS profile used to generate the invoice"
+      synonyms_en: ["pos profile", "point of sale profile", "retail profile"]
+      synonyms_ar: ["ملف نقطة البيع", "ملف البيع بالتجزئة", "تعريف نقطة البيع"]
+
+    - name: "is_consolidated"
+      type: "INT"
+      role: ["flag"]
+      description: "Indicates if the invoice is part of a consolidated entry"
+      synonyms_en: ["consolidated flag", "grouped invoice", "merged invoice"]
+      synonyms_ar: ["فاتورة مدمجة", "فاتورة مجمعة", "علامة الفاتورة المجمعة"]
+
+    - name: "is_return"
+      type: "INT"
+      role: ["flag"]
+      description: "Indicates whether this is a return/credit note"
+      synonyms_en: ["return flag", "credit note", "is return invoice", "reverse invoice"]
+      synonyms_ar: ["فاتورة مرتجعة", "إشعار دائن", "فاتورة عكسية", "علامة الإرجاع"]
+
+    - name: "return_against"
+      type: "VARCHAR"
+      role: ["reference"]
+      description: "Original invoice ID if this is a return invoice"
+      synonyms_en: ["return against", "original invoice", "linked invoice", "return reference"]
+      synonyms_ar: ["المرتجع ضد", "فاتورة أصلية", "فاتورة مرتبطة", "مرجع الإرجاع"]
+
+    - name: "update_outstanding_for_self"
+      type: "INT"
+      role: ["flag"]
+      description: "Indicates if outstanding amount should be updated on this invoice itself"
+      synonyms_en: ["update outstanding flag", "update balance", "update self"]
+      synonyms_ar: ["تحديث الرصيد", "تحديث المبلغ المستحق", "تحديث ذاتي"]
+
+    - name: "update_billed_amount_in_sales_order"
+      type: "INT"
+      role: ["flag"]
+      description: "Indicates whether billed amount should be updated in linked Sales Order"
+      synonyms_en: ["update sales order billed", "sync with sales order", "update order billing"]
+      synonyms_ar: ["تحديث مبلغ أمر البيع", "مزامنة مع أمر البيع", "تحديث الفاتورة في الطلب"]
+
+    - name: "update_billed_amount_in_delivery_note"
+      type: "INT"
+      role: ["flag"]
+      description: "Indicates whether billed amount should be updated in linked Delivery Note"
+      synonyms_en: ["update delivery note billed", "sync with delivery note", "update delivery billing"]
+      synonyms_ar: ["تحديث مبلغ مذكرة التسليم", "مزامنة مع مذكرة التسليم", "تحديث الفاتورة في مذكرة التسليم"]
+
+    - name: "is_debit_note"
+      type: "INT"
+      role: ["flag"]
+      description: "Indicates if this is a debit note invoice"
+      synonyms_en: ["debit note flag", "debit invoice", "is debit note"]
+      synonyms_ar: ["علامة إشعار مدين", "فاتورة مدينة", "إشعار مدين"]
+
+    - name: "amended_from"
+      type: "VARCHAR"
+      role: ["reference"]
+      description: "Link to the original invoice if this document was amended"
+      synonyms_en: ["amended from", "revised from", "original document", "previous version"]
+      synonyms_ar: ["تعديل من", "مستند معدل", "النسخة الأصلية", "الوثيقة السابقة"]
+    - name: "cost_center"
+      type: "VARCHAR"
+      role: ["accounting", "filter"]
+      description: "Cost center associated with this invoice for financial reporting"
+      synonyms_en: ["cost center", "expense center", "department code"]
+      synonyms_ar: ["مركز التكلفة", "رمز القسم", "مركز المصاريف"]
+
+    - name: "project"
+      type: "VARCHAR"
+      role: ["reference", "filter"]
+      description: "Linked project associated with the invoice"
+      synonyms_en: ["project", "project id", "linked project", "project reference"]
+      synonyms_ar: ["المشروع", "معرف المشروع", "المرجع للمشروع"]
+
+    - name: "currency"
+      type: "VARCHAR"
+      role: ["finance", "filter"]
+      description: "Currency in which the invoice is issued"
+      synonyms_en: ["currency", "invoice currency", "money unit"]
+      synonyms_ar: ["العملة", "عملة الفاتورة", "وحدة النقد"]
+
+    - name: "conversion_rate"
+      type: "DECIMAL"
+      role: ["finance", "rate"]
+      description: "Conversion rate from invoice currency to company currency"
+      synonyms_en: ["conversion rate", "exchange rate", "currency rate"]
+      synonyms_ar: ["سعر التحويل", "سعر الصرف", "معدل العملة"]
+
+    - name: "selling_price_list"
+      type: "VARCHAR"
+      role: ["pricing", "reference"]
+      description: "Selling price list applied to the invoice"
+      synonyms_en: ["price list", "selling price list", "pricebook", "rate list"]
+      synonyms_ar: ["قائمة الأسعار", "قائمة البيع", "سعر البيع"]
+
+    - name: "price_list_currency"
+      type: "VARCHAR"
+      role: ["pricing", "finance"]
+      description: "Currency of the applied price list"
+      synonyms_en: ["price list currency", "list currency", "pricing currency"]
+      synonyms_ar: ["عملة قائمة الأسعار", "عملة التسعير"]
+
+    - name: "plc_conversion_rate"
+      type: "DECIMAL"
+      role: ["finance", "rate"]
+      description: "Conversion rate from price list currency to company currency"
+      synonyms_en: ["price list conversion rate", "plc rate", "price list exchange rate"]
+      synonyms_ar: ["معدل تحويل قائمة الأسعار", "سعر صرف قائمة الأسعار"]
+
+    - name: "ignore_pricing_rule"
+      type: "INT"
+      role: ["flag"]
+      description: "Indicates whether to ignore pricing rules for this invoice"
+      synonyms_en: ["ignore pricing rule", "bypass pricing", "manual pricing"]
+      synonyms_ar: ["تجاهل قاعدة التسعير", "تسعير يدوي", "تجاوز قاعدة الأسعار"]
+
+    - name: "scan_barcode"
+      type: "VARCHAR"
+      role: ["input", "reference"]
+      description: "Scanned barcode linked to the invoice or item entry"
+      synonyms_en: ["barcode", "scan code", "item barcode", "qr code"]
+      synonyms_ar: ["الرمز الشريطي", "رمز المسح", "باركود", "رمز الاستجابة السريعة"]
+
+    - name: "update_stock"
+      type: "INT"
+      role: ["flag", "inventory"]
+      description: "Indicates whether stock quantity should be updated from this invoice"
+      synonyms_en: ["update stock", "inventory update", "adjust stock"]
+      synonyms_ar: ["تحديث المخزون", "تعديل الكمية", "تحديث الجرد"]
+
+    - name: "set_warehouse"
+      type: "VARCHAR"
+      role: ["inventory", "reference"]
+      description: "Default warehouse used for invoiced items"
+      synonyms_en: ["warehouse", "source warehouse", "from warehouse"]
+      synonyms_ar: ["المخزن", "مخزن المصدر", "المستودع الأصلي"]
+
+    - name: "set_target_warehouse"
+      type: "VARCHAR"
+      role: ["inventory", "reference"]
+      description: "Target warehouse for item movement if applicable"
+      synonyms_en: ["target warehouse", "to warehouse", "destination warehouse"]
+      synonyms_ar: ["المخزن الهدف", "المخزن الوجهة", "مستودع الاستلام"]
+
+    - name: "total_qty"
+      type: "DECIMAL"
+      role: ["quantity", "metric"]
+      description: "Total quantity of all items in the invoice"
+      synonyms_en: ["total quantity", "total qty", "invoice quantity"]
+      synonyms_ar: ["إجمالي الكمية", "مجموع الكمية", "كمية الفاتورة"]
+
+    - name: "total_net_weight"
+      type: "DECIMAL"
+      role: ["weight", "metric"]
+      description: "Total net weight of all items in the invoice"
+      synonyms_en: ["total net weight", "net weight", "weight total"]
+      synonyms_ar: ["إجمالي الوزن الصافي", "الوزن الصافي", "مجموع الوزن"]
+
+    - name: "base_total"
+      type: "DECIMAL"
+      role: ["amount", "metric"]
+      description: "Total amount in company currency before taxes"
+      synonyms_en: ["base total", "amount before tax", "total (base currency)"]
+      synonyms_ar: ["الإجمالي الأساسي", "المبلغ قبل الضريبة", "الإجمالي بعملة الشركة"]
+
+    - name: "base_net_total"
+      type: "DECIMAL"
+      role: ["amount", "metric"]
+      description: "Net total amount in company currency before taxes"
+      synonyms_en: ["base net total", "net amount base", "net before tax"]
+      synonyms_ar: ["الصافي الأساسي", "الصافي قبل الضريبة", "صافي المبلغ"]
+
+    - name: "total"
+      type: "DECIMAL"
+      role: ["amount", "metric"]
+      description: "Total amount in invoice currency before taxes"
+      synonyms_en: ["total amount", "invoice total", "total (invoice currency)"]
+      synonyms_ar: ["المبلغ الإجمالي", "الإجمالي", "مجموع المبلغ"]
+
+    - name: "net_total"
+      type: "DECIMAL"
+      role: ["amount", "metric"]
+      description: "Net total in invoice currency before taxes"
+      synonyms_en: ["net total", "net amount", "net before tax"]
+      synonyms_ar: ["الصافي", "صافي المبلغ", "الصافي قبل الضريبة"]
+
+    - name: "tax_category"
+      type: "VARCHAR"
+      role: ["tax", "filter"]
+      description: "Tax category applied to this invoice"
+      synonyms_en: ["tax category", "tax type", "tax group"]
+      synonyms_ar: ["فئة الضريبة", "نوع الضريبة", "مجموعة الضريبة"]
+
+    - name: "taxes_and_charges"
+      type: "VARCHAR"
+      role: ["tax", "reference"]
+      description: "Tax and charges template applied to the invoice"
+      synonyms_en: ["tax template", "tax and charges", "tax rule"]
+      synonyms_ar: ["قالب الضرائب", "الضرائب والرسوم", "قواعد الضريبة"]
+
+    - name: "shipping_rule"
+      type: "VARCHAR"
+      role: ["logistics", "reference"]
+      description: "Shipping rule applied to the invoice"
+      synonyms_en: ["shipping rule", "delivery rule", "shipping policy"]
+      synonyms_ar: ["قاعدة الشحن", "سياسة الشحن", "قواعد التوصيل"]
+    - name: "incoterm"
+      type: "VARCHAR"
+      role: ["logistics", "trade"]
+      description: "International commercial term used for shipping agreements"
+      synonyms_en: ["incoterm", "shipping incoterm", "trade term"]
+      synonyms_ar: ["إنكوترمز", "شروط التجارة الدولية", "شرط الشحن"]
+
+    - name: "named_place"
+      type: "VARCHAR"
+      role: ["logistics", "trade"]
+      description: "Named location associated with incoterm for delivery"
+      synonyms_en: ["named place", "delivery location", "incoterm location"]
+      synonyms_ar: ["المكان المحدد", "موقع التسليم", "موقع إنكوترمز"]
+
+    - name: "base_total_taxes_and_charges"
+      type: "DECIMAL"
+      role: ["tax", "amount"]
+      description: "Total tax and charges in company currency"
+      synonyms_en: ["base total taxes", "base tax amount", "tax total (base currency)"]
+      synonyms_ar: ["إجمالي الضرائب الأساسي", "مبلغ الضريبة الأساسي", "مجموع الضرائب بعملة الشركة"]
+
+    - name: "total_taxes_and_charges"
+      type: "DECIMAL"
+      role: ["tax", "amount"]
+      description: "Total tax and charges in invoice currency"
+      synonyms_en: ["total taxes", "tax amount", "tax total"]
+      synonyms_ar: ["إجمالي الضرائب", "مبلغ الضريبة", "مجموع الضرائب"]
+
+    - name: "base_grand_total"
+      type: "DECIMAL"
+      role: ["amount", "metric"]
+      description: "Grand total of invoice in company currency"
+      synonyms_en: ["base grand total", "final total base", "grand total (company currency)"]
+      synonyms_ar: ["الإجمالي النهائي الأساسي", "الإجمالي بعملة الشركة", "إجمالي الفاتورة الأساسي"]
+
+    - name: "base_rounding_adjustment"
+      type: "DECIMAL"
+      role: ["finance", "adjustment"]
+      description: "Rounding difference amount in company currency"
+      synonyms_en: ["base rounding adjustment", "rounding diff base", "rounding correction"]
+      synonyms_ar: ["تعديل التقريب الأساسي", "فرق التقريب الأساسي", "تصحيح التقريب"]
+
+    - name: "base_rounded_total"
+      type: "DECIMAL"
+      role: ["amount", "metric"]
+      description: "Rounded total of the invoice in company currency"
+      synonyms_en: ["base rounded total", "rounded amount base", "rounded total (company)"]
+      synonyms_ar: ["الإجمالي المقرب الأساسي", "المبلغ بعد التقريب", "الإجمالي المقرب بعملة الشركة"]
+
+    - name: "base_in_words"
+      type: "TEXT"
+      role: ["display"]
+      description: "Amount in words in company currency"
+      synonyms_en: ["amount in words base", "amount in words (company)", "base currency words"]
+      synonyms_ar: ["المبلغ كتابة (أساسي)", "المبلغ بالأحرف", "المبلغ بعملة الشركة كتابة"]
+
+    - name: "grand_total"
+      type: "DECIMAL"
+      role: ["amount", "metric"]
+      description: "Final grand total of the invoice in invoice currency"
+      synonyms_en: ["grand total", "final total", "invoice total"]
+      synonyms_ar: ["الإجمالي النهائي", "مجموع الفاتورة", "إجمالي المبلغ"]
+
+    - name: "rounding_adjustment"
+      type: "DECIMAL"
+      role: ["finance", "adjustment"]
+      description: "Rounding difference in invoice currency"
+      synonyms_en: ["rounding adjustment", "rounding difference", "rounding correction"]
+      synonyms_ar: ["تعديل التقريب", "فرق التقريب", "تصحيح التقريب"]
+
+    - name: "use_company_roundoff_cost_center"
+      type: "INT"
+      role: ["flag", "accounting"]
+      description: "Indicates whether to use company round-off cost center for rounding difference"
+      synonyms_en: ["use company roundoff", "company round-off center flag"]
+      synonyms_ar: ["استخدام مركز تقريب الشركة", "علامة مركز تقريب الشركة"]
+
+    - name: "rounded_total"
+      type: "DECIMAL"
+      role: ["amount", "metric"]
+      description: "Rounded total of invoice in invoice currency"
+      synonyms_en: ["rounded total", "rounded amount", "total after rounding"]
+      synonyms_ar: ["الإجمالي المقرب", "المبلغ بعد التقريب", "المبلغ المقرب"]
+
+    - name: "in_words"
+      type: "TEXT"
+      role: ["display"]
+      description: "Amount in words in invoice currency"
+      synonyms_en: ["amount in words", "invoice amount words", "total in words"]
+      synonyms_ar: ["المبلغ كتابة", "المبلغ بالأحرف", "قيمة الفاتورة كتابة"]
+
+    - name: "total_advance"
+      type: "DECIMAL"
+      role: ["amount", "payment"]
+      description: "Total advance amount allocated to the invoice"
+      synonyms_en: ["total advance", "advance amount", "prepayment total"]
+      synonyms_ar: ["إجمالي الدفعة المقدمة", "مبلغ السلفة", "المبلغ المقدم"]
+
+    - name: "outstanding_amount"
+      type: "DECIMAL"
+      role: ["amount", "payment"]
+      description: "Outstanding amount remaining on the invoice"
+      synonyms_en: ["outstanding amount", "balance due", "amount to pay", "unpaid amount"]
+      synonyms_ar: ["المبلغ المستحق", "الرصيد المتبقي", "المبلغ غير المدفوع"]
+
+    - name: "disable_rounded_total"
+      type: "INT"
+      role: ["flag"]
+      description: "Indicates whether rounded total should be disabled for this invoice"
+      synonyms_en: ["disable rounded total", "no rounding", "rounding off disabled"]
+      synonyms_ar: ["تعطيل الإجمالي المقرب", "عدم التقريب", "إلغاء التقريب"]
+
+    - name: "apply_discount_on"
+      type: "VARCHAR"
+      role: ["discount", "setting"]
+      description: "Indicates whether discount is applied on Net Total or Grand Total"
+      synonyms_en: ["apply discount on", "discount base", "discount setting"]
+      synonyms_ar: ["تطبيق الخصم على", "أساس الخصم", "إعداد الخصم"]
+
+    - name: "base_discount_amount"
+      type: "DECIMAL"
+      role: ["amount", "discount"]
+      description: "Discount amount in company currency"
+      synonyms_en: ["base discount amount", "company currency discount", "discount (base)"]
+      synonyms_ar: ["مبلغ الخصم الأساسي", "الخصم بعملة الشركة", "قيمة الخصم الأساسي"]
+
+    - name: "is_cash_or_non_trade_discount"
+      type: "INT"
+      role: ["flag", "discount"]
+      description: "Indicates whether the discount is cash/non-trade"
+      synonyms_en: ["cash discount flag", "non trade discount", "discount type indicator"]
+      synonyms_ar: ["علامة خصم نقدي", "خصم غير تجاري", "نوع الخصم"]
+
+    - name: "additional_discount_account"
+      type: "VARCHAR"
+      role: ["accounting", "discount"]
+      description: "Account used to post additional discounts"
+      synonyms_en: ["additional discount account", "discount ledger", "discount account"]
+      synonyms_ar: ["حساب الخصم الإضافي", "حساب الخصم", "دفتر الخصم"]
+    - name: "additional_discount_percentage"
+      type: "DECIMAL"
+      role: ["discount", "percentage"]
+      description: "Additional discount percentage applied on the invoice"
+      synonyms_en: ["extra discount percent", "discount %", "additional discount", "percentage discount"]
+      synonyms_ar: ["نسبة الخصم الإضافي", "نسبة الخصم", "خصم إضافي", "الخصم كنسبة"]
+
+    - name: "discount_amount"
+      type: "DECIMAL"
+      role: ["discount", "amount"]
+      description: "Total discount amount applied on the invoice"
+      synonyms_en: ["discount amount", "total discount", "invoice discount"]
+      synonyms_ar: ["مبلغ الخصم", "الخصم الإجمالي", "قيمة الخصم"]
+
+    - name: "other_charges_calculation"
+      type: "LONGTEXT"
+      role: ["charges", "calculation"]
+      description: "Calculation details of other charges applied to the invoice"
+      synonyms_en: ["other charges", "charges calculation", "extra charges"]
+      synonyms_ar: ["رسوم أخرى", "حساب الرسوم الإضافية", "تكاليف إضافية"]
+
+    - name: "total_billing_hours"
+      type: "DECIMAL"
+      role: ["service", "metric"]
+      description: "Total number of billing hours included in the invoice"
+      synonyms_en: ["total billing hours", "billed hours", "service hours"]
+      synonyms_ar: ["إجمالي ساعات الفوترة", "ساعات الفوترة", "ساعات الخدمة"]
+
+    - name: "total_billing_amount"
+      type: "DECIMAL"
+      role: ["service", "amount"]
+      description: "Total amount based on billing hours"
+      synonyms_en: ["total billing amount", "service billing amount", "labor charges"]
+      synonyms_ar: ["مبلغ الفوترة الكلي", "مبلغ الخدمة", "رسوم العمالة"]
+
+    - name: "cash_bank_account"
+      type: "VARCHAR"
+      role: ["payment", "accounting"]
+      description: "Cash or bank account used to receive the payment"
+      synonyms_en: ["cash bank account", "payment account", "bank account"]
+      synonyms_ar: ["حساب النقد أو البنك", "حساب الدفع", "الحساب البنكي"]
+
+    - name: "base_paid_amount"
+      type: "DECIMAL"
+      role: ["payment", "amount"]
+      description: "Paid amount in company currency"
+      synonyms_en: ["base paid amount", "paid amount (base)", "company currency paid"]
+      synonyms_ar: ["المبلغ المدفوع الأساسي", "المدفوع بعملة الشركة", "المبلغ المدفوع"]
+
+    - name: "paid_amount"
+      type: "DECIMAL"
+      role: ["payment", "amount"]
+      description: "Paid amount in invoice currency"
+      synonyms_en: ["paid amount", "amount received", "payment received"]
+      synonyms_ar: ["المبلغ المدفوع", "المبلغ المستلم", "قيمة الدفعة"]
+
+    - name: "base_change_amount"
+      type: "DECIMAL"
+      role: ["payment", "amount"]
+      description: "Change amount returned in company currency"
+      synonyms_en: ["base change amount", "change (base)", "change returned"]
+      synonyms_ar: ["مبلغ الباقي الأساسي", "الباقي بعملة الشركة", "المبلغ المعاد"]
+
+    - name: "change_amount"
+      type: "DECIMAL"
+      role: ["payment", "amount"]
+      description: "Change amount returned in invoice currency"
+      synonyms_en: ["change amount", "change returned", "return amount"]
+      synonyms_ar: ["مبلغ الباقي", "المبلغ المعاد", "قيمة الإرجاع"]
+
+    - name: "account_for_change_amount"
+      type: "VARCHAR"
+      role: ["payment", "accounting"]
+      description: "Account to which change amount is posted"
+      synonyms_en: ["change account", "account for change", "cash return account"]
+      synonyms_ar: ["حساب الباقي", "حساب المبلغ المعاد", "حساب النقد المرتجع"]
+
+    - name: "allocate_advances_automatically"
+      type: "INT"
+      role: ["flag", "payment"]
+      description: "Indicates whether advances should be automatically allocated to this invoice"
+      synonyms_en: ["auto allocate advances", "apply advances automatically"]
+      synonyms_ar: ["تخصيص السلف تلقائيًا", "تطبيق الدفعة المقدمة تلقائيًا"]
+
+    - name: "only_include_allocated_payments"
+      type: "INT"
+      role: ["flag", "payment"]
+      description: "Indicates whether to include only allocated payments in the invoice"
+      synonyms_en: ["only allocated payments", "restrict to allocated", "allocated payment flag"]
+      synonyms_ar: ["المدفوعات المخصصة فقط", "تقييد المدفوعات المخصصة", "علامة المدفوعات المخصصة"]
+
+    - name: "write_off_amount"
+      type: "DECIMAL"
+      role: ["write_off", "amount"]
+      description: "Amount written off in invoice currency"
+      synonyms_en: ["write-off amount", "amount written off", "bad debt amount"]
+      synonyms_ar: ["مبلغ الإطفاء", "المبلغ المشطوب", "مبلغ الدين المعدوم"]
+
+    - name: "base_write_off_amount"
+      type: "DECIMAL"
+      role: ["write_off", "amount"]
+      description: "Amount written off in company currency"
+      synonyms_en: ["base write-off amount", "write-off (base)", "bad debt base"]
+      synonyms_ar: ["مبلغ الإطفاء الأساسي", "المبلغ المشطوب الأساسي", "دين معدوم أساسي"]
+
+    - name: "write_off_outstanding_amount_automatically"
+      type: "INT"
+      role: ["flag", "write_off"]
+      description: "Indicates whether outstanding amount should be auto written off"
+      synonyms_en: ["auto write-off outstanding", "write-off automatically"]
+      synonyms_ar: ["إطفاء الرصيد تلقائيًا", "إطفاء تلقائي", "شطب تلقائي"]
+
+    - name: "write_off_account"
+      type: "VARCHAR"
+      role: ["accounting", "write_off"]
+      description: "Account used to record the write-off"
+      synonyms_en: ["write-off account", "bad debt account", "loss account"]
+      synonyms_ar: ["حساب الإطفاء", "حساب الديون المعدومة", "حساب الخسائر"]
+
+    - name: "write_off_cost_center"
+      type: "VARCHAR"
+      role: ["accounting", "write_off"]
+      description: "Cost center associated with the write-off"
+      synonyms_en: ["write-off cost center", "bad debt cost center"]
+      synonyms_ar: ["مركز تكلفة الإطفاء", "مركز تكلفة الدين المعدوم"]
+
+    - name: "redeem_loyalty_points"
+      type: "INT"
+      role: ["flag", "loyalty"]
+      description: "Indicates whether loyalty points are redeemed in this invoice"
+      synonyms_en: ["redeem loyalty points", "loyalty redemption flag"]
+      synonyms_ar: ["استرداد نقاط الولاء", "علامة استرداد الولاء", "خصم نقاط الولاء"]
+    - name: "loyalty_points"
+      type: "INT"
+      role: ["loyalty", "metric"]
+      description: "Number of loyalty points redeemed or used for this invoice"
+      synonyms_en: ["loyalty points", "reward points", "points used"]
+      synonyms_ar: ["نقاط الولاء", "نقاط المكافأة", "النقاط المستخدمة"]
+
+    - name: "loyalty_amount"
+      type: "DECIMAL"
+      role: ["loyalty", "amount"]
+      description: "Amount equivalent of loyalty points redeemed"
+      synonyms_en: ["loyalty amount", "reward amount", "points value"]
+      synonyms_ar: ["قيمة نقاط الولاء", "مبلغ المكافأة", "قيمة النقاط"]
+
+    - name: "loyalty_program"
+      type: "VARCHAR"
+      role: ["loyalty", "reference"]
+      description: "Loyalty program under which points are earned or redeemed"
+      synonyms_en: ["loyalty program", "rewards program", "points program"]
+      synonyms_ar: ["برنامج الولاء", "برنامج المكافآت", "برنامج النقاط"]
+
+    - name: "loyalty_redemption_account"
+      type: "VARCHAR"
+      role: ["loyalty", "accounting"]
+      description: "Account used to post loyalty redemption amounts"
+      synonyms_en: ["loyalty redemption account", "reward account", "points account"]
+      synonyms_ar: ["حساب استرداد الولاء", "حساب المكافآت", "حساب النقاط"]
+
+    - name: "loyalty_redemption_cost_center"
+      type: "VARCHAR"
+      role: ["loyalty", "accounting"]
+      description: "Cost center used for loyalty redemption entries"
+      synonyms_en: ["loyalty cost center", "redemption cost center"]
+      synonyms_ar: ["مركز تكلفة الولاء", "مركز تكلفة الاسترداد"]
+
+    - name: "customer_address"
+      type: "VARCHAR"
+      role: ["address", "reference"]
+      description: "Customer's linked address record"
+      synonyms_en: ["customer address", "billing address", "client address"]
+      synonyms_ar: ["عنوان العميل", "عنوان الفاتورة", "عنوان الزبون"]
+
+    - name: "address_display"
+      type: "TEXT"
+      role: ["address", "display"]
+      description: "Formatted billing address displayed on invoice"
+      synonyms_en: ["address display", "billing address text", "formatted address"]
+      synonyms_ar: ["عرض العنوان", "عنوان الفاتورة", "العنوان المنسق"]
+
+    - name: "contact_person"
+      type: "VARCHAR"
+      role: ["contact", "reference"]
+      description: "Linked contact person for this invoice"
+      synonyms_en: ["contact person", "customer contact", "person name"]
+      synonyms_ar: ["شخص الاتصال", "جهة الاتصال", "اسم جهة الاتصال"]
+
+    - name: "contact_display"
+      type: "TEXT"
+      role: ["contact", "display"]
+      description: "Formatted display of contact details"
+      synonyms_en: ["contact display", "contact info", "contact details"]
+      synonyms_ar: ["عرض جهة الاتصال", "معلومات الاتصال", "تفاصيل الاتصال"]
+
+    - name: "contact_mobile"
+      type: "TEXT"
+      role: ["contact", "phone"]
+      description: "Mobile number of the contact person"
+      synonyms_en: ["contact mobile", "mobile number", "phone number"]
+      synonyms_ar: ["رقم الجوال", "رقم الهاتف", "جوال جهة الاتصال"]
+
+    - name: "contact_email"
+      type: "VARCHAR"
+      role: ["contact", "email"]
+      description: "Email of the contact person"
+      synonyms_en: ["contact email", "email", "customer email"]
+      synonyms_ar: ["بريد إلكتروني", "بريد جهة الاتصال", "البريد الإلكتروني للعميل"]
+
+    - name: "territory"
+      type: "VARCHAR"
+      role: ["sales", "dimension"]
+      description: "Sales territory of the customer"
+      synonyms_en: ["territory", "sales region", "sales area"]
+      synonyms_ar: ["الإقليم", "منطقة المبيعات", "المنطقة"]
+
+    - name: "shipping_address_name"
+      type: "VARCHAR"
+      role: ["address", "reference"]
+      description: "Linked name of the shipping address"
+      synonyms_en: ["shipping address name", "delivery address name"]
+      synonyms_ar: ["اسم عنوان الشحن", "اسم عنوان التسليم"]
+
+    - name: "shipping_address"
+      type: "TEXT"
+      role: ["address", "display"]
+      description: "Formatted shipping address for delivery"
+      synonyms_en: ["shipping address", "delivery address", "ship to address"]
+      synonyms_ar: ["عنوان الشحن", "عنوان التسليم", "عنوان الإرسال"]
+
+    - name: "dispatch_address_name"
+      type: "VARCHAR"
+      role: ["address", "reference"]
+      description: "Linked name of the dispatch address"
+      synonyms_en: ["dispatch address name", "from address name"]
+      synonyms_ar: ["اسم عنوان الإرسال", "اسم عنوان المصدر"]
+
+    - name: "dispatch_address"
+      type: "TEXT"
+      role: ["address", "display"]
+      description: "Formatted dispatch address for shipping origin"
+      synonyms_en: ["dispatch address", "from address", "source address"]
+      synonyms_ar: ["عنوان الإرسال", "عنوان المصدر", "عنوان الشحن"]
+
+    - name: "company_address"
+      type: "VARCHAR"
+      role: ["address", "reference"]
+      description: "Linked address of the company issuing the invoice"
+      synonyms_en: ["company address", "issuer address", "organization address"]
+      synonyms_ar: ["عنوان الشركة", "عنوان الجهة المصدرة", "عنوان المؤسسة"]
+
+    - name: "company_address_display"
+      type: "TEXT"
+      role: ["address", "display"]
+      description: "Formatted company address displayed on invoice"
+      synonyms_en: ["company address display", "issuer address text"]
+      synonyms_ar: ["عرض عنوان الشركة", "عنوان الشركة المنسق"]
+
+    - name: "company_contact_person"
+      type: "VARCHAR"
+      role: ["contact", "reference"]
+      description: "Contact person at the issuing company"
+      synonyms_en: ["company contact person", "issuer contact"]
+      synonyms_ar: ["جهة اتصال الشركة", "شخص الاتصال بالشركة"]
+
+    - name: "ignore_default_payment_terms_template"
+      type: "INT"
+      role: ["flag", "payment_terms"]
+      description: "Flag to ignore default payment terms template"
+      synonyms_en: ["ignore payment terms", "bypass default payment terms"]
+      synonyms_ar: ["تجاهل شروط الدفع", "تجاوز نموذج شروط الدفع"]
+
+    - name: "payment_terms_template"
+      type: "VARCHAR"
+      role: ["payment_terms", "reference"]
+      description: "Linked payment terms template for invoice"
+      synonyms_en: ["payment terms template", "terms template", "payment rule"]
+      synonyms_ar: ["نموذج شروط الدفع", "قالب الدفع", "قواعد الدفع"]
+
+    - name: "tc_name"
+      type: "VARCHAR"
+      role: ["terms", "reference"]
+      description: "Title of Terms and Conditions template applied to invoice"
+      synonyms_en: ["terms and conditions name", "tc name", "T&C title"]
+      synonyms_ar: ["اسم الشروط والأحكام", "اسم T&C", "اسم شروط العقد"]
+
+    - name: "terms"
+      type: "LONGTEXT"
+      role: ["terms", "text"]
+      description: "Terms and conditions text applied to the invoice"
+      synonyms_en: ["terms and conditions", "T&C text", "contract terms"]
+      synonyms_ar: ["الشروط والأحكام", "نص الشروط", "بنود العقد"]
+
+    - name: "po_no"
+      type: "VARCHAR"
+      role: ["reference", "purchase"]
+      description: "Customer's purchase order number associated with this invoice"
+      synonyms_en: ["PO number", "purchase order no", "order number"]
+      synonyms_ar: ["رقم أمر الشراء", "رقم PO", "رقم الطلب"]
+    - name: "po_date"
+      type: "DATE"
+      role: ["reference", "purchase"]
+      description: "Customer purchase order date associated with the invoice"
+      synonyms_en: ["PO date", "purchase order date", "order date"]
+      synonyms_ar: ["تاريخ أمر الشراء", "تاريخ PO", "تاريخ الطلب"]
+
+    - name: "debit_to"
+      type: "VARCHAR"
+      role: ["accounting", "ledger"]
+      description: "Customer receivable account (debit) for this invoice"
+      synonyms_en: ["debit account", "customer account", "receivable account"]
+      synonyms_ar: ["حساب المدين", "حساب العميل", "حساب الذمم المدينة"]
+
+    - name: "party_account_currency"
+      type: "VARCHAR"
+      role: ["currency", "accounting"]
+      description: "Currency of the party account used for posting"
+      synonyms_en: ["party account currency", "customer currency", "account currency"]
+      synonyms_ar: ["عملة حساب العميل", "عملة الحساب", "عملة الطرف"]
+
+    - name: "is_opening"
+      type: "VARCHAR"
+      role: ["flag", "accounting"]
+      description: "Indicates whether the invoice is an opening entry (Yes/No)"
+      synonyms_en: ["is opening", "opening entry", "opening invoice flag"]
+      synonyms_ar: ["فاتورة افتتاحية", "قيد افتتاحي", "علامة فاتورة افتتاحية"]
+
+    - name: "unrealized_profit_loss_account"
+      type: "VARCHAR"
+      role: ["accounting", "reference"]
+      description: "Account used to book unrealized profit or loss"
+      synonyms_en: ["unrealized P&L account", "unrealized profit loss account", "forex gain loss account"]
+      synonyms_ar: ["حساب الأرباح/الخسائر غير المحققة", "حساب أرباح غير محققة", "حساب خسائر غير محققة"]
+
+    - name: "against_income_account"
+      type: "TEXT"
+      role: ["accounting", "reference"]
+      description: "Income account(s) against which the invoice is booked"
+      synonyms_en: ["against income account", "income account", "revenue account"]
+      synonyms_ar: ["حساب الإيرادات", "الحساب المقابل للإيرادات", "حساب الدخل"]
+
+    - name: "sales_partner"
+      type: "VARCHAR"
+      role: ["sales", "reference"]
+      description: "Linked sales partner for this invoice"
+      synonyms_en: ["sales partner", "partner", "agent"]
+      synonyms_ar: ["شريك المبيعات", "الوكيل", "الشريك"]
+
+    - name: "amount_eligible_for_commission"
+      type: "DECIMAL"
+      role: ["commission", "amount"]
+      description: "Total amount on which commission is calculated"
+      synonyms_en: ["commissionable amount", "amount eligible for commission", "base for commission"]
+      synonyms_ar: ["المبلغ المؤهل للعمولة", "مبلغ العمولة", "أساس العمولة"]
+
+    - name: "commission_rate"
+      type: "DECIMAL"
+      role: ["commission", "percentage"]
+      description: "Commission percentage applicable on the eligible amount"
+      synonyms_en: ["commission rate", "commission %", "partner commission rate"]
+      synonyms_ar: ["نسبة العمولة", "معدل العمولة", "نسبة الشريك"]
+
+    - name: "total_commission"
+      type: "DECIMAL"
+      role: ["commission", "amount"]
+      description: "Total commission amount calculated for this invoice"
+      synonyms_en: ["total commission", "commission amount", "partner commission"]
+      synonyms_ar: ["إجمالي العمولة", "مبلغ العمولة", "عمولة الشريك"]
+
+    - name: "letter_head"
+      type: "VARCHAR"
+      role: ["print", "display"]
+      description: "Letterhead used for printing this invoice"
+      synonyms_en: ["letterhead", "print letterhead", "company letterhead"]
+      synonyms_ar: ["ورقة رسمية", "رأس الورقة", "ورقة الطباعة"]
+
+    - name: "group_same_items"
+      type: "INT"
+      role: ["flag", "print"]
+      description: "Indicates whether identical items should be grouped on print"
+      synonyms_en: ["group same items", "group line items", "merge same items"]
+      synonyms_ar: ["تجميع العناصر المتشابهة", "دمج البنود", "تجميع البنود"]
+
+    - name: "select_print_heading"
+      type: "VARCHAR"
+      role: ["print", "display"]
+      description: "Custom print heading selected for invoice"
+      synonyms_en: ["print heading", "custom print title"]
+      synonyms_ar: ["عنوان الطباعة", "رأس الطباعة"]
+
+    - name: "language"
+      type: "VARCHAR"
+      role: ["language", "display"]
+      description: "Language in which the invoice is printed"
+      synonyms_en: ["language", "invoice language", "print language"]
+      synonyms_ar: ["اللغة", "لغة الفاتورة", "لغة الطباعة"]
+
+    - name: "subscription"
+      type: "VARCHAR"
+      role: ["subscription", "reference"]
+      description: "Subscription linked to this invoice"
+      synonyms_en: ["subscription", "subscription reference"]
+      synonyms_ar: ["الاشتراك", "مرجع الاشتراك"]
+
+    - name: "from_date"
+      type: "DATE"
+      role: ["subscription", "date"]
+      description: "Start date of the subscription or service period"
+      synonyms_en: ["from date", "subscription start date", "service start date"]
+      synonyms_ar: ["تاريخ البدء", "تاريخ بداية الاشتراك", "تاريخ بدء الخدمة"]
+
+    - name: "auto_repeat"
+      type: "VARCHAR"
+      role: ["subscription", "flag"]
+      description: "Auto repeat reference or flag for recurring invoices"
+      synonyms_en: ["auto repeat", "recurring invoice reference", "repeat ID"]
+      synonyms_ar: ["التكرار التلقائي", "فاتورة متكررة", "معرّف التكرار"]
+
+    - name: "to_date"
+      type: "DATE"
+      role: ["subscription", "date"]
+      description: "End date of the subscription or service period"
+      synonyms_en: ["to date", "subscription end date", "service end date"]
+      synonyms_ar: ["تاريخ الانتهاء", "تاريخ نهاية الاشتراك", "تاريخ نهاية الخدمة"]
+    - name: "status"
+      type: "VARCHAR"
+      role: ["lifecycle", "enum"]
+      description: "Current status of the Sales Invoice (e.g., Draft, Submitted, Paid, Overdue)"
+      synonyms_en: ["invoice status", "state", "invoice stage"]
+      synonyms_ar: ["حالة الفاتورة", "المرحلة", "وضع الفاتورة"]
+      enum_values: ["Draft", "Submitted", "Paid", "Overdue", "Cancelled"]
+
+    - name: "inter_company_invoice_reference"
+      type: "VARCHAR"
+      role: ["reference", "inter_company"]
+      description: "Reference to the related inter-company invoice, if applicable"
+      synonyms_en: ["inter company invoice reference", "related invoice", "linked intercompany invoice"]
+      synonyms_ar: ["مرجع الفاتورة بين الشركات", "فاتورة مرتبطة", "فاتورة بين الشركات"]
+
+    - name: "campaign"
+      type: "VARCHAR"
+      role: ["marketing", "reference"]
+      description: "Linked marketing campaign associated with this invoice"
+      synonyms_en: ["campaign", "marketing campaign", "promo campaign"]
+      synonyms_ar: ["الحملة", "حملة التسويق", "الحملة الترويجية"]
+
+    - name: "represents_company"
+      type: "VARCHAR"
+      role: ["reference", "organization"]
+      description: "Company represented in this transaction (used in inter-company scenarios)"
+      synonyms_en: ["represents company", "representing company", "linked company"]
+      synonyms_ar: ["الشركة الممثلة", "الشركة المرتبطة", "شركة التمثيل"]
+
+    - name: "source"
+      type: "VARCHAR"
+      role: ["reference", "misc"]
+      description: "Source of the invoice (e.g., POS, API, manual entry)"
+      synonyms_en: ["source", "invoice source", "entry source"]
+      synonyms_ar: ["المصدر", "مصدر الفاتورة", "جهة الإدخال"]
+
+    - name: "customer_group"
+      type: "VARCHAR"
+      role: ["dimension", "customer"]
+      description: "Customer group classification for segmentation and reporting"
+      synonyms_en: ["customer group", "client group", "buyer segment", "customer category"]
+      synonyms_ar: ["مجموعة العملاء", "فئة العميل", "شريحة المشتري"]
+
+    - name: "is_internal_customer"
+      type: "INT"
+      role: ["flag", "customer"]
+      description: "Flag indicating whether the customer is internal to the organization"
+      synonyms_en: ["internal customer flag", "internal customer", "intra-company customer"]
+      synonyms_ar: ["عميل داخلي", "عميل ضمن الشركة", "علامة عميل داخلي"]
+
+    - name: "is_discounted"
+      type: "INT"
+      role: ["flag", "discount"]
+      description: "Indicates whether a discount has been applied to the invoice"
+      synonyms_en: ["discounted flag", "is discounted", "discount applied"]
+      synonyms_ar: ["علامة الخصم", "فاتورة مخفضة", "خصم مطبق"]
+
+    - name: "remarks"
+      type: "TEXT"
+      role: ["notes", "text"]
+      description: "Free-text remarks or internal notes on the invoice"
+      synonyms_en: ["remarks", "notes", "comments", "memo"]
+      synonyms_ar: ["ملاحظات", "تعليقات", "مذكرة"]
+
+    - name: "_user_tags"
+      type: "TEXT"
+      role: ["system", "tags"]
+      description: "Tags added to the document for classification or search"
+      synonyms_en: ["user tags", "document tags", "tags"]
+      synonyms_ar: ["علامات المستخدم", "وسوم المستند", "العلامات"]
+
+    - name: "_comments"
+      type: "TEXT"
+      role: ["system", "comments"]
+      description: "Comments added to the invoice activity log"
+      synonyms_en: ["comments", "activity comments", "log notes"]
+      synonyms_ar: ["تعليقات", "ملاحظات النشاط", "سجل التعليقات"]
+
+    - name: "_assign"
+      type: "TEXT"
+      role: ["system", "assignment"]
+      description: "User assignments for the invoice (e.g., to-do, task ownership)"
+      synonyms_en: ["assignments", "assigned to", "task assignment"]
+      synonyms_ar: ["تعيينات", "مسند إلى", "تعيين المهمة"]
+
+    - name: "_liked_by"
+      type: "TEXT"
+      role: ["system", "interaction"]
+      description: "Users who liked this document"
+      synonyms_en: ["liked by", "likes", "user likes"]
+      synonyms_ar: ["معجب به من", "الإعجابات", "إعجابات المستخدمين"]
+
+    - name: "_seen"
+      type: "TEXT"
+      role: ["system", "interaction"]
+      description: "Users who have seen this document"
+      synonyms_en: ["seen by", "viewed by", "user views"]
+      synonyms_ar: ["تمت رؤيته من", "مشاهدات", "من شاهد المستند"]
+    - name: "ksa_einv_qr"
+      type: "TEXT"
+      role: ["zatca", "einv", "qr"]
+      description: "ZATCA e-invoicing QR code generated as part of invoice submission"
+      synonyms_en: ["ZATCA QR", "e-invoice QR", "KSA QR code", "invoice QR"]
+      synonyms_ar: ["رمز QR للفوترة الإلكترونية", "رمز الاستجابة السريعة", "رمز ZATCA"]
+
+    - name: "custom_ksa_einvoicing_xml"
+      type: "VARCHAR"
+      role: ["zatca", "einv", "xml"]
+      description: "ZATCA-compliant XML payload of the invoice"
+      synonyms_en: ["ZATCA XML", "e-invoice XML", "KSA XML file"]
+      synonyms_ar: ["ملف XML للفوترة الإلكترونية", "ملف ZATCA", "مخرجات الفاتورة"]
+
+    - name: "custom_b2c"
+      type: "INT"
+      role: ["zatca", "flag"]
+      description: "Flag indicating whether the invoice is a B2C transaction"
+      synonyms_en: ["B2C flag", "business to customer", "retail invoice"]
+      synonyms_ar: ["علامة B2C", "فاتورة البيع بالتجزئة", "فاتورة المستهلك"]
+
+    - name: "custom_uuid"
+      type: "TEXT"
+      role: ["zatca", "identifier"]
+      description: "UUID generated by ZATCA to uniquely identify the invoice"
+      synonyms_en: ["ZATCA UUID", "invoice UUID", "e-invoice ID"]
+      synonyms_ar: ["المعرف الفريد ZATCA", "UUID الفاتورة", "معرّف الفاتورة الإلكتروني"]
+
+    - name: "custom_zatca_status"
+      type: "VARCHAR"
+      role: ["zatca", "enum", "status"]
+      description: "ZATCA submission status of the invoice"
+      synonyms_en: ["ZATCA status", "submission status", "e-invoice status"]
+      synonyms_ar: ["حالة ZATCA", "حالة الإرسال", "حالة الفاتورة الإلكترونية"]
+      enum_values: ["Not Submitted", "Submitted", "Cleared", "Rejected", "Pending"]
+
+    - name: "custom_zatca_third_party_invoice"
+      type: "INT"
+      role: ["zatca", "flag"]
+      description: "Indicates whether invoice is generated through a third-party system"
+      synonyms_en: ["third party invoice flag", "external system invoice"]
+      synonyms_ar: ["فاتورة من طرف ثالث", "فاتورة خارجية", "طرف ثالث"]
+
+    - name: "custom_zatca_nominal_invoice"
+      type: "INT"
+      role: ["zatca", "flag"]
+      description: "Indicates whether the invoice is a nominal invoice (e.g., training or test)"
+      synonyms_en: ["nominal invoice", "simulation invoice", "test invoice"]
+      synonyms_ar: ["فاتورة اسمية", "فاتورة تجريبية", "فاتورة محاكاة"]
+
+    - name: "custom_zatca_export_invoice"
+      type: "INT"
+      role: ["zatca", "flag"]
+      description: "Indicates whether the invoice is for export transactions"
+      synonyms_en: ["export invoice", "export flag", "international invoice"]
+      synonyms_ar: ["فاتورة تصدير", "علامة التصدير", "فاتورة دولية"]
+
+    - name: "custom_summary_invoice"
+      type: "INT"
+      role: ["zatca", "flag"]
+      description: "Indicates whether the invoice is a summary invoice (batch reporting)"
+      synonyms_en: ["summary invoice", "batch invoice", "aggregated invoice"]
+      synonyms_ar: ["فاتورة ملخص", "فاتورة مجمعة", "فاتورة إجمالية"]
+
+    - name: "custom_self_billed_invoice"
+      type: "INT"
+      role: ["zatca", "flag"]
+      description: "Indicates whether the invoice is self-billed"
+      synonyms_en: ["self billed invoice", "self invoice", "reverse invoice"]
+      synonyms_ar: ["فاتورة ذاتية", "فاتورة عكسية", "فاتورة ذات إصدار ذاتي"]
+
+    - name: "custom_user_invoice_number"
+      type: "VARCHAR"
+      role: ["zatca", "identifier"]
+      description: "User-defined invoice number (e.g., POS or external system)"
+      synonyms_en: ["user invoice number", "custom invoice number", "external invoice id"]
+      synonyms_ar: ["رقم الفاتورة المخصص", "رقم فاتورة المستخدم", "رقم فاتورة خارجي"]
+
+    - name: "custom_zatca_tax_category"
+      type: "VARCHAR"
+      role: ["zatca", "tax"]
+      description: "ZATCA tax category code applied to the invoice"
+      synonyms_en: ["tax category", "ZATCA tax code", "tax classification"]
+      synonyms_ar: ["فئة الضريبة", "رمز الضريبة", "تصنيف الضريبة"]
+    - name: "custom_exemption_reason_code"
+      type: "VARCHAR"
+      role: ["zatca", "tax", "code"]
+      description: "Reason code for VAT exemption per ZATCA rules"
+      synonyms_en: ["exemption reason code", "VAT exemption code", "tax exemption code"]
+      synonyms_ar: ["رمز سبب الإعفاء", "رمز إعفاء ضريبة القيمة المضافة", "رمز إعفاء ضريبي"]
+
+    - name: "custom_zatca_discount_reason_code"
+      type: "VARCHAR"
+      role: ["zatca", "discount", "code"]
+      description: "ZATCA discount reason code (e.g., 95)"
+      synonyms_en: ["discount reason code", "ZATCA discount code", "reason code for discount"]
+      synonyms_ar: ["رمز سبب الخصم", "رمز خصم ZATCA", "رمز سبب التخفيض"]
+
+    - name: "custom_zatca_discount_reason"
+      type: "VARCHAR"
+      role: ["zatca", "discount", "text"]
+      description: "Human-readable ZATCA discount reason (e.g., Discount)"
+      synonyms_en: ["discount reason", "reason for discount", "discount description"]
+      synonyms_ar: ["سبب الخصم", "وصف الخصم", "مبرر الخصم"]
+
+    - name: "custom_submit_line_item_discount_to_zatca"
+      type: "INT"
+      role: ["zatca", "flag"]
+      description: "Flag to submit per-line discounts to ZATCA instead of only header level"
+      synonyms_en: ["submit line item discount", "line discount to ZATCA", "per-item discount flag"]
+      synonyms_ar: ["إرسال خصم البنود", "خصم على مستوى البند", "إرسال الخصم إلى ZATCA"]
+
+    - name: "custom_zatca_full_response"
+      type: "LONGTEXT"
+      role: ["zatca", "payload", "response"]
+      description: "Raw ZATCA API response payload for the submission"
+      synonyms_en: ["ZATCA full response", "e-invoice API response", "ZATCA payload"]
+      synonyms_ar: ["استجابة ZATCA الكاملة", "استجابة واجهة الفوترة الإلكترونية", "حمولة الاستجابة"]
+
+    - name: "custom_zatca_pos_name"
+      type: "VARCHAR"
+      role: ["zatca", "pos", "reference"]
+      description: "POS terminal/profile name used for ZATCA submission"
+      synonyms_en: ["ZATCA POS name", "POS profile name", "terminal name"]
+      synonyms_ar: ["اسم نقطة البيع ZATCA", "اسم ملف نقطة البيع", "اسم الجهاز"]
+  notes: |
+    - `tabSales Invoice` is one of the core transactional tables in ERPNext.
+    - For most analytical queries, use `docstatus = 1` to filter only submitted invoices.
+    - Use `base_grand_total` for company currency calculations; `grand_total` reflects the transaction currency.
+    - Fields like `customer` (Link) and `project` are frequently joined to master tables for dimension analysis.
+    - ZATCA-related fields (`custom_*`) are critical for e-invoicing compliance in KSA; use these for status checks, filtering, and reporting.
+    - Parent-child relationships exist with `tabSales Invoice Item` through `name` → `parent`.
+    - POS-specific and B2C invoices can be identified through fields like `custom_b2c` and `custom_zatca_pos_name`.
+    - Avoid using system fields (e.g., `creation`, `modified`) in business-level aggregations unless needed for audit or activity reports.
+    - Always validate date fields like `posting_date` and `due_date` for time-bound reporting.
+
+- table: "tabCustomer"
+  description: "Stores core customer information including identity, classification, contact details, and commercial settings for sales and billing transactions."
+  synonyms_en: ["customer", "client", "buyer", "consumer", "patron"]
+  synonyms_ar: ["العميل", "الزبون", "المستهلك", "المشتري", "الطرف"]
+
+  fields:
+    - name: "name"
+      type: "VARCHAR"
+      role: ["id"]
+      description: "Unique identifier for the customer record"
+      synonyms_en: ["customer id", "customer code", "client id", "party id"]
+      synonyms_ar: ["معرّف العميل", "رمز العميل", "كود العميل", "معرف الزبون"]
+
+    - name: "creation"
+      type: "DATETIME"
+      role: ["system"]
+      description: "Timestamp when the customer record was created"
+      synonyms_en: ["creation time", "created at", "record creation date"]
+      synonyms_ar: ["تاريخ الإنشاء", "وقت الإنشاء", "وقت تسجيل العميل"]
+
+    - name: "modified"
+      type: "DATETIME"
+      role: ["system"]
+      description: "Timestamp when the customer record was last modified"
+      synonyms_en: ["last modified", "update time", "last updated"]
+      synonyms_ar: ["آخر تعديل", "تاريخ التحديث", "وقت آخر تحديث"]
+
+    - name: "modified_by"
+      type: "VARCHAR"
+      role: ["system"]
+      description: "User who last modified the customer record"
+      synonyms_en: ["modified by", "updated by", "last editor"]
+      synonyms_ar: ["تم التعديل بواسطة", "آخر من عدّل", "مستخدم التحديث"]
+
+    - name: "owner"
+      type: "VARCHAR"
+      role: ["system"]
+      description: "User who originally created the customer record"
+      synonyms_en: ["created by", "record owner", "owner"]
+      synonyms_ar: ["تم الإنشاء بواسطة", "مالك السجل", "المنشئ"]
+
+    - name: "docstatus"
+      type: "INT"
+      role: ["lifecycle"]
+      description: "Document status: 0=Draft, 1=Submitted, 2=Cancelled"
+      synonyms_en: ["status", "submission state", "document status"]
+      synonyms_ar: ["حالة المستند", "حالة العميل", "رمز الحالة"]
+
+    - name: "idx"
+      type: "INT"
+      role: ["system"]
+      description: "Index used internally for ordering"
+      synonyms_en: ["row index", "ordering index", "internal order"]
+      synonyms_ar: ["الترتيب الداخلي", "رقم الصف", "فهرس الترتيب"]
+
+    - name: "naming_series"
+      type: "VARCHAR"
+      role: ["system"]
+      description: "Naming series used for auto-generating customer IDs"
+      synonyms_en: ["naming pattern", "customer series", "numbering format"]
+      synonyms_ar: ["سلسلة التسمية", "نمط الترقيم", "سلسلة العملاء"]
+
+    - name: "salutation"
+      type: "VARCHAR"
+      role: ["display"]
+      description: "Salutation prefix for the customer name"
+      synonyms_en: ["title", "greeting", "salute"]
+      synonyms_ar: ["اللقب", "التحية", "صفة الخطاب"]
+
+    - name: "customer_name"
+      type: "VARCHAR"
+      role: ["party", "dimension"]
+      description: "Official name of the customer"
+      synonyms_en: ["client name", "buyer name", "party name", "customer display name"]
+      synonyms_ar: ["اسم العميل", "اسم الزبون", "اسم الطرف", "اسم المشتري"]
+
+    - name: "customer_type"
+      type: "VARCHAR"
+      role: ["classification"]
+      description: "Customer type (e.g., Company or Individual)"
+      synonyms_en: ["type", "customer classification", "party type"]
+      synonyms_ar: ["نوع العميل", "تصنيف العميل", "فئة العميل"]
+      enum_values: ["Company", "Individual"]
+
+    - name: "customer_group"
+      type: "VARCHAR"
+      role: ["segment"]
+      description: "Customer group classification"
+      synonyms_en: ["group", "category", "segment", "customer segment"]
+      synonyms_ar: ["مجموعة العملاء", "فئة العملاء", "قطاع العملاء"]
+
+    - name: "territory"
+      type: "VARCHAR"
+      role: ["dimension", "region"]
+      description: "Sales territory or region assigned to the customer"
+      synonyms_en: ["territory", "region", "area", "zone"]
+      synonyms_ar: ["المنطقة", "الإقليم", "المنطقة الجغرافية", "النطاق"]
+
+    - name: "gender"
+      type: "VARCHAR"
+      role: ["attribute"]
+      description: "Gender of the customer (if individual)"
+      synonyms_en: ["gender", "sex", "gender type"]
+      synonyms_ar: ["الجنس", "النوع", "النوع الاجتماعي"]
+
+    - name: "lead_name"
+      type: "VARCHAR"
+      role: ["crm", "link"]
+      description: "Linked Lead record for customer conversion"
+      synonyms_en: ["lead id", "lead name", "linked lead"]
+      synonyms_ar: ["اسم العميل المحتمل", "معرّف العميل المحتمل", "رابط القيادة"]
+
+    - name: "opportunity_name"
+      type: "VARCHAR"
+      role: ["crm", "link"]
+      description: "Linked Opportunity record"
+      synonyms_en: ["opportunity id", "opportunity name", "linked opportunity"]
+      synonyms_ar: ["اسم الفرصة", "معرّف الفرصة", "فرصة المبيعات"]
+
+    - name: "prospect_name"
+      type: "VARCHAR"
+      role: ["crm", "link"]
+      description: "Linked Prospect record"
+      synonyms_en: ["prospect id", "prospect name", "potential customer"]
+      synonyms_ar: ["الزبون المحتمل", "معرف الزبون المحتمل", "عميل محتمل"]
+
+    - name: "account_manager"
+      type: "VARCHAR"
+      role: ["user", "link"]
+      description: "Assigned account manager or sales owner"
+      synonyms_en: ["account owner", "sales rep", "salesperson", "account executive"]
+      synonyms_ar: ["مدير الحساب", "مسؤول المبيعات", "مندوب المبيعات"]
+
+    - name: "image"
+      type: "TEXT"
+      role: ["media"]
+      description: "Path to customer's image or logo"
+      synonyms_en: ["customer image", "logo", "profile image"]
+      synonyms_ar: ["صورة العميل", "الشعار", "صورة الملف الشخصي"]
+
+    - name: "default_currency"
+      type: "VARCHAR"
+      role: ["finance"]
+      description: "Default currency associated with the customer"
+      synonyms_en: ["currency", "customer currency", "default currency"]
+      synonyms_ar: ["العملة الافتراضية", "عملة العميل", "العملة"]
+
+    - name: "default_bank_account"
+      type: "VARCHAR"
+      role: ["finance", "link"]
+      description: "Default bank account linked to the customer"
+      synonyms_en: ["bank account", "customer bank", "default account"]
+      synonyms_ar: ["الحساب البنكي", "الحساب المصرفي", "الحساب الافتراضي"]
+
+    - name: "default_price_list"
+      type: "VARCHAR"
+      role: ["pricing", "link"]
+      description: "Default price list associated with the customer"
+      synonyms_en: ["price list", "customer price list", "default pricing list"]
+      synonyms_ar: ["قائمة الأسعار", "قائمة أسعار العميل", "قائمة التسعير"]
+
+    - name: "is_internal_customer"
+      type: "INT"
+      role: ["flag"]
+      description: "Flag indicating whether this is an internal customer"
+      synonyms_en: ["internal flag", "internal customer", "inside customer"]
+      synonyms_ar: ["عميل داخلي", "إشارة عميل داخلي"]
+
+    - name: "represents_company"
+      type: "VARCHAR"
+      role: ["organization", "link"]
+      description: "Company this customer represents"
+      synonyms_en: ["represented company", "company name", "linked company"]
+      synonyms_ar: ["الشركة الممثلة", "الشركة المرتبطة", "الشركة"]
+
+    - name: "market_segment"
+      type: "VARCHAR"
+      role: ["classification", "segment"]
+      description: "Market segment to which the customer belongs"
+      synonyms_en: ["market segment", "customer segment", "business segment", "sector"]
+      synonyms_ar: ["قطاع السوق", "قطاع العملاء", "القطاع التجاري"]
+
+    - name: "industry"
+      type: "VARCHAR"
+      role: ["classification", "segment"]
+      description: "Industry category of the customer"
+      synonyms_en: ["industry", "business industry", "customer industry"]
+      synonyms_ar: ["الصناعة", "مجال العمل", "القطاع الصناعي"]
+
+    - name: "customer_pos_id"
+      type: "VARCHAR"
+      role: ["id", "pos"]
+      description: "Customer ID used in the Point of Sale system"
+      synonyms_en: ["POS customer id", "pos id", "point of sale id"]
+      synonyms_ar: ["معرف نقطة البيع", "رقم العميل في نقطة البيع"]
+
+    - name: "website"
+      type: "VARCHAR"
+      role: ["contact", "online"]
+      description: "Customer's website URL"
+      synonyms_en: ["website", "web address", "URL"]
+      synonyms_ar: ["الموقع الإلكتروني", "عنوان الموقع"]
+
+    - name: "language"
+      type: "VARCHAR"
+      role: ["localization"]
+      description: "Preferred language for communication with the customer"
+      synonyms_en: ["language", "preferred language", "locale"]
+      synonyms_ar: ["اللغة", "اللغة المفضلة", "اللغة المختارة"]
+
+    - name: "customer_details"
+      type: "TEXT"
+      role: ["note", "info"]
+      description: "Additional descriptive details about the customer"
+      synonyms_en: ["customer info", "customer description", "customer note", "remarks"]
+      synonyms_ar: ["ملاحظات العميل", "تفاصيل العميل", "وصف العميل"]
+
+    - name: "customer_primary_address"
+      type: "VARCHAR"
+      role: ["address", "link"]
+      description: "Reference to the customer's primary address record"
+      synonyms_en: ["primary address id", "main address link", "default address id"]
+      synonyms_ar: ["عنوان العميل الرئيسي", "معرف العنوان الرئيسي"]
+
+    - name: "primary_address"
+      type: "TEXT"
+      role: ["address", "display"]
+      description: "Full primary address of the customer"
+      synonyms_en: ["main address", "customer address", "primary location"]
+      synonyms_ar: ["العنوان الرئيسي", "عنوان العميل", "العنوان الأساسي"]
+
+    - name: "customer_primary_contact"
+      type: "VARCHAR"
+      role: ["contact", "link"]
+      description: "Reference to the customer's primary contact record"
+      synonyms_en: ["primary contact id", "main contact", "default contact"]
+      synonyms_ar: ["معرف جهة الاتصال الرئيسية", "الجهة الأساسية", "جهة الاتصال"]
+
+    - name: "mobile_no"
+      type: "VARCHAR"
+      role: ["contact"]
+      description: "Customer's mobile phone number"
+      synonyms_en: ["mobile number", "phone number", "contact number"]
+      synonyms_ar: ["رقم الجوال", "رقم الهاتف", "رقم الاتصال"]
+
+    - name: "email_id"
+      type: "VARCHAR"
+      role: ["contact"]
+      description: "Customer's primary email address"
+      synonyms_en: ["email", "email address", "customer email"]
+      synonyms_ar: ["البريد الإلكتروني", "إيميل العميل", "عنوان البريد"]
+
+    - name: "tax_id"
+      type: "VARCHAR"
+      role: ["tax", "id"]
+      description: "Customer's tax identification number"
+      synonyms_en: ["tax id", "VAT number", "tax identification number"]
+      synonyms_ar: ["الرقم الضريبي", "معرف الضريبة", "رقم ضريبة القيمة المضافة"]
+
+    - name: "tax_category"
+      type: "VARCHAR"
+      role: ["tax"]
+      description: "Tax category applicable to the customer"
+      synonyms_en: ["tax category", "tax group", "tax type"]
+      synonyms_ar: ["فئة الضريبة", "تصنيف الضريبة", "نوع الضريبة"]
+
+    - name: "tax_withholding_category"
+      type: "VARCHAR"
+      role: ["tax"]
+      description: "Tax withholding category for the customer"
+      synonyms_en: ["withholding category", "tax withholding", "TDS category"]
+      synonyms_ar: ["فئة حجز الضريبة", "حجز الضريبة", "فئة الاستقطاع"]
+
+    - name: "payment_terms"
+      type: "VARCHAR"
+      role: ["payment", "terms"]
+      description: "Default payment terms for this customer"
+      synonyms_en: ["payment terms", "credit terms", "terms of payment"]
+      synonyms_ar: ["شروط الدفع", "بنود الدفع", "شروط الائتمان"]
+
+    - name: "loyalty_program"
+      type: "VARCHAR"
+      role: ["loyalty", "marketing"]
+      description: "Loyalty program assigned to the customer"
+      synonyms_en: ["loyalty program", "rewards program", "points program"]
+      synonyms_ar: ["برنامج الولاء", "برنامج المكافآت", "نظام النقاط"]
+
+    - name: "loyalty_program_tier"
+      type: "VARCHAR"
+      role: ["loyalty", "tier"]
+      description: "Tier level of the loyalty program"
+      synonyms_en: ["loyalty tier", "reward level", "membership level"]
+      synonyms_ar: ["مستوى الولاء", "مستوى المكافآت", "مستوى العضوية"]
+
+    - name: "default_sales_partner"
+      type: "VARCHAR"
+      role: ["sales", "partner"]
+      description: "Default sales partner associated with the customer"
+      synonyms_en: ["sales partner", "partner", "default partner"]
+      synonyms_ar: ["شريك المبيعات", "الشريك", "الشريك الافتراضي"]
+    - name: "default_commission_rate"
+      type: "DECIMAL"
+      role: ["sales", "commission"]
+      description: "Default commission rate assigned to this customer"
+      synonyms_en: ["commission rate", "default commission", "sales commission"]
+      synonyms_ar: ["معدل العمولة", "العمولة الافتراضية", "عمولة المبيعات"]
+
+    - name: "so_required"
+      type: "INT"
+      role: ["sales", "requirement"]
+      description: "Flag indicating whether a Sales Order is required before invoicing"
+      synonyms_en: ["sales order required", "so required", "require sales order"]
+      synonyms_ar: ["مطلوب أمر مبيعات", "طلب مبيعات إلزامي"]
+
+    - name: "dn_required"
+      type: "INT"
+      role: ["sales", "requirement"]
+      description: "Flag indicating whether a Delivery Note is required before invoicing"
+      synonyms_en: ["delivery note required", "dn required", "require delivery note"]
+      synonyms_ar: ["مطلوب إذن تسليم", "إذن تسليم إلزامي"]
+
+    - name: "is_frozen"
+      type: "INT"
+      role: ["status", "control"]
+      description: "Indicates if the customer record is frozen and cannot be modified"
+      synonyms_en: ["frozen", "locked", "read-only customer"]
+      synonyms_ar: ["مجمد", "مغلق", "قيد القراءة فقط"]
+
+    - name: "disabled"
+      type: "INT"
+      role: ["status", "control"]
+      description: "Indicates if the customer is disabled and cannot be used in transactions"
+      synonyms_en: ["disabled", "inactive", "blocked customer"]
+      synonyms_ar: ["معطل", "غير نشط", "محظور"]
+
+    - name: "_user_tags"
+      type: "TEXT"
+      role: ["system", "tags"]
+      description: "Internal user tags associated with the record"
+      synonyms_en: ["user tags", "tags", "labels"]
+      synonyms_ar: ["العلامات", "الوسوم", "وسوم المستخدم"]
+
+    - name: "_comments"
+      type: "TEXT"
+      role: ["system", "note"]
+      description: "Internal comments for this record"
+      synonyms_en: ["comments", "notes", "remarks"]
+      synonyms_ar: ["ملاحظات", "تعليقات", "ملاحظات داخلية"]
+
+    - name: "_assign"
+      type: "TEXT"
+      role: ["system", "assignment"]
+      description: "Assignment metadata for this record"
+      synonyms_en: ["assigned to", "assignment", "responsible user"]
+      synonyms_ar: ["التكليف", "التعيين", "المسؤول"]
+
+    - name: "_liked_by"
+      type: "TEXT"
+      role: ["system", "social"]
+      description: "User list who liked this record"
+      synonyms_en: ["liked by", "favorites", "starred by"]
+      synonyms_ar: ["المعجبون", "مفضل من قبل", "تم وضع علامة مفضلة"]
+
+    - name: "zatca_customer_name_in_arabic"
+      type: "VARCHAR"
+      role: ["compliance", "ZATCA"]
+      description: "Customer name in Arabic for ZATCA e-invoicing"
+      synonyms_en: ["arabic customer name", "zatca name", "name in arabic"]
+      synonyms_ar: ["اسم العميل بالعربية", "اسم زاتكا", "الاسم العربي"]
+
+    - name: "custom_b2c"
+      type: "INT"
+      role: ["ZATCA", "compliance"]
+      description: "Indicates if the customer is a B2C customer under ZATCA"
+      synonyms_en: ["b2c customer", "consumer customer", "zatca b2c"]
+      synonyms_ar: ["عميل فردي", "عميل بيع بالتجزئة", "بي تو سي"]
+
+    - name: "custom_buyer_id_type"
+      type: "VARCHAR"
+      role: ["ZATCA", "compliance"]
+      description: "Type of buyer identification used for ZATCA compliance"
+      synonyms_en: ["buyer id type", "id type", "zatca buyer type"]
+      synonyms_ar: ["نوع هوية المشتري", "نوع الهوية", "نوع معرف زاتكا"]
+
+    - name: "custom_buyer_id"
+      type: "VARCHAR"
+      role: ["ZATCA", "compliance"]
+      description: "Buyer identification number for ZATCA"
+      synonyms_en: ["buyer id", "buyer identification", "zatca id"]
+      synonyms_ar: ["هوية المشتري", "معرف المشتري", "رقم زاتكا"]
+
+  notes: |
+    - Master tables store key identifiers and classification fields used in multiple transactions.  
+    - They enable accurate entity resolution in natural language queries.  
+    - Users may refer to entities using partial names, informal terms, or synonyms.  
+    - Embedding master data improves matching accuracy and reduces ambiguity.  
+    - Correct master data retrieval ensures proper joins, filters, and query generation.
+
+- table: "tabSales Invoice Item"
+  synonyms_en:
+    - "invoice line"
+    - "line item"
+    - "sales line"
+    - "invoice item"
+    - "product line"
+    - "SI item"
+  synonyms_ar:
+    - "بند الفاتورة"
+    - "سطر الفاتورة"
+    - "عنصر المبيعات"
+  description: "Child rows of Sales Invoice representing each billed item, quantity, price, discounts, taxes, and delivery references."
+
+  fields:
+    - name: "name"
+      type: "VARCHAR"
+      role: ["id"]
+      description: "Primary key of the line item"
+      synonyms_en: ["line id", "row id"]
+      synonyms_ar: ["معرّف السطر", "معرّف البند"]
+
+    - name: "parent"
+      type: "VARCHAR"
+      role: ["parent_link"]
+      description: "Links to parent Sales Invoice (tabSales Invoice.name)"
+      synonyms_en: ["invoice id (parent)", "parent invoice"]
+      synonyms_ar: ["فاتورة الأصل", "رابط الأصل"]
+
+    - name: "parenttype"
+      type: "VARCHAR"
+      role: ["system"]
+      description: "Parent doctype (should be 'Sales Invoice')"
+      synonyms_en: ["parent doctype", "parent type", "source doctype", "origin doctype"]
+      synonyms_ar: ["نوع المستند الأصل", "نوع الأصل", "نوع المصدر"]
+
+    - name: "parentfield"
+      type: "VARCHAR"
+      role: ["system"]
+      description: "Child table fieldname on parent (usually 'items')"
+      synonyms_en: ["child table fieldname", "parent fieldname", "items field", "child link field"]
+      synonyms_ar: ["اسم حقل الجدول الفرعي", "اسم حقل الأصل", "حقل العناصر"]
+
+    - name: "creation"
+      type: "DATETIME"
+      role: ["system"]
+      description: "Timestamp when the line was created"
+      synonyms_en: ["created at", "creation time", "created date", "invoice item created on"]
+      synonyms_ar: ["تاريخ الإنشاء", "وقت الإنشاء", "تم الإنشاء في"]
+
+    - name: "modified"
+      type: "DATETIME"
+      role: ["system"]
+      description: "Timestamp when the line was last modified"
+      synonyms_en: ["last modified", "updated at", "modification time", "last updated date"]
+      synonyms_ar: ["آخر تعديل", "تاريخ التعديل", "وقت التعديل"]
+
+    - name: "modified_by"
+      type: "VARCHAR"
+      role: ["system"]
+      description: "User who last modified the line"
+      synonyms_en: ["updated by", "last modified by", "user who modified", "edited by"]
+      synonyms_ar: ["تم التعديل بواسطة", "آخر من عدّل", "المستخدم المعدّل"]
+
+    - name: "owner"
+      type: "VARCHAR"
+      role: ["system"]
+      description: "User who created the line"
+      synonyms_en: ["created by", "owner", "user who created", "creator"]
+      synonyms_ar: ["تم الإنشاء بواسطة", "المالك", "منشئ السجل"]
+
+    - name: "docstatus"
+      type: "INT"
+      role: ["lifecycle"]
+      description: "Document status inherited from parent (0=Draft, 1=Submitted, 2=Cancelled)"
+      synonyms_en: ["document status", "status code", "record status", "doc state"]
+      synonyms_ar: ["حالة المستند", "رمز الحالة", "حالة السجل"]
+
+    - name: "idx"
+      type: "INT"
+      role: ["system"]
+      description: "Row order index inside the invoice"
+      synonyms_en: ["row index", "line number", "row position", "item index"]
+      synonyms_ar: ["ترتيب السطر", "رقم السطر", "موقع السطر"]
+
+    - name: "barcode"
+      type: "VARCHAR"
+      role: ["reference", "scan"]
+      description: "Scanned barcode associated with the item line"
+      synonyms_en: ["barcode", "scanner code", "product barcode", "item barcode"]
+      synonyms_ar: ["الباركود", "رمز المسح", "رمز المنتج"]
+
+    - name: "has_item_scanned"
+      type: "INT"
+      role: ["flag"]
+      description: "Flag indicating an item was scanned via barcode"
+      synonyms_en: ["scanned flag", "barcode scanned", "item scanned indicator"]
+      synonyms_ar: ["تم مسحه", "تم قراءة الباركود", "إشارة المسح"]
+
+    - name: "item_code"
+      type: "VARCHAR"
+      role: ["item_id", "link"]
+      description: "Item master code"
+      synonyms_en: ["sku", "product code", "item id"]
+      synonyms_ar: ["رمز الصنف", "معرّف الصنف"]
+
+    - name: "item_name"
+      type: "VARCHAR"
+      role: ["item_name", "display"]
+      description: "Item display name"
+      synonyms_en: ["product name", "item title"]
+      synonyms_ar: ["اسم الصنف", "اسم المنتج"]
+    - name: "customer_item_code"
+      type: "VARCHAR"
+      role: ["reference"]
+      description: "Customer-specific item code"
+      synonyms_en: ["customer code", "client item code", "buyer code", "customer-specific code"]
+      synonyms_ar: ["رمز العميل", "رمز الصنف للعميل", "رمز المشتري"]
+
+    - name: "description"
+      type: "LONGTEXT"
+      role: ["text"]
+      description: "Item description printed on the invoice"
+      synonyms_en: ["item description", "product description", "line description", "details"]
+      synonyms_ar: ["وصف الصنف", "وصف المنتج", "وصف السطر", "تفاصيل"]
+
+    - name: "item_group"
+      type: "VARCHAR"
+      role: ["dimension"]
+      description: "Item group/segment for analytics"
+      synonyms_en: ["category", "product group", "product category", "item category"]
+      synonyms_ar: ["مجموعة الأصناف", "فئة المنتج", "تصنيف الصنف"]
+
+    - name: "brand"
+      type: "VARCHAR"
+      role: ["dimension"]
+      description: "Brand of the item"
+      synonyms_en: ["product brand", "label", "maker", "manufacturer brand"]
+      synonyms_ar: ["العلامة التجارية", "الماركة", "العلامة"]
+
+    - name: "image"
+      type: "TEXT"
+      role: ["reference"]
+      description: "Optional image reference"
+      synonyms_en: ["item image", "product image", "image URL", "photo"]
+      synonyms_ar: ["صورة المنتج", "صورة الصنف", "رابط الصورة", "صورة"]
+
+    - name: "qty"
+      type: "DECIMAL"
+      role: ["quantity", "metric"]
+      description: "Billed quantity in selling UOM"
+      synonyms_en: ["quantity", "qty"]
+      synonyms_ar: ["الكمية"]
+    - name: "stock_uom"
+      type: "VARCHAR"
+      role: ["uom"]
+      description: "Stock UOM"
+      synonyms_en: ["base uom", "inventory uom", "default uom", "stock unit"]
+      synonyms_ar: ["وحدة القياس الأساسية", "وحدة المخزون", "وحدة القياس"]
+
+    - name: "uom"
+      type: "VARCHAR"
+      role: ["uom"]
+      description: "Selling UOM used for the line"
+      synonyms_en: ["selling uom", "sales unit", "unit of measure"]
+      synonyms_ar: ["وحدة البيع", "وحدة القياس", "وحدة الصنف"]
+
+    - name: "conversion_factor"
+      type: "DECIMAL"
+      role: ["uom", "calc"]
+      description: "Multiplier between selling UOM and stock UOM"
+      synonyms_en: ["uom conversion factor", "unit conversion", "uom ratio"]
+      synonyms_ar: ["معامل التحويل", "تحويل وحدة القياس", "نسبة التحويل"]
+
+    - name: "stock_qty"
+      type: "DECIMAL"
+      role: ["quantity", "metric"]
+      description: "Quantity converted to stock UOM"
+      synonyms_en: ["stock quantity", "converted quantity", "base quantity"]
+      synonyms_ar: ["كمية المخزون", "الكمية الأساسية", "الكمية المحولة"]
+
+    - name: "price_list_rate"
+      type: "DECIMAL"
+      role: ["pricing"]
+      description: "Price list rate in transaction currency"
+      synonyms_en: ["price list price", "catalog price", "selling rate", "listed price"]
+      synonyms_ar: ["سعر القائمة", "سعر الكتالوج", "سعر البيع"]
+
+    - name: "base_price_list_rate"
+      type: "DECIMAL"
+      role: ["pricing", "company_currency"]
+      description: "Price list rate in company currency"
+      synonyms_en: ["base price list price", "company currency list rate", "base catalog price"]
+      synonyms_ar: ["سعر القائمة بالعملة الأساسية", "سعر الكتالوج الأساسي", "سعر الشركة"]
+
+    - name: "margin_type"
+      type: "VARCHAR"
+      role: ["pricing"]
+      description: "Margin calculation method (e.g., Percentage/Amount)"
+      synonyms_en: ["margin method", "margin mode", "profit margin type"]
+      synonyms_ar: ["نوع الهامش", "طريقة احتساب الهامش", "نمط الهامش"]
+    - name: "margin_rate_or_amount"
+      type: "DECIMAL"
+      role: ["pricing"]
+      description: "Margin applied per unit"
+      synonyms_en: ["margin amount", "margin per unit", "profit per unit", "margin value"]
+      synonyms_ar: ["هامش الربح", "قيمة الهامش", "هامش الربح لكل وحدة"]
+
+    - name: "rate_with_margin"
+      type: "DECIMAL"
+      role: ["pricing"]
+      description: "Selling rate after margin (txn currency)"
+      synonyms_en: ["final rate", "price after margin", "adjusted selling rate"]
+      synonyms_ar: ["السعر بعد الهامش", "السعر النهائي", "سعر البيع المعدل"]
+
+    - name: "discount_percentage"
+      type: "DECIMAL"
+      role: ["discount"]
+      description: "Discount percent on the item"
+      synonyms_en: ["disc%", "line discount%"]
+      synonyms_ar: ["نسبة الخصم"]
+
+    - name: "discount_amount"
+      type: "DECIMAL"
+      role: ["discount", "amount"]
+      description: "Absolute discount amount (txn currency)"
+      synonyms_ar: ["مبلغ الخصم"]
+
+    - name: "distributed_discount_amount"
+      type: "DECIMAL"
+      role: ["discount", "allocation"]
+      description: "Allocated discount from header-level discount"
+      synonyms_en: ["allocated discount", "distributed discount", "shared discount amount", "header discount allocation"]
+      synonyms_ar: ["الخصم الموزع", "الخصم المخصص", "قيمة الخصم المشتركة", "توزيع الخصم"]
+
+    - name: "rate"
+      type: "DECIMAL"
+      role: ["pricing"]
+      description: "Final unit rate in transaction currency"
+      synonyms_en: ["unit price", "selling rate"]
+      synonyms_ar: ["السعر"]
+
+    - name: "amount"
+      type: "DECIMAL"
+      role: ["amount", "metric"]
+      description: "Line amount (rate × qty), txn currency"
+      synonyms_en: ["line total"]
+      synonyms_ar: ["المبلغ"]
+
+    - name: "item_tax_template"
+      type: "VARCHAR"
+      role: ["tax", "link"]
+      description: "Tax template applied to the line"
+      synonyms_en: ["tax template", "tax rule", "tax config"]
+      synonyms_ar: ["قالب الضريبة", "قواعد الضريبة", "إعداد الضريبة"]
+
+    - name: "base_rate"
+      type: "DECIMAL"
+      role: ["pricing", "company_currency"]
+      description: "Final unit rate in company currency"
+      synonyms_en: ["base unit rate", "company currency rate", "base price"]
+      synonyms_ar: ["السعر الأساسي", "سعر العملة الأساسية", "سعر الوحدة الأساسي"]
+
+    - name: "base_amount"
+      type: "DECIMAL"
+      role: ["amount", "company_currency"]
+      description: "Line amount in company currency"
+      synonyms_en: ["base amount", "company currency amount", "base line total"]
+      synonyms_ar: ["المبلغ الأساسي", "قيمة العملة الأساسية", "المبلغ الإجمالي الأساسي"]
+
+    - name: "pricing_rules"
+      type: "TEXT"
+      role: ["pricing", "reference"]
+      description: "Applied pricing rule details"
+      synonyms_en: ["pricing rules", "discount rules", "price configuration"]
+      synonyms_ar: ["قواعد التسعير", "قواعد الخصم", "إعدادات السعر"]
+
+    - name: "stock_uom_rate"
+      type: "DECIMAL"
+      role: ["pricing", "uom"]
+      description: "Rate normalized to stock UOM"
+      synonyms_en: ["uom rate", "stock unit rate", "normalized rate"]
+      synonyms_ar: ["سعر وحدة المخزون", "سعر موحد", "معدل الوحدة"]
+
+    - name: "is_free_item"
+      type: "INT"
+      role: ["flag"]
+      description: "Indicates free-of-charge item"
+      synonyms_en: ["free item", "complimentary", "zero price item"]
+      synonyms_ar: ["عنصر مجاني", "مجاني", "بلا مقابل"]
+
+    - name: "grant_commission"
+      type: "INT"
+      role: ["flag"]
+      description: "Eligible for commission calculation"
+      synonyms_en: ["eligible commission", "grant commission flag"]
+      synonyms_ar: ["مؤهل للعمولة", "سماح بالعمولة"]
+
+    - name: "net_rate"
+      type: "DECIMAL"
+      role: ["pricing"]
+      description: "Rate after discounts (txn currency)"
+      synonyms_en: ["net rate", "discounted rate", "final rate"]
+      synonyms_ar: ["السعر الصافي", "السعر بعد الخصم", "السعر النهائي"]
+
+    - name: "net_amount"
+      type: "DECIMAL"
+      role: ["amount"]
+      description: "Amount after discounts (txn currency)"
+      synonyms_en: ["net amount", "discounted amount", "final amount"]
+      synonyms_ar: ["المبلغ الصافي", "المبلغ بعد الخصم", "المبلغ النهائي"]
+
+    - name: "base_net_rate"
+      type: "DECIMAL"
+      role: ["pricing", "company_currency"]
+      description: "Net rate in company currency"
+      synonyms_en: ["base net rate", "net rate company currency"]
+      synonyms_ar: ["السعر الصافي الأساسي", "السعر الصافي بعملة الشركة"]
+
+    - name: "base_net_amount"
+      type: "DECIMAL"
+      role: ["amount", "company_currency"]
+      description: "Net amount in company currency"
+      synonyms_en: ["base net amount", "net amount company currency"]
+      synonyms_ar: ["المبلغ الصافي الأساسي", "المبلغ الصافي بعملة الشركة"]
+
+    - name: "delivered_by_supplier"
+      type: "INT"
+      role: ["flag"]
+      description: "Supplier directly delivers item to customer"
+      synonyms_en: ["delivered by supplier", "supplier delivery"]
+      synonyms_ar: ["تم التسليم من المورد", "تسليم المورد"]
+
+    - name: "income_account"
+      type: "VARCHAR"
+      role: ["accounting", "link"]
+      description: "Revenue account for this line"
+      synonyms_en: ["income account", "revenue account"]
+      synonyms_ar: ["حساب الإيرادات", "حساب الدخل"]
+
+    - name: "expense_account"
+      type: "VARCHAR"
+      role: ["accounting", "link"]
+      description: "Expense account (if applicable)"
+      synonyms_en: ["expense account", "cost account"]
+      synonyms_ar: ["حساب المصروفات", "حساب التكلفة"]
+
+    - name: "discount_account"
+      type: "VARCHAR"
+      role: ["accounting", "link"]
+      description: "Account used for discounts (if configured)"
+      synonyms_en: ["discount account"]
+      synonyms_ar: ["حساب الخصم"]
+
+    - name: "deferred_revenue_account"
+      type: "VARCHAR"
+      role: ["revenue_recognition", "link"]
+      description: "Deferred revenue ledger account"
+      synonyms_en: ["deferred revenue account", "deferred income account"]
+      synonyms_ar: ["حساب الإيرادات المؤجلة", "حساب الدخل المؤجل"]
+
+    - name: "enable_deferred_revenue"
+      type: "INT"
+      role: ["revenue_recognition", "flag"]
+      description: "Enable revenue deferral for this line"
+      synonyms_en: ["enable deferral", "defer revenue"]
+      synonyms_ar: ["تمكين تأجيل الإيرادات", "تأجيل الإيرادات"]
+
+    - name: "service_start_date"
+      type: "DATE"
+      role: ["revenue_recognition", "schedule"]
+      description: "Service start date for deferral schedules"
+      synonyms_en: ["service start date", "deferral start date"]
+      synonyms_ar: ["تاريخ بدء الخدمة", "بداية الجدولة"]
+
+    - name: "service_end_date"
+      type: "DATE"
+      role: ["revenue_recognition", "schedule"]
+      description: "Service end date for deferral schedules"
+      synonyms_en: ["service end date", "deferral end date"]
+      synonyms_ar: ["تاريخ انتهاء الخدمة", "نهاية الجدولة"]
+
+    - name: "service_stop_date"
+      type: "DATE"
+      role: ["revenue_recognition", "schedule"]
+      description: "Date to stop service recognition"
+      synonyms_en: ["service stop date", "recognition stop date"]
+      synonyms_ar: ["تاريخ إيقاف الخدمة", "إيقاف الاعتراف"]
+
+    - name: "weight_per_unit"
+      type: "DECIMAL"
+      role: ["weight"]
+      description: "Weight per unit"
+      synonyms_en: ["unit weight", "weight each"]
+      synonyms_ar: ["الوزن لكل وحدة", "الوزن الفردي"]
+
+    - name: "total_weight"
+      type: "DECIMAL"
+      role: ["weight"]
+      description: "Total line weight"
+      synonyms_en: ["total weight", "line weight"]
+      synonyms_ar: ["الوزن الإجمالي", "إجمالي الوزن"]
+
+    - name: "weight_uom"
+      type: "VARCHAR"
+      role: ["uom", "weight"]
+      description: "Weight UOM"
+      synonyms_en: ["weight unit", "weight uom"]
+      synonyms_ar: ["وحدة الوزن", "وحدة القياس للوزن"]
+    - name: "warehouse"
+      type: "VARCHAR"
+      role: ["warehouse", "link"]
+      description: "Source warehouse"
+      synonyms_en: ["warehouse", "source warehouse", "from warehouse"]
+      synonyms_ar: ["المستودع", "مستودع المصدر", "من المخزن"]
+
+    - name: "target_warehouse"
+      type: "VARCHAR"
+      role: ["warehouse", "link"]
+      description: "Target warehouse (if moving stock)"
+      synonyms_en: ["target warehouse", "to warehouse", "destination warehouse"]
+      synonyms_ar: ["مستودع الوجهة", "مخزن الهدف", "إلى المستودع"]
+
+    - name: "quality_inspection"
+      type: "VARCHAR"
+      role: ["quality", "link"]
+      description: "Quality inspection reference"
+      synonyms_en: ["quality check", "quality inspection", "inspection reference"]
+      synonyms_ar: ["فحص الجودة", "مرجع فحص الجودة", "تفتيش الجودة"]
+
+    - name: "serial_and_batch_bundle"
+      type: "VARCHAR"
+      role: ["serial_batch", "link"]
+      description: "Reference to serial/batch bundle"
+      synonyms_en: ["serial batch bundle", "batch reference", "serial batch id"]
+      synonyms_ar: ["حزمة السيريال والدفعة", "مرجع الدفعة", "معرّف الدفعة"]
+
+    - name: "use_serial_batch_fields"
+      type: "INT"
+      role: ["serial_batch", "flag"]
+      description: "Controls whether serial/batch fields are enabled"
+      synonyms_en: ["use serial batch", "serial batch flag"]
+      synonyms_ar: ["استخدام حقول الدفعة", "علامة حقل الدفعة"]
+
+    - name: "allow_zero_valuation_rate"
+      type: "INT"
+      role: ["stock", "flag"]
+      description: "Allow zero valuation rate on stock moves"
+      synonyms_en: ["allow zero valuation", "zero rate flag"]
+      synonyms_ar: ["السماح بسعر تقييم صفري", "علامة السعر الصفري"]
+
+    - name: "incoming_rate"
+      type: "DECIMAL"
+      role: ["stock", "valuation"]
+      description: "Incoming valuation rate"
+      synonyms_en: ["incoming rate", "valuation rate"]
+      synonyms_ar: ["معدل التقييم الوارد", "سعر التقييم"]
+
+    - name: "item_tax_rate"
+      type: "TEXT"
+      role: ["tax"]
+      description: "JSON of per-tax rate for this item"
+      synonyms_en: ["item tax rate", "tax rate per item"]
+      synonyms_ar: ["معدل ضريبة الصنف", "معدل الضريبة"]
+
+    - name: "actual_batch_qty"
+      type: "DECIMAL"
+      role: ["serial_batch"]
+      description: "Actual quantity per batch"
+      synonyms_en: ["actual batch qty", "batch quantity"]
+      synonyms_ar: ["الكمية الفعلية للدفعة", "كمية الدفعة"]
+
+    - name: "serial_no"
+      type: "TEXT"
+      role: ["serial_batch"]
+      description: "Serial numbers used"
+      synonyms_en: ["serial no", "serial number", "serials"]
+      synonyms_ar: ["الأرقام التسلسلية", "الرقم التسلسلي"]
+
+    - name: "batch_no"
+      type: "VARCHAR"
+      role: ["serial_batch"]
+      description: "Batch number used"
+      synonyms_en: ["batch no", "batch number"]
+      synonyms_ar: ["رقم الدفعة", "دفعة"]
+
+    - name: "actual_qty"
+      type: "DECIMAL"
+      role: ["stock"]
+      description: "Actual stock movement quantity (contextual)"
+      synonyms_en: ["actual quantity", "moved qty"]
+      synonyms_ar: ["الكمية الفعلية", "كمية الحركة الفعلية"]
+
+    - name: "company_total_stock"
+      type: "DECIMAL"
+      role: ["stock"]
+      description: "Company-wide on-hand stock snapshot (contextual)"
+      synonyms_en: ["company total stock", "total stock"]
+      synonyms_ar: ["إجمالي مخزون الشركة", "إجمالي المخزون"]
+
+    - name: "sales_order"
+      type: "VARCHAR"
+      role: ["link"]
+      description: "Linked Sales Order (header)"
+      synonyms_en: ["sales order", "so reference", "so id"]
+      synonyms_ar: ["أمر البيع", "رقم أمر البيع", "مرجع أمر البيع"]
+
+    - name: "so_detail"
+      type: "VARCHAR"
+      role: ["link"]
+      description: "Linked Sales Order Item (row id)"
+      synonyms_en: ["sales order item", "so detail id"]
+      synonyms_ar: ["تفاصيل أمر البيع", "عنصر أمر البيع"]
+
+    - name: "delivery_note"
+      type: "VARCHAR"
+      role: ["link"]
+      description: "Linked Delivery Note (header)"
+      synonyms_en: ["delivery note", "dn reference", "dn id"]
+      synonyms_ar: ["مذكرة التسليم", "رقم مذكرة التسليم", "مرجع مذكرة التسليم"]
+
+    - name: "dn_detail"
+      type: "VARCHAR"
+      role: ["link"]
+      description: "Linked Delivery Note Item (row id)"
+      synonyms_en: ["delivery note item", "dn detail id"]
+      synonyms_ar: ["تفاصيل مذكرة التسليم", "عنصر مذكرة التسليم"]
+
+    - name: "sales_invoice_item"
+      type: "VARCHAR"
+      role: ["reference"]
+      description: "Self-reference or cross-reference on amendment"
+      synonyms_en: ["invoice item reference", "si item ref"]
+      synonyms_ar: ["مرجع عنصر الفاتورة", "مرجع البند"]
+
+    - name: "delivered_qty"
+      type: "DECIMAL"
+      role: ["quantity"]
+      description: "Delivered quantity against the line"
+      synonyms_en: ["delivered qty", "delivered quantity"]
+      synonyms_ar: ["الكمية المسلمة", "كمية التسليم"]
+
+    - name: "pos_invoice"
+      type: "VARCHAR"
+      role: ["link"]
+      description: "Linked POS Invoice (header)"
+      synonyms_en: ["pos invoice", "pos bill id"]
+      synonyms_ar: ["فاتورة نقطة البيع", "رقم فاتورة نقطة البيع"]
+
+    - name: "pos_invoice_item"
+      type: "VARCHAR"
+      role: ["link"]
+      description: "Linked POS Invoice Item (row id)"
+      synonyms_en: ["pos invoice item", "pos item ref"]
+      synonyms_ar: ["عنصر فاتورة نقطة البيع", "تفاصيل فاتورة نقطة البيع"]
+
+    - name: "purchase_order"
+      type: "VARCHAR"
+      role: ["link"]
+      description: "Linked Purchase Order (drop-ship/back-to-back scenarios)"
+      synonyms_en: ["purchase order", "po reference", "po id"]
+      synonyms_ar: ["أمر الشراء", "رقم أمر الشراء", "مرجع أمر الشراء"]
+
+    - name: "purchase_order_item"
+      type: "VARCHAR"
+      role: ["link"]
+      description: "Linked Purchase Order Item (row id)"
+      synonyms_en: ["purchase order item", "po detail id"]
+      synonyms_ar: ["تفاصيل أمر الشراء", "عنصر أمر الشراء"]
+
+    - name: "cost_center"
+      type: "VARCHAR"
+      role: ["accounting", "dimension"]
+      description: "Cost center allocation"
+      synonyms_en: ["cost center", "cost allocation"]
+      synonyms_ar: ["مركز التكلفة", "تخصيص التكلفة"]
+
+    - name: "project"
+      type: "VARCHAR"
+      role: ["dimension"]
+      description: "Project code for project accounting"
+      synonyms_en: ["project", "project code"]
+      synonyms_ar: ["المشروع", "رمز المشروع"]
+
+    - name: "page_break"
+      type: "INT"
+      role: ["print"]
+      description: "Insert page break before this row on print"
+      synonyms_en: ["page break", "print break"]
+      synonyms_ar: ["فاصل صفحة", "فاصل طباعة"]
+
+  notes: |
+    - Parent-child relation: join `tabSales Invoice Item`.`parent` = `tabSales Invoice`.`name`.
+    - For listing invoice lines, select identifying fields like `parent`, `name`, `item_code`, `item_name`, `qty`, `rate`, `amount`.
+    - Use `net_rate` / `net_amount` when you need post-discount values; use `base_*` for company currency.
+    - When grouping analytics, prefer dimensions like `item_group`, `brand`, `warehouse`, `project`, `cost_center`.
+    - Serial/Batch scenarios: rely on `serial_no`, `batch_no`, and `serial_and_batch_bundle`.
+    - Delivery/fulfillment context: `delivery_note`, `delivered_qty`, links to SO (`sales_order`, `so_detail`) and POS (`pos_invoice`, `pos_invoice_item`).
+    - Pricing sources: `price_list_rate`, `pricing_rules`, `discount_%/amount`, and margin fields determine final `rate`/`amount`.
+
+- table: "tabSupplier"
+  synonyms_en:
+    - "vendor"
+    - "supplier"
+    - "provider"
+    - "partner"
+    - "seller"
+    - "external party"
+  synonyms_ar:
+    - "مورد"
+    - "مزود"
+    - "بائع"
+    - "شريك"
+    - "طرف خارجي"
+  description: "Master table storing supplier/vendor information, including contact details, tax info, and purchasing configuration."
+
+  fields:
+    - name: "name"
+      type: "VARCHAR"
+      role: ["id"]
+      description: "Supplier unique ID / primary key"
+      synonyms_en: ["supplier id", "vendor id", "supplier code"]
+      synonyms_ar: ["معرّف المورد", "رمز المورد", "رقم المورد"]
+
+    - name: "creation"
+      type: "DATETIME"
+      role: ["system"]
+      description: "Timestamp when the supplier record was created"
+      synonyms_en: ["created on", "creation time"]
+      synonyms_ar: ["تاريخ الإنشاء", "وقت الإنشاء"]
+
+    - name: "modified"
+      type: "DATETIME"
+      role: ["system"]
+      description: "Timestamp when the record was last modified"
+      synonyms_en: ["last modified", "updated on"]
+      synonyms_ar: ["تاريخ التعديل", "آخر تعديل"]
+
+    - name: "modified_by"
+      type: "VARCHAR"
+      role: ["system"]
+      description: "User who last modified the record"
+      synonyms_en: ["modified by", "last edited by"]
+      synonyms_ar: ["عدله المستخدم", "آخر محرر"]
+
+    - name: "owner"
+      type: "VARCHAR"
+      role: ["system"]
+      description: "User who created the record"
+      synonyms_en: ["owner", "created by"]
+      synonyms_ar: ["المالك", "أنشأ بواسطة"]
+
+    - name: "docstatus"
+      type: "INT"
+      role: ["lifecycle"]
+      description: "Document status (0=Draft, 1=Submitted, 2=Cancelled)"
+      synonyms_en: ["status", "document status"]
+      synonyms_ar: ["حالة المستند", "الحالة"]
+
+    - name: "idx"
+      type: "INT"
+      role: ["system"]
+      description: "Index of record (system)"
+      synonyms_en: ["index", "row index"]
+      synonyms_ar: ["الفهرس", "رقم السطر"]
+
+    - name: "naming_series"
+      type: "VARCHAR"
+      role: ["naming"]
+      description: "Naming series for supplier IDs"
+      synonyms_en: ["naming series"]
+      synonyms_ar: ["سلسلة التسمية"]
+
+    - name: "supplier_name"
+      type: "VARCHAR"
+      role: ["display"]
+      description: "Full display name of the supplier"
+      synonyms_en: ["supplier name", "vendor name"]
+      synonyms_ar: ["اسم المورد", "اسم البائع"]
+
+    - name: "country"
+      type: "VARCHAR"
+      role: ["geo"]
+      description: "Country of the supplier"
+      synonyms_en: ["country", "supplier country"]
+      synonyms_ar: ["الدولة", "بلد المورد"]
+
+    - name: "supplier_group"
+      type: "VARCHAR"
+      role: ["dimension"]
+      description: "Supplier group classification"
+      synonyms_en: ["supplier group", "vendor group"]
+      synonyms_ar: ["مجموعة المورد", "تصنيف المورد"]
+
+    - name: "supplier_type"
+      type: "VARCHAR"
+      role: ["type"]
+      description: "Supplier type (e.g., Company, Individual)"
+      synonyms_en: ["supplier type", "vendor type"]
+      synonyms_ar: ["نوع المورد", "تصنيف المورد"]
+
+    - name: "is_transporter"
+      type: "INT"
+      role: ["flag"]
+      description: "Flag indicating supplier is a transporter"
+      synonyms_en: ["is transporter", "transporter flag"]
+      synonyms_ar: ["مورد نقل", "مزود خدمات النقل"]
+
+    - name: "image"
+      type: "TEXT"
+      role: ["reference"]
+      description: "Image of supplier or logo"
+      synonyms_en: ["image", "logo"]
+      synonyms_ar: ["صورة", "شعار"]
+
+    - name: "default_currency"
+      type: "VARCHAR"
+      role: ["finance"]
+      description: "Default currency for supplier transactions"
+      synonyms_en: ["currency", "default currency"]
+      synonyms_ar: ["العملة", "العملة الافتراضية"]
+
+    - name: "default_bank_account"
+      type: "VARCHAR"
+      role: ["finance", "link"]
+      description: "Default bank account linked to supplier"
+      synonyms_en: ["bank account", "default bank"]
+      synonyms_ar: ["الحساب البنكي", "الحساب البنكي الافتراضي"]
+
+    - name: "default_price_list"
+      type: "VARCHAR"
+      role: ["pricing"]
+      description: "Default price list for supplier"
+      synonyms_en: ["price list"]
+      synonyms_ar: ["قائمة الأسعار"]
+
+    - name: "is_internal_supplier"
+      type: "INT"
+      role: ["flag"]
+      description: "Indicates if the supplier is internal"
+      synonyms_en: ["internal supplier flag"]
+      synonyms_ar: ["مورد داخلي"]
+
+    - name: "represents_company"
+      type: "VARCHAR"
+      role: ["link"]
+      description: "Company represented by the supplier"
+      synonyms_en: ["represents company"]
+      synonyms_ar: ["يمثل الشركة"]
+
+    - name: "supplier_details"
+      type: "TEXT"
+      role: ["text"]
+      description: "Additional details about the supplier"
+      synonyms_en: ["details", "supplier info"]
+      synonyms_ar: ["تفاصيل المورد", "معلومات المورد"]
+
+    - name: "website"
+      type: "VARCHAR"
+      role: ["reference"]
+      description: "Supplier website URL"
+      synonyms_en: ["website", "supplier site"]
+      synonyms_ar: ["موقع المورد", "موقع الويب"]
+
+    - name: "language"
+      type: "VARCHAR"
+      role: ["preference"]
+      description: "Preferred language for communication"
+      synonyms_en: ["language"]
+      synonyms_ar: ["اللغة"]
+
+    - name: "tax_id"
+      type: "VARCHAR"
+      role: ["tax"]
+      description: "Tax identification number"
+      synonyms_en: ["tax id", "tax number"]
+      synonyms_ar: ["رقم الضريبة", "معرّف الضريبة"]
+
+    - name: "tax_category"
+      type: "VARCHAR"
+      role: ["tax"]
+      description: "Tax category applied to supplier"
+      synonyms_en: ["tax category"]
+      synonyms_ar: ["فئة الضريبة"]
+
+    - name: "tax_withholding_category"
+      type: "VARCHAR"
+      role: ["tax"]
+      description: "Tax withholding category for compliance"
+      synonyms_en: ["withholding category"]
+      synonyms_ar: ["فئة استقطاع الضريبة"]
+
+    - name: "supplier_primary_address"
+      type: "VARCHAR"
+      role: ["address"]
+      description: "Primary address ID of supplier"
+      synonyms_en: ["primary address id"]
+      synonyms_ar: ["معرّف العنوان الأساسي"]
+
+    - name: "primary_address"
+      type: "TEXT"
+      role: ["address"]
+      description: "Text address of the supplier"
+      synonyms_en: ["address", "primary address"]
+      synonyms_ar: ["العنوان الأساسي", "عنوان المورد"]
+
+    - name: "supplier_primary_contact"
+      type: "VARCHAR"
+      role: ["contact"]
+      description: "Primary contact ID of supplier"
+      synonyms_en: ["primary contact id"]
+      synonyms_ar: ["معرّف جهة الاتصال الأساسية"]
+
+    - name: "mobile_no"
+      type: "VARCHAR"
+      role: ["contact"]
+      description: "Supplier mobile number"
+      synonyms_en: ["mobile number", "phone"]
+      synonyms_ar: ["رقم الجوال", "رقم الهاتف"]
+
+    - name: "email_id"
+      type: "VARCHAR"
+      role: ["contact"]
+      description: "Supplier email address"
+      synonyms_en: ["email", "email id"]
+      synonyms_ar: ["البريد الإلكتروني", "عنوان البريد"]
+
+    - name: "payment_terms"
+      type: "VARCHAR"
+      role: ["finance"]
+      description: "Linked payment terms template"
+      synonyms_en: ["payment terms"]
+      synonyms_ar: ["شروط الدفع"]
+
+    - name: "allow_purchase_invoice_creation_without_purchase_order"
+      type: "INT"
+      role: ["flag"]
+      description: "Allow purchase invoice creation without a purchase order"
+      synonyms_en: ["allow invoice without PO"]
+      synonyms_ar: ["السماح بإنشاء فاتورة بدون أمر شراء"]
+
+    - name: "allow_purchase_invoice_creation_without_purchase_receipt"
+      type: "INT"
+      role: ["flag"]
+      description: "Allow purchase invoice creation without a receipt"
+      synonyms_en: ["allow invoice without receipt"]
+      synonyms_ar: ["السماح بإنشاء فاتورة بدون إيصال"]
+
+    - name: "is_frozen"
+      type: "INT"
+      role: ["flag"]
+      description: "Flag indicating if the supplier record is frozen"
+      synonyms_en: ["is frozen", "frozen flag"]
+      synonyms_ar: ["مجمد", "قيد التجميد"]
+
+    - name: "disabled"
+      type: "INT"
+      role: ["flag"]
+      description: "Flag indicating if the supplier is disabled"
+      synonyms_en: ["disabled flag", "inactive"]
+      synonyms_ar: ["معطل", "غير نشط"]
+
+    - name: "warn_rfqs"
+      type: "INT"
+      role: ["flag"]
+      description: "Warn on Request for Quotation (RFQ)"
+      synonyms_en: ["warn rfq", "rfq warning"]
+      synonyms_ar: ["تحذير طلب عرض الأسعار", "تحذير RFQ"]
+
+    - name: "warn_pos"
+      type: "INT"
+      role: ["flag"]
+      description: "Warn on Purchase Order Submission"
+      synonyms_en: ["warn po", "po warning"]
+      synonyms_ar: ["تحذير أمر الشراء", "تحذير PO"]
+
+    - name: "prevent_rfqs"
+      type: "INT"
+      role: ["flag"]
+      description: "Prevent RFQs to this supplier"
+      synonyms_en: ["block rfq"]
+      synonyms_ar: ["منع RFQ"]
+
+    - name: "prevent_pos"
+      type: "INT"
+      role: ["flag"]
+      description: "Prevent purchase orders to this supplier"
+      synonyms_en: ["block po"]
+      synonyms_ar: ["منع أمر الشراء"]
+
+    - name: "on_hold"
+      type: "INT"
+      role: ["flag"]
+      description: "Flag indicating if supplier is on hold"
+      synonyms_en: ["on hold"]
+      synonyms_ar: ["قيد الإيقاف"]
+
+    - name: "hold_type"
+      type: "VARCHAR"
+      role: ["flag"]
+      description: "Type of hold applied"
+      synonyms_en: ["hold type"]
+      synonyms_ar: ["نوع الإيقاف"]
+
+    - name: "release_date"
+      type: "DATE"
+      role: ["flag"]
+      description: "Date to release hold"
+      synonyms_en: ["release date"]
+      synonyms_ar: ["تاريخ الإطلاق"]
+
+    - name: "_user_tags"
+      type: "TEXT"
+      role: ["system"]
+      description: "System tags assigned by user"
+      synonyms_en: ["tags", "user tags"]
+      synonyms_ar: ["العلامات", "علامات المستخدم"]
+
+    - name: "_comments"
+      type: "TEXT"
+      role: ["system"]
+      description: "User/system comments"
+      synonyms_en: ["comments", "notes"]
+      synonyms_ar: ["ملاحظات", "تعليقات"]
+
+    - name: "_assign"
+      type: "TEXT"
+      role: ["system"]
+      description: "Assignment info for workflows"
+      synonyms_en: ["assignments"]
+      synonyms_ar: ["تعيينات"]
+
+    - name: "_liked_by"
+      type: "TEXT"
+      role: ["system"]
+      description: "Users who liked the record"
+      synonyms_en: ["liked by"]
+      synonyms_ar: ["المعجبون", "من أعجب"]
+
+  notes: |
+    - `tabSupplier` stores vendor master data used in purchasing workflows.
+    - Common joins: purchase orders (`tabPurchase Order`), invoices (`tabPurchase Invoice`), and supplier quotations.
+    - For reporting, use `supplier_group`, `country`, `is_frozen`, and `disabled` for segmentation.
+    - `on_hold`, `warn_*`, and `prevent_*` flags support procurement control workflows.
+    - `tax_category` and `tax_withholding_category` are used for tax compliance in purchasing.
+    - `default_currency` and `payment_terms` help determine default financial settings.
+
+- table: "tabPurchase Invoice"
+  synonyms_en:
+    - "purchase bill"
+    - "vendor invoice"
+    - "supplier invoice"
+    - "purchase voucher"
+    - "purchase document"
+  synonyms_ar:
+    - "فاتورة شراء"
+    - "فاتورة المورد"
+    - "فاتورة المشتريات"
+    - "سند شراء"
+    - "مستند شراء"
+  description: "Represents a purchase transaction from a supplier. Includes supplier details, posting dates, totals, payment information, and ZATCA compliance fields."
+
+  fields:
+    - name: "name"
+      type: "VARCHAR"
+      role: ["id"]
+      description: "Primary key / Purchase Invoice ID"
+      synonyms_en: ["purchase invoice id", "bill id", "purchase bill number"]
+      synonyms_ar: ["معرّف فاتورة الشراء", "رقم فاتورة الشراء"]
+
+    - name: "creation"
+      type: "DATETIME"
+      role: ["system"]
+      description: "Timestamp when the invoice was created"
+      synonyms_en: ["created on", "creation time"]
+      synonyms_ar: ["تاريخ الإنشاء", "وقت الإنشاء"]
+
+    - name: "modified"
+      type: "DATETIME"
+      role: ["system"]
+      description: "Timestamp when the record was last modified"
+      synonyms_en: ["last modified", "updated on"]
+      synonyms_ar: ["تاريخ التعديل", "آخر تعديل"]
+
+    - name: "modified_by"
+      type: "VARCHAR"
+      role: ["system"]
+      description: "User who last modified the record"
+      synonyms_en: ["modified by", "last edited by"]
+      synonyms_ar: ["عدله المستخدم", "آخر محرر"]
+
+    - name: "owner"
+      type: "VARCHAR"
+      role: ["system"]
+      description: "User who created the record"
+      synonyms_en: ["owner", "created by"]
+      synonyms_ar: ["المالك", "أنشأ بواسطة"]
+
+    - name: "docstatus"
+      type: "INT"
+      role: ["lifecycle"]
+      description: "Document status (0=Draft, 1=Submitted, 2=Cancelled)"
+      synonyms_en: ["status", "document status"]
+      synonyms_ar: ["حالة المستند", "الحالة"]
+
+    - name: "idx"
+      type: "INT"
+      role: ["system"]
+      description: "Row index in system"
+      synonyms_en: ["index", "row index"]
+      synonyms_ar: ["الفهرس", "رقم السطر"]
+
+    - name: "title"
+      type: "VARCHAR"
+      role: ["display"]
+      description: "Document title (defaults to supplier name)"
+      synonyms_en: ["title", "invoice title"]
+      synonyms_ar: ["العنوان", "عنوان الفاتورة"]
+
+    - name: "naming_series"
+      type: "VARCHAR"
+      role: ["naming"]
+      description: "Naming series for generating invoice number"
+      synonyms_en: ["naming series"]
+      synonyms_ar: ["سلسلة التسمية"]
+
+    - name: "supplier"
+      type: "VARCHAR"
+      role: ["link"]
+      description: "Linked Supplier ID for the invoice"
+      synonyms_en: ["supplier", "vendor", "supplier id"]
+      synonyms_ar: ["المورد", "البائع", "معرّف المورد"]
+
+    - name: "supplier_name"
+      type: "VARCHAR"
+      role: ["display"]
+      description: "Supplier display name"
+      synonyms_en: ["supplier name", "vendor name"]
+      synonyms_ar: ["اسم المورد", "اسم البائع"]
+
+    - name: "tax_id"
+      type: "VARCHAR"
+      role: ["tax"]
+      description: "Supplier tax identification number"
+      synonyms_en: ["tax id", "vat number", "tax number"]
+      synonyms_ar: ["رقم الضريبة", "رقم ضريبة القيمة المضافة", "الرقم الضريبي"]
+
+    - name: "company"
+      type: "VARCHAR"
+      role: ["link"]
+      description: "Company for which the purchase invoice is booked"
+      synonyms_en: ["company"]
+      synonyms_ar: ["الشركة"]
+
+    - name: "posting_date"
+      type: "DATE"
+      role: ["date"]
+      description: "Date the invoice is posted in the system"
+      synonyms_en: ["posting date", "invoice date", "bill date"]
+      synonyms_ar: ["تاريخ القيد", "تاريخ الفاتورة"]
+
+    - name: "posting_time"
+      type: "TIME"
+      role: ["date"]
+      description: "Time the invoice is posted in the system"
+      synonyms_en: ["posting time", "invoice time"]
+      synonyms_ar: ["وقت القيد", "وقت الفاتورة"]
+
+    - name: "set_posting_time"
+      type: "INT"
+      role: ["flag"]
+      description: "Flag indicating whether posting time is manually set"
+      synonyms_en: ["set posting time flag", "manual posting time"]
+      synonyms_ar: ["تحديد وقت القيد", "وقت القيد اليدوي"]
+
+    - name: "due_date"
+      type: "DATE"
+      role: ["date"]
+      description: "Payment due date of the invoice"
+      synonyms_en: ["due date", "payment due date"]
+      synonyms_ar: ["تاريخ الاستحقاق", "تاريخ الدفع"]
+
+    - name: "is_paid"
+      type: "INT"
+      role: ["flag"]
+      description: "Flag indicating whether the invoice has been fully paid"
+      synonyms_en: ["is paid", "fully paid"]
+      synonyms_ar: ["مدفوعة", "تم السداد"]
+
+    - name: "is_return"
+      type: "INT"
+      role: ["flag"]
+      description: "Flag indicating whether the invoice is a return"
+      synonyms_en: ["is return", "return flag", "credit note flag"]
+      synonyms_ar: ["فاتورة مرتجعة", "علامة المرتجع"]
+
+    - name: "return_against"
+      type: "VARCHAR"
+      role: ["reference"]
+      description: "Reference to original invoice if this is a return"
+      synonyms_en: ["return against", "return reference"]
+      synonyms_ar: ["إرجاع مقابل", "فاتورة المرجع"]
+
+    - name: "update_outstanding_for_self"
+      type: "INT"
+      role: ["flag"]
+      description: "Flag to update outstanding amount on the same document"
+      synonyms_en: ["update outstanding for self"]
+      synonyms_ar: ["تحديث المبلغ المستحق لنفس الفاتورة"]
+
+    - name: "update_billed_amount_in_purchase_order"
+      type: "INT"
+      role: ["flag"]
+      description: "Flag to update billed amount in linked Purchase Order"
+      synonyms_en: ["update billed amount in PO"]
+      synonyms_ar: ["تحديث المبلغ المفوتر في أمر الشراء"]
+
+    - name: "update_billed_amount_in_purchase_receipt"
+      type: "INT"
+      role: ["flag"]
+      description: "Flag to update billed amount in linked Purchase Receipt"
+      synonyms_en: ["update billed amount in PR"]
+      synonyms_ar: ["تحديث المبلغ المفوتر في إيصال الشراء"]
+
+    - name: "apply_tds"
+      type: "INT"
+      role: ["tax", "flag"]
+      description: "Flag indicating whether TDS should be applied"
+      synonyms_en: ["apply tds", "tds flag"]
+      synonyms_ar: ["تطبيق الضريبة المقتطعة", "تطبيق TDS"]
+
+    - name: "tax_withholding_category"
+      type: "VARCHAR"
+      role: ["tax", "link"]
+      description: "Tax withholding category applied to the invoice"
+      synonyms_en: ["tax withholding category", "tds category"]
+      synonyms_ar: ["فئة الضريبة المقتطعة", "فئة TDS"]
+
+    - name: "amended_from"
+      type: "VARCHAR"
+      role: ["reference"]
+      description: "Reference to the original document when amended"
+      synonyms_en: ["amended from", "amendment reference"]
+      synonyms_ar: ["تم التعديل من", "مرجع التعديل"]
+
+    - name: "bill_no"
+      type: "VARCHAR"
+      role: ["reference"]
+      description: "Reference bill number from the supplier"
+      synonyms_en: ["bill number", "supplier bill no", "vendor invoice no"]
+      synonyms_ar: ["رقم الفاتورة", "فاتورة المورد", "رقم فاتورة البائع"]
+
+    - name: "bill_date"
+      type: "DATE"
+      role: ["date"]
+      description: "Supplier invoice date"
+      synonyms_en: ["bill date", "supplier invoice date"]
+      synonyms_ar: ["تاريخ الفاتورة", "تاريخ فاتورة المورد"]
+
+    - name: "cost_center"
+      type: "VARCHAR"
+      role: ["dimension", "accounting"]
+      description: "Cost center linked to the purchase invoice"
+      synonyms_en: ["cost center"]
+      synonyms_ar: ["مركز التكلفة"]
+
+    - name: "project"
+      type: "VARCHAR"
+      role: ["dimension"]
+      description: "Project code for project-based purchases"
+      synonyms_en: ["project"]
+      synonyms_ar: ["المشروع"]
+
+    - name: "currency"
+      type: "VARCHAR"
+      role: ["currency"]
+      description: "Currency used in the transaction"
+      synonyms_en: ["currency", "transaction currency"]
+      synonyms_ar: ["العملة", "عملة المعاملة"]
+
+    - name: "conversion_rate"
+      type: "DECIMAL"
+      role: ["currency"]
+      description: "Exchange rate between transaction currency and company currency"
+      synonyms_en: ["conversion rate", "exchange rate"]
+      synonyms_ar: ["سعر التحويل", "سعر الصرف"]
+
+    - name: "use_transaction_date_exchange_rate"
+      type: "INT"
+      role: ["currency", "flag"]
+      description: "Flag to use transaction date's exchange rate"
+      synonyms_en: ["use transaction date exchange rate"]
+      synonyms_ar: ["استخدام سعر الصرف في تاريخ المعاملة"]
+
+    - name: "buying_price_list"
+      type: "VARCHAR"
+      role: ["pricing", "link"]
+      description: "Buying price list used in this invoice"
+      synonyms_en: ["buying price list"]
+      synonyms_ar: ["قائمة أسعار الشراء"]
+
+    - name: "price_list_currency"
+      type: "VARCHAR"
+      role: ["currency"]
+      description: "Currency of the price list"
+      synonyms_en: ["price list currency"]
+      synonyms_ar: ["عملة قائمة الأسعار"]
+
+    - name: "plc_conversion_rate"
+      type: "DECIMAL"
+      role: ["currency"]
+      description: "Exchange rate between price list currency and company currency"
+      synonyms_en: ["plc conversion rate", "price list conversion rate"]
+      synonyms_ar: ["سعر تحويل قائمة الأسعار"]
+
+    - name: "ignore_pricing_rule"
+      type: "INT"
+      role: ["pricing", "flag"]
+      description: "Flag to ignore pricing rules on this document"
+      synonyms_en: ["ignore pricing rule"]
+      synonyms_ar: ["تجاهل قاعدة التسعير"]
+
+    - name: "scan_barcode"
+      type: "VARCHAR"
+      role: ["reference", "scan"]
+      description: "Scanned barcode for quick item entry"
+      synonyms_en: ["scan barcode", "barcode"]
+      synonyms_ar: ["رمز شريطي", "مسح الباركود"]
+
+    - name: "update_stock"
+      type: "INT"
+      role: ["stock", "flag"]
+      description: "Flag indicating whether stock levels should be updated"
+      synonyms_en: ["update stock flag"]
+      synonyms_ar: ["تحديث المخزون"]
+
+    - name: "set_warehouse"
+      type: "VARCHAR"
+      role: ["warehouse", "link"]
+      description: "Default warehouse to set for items"
+      synonyms_en: ["set warehouse", "default warehouse"]
+      synonyms_ar: ["المستودع", "المخزن الافتراضي"]
+
+    - name: "set_from_warehouse"
+      type: "VARCHAR"
+      role: ["warehouse", "link"]
+      description: "Source warehouse for goods"
+      synonyms_en: ["set from warehouse", "source warehouse"]
+      synonyms_ar: ["مستودع المصدر", "من المستودع"]
+
+    - name: "is_subcontracted"
+      type: "INT"
+      role: ["flag"]
+      description: "Flag indicating whether the purchase is subcontracted"
+      synonyms_en: ["is subcontracted", "subcontract flag"]
+      synonyms_ar: ["شراء مقاول باطن", "مورد من مقاول"]
+
+    - name: "rejected_warehouse"
+      type: "VARCHAR"
+      role: ["warehouse", "link"]
+      description: "Warehouse used to store rejected items"
+      synonyms_en: ["rejected warehouse", "return warehouse", "warehouse for rejects"]
+      synonyms_ar: ["مستودع المرتجعات", "مستودع الرفض"]
+
+    - name: "supplier_warehouse"
+      type: "VARCHAR"
+      role: ["warehouse", "link"]
+      description: "Supplier warehouse reference for drop-shipping or subcontracting"
+      synonyms_en: ["supplier warehouse", "vendor warehouse"]
+      synonyms_ar: ["مستودع المورد", "مخزن المورد"]
+
+    - name: "total_qty"
+      type: "DECIMAL"
+      role: ["quantity", "metric"]
+      description: "Total quantity of items in the invoice"
+      synonyms_en: ["total qty", "total quantity"]
+      synonyms_ar: ["إجمالي الكمية", "الكمية الكلية"]
+
+    - name: "total_net_weight"
+      type: "DECIMAL"
+      role: ["weight", "metric"]
+      description: "Total net weight of all items"
+      synonyms_en: ["total net weight"]
+      synonyms_ar: ["الوزن الصافي الإجمالي"]
+
+    - name: "base_total"
+      type: "DECIMAL"
+      role: ["amount", "company_currency"]
+      description: "Total amount before taxes in company currency"
+      synonyms_en: ["base total", "company total"]
+      synonyms_ar: ["الإجمالي الأساسي", "إجمالي الشركة"]
+
+    - name: "base_net_total"
+      type: "DECIMAL"
+      role: ["amount", "company_currency"]
+      description: "Net total before taxes in company currency"
+      synonyms_en: ["base net total", "company net total"]
+      synonyms_ar: ["صافي الإجمالي الأساسي", "صافي إجمالي الشركة"]
+
+    - name: "total"
+      type: "DECIMAL"
+      role: ["amount"]
+      description: "Total amount before taxes in transaction currency"
+      synonyms_en: ["total amount", "gross total"]
+      synonyms_ar: ["الإجمالي", "إجمالي المبلغ"]
+
+    - name: "net_total"
+      type: "DECIMAL"
+      role: ["amount"]
+      description: "Net total before taxes in transaction currency"
+      synonyms_en: ["net total", "gross amount without tax"]
+      synonyms_ar: ["صافي الإجمالي", "صافي المبلغ"]
+
+    - name: "tax_withholding_net_total"
+      type: "DECIMAL"
+      role: ["amount", "tax"]
+      description: "Net total after tax withholding in transaction currency"
+      synonyms_en: ["tax withholding net total"]
+      synonyms_ar: ["الصافي بعد الضريبة المقتطعة"]
+
+    - name: "base_tax_withholding_net_total"
+      type: "DECIMAL"
+      role: ["amount", "company_currency", "tax"]
+      description: "Net total after tax withholding in company currency"
+      synonyms_en: ["base tax withholding net total"]
+      synonyms_ar: ["الصافي الأساسي بعد الضريبة المقتطعة"]
+
+    - name: "tax_category"
+      type: "VARCHAR"
+      role: ["tax", "link"]
+      description: "Tax category linked to the invoice"
+      synonyms_en: ["tax category"]
+      synonyms_ar: ["فئة الضريبة"]
+
+    - name: "taxes_and_charges"
+      type: "VARCHAR"
+      role: ["tax", "link"]
+      description: "Tax template or rule applied to this invoice"
+      synonyms_en: ["taxes and charges", "tax template"]
+      synonyms_ar: ["الضرائب والرسوم", "قالب الضريبة"]
+
+    - name: "shipping_rule"
+      type: "VARCHAR"
+      role: ["shipping", "link"]
+      description: "Shipping rule applied to the invoice"
+      synonyms_en: ["shipping rule"]
+      synonyms_ar: ["قاعدة الشحن"]
+
+    - name: "incoterm"
+      type: "VARCHAR"
+      role: ["shipping", "term"]
+      description: "International commercial terms (Incoterms) for shipping"
+      synonyms_en: ["incoterm", "incoterms"]
+      synonyms_ar: ["شروط التجارة الدولية", "إنكوترمز"]
+    - name: "named_place"
+      type: "VARCHAR"
+      role: ["shipping"]
+      description: "Named place associated with Incoterms (delivery or handover location)"
+      synonyms_en: ["named place", "delivery place", "handover point"]
+      synonyms_ar: ["مكان محدد", "نقطة التسليم", "مكان التسليم"]
+
+    - name: "base_taxes_and_charges_added"
+      type: "DECIMAL"
+      role: ["tax", "amount", "company_currency"]
+      description: "Total taxes and charges added in company currency"
+      synonyms_en: ["base taxes added", "taxes added (company)"]
+      synonyms_ar: ["الضرائب المضافة (الأساسية)", "الضرائب المضافة بعملة الشركة"]
+
+    - name: "base_taxes_and_charges_deducted"
+      type: "DECIMAL"
+      role: ["tax", "amount", "company_currency"]
+      description: "Total taxes and charges deducted in company currency"
+      synonyms_en: ["base taxes deducted", "taxes deducted (company)"]
+      synonyms_ar: ["الضرائب المخصومة (الأساسية)", "الضرائب المخصومة بعملة الشركة"]
+
+    - name: "base_total_taxes_and_charges"
+      type: "DECIMAL"
+      role: ["tax", "amount", "company_currency"]
+      description: "Net total taxes (added - deducted) in company currency"
+      synonyms_en: ["base total taxes", "total tax (company currency)"]
+      synonyms_ar: ["إجمالي الضرائب الأساسية", "إجمالي الضرائب بعملة الشركة"]
+
+    - name: "taxes_and_charges_added"
+      type: "DECIMAL"
+      role: ["tax", "amount"]
+      description: "Total taxes and charges added in transaction currency"
+      synonyms_en: ["taxes added", "additional taxes"]
+      synonyms_ar: ["الضرائب المضافة", "ضرائب إضافية"]
+
+    - name: "taxes_and_charges_deducted"
+      type: "DECIMAL"
+      role: ["tax", "amount"]
+      description: "Total taxes and charges deducted in transaction currency"
+      synonyms_en: ["taxes deducted"]
+      synonyms_ar: ["الضرائب المخصومة"]
+
+    - name: "total_taxes_and_charges"
+      type: "DECIMAL"
+      role: ["tax", "amount"]
+      description: "Net total taxes (added - deducted) in transaction currency"
+      synonyms_en: ["total taxes and charges", "net taxes"]
+      synonyms_ar: ["إجمالي الضرائب", "صافي الضرائب"]
+
+    - name: "base_grand_total"
+      type: "DECIMAL"
+      role: ["amount", "company_currency"]
+      description: "Grand total including taxes in company currency"
+      synonyms_en: ["base grand total", "company grand total"]
+      synonyms_ar: ["الإجمالي الأساسي", "الإجمالي الكلي بعملة الشركة"]
+
+    - name: "base_rounding_adjustment"
+      type: "DECIMAL"
+      role: ["rounding", "amount", "company_currency"]
+      description: "Rounding adjustment in company currency"
+      synonyms_en: ["base rounding adjustment"]
+      synonyms_ar: ["تعديل التقريب الأساسي", "التقريب بعملة الشركة"]
+
+    - name: "base_rounded_total"
+      type: "DECIMAL"
+      role: ["amount", "company_currency"]
+      description: "Rounded total amount in company currency"
+      synonyms_en: ["base rounded total", "rounded company total"]
+      synonyms_ar: ["الإجمالي المقرب (الأساسي)", "الإجمالي المقرب بعملة الشركة"]
+
+    - name: "base_in_words"
+      type: "VARCHAR"
+      role: ["display"]
+      description: "Grand total in words (company currency)"
+      synonyms_en: ["base amount in words"]
+      synonyms_ar: ["الإجمالي كتابة (العملة الأساسية)"]
+
+    - name: "grand_total"
+      type: "DECIMAL"
+      role: ["amount"]
+      description: "Grand total including taxes in transaction currency"
+      synonyms_en: ["grand total"]
+      synonyms_ar: ["الإجمالي الكلي"]
+
+    - name: "rounding_adjustment"
+      type: "DECIMAL"
+      role: ["rounding", "amount"]
+      description: "Rounding adjustment in transaction currency"
+      synonyms_en: ["rounding adjustment"]
+      synonyms_ar: ["تعديل التقريب"]
+
+    - name: "use_company_roundoff_cost_center"
+      type: "INT"
+      role: ["rounding", "flag"]
+      description: "Flag indicating whether company default round-off cost center should be used"
+      synonyms_en: ["use company roundoff cost center", "rounding cost center flag"]
+      synonyms_ar: ["استخدام مركز تكلفة التقريب للشركة", "مركز تكلفة التقريب"]
+
+    - name: "rounded_total"
+      type: "DECIMAL"
+      role: ["amount"]
+      description: "Rounded total amount in transaction currency"
+      synonyms_en: ["rounded total"]
+      synonyms_ar: ["الإجمالي المقرب"]
+
+    - name: "in_words"
+      type: "VARCHAR"
+      role: ["display"]
+      description: "Grand total in words (transaction currency)"
+      synonyms_en: ["amount in words"]
+      synonyms_ar: ["الإجمالي كتابة"]
+
+    - name: "total_advance"
+      type: "DECIMAL"
+      role: ["amount"]
+      description: "Total advance amount allocated to this invoice"
+      synonyms_en: ["total advance", "advance amount"]
+      synonyms_ar: ["إجمالي الدفعة المقدمة", "الدفعة المسبقة"]
+
+    - name: "outstanding_amount"
+      type: "DECIMAL"
+      role: ["amount"]
+      description: "Outstanding amount to be paid for this invoice"
+      synonyms_en: ["outstanding amount", "balance due"]
+      synonyms_ar: ["المبلغ المستحق", "الرصيد المتبقي"]
+
+    - name: "disable_rounded_total"
+      type: "INT"
+      role: ["rounding", "flag"]
+      description: "Flag indicating whether rounded total is disabled"
+      synonyms_en: ["disable rounded total flag"]
+      synonyms_ar: ["تعطيل الإجمالي المقرب"]
+
+    - name: "apply_discount_on"
+      type: "VARCHAR"
+      role: ["discount", "pricing"]
+      description: "Specifies the base on which the discount is applied (e.g. Grand Total)"
+      synonyms_en: ["apply discount on", "discount basis"]
+      synonyms_ar: ["تطبيق الخصم على", "أساس الخصم"]
+
+    - name: "base_discount_amount"
+      type: "DECIMAL"
+      role: ["discount", "company_currency"]
+      description: "Total discount amount in company currency"
+      synonyms_en: ["base discount amount", "company discount amount"]
+      synonyms_ar: ["مبلغ الخصم الأساسي", "مبلغ الخصم بعملة الشركة"]
+
+    - name: "additional_discount_percentage"
+      type: "DECIMAL"
+      role: ["discount"]
+      description: "Additional discount percentage applied on invoice total"
+      synonyms_en: ["additional discount percentage", "extra discount percentage"]
+      synonyms_ar: ["نسبة الخصم الإضافي", "الخصم الإضافي"]
+
+    - name: "discount_amount"
+      type: "DECIMAL"
+      role: ["discount"]
+      description: "Total discount amount in transaction currency"
+      synonyms_en: ["discount amount", "invoice discount"]
+      synonyms_ar: ["مبلغ الخصم", "قيمة الخصم"]
+
+    - name: "other_charges_calculation"
+      type: "LONGTEXT"
+      role: ["tax", "calculation"]
+      description: "Stores JSON or text representing additional tax and charge calculation"
+      synonyms_en: ["other charges calculation"]
+      synonyms_ar: ["حساب الرسوم الإضافية"]
+
+    - name: "mode_of_payment"
+      type: "VARCHAR"
+      role: ["payment", "link"]
+      description: "Mode of payment selected for the invoice"
+      synonyms_en: ["mode of payment", "payment method"]
+      synonyms_ar: ["طريقة الدفع", "وسيلة الدفع"]
+
+    - name: "base_paid_amount"
+      type: "DECIMAL"
+      role: ["payment", "company_currency"]
+      description: "Paid amount in company currency"
+      synonyms_en: ["base paid amount"]
+      synonyms_ar: ["المبلغ المدفوع بعملة الشركة"]
+
+    - name: "clearance_date"
+      type: "DATE"
+      role: ["payment", "date"]
+      description: "Date on which payment was cleared"
+      synonyms_en: ["clearance date", "payment clearance date"]
+      synonyms_ar: ["تاريخ التسوية", "تاريخ صرف الدفعة"]
+
+    - name: "cash_bank_account"
+      type: "VARCHAR"
+      role: ["payment", "accounting", "link"]
+      description: "Cash or bank account used for payment"
+      synonyms_en: ["cash/bank account", "payment account"]
+      synonyms_ar: ["حساب نقدي/بنكي", "حساب الدفع"]
+
+    - name: "paid_amount"
+      type: "DECIMAL"
+      role: ["payment", "amount"]
+      description: "Total amount paid for this invoice in transaction currency"
+      synonyms_en: ["paid amount", "amount paid"]
+      synonyms_ar: ["المبلغ المدفوع"]
+
+    - name: "allocate_advances_automatically"
+      type: "INT"
+      role: ["payment", "flag"]
+      description: "Flag indicating whether to auto-allocate advances to the invoice"
+      synonyms_en: ["allocate advances automatically flag"]
+      synonyms_ar: ["تخصيص الدفعات المقدمة تلقائيًا"]
+
+    - name: "only_include_allocated_payments"
+      type: "INT"
+      role: ["payment", "flag"]
+      description: "Flag to only include payments that are allocated"
+      synonyms_en: ["only include allocated payments flag"]
+      synonyms_ar: ["تضمين المدفوعات المخصصة فقط"]
+
+    - name: "write_off_amount"
+      type: "DECIMAL"
+      role: ["payment", "write_off"]
+      description: "Amount written off for the invoice"
+      synonyms_en: ["write off amount"]
+      synonyms_ar: ["مبلغ الشطب", "المبلغ المتروك"]
+
+    - name: "base_write_off_amount"
+      type: "DECIMAL"
+      role: ["payment", "write_off", "company_currency"]
+      description: "Amount written off in company currency"
+      synonyms_en: ["base write off amount", "company write off amount"]
+      synonyms_ar: ["مبلغ الشطب الأساسي", "مبلغ الشطب بعملة الشركة"]
+
+    - name: "write_off_account"
+      type: "VARCHAR"
+      role: ["payment", "accounting", "link"]
+      description: "Account to which the write-off amount is booked"
+      synonyms_en: ["write off account"]
+      synonyms_ar: ["حساب الشطب"]
+
+    - name: "write_off_cost_center"
+      type: "VARCHAR"
+      role: ["payment", "accounting", "link"]
+      description: "Cost center for write-off entries"
+      synonyms_en: ["write off cost center"]
+      synonyms_ar: ["مركز تكلفة الشطب"]
+
+    - name: "supplier_address"
+      type: "VARCHAR"
+      role: ["address", "link"]
+      description: "Linked supplier address"
+      synonyms_en: ["supplier address", "vendor address"]
+      synonyms_ar: ["عنوان المورد", "عنوان البائع"]
+
+    - name: "address_display"
+      type: "TEXT"
+      role: ["address", "display"]
+      description: "Formatted display of supplier address"
+      synonyms_en: ["address display", "formatted supplier address"]
+      synonyms_ar: ["عرض العنوان", "العنوان المنسق"]
+
+    - name: "contact_person"
+      type: "VARCHAR"
+      role: ["contact", "link"]
+      description: "Linked supplier contact person"
+      synonyms_en: ["contact person", "supplier contact"]
+      synonyms_ar: ["جهة الاتصال", "الشخص المسؤول"]
+
+    - name: "contact_display"
+      type: "TEXT"
+      role: ["contact", "display"]
+      description: "Formatted display of contact information"
+      synonyms_en: ["contact display", "formatted contact"]
+      synonyms_ar: ["عرض جهة الاتصال", "معلومات الاتصال المنسقة"]
+
+    - name: "contact_mobile"
+      type: "TEXT"
+      role: ["contact", "mobile"]
+      description: "Contact mobile number"
+      synonyms_en: ["contact mobile", "mobile number"]
+      synonyms_ar: ["رقم الجوال", "هاتف جهة الاتصال"]
+
+    - name: "contact_email"
+      type: "TEXT"
+      role: ["contact", "email"]
+      description: "Contact email address"
+      synonyms_en: ["contact email", "email address"]
+      synonyms_ar: ["البريد الإلكتروني لجهة الاتصال", "بريد المورد"]
+
+    - name: "dispatch_address"
+      type: "VARCHAR"
+      role: ["address", "link"]
+      description: "Linked dispatch address"
+      synonyms_en: ["dispatch address", "shipping dispatch address"]
+      synonyms_ar: ["عنوان الإرسال", "عنوان الشحن"]
+
+    - name: "dispatch_address_display"
+      type: "LONGTEXT"
+      role: ["address", "display"]
+      description: "Formatted display of dispatch address"
+      synonyms_en: ["dispatch address display"]
+      synonyms_ar: ["عرض عنوان الإرسال"]
+
+    - name: "shipping_address"
+      type: "VARCHAR"
+      role: ["address", "link"]
+      description: "Linked shipping address"
+      synonyms_en: ["shipping address", "delivery address"]
+      synonyms_ar: ["عنوان الشحن", "عنوان التسليم"]
+
+    - name: "shipping_address_display"
+      type: "TEXT"
+      role: ["address", "display"]
+      description: "Formatted display of shipping address"
+      synonyms_en: ["shipping address display"]
+      synonyms_ar: ["عرض عنوان الشحن"]
+
+    - name: "billing_address"
+      type: "VARCHAR"
+      role: ["address", "link"]
+      description: "Linked billing address"
+      synonyms_en: ["billing address", "invoice address"]
+      synonyms_ar: ["عنوان الفاتورة", "عنوان الدفع"]
+
+    - name: "billing_address_display"
+      type: "TEXT"
+      role: ["address", "display"]
+      description: "Formatted display of billing address"
+      synonyms_en: ["billing address display"]
+      synonyms_ar: ["عرض عنوان الفاتورة"]
+
+    - name: "payment_terms_template"
+      type: "VARCHAR"
+      role: ["payment", "terms", "link"]
+      description: "Linked payment terms template"
+      synonyms_en: ["payment terms template"]
+      synonyms_ar: ["قالب شروط الدفع"]
+
+    - name: "ignore_default_payment_terms_template"
+      type: "INT"
+      role: ["payment", "flag"]
+      description: "Flag to ignore the default payment terms template"
+      synonyms_en: ["ignore default payment terms template flag"]
+      synonyms_ar: ["تجاهل قالب شروط الدفع الافتراضي"]
+
+    - name: "tc_name"
+      type: "VARCHAR"
+      role: ["terms", "link"]
+      description: "Linked terms and conditions template"
+      synonyms_en: ["terms and conditions name", "TC name"]
+      synonyms_ar: ["اسم الشروط والأحكام", "اسم TC"]
+
+    - name: "terms"
+      type: "LONGTEXT"
+      role: ["terms", "text"]
+      description: "Text of terms and conditions applied to this invoice"
+      synonyms_en: ["terms", "terms and conditions text"]
+      synonyms_ar: ["الشروط والأحكام", "نص الشروط"]
+
+    - name: "status"
+      type: "VARCHAR"
+      role: ["lifecycle", "status"]
+      description: "Current status of the invoice (e.g., Draft, Submitted, Paid)"
+      synonyms_en: ["status", "invoice status"]
+      synonyms_ar: ["الحالة", "حالة الفاتورة"]
+
+    - name: "per_received"
+      type: "DECIMAL"
+      role: ["fulfillment", "percentage"]
+      description: "Percentage of goods or services received against the invoice"
+      synonyms_en: ["percentage received", "per received"]
+      synonyms_ar: ["النسبة المستلمة", "نسبة التوريد"]
+
+    - name: "credit_to"
+      type: "VARCHAR"
+      role: ["accounting", "link"]
+      description: "Credit account to which the invoice amount is booked"
+      synonyms_en: ["credit to", "credit account"]
+      synonyms_ar: ["الحساب الدائن", "لحساب"]
+    - name: "party_account_currency"
+      type: "VARCHAR"
+      role: ["accounting", "currency"]
+      description: "Currency of the party account linked to the invoice"
+      synonyms_en: ["party account currency", "supplier account currency"]
+      synonyms_ar: ["عملة حساب المورد", "عملة الحساب"]
+
+    - name: "is_opening"
+      type: "VARCHAR"
+      role: ["accounting", "flag"]
+      description: "Indicates whether this is an opening entry (Yes/No)"
+      synonyms_en: ["is opening entry", "opening flag"]
+      synonyms_ar: ["قيد افتتاحي", "سجل افتتاحي"]
+
+    - name: "against_expense_account"
+      type: "TEXT"
+      role: ["accounting"]
+      description: "Expense accounts debited against this invoice"
+      synonyms_en: ["against expense account", "expense accounts"]
+      synonyms_ar: ["حساب المصروفات", "الحسابات المقابلة للمصروفات"]
+
+    - name: "unrealized_profit_loss_account"
+      type: "VARCHAR"
+      role: ["accounting", "link"]
+      description: "Account used to record unrealized profit or loss"
+      synonyms_en: ["unrealized profit loss account", "FX gain/loss account"]
+      synonyms_ar: ["حساب الأرباح والخسائر غير المحققة", "حساب فروق العملة"]
+
+    - name: "subscription"
+      type: "VARCHAR"
+      role: ["recurring", "link"]
+      description: "Linked subscription if the invoice is recurring"
+      synonyms_en: ["subscription"]
+      synonyms_ar: ["الاشتراك"]
+
+    - name: "auto_repeat"
+      type: "VARCHAR"
+      role: ["recurring", "link"]
+      description: "Linked auto-repeat schedule if applicable"
+      synonyms_en: ["auto repeat", "recurring schedule"]
+      synonyms_ar: ["جدولة التكرار التلقائي", "إعادة تلقائية"]
+
+    - name: "from_date"
+      type: "DATE"
+      role: ["recurring", "date"]
+      description: "Start date for the invoice period or subscription"
+      synonyms_en: ["from date", "start date"]
+      synonyms_ar: ["تاريخ البدء"]
+
+    - name: "to_date"
+      type: "DATE"
+      role: ["recurring", "date"]
+      description: "End date for the invoice period or subscription"
+      synonyms_en: ["to date", "end date"]
+      synonyms_ar: ["تاريخ الانتهاء"]
+
+    - name: "letter_head"
+      type: "VARCHAR"
+      role: ["print", "link"]
+      description: "Letter head template used for printing the invoice"
+      synonyms_en: ["letter head", "letterhead"]
+      synonyms_ar: ["ورقة الخطاب", "نموذج الرأس"]
+
+    - name: "group_same_items"
+      type: "INT"
+      role: ["print", "flag"]
+      description: "Flag to group same items in print format"
+      synonyms_en: ["group same items flag"]
+      synonyms_ar: ["تجميع العناصر المتشابهة"]
+
+    - name: "select_print_heading"
+      type: "VARCHAR"
+      role: ["print"]
+      description: "Selected print heading for the invoice"
+      synonyms_en: ["print heading", "heading on print"]
+      synonyms_ar: ["عنوان الطباعة", "عنوان الرأس"]
+
+    - name: "language"
+      type: "VARCHAR"
+      role: ["system", "language"]
+      description: "Language used for the invoice"
+      synonyms_en: ["language"]
+      synonyms_ar: ["اللغة"]
+
+    - name: "on_hold"
+      type: "INT"
+      role: ["lifecycle", "flag"]
+      description: "Flag indicating if the invoice is on hold"
+      synonyms_en: ["on hold flag"]
+      synonyms_ar: ["معلق"]
+
+    - name: "release_date"
+      type: "DATE"
+      role: ["lifecycle", "date"]
+      description: "Date on which the invoice is released from hold"
+      synonyms_en: ["release date"]
+      synonyms_ar: ["تاريخ الإفراج"]
+
+    - name: "hold_comment"
+      type: "TEXT"
+      role: ["lifecycle", "comment"]
+      description: "Comment or note explaining why the invoice is on hold"
+      synonyms_en: ["hold comment"]
+      synonyms_ar: ["ملاحظة التعليق", "سبب التعليق"]
+
+    - name: "is_internal_supplier"
+      type: "INT"
+      role: ["flag"]
+      description: "Flag indicating whether supplier is internal"
+      synonyms_en: ["is internal supplier flag"]
+      synonyms_ar: ["مورد داخلي"]
+
+    - name: "represents_company"
+      type: "VARCHAR"
+      role: ["link"]
+      description: "Company represented by the internal supplier"
+      synonyms_en: ["represents company"]
+      synonyms_ar: ["يمثل الشركة"]
+
+    - name: "supplier_group"
+      type: "VARCHAR"
+      role: ["supplier", "dimension"]
+      description: "Supplier group classification"
+      synonyms_en: ["supplier group", "vendor group"]
+      synonyms_ar: ["مجموعة المورد", "تصنيف المورد"]
+
+    - name: "inter_company_invoice_reference"
+      type: "VARCHAR"
+      role: ["reference"]
+      description: "Reference to corresponding inter-company invoice"
+      synonyms_en: ["inter company invoice reference"]
+      synonyms_ar: ["مرجع الفاتورة بين الشركات"]
+
+    - name: "is_old_subcontracting_flow"
+      type: "INT"
+      role: ["flag"]
+      description: "Flag indicating legacy subcontracting flow"
+      synonyms_en: ["is old subcontracting flow flag"]
+      synonyms_ar: ["عملية التوريد القديمة"]
+
+    - name: "remarks"
+      type: "TEXT"
+      role: ["comment"]
+      description: "Remarks or notes for the invoice"
+      synonyms_en: ["remarks", "notes"]
+      synonyms_ar: ["ملاحظات", "تعليقات"]
+
+    - name: "_user_tags"
+      type: "TEXT"
+      role: ["system", "meta"]
+      description: "User tags metadata"
+      synonyms_en: ["user tags"]
+      synonyms_ar: ["وسوم المستخدم"]
+
+    - name: "_comments"
+      type: "TEXT"
+      role: ["system", "meta"]
+      description: "Comments metadata"
+      synonyms_en: ["comments meta"]
+      synonyms_ar: ["تعليقات"]
+
+    - name: "_assign"
+      type: "TEXT"
+      role: ["system", "meta"]
+      description: "Assignment metadata"
+      synonyms_en: ["assign meta"]
+      synonyms_ar: ["تعيين"]
+
+    - name: "_liked_by"
+      type: "TEXT"
+      role: ["system", "meta"]
+      description: "Liked by metadata"
+      synonyms_en: ["liked by"]
+      synonyms_ar: ["معجب بها"]
+
+    - name: "custom_zatca_summary_invoice"
+      type: "INT"
+      role: ["zatca", "flag"]
+      description: "Flag indicating ZATCA summary invoice"
+      synonyms_en: ["zatca summary invoice flag"]
+      synonyms_ar: ["فاتورة ملخص زاتكا"]
+
+    - name: "custom_zatca_3rd_party_invoice"
+      type: "INT"
+      role: ["zatca", "flag"]
+      description: "Flag indicating third party ZATCA invoice"
+      synonyms_en: ["zatca 3rd party invoice flag"]
+      synonyms_ar: ["فاتورة طرف ثالث زاتكا"]
+
+    - name: "custom_zatca_self_billed_invoice"
+      type: "INT"
+      role: ["zatca", "flag"]
+      description: "Flag indicating ZATCA self billed invoice"
+      synonyms_en: ["zatca self billed invoice flag"]
+      synonyms_ar: ["فاتورة ذاتية زاتكا"]
+
+    - name: "custom_zatca_import_invoice"
+      type: "INT"
+      role: ["zatca", "flag"]
+      description: "Flag indicating ZATCA import invoice"
+      synonyms_en: ["zatca import invoice flag"]
+      synonyms_ar: ["فاتورة استيراد زاتكا"]
+
+    - name: "custom_zatca_nominal_invoice"
+      type: "INT"
+      role: ["zatca", "flag"]
+      description: "Flag indicating ZATCA nominal invoice"
+      synonyms_en: ["zatca nominal invoice flag"]
+      synonyms_ar: ["فاتورة اسمية زاتكا"]
+
+    - name: "custom_zatca_tax_category"
+      type: "VARCHAR"
+      role: ["zatca", "tax"]
+      description: "ZATCA tax category applied to invoice"
+      synonyms_en: ["zatca tax category"]
+      synonyms_ar: ["فئة الضريبة زاتكا"]
+
+    - name: "custom_exemption_reason_code"
+      type: "VARCHAR"
+      role: ["zatca", "tax"]
+      description: "ZATCA exemption reason code if applicable"
+      synonyms_en: ["zatca exemption reason code"]
+      synonyms_ar: ["رمز سبب الإعفاء زاتكا"]
+  notes: |
+    - Core doctype for supplier bills and accounts payable.
+    - Use `docstatus = 1` to filter submitted invoices.
+    - Key joins: `supplier` → `tabSupplier`, `name` → `tabPurchase Invoice Item`.`parent`.
+    - Use `grand_total` for invoice currency and `base_grand_total` for company currency.
+    - `outstanding_amount` is crucial for AP aging and payments.
+    - Discounts and taxes controlled via `discount_amount`, `taxes_and_charges`, `tax_category`.
+    - `status` reflects lifecycle (Draft, Submitted, Paid, etc.).
+    - `is_return` and `return_against` track credit notes/returns.
+    - ZATCA fields (`custom_zatca_*`) are important for e-invoicing compliance.
+    - Indexed fields like `supplier`, `posting_date`, and `bill_no` improve query performance.
