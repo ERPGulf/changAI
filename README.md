@@ -17,13 +17,12 @@ It retrieves schema information dynamically, validates SQL against real ERP meta
 - Self-correcting repair loop  
 - Conversational output formatting with Jinja2  
 - Workflow orchestration via LangGraph  
-
 ---
 
 ## 2. System Architecture
 
 <p align="center">
-  <img src="changai/changai/sys_arc_v2.png" width="750" alt="ChangAI v2 - RAG + LangGraph Overview">
+  <img src="changai/changai/sys_arc_v2.png" width="750" height="420" alt="ChangAI v2 - RAG + LangGraph Overview">
 </p>
 
 ---
@@ -206,7 +205,7 @@ changai/
 | Validation   | Basic checks            | SQLGlot schema validation     |
 | Repair       | None                    | Guided retry with hints       |
 | LLM          | Hugging Face fine-tunes | Local Ollama model            |
-| Formatter    | Jinja2 only             | Hybrid Jinja2 + LLM (planned) |
+| Formatter    | Jinja2                  | Jinja2
 
 ---
 
@@ -241,5 +240,3 @@ This project is released under the MIT License.
 © 2025 ERPGulf / ChangAI Team
 
 ---
-
-**“From schema to speech — ChangAI v2 makes ERPNext queries truly conversational.”**
