@@ -1,317 +1,245 @@
-#  ERP Chatbot - Alpha Release  
-****ChangAI - ERPNext Natural Language Interface**
+# ChangAI v2 — Open Source ERPNext Text-to-SQL Engine (RAG + LangGraph)
 
-Welcome to the **alpha version** of ChangAI - an AI-powered assistant that converts natural language queries into executable Frappe queries, executes them, and returns results in human-friendly language, using a fine-tuned multi-model pipeline. Built to simplify ERP access for business users with no technical knowledge.
-
-> ⚠️ This release is intended for internal testing and feedback only.  
-
-> Please read the known issues section carefully before use.
+ChangAI is an open-source, schema-aware AI assistant that converts natural language into valid, executable ERPNext SQL queries.  
+It uses a Retrieval-Augmented Generation (RAG) architecture, FAISS vector search, LangGraph orchestration, and Ollama for local LLM inference.
 
 ---
 
-## ✨ Features
+## 1. Overview
 
-* Natural language → ERPNext query conversion
-* Multi-model NLP pipeline (**Hugging Face models**)
-* Local inference **or** remote inference via **Replicate API**
-* Jinja2-based templates for conversational responses
-* Extendable for new doctypes and queries
-* Built-in dataset + Colab training workflows
-* Conversational handling for small talk and ERP queries
+ChangAI v2 is a modular, locally deployable text-to-SQL system for ERPNext.  
+It retrieves schema information dynamically, validates SQL against real ERP metadata, and produces clean, conversational answers.
 
---------
-
-### 💬 Conversational Handling
-
-ChangAI seamlessly manages both casual interactions and ERP-related queries.
-
-Small talk (e.g., greetings) is handled through predefined responses.
-
-ERP queries are identified using business keywords and spelling correction.
-
-Valid queries are processed by the prediction pipeline, which generates and executes the corresponding Frappe query.
-
-Responses are returned in a natural, conversational format for better user experience.
-
-## 🧠 Pipeline & Models
-
-ChangAI uses **four fine-tuned Hugging Face models**, trained in **Google Colab** and deployed locally or on Replicate:
-
-| Stage                            | Model                                                     | Role                                 |
-| -------------------------------- | --------------------------------------------------------- | ------------------------------------ |
-| **1. Doctype Detection**         | `hyrinmansoor/text2frappe-s1-roberta` *(RoBERTa)*         | Detect target ERPNext Doctype        |
-| **2. Relevant Field Prediction** | `hyrinmansoor/text2frappe-s2-sbert` *(SBERT)*             | Suggest semantically relevant fields |
-| **3. Exact Field Selection**     | `hyrinmansoor/text2frappe-s2-flan-field` *(Flan-T5 base)* | Select metadata-validated fields     |
-| **4. Query Generation**          | `hyrinmansoor/text2frappe-s3-flan-query` *(Flan-T5 base)* | Generate executable SQL query        |
+### Core Features
+- RAG retrieval using FAISS and structured schema cards  
+- Contextual SQL generation with Ollama LLM  
+- Schema-level validation via SQLGlot  
+- Self-correcting repair loop  
+- Conversational output formatting with Jinja2  
+- Workflow orchestration via LangGraph  
 
 ---
 
-## ⚙️ What It Does
+## 2. System Architecture
 
-* Understands natural ERP-related questions like:
-  *“How many contacts do we have?”*
-* Distinguishes **small talk, complete & incomplete queries**
-* Identifies the right **Doctype**
-* Predicts relevant **fields**
-* Generates valid Frappe queries using **`frappe.db.sql`**
-* Formats output using **Jinja2 templates** for natural replies
+<p align="center">
+  <img src="changai/changai/sys_arc_v2.png" width="750" alt="ChangAI v2 - RAG + LangGraph Overview">
+</p>
 
 ---
 
-## 🧾 Conversational Templates
+## 3. Retrieval Layer (RAG)
 
-Responses are formatted with **Jinja2 templates** for human-friendly answers.
+ChangAI v2’s retrieval layer grounds all model generations in ERPNext schema knowledge.
+
+**Components**
+- `cards_v2/` — structured YAML cards for schema, joins, metrics, glossary, and entities  
+- FAISS index — HNSW-based vector store for semantic retrieval  
+- Ollama embeddings — generate dense vector representations  
+
+**Example build process**
+```python
+emb = OllamaEmbeddings(base_url=CONFIG['OLLAMA_URL'], model=CONFIG['EMBED_MODEL'])
+vector_store = FAISS.from_texts(texts, embedding=emb, metadatas=metas)
+vector_store.save_local(INDEX_PATH)
+````
+
+---
+
+## 4. Prompt Builder
+
+Constructs concise, schema-restricted prompts for the model to ensure valid SQL.
 
 Example:
 
-* **Template:** `"There are {{ count }} contacts registered in the system."`
-* **Output:** `"There are 154 contacts registered in the system."`
+```
+### SCHEMA CONTEXT
+Table: tabSales Invoice
+Fields: name, posting_date, customer, grand_total
 
-
----
-
-✔ Examples:
-
-* How many customers do we have?
-* Get all sales invoices.
-* Active employees count?
-* How many sales invoices have discounts?
-* List all employees.
-* Who is the customer on the last invoice?
-* List item names within stock.
-* Show names of the disabled customers.
-* What is the total value of all sales orders?
-* List delivery date of all sales orders.
-* Get all names and grand total of all sales invoices.
-* Sales invoices not paid yet.
-* Show item names of all items.
-* Show item codes of all items.
-* Count of suppliers we work with.
-* List items with valuation rate above 700.
-* List items with valuation rate above 100.
-* Sales orders created today.
-* Customers created this month.
-* List all suppliers and their default currency.
-* Suppliers with default currency USD.
-* Show stock entries from past 7 days.
-
----
-🚀 Deployment
-
-ChangAI’s models are containerized with Docker and packaged using Cog for reproducible inference.
-They are deployed on Replicate, where each version runs in an isolated environment and is accessible via the Replicate API.
-
-The serving logic is defined in predict.py (model loading, inference, query generation).
-
-Using cog push, the models are published to Replicate under a unique version ID.
-
-## 🛠️ Installation Guide
-
-### 1. 🔹 Local Development (Training / Testing)
-
-```bash
-git clone https://github.com/ERPGulf/Changai.git
-cd ChangAI
-
-# Create environment
-python3 -m venv venv
-source venv/bin/activate   # macOS/Linux
-venv\Scripts\activate      # Windows
-
-# Install dependencies
-pip install -r requirements.txt
+### QUESTION
+Which customers have the highest invoice totals?
 ```
 
-➡️ Train models in **Google Colab (GPU recommended)**.
-➡️ Export trained weights to local or Docker.
-
 ---
 
-### 2. 🔹 Run via Replicate (Inference / Production)
+## 5. SQL Generation
 
-1. Install **Cog**
-
-   ```bash
-   pip install cog
-   ```
-
-2. Login
-
-   ```bash
-   replicate login
-   ```
-
-3. Push model
-
-   ```bash
-   cog push r8.im/<username>/<model-name>
-   ```
-
-4. Call API
-
-**Python**
+The SQL generator uses Ollama for deterministic, local inference.
+The model receives schema context and returns a single valid SQL `SELECT` statement.
 
 ```python
-import replicate
-
-output = replicate.run(
-    "your-username/erp-chatbot:VERSION_ID",
-    input={"question": "How many sales invoices last month?"}
-)
-print(output)
-```
-
-**cURL**
-
-```bash
-curl -s \
-  -H "Authorization: Token $REPLICATE_API_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{"input": {"question": "Get all employees"}}' \
-  https://api.replicate.com/v1/predictions
+payload = {"model": CONFIG['OLLAMA_MODEL'], "prompt": prompt, "stream": False}
+r = requests.post(f"{CONFIG['OLLAMA_URL']}/api/generate", json=payload)
+sql = r.json().get("response", "").strip()
 ```
 
 ---
 
-## 🚀 Usage
+## 6. SQL Validation
 
-Run locally:
+Every query is validated using SQLGlot against a metaschema JSON defining valid fields per ERPNext table.
 
-```bash
-python app.py
-```
-
-**Sample Input:**
+**Example `metaschema_clean_v2.json`:**
 
 ```json
 {
-  "question": "How many contacts do we have?",
-  "meta_file_path": "metadata.csv"
+  "tabCustomer": ["name", "customer_name", "customer_group", "territory", "disabled"]
 }
 ```
 
-**Sample Response:**
+Validation ensures:
+
+* No hallucinated tables or columns
+* Proper syntax and aliasing
+* Feedback for repair loops
+
+---
+
+## 7. Repair Loop
+
+When validation fails, the system:
+
+1. Extracts error messages and suggests corrections.
+2. Augments the prompt with hints (e.g., “use `grand_total` instead of `grandTotals`”).
+3. Regenerates the SQL query, up to two attempts.
+
+---
+
+## 8. Query Execution
+
+Execution is strictly limited to read-only `SELECT` queries within Frappe ORM.
+
+```python
+if not q.upper().startswith("SELECT") or ";" in q:
+    frappe.throw("Only single SELECT statements are allowed.")
+result = frappe.db.sql(q, as_dict=True)
+```
+
+---
+
+## 9. Conversational Formatter
+
+Results are rendered into natural responses using Jinja2 templates.
+
+Example:
+
+```jinja2
+"There are {{ count }} {{ doctype }} records found."
+```
+
+**Planned enhancement:**
+A hybrid LLM + Jinja2 formatter for multilingual, tone-aware responses.
+
+---
+
+## 10. LangGraph Orchestration
+
+The LangGraph workflow defines each processing step as an independent node:
+
+1. Retrieve (FAISS)
+2. Build Context
+3. Generate SQL
+4. Validate SQL
+5. Repair SQL
+
+Execution traces can be visualized using LangSmith for debugging and performance tracking.
+
+---
+
+## 11. Configuration (Frappe Settings)
+
+| Field          | Description                          |
+| -------------- | ------------------------------------ |
+| Root Path      | Base path of the application         |
+| Ollama URL     | Local endpoint for LLM               |
+| Ollama Model   | SQL generation model name            |
+| Embed Model    | Embedding model for FAISS            |
+| LangSmith Keys | Optional tracing and monitoring keys |
+
+---
+
+## 12. Example Usage
+
+```python
+frappe.call('changai.changai.api.text2sql_pipeline_v2.run_text2sql_pipeline', {
+  'user_question': 'Show all invoices pending ZATCA submission'
+})
+```
+
+**Response Example:**
 
 ```json
 {
-  "query": "frappe.db.sql(\"SELECT COUNT(name) FROM `tabContact`\")",
-  "doctype": "Contact",
-  "fields": ["count(name)"],
-  "data": {"count": 154},
-  "query_data": "There are {{ count }} contacts in the system."
+  "SQL": "SELECT name, customer, custom_zatca_status FROM `tabSales Invoice` WHERE custom_zatca_status='Pending';",
+  "Validation": {"ok": true},
+  "Result": [{"name": "SINV-0031", "customer": "Al Falah", "custom_zatca_status": "Pending"}],
+  "Bot": "There is 1 invoice pending ZATCA submission for customer Al Falah."
 }
 ```
 
-💬 Final output:
-
-> "There are 154 contacts in the system."
-
 ---
 
-## 📄 Metadata Format
-
-Metadata file (CSV/JSON) must list **valid doctype-fieldname pairs**.
-
-**CSV Example**
-
-| doctype        | fieldname        |
-| -------------- | ---------------- |
-| Company        | name             |
-| Company        | industry         |
-| Contact        | email\_id        |
-| Purchase Order | discount\_amount |
-
-⚠️ Must exclude layout fields (e.g. Section Break, Tab, etc.)
-
----
-
-## ⚠️ Known Issues
-
-* ❗ **Query Errors**: e.g. `IndexError`, `Unknown column`, `Invalid field name`
-* 🧠 **Field Prediction**: may hallucinate non-existent fields
-* 📄 **Doctype Coverage**: limited to trained doctypes only
-* 📦 **Metadata Dependency**: requires clean, correct metadata file
-
-➡️ Fixes in progress:
-
-* Stronger metadata validation
-* User-friendly error handling
-* Expanded doctype/query support
-
----
-
-## 📝 Contributions
-
-If you want to contribute to this project and make it better, your help is very welcome!
-Contributing is also a great way to learn more about collaborative development on Github, new technologies in AI/ML, insights on ERPNext and their ecosystems and how to make constructive, helpful bug reports, feature requests and the noblest of all contributions: a good, clean pull request.
-
-### How to make a clean pull request
-
-Look for a project's contribution instructions. If there are any, follow them.
-
-- Create a personal fork of the project on Github.
-- Clone the fork on your local machine. Your remote repo on Github is called `origin`.
-- Add the original repository as a remote called `upstream`.
-- If you created your fork a while ago be sure to pull upstream changes into your local repository.
-- Create a new branch to work on! Branch from `develop` if it exists, else from `master`.
-- Implement/fix your feature, comment your code.
-- Follow the code style of the project, including indentation.
-- If the project has tests run them!
-- Write or adapt tests as needed.
-- Add or change the documentation as needed.
-- If you're contributing training data, ensure it's clean and well-structured.
-- Squash your commits into a single commit with git's [interactive rebase](https://help.github.com/articles/interactive-rebase). Create a new branch if necessary.
-- Push your branch to your fork on Github, the remote `origin`.
-- From your fork open a pull request in the correct branch. Target the project's `develop` branch if there is one, else go for `master`!
-
-- If the maintainer requests further changes just push them to your branch. The PR will be updated automatically.
-- Once the pull request is approved and merged you can pull the changes from `upstream` to your local repo and delete
-your extra branch(es).
-
-And last but not least: Always write your commit messages in the present tense. Your commit message should describe what the commit, when applied, does to the code – not what you did to the code.
-
-### Contributing Training Data
-Your contributions are not limited to code! We highly encourage and welcome the submission of data for training our models. 
-This could include:
-- Structured and balanced dataset: Datasets for various models in the correct format including all details.
-- Natural language queries: Examples of questions users would ask.
-- Corresponding Frappe query examples: The ideal Frappe queries that should be generated from those natural language inputs.
-- Metadata improvements: Suggestions or corrections for doctype-fieldname pairs.
-High-quality training data is crucial for improving the chatbot's accuracy and expanding its understanding. Please refer to the formats of training datasets of various models used in the pipeline.
-
----
-
-## 🗣️ Feedback
-
-Your feedback is critical at this stage! 
-As there are many known issues and limitations in the release, we encourage you to share all experiences - good or bad - to help us improve faster and smarter.
-For better feedback and easier error diagnosis, a **Debug** tab is available. It displays the intermediate outputs of all models used in the pipeline, helping users and contributors trace issues and track model behaviour at each stage.
-Please report:
-
-- Natural language input used
-- The output generated
-- Any errors encountered
-- Your metadata file (if relevant)
-
-### 📮 Report issues via:
-
-- **GitHub Issues**: [https://github.com/ERPGulf/ChangAI/issues](https://github.com/ERPGulf/ChangAI/issues)
-
----
-
-## 📜 License
-
-This project is released under the MIT License. See `LICENSE` for more details.
-
----
-
-## 🙏 Acknowledgements
-
-* Frappe / ERPNext Team
-* ERPGulf Team
-
----
-
-> \*"We're building not just a chatbot, but a bridge between language and logic. Thank you for testing and shaping it with us!"\*
+## 13. Repository Structure
 
 ```
+changai/
+ ├── api/
+ │   ├── build_cards_faiss_index_v2.py
+ │   ├── text2sql_pipeline_v2.py
+ │   └── metaschema_clean_v2.json
+ ├── cards_v2/
+ ├── faiss_index_hnsw_v2/
+ ├── prompts/
+ ├── templates/
+ └── ...
+```
+
+---
+
+## 14. Comparison: v1 vs v2
+
+| Feature      | v1 (Alpha)              | v2 (Current)                  |
+| ------------ | ----------------------- | ----------------------------- |
+| Architecture | Multi-model pipeline    | RAG + LangGraph               |
+| Context      | Static metadata         | FAISS dynamic retrieval       |
+| Validation   | Basic checks            | SQLGlot schema validation     |
+| Repair       | None                    | Guided retry with hints       |
+| LLM          | Hugging Face fine-tunes | Local Ollama model            |
+| Formatter    | Jinja2 only             | Hybrid Jinja2 + LLM (planned) |
+
+---
+
+## 15. Roadmap
+
+* Permission-aware query generation (DocPerm, user roles)
+* Contextual and memory-based responses
+* Inference cache and quick retrieval for frequent queries
+* Data visualization for metrics and KPIs
+* Continuous learning from executed queries
+* Persistent memory graph for adaptive correction
+
+---
+
+## 16. Open Source & Contributions
+
+ChangAI is fully open source and community-driven.
+We welcome contributions in the form of bug fixes, dataset expansions, and feature improvements.
+
+**To contribute:**
+
+1. Fork this repository.
+2. Create a feature branch.
+3. Commit and describe your changes clearly.
+4. Open a pull request against the `version-2` branch.
+
+---
+
+## License
+
+This project is released under the MIT License.
+© 2025 ERPGulf / ChangAI Team
+
+---
+
+**“From schema to speech — ChangAI v2 makes ERPNext queries truly conversational.”**
