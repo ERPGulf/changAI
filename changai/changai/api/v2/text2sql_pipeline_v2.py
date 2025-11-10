@@ -1,7 +1,7 @@
 from typing import TypedDict,List,Dict,Any,Optional
 from langgraph.graph import StateGraph,END
 # from langgraph_checkpoint_redis import RedisSaver
-# from langgraph.checkpoint.memory import MemorySaver   #Short Term Memory
+from langgraph.checkpoint.memory import MemorySaver   #Short Term Memory
 from collections import OrderedDict
 from typing import Any, Dict, Iterable, List, Tuple, Union
 # from changai.changai.api.build_docs import search_faiss, fill_sql_prompt
@@ -15,12 +15,70 @@ from langchain_ollama import OllamaEmbeddings
 # from tqdm import tqdm
 from time import time
 from langchain_community.vectorstores import FAISS
+# from langchain.chains import create_history_aware_retriever
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 import frappe
+# from langchain.chains import create_history_aware_retriever
+# from changai.changai.api.v2.memory import __get_memory, load_history, save_turn
+import re, json, requests, frappe
+# from langgraph.checkpoint.memory import InMemorySaver
+from typing import Dict
+from langchain_ollama import ChatOllama
+from langchain_core.callbacks import Callbacks 
+from langchain_core.caches import BaseCache
+from datetime import datetime,timedelta
+from langgraph.checkpoint.memory import MemorySaver
+# from langgraph.checkpoint.sqlite import SqliteSaver
+from langchain_core.messages import HumanMessage, AIMessage
+from langchain_community.chat_message_histories import SQLChatMessageHistory
+from langchain_core.chat_history import InMemoryChatMessageHistory
+
+from changai.changai.api.v2.store_chats import save_turn,save_message_doc,inject_prompt
+LAST_SEEN:Dict[str,datetime]={}
+non_erp_res=""
+MAX_TOKEN_LIMIT=1500
+MAX_WINDOW_TURNS=10
+IDLE_EVICT_AFTER=timedelta(hours=6)
+# def __llm(base_url:str,model:str) -> ChatOllama:
+#     return ChatOllama(base_url=base_url,model=model, temperature=0)
+
+# @frappe.whitelist(allow_guest=True)
+# def __get_memory(session_id,base_url: str, model: str) -> ConversationSummaryBufferMemory:
+#     mem=MEMORIES.get(session_id)
+#     if mem is None:
+#         mem=ConversationSummaryBufferMemory(
+#             llm=__llm(base_url,model),
+#             max_token_limit=MAX_TOKEN_LIMIT,
+#             return_messages=True,
+#             memory_key="history"
+#         )
+#         MEMORIES[session_id] = mem
+#     LAST_SEEN[session_id]=datetime.utcnow()
+#     return mem
 
 
-_vector_store = None
+# def save_turn(session_id: str, base_url: str, model: str, user_text: str, bot_text: str):
+#     mem = __get_memory(session_id, base_url, model)
+#     mem.save_context({"input": user_text or ""}, {"output": bot_text or ""})
+#     LAST_SEEN[session_id] = datetime.utcnow()
 
-@frappe.whitelist(allow_guest=False)
+# def load_history(session_id: str, base_url: str, model: str):
+#     mem = __get_memory(session_id, base_url, model)
+#     return mem.load_memory_variables({}).get("history", [])
+
+
+# def evict_idle_():
+#     now=datetime.utcnow()
+#     for sid,seen in list(LAST_SEEN.items()):
+#         if now - seen >IDLE_EVICT_AFTER:
+#             MEMORIES.pop(sid,None)
+#             LAST_SEEN.pop(sid,None)
+
+
+
+__vector_store = None
+
+@frappe.whitelist(allow_guest=True)
 def get_settings():
     settings=frappe.get_single("ChangAI Settings")
     langsmith_tracing = "true" if settings.langsmith_tracing else "false"
@@ -32,11 +90,11 @@ def get_settings():
         "ROOT_PATH":settings.root_path,
         "OLLAMA_URL":settings.ollama_url,
         "OLLAMA_MODEL":settings.ollama_llm_model,
-        "EMBED_MODEL":settings.ollama_embed_model
+        "EMBED_MODEL":settings.ollama_embed_model,
+        "RETAIN_MEM":settings.retain_memory
     }
     return config
 
-RETRY_LIMIT=2
 CONFIG = get_settings()
 RETRY_LIMIT=2
 INDEX_PATH = f"{CONFIG['ROOT_PATH']}/changai/changai/changai/faiss_index_hnsw_v2"
@@ -44,6 +102,90 @@ MAPPING_SCHEMA_PATH = f"{CONFIG['ROOT_PATH']}/changai/changai/changai/api/v2/met
 SQL_PROMPT_PATH=f"{CONFIG['ROOT_PATH']}/changai/changai/changai/prompts/sql_prompt.txt"
 FORMAT_PROMPT_PATH=f"{CONFIG['ROOT_PATH']}/changai/changai/changai/prompts/formatting_prompt.txt"
 TEMPLATE_PATH=f"{CONFIG['ROOT_PATH']}/changai/changai/changai/templates/conversation_template_v2.j2"
+BUSINESS_KEYWORDS_PATH = f"{CONFIG['ROOT_PATH']}/changai/changai/changai/api/v2/business_keywords_v1.json"
+GRAPH_DB_PATH = f"{CONFIG['ROOT_PATH']}/changai/changai/changai/runtime/changai_graph.db"
+CHAT_DB_PATH = f"{CONFIG['ROOT_PATH']}/changai/changai/changai/runtime/changai_chat.db"
+
+INPROC_HISTORIES: Dict[str, InMemoryChatMessageHistory] = {}
+def checkpointer_init():
+    if CONFIG["RETAIN_MEM"]:
+        return SqliteSaver.from_conn_string(f"sqlite:///{GRAPH_DB_PATH}")
+    return MemorySaver()
+
+def _get_chat_history(session_id: str):
+    if CONFIG['RETAIN_MEM']:
+        return SQLChatMessageHistory(
+            session_id=session_id,
+            connection_string=f"sqlite:///{CHAT_DB_PATH}",
+        )
+    # volatile (per-process)
+    hist = INPROC_HISTORIES.get(session_id)
+    if not hist:
+        hist = InMemoryChatMessageHistory()
+        INPROC_HISTORIES[session_id] = hist
+    return hist
+# def save_turn(session_id: str, base_url: str, model: str, user_text: str, bot_text: str):
+#     hist = _get_chat_history(session_id)
+#     if user_text:
+#         hist.add_user_message(user_text)
+#     if bot_text:
+#         hist.add_ai_message(bot_text)
+
+def load_history(session_id: str, base_url: str, model: str):
+    hist = _get_chat_history(session_id)
+    return hist.messages[-MAX_WINDOW_TURNS:]
+
+@frappe.whitelist(allow_guest=True)
+def contextualize_query(session_id: str, user_input: str):
+    SYSTEM_MSG = (
+        "You are a query rewriter. "
+        "Rewrite the user's latest message into a clear, self-contained question using brief chat history. "
+        "Return only the rewritten question text — no explanations, no formatting, no JSON."
+    )
+
+    history_msgs = load_history(session_id, CONFIG["OLLAMA_URL"], CONFIG["OLLAMA_MODEL"]) or []
+    messages = [{"role": "system", "content": SYSTEM_MSG}]
+    for m in history_msgs[-10:]:
+        role = "user" if getattr(m, "type", "") == "human" else "assistant"
+        messages.append({"role": role, "content": getattr(m, "content", "")})
+    messages.append({"role": "user", "content": user_input or ""})
+
+    url = f"{CONFIG['OLLAMA_URL']}/api/chat"
+    payload = {
+        "model": CONFIG["OLLAMA_MODEL"],
+        "messages": messages,
+        "stream": False,
+        "options": {"temperature": 0, "num_predict": 128},
+    }
+
+    try:
+        res = requests.post(url, json=payload, timeout=20)
+        res.raise_for_status()
+        rewritten = (res.json().get("message", {}).get("content") or "").strip()
+        # strip accidental fences
+        rewritten = re.sub(r"^```.*?```$", "", rewritten, flags=re.S).strip("` \n\"'")
+        return rewritten or (user_input or "")
+    except Exception:
+        return user_input or ""
+
+# @frappe.whitelist(allow_guest=True)
+# def forget_session(session_id: str):
+#     if PERSIST_CHAT:
+#         # SQLChatMessageHistory exposes .clear() in recent versions
+#         SQLChatMessageHistory(session_id, f"sqlite:///{CHAT_DB_PATH}").clear()
+#     else:
+#         INPROC_HISTORIES.pop(session_id, None)
+#     return {"ok": True}
+
+@frappe.whitelist(allow_guest=True)
+def debug_history(session_id: str):
+    hist = _get_chat_history(session_id).messages
+    return {
+        "session_id": session_id,
+        "len": len(hist),
+        "last_two": [m.content for m in hist[-2:]],
+        "types": [m.type for m in hist],
+    }
 
 
 def read_json(path):
@@ -58,36 +200,97 @@ CONVERSATION_TEMPLATE=read_text(TEMPLATE_PATH)
 mapping_data=read_json(MAPPING_SCHEMA_PATH)
 SQL_PROMPT=read_text(SQL_PROMPT_PATH)
 FORMAT_PROMPT=read_text(FORMAT_PROMPT_PATH)
+BUSINESS_KEYWORDS=read_json(BUSINESS_KEYWORDS_PATH)["business_keywords"]
 
 if not os.path.exists(INDEX_PATH):
     frappe.logger().warning(f"FAISS index not found at {INDEX_PATH}")
 else:
     _emb = OllamaEmbeddings(base_url=CONFIG['OLLAMA_URL'], model=CONFIG['EMBED_MODEL'])
-    _vector_store = FAISS.load_local(INDEX_PATH, embeddings=_emb, allow_dangerous_deserialization=True)
+    __vector_store = FAISS.load_local(INDEX_PATH, embeddings=_emb, allow_dangerous_deserialization=True)
 
 
 # # Shared State
 class SQLState(TypedDict,total=False):
+    session_id:str
     question: str
-    hits: List[Any] # List of values with Any type.o/p from the Fiass Vector Retreiver.
-    context :str  # o/p from the hits to schema contect formatting function.
+    formatted_q:Dict[str,Any]
+    hits: List[Any]
+    context :str
     sql_prompt:str 
     sql:str
-    validation:Dict[str,Any] #Dict with keys string and wiht values of Any type.
+    validation:Dict[str,Any]
     error:Optional[str]
     tries:int
+    query_type:str
+    non_erp_res:str
 
+# InMemorySaver -> wiped after restart
+# checkpointer = MemorySaver()     
 
 def fill_sql_prompt(question: str, context: str) -> str:
     return SQL_PROMPT.format(question=question, context=context)
 
+
+def guardrail_router(state:SQLState) -> SQLState:
+    q=(state.get("formatted_q","")).lower()
+    keywords=[kw.lower() for kw in BUSINESS_KEYWORDS]
+    is_erp=any(kw in q for kw in keywords)
+    return {**state,"query_type":"ERP" if is_erp else "NON_ERP"}
+
+
+NON_ERP_PROMPT="""You are ChangAI, a friendly assistant.
+
+The user message: {qstn}
+
+If the message is casual or conversational (not ERP related),
+reply naturally with a short, polite response (1–2 sentences max).
+Avoid technical or formal tone."""
+
+def send_non_erp_request(state:SQLState) -> SQLState:
+    prompt=NON_ERP_PROMPT.format(qstn=state.get("question",""))
+    url=f"{CONFIG['OLLAMA_URL']}/api/generate"
+    payload={
+        "model":CONFIG['OLLAMA_MODEL'],
+        "prompt":prompt,
+        "stream":False
+    }
+    try:
+        r=requests.post(url,json=payload,timeout=120)
+        r.raise_for_status()
+        data=r.json()
+        non_erp_res=(data.get("response") or "").strip()
+        return {**state,"prompt":prompt,"non_erp_res":non_erp_res,"error":None}
+    except Exception as e:
+        return {**state,"non_erp_res": "", "error": f"NON-ERP call failed: {e}"}
+
+
+def call_llm(state:SQLState) -> SQLState:
+    user_qstn=state.get("question")
+    session_id=state.get("session_id")
+    prompt=inject_prompt(user_qstn,session_id)
+    url = f"{CONFIG['OLLAMA_URL']}/api/generate"
+    payload = {
+        "model":CONFIG["OLLAMA_MODEL"],
+        "prompt": prompt,
+        "stream": False,
+        "options": {"temperature": 0, "num_predict": 128},
+    }
+
+    try:
+        res = requests.post(url, json=payload)
+        res.raise_for_status()
+        data=res.json()
+        response=(data.get("response") or "").strip()
+        return {**state, "formatted_q": response}
+    except Exception as e:
+        return {**state, "error": str(e),"formatted_q": None}
 
 # # Node 1: Retrive with Fiass Vector Store.
 @traceable(name="schema_retriever", run_type="tool")
 def schema_retriever(state: SQLState) -> SQLState:
     if "__vector_store" not in globals() or __vector_store is None:
         return {**state, "hits": [],"error":"Vector index unavailable"}
-    hits = _vector_store.similarity_search(state["question"], k=12)
+    hits = __vector_store.similarity_search(state["formatted_q"], k=12)
     return {**state, "hits": hits}
 
 
@@ -101,7 +304,7 @@ def hits_to_prompt_context(state:SQLState) -> SQLState:
 # # Node 3:Generate the SQL Prompt and call LLM(Ollama Http)
 @traceable(name="generate_sql", run_type="tool")
 def generate_sql(state:SQLState) -> SQLState:
-    prompt=fill_sql_prompt(state["question"],state["context"])
+    prompt=fill_sql_prompt(state["formatted_q"],state["context"])
     url=f"{CONFIG['OLLAMA_URL']}/api/generate"
     payload={
         "model":CONFIG['OLLAMA_MODEL'],
@@ -157,6 +360,12 @@ def repair_sqlquery(state:SQLState)->SQLState:
 
     except Exception as e:
         return {**state,"error":f"Repair call failed {e}"}
+
+
+
+def route_guardrail(state:SQLState):
+    return "ERP" if state.get("query_type")=="ERP" else "NON_ERP"
+
 
 # # Router to decide next stage:
 @traceable(name="router", run_type="tool")
@@ -491,13 +700,19 @@ def hits_to_schema_context(
 
 # Building the Workflow Graph
 workflow=StateGraph(SQLState)
+workflow.add_node("call_llm",call_llm)
+workflow.add_node("guardrail_router",guardrail_router)
 workflow.add_node("retrieve",schema_retriever)
 workflow.add_node("build_context",hits_to_prompt_context)
 workflow.add_node("generate_sql",generate_sql)
 workflow.add_node("validate_sql",validate_sql)
 workflow.add_node("repair_sql",repair_sqlquery)
+workflow.add_node("send_non_erp_request",send_non_erp_request)
 
-workflow.set_entry_point("retrieve")
+workflow.set_entry_point("call_llm")
+workflow.add_edge("call_llm", "guardrail_router")
+workflow.add_conditional_edges("guardrail_router",route_guardrail,{"ERP":"retrieve","NON_ERP":"send_non_erp_request"})
+workflow.add_edge("send_non_erp_request", END)
 workflow.add_edge("retrieve","build_context")
 workflow.add_edge("build_context","generate_sql")
 workflow.add_edge("generate_sql","validate_sql")
@@ -508,9 +723,9 @@ workflow.add_conditional_edges("validate_sql",router,{"repair":"repair_sql","end
 workflow.add_edge("repair_sql","validate_sql")
 
 # optional memory/persistence
-# checkpointer=MemorySaver()
-# app=workflow.compile(checkpointer=checkpointer)
-app=workflow.compile()
+checkpointer=MemorySaver()
+app=workflow.compile(checkpointer=checkpointer)
+# app=workflow.compile()
 
 # Run
     # initial_state=SQLState(question="show all sales invoices?")
@@ -535,18 +750,18 @@ app=workflow.compile()
     # print("\n Tries",final.get("tries",0),"Error:",final.get("error"))
 
 
-@frappe.whitelist(allow_guest=False)
+@frappe.whitelist(allow_guest=True)
 def execute_query(query:str):
-    q = (query or "").strip()
-    if not q.upper().startswith("SELECT") or ";" in q:
-        frappe.throw("Only single SELECT statements are allowed.")
+    # q = (query or "").strip()
+    # if not q.upper().startswith("SELECT") or ";" in q:
+    #     frappe.throw("Only single SELECT statements are allowed.")
     try:
-        result=frappe.db.sql(q,as_dict=True)
+        result=frappe.db.sql(query,as_dict=True)
         return result
     except Exception as e:
         return {"error":f"SQL Execution Failed : {e}"}
 
-@frappe.whitelist(allow_guest=False)
+@frappe.whitelist(allow_guest=True)
 def format_data(qstn,sql,data):
     payload={
         "model":"gemma3:270m",
@@ -562,7 +777,7 @@ def format_data(qstn,sql,data):
         return {"text": f"Unable to format response quickly.{e}"}
 
 
-@frappe.whitelist(allow_guest=False)
+@frappe.whitelist(allow_guest=True)
 def format_data_conversationally(user_data):
     """
     Formats user data using the single, powerful conversational Jinja2 template.
@@ -573,38 +788,127 @@ def format_data_conversationally(user_data):
     template = env.from_string(CONVERSATION_TEMPLATE)
     return template.render(data=user_data)
 
+
+@frappe.whitelist(allow_guest=True)
+def test(chat_id):
+    config = {
+        "configurable": {"thread_id": chat_id},
+        "run_name": "changai_text2sql_graph",
+        "run_type": "graph",
+        "tags": ["changai", "rag", "sql"],
+        "metadata": {"tenant": "demo"},
+    }
+    st = app.get_state(config)
+    checkpoint_id = getattr(st, "checkpoint_id", None)
+    return {"checkpoint_id":checkpoint_id}
 # Run
-@frappe.whitelist(allow_guest=False)
-def run_text2sql_pipeline(user_question):
-        initial_state=SQLState(question=user_question)
-        config = {
-            "run_name": "changai_text2sql_graph",
-            "run_type": "graph",
-            "tags": ["changai", "rag", "sql"],
-            "metadata": {"tenant": "demo"}
-        }
-        t0 = time()
-        final=app.invoke(initial_state,config=config)
-        t1=time()
-        sql = final.get("sql") or ""
-        result=execute_query(sql)
-        error=final.get("error")
-        tries=final.get("tries",0)
-        val=final.get("validation")
-        context=final["context"][:800]
-        formatted_result=format_data_conversationally(result)
-        # formatted_result=format_data(user_question,sql,result)
-        duration_s = t1 - t0
+@frappe.whitelist(allow_guest=True)
+def run_text2sql_pipeline(user_question: str, chat_id: str):
+    q = (user_question or "").strip()
+
+    config = {
+        "configurable": {"thread_id": chat_id},
+        "run_name": "changai_text2sql_graph",
+        "run_type": "graph",
+        "tags": ["changai", "rag", "sql"],
+        "metadata": {"tenant": "demo"},
+    }
+
+    # pull prior state (works only if you compiled with a checkpointer)
+    st = app.get_state(config)
+    # prior_chat = []
+    # if st and getattr(st, "values", None):
+    #     prior_chat = st.values.get("chat", []) or []
+    # # run graph
+    initial_state: SQLState = {
+        "question": q,
+        "session_id":chat_id
+    }
+    final: SQLState = app.invoke(initial_state, config=config)
+
+    # router result
+    type_ = final.get("query_type") or "NON_ERP"
+    if type_ == "NON_ERP":
+        non_erp_res = (final.get("non_erp_res") or "").strip()
+        formatted_q = (final.get("formatted_q") or "").strip()
+
+        # new_chat = prior_chat + [
+        #     {"role": "user", "content": q},
+        #     {"role": "assistant", "content": non_erp_res},
+        # ]
+        # keep the in-graph chat memory short
+        # if len(new_chat) > 40:
+        #     new_chat = new_chat[-40:]
+
+        # app.update_state(config, {"chat": new_chat})
+        try:
+            save_turn(session_id=chat_id,
+                    user_text=formatted_q,
+                    bot_text=non_erp_res)
+        except Exception as e:
+            return e
+        return {"Bot": non_erp_res}
+
+    # ERP path
+    sql = (final.get("sql") or "").strip()
+    formatted_q = (final.get("formatted_q") or "").strip()
+    val = final.get("validation") or {}
+    ok = bool(val.get("ok"))
+
+    if not ok or not sql.upper().startswith("SELECT"):
+        # don’t execute invalid SQL; surface debug info
+        context = (final.get("context") or "")[:800]
+        tries = int(final.get("tries") or 0)
+        err = final.get("error")
         return {
-            "Time taken":f"{round(duration_s, 2)}s",
-            "Context":context,
-            "SQL":sql,
-            "Validation":val,
-            "Tries":tries,
-            "Error":error,
-            "Result":result,
-            "Bot":formatted_result
+            "Question":user_question,
+            "Formatted-Question":formatted_q,
+            "Context": context,
+            "SQL": sql,
+            "Validation": val,
+            "Tries": tries,
+            "Error": err or "SQL not valid or missing",
+            "Result": [],
+            "Bot": "I couldn’t produce a valid SQL yet. Please try rephrasing.",
         }
+
+    # safe to execute
+    result = execute_query(sql)
+    context = (final.get("context") or "")[:800]
+    tries = int(final.get("tries") or 0)
+    err = final.get("error")
+
+    # format for user
+    formatted_result = format_data_conversationally(result)
+
+    # # update chat state
+    # new_chat = prior_chat + [
+    #     {"role": "user", "content": q},
+    #     {"role": "assistant", "content": formatted_result},
+    # ]
+    # if len(new_chat) > 40:
+    #     new_chat = new_chat[-40:]
+    # app.update_state(config, {"chat": new_chat})
+    try:
+        save_turn(session_id=chat_id,
+                    user_text=formatted_q,
+                    bot_text=formatted_result)
+    except Exception as e:
+        return e
+    
+    return {
+        "Question":user_question,
+        "Formatted_Question":formatted_q,
+        "Context": context,
+        "SQL": sql,
+        "Validation": val,
+        "Tries": tries,
+        "Error": err,
+        "Result": result,
+        "Bot": formatted_result,
+    }
+
+
 # if __name__== "__main__":
 #         print(f"⏱️ Retrieval time: {(t1 - t0)*1000:.2f} ms")
 #         print("Question:",final["question"])
