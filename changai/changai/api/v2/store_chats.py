@@ -62,4 +62,5 @@ Rules:
 def inject_prompt(user_qstn,session_id):
     rows=get_chat_history(session_id)
     prompt=PROMPT_FOLLOWUP.format(rows=rows,qstn=user_qstn)
-    return prompt
+    return prompt,rows
+
