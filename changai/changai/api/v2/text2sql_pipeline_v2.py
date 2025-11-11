@@ -263,7 +263,6 @@ def repair_sqlquery(state:SQLState)->SQLState:
         return {**state,"error":f"Repair call failed {e}"}
 
 
-
 def route_guardrail(state:SQLState):
     return "ERP" if state.get("query_type")=="ERP" else "NON_ERP"
 
@@ -286,8 +285,8 @@ def validate_sql_against_mapping(sql_text: str, mapping: Dict[str, List[str]], d
     result = {
         "ok": True,
         "unknown_tables": [],
-        "unknown_columns": [],      # list of (column, table_context or None)
-        "ambiguous_columns": [],    # list of column names
+        "unknown_columns": [],
+        "ambiguous_columns": [],
         "details": {}
     }
 
@@ -618,6 +617,7 @@ workflow.add_edge("repair_sql","validate_sql")
 checkpointer=MemorySaver()
 app=workflow.compile(checkpointer=checkpointer)
 
+#to execute the sql returned inside frappe
 @frappe.whitelist(allow_guest=True)
 def execute_query(query:str):
     # q = (query or "").strip()
@@ -629,6 +629,8 @@ def execute_query(query:str):
     except Exception as e:
         return {"error":f"SQL Execution Failed : {e}"}
 
+
+# to format the data returned afer execution using model
 # @frappe.whitelist(allow_guest=True)
 # def format_data(qstn,sql,data):
 #     payload={
@@ -644,7 +646,7 @@ def execute_query(query:str):
 #     except Exception as e:
 #         return {"text": f"Unable to format response quickly.{e}"}
 
-
+# to format the data returned afer execution using jinj2 template
 @frappe.whitelist(allow_guest=True)
 def format_data_conversationally(user_data):
     """
@@ -655,20 +657,6 @@ def format_data_conversationally(user_data):
     )
     template = env.from_string(CONVERSATION_TEMPLATE)
     return template.render(data=user_data)
-
-
-# @frappe.whitelist(allow_guest=True)
-# def get_checkpoint_id(chat_id):
-#     config = {
-#         "configurable": {"thread_id": chat_id},
-#         "run_name": "changai_text2sql_graph",
-#         "run_type": "graph",
-#         "tags": ["changai", "rag", "sql"],
-#         "metadata": {"tenant": "demo"},
-#     }
-#     st = app.get_state(config)
-#     checkpoint_id = getattr(st, "checkpoint_id", None)
-#     return {"checkpoint_id":checkpoint_id}
 
 
 # Run
@@ -759,3 +747,17 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
 
 # result=execute_query("SELECT * FROM `tabCustomer`;")
 # print(result)
+
+
+# @frappe.whitelist(allow_guest=True)
+# def get_checkpoint_id(chat_id):
+#     config = {
+#         "configurable": {"thread_id": chat_id},
+#         "run_name": "changai_text2sql_graph",
+#         "run_type": "graph",
+#         "tags": ["changai", "rag", "sql"],
+#         "metadata": {"tenant": "demo"},
+#     }
+#     st = app.get_state(config)
+#     checkpoint_id = getattr(st, "checkpoint_id", None)
+#     return {"checkpoint_id":checkpoint_id}
