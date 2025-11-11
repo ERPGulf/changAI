@@ -742,9 +742,7 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
         "Bot": formatted_result,
     }
 
-
-#######################################################################
-
+# Test run
 # if __name__== "__main__":
 #         print(f"⏱️ Retrieval time: {(t1 - t0)*1000:.2f} ms")
 #         print("Question:",final["question"])
