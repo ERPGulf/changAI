@@ -48,13 +48,13 @@ def get_settings():
         "LANGSMITH_API_KEY" : settings.langsmith_api_key,
         "LANGSMITH_PROJECT" : settings.langsmith_project,
         "ROOT_PATH":settings.root_path,
-        "OLLAMA_URL":settings.ollama_url,
-        "OLLAMA_MODEL":settings.ollama_llm_model,
-        "EMBED_MODEL":settings.ollama_embed_model,
+        "URL":settings.server_url if settings.remote else settings.ollama_url,
+        "LLM":settings.llm,
+        "EMBED_MODEL":settings.embedder,
         "RETAIN_MEM":settings.retain_memory,
-        "REPLICATE_MODEL_URL":settings.server_url,
-        "VERSION_ID":settings.version_id,
-        "API_TOKEN":settings.api_token
+        "LLM_VERSION_ID":settings.version_id,
+        "EMBED_VERSION_ID":settings.version_id,
+        "API_TOKEN":settings.api_token,
     }
     return config
 
@@ -67,6 +67,73 @@ FORMAT_PROMPT_PATH=f"{CONFIG['ROOT_PATH']}/changai/changai/changai/prompts/forma
 NON_ERP_PROMPT_PATH=f"{CONFIG['ROOT_PATH']}/changai/changai/changai/prompts/non_erp_prompt.txt"
 TEMPLATE_PATH=f"{CONFIG['ROOT_PATH']}/changai/changai/changai/templates/conversation_template_v2.j2"
 BUSINESS_KEYWORDS_PATH = f"{CONFIG['ROOT_PATH']}/changai/changai/changai/api/v2/business_keywords_v1.json"
+
+@frappe.whitelist(allow_guest=True)
+def local_llm_request(prompt):
+    url = f"{CONFIG['URL'].rstrip('/')}/api/generate"
+    payload = {
+        "model": CONFIG["LLM"],
+        "prompt": prompt,
+        "stream": False
+    }
+    try:
+        res = requests.post(url, json=payload, timeout=180)
+        res.raise_for_status()
+        return (res.json().get("response") or "").strip()
+    except Exception as e:
+        return f"Error: {e}"
+
+
+@frappe.whitelist(allow_guest=True)
+def remote_llm_request(prompt):
+    url = CONFIG['URL']
+    payload = {
+        "version":CONFIG["LLM_VERSION_ID"],
+        "input": {"user_input": prompt},
+    }
+    headers = {
+            "Content-Type": "application/json",
+            "Prefer": "wait",
+            "Authorization": f"Bearer {CONFIG['API_TOKEN']}",
+        }
+    try:
+        r=requests.post(url,headers=headers,json=payload,timeout=120)
+        r.raise_for_status()
+        data=r.json()
+        result=data["output"]
+        return result
+    except Exception as e:
+        return f"Error: {e}"
+
+@frappe.whitelist(allow_guest=True)
+def remote_embedder_request(state:SQLState) -> SQLState:
+    q=state.get("formatted_q","")
+    payload={
+        "version":CONFIG["LLM_VERSION_ID"],
+        "input": {"user_input": q}
+    }
+    headers = {
+            "Content-Type": "application/json",
+            "Prefer": "wait",
+            "Authorization": f"Bearer {CONFIG['API_TOKEN']}",
+        }
+    try:
+        r=requests.post(url,headers=headers,json=payload,timeout=120)
+        r.raise_for_status()
+        data=r.json()
+        result=data["output"]
+        return result
+    except Exception as e:
+        return f"Error: {e}"
+
+def local_embedder_request():
+    if not os.path.exists(INDEX_PATH):
+        frappe.logger().warning(f"FAISS index not found at {INDEX_PATH}")
+    else:
+        _emb = OllamaEmbeddings(base_url=CONFIG["URL"], model=CONFIG['EMBED_MODEL'])
+        __vector_store = FAISS.load_local(INDEX_PATH, embeddings=_emb, allow_dangerous_deserialization=True)
+    return __vector_store
+    
 
 
 def read_json(path):
@@ -83,12 +150,6 @@ SQL_PROMPT=read_text(SQL_PROMPT_PATH)
 FORMAT_PROMPT=read_text(FORMAT_PROMPT_PATH)
 NON_ERP_PROMPT=read_text(NON_ERP_PROMPT_PATH)
 BUSINESS_KEYWORDS=read_json(BUSINESS_KEYWORDS_PATH)["business_keywords"]
-
-if not os.path.exists(INDEX_PATH):
-    frappe.logger().warning(f"FAISS index not found at {INDEX_PATH}")
-else:
-    _emb = OllamaEmbeddings(base_url=CONFIG['OLLAMA_URL'], model=CONFIG['EMBED_MODEL'])
-    __vector_store = FAISS.load_local(INDEX_PATH, embeddings=_emb, allow_dangerous_deserialization=True)
 
 
 # # Shared State
@@ -129,7 +190,7 @@ def send_non_erp_request(state:SQLState) -> SQLState:
             "Authorization": f"Bearer {CONFIG['API_TOKEN']}",
         }
     payload = {
-        "version":CONFIG["VERSION_ID"],
+        "version":CONFIG["LLM_VERSION_ID"],
         "input": {"user_input": prompt},
     }
     try:
@@ -158,7 +219,7 @@ def call_llm(state:SQLState) -> SQLState:
             "Authorization": f"Bearer {CONFIG['API_TOKEN']}",
         }
     payload = {
-        "version":CONFIG["VERSION_ID"],
+        "version":CONFIG["LLM_VERSION_ID"],
         "input": {"user_input": prompt},
     }
     try:
@@ -167,7 +228,7 @@ def call_llm(state:SQLState) -> SQLState:
         data=res.json()
         result=data["output"][0]
         print("Result is",result)
-        return {**state, "formatted_q":result,hist_prompt}
+        return {**state, "formatted_q":result}
     except Exception as e:
         return {**state, "error": str(e),"formatted_q": ""}
 
@@ -203,7 +264,7 @@ def generate_sql(state:SQLState) -> SQLState:
             "Authorization": f"Bearer {CONFIG['API_TOKEN']}",
         }
     payload = {
-        "version":CONFIG["VERSION_ID"],
+        "version":CONFIG["LLM_VERSION_ID"],
         "input": {"user_input": prompt},
     }
     try:
@@ -250,7 +311,7 @@ def repair_sqlquery(state:SQLState)->SQLState:
             "Authorization": f"Bearer {CONFIG['API_TOKEN']}",
         }
     payload = {
-        "version":CONFIG["VERSION_ID"],
+        "version":CONFIG["LLM_VERSION_ID"],
         "input": {"user_input": patched_prompt},
     }
     try:
@@ -719,7 +780,6 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
         return e
     return {
         "Question":user_question,
-        "Chat history based prompt":prompt,
         "Formatted_Question":formatted_q,
         "Context": context,
         "SQL": sql,

@@ -6,7 +6,7 @@ def save_message_doc(session_id:str,message_type:str,content:str):
     if message_type not in ["ai","human"]:
         frappe.throw("message_type must be 'human' or 'ai'")
     doc=frappe.get_doc({
-        "doctype":"ChangAI Log",
+        "doctype":"ChangAI Chat History",
         "session_id": session_id,
         "message_type": message_type,
         "content": content or ""
@@ -27,7 +27,7 @@ def save_turn(session_id:str,user_text:str,bot_text:str):
 
 @frappe.whitelist(allow_guest=True)
 def get_chat_history(session_id):
-    rows=frappe.get_all("ChangAI Log",filters={"session_id":session_id},fields=["content","message_type"])
+    rows=frappe.get_all("ChangAI Chat History",filters={"session_id":session_id},fields=["content","message_type"])
     rows.reverse()
     result=[]
     for item in rows:
