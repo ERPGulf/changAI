@@ -61,6 +61,7 @@ NON_ERP_PROMPT_PATH=f"{CONFIG['ROOT_PATH']}/changai/changai/changai/prompts/non_
 TEMPLATE_PATH=f"{CONFIG['ROOT_PATH']}/changai/changai/changai/templates/conversation_template_v2.j2"
 BUSINESS_KEYWORDS_PATH = f"{CONFIG['ROOT_PATH']}/changai/changai/changai/api/v2/business_keywords_v1.json"
 
+
 def call_model(prompt):
     return remote_llm_request(prompt) if CONFIG["REMOTE"] else local_llm_request(prompt)
 
