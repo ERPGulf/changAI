@@ -241,9 +241,15 @@
     line-height: 1.4;
 }
 
+.chat-body .bot-message {
+    align-items: flex-start;   /* override center for bot rows */
+}
+
 .chat-body .bot-message .message-text {
     border-radius: 10px 10px 10px 3px;
     background: #f6f2ff;
+    margin: 0;
+    
 }
 
 .chat-body .user-message .message-text {

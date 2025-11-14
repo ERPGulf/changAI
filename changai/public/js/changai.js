@@ -142,38 +142,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function generateBotResponse(userMsg, thinkingMsg, warmingTimeout) {
         try {
-            const API_URL = await frappe.db.get_single_value("Settings", "backend_url");
+            const API_URL = await frappe.db.get_single_value("ChangAI Settings", "vite_api_url");
             const reqOpts = {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     "X-Frappe-CSRF-Token": frappe.csrf_token
                 },
-                body: JSON.stringify({ qstn: userMsg }),
+                body: JSON.stringify({ user_question: userMsg,chat_id:"sid_3" }),
             };
 
             const res = await fetch(API_URL, reqOpts);
-            const data = await res.json();
+            const data =  await res.json()
+            console.log("API response:", data); 
 
             if (!res.ok) throw new Error(data.message?.error || "Something went wrong!!");
 
             clearTimeout(warmingTimeout);
 
-            if (data.message?.query_data) {
-                thinkingMsg.text = data.message.query_data;
-            } else {
-                const res = await fetch(API_URL, reqOpts);
-                const data = await res.json();
-                thinkingMsg.text = data.message?.query_data;
+            if (data.message) {
+                thinkingMsg.text = data.message?.Bot;
             }
+            //  else {
+            //     const res = await fetch(API_URL, reqOpts);
+            //     const data = await res.json();
+            //     thinkingMsg.text = data.message?.Bot;
+            // }
             debugLogs.push({
                 user: userMsg,
-                response: thinkingMsg.text,
-                doctype: data.message?.doctype,
-                top_fields: data.message?.top_fields,
-                fields: data.message?.fields,
-                query: data.message?.query,
-                data: data.message?.data
+                response: data.message,
+                // doctype: data.message?.doctype,
+                // top_fields: data.message?.top_fields,
+                // fields: data.message?.fields,
+                // query: data.message?.query,
+                // data: data.message?.data
             });
 
             renderMessages();

@@ -13,23 +13,14 @@ import jinja2
 from langchain_ollama import OllamaEmbeddings
 # import faiss
 # from tqdm import tqdm
-from time import time
 from langchain_community.vectorstores import FAISS
 # from langchain.chains import create_history_aware_retriever
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 import frappe
 # from langchain.chains import create_history_aware_retriever
-import re, json, requests, frappe
 # from langgraph.checkpoint.memory import InMemorySaver
 from typing import Dict
-from langchain_ollama import ChatOllama
-from langchain_core.callbacks import Callbacks 
-from langchain_core.caches import BaseCache
-from datetime import datetime,timedelta
 from langgraph.checkpoint.memory import MemorySaver
 # from langgraph.checkpoint.sqlite import SqliteSaver
-from langchain_core.messages import HumanMessage, AIMessage
-from langchain_community.chat_message_histories import SQLChatMessageHistory
 from langchain_core.chat_history import InMemoryChatMessageHistory
 from changai.changai.api.v2.store_chats import save_turn,save_message_doc,inject_prompt
 non_erp_res=""
@@ -41,20 +32,22 @@ __vector_store = None
 @frappe.whitelist(allow_guest=True)
 def get_settings():
     settings=frappe.get_single("ChangAI Settings")
+
     langsmith_tracing = "true" if settings.langsmith_tracing else "false"
     config={
-        "LANGSMITH_TRACING" : langsmith_tracing,
-        "LANGSMITH_ENDPOINT" : settings.langsmith_endpoint,
-        "LANGSMITH_API_KEY" : settings.langsmith_api_key,
-        "LANGSMITH_PROJECT" : settings.langsmith_project,
+        # "LANGSMITH_TRACING" : langsmith_tracing,
+        # "LANGSMITH_ENDPOINT" : settings.langsmith_endpoint,
+        # "LANGSMITH_API_KEY" : settings.langsmith_api_key,
+        # "LANGSMITH_PROJECT" : settings.langsmith_project,
         "ROOT_PATH":settings.root_path,
         "URL":settings.server_url if settings.remote else settings.ollama_url,
         "LLM":settings.llm,
         "EMBED_MODEL":settings.embedder,
         "RETAIN_MEM":settings.retain_memory,
-        "LLM_VERSION_ID":settings.version_id,
-        "EMBED_VERSION_ID":settings.version_id,
+        "LLM_VERSION_ID":settings.llm_version_id,
+        "EMBED_VERSION_ID":settings.embedder_version_id,
         "API_TOKEN":settings.api_token,
+        "REMOTE": bool(settings.remote),
     }
     return config
 
@@ -68,81 +61,81 @@ NON_ERP_PROMPT_PATH=f"{CONFIG['ROOT_PATH']}/changai/changai/changai/prompts/non_
 TEMPLATE_PATH=f"{CONFIG['ROOT_PATH']}/changai/changai/changai/templates/conversation_template_v2.j2"
 BUSINESS_KEYWORDS_PATH = f"{CONFIG['ROOT_PATH']}/changai/changai/changai/api/v2/business_keywords_v1.json"
 
-@frappe.whitelist(allow_guest=True)
-def local_llm_request(prompt):
-    url = f"{CONFIG['URL'].rstrip('/')}/api/generate"
-    payload = {
-        "model": CONFIG["LLM"],
-        "prompt": prompt,
-        "stream": False
-    }
+def call_model(prompt):
+    return remote_llm_request(prompt) if CONFIG["REMOTE"] else local_llm_request(prompt)
+
+
+def call_embedder(question):
+    return remote_embedder_request(question) if CONFIG["REMOTE"] else local_embedder_request(question)
+
+
+def _post_json(url: str, headers: Dict[str,str], payload: Dict[str,Any], timeout: int = 120):
     try:
-        res = requests.post(url, json=payload, timeout=180)
+        res = requests.post(url, headers=headers, json=payload, timeout=timeout)
         res.raise_for_status()
-        return (res.json().get("response") or "").strip()
+        return res.json()
     except Exception as e:
-        return f"Error: {e}"
+        frappe.log_error(f"Request failed: {e}", "ChangAI HTTP Error")
+        return None
 
 
-@frappe.whitelist(allow_guest=True)
-def remote_llm_request(prompt):
-    url = CONFIG['URL']
-    payload = {
-        "version":CONFIG["LLM_VERSION_ID"],
-        "input": {"user_input": prompt},
-    }
+def local_llm_request(prompt: str) -> str:
+    url = f"{CONFIG['URL'].rstrip('/')}/api/generate"
+    payload = {"model": CONFIG["LLM"], "prompt": prompt, "stream": False}
+    response = _post_json(url, {}, payload, timeout=120)
+    if response and "response" in response:
+        return response["response"].strip()
+    return "Error: Failed to get response from local LLM."
+
+
+def remote_llm_request(prompt: str) -> str:
+    payload = {"version": CONFIG["LLM_VERSION_ID"], "input": {"user_input": prompt}}
     headers = {
-            "Content-Type": "application/json",
-            "Prefer": "wait",
-            "Authorization": f"Bearer {CONFIG['API_TOKEN']}",
-        }
-    try:
-        r=requests.post(url,headers=headers,json=payload,timeout=120)
-        r.raise_for_status()
-        data=r.json()
-        result=data["output"]
-        return result
-    except Exception as e:
-        return f"Error: {e}"
-
-@frappe.whitelist(allow_guest=True)
-def remote_embedder_request(state:SQLState) -> SQLState:
-    q=state.get("formatted_q","")
-    payload={
-        "version":CONFIG["LLM_VERSION_ID"],
-        "input": {"user_input": q}
+        "Content-Type": "application/json",
+        "Prefer": "wait",
+        "Authorization": f"Bearer {CONFIG['API_TOKEN']}",
     }
-    headers = {
-            "Content-Type": "application/json",
-            "Prefer": "wait",
-            "Authorization": f"Bearer {CONFIG['API_TOKEN']}",
-        }
-    try:
-        r=requests.post(url,headers=headers,json=payload,timeout=120)
-        r.raise_for_status()
-        data=r.json()
-        result=data["output"]
-        return result
-    except Exception as e:
-        return f"Error: {e}"
+    result = None
+    response = _post_json(CONFIG["URL"], headers, payload)
+    if response and isinstance(response.get("output"), list) and response["output"]:
+        return str(response["output"][0]).strip()
+    return "Error: No output in response"
 
-def local_embedder_request():
+
+def remote_embedder_request(formatted_q: str) -> Union[list, str]:
+    payload = {"version": CONFIG["EMBED_VERSION_ID"], "input": {"user_input": formatted_q}}
+    headers = {
+        "Content-Type": "application/json",
+        "Prefer": "wait",
+        "Authorization": f"Bearer {CONFIG['API_TOKEN']}",
+    }
+    result = None
+    response = _post_json(CONFIG["URL"], headers, payload)
+    if response and "output" in response:
+        result = response["output"]
+    return result or "Error: No output in response"
+
+
+def local_embedder_request(question: str):
+    global __vector_store
     if not os.path.exists(INDEX_PATH):
         frappe.logger().warning(f"FAISS index not found at {INDEX_PATH}")
-    else:
-        _emb = OllamaEmbeddings(base_url=CONFIG["URL"], model=CONFIG['EMBED_MODEL'])
+        return []
+    if __vector_store is None:
+        _emb = OllamaEmbeddings(base_url=CONFIG["URL"], model=CONFIG["EMBED_MODEL"])
         __vector_store = FAISS.load_local(INDEX_PATH, embeddings=_emb, allow_dangerous_deserialization=True)
-    return __vector_store
+    return __vector_store.similarity_search(question, k=12)
     
-
 
 def read_json(path):
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
+
 def read_text(path):
     with open(path,"r",encoding="utf-8") as f:
         return f.read()
+
 
 CONVERSATION_TEMPLATE=read_text(TEMPLATE_PATH)
 mapping_data=read_json(MAPPING_SCHEMA_PATH)
@@ -159,16 +152,17 @@ class SQLState(TypedDict,total=False):
     formatted_q:str
     hits: List[Any]
     context :str
-    sql_prompt:str 
     sql:str
     validation:Dict[str,Any]
     error:Optional[str]
     tries:int
     query_type:str
+    sql_prompt:str
     non_erp_res:str
 
 # InMemorySaver -> wiped after restart
 # checkpointer = MemorySaver()     
+
 
 def fill_sql_prompt(question: str, context: str) -> str:
     return SQL_PROMPT.format(question=question, context=context)
@@ -182,62 +176,30 @@ def guardrail_router(state:SQLState) -> SQLState:
 
 
 def send_non_erp_request(state:SQLState) -> SQLState:
-    prompt=NON_ERP_PROMPT.format(qstn=state.get("question",""))
-    url=CONFIG['REPLICATE_MODEL_URL']
-    headers = {
-            "Content-Type": "application/json",
-            "Prefer": "wait",
-            "Authorization": f"Bearer {CONFIG['API_TOKEN']}",
-        }
-    payload = {
-        "version":CONFIG["LLM_VERSION_ID"],
-        "input": {"user_input": prompt},
-    }
+    qstn=state.get("formatted_q","")
+    prompt=NON_ERP_PROMPT.format(question=qstn)
     try:
-        r=requests.post(url,headers=headers,json=payload,timeout=120)
-        r.raise_for_status()
-        data=r.json()
-        result=data["output"]
-        return {**state,"prompt":prompt,"non_erp_res":result,"error":None}
+        response=call_model(prompt)
+        return {**state,"prompt":prompt,"non_erp_res":response,"error":None}
     except Exception as e:
         return {**state,"non_erp_res": "", "error": f"NON-ERP call failed: {e}"}
+
 
 def call_llm(state:SQLState) -> SQLState:
     user_qstn=state.get("question")
     session_id=state.get("session_id")
     prompt=inject_prompt(user_qstn,session_id)
-    # url = f"{CONFIG['OLLAMA_URL']}/api/generate"
-    # payload = {
-    #     "model":CONFIG["OLLAMA_MODEL"],
-    #     "prompt": prompt,
-    #     "stream": False,
-    #     "options": {"temperature": 0, "num_predict": 128},
-    # }
-    headers = {
-            "Content-Type": "application/json",
-            "Prefer": "wait",
-            "Authorization": f"Bearer {CONFIG['API_TOKEN']}",
-        }
-    payload = {
-        "version":CONFIG["LLM_VERSION_ID"],
-        "input": {"user_input": prompt},
-    }
     try:
-        res = requests.post(CONFIG['REPLICATE_MODEL_URL'],headers=headers, json=payload)
-        res.raise_for_status()
-        data=res.json()
-        result=data["output"][0]
-        print("Result is",result)
-        return {**state, "formatted_q":result}
+        response=call_model(prompt)
+        return {**state, "formatted_q":response}
     except Exception as e:
         return {**state, "error": str(e),"formatted_q": ""}
+
 
 # # Node 1: Retrive with Fiass Vector Store.
 @traceable(name="schema_retriever", run_type="tool")
 def schema_retriever(state: SQLState) -> SQLState:
-    if "__vector_store" not in globals() or __vector_store is None:
-        return {**state, "hits": [],"error":"Vector index unavailable"}
-    hits = __vector_store.similarity_search(state["formatted_q"], k=12)
+    hits=call_embedder(state["formatted_q"])
     return {**state, "hits": hits}
 
 
@@ -252,36 +214,19 @@ def hits_to_prompt_context(state:SQLState) -> SQLState:
 @traceable(name="generate_sql", run_type="tool")
 def generate_sql(state:SQLState) -> SQLState:
     prompt=fill_sql_prompt(state["formatted_q"],state["context"])
-    # url=f"{CONFIG['OLLAMA_URL']}/api/generate"
-    # payload={
-    #     "model":CONFIG['OLLAMA_MODEL'],
-    #     "prompt":prompt,
-    #     "stream":False
-    # }
-    headers = {
-            "Content-Type": "application/json",
-            "Prefer": "wait",
-            "Authorization": f"Bearer {CONFIG['API_TOKEN']}",
-        }
-    payload = {
-        "version":CONFIG["LLM_VERSION_ID"],
-        "input": {"user_input": prompt},
-    }
     try:
-        r=requests.post(CONFIG['REPLICATE_MODEL_URL'],headers=headers, json=payload)
-        r.raise_for_status()
-        data=r.json()
-        return {**state,"prompt":prompt,"sql":data["output"][0],"error":None}
+        response=call_model(prompt)
+        return {**state,"sql_prompt":prompt,"sql":response,"error":None}
     except Exception as e:
-        return {**state,"error": f"LLM call failed: {e}"}
+        return {**state,"error": f"LLM call failed: {e}","sql_prompt":prompt}
 
 
 # # Node 4:Validate the SQL Generate with meta schema mapping using SQLGlot
 @traceable(name="validate_sql", run_type="tool")
 def validate_sql(state: SQLState) -> SQLState:
     sql=state.get("sql") or ""
-    if not sql.upper().startswith("SELECT"):
-        return {**state,"validation":{"ok":False,"details":{"parse_error":"Not a SELECT Query"}}}
+    # if not sql.upper().startswith("SELECT"):
+    #     return {**state,"validation":{"ok":False,"details":{"parse_error":"Not a SELECT Query"}}}
     val = validate_sql_against_mapping(sql,mapping_data,dialect="mysql")
     return {**state,"validation":val}
 
@@ -301,24 +246,10 @@ def repair_sqlquery(state:SQLState)->SQLState:
         hints.append(f"Unknown Columns:{unknown_cols}.Use only fields listed for each tables from the context")
     if ambiguous:
         hints.append(f"Ambiguous columns(qualify them):{ambiguous}")
-    patched_prompt=state["prompt"]+"\n\n#VALIDATION HINTS\n"+"\n".join(f"-{h}" for h in hints)
-    # print(patched_prompt)
-    # payload={"model":CONFIG['OLLAMA_MODEL'],"prompt":patched_prompt,"stream":False,"options": {"temperature": 0,},}
-    url=CONFIG["REPLICATE_MODEL_URL"]
-    headers = {
-            "Content-Type": "application/json",
-            "Prefer": "wait",
-            "Authorization": f"Bearer {CONFIG['API_TOKEN']}",
-        }
-    payload = {
-        "version":CONFIG["LLM_VERSION_ID"],
-        "input": {"user_input": patched_prompt},
-    }
+    patched_prompt=state["sql_prompt"]+"\n\n#VALIDATION HINTS\n"+"\n".join(f"-{h}" for h in hints)
     try:
-        res = requests.post(url,headers=headers, json=payload)
-        res.raise_for_status()
-        data=res.json()
-        return {**state,"sql":data["output"][0],"tries":tries,"error":None}
+        response = call_llm(patched_prompt)
+        return {**state,"sql":response,"tries":tries,"error":None}
 
     except Exception as e:
         return {**state,"error":f"Repair call failed {e}"}
@@ -681,9 +612,9 @@ app=workflow.compile(checkpointer=checkpointer)
 #to execute the sql returned inside frappe
 @frappe.whitelist(allow_guest=True)
 def execute_query(query:str):
-    # q = (query or "").strip()
+    q = (query or "").strip()
     # if not q.upper().startswith("SELECT") or ";" in q:
-    #     frappe.throw("Only single SELECT statements are allowed.")
+    #     return {"error": "Only a single SELECT statement is allowed."}
     try:
         result=frappe.db.sql(query,as_dict=True)
         return result
@@ -731,7 +662,6 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
         "tags": ["changai", "rag", "sql"],
         "metadata": {"tenant": "demo"},
     }
-    st = app.get_state(config)
     initial_state: SQLState = {
         "question": q,
         "session_id":chat_id
@@ -767,6 +697,7 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
             "Result": [],
             "Bot": "I couldn’t produce a valid SQL yet. Please try rephrasing.",
         }
+    
     result = execute_query(sql)
     context = (final.get("context") or "")[:800]
     tries = int(final.get("tries") or 0)
