@@ -8,13 +8,12 @@ import requests
 from tqdm import tqdm
 import einops
 from time import time
-# from changai.changai.api.v2.text2sql_pipeline_v2 import get_settings
+from changai.changai.api.v2.text2sql_pipeline_v2 import get_settings
 
-# CONFIG=get_settings()
-# BASE=f"{CONFIG['ROOT_PATH']}/changai/changai/changai/cards_v2"
+CONFIG=get_settings()
+BASE=f"{CONFIG['ROOT_PATH']}/changai/changai/changai/cards_v2"
 
-BASE="/opt/hyrin/frappe-bench/apps/changai/changai/changai/cards_v2"
-INDEX_PATH="/opt/hyrin/frappe-bench/apps/changai/changai/changai/faiss_index_hnsw_v3"
+
 
 class ReplicateEmbeddings:
     def __init__(self,api_url:str,version:str,api_token:str):
