@@ -1,12 +1,5 @@
-{# ======================= HELPERS ======================= #}
-
-{# Replace underscores with spaces #}
 {%- macro _human_label(key) -%}{{ (key|string).replace('_',' ') }}{%- endmacro -%}
-
-{# Grammar: “is” for 1, “are” otherwise #}
 {%- macro _be(n) -%}{{ 'is' if (n|string).strip() == '1' else 'are' }}{%- endmacro -%}
-
-{# Pluralize simple words (customers, invoices, etc.) #}
 {%- macro _pluralize(word) -%}
   {%- if not word -%}records
   {%- else -%}
@@ -20,14 +13,10 @@
     {%- endif -%}
   {%- endif -%}
 {%- endmacro -%}
-
-{# Choose singular/plural label based on count #}
 {%- macro _count_phrase(n, label) -%}
   {%- set lbl = label or 'record' -%}
   {{ lbl if (n|string).strip() == '1' else _pluralize(lbl) }}
 {%- endmacro -%}
-
-{# Infer doctype from keys like "customer_count", "invoice_count", etc. #}
 {%- macro _doctype_from_count_key(k) -%}
   {%- set s = (k|string)|lower -%}
   {%- if s.endswith('_count') -%}
@@ -36,10 +25,6 @@
     {{ '' }}
   {%- endif -%}
 {%- endmacro -%}
-
-{# ======================= MAIN TEMPLATE ======================= #}
-
-{# Case 1 — Data is a dict: {"customer_count": 27} #}
 {%- if data is mapping -%}
   {%- set items = data.items()|list -%}
   {%- if items|length == 1 -%}
@@ -52,8 +37,6 @@
       {{ _human_label(k)|capitalize }}: {{ v }}{% if not loop.last %}, {% endif %}
     {%- endfor -%}
   {%- endif -%}
-
-{# Case 2 — Data is a list with a single dict: [{"customer_count": 27}] #}
 {%- elif data is sequence and data|length == 1 and data[0] is mapping -%}
   {%- set record = data[0] -%}
   {%- set items = record.items()|list -%}
@@ -67,16 +50,12 @@
       {{ _human_label(k)|capitalize }}: {{ v }}{% if not loop.last %}, {% endif %}
     {%- endfor -%}
   {%- endif -%}
-
-{# Case 3 — Data is a list of multiple records (show summary) #}
 {%- elif data is sequence and data|length > 1 -%}
   I found {{ data|length }} records. Here are a few:
   {%- for rec in data[:5] %}
   - {{ rec }}
   {%- endfor %}
   {%- if data|length > 5 %} …and {{ data|length - 5 }} more.{% endif %}
-
-{# Case 4 — Fallback for string or unknown types #}
 {%- else -%}
   {{ data if data is not none and data != '' else 'No data available.' }}
 {%- endif -%}

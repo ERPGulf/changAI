@@ -4,13 +4,43 @@ from langchain_core.documents import Document
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_ollama import OllamaEmbeddings
 import faiss
+import requests
 from tqdm import tqdm
+import einops
 from time import time
-from changai.changai.api.v2.text2sql_pipeline import get_settings
+# from changai.changai.api.v2.text2sql_pipeline_v2 import get_settings
 
-CONFIG=get_settings()
-BASE=f"{CONFIG['ROOT_PATH']}/changai/changai/changai/cards_v2"
+# CONFIG=get_settings()
+# BASE=f"{CONFIG['ROOT_PATH']}/changai/changai/changai/cards_v2"
 
+BASE="/opt/hyrin/frappe-bench/apps/changai/changai/changai/cards_v2"
+INDEX_PATH="/opt/hyrin/frappe-bench/apps/changai/changai/changai/faiss_index_hnsw_v3"
+
+class ReplicateEmbeddings:
+    def __init__(self,api_url:str,version:str,api_token:str):
+        self.api_url=api_url.rstrip("/")
+        self.version=version
+        self.api_token=api_token
+    def _call_replicate(self,text:str) -> list[float]:
+        payload = {
+            "version": self.version,
+            "input": {
+                # match your Replicate model’s input schema
+                "user_input": text
+            }
+        }
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {self.api_token}",
+            "Prefer": "wait"
+        }
+        res = requests.post(self.api_url, json=payload, headers=headers, timeout=300)
+        res.raise_for_status()
+        data = res.json()
+        # assuming your model returns the embedding list in data["output"]
+        return data["output"]
+    def embed_documents(self,texts:list[str])->list[list[float]]:
+        return [self._call_replicate(t) for t in texts]
 
 def load_yaml_dir(path):
   out=[]
@@ -58,42 +88,28 @@ def _md_valid_tables(valid_for_tables):
 
 # Build a compact, natural page_content for entity cards (best for embedding)
 def _entity_page_content(md):
-    entity_type = md.get("entity", "").strip() or "Entity"
-    filters = md.get("filters", "")
-    name = md.get("id", "").strip()
-    labels = md.get("labels", []) or []
+    # 1) If embedding_text is present, use it directly (best for embeddings)
+    et = (md.get("embedding_text") or "").strip()
+    if et:
+        return et
 
-    # Keep aliases short in text (full list stays in metadata)
-    alias_sample = []
-    for lbl in labels:
-        if lbl and lbl != name and lbl not in alias_sample:
-            alias_sample.append(lbl)
-        if len(alias_sample) >= 4:
-            break
-    aliases_text = _md_serialize_labels(alias_sample)
+    # 2) Fallback: build a reasonable sentence from fields
+    entity_type = (md.get("entity_type") or "entity").strip()
+    canonical = (md.get("canonical_name") or md.get("entity_id") or "").strip()
+    aliases = md.get("aliases", []) or []
+    misspellings = md.get("misspellings", []) or []
 
-    # Optional human-readable "appears in" from valid_for_tables
-    appears = []
-    for vt in md.get("valid_for_tables", []):
-        t = vt.get("table", "")
-        if not t:
-            continue
-        # Convert ERPNext table names to human labels (simple heuristics)
-        if t.startswith("tab"):
-            human = t.replace("tab", "").strip()
-        else:
-            human = t
-        # De-duplicate while keeping order
-        if human and human not in appears:
-            appears.append(human)
-    appears_in_text = _md_serialize_labels(appears[:6])
+    alias_text = ", ".join(aliases)
+    typo_text = ", ".join(misspellings)
 
-    # Build natural text WITHOUT filters/schema syntax
-    parts = [
-        f"[ENTITY] {entity_type}" if name else f"[ENTITY] {entity_type}",
-        f"[FILTERS] {filters}"    ]
-    # Remove empties and join into one line
-    return _join(parts)
+    return _join(
+        [
+            f"{entity_type.title()}: {canonical}" if canonical else "",
+            f"Also known as {alias_text}" if alias_text else "",
+            f"Common misspellings: {typo_text}" if typo_text else "",
+        ],
+        sep=". ",
+    )
 
 # Build Docs
 
@@ -226,25 +242,18 @@ def build_docs():
         text = _entity_page_content(md)
         meta = {
             "type": "entity",
-            "subtype": md.get("type", "alias"),
-            "entity": md.get("entity"),
-            "id": md.get("id"),
-            "labels": md.get("labels", []),
-            "typo_variants": md.get("typo_variants", []),
-            "ngrams": md.get("ngrams", []),
-            "examples": md.get("examples", []),
+            "entity_type": md.get("entity_type"),
+            "entity_id": md.get("entity_id"),
+            "canonical_name": md.get("canonical_name"),
+            "aliases": md.get("aliases", []),
+            "misspellings": md.get("misspellings", []),
             "filters": md.get("filters", {}),
-            "valid_for_tables": md.get("valid_for_tables", []),
-            "match_strategy": md.get("match_strategy"),
-            "fuzzy": md.get("fuzzy"),
-            "confidence": md.get("confidence"),
-            "context": md.get("context", {}),
-            "tenant_id": md.get("tenant_id"),
-            "notes": md.get("notes", ""),
-            "description": md.get("description", "")
+            # keep notes/description if you find them useful at runtime
+            "description": md.get("description", ""),
         }
 
         master_docs.append({"text": text, "metadata": meta})
+
 
     return master_docs,schema_docs,enum_docs,glossary_docs,currency_docs,periods_docs,metric_docs,join_docs
 
@@ -265,37 +274,23 @@ all_docs = (
     metric_docs + join_docs + master_docs + enum_docs
 )
 
-# Embedding Model Init
-emb = OllamaEmbeddings(base_url=CONFIG['OLLAMA_URL'], model=CONFIG['EMBED_MODEL'])
-
-
-# Create Vector Fiass Index
 texts = [d.page_content for d in all_docs]
+print(texts[:10])
 metas = [d.metadata for d in all_docs]
+print(metas[:10])
 print(f"🚀 Generating index embeddings for {len(texts)} docs via Ollama...")
 
-embeddings = []
-for t in tqdm(texts, desc="Embedding"):
-    try:
-        vec = emb.embed_query(t)
-        embeddings.append(vec)
-    except Exception as e:
-        print(f"❌ Error embedding doc: {e}")
-        embeddings.append(np.zeros(len(embeddings[0]) if embeddings else 768))
-embeddings = np.array(embeddings).astype("float32")
+# emb = HuggingFaceEmbeddings(
+#     model_name="nomic-ai/nomic-embed-text-v1.5",
+#     model_kwargs={"trust_remote_code": True, "device": "cpu"}
+# )
 
-dim = embeddings.shape[1]
-index = faiss.IndexHNSWFlat(dim, 32)   # 32 neighbors per node
-index.hnsw.efConstruction = 200        # accuracy vs. build speed
-index.hnsw.efSearch = 64               # accuracy vs. query speed
-print("🏗️ Building HNSW index...")
-index.add(embeddings)
+# vector_store = FAISS.from_texts(
+#     texts=texts,
+#     embedding=emb,
+#     metadatas=metas
+# )
 
-vector_store = FAISS.from_texts(
-    texts=texts,
-    embedding=emb,
-    metadatas=metas
-)
+# vector_store.save_local(INDEX_PATH)
+# print(f"✅ HNSW FAISS index built and saved at: {INDEX_PATH}")
 
-vector_store.save_local(INDEX_PATH)
-print(f"✅ HNSW FAISS index built and saved at: {INDEX_PATH}")

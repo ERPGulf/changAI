@@ -1,74 +1,25 @@
-- type: alias
-  entity: Customer
-  id: "A. Williams"
+- entity_type: tabCustomer
+  entity_id: "A. Williams"
+  canonical_name: "A. Williams"
 
-  description: >
-    Customer entity for resolving natural-language mentions of “Williams”.
-    Use this card when the user’s question references this customer by name
-    (even if misspelled, shortened,informal or indirect mentions (e.g. “williams”, 
-    “willams”, “a williams”, “customer williams”, “Mr. Williams”). and apply its filters in WHERE
-    clauses for customer-linked fields (e.g., tabSales Invoice.customer).
-    Prioritize returning this card in the top results whenever such tokens appear 
-    in the query, since it represents a concrete customer entity used for 
-    filtering records.
-
-  labels:
-    - "A. Williams"
+  aliases:
     - "Williams"
     - "A Williams"
-    - "A Wms"
     - "Mr Williams"
 
-  typo_variants:
+  misspellings:
     - "willimas"
-    - "wiliams"
-    - "wlliams"
     - "wilams"
-    - "willaims"
-    - "willam"
-    - "willm"
-    - "wilim"
-    - "willims"
-    - "wiliamz"
-
-  ngrams:
-    - "A Williams"
-    - "customer williams"
-    - "client williams"
-    - "buyer williams"
-    - "mr williams"
-    - "cust williams"
+    - "wiliams"
 
   filters:
-    name: ["A. Williams"]
-    customer_name: ["A. Williams"]
-  valid_for_tables:
-    - { table: "tabCustomer",            field: "name" }
-    - { table: "tabCustomer",            field: "customer_name" }
-    - { table: "tabSales Invoice",       field: "customer" }
-    - { table: "tabSales Order",         field: "customer" }
-    - { table: "tabDelivery Note",       field: "customer" }
-    - { table: "tabQuotation",           field: "customer" }
-    - { table: "tabPayment Entry",       field: "party" }
-    - { table: "tabSales Invoice Payment", field: "parent" }
-    - { table: "tabPOS Invoice",         field: "customer" }
-    - { table: "tabCustomer Group",      field: "parent_customer" }
+    field: "customer"
+    value: "A. Williams"
 
-  match_strategy:
-    prefer_entity_when_present: true     
-    allow_partial_token_hits: true      
+  embedding_text: >
+    Customer: A. Williams. Also known as Williams, A Williams, or Mr Williams.
+    Common misspellings include willimas, wilams, and wiliams.
 
-  context:
-    tenant_id: ACME
-    notes: "Common truncations and misspellings handled."
-
-  examples:
-    - "williams invoices"
-    - "sales to a williams this month"
-    - "show sales invoices where customer williams bought dell laptops supplied by global in usd"
-
-  fuzzy: { wr_ratio_min: 82, token_set_min: 78 }
-  confidence: 0.93
 
 
 - type: alias

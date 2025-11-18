@@ -16,6 +16,19 @@ def save_message_doc(session_id:str,message_type:str,content:str):
     return doc.name
 
 
+def save_message_doc(session_id:str,message_type:str,content:str):
+
+    doc=frappe.get_doc({
+        "doctype":"ChangAI Chat History",
+        "session_id": session_id,
+        "message_type": message_type,
+        "content": content or ""
+    })
+    doc.insert(ignore_permissions=True)
+    frappe.db.commit()
+    return doc.name
+
+
 @frappe.whitelist(allow_guest=True)
 def save_turn(session_id:str,user_text:str,bot_text:str):
     if user_text:
@@ -23,6 +36,51 @@ def save_turn(session_id:str,user_text:str,bot_text:str):
     if bot_text:
         ai_row=save_message_doc(session_id,"ai",bot_text)
     return ai_row,user_row
+
+
+@frappe.whitelist(allow_guest=True)
+def save_turn_2(session_id: str, user_text: str = None, bot_text: str = None):
+    doc_name = frappe.db.exists("ChangAI Chat History", {"session_id": session_id})
+
+    current_value = ""
+    if doc_name:
+        current_value = frappe.db.get_value(
+            "ChangAI Chat History",
+            doc_name,
+            "content"
+        ) or ""
+
+    lines = []
+    if current_value:
+        lines.append(current_value)
+    if user_text:
+        lines.append(json.dumps({"human": user_text}, ensure_ascii=False))
+    if bot_text:
+        lines.append(json.dumps({"ai": bot_text}, ensure_ascii=False))
+
+    new_content = "\n".join(lines)
+
+    if doc_name:
+        # Update directly, bypassing user-level permission checks
+        frappe.db.set_value(
+            "ChangAI Chat History",
+            doc_name,
+            "content",
+            new_content,
+            update_modified=True
+        )
+        frappe.db.commit()
+        return doc_name
+    else:
+        doc = frappe.get_doc({
+            "doctype": "ChangAI Chat History",
+            "session_id": session_id,
+            "content": new_content
+        })
+        doc.insert(ignore_permissions=True)
+        frappe.db.commit()
+        return doc.name
+
 
 
 @frappe.whitelist(allow_guest=True)
@@ -34,6 +92,20 @@ def get_chat_history(session_id):
         rec={item["message_type"]:item["content"]}
         result.append(rec)
     return result
+
+@frappe.whitelist(allow_guest=True)
+def get_chat_history_1(session_id):
+    doc_name = frappe.db.exists("ChangAI Chat History", {"session_id": session_id})
+    if not doc_name:
+        return ""
+    # Use db.get_value instead of get_doc to avoid read perm issues
+    current_value = frappe.db.get_value(
+        "ChangAI Chat History",
+        doc_name,
+        "content"
+    )
+    return current_value or ""
+
 # PROMPT_FOLLOWUP="""
 # You are a Query Rewriter.
 
@@ -59,29 +131,51 @@ def get_chat_history(session_id):
 
 # """
 
-PROMPT_FOLLOWUP="""You are ChangAI, an ERP query rewriter.
-YOUR ONLY TASK:
+PROMPT_FOLLOWUP = """You are ChangAI, an ERP query rewriter.
+
+Task:
 Rewrite the latest user message into a complete standalone question.
-FOLLOW-UP RULE:
-- If the message is a follow-up, rewrite it using all necessary context from the chat history.
-- If it is NOT a follow-up, return it exactly as it is.
-HARD RULES:
-- Do NOT answer the user.
-- Do NOT provide dates, numbers, or results.
-- Do NOT add any information that is not in the user’s text or chat history.
-- ALWAYS preserve all active filters and entities from earlier in the chat history (customer, supplier, item, date range, status, etc.).
-- Do NOT say anything except the rewritten question.
-- Do NOT include explanations, reasoning, SQL, or markdown.
-- Output MUST be only one clean rewritten question as plain text.
-If the model tries to answer, refuse and output only the rewritten question.
-User:
+
+Chat history:
+- It is a list of JSON-like lines.
+- Use ONLY the human messages as context.
+- IGNORE all ai messages completely (do not copy their wording or numbers).
+
+Rules:
+- If the latest message is a follow-up, expand it using only human messages from history.
+- If it is NOT a follow-up, return it unchanged.
+- Do NOT answer the question.
+- Do NOT provide results, counts, or dates.
+- Do NOT add information that is not present in the human messages or the latest message.
+- Output exactly ONE plain-text question, no explanations, no SQL, no markdown.
+- Do not use ai message for formatting the latest question.
+
 Chat history:
 {rows}
+
 Latest user message:
 {qstn}
-Return only the final rewritten question as plain text."""
+"""
+
+
 @frappe.whitelist(allow_guest=True)
 def inject_prompt(user_qstn,session_id):
-    rows=get_chat_history(session_id)
+    rows=get_chat_history_1(session_id)
     prompt=PROMPT_FOLLOWUP.format(rows=rows,qstn=user_qstn)
     return prompt
+
+
+@frappe.whitelist(allow_guest=True)
+def save_logs(user_question, formatted_q, context, sql, val, tries, err, formatted_result):
+    doc = frappe.new_doc("ChangAI Logs")
+    doc.user_question = user_question
+    doc.rewritten_question = formatted_q
+    doc.schema_retrieved = context
+    doc.sql_generated = sql
+    doc.validation = val
+    doc.tries = tries
+    doc.error = err
+    doc.formatted_result = formatted_result
+    doc.insert(ignore_permissions=True)
+    frappe.db.commit()
+    return doc.name

@@ -22,14 +22,13 @@ from typing import Dict
 from langgraph.checkpoint.memory import MemorySaver
 # from langgraph.checkpoint.sqlite import SqliteSaver
 from langchain_core.chat_history import InMemoryChatMessageHistory
-from changai.changai.api.v2.store_chats import save_turn,save_message_doc,inject_prompt
+from changai.changai.api.v2.store_chats import save_turn_2,save_message_doc,inject_prompt
 non_erp_res=""
 MAX_TOKEN_LIMIT=1500
 MAX_WINDOW_TURNS=10
 
 __vector_store = None
 
-@frappe.whitelist(allow_guest=True)
 def get_settings():
     settings=frappe.get_single("ChangAI Settings")
 
@@ -56,7 +55,7 @@ RETRY_LIMIT=2
 INDEX_PATH = f"{CONFIG['ROOT_PATH']}/changai/changai/changai/faiss_index_hnsw_v2"
 MAPPING_SCHEMA_PATH = f"{CONFIG['ROOT_PATH']}/changai/changai/changai/api/v2/metaschema_clean_v2.json"
 SQL_PROMPT_PATH=f"{CONFIG['ROOT_PATH']}/changai/changai/changai/prompts/sql_prompt.txt"
-FORMAT_PROMPT_PATH=f"{CONFIG['ROOT_PATH']}/changai/changai/changai/prompts/formatting_prompt.txt"
+FORMAT_PROMPT_PATH=f"{CONFIG['ROOT_PATH']}/changai/changai/changai/prompts/user_friendly_prompt.txt"
 NON_ERP_PROMPT_PATH=f"{CONFIG['ROOT_PATH']}/changai/changai/changai/prompts/non_erp_prompt.txt"
 TEMPLATE_PATH=f"{CONFIG['ROOT_PATH']}/changai/changai/changai/templates/conversation_template_v2.j2"
 BUSINESS_KEYWORDS_PATH = f"{CONFIG['ROOT_PATH']}/changai/changai/changai/api/v2/business_keywords_v1.json"
@@ -64,7 +63,7 @@ BUSINESS_KEYWORDS_PATH = f"{CONFIG['ROOT_PATH']}/changai/changai/changai/api/v2/
 def call_model(prompt):
     return remote_llm_request(prompt) if CONFIG["REMOTE"] else local_llm_request(prompt)
 
-
+@frappe.whitelist(allow_guest=True)
 def call_embedder(question):
     return remote_embedder_request(question) if CONFIG["REMOTE"] else local_embedder_request(question)
 
@@ -101,7 +100,7 @@ def remote_llm_request(prompt: str) -> str:
         return str(response["output"][0]).strip()
     return "Error: No output in response"
 
-
+@frappe.whitelist(allow_guest=True)
 def remote_embedder_request(formatted_q: str) -> Union[list, str]:
     payload = {"version": CONFIG["EMBED_VERSION_ID"], "input": {"user_input": formatted_q}}
     headers = {
@@ -111,6 +110,7 @@ def remote_embedder_request(formatted_q: str) -> Union[list, str]:
     }
     result = None
     response = _post_json(CONFIG["URL"], headers, payload)
+    return {"Result":response}
     if response and "output" in response:
         result = response["output"]
     return result or "Error: No output in response"
@@ -291,35 +291,30 @@ def validate_sql_against_mapping(sql_text: str, mapping: Dict[str, List[str]], d
         result["details"]["parse_error"] = str(e)
         return result
 
-    # Collect referenced tables (as they appear in SQL, including backticks)
     tables = []
     for t in ast.find_all(exp.Table):
         name = t.name  # identifier only (no catalog/db)
         if name:
             tables.append(name)
 
-    # De-dup & check tables
     tables = list(dict.fromkeys(tables))
     unknown_tables = [t for t in tables if t not in mapping]
     if unknown_tables:
         result["ok"] = False
         result["unknown_tables"] = unknown_tables
 
-    # Build quick reverse index for column → tables that contain it
     col_to_tables = {}
     for tbl, cols in mapping.items():
         for c in cols:
             col_to_tables.setdefault(c, set()).add(tbl)
 
-    # Collect column refs
-    # If column has qualifier (table alias/name), use it; else check ambiguity
-    from_tables = set(tables)  # tables actually in this query’s FROM/JOIN
+    from_tables = set(tables)
     ambiguous = set()
     unknown_cols = []
 
     for col in ast.find_all(exp.Column):
         col_name = col.name
-        qualifier = col.table  # table/alias (if present)
+        qualifier = col.table
         if not col_name:
             continue
 
@@ -327,7 +322,6 @@ def validate_sql_against_mapping(sql_text: str, mapping: Dict[str, List[str]], d
             qual = str(qualifier)
             base_table_for_alias = None
             for j in ast.find_all(exp.Alias):
-                # not every Alias is a table alias; but sqlglot uses TableAlias for FROM
                 pass
             table_name = qual.strip("`")
             if table_name in mapping:
@@ -468,7 +462,6 @@ def hits_to_schema_context(
 
         elif dtype == "enum":
             tbl = md.get("table") or _parse_tag(txt, "TABLE")
-            # field may be in metadata or embedded in [ENUM] table.field
             fld = md.get("field")
             if not fld:
                 ef = _parse_tag(txt, "ENUM")
@@ -627,7 +620,7 @@ def execute_query(query:str):
 # def format_data(qstn,sql,data):
 #     payload={
 #         "model":"gemma3:270m",
-#         "prompt":FRIENDLY_PROMPT.format(question=qstn,sql=sql,data=data),
+#         "prompt":user_friendly_prompt.format(question=qstn,sql=sql,data=data),
 #         "stream":False
 #     }
 #     try:
@@ -672,7 +665,7 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
         non_erp_res = (final.get("non_erp_res") or "").strip()
         formatted_q = (final.get("formatted_q") or "").strip()
         try:
-            save_turn(session_id=chat_id,
+            save_turn_2(session_id=chat_id,
                     user_text=formatted_q,
                     bot_text=non_erp_res)
         except Exception as e:
@@ -704,9 +697,10 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
     err = final.get("error")
     formatted_result = format_data_conversationally(result)
     try:
-        save_turn(session_id=chat_id,
+        save_turn_2(session_id=chat_id,
                     user_text=formatted_q,
                     bot_text=formatted_result)
+        save_logs(user_question,formatted_q,context,sql,val,tries,err,result,formatted_result)
     except Exception as e:
         return e
     return {

@@ -1,4 +1,3 @@
-// Insert chatbot HTML template into body
 document.addEventListener('DOMContentLoaded', () => {
     const chatbotHTML = `
   <button id="chatbot-toggler" class="chatbot-toggler">
@@ -121,13 +120,11 @@ document.addEventListener('DOMContentLoaded', () => {
         renderMessages();
         scrollToBottom();
 
-        // Add placeholder message
         const thinkingMsg = { role: 'model', text: 'Thinking...' };
         chatHistory.push(thinkingMsg);
         renderMessages();
         scrollToBottom();
 
-        // Set warming message timeout
         const warmingTimeout = setTimeout(() => {
             if (thinkingMsg.text === 'Thinking...') {
                 thinkingMsg.text = 'Model is warming up, please wait...⌛';
@@ -136,7 +133,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }, 12000);
 
-        // Call bot response
         generateBotResponse(message, thinkingMsg, warmingTimeout);
     }
 
@@ -149,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     "Content-Type": "application/json",
                     "X-Frappe-CSRF-Token": frappe.csrf_token
                 },
-                body: JSON.stringify({ user_question: userMsg,chat_id:"sid_3" }),
+                body: JSON.stringify({ user_question: userMsg,chat_id:"sid_4" }),
             };
 
             const res = await fetch(API_URL, reqOpts);
@@ -161,21 +157,12 @@ document.addEventListener('DOMContentLoaded', () => {
             clearTimeout(warmingTimeout);
 
             if (data.message) {
-                thinkingMsg.text = data.message?.Bot;
+                result =(data.message?.Bot || '').trim();
+                thinkingMsg.text = result
             }
-            //  else {
-            //     const res = await fetch(API_URL, reqOpts);
-            //     const data = await res.json();
-            //     thinkingMsg.text = data.message?.Bot;
-            // }
             debugLogs.push({
                 user: userMsg,
-                response: data.message,
-                // doctype: data.message?.doctype,
-                // top_fields: data.message?.top_fields,
-                // fields: data.message?.fields,
-                // query: data.message?.query,
-                // data: data.message?.data
+                response:data.message
             });
 
             renderMessages();
