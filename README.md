@@ -22,9 +22,8 @@ It retrieves schema information dynamically, validates SQL against real ERP meta
 ## 2. System Architecture
 
 <p align="center">
-  <img src="changai/changai/sys_arc_v2.png" width="750" height="450" alt="ChangAI v2 - RAG + LangGraph Overview">
+  <img src="changai/changai/images/sys_arc_v2.png" width="750" height="450" alt="ChangAI v2 - RAG + LangGraph Overview">
 </p>
-
 ---
 
 ## 3. Retrieval Layer (RAG)

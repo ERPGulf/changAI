@@ -164,7 +164,7 @@ def inject_prompt(user_qstn,session_id):
     prompt=PROMPT_FOLLOWUP.format(rows=rows,qstn=user_qstn)
     return prompt
 
-
+# Debugging
 @frappe.whitelist(allow_guest=True)
 def save_logs(user_question, formatted_q, context, sql, val, tries, err, formatted_result):
     doc = frappe.new_doc("ChangAI Logs")
