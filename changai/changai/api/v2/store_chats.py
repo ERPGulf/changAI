@@ -142,6 +142,7 @@ Chat history:
 - IGNORE all ai messages completely (do not copy their wording or numbers).
 
 Rules:
+- check at the lastest message compare with cht history and check if it can be a foloup if u feel like a followup thenr ewrite to a complete question based on history or previous messages.becasue soemtime s may ask like hw amny customers then after ask like active? or names ? these are not normal chat but they aree refing preious chat 
 - If the latest message is a follow-up, expand it using only human messages from history.
 - If it is NOT a follow-up, return it unchanged.
 - Do NOT answer the question.
@@ -164,18 +165,13 @@ def inject_prompt(user_qstn,session_id):
     prompt=PROMPT_FOLLOWUP.format(rows=rows,qstn=user_qstn)
     return prompt
 
-# Debugging
-@frappe.whitelist(allow_guest=True)
-def save_logs(user_question, formatted_q, context, sql, val, tries, err, formatted_result):
-    doc = frappe.new_doc("ChangAI Logs")
-    doc.user_question = user_question
-    doc.rewritten_question = formatted_q
-    doc.schema_retrieved = context
-    doc.sql_generated = sql
-    doc.validation = val
-    doc.tries = tries
-    doc.error = err
-    doc.formatted_result = formatted_result
-    doc.insert(ignore_permissions=True)
-    frappe.db.commit()
-    return doc.name
+
+def normalize(value):
+    if isinstance(value, str):
+        try:
+            value = json.loads(value)
+        except:
+            pass
+    if isinstance(value, (list, dict)):
+        value = json.dumps(value)
+    return value

@@ -34,12 +34,13 @@ def get_settings():
 
     langsmith_tracing = "true" if settings.langsmith_tracing else "false"
     config={
-        # "LANGSMITH_TRACING" : langsmith_tracing,
-        # "LANGSMITH_ENDPOINT" : settings.langsmith_endpoint,
-        # "LANGSMITH_API_KEY" : settings.langsmith_api_key,
-        # "LANGSMITH_PROJECT" : settings.langsmith_project,
+        "LANGSMITH_TRACING" : langsmith_tracing,
+        "LANGSMITH_ENDPOINT" : settings.langsmith_endpoint,
+        "LANGSMITH_API_KEY" : settings.langsmith_api_key,
+        "LANGSMITH_PROJECT" : settings.langsmith_project,
         "ROOT_PATH":settings.root_path,
         "URL":settings.server_url if settings.remote else settings.ollama_url,
+        # "URL": (settings.deploy if settings.deploy else settings.server_url) if settings.remote else settings.ollama_url,
         "LLM":settings.llm,
         "EMBED_MODEL":settings.embedder,
         "RETAIN_MEM":settings.retain_memory,
@@ -47,6 +48,7 @@ def get_settings():
         "EMBED_VERSION_ID":settings.embedder_version_id,
         "API_TOKEN":settings.api_token,
         "REMOTE": bool(settings.remote),
+        "deploy_url":settings.deploy_url,
     }
     return config
 
@@ -75,7 +77,7 @@ def _post_json(url: str, headers: Dict[str,str], payload: Dict[str,Any], timeout
         return res.json()
     except Exception as e:
         frappe.log_error(f"Request failed: {e}", "ChangAI HTTP Error")
-        return None
+        return str(e)
 
 
 def local_llm_request(prompt: str) -> str:
@@ -87,18 +89,165 @@ def local_llm_request(prompt: str) -> str:
     return "Error: Failed to get response from local LLM."
 
 
+def return_headers():
+    return {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {CONFIG['API_TOKEN']}",
+        }
+@frappe.whitelist(allow_guest=True)
+def create_llm_prediction(prompt:str):
+    try:
+        payload = {
+            "version": CONFIG["LLM_VERSION_ID"],
+            "input": {"user_input": prompt}
+        }
+        resp = requests.post(
+            CONFIG["URL"],
+            json=payload,
+            headers=return_headers(),
+            timeout=15,
+        )
+        if resp.status_code not in (200,201):
+            frappe.log_error(resp.text,"LLM Creation prediction error")
+            return{"ok":False,"error": f"Submit failed: {resp.status_code}"}
+        data=resp.json()
+        pred_id=data["id"]
+        status=data.get("status")
+        if not pred_id:
+            return {"ok":False,"Error":"Missing prediction id from Replicate"}
+        return{"ok":True,"pred_id":pred_id,"status":status}
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), "LLM Create Prediction Exception")
+        return {"ok":False,"Error":str(e)}
+
+@frappe.whitelist(allow_guest=True)
+def get_llm_prediction(pred_id:str):
+    try:
+        poll_url=f"{CONFIG['URL']}/{pred_id}"
+        resp=requests.get(poll_url,headers=return_headers(),timeout=10)
+        if resp.status_code!=200:
+            frappe.log_error(resp.text,"LLM Poll Prediction Error")
+            return {
+                "ok":False,
+                "error":f"Poll failed: {resp.status_code}"
+            }
+        data=resp.json()
+        status=data.get("status")
+        output=data.get("output")
+        error=data.get("error")
+        return{
+            "ok":True,
+            "status":status,
+            "output":output,
+            "error":error
+
+        }
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), "LLM Poll Prediction Exception")
+        return {"ok": False, "error": str(e)}
+
+
+# def remote_llm_request_1(prompt: str) -> str:
+#     payload = {"version": CONFIG["LLM_VERSION_ID"], "input": {"user_input": prompt}}
+#     headers = {
+#         "Content-Type": "application/json",
+#         "Prefer": "wait",
+#         "Authorization": f"Bearer {CONFIG['API_TOKEN']}",
+#     }
+#     result = None
+#     response = _post_json("https://api.replicate.com/v1/deployments/farook/my-changai-qwen3-deploy/predictions", headers, payload)
+#     if response and isinstance(response.get("output"), list) and response["output"]:
+#         return str(response["output"][0]).strip()
+#     return "Error: No output in response"
+
+
+@frappe.whitelist(allow_guest=True)
 def remote_llm_request(prompt: str) -> str:
-    payload = {"version": CONFIG["LLM_VERSION_ID"], "input": {"user_input": prompt}}
+    payload = {
+        "version": CONFIG["LLM_VERSION_ID"],
+        "input": {"user_input": prompt}
+    }
+
     headers = {
         "Content-Type": "application/json",
         "Prefer": "wait",
         "Authorization": f"Bearer {CONFIG['API_TOKEN']}",
     }
-    result = None
-    response = _post_json(CONFIG["URL"], headers, payload)
-    if response and isinstance(response.get("output"), list) and response["output"]:
-        return str(response["output"][0]).strip()
-    return "Error: No output in response"
+
+    # First request: create job
+    response = _post_json(CONFIG["URL"], headers, payload,timeout=100)
+    if not response or "id" not in response:
+        return "Error: Failed to create prediction"
+
+    pred_id = response["id"]
+
+    # Second request: poll job (FIXED: correct header)
+    poll_url = f"{CONFIG['URL']}/{pred_id}"
+    poll = requests.get(poll_url, headers=headers,timeout=80).json()
+
+    status = poll.get("status")
+    output = poll.get("output")
+
+    if status == "succeeded" and output:
+        return output
+
+    return f"Error:Model ended with status {status}"
+
+import time
+
+@frappe.whitelist(allow_guest=True)
+def remote_llm_request_deploy_test(prompt: str) -> str:
+    payload = {
+        "input": {"user_input": prompt}
+    }
+
+    headers = {
+        "Content-Type": "application/json",
+        "Prefer": "wait",
+        "Authorization": f"Bearer {CONFIG['API_TOKEN']}",
+    }
+
+    # First request: create job
+    try:
+        # res = requests.post(CONFIG["deploy_url"], headers=headers, json=payload, timeout=120)
+        # res.raise_for_status()
+        # data=res.json()
+        data=_post_json(CONFIG["deploy_url"], headers=headers, payload=payload, timeout=120)
+    except Exception as e:
+        return {"Error":str(e)}
+    if not data or "urls" not in data:
+        return "Error: Failed to create prediction"
+
+    urls=(data or {}).get("urls") or {}
+    get_url=urls.get("get")
+    if not get_url:
+        return {"Error": f"Failed to create prediction, response: {data}"}
+    terminal_states = {"succeeded", "failed", "canceled"}
+    poll_interval=3
+    max_waits_sec=300
+    dead_line=time.time()+max_waits_sec
+    last_status=None
+    while time.time()<dead_line:
+        try:
+            poll_res = requests.get(get_url, headers=headers,timeout=120)
+            poll_res.raise_for_status()
+            poll=poll_res.json()
+        except Exception as e:
+            return {"Error":str(e)}
+        status = poll.get("status")
+        output = poll.get("output")
+        last_status=status
+        if status in terminal_states:
+            if status=="succeeded":
+                return output
+            else:
+                return {
+                    "Error":f"Model ended with status:{status}",
+                    "details":poll
+                }
+        time_sleep(poll_interval)
+    return {"Error":f"Error:Model ended with status {last_status}","details":poll}
+
 
 @frappe.whitelist(allow_guest=True)
 def remote_embedder_request(formatted_q: str) -> Union[list, str]:
@@ -110,7 +259,6 @@ def remote_embedder_request(formatted_q: str) -> Union[list, str]:
     }
     result = None
     response = _post_json(CONFIG["URL"], headers, payload)
-    return {"Result":response}
     if response and "output" in response:
         result = response["output"]
     return result or "Error: No output in response"
@@ -356,57 +504,59 @@ def validate_sql_against_mapping(sql_text: str, mapping: Dict[str, List[str]], d
     result["details"]["from_tables"] = tables
     return result
 
-
 def hits_to_schema_context(
-    hits: Union[List[Any],Dict, str],
+    hits: Union[List[Any], Dict, str],
     title: str = "SCHEMA CONTEXT",
     max_fields_per_table: int = 20,
     sort_sections: bool = True,
     show_entity_filters_yaml: bool = True
 ) -> str:
 
+    if isinstance(hits, dict) and "message" in hits and isinstance(hits["message"], list):
+        hits = hits["message"]
+
     def _to_txt_md(doc: Any) -> Tuple[str, Dict]:
-        if hasattr(doc, "page_content"):
-            return getattr(doc, "page_content", "") or "", getattr(doc, "metadata", {}) or {}
-        # dict
         if isinstance(doc, dict):
             return doc.get("text", "") or "", doc.get("metadata", {}) or {}
-        # str
+        # plain string
         if isinstance(doc, str):
             return doc, {}
         return "", {}
 
-    docs = []
+    docs: List[Tuple[str, Dict]] = []
     if isinstance(hits, (dict, str)) or hasattr(hits, "page_content"):
         docs.append(_to_txt_md(hits))
     else:
+        # list of docs
         for d in (hits or []):
             docs.append(_to_txt_md(d))
 
-    # # --- helpers ---
+    # --- helpers ---
     def _parse_tag(txt: str, tag: str) -> str:
         m = re.search(rf"\[{re.escape(tag)}\]\s*(.+?)(?:\s*\||\s*$)", txt or "")
         return m.group(1).strip() if m else ""
 
     def _infer_type(txt: str) -> str:
-        if not (txt or "").startswith("["): return ""
+        if not (txt or "").startswith("["):
+            return ""
         order = [
-            ("TABLE","table"), ("FIELD","field"), ("JOIN","join"),
-            ("METRIC","metric"), ("ENUM","enum"), ("PERIOD","period"),
-            ("CURRENCY","currency"), ("ENTITY","entity")
+            ("TABLE", "table"), ("FIELD", "field"), ("JOIN", "join"),
+            ("METRIC", "metric"), ("ENUM", "enum"), ("PERIOD", "period"),
+            ("CURRENCY", "currency"), ("ENTITY", "entity")
         ]
         for tg, tp in order:
-            if txt.startswith(f"[{tg}]"): return tp
+            if txt.startswith(f"[{tg}]"):
+                return tp
         return ""
 
-    # # --- accumulators ---
+    # --- accumulators ---
     tables: List[str] = []
     fields_by_table: Dict[str, List[str]] = OrderedDict()
     joins: List[str] = []
     metrics: List[Tuple[str, str, str]] = []  # (metric_name, expression, table)
     periods: List[str] = []
     currencies: List[str] = []
-    enums: OrderedDict[str, str] = OrderedDict()
+    enums: "OrderedDict[str, str]" = OrderedDict()
     entities: List[Tuple[str, Dict]] = []
 
     def _add_table(t: str):
@@ -444,7 +594,8 @@ def hits_to_schema_context(
             mname = md.get("name") or _parse_tag(txt, "METRIC")
             mexpr = md.get("expression") or _parse_tag(txt, "EXPR")
             mtbl  = md.get("table") or _parse_tag(txt, "TABLE")
-            if mtbl: _add_table(mtbl)
+            if mtbl:
+                _add_table(mtbl)
             if mname:
                 tup = (mname, mexpr or "", mtbl or "")
                 if tup not in metrics:
@@ -468,7 +619,8 @@ def hits_to_schema_context(
                 if "." in ef:
                     tbl = tbl or ef.split(".", 1)[0].strip()
                     fld = ef.split(".", 1)[1].strip()
-            if tbl: _add_table(tbl)
+            if tbl:
+                _add_table(tbl)
             if tbl and fld:
                 key = f"{tbl}.{fld}"
                 vals = md.get("values")
@@ -484,7 +636,6 @@ def hits_to_schema_context(
             ent_name = md.get("entity") or _parse_tag(txt, "ENTITY") or "Entity"
             filt = md.get("filters")
             if filt is None:
-                # parse [FILTERS] key=v1,v2; key2=v3
                 filt_txt = _parse_tag(txt, "FILTERS")
                 filt = {}
                 if filt_txt:
@@ -502,7 +653,7 @@ def hits_to_schema_context(
             if t not in tables:
                 tables.append(t)
         for t in fields_by_table:
-            fields_by_table[t] = sorted(fields_by_table[t], key=lambda s: s.split(".",1)[1])
+            fields_by_table[t] = sorted(fields_by_table[t], key=lambda s: s.split(".", 1)[1])
         joins.sort()
         metrics.sort(key=lambda x: x[0])
         periods.sort()
@@ -644,6 +795,77 @@ def format_data_conversationally(user_data):
     return template.render(data=user_data)
 
 
+def save_logs(user_question=None, formatted_q=None, context=None, sql=None, val=None,result=None, tries=None, err=None,formatted_result=None):
+    if isinstance(val,str):
+        val=json.loads(val)
+    if isinstance(tries,str):
+        tries=json.loads(tries)
+    if isinstance(err,str):
+        err=json.loads(err)
+    if isinstance(result,str):
+        result=json.loads(result) 
+    if isinstance(result, (list, dict)):
+        result = json.dumps(result, default=str)    
+    doc = frappe.new_doc("ChangAI Logs")
+    doc.user_question = user_question
+    doc.rewritten_question = formatted_q
+    doc.schema_retrieved = context
+    doc.sql_generated = sql
+    doc.validation = val
+    doc.tries = tries
+    doc.error = err
+    doc.result = result
+    doc.formatted_result = formatted_result
+    doc.insert(ignore_permissions=True)
+    frappe.db.commit()
+    return doc.name
+
+
+def save_logs(
+    user_question=None,
+    formatted_q=None,
+    context=None,
+    sql=None,
+    val=None,
+    result=None,
+    tries=None,
+    err=None,
+    formatted_result=None,
+):
+    # helper: convert dict/list to JSON string for DocType fields
+    def to_json_if_needed(v):
+        if isinstance(v, (dict, list)):
+            return json.dumps(v, default=str)
+        return v
+
+    # These three are dict/list in your pipeline → convert to JSON
+    val = to_json_if_needed(val)        # validation dict
+    result = to_json_if_needed(result)  # query result list
+    err = to_json_if_needed(err)        # sometimes dict/str, safe
+
+    # context and formatted_result are already strings in your code,
+    # but this is safe even if you later change them to dict/list
+    context = to_json_if_needed(context)
+    formatted_result = to_json_if_needed(formatted_result)
+
+    # tries is int; Frappe will accept int for Int fields.
+    # If your DocField is Data, you can do: tries = str(tries) instead.
+    doc = frappe.new_doc("ChangAI Logs")
+    doc.user_question = user_question
+    doc.rewritten_question = formatted_q
+    doc.schema_retrieved = context
+    doc.sql_generated = sql
+    doc.validation = val
+    doc.tries = tries
+    doc.error = err
+    doc.result = result
+    doc.formatted_result = formatted_result
+
+    doc.insert(ignore_permissions=True)
+    frappe.db.commit()
+    return doc.name
+
+
 # Run
 @frappe.whitelist(allow_guest=True)
 def run_text2sql_pipeline(user_question: str, chat_id: str):
@@ -668,9 +890,15 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
             save_turn_2(session_id=chat_id,
                     user_text=formatted_q,
                     bot_text=non_erp_res)
+            save_logs(user_question=user_question,formatted_q=formatted_q,result=non_erp_res)
+
         except Exception as e:
             return e
-        return {"Bot": non_erp_res}
+        return {
+            "Question":user_question,
+            "Formatted-Question":formatted_q,
+            "Bot": non_erp_res,
+        }
     sql = (final.get("sql") or "").strip()
     formatted_q = (final.get("formatted_q") or "").strip()
     val = final.get("validation") or {}
@@ -700,7 +928,7 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
         save_turn_2(session_id=chat_id,
                     user_text=formatted_q,
                     bot_text=formatted_result)
-        save_logs(user_question,formatted_q,context,sql,val,tries,err,result,formatted_result)
+        save_logs(user_question=user_question,formatted_q=formatted_q,context=context,sql=sql,val=val,result=result,formatted_result=formatted_result)
     except Exception as e:
         return e
     return {
@@ -711,7 +939,7 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
         "Validation": val,
         "Tries": tries,
         "Error": err,
-        "Result": result,
+        # "Result": result,
         "Bot": formatted_result,
     }
 

@@ -4,42 +4,24 @@ from langchain_core.documents import Document
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_ollama import OllamaEmbeddings
 import faiss
-import requests
 from tqdm import tqdm
-import einops
 from time import time
-from changai.changai.api.v2.text2sql_pipeline_v2 import get_settings
+# from changai.changai.api.v2.text2sql_pipeline import get_settings
+import os
+from pathlib import Path
+from langchain_community.docstore.in_memory import InMemoryDocstore
 
 CONFIG=get_settings()
 BASE=f"{CONFIG['ROOT_PATH']}/changai/changai/changai/cards_v2"
+def get_settings():
+    settings=frappe.get_single("ChangAI Settings")
 
-
-
-class ReplicateEmbeddings:
-    def __init__(self,api_url:str,version:str,api_token:str):
-        self.api_url=api_url.rstrip("/")
-        self.version=version
-        self.api_token=api_token
-    def _call_replicate(self,text:str) -> list[float]:
-        payload = {
-            "version": self.version,
-            "input": {
-                # match your Replicate model’s input schema
-                "user_input": text
-            }
-        }
-        headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {self.api_token}",
-            "Prefer": "wait"
-        }
-        res = requests.post(self.api_url, json=payload, headers=headers, timeout=300)
-        res.raise_for_status()
-        data = res.json()
-        # assuming your model returns the embedding list in data["output"]
-        return data["output"]
-    def embed_documents(self,texts:list[str])->list[list[float]]:
-        return [self._call_replicate(t) for t in texts]
+    langsmith_tracing = "true" if settings.langsmith_tracing else "false"
+    config={
+        "ROOT_PATH":settings.root_path,
+        "EMBED_MODEL":settings.embedder,
+    }
+    return config
 
 def load_yaml_dir(path):
   out=[]
@@ -273,23 +255,66 @@ all_docs = (
     metric_docs + join_docs + master_docs + enum_docs
 )
 
+
+# Create Vector Fiass Index
 texts = [d.page_content for d in all_docs]
-print(texts[:10])
 metas = [d.metadata for d in all_docs]
-print(metas[:10])
-print(f"🚀 Generating index embeddings for {len(texts)} docs via Ollama...")
 
-# emb = HuggingFaceEmbeddings(
-#     model_name="nomic-ai/nomic-embed-text-v1.5",
-#     model_kwargs={"trust_remote_code": True, "device": "cpu"}
-# )
+INDEX_DIR = f"{CONFIG['ROOT_PATH']}/changai/changai/changai/api/v2/faiss_hnsw_vector_index"
+INDEX_NAME = "index"
 
-# vector_store = FAISS.from_texts(
-#     texts=texts,
-#     embedding=emb,
-#     metadatas=metas
-# )
 
-# vector_store.save_local(INDEX_PATH)
-# print(f"✅ HNSW FAISS index built and saved at: {INDEX_PATH}")
+emb = HuggingFaceEmbeddings(
+    model_name=CONFIG["EMBED_MODEL"],
+    model_kwargs={"device": "cpu", "trust_remote_code": True},
+    encode_kwargs={"normalize_embeddings": True},
+)
+
+print("🧠 Computing embeddings...")
+embeddings = []
+for t in tqdm(texts, desc="Embedding"):
+    try:
+        vec = emb.embed_query(t)  # also fine: emb.embed_documents()
+        embeddings.append(vec)
+    except Exception as e:
+        print(f"❌ Error embedding text: {e}")
+        # fallback vector
+        embeddings.append(np.zeros(768))
+
+embeddings = np.array(embeddings).astype("float32")
+print("✅ Embeddings computed:", embeddings.shape)
+
+dim = embeddings.shape[1]
+print(f"🏗️ Building HNSW index (dim={dim}, count={len(embeddings)})...")
+
+index = faiss.IndexHNSWFlat(dim, 32)      # 32 neighbors per node
+index.hnsw.efConstruction = 200
+index.hnsw.efSearch = 64
+
+index.add(embeddings)
+print("✅ HNSW FAISS index built")
+
+
+
+docs = [
+    Document(page_content=text, metadata=meta)
+    for text, meta in zip(texts, metas)
+]
+
+# Create docstore + mapping
+docstore = InMemoryDocstore({str(i): doc for i, doc in enumerate(docs)})
+index_to_docstore_id = {i: str(i) for i in range(len(docs))}
+
+# Now create LangChain FAISS wrapper
+vector_store = FAISS(
+    embedding_function=emb,
+    index=index,                       # <-- THIS is where FAISS index must exist
+    docstore=docstore,
+    index_to_docstore_id=index_to_docstore_id,
+)
+
+os.makedirs(INDEX_DIR, exist_ok=True)
+vector_store.save_local(INDEX_DIR, index_name=INDEX_NAME)
+
+print(f"🎉 DONE! Saved FAISS HNSW index at: {INDEX_DIR}")
 
