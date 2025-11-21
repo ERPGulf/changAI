@@ -1,8 +1,9 @@
-from typing import TypedDict,List,Dict,Any,Optional
+from typing import List,Dict,Any,Optional
 from langgraph.graph import StateGraph,END
 # from langgraph_checkpoint_redis import RedisSaver
 from langgraph.checkpoint.memory import MemorySaver   #Short Term Memory
 from collections import OrderedDict
+from typing_extensions import TypedDict 
 from typing import Any, Dict, Iterable, List, Tuple, Union
 # from changai.changai.api.build_docs import search_faiss, fill_sql_prompt
 from sqlglot import exp
@@ -23,6 +24,7 @@ from langgraph.checkpoint.memory import MemorySaver
 # from langgraph.checkpoint.sqlite import SqliteSaver
 from langchain_core.chat_history import InMemoryChatMessageHistory
 from changai.changai.api.v2.store_chats import save_turn_2,save_message_doc,inject_prompt
+import time
 non_erp_res=""
 MAX_TOKEN_LIMIT=1500
 MAX_WINDOW_TURNS=10
@@ -52,7 +54,12 @@ def get_settings():
     }
     return config
 
+
 CONFIG = get_settings()
+# LANGSMITH_TRACING=CONFIG["LANGSMITH_TRACING"]
+# LANGSMITH_ENDPOINT=CONFIG["LANGSMITH_ENDPOINT"]
+# LANGSMITH_API_KEY=CONFIG["LANGSMITH_API_KEY"]
+# LANGSMITH_PROJECT=CONFIG["LANGSMITH_PROJECT"]
 RETRY_LIMIT=2
 INDEX_PATH = f"{CONFIG['ROOT_PATH']}/changai/changai/changai/faiss_index_hnsw_v2"
 MAPPING_SCHEMA_PATH = f"{CONFIG['ROOT_PATH']}/changai/changai/changai/api/v2/metaschema_clean_v2.json"
@@ -63,9 +70,9 @@ TEMPLATE_PATH=f"{CONFIG['ROOT_PATH']}/changai/changai/changai/templates/conversa
 BUSINESS_KEYWORDS_PATH = f"{CONFIG['ROOT_PATH']}/changai/changai/changai/api/v2/business_keywords_v1.json"
 
 def call_model(prompt):
-    return remote_llm_request(prompt) if CONFIG["REMOTE"] else local_llm_request(prompt)
+    return remote_llm_request_deploy_test(prompt) if CONFIG["REMOTE"] else local_llm_request(prompt)
 
-@frappe.whitelist(allow_guest=True)
+
 def call_embedder(question):
     return remote_embedder_request(question) if CONFIG["REMOTE"] else local_embedder_request(question)
 
@@ -94,7 +101,8 @@ def return_headers():
             "Content-Type": "application/json",
             "Authorization": f"Bearer {CONFIG['API_TOKEN']}",
         }
-@frappe.whitelist(allow_guest=True)
+
+
 def create_llm_prediction(prompt:str):
     try:
         payload = {
@@ -105,7 +113,7 @@ def create_llm_prediction(prompt:str):
             CONFIG["URL"],
             json=payload,
             headers=return_headers(),
-            timeout=15,
+            timeout=120,
         )
         if resp.status_code not in (200,201):
             frappe.log_error(resp.text,"LLM Creation prediction error")
@@ -120,11 +128,11 @@ def create_llm_prediction(prompt:str):
         frappe.log_error(frappe.get_traceback(), "LLM Create Prediction Exception")
         return {"ok":False,"Error":str(e)}
 
-@frappe.whitelist(allow_guest=True)
+
 def get_llm_prediction(pred_id:str):
     try:
         poll_url=f"{CONFIG['URL']}/{pred_id}"
-        resp=requests.get(poll_url,headers=return_headers(),timeout=10)
+        resp=requests.get(poll_url,headers=return_headers(),timeout=120)
         if resp.status_code!=200:
             frappe.log_error(resp.text,"LLM Poll Prediction Error")
             return {
@@ -147,21 +155,6 @@ def get_llm_prediction(pred_id:str):
         return {"ok": False, "error": str(e)}
 
 
-# def remote_llm_request_1(prompt: str) -> str:
-#     payload = {"version": CONFIG["LLM_VERSION_ID"], "input": {"user_input": prompt}}
-#     headers = {
-#         "Content-Type": "application/json",
-#         "Prefer": "wait",
-#         "Authorization": f"Bearer {CONFIG['API_TOKEN']}",
-#     }
-#     result = None
-#     response = _post_json("https://api.replicate.com/v1/deployments/farook/my-changai-qwen3-deploy/predictions", headers, payload)
-#     if response and isinstance(response.get("output"), list) and response["output"]:
-#         return str(response["output"][0]).strip()
-#     return "Error: No output in response"
-
-
-@frappe.whitelist(allow_guest=True)
 def remote_llm_request(prompt: str) -> str:
     payload = {
         "version": CONFIG["LLM_VERSION_ID"],
@@ -174,16 +167,14 @@ def remote_llm_request(prompt: str) -> str:
         "Authorization": f"Bearer {CONFIG['API_TOKEN']}",
     }
 
-    # First request: create job
-    response = _post_json(CONFIG["URL"], headers, payload,timeout=100)
+    response = _post_json(CONFIG["URL"], headers, payload,timeout=120)
     if not response or "id" not in response:
         return "Error: Failed to create prediction"
 
     pred_id = response["id"]
 
-    # Second request: poll job (FIXED: correct header)
     poll_url = f"{CONFIG['URL']}/{pred_id}"
-    poll = requests.get(poll_url, headers=headers,timeout=80).json()
+    poll = requests.get(poll_url, headers=headers,timeout=120).json()
 
     status = poll.get("status")
     output = poll.get("output")
@@ -193,9 +184,7 @@ def remote_llm_request(prompt: str) -> str:
 
     return f"Error:Model ended with status {status}"
 
-import time
 
-@frappe.whitelist(allow_guest=True)
 def remote_llm_request_deploy_test(prompt: str) -> str:
     payload = {
         "input": {"user_input": prompt}
@@ -206,12 +195,7 @@ def remote_llm_request_deploy_test(prompt: str) -> str:
         "Prefer": "wait",
         "Authorization": f"Bearer {CONFIG['API_TOKEN']}",
     }
-
-    # First request: create job
     try:
-        # res = requests.post(CONFIG["deploy_url"], headers=headers, json=payload, timeout=120)
-        # res.raise_for_status()
-        # data=res.json()
         data=_post_json(CONFIG["deploy_url"], headers=headers, payload=payload, timeout=120)
     except Exception as e:
         return {"Error":str(e)}
@@ -245,11 +229,10 @@ def remote_llm_request_deploy_test(prompt: str) -> str:
                     "Error":f"Model ended with status:{status}",
                     "details":poll
                 }
-        time_sleep(poll_interval)
+        time.sleep(poll_interval)
     return {"Error":f"Error:Model ended with status {last_status}","details":poll}
 
 
-@frappe.whitelist(allow_guest=True)
 def remote_embedder_request(formatted_q: str) -> Union[list, str]:
     payload = {"version": CONFIG["EMBED_VERSION_ID"], "input": {"user_input": formatted_q}}
     headers = {
@@ -332,7 +315,6 @@ def send_non_erp_request(state:SQLState) -> SQLState:
     except Exception as e:
         return {**state,"non_erp_res": "", "error": f"NON-ERP call failed: {e}"}
 
-
 def call_llm(state:SQLState) -> SQLState:
     user_qstn=state.get("question")
     session_id=state.get("session_id")
@@ -372,35 +354,52 @@ def generate_sql(state:SQLState) -> SQLState:
 # # Node 4:Validate the SQL Generate with meta schema mapping using SQLGlot
 @traceable(name="validate_sql", run_type="tool")
 def validate_sql(state: SQLState) -> SQLState:
-    sql=state.get("sql") or ""
-    # if not sql.upper().startswith("SELECT"):
-    #     return {**state,"validation":{"ok":False,"details":{"parse_error":"Not a SELECT Query"}}}
-    val = validate_sql_against_mapping(sql,mapping_data,dialect="mysql")
-    return {**state,"validation":val}
+    sql = (state.get("sql") or "").strip()
+
+    if not sql or sql.startswith("Error:"):
+        return {
+            **state,
+            "validation": {
+                "ok": False,
+                "unknown_tables": [],
+                "unknown_columns": [],
+                "ambiguous_columns": [],
+                "details": {
+                    "parse_error": sql or "Empty SQL from LLM"
+                },
+            },
+        }
+
+    val = validate_sql_against_mapping(sql, mapping_data, dialect="mysql")
+    return {**state, "validation": val}
 
 
 # # Node 5:Repair Loop :Simple prompt for one more try.
 @traceable(name="repair_sqlquery", run_type="tool")
-def repair_sqlquery(state:SQLState)->SQLState:
+def repair_sqlquery(state: SQLState) -> SQLState:
     hints: List[str] = []
-    tries=int(state.get("tries") or 0)+1
-    val=state.get("validation",{})
-    unknown_tables=val.get("unknown_tables",[])
-    unknown_cols=val.get("unknown_columns",[])
-    ambiguous=val.get("ambiguous_columns",[])
+    tries = int(state.get("tries") or 0) + 1
+    val = state.get("validation", {})
+    unknown_tables = val.get("unknown_tables", [])
+    unknown_cols = val.get("unknown_columns", [])
+    ambiguous = val.get("ambiguous_columns", [])
+
     if unknown_tables:
         hints.append(f"Unknown tables:{unknown_tables}.Use only tables in context")
     if unknown_cols:
         hints.append(f"Unknown Columns:{unknown_cols}.Use only fields listed for each tables from the context")
     if ambiguous:
         hints.append(f"Ambiguous columns(qualify them):{ambiguous}")
-    patched_prompt=state["sql_prompt"]+"\n\n#VALIDATION HINTS\n"+"\n".join(f"-{h}" for h in hints)
-    try:
-        response = call_llm(patched_prompt)
-        return {**state,"sql":response,"tries":tries,"error":None}
 
+    patched_prompt = state["sql_prompt"] + "\n\n#VALIDATION HINTS\n" + "\n".join(f"-{h}" for h in hints)
+
+    try:
+        # ✅ just call the model with a prompt string
+        response = call_model(patched_prompt)
+        return {**state, "sql": response, "tries": tries, "error": None}
     except Exception as e:
-        return {**state,"error":f"Repair call failed {e}"}
+        return {**state, "tries": tries, "error": f"Repair call failed {e}"}
+
 
 
 def route_guardrail(state:SQLState):
@@ -419,6 +418,7 @@ def router(state:SQLState) -> str:
     if tries < RETRY_LIMIT:
         return "repair"
     return "end"
+
 
 def validate_sql_against_mapping(sql_text: str, mapping: Dict[str, List[str]], dialect: str = "mysql"):
 
@@ -503,6 +503,7 @@ def validate_sql_against_mapping(sql_text: str, mapping: Dict[str, List[str]], d
         result["ambiguous_columns"] = sorted(ambiguous)
     result["details"]["from_tables"] = tables
     return result
+
 
 def hits_to_schema_context(
     hits: Union[List[Any], Dict, str],
@@ -753,6 +754,7 @@ workflow.add_edge("repair_sql","validate_sql")
 checkpointer=MemorySaver()
 app=workflow.compile(checkpointer=checkpointer)
 
+
 #to execute the sql returned inside frappe
 @frappe.whitelist(allow_guest=True)
 def execute_query(query:str):
@@ -782,6 +784,7 @@ def execute_query(query:str):
 #     except Exception as e:
 #         return {"text": f"Unable to format response quickly.{e}"}
 
+
 # to format the data returned afer execution using jinj2 template
 @frappe.whitelist(allow_guest=True)
 def format_data_conversationally(user_data):
@@ -795,30 +798,30 @@ def format_data_conversationally(user_data):
     return template.render(data=user_data)
 
 
-def save_logs(user_question=None, formatted_q=None, context=None, sql=None, val=None,result=None, tries=None, err=None,formatted_result=None):
-    if isinstance(val,str):
-        val=json.loads(val)
-    if isinstance(tries,str):
-        tries=json.loads(tries)
-    if isinstance(err,str):
-        err=json.loads(err)
-    if isinstance(result,str):
-        result=json.loads(result) 
-    if isinstance(result, (list, dict)):
-        result = json.dumps(result, default=str)    
-    doc = frappe.new_doc("ChangAI Logs")
-    doc.user_question = user_question
-    doc.rewritten_question = formatted_q
-    doc.schema_retrieved = context
-    doc.sql_generated = sql
-    doc.validation = val
-    doc.tries = tries
-    doc.error = err
-    doc.result = result
-    doc.formatted_result = formatted_result
-    doc.insert(ignore_permissions=True)
-    frappe.db.commit()
-    return doc.name
+# def save_logs(user_question=None, formatted_q=None, context=None, sql=None, val=None,result=None, tries=None, err=None,formatted_result=None):
+#     if isinstance(val,str):
+#         val=json.loads(val)
+#     if isinstance(tries,str):
+#         tries=json.loads(tries)
+#     if isinstance(err,str):
+#         err=json.loads(err)
+#     if isinstance(result,str):
+#         result=json.loads(result) 
+#     if isinstance(result, (list, dict)):
+#         result = json.dumps(result, default=str)    
+#     doc = frappe.new_doc("ChangAI Logs")
+#     doc.user_question = user_question
+#     doc.rewritten_question = formatted_q
+#     doc.schema_retrieved = context
+#     doc.sql_generated = sql
+#     doc.validation = val
+#     doc.tries = tries
+#     doc.error = err
+#     doc.result = result
+#     doc.formatted_result = formatted_result
+#     doc.insert(ignore_permissions=True)
+#     frappe.db.commit()
+#     return doc.name
 
 
 def save_logs(
@@ -939,9 +942,15 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
         "Validation": val,
         "Tries": tries,
         "Error": err,
-        # "Result": result,
+        "Result": result,
         "Bot": formatted_result,
     }
+@frappe.whitelist(allow_guest=True)
+def respond_from_cache(user_question:str):
+    if user_question:
+        doc=frappe.db.get_value("ChangAI Logs",{"user_question":user_question},["sql_generated","result"],as_dict=False)
+        return doc
+
 
 # Test run
 # if __name__== "__main__":

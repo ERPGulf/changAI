@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const API_URL = await frappe.db.get_single_value("ChangAI Settings", "vite_api_url");
             const payload={
                 "user_question":userMsg,
-                "chat_id":"session_2"
+                "chat_id":"new_2"
             };
 
             // const reqOpts = {
