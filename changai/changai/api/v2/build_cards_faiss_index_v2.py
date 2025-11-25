@@ -10,19 +10,19 @@ from time import time
 import os
 from pathlib import Path
 from langchain_community.docstore.in_memory import InMemoryDocstore
+# def get_settings():
+#     settings=frappe.get_single("ChangAI Settings")
 
-CONFIG=get_settings()
-BASE=f"{CONFIG['ROOT_PATH']}/changai/changai/changai/cards_v2"
-def get_settings():
-    settings=frappe.get_single("ChangAI Settings")
+#     langsmith_tracing = "true" if settings.langsmith_tracing else "false"
+#     config={
+#         "ROOT_PATH":settings.root_path,
+#         "EMBED_MODEL":settings.embedder,
+#     }
+#     return config
 
-    langsmith_tracing = "true" if settings.langsmith_tracing else "false"
-    config={
-        "ROOT_PATH":settings.root_path,
-        "EMBED_MODEL":settings.embedder,
-    }
-    return config
-
+# CONFIG=get_settings()
+# BASE=f"{CONFIG['ROOT_PATH']}/changai/changai/changai/cards_v2"
+BASE="/opt/hyrin/frappe-bench/apps/changai/changai/changai/cards_v2"
 def load_yaml_dir(path):
   out=[]
   for fp in glob.glob(os.path.join(path,"*.yaml")):
@@ -95,16 +95,16 @@ def _entity_page_content(md):
 # Build Docs
 
 schema_cards=load_yaml_dir(os.path.join(BASE,"schema"))
-glossary_cards=load_yaml_dir(os.path.join(BASE,"glossary"))
-metric_cards=load_yaml_dir(os.path.join(BASE,"metrics"))
-permission_cards=load_yaml_dir(os.path.join(BASE,"permissions"))
-enum_cards=load_yaml_dir(os.path.join(BASE,"enum"))
-period_currency_cards=load_yaml_dir(os.path.join(BASE,"rules"))
-join_cards=load_yaml_dir(os.path.join(BASE,"joins"))
+# glossary_cards=load_yaml_dir(os.path.join(BASE,"glossary"))
+# metric_cards=load_yaml_dir(os.path.join(BASE,"metrics"))
+# permission_cards=load_yaml_dir(os.path.join(BASE,"permissions"))
+# enum_cards=load_yaml_dir(os.path.join(BASE,"enum"))
+# period_currency_cards=load_yaml_dir(os.path.join(BASE,"rules"))
+# join_cards=load_yaml_dir(os.path.join(BASE,"joins"))
 masterdata_cards=load_yaml_dir(os.path.join(BASE,"entity"))
 
-schema_docs,enum_docs,periods_docs,currency_docs=[],[],[],[]
-metric_docs,master_docs,glossary_docs,join_docs=[],[],[],[]
+schema_docs=[]
+master_docs=[]
 
 def build_docs():
     docs = []
@@ -131,141 +131,160 @@ def build_docs():
         for f in sc.get("fields", []):
             fname = f.get("name", "UNKNOWN")
             ftype = f.get("type", "UNKNOWN")
+            enum_vals = f.get("enum_values", []) or [] 
             fdesc = f.get("description", "")
             syn_en = ", ".join(f.get("synonyms_en", []) or [])
-            syn_ar = ", ".join(f.get("synonyms_ar", []) or [])
-            role   = ", ".join(f.get("role", []) or [])
-
-            schema_docs.append({
-                "text": _join([
+            # syn_ar = ", ".join(f.get("synonyms_ar", []) or [])
+            # role   = ", ".join(f.get("role", []) or [])
+            parts=[
                     f"[FIELD] {fname} ({ftype})",
                     f"[TABLE] {tname}",
-                    f"[DESC] {fdesc}" if fdesc else "",
-                    f"[ROLE] {role}" if role else "",
-                    f"[ALIAS_EN] {syn_en}" if syn_en else "",
-                    f"[ALIAS_AR] {syn_ar}" if syn_ar else "",
-                ], sep=" | "),
-                "metadata": {
-                    "type": "field",
-                    "table": tname,
-                    "field": fname,
-                    "role": f.get("role", [])
-                }
-            })
+                    f"[DESC] {fdesc}"
+            ]
+            if enum_vals:
+                parts.append(f"[ENUM] {', '.join(enum_vals)}")
+            if syn_en:
+                parts.append(f"[ALIAS_EN] {syn_en}")
+            schema_docs.append({
+    "text": _join(parts, sep=" | "),
+    "metadata": {
+        "type": "field",
+        "table": tname,
+        "field": fname
+    }
+})
+            # schema_docs.append({
+            #     "text": _join([
+            #         f"[FIELD] {fname} ({ftype})",
+            #         f"[TABLE] {tname}",
+            #         f"[ENUM VALUES] {enum}"
+            #         # f"[DESC] {fdesc}" if fdesc else "",
+            #         f"[ALIAS_EN] {syn_en}" if syn_en else "",
+            #         # f"[ALIAS_AR] {syn_ar}" if syn_ar else "",
+            #     ], sep=" | "),
+            #     "metadata": {
+            #         "type": "field",
+            #         "table": tname,
+            #         "field": fname
+            #     }
+            # })
 
     # ------------- Joins -------------
-    for jc in join_cards:
-        join_docs.append({
-            "text": _join([
-                f"[JOIN] {jc.get('from','')} → {jc.get('to','')}",
-                f"[ON] {jc.get('on','')}",
-                f"[TYPE] {jc.get('join_type','inner')}",
-                f"[RELATIONSHIP] {jc.get('relationship','')}",
-                f"[WHY] {jc.get('rationale','')}",
-            ], sep=" | "),
-            "metadata": {
-                "type": "join",
-                "from": jc.get("from"),
-                "to": jc.get("to")
-            }
-        })
+    # for jc in join_cards:
+    #     join_docs.append({
+    #         "text": _join([
+    #             f"[JOIN] {jc.get('from','')} → {jc.get('to','')}",
+    #             f"[ON] {jc.get('on','')}",
+    #             # f"[TYPE] {jc.get('join_type','inner')}",
+    #             # f"[RELATIONSHIP] {jc.get('relationship','')}",
+    #             # f"[WHY] {jc.get('rationale','')}",
+    #         ], sep=" | "),
+    #         "metadata": {
+    #             "type": "join",
+    #             "from": jc.get("from"),
+    #             "to": jc.get("to")
+    #         }
+    #     })
 
-    # ------------- Glossary -------------
-    for gl in glossary_cards:
-        mp = gl.get("map", {}) or {}
-        for k, targets in mp.items():
-            target_str = ", ".join(targets or [])
-            glossary_docs.append({
-                "text": _join([f"[GLOSSARY_EN] {k}", f"[MAPS_TO] {target_str}"], sep=" | "),
-                "metadata": {"type": "glossary", "lang": "en", "key": k, "targets": targets}
-            })
+    # # ------------- Glossary -------------
+    # for gl in glossary_cards:
+    #     mp = gl.get("map", {}) or {}
+    #     for k, targets in mp.items():
+    #         target_str = ", ".join(targets or [])
+    #         glossary_docs.append({
+    #             "text": _join([f"[GLOSSARY_EN] {k}", f"[MAPS_TO] {target_str}"], sep=" | "),
+    #             "metadata": {"type": "glossary", "lang": "en", "key": k, "targets": targets}
+    #         })
 
-    # ------------- Metrics -------------
-    for mc in metric_cards:
-        metric_docs.append({
-            "text": _join([
-                f"[METRIC] {mc['metric']}",
-                f"[TABLE] {mc['table']}",
-                f"[EXPR] {mc['expression']}",
-                f"[DESC] {mc.get('description','')}"
-            ], sep=" | "),
-            "metadata": {"type": "metric", "name": mc["metric"], "table": mc["table"]}
-        })
+    # # ------------- Metrics -------------
+    # for mc in metric_cards:
+    #     metric_docs.append({
+    #         "text": _join([
+    #             f"[METRIC] {mc['metric']}",
+    #             f"[TABLE] {mc['table']}",
+    #             f"[EXPR] {mc['expression']}",
+    #             # f"[DESC] {mc.get('description','')}"
+    #         ], sep=" | "),
+    #         "metadata": {"type": "metric", "name": mc["metric"], "table": mc["table"]}
+    #     })
 
     # ------------- Enums -------------
-    for ec in enum_cards:
-        enum_docs.append({
-            "text": _join([
-                f"[ENUM] {ec['table']}.{ec['field']}",
-                f"[VALUES] {', '.join(ec.get('values',[]))}"
-            ], sep=" | "),
-            "metadata": {"type": "enum", "table": ec["table"], "field": ec["field"]}
-        })
+    # for ec in enum_cards:
+    #     enum_docs.append({
+    #         "text": _join([
+    #             f"[ENUM] {ec['table']}.{ec['field']}",
+    #             f"[VALUES] {', '.join(ec.get('values',[]))}"
+    #         ], sep=" | "),
+    #         "metadata": {"type": "enum", "table": ec["table"], "field": ec["field"]}
+    #     })
 
-    # ------------- Period / Currency rules -------------
-    for pc in period_currency_cards:
-        periods = pc.get("periods", {}) or {}
-        for key, spec in periods.items():
-            periods_docs.append({
-                "text": _join([f"[PERIOD] {key}", f"[SQL] {spec.get('filter_sql','')}"], sep=" | "),
-                "metadata": {"type": "period", "name": key}
-            })
-    for cc in period_currency_cards:
-        currencies = cc.get("currencies", {}) or {}
-        for key, mapping in currencies.items():
-            currency_docs.append({
-                "text": _join([f"[CURRENCY] {key}", f"[RULE] {mapping}"], sep=" | "),
-                "metadata": {"type": "currency", "code": key}
-            })
-
-    # ------------- Masterdata (Entity cards) -------------
+    # # ------------- Period / Currency rules -------------
+    # for pc in period_currency_cards:
+    #     periods = pc.get("periods", {}) or {}
+    #     for key, spec in periods.items():
+    #         periods_docs.append({
+    #             "text": _join([f"[PERIOD] {key}", f"[SQL] {spec.get('filter_sql','')}"], sep=" | "),
+    #             "metadata": {"type": "period", "name": key}
+    #         })
+    # for cc in period_currency_cards:
+    #     currencies = cc.get("currencies", {}) or {}
+    #     for key, mapping in currencies.items():
+    #         currency_docs.append({
+    #             "text": _join([f"[CURRENCY] {key}", f"[RULE] {mapping}"], sep=" | "),
+    #             "metadata": {"type": "currency", "code": key}
+        #         })
     for md in masterdata_cards:
         text = _entity_page_content(md)
+        if not text:
+            # Skip useless blank entities
+            continue
+
         meta = {
             "type": "entity",
             "entity_type": md.get("entity_type"),
             "entity_id": md.get("entity_id"),
             "canonical_name": md.get("canonical_name"),
             "aliases": md.get("aliases", []),
-            "misspellings": md.get("misspellings", []),
-            "filters": md.get("filters", {}),
-            # keep notes/description if you find them useful at runtime
+            # "misspellings": md.get("misspellings", []),
+            # "filters": md.get("filters", {}),
+            # # keep notes/description if you find them useful at runtime
             "description": md.get("description", ""),
         }
 
         master_docs.append({"text": text, "metadata": meta})
 
+    return master_docs,schema_docs
 
-    return master_docs,schema_docs,enum_docs,glossary_docs,currency_docs,periods_docs,metric_docs,join_docs
 
-
-master_docs, schema_docs, enum_docs, glossary_docs, currency_docs, periods_docs, metric_docs, join_docs = build_docs()
+master_docs, schema_docs = build_docs()
 
 schema_docs=[Document(page_content=d["text"],metadata=d.get("metadata",{})) for d in schema_docs]
-glossary_docs=[Document(page_content=d["text"],metadata=d.get("metadata",{})) for d in glossary_docs]
-currency_docs=[Document(page_content=d["text"],metadata=d.get("metadata",{})) for d in currency_docs]
-periods_docs=[Document(page_content=d["text"],metadata=d.get("metadata",{})) for d in periods_docs]
-enum_docs=[Document(page_content=d["text"],metadata=d.get("metadata",{})) for d in enum_docs]
+# glossary_docs=[Document(page_content=d["text"],metadata=d.get("metadata",{})) for d in glossary_docs]
+# currency_docs=[Document(page_content=d["text"],metadata=d.get("metadata",{})) for d in currency_docs]
+# periods_docs=[Document(page_content=d["text"],metadata=d.get("metadata",{})) for d in periods_docs]
+# enum_docs=[Document(page_content=d["text"],metadata=d.get("metadata",{})) for d in enum_docs]
 master_docs=[Document(page_content=d["text"],metadata=d.get("metadata",{})) for d in master_docs]
-metric_docs=[Document(page_content=d["text"],metadata=d.get("metadata",{})) for d in metric_docs]
-join_docs=[Document(page_content=d["text"],metadata=d.get("metadata",{})) for d in join_docs]
+# metric_docs=[Document(page_content=d["text"],metadata=d.get("metadata",{})) for d in metric_docs]
+# join_docs=[Document(page_content=d["text"],metadata=d.get("metadata",{})) for d in join_docs]
 
-all_docs = (
-    schema_docs + glossary_docs + currency_docs + periods_docs + 
-    metric_docs + join_docs + master_docs + enum_docs
-)
+# all_docs = (
+#     schema_docs + glossary_docs + currency_docs + periods_docs + 
+#     metric_docs + join_docs + master_docs + enum_docs
+# )
+all_docs = schema_docs + master_docs
 
 
 # Create Vector Fiass Index
 texts = [d.page_content for d in all_docs]
 metas = [d.metadata for d in all_docs]
+INDEX_DIR="/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/v2/faiss_hnsw_vector_index_2"
 
-INDEX_DIR = f"{CONFIG['ROOT_PATH']}/changai/changai/changai/api/v2/faiss_hnsw_vector_index"
+# INDEX_DIR = f"{CONFIG['ROOT_PATH']}/changai/changai/changai/api/v2/faiss_hnsw_vector_index"
 INDEX_NAME = "index"
 
 
 emb = HuggingFaceEmbeddings(
-    model_name=CONFIG["EMBED_MODEL"],
+    model_name="hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned",
     model_kwargs={"device": "cpu", "trust_remote_code": True},
     encode_kwargs={"normalize_embeddings": True},
 )
@@ -274,12 +293,12 @@ print("🧠 Computing embeddings...")
 embeddings = []
 for t in tqdm(texts, desc="Embedding"):
     try:
-        vec = emb.embed_query(t)  # also fine: emb.embed_documents()
+        doc_text = f"search_document: {t}"
+        vec = emb.embed_query(doc_text)
         embeddings.append(vec)
     except Exception as e:
         print(f"❌ Error embedding text: {e}")
-        # fallback vector
-        embeddings.append(np.zeros(768))
+        embeddings.append(np.zeros(emb.client.get_sentence_embedding_dimension()))
 
 embeddings = np.array(embeddings).astype("float32")
 print("✅ Embeddings computed:", embeddings.shape)

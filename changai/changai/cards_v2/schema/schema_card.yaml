@@ -1155,11 +1155,6 @@
       role: ["accounting"]
       description: "Cost center for this item row."
 
-    - name: "page_break"
-      type: "INT(1)"
-      role: ["print"]
-      description: "1 if page break after this item in print."
-
     - name: "parent"
       type: "VARCHAR"
       role: ["system", "link"]
@@ -2313,12 +2308,6 @@
       synonyms_en: ["production plan sub assembly item", "pp sub item", "subassembly"]
       synonyms_ar: ["عنصر التجميع الفرعي", "عنصر فرعي للإنتاج", "بند التجميع"]
 
-    - name: "page_break"
-      type: "INT(1)"
-      role: ["layout"]
-      description: "Used to insert a page break after this item when printing"
-      synonyms_en: ["page break", "print break", "new page flag"]
-      synonyms_ar: ["فاصل الصفحة", "كسر الصفحة", "فاصل الطباعة"]
 
     - name: "parent"
       type: "VARCHAR"
@@ -2647,8 +2636,8 @@
     - name: "posting_date"
       type: "DATE"
       role: ["timestamp", "posting"]
-      description: "Date when the purchase receipt was recorded in the system"
-      synonyms_en: ["receipt date", "posting date", "entry date"]
+      description: "This can be used for any date filters."
+      synonyms_en: ["receipt date", "posting date", "entry date","today","month"]
       synonyms_ar: ["تاريخ التسجيل", "تاريخ الاستلام"]
 
     - name: "posting_time"
@@ -3873,11 +3862,7 @@
       synonyms_en: ["department", "branch", "financial center"]
       synonyms_ar: ["مركز التكلفة", "القسم", "الفرع المالي"]
 
-    - name: "page_break"
-      type: "INT(1)"
-      description: "Indicates page break in print format"
-      synonyms_en: ["page split", "print break", "page divider"]
-      synonyms_ar: ["فاصل صفحة", "تقسيم الصفحة", "فاصل الطباعة"]
+  
 
     - name: "sales_order"
       type: "VARCHAR(140)"
@@ -5396,12 +5381,6 @@
       description: "Linked Job Card Item reference"
       synonyms_en: ["job card line", "work order item"]
       synonyms_ar: ["عنصر بطاقة العمل"]
-
-    - name: "page_break"
-      type: "INT(1)"
-      description: "Indicates a page break in print format (1 = Yes, 0 = No)"
-      synonyms_en: ["print page break", "page separator"]
-      synonyms_ar: ["فاصل الصفحة"]
 
     - name: "parent"
       type: "VARCHAR(140)"
@@ -7352,12 +7331,7 @@
       synonyms_en: ["project code", "project reference"]
       synonyms_ar: ["المشروع"]
 
-    - name: "page_break"
-      type: "INT(1)"
-      role: ["reporting"]
-      description: "Indicates if a page break should occur after this item in reports"
-      synonyms_en: ["report page break", "break after item"]
-      synonyms_ar: ["فاصل صفحة"]
+
 
     - name: "parent"
       type: "VARCHAR(140)"
@@ -7867,7 +7841,11 @@
   synonyms_en:
     - "customer bill"
     - "sales receipt"
+    - "sales invoice"
     - "invoice"
+    - "customer invoice"
+    - "sales bill"
+    - "sales record"
     - "sales document"
     - "billing record"
     - "transaction slip"
@@ -7973,8 +7951,8 @@
     - name: "posting_date"
       type: "DATE"
       role: ["date", "filter"]
-      description: "Accounting date of the invoice"
-      synonyms_en: ["invoice date", "posting date", "sales date", "bill date"]
+      description: "This can be used for any date filters."
+      synonyms_en: ["invoice date", "posting date", "sales date", "bill date","today","month"]
       synonyms_ar: ["تاريخ الفاتورة", "تاريخ التسجيل", "تاريخ البيع", "تاريخ الإدخال المحاسبي"]
 
     - name: "posting_time"
@@ -8776,6 +8754,8 @@
       description: "End date of the subscription or service period"
       synonyms_en: ["to date", "subscription end date", "service end date"]
       synonyms_ar: ["تاريخ الانتهاء", "تاريخ نهاية الاشتراك", "تاريخ نهاية الخدمة"]
+
+
     - name: "status"
       type: "VARCHAR"
       role: ["lifecycle", "enum"]
@@ -9992,12 +9972,6 @@
       synonyms_en: ["project", "project code"]
       synonyms_ar: ["المشروع", "رمز المشروع"]
 
-    - name: "page_break"
-      type: "INT"
-      role: ["print"]
-      description: "Insert page break before this row on print"
-      synonyms_en: ["page break", "print break"]
-      synonyms_ar: ["فاصل صفحة", "فاصل طباعة"]
 
   notes: |
     - Parent-child relation: join `tabSales Invoice Item`.`parent` = `tabSales Invoice`.`name`.
@@ -10465,7 +10439,7 @@
     - name: "posting_date"
       type: "DATE"
       role: ["date"]
-      description: "Date the invoice is posted in the system"
+      description: "This can be used for any date filters."
       synonyms_en: ["posting date", "invoice date", "bill date"]
       synonyms_ar: ["تاريخ القيد", "تاريخ الفاتورة"]
 
