@@ -1,0 +1,1923 @@
+[
+  {
+    "anchor": "Find all customers who have placed an order.",
+    "positives": [
+      "[TABLE] tabCustomer",
+      "[FIELD] name | [TABLE] tabCustomer",
+      "[FIELD] customer_name | [TABLE] tabCustomer",
+      "[TABLE] tabSales Order",
+      "[FIELD] customer | [TABLE] tabSales Order",
+      "[FIELD] transaction_date | [TABLE] tabSales Order"
+    ]},
+
+  {
+    "anchor": "List products that have never been ordered.",
+    "positives": [
+      "[TABLE] tabItem",
+      "[FIELD] name | [TABLE] tabItem",
+      "[FIELD] item_name | [TABLE] tabItem",
+      "[TABLE] tabSales Order Item",
+      "[FIELD] item_code | [TABLE] tabSales Order Item"
+    ]
+  },
+
+  {
+    "anchor": "Find the total revenue for each product category.",
+    "positives": [
+      "[TABLE] tabItem Group",
+      "[FIELD] name | [TABLE] tabItem Group",
+      "[TABLE] tabItem",
+      "[FIELD] item_group | [TABLE] tabItem",
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] amount | [TABLE] tabSales Invoice Item"
+    ]
+  },
+
+  {
+    "anchor": "Get the top 3 customers who placed the highest number of orders.",
+    "positives": [
+      "[TABLE] tabCustomer",
+      "[FIELD] name | [TABLE] tabCustomer",
+      "[FIELD] customer_name | [TABLE] tabCustomer",
+      "[TABLE] tabSales Order",
+      "[FIELD] customer | [TABLE] tabSales Order"
+    ]
+  },
+
+  {
+    "anchor": "Find employees who have been in the company for more than 5 years.",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] date_of_joining | [TABLE] tabEmployee",
+      "[FIELD] employee_name | [TABLE] tabEmployee",
+      "[FIELD] status | [TABLE] tabEmployee",
+      "[FIELD] company | [TABLE] tabEmployee"
+    ]
+  },
+
+  {
+    "anchor": "Retrieve details of the most recent order placed.",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] name | [TABLE] tabSales Order",
+      "[FIELD] customer | [TABLE] tabSales Order",
+      "[FIELD] transaction_date | [TABLE] tabSales Order",
+      "[FIELD] grand_total | [TABLE] tabSales Order",
+      "[TABLE] tabSales Order Item",
+      "[FIELD] item_code | [TABLE] tabSales Order Item"
+    ]
+},
+
+  {
+    "anchor": "List customers who have placed more than 5 orders.",
+    "positives": [
+      "[TABLE] tabCustomer",
+      "[FIELD] name | [TABLE] tabCustomer",
+      "[FIELD] customer_name | [TABLE] tabCustomer",
+      "[TABLE] tabSales Order",
+      "[FIELD] customer | [TABLE] tabSales Order",
+      "[FIELD] transaction_date | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Retrieve the names of all employees earning more than $50,000.",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] name | [TABLE] tabEmployee",
+      "[FIELD] salary | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "Get the average salary for each department.",
+    "positives": [
+      "[TABLE] tabDepartment",
+      "[TABLE] tabEmployee",
+      "[FIELD] department | [TABLE] tabEmployee",
+      "[FIELD] ctc | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "Retrieve the details of the most recent order placed.",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] name | [TABLE] tabSales Order",
+      "[FIELD] transaction_date | [TABLE] tabSales Order",
+      "[FIELD] creation | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Find the employee with the second highest salary.",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] ctc | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "List customers who have placed more than 5 orders.",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] customer | [TABLE] tabSales Order",
+      "[FIELD] name | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Find employees who earn more than the company average salary.",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] ctc | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "Retrieve the order count per customer along with their names.",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[TABLE] tabCustomer",
+      "[FIELD] customer | [TABLE] tabSales Order",
+      "[FIELD] customer_name | [TABLE] tabCustomer",
+      "[FIELD] name | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "List all employees who do not have any assigned department.",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] department | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "Find products that have been ordered more than 10 times.",
+    "positives": [
+      "[TABLE] tabSales Order Item",
+      "[FIELD] item_code | [TABLE] tabSales Order Item",
+      "[FIELD] qty | [TABLE] tabSales Order Item",
+      "[FIELD] parent | [TABLE] tabSales Order Item",
+      "[TABLE] tabSales Order",
+      "[FIELD] name | [TABLE] tabSales Order",
+      "[FIELD] docstatus | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Retrieve employees who joined in the last year.",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] date_of_joining | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "List customers who have never placed an order.",
+    "positives": [
+      "[TABLE] tabCustomer",
+      "[TABLE] tabSales Order",
+      "[FIELD] name | [TABLE] tabCustomer",
+      "[FIELD] customer | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Find the most expensive product.",
+    "positives": [
+      "[TABLE] tabItem",
+      "[FIELD] price | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "Retrieve orders placed in the last 30 days.",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] name | [TABLE] tabSales Order",
+      "[FIELD] transaction_date | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Find the average order value.",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] base_grand_total | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Get the list of departments with more than 10 employees.",
+    "positives": [
+      "[TABLE] tabDepartment",
+      "[TABLE] tabEmployee",
+      "[FIELD] department | [TABLE] tabEmployee",
+      "[FIELD] name | [TABLE] tabDepartment"
+    ]
+  },
+  {
+    "anchor": "List all orders with a total greater than $1000.",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] name | [TABLE] tabSales Order",
+      "[FIELD] grand_total | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Get product names and the average rating for products with at least 20 reviews.",
+    "positives": [
+      "[TABLE] tabProduct",
+      "[TABLE] tabReview",
+      "[FIELD] name | [TABLE] tabProduct",
+      "[FIELD] product | [TABLE] tabReview",
+      "[FIELD] rating | [TABLE] tabReview"
+    ]
+  },
+  {
+    "anchor": "Find employees working in departments that have more than 5 employees.",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[TABLE] tabDepartment",
+      "[FIELD] department | [TABLE] tabEmployee",
+      "[FIELD] name | [TABLE] tabDepartment"
+    ]
+  },
+  {
+    "anchor": "Retrieve customer details along with total orders placed.",
+    "positives": [
+      "[TABLE] tabCustomer",
+      "[TABLE] tabSales Order",
+      "[FIELD] name | [TABLE] tabCustomer",
+      "[FIELD] customer_name | [TABLE] tabCustomer",
+      "[FIELD] customer | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "List products along with their supplier names.",
+    "positives": [
+      "[TABLE] tabItem",
+      "[TABLE] tabSupplier",
+      "[TABLE] tabItem Supplier",
+      "[FIELD] item_code | [TABLE] tabItem",
+      "[FIELD] supplier | [TABLE] tabItem Supplier",
+      "[FIELD] supplier_name | [TABLE] tabSupplier"
+    ]
+  },
+  {
+    "anchor": "Find the month with the highest total sales.",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] grand_total | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "Retrieve all orders with no corresponding customer record.",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[TABLE] tabCustomer",
+      "[FIELD] customer | [TABLE] tabSales Order",
+      "[FIELD] name | [TABLE] tabCustomer"
+    ]
+  },
+  {
+    "anchor": "Get the latest hire date from each department.",
+    "positives": [
+      "[TABLE] tabDepartment",
+      "[TABLE] tabEmployee",
+      "[FIELD] department | [TABLE] tabEmployee",
+      "[FIELD] date_of_joining | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "List all suppliers who supply more than 3 products.",
+    "positives": [
+      "[TABLE] tabSupplier",
+      "[TABLE] tabItem",
+      "[TABLE] tabItem Supplier",
+      "[FIELD] supplier | [TABLE] tabItem Supplier",
+      "[FIELD] item_code | [TABLE] tabItem Supplier",
+      "[FIELD] supplier_name | [TABLE] tabSupplier"
+    ]
+  },
+  {
+    "anchor": "Retrieve customers and the sum of their order totals.",
+    "positives": [
+      "[TABLE] tabCustomer",
+      "[TABLE] tabSales Order",
+      "[FIELD] name | [TABLE] tabCustomer",
+      "[FIELD] customer | [TABLE] tabSales Order",
+      "[FIELD] grand_total | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Find products with prices within the top 10% of all products.",
+    "positives": [
+      "[TABLE] tabItem",
+      "[FIELD] price | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "List employees with birthdays in the current month.",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] date_of_birth | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "Retrieve the average rating for each product category.",
+    "positives": [
+      "[TABLE] tabProduct",
+      "[TABLE] tabProduct Rating",
+      "[FIELD] category | [TABLE] tabProduct",
+      "[FIELD] product | [TABLE] tabProduct Rating",
+      "[FIELD] rating | [TABLE] tabProduct Rating"
+    ]
+  },
+  {
+    "anchor": "Find customers with duplicate email addresses.",
+    "positives": [
+      "[TABLE] tabCustomer",
+      "[FIELD] email_id | [TABLE] tabCustomer"
+    ]
+  },
+  {
+    "anchor": "Get the total number of orders placed each day.",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] name | [TABLE] tabSales Order",
+      "[FIELD] transaction_date | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Retrieve employees with salaries below the department average.",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] salary | [TABLE] tabEmployee",
+      "[FIELD] department | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "List products that have been discontinued.",
+    "positives": [
+      "[TABLE] tabItem",
+      "[FIELD] item_code | [TABLE] tabItem",
+      "[FIELD] item_name | [TABLE] tabItem",
+      "[FIELD] disabled | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "Find the total sales per region.",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] region | [TABLE] tabSales Invoice",
+      "[FIELD] base_net_amount | [TABLE] tabSales Invoice Item",
+      "[FIELD] parent | [TABLE] tabSales Invoice Item",
+      "[FIELD] name | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "Retrieve order details along with customer and product information.",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[TABLE] tabSales Order Item",
+      "[TABLE] tabCustomer",
+      "[TABLE] tabItem",
+      "[FIELD] name | [TABLE] tabSales Order",
+      "[FIELD] customer | [TABLE] tabSales Order",
+      "[FIELD] item_code | [TABLE] tabSales Order Item",
+      "[FIELD] qty | [TABLE] tabSales Order Item",
+      "[FIELD] rate | [TABLE] tabSales Order Item",
+      "[FIELD] customer_name | [TABLE] tabCustomer",
+      "[FIELD] item_name | [TABLE] tabItem",
+      "[FIELD] description | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "Get a list of all departments and the number of employees in each.",
+    "positives": [
+      "[TABLE] tabDepartment",
+      "[TABLE] tabEmployee",
+      "[FIELD] name | [TABLE] tabDepartment",
+      "[FIELD] department | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "Find the top 3 most active users based on login count.",
+    "positives": [
+      "[TABLE] tabUser",
+      "[FIELD] login_count | [TABLE] tabUser"
+    ]
+  },
+  {
+    "anchor": "Retrieve the list of orders along with the order status for each.",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] name | [TABLE] tabSales Order",
+      "[FIELD] status | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "List all products with a stock level below 50.",
+    "positives": [
+      "[TABLE] tabItem",
+      "[FIELD] item_code | [TABLE] tabItem",
+      "[TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin"
+    ]
+  },
+  {
+    "anchor": "Find customers who registered in the last month.",
+    "positives": [
+      "[TABLE] tabCustomer",
+      "[FIELD] creation | [TABLE] tabCustomer"
+    ]
+  },
+  {
+    "anchor": "Retrieve a list of employees and the departments they belong to, including those with no department assigned.",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[TABLE] tabDepartment",
+      "[FIELD] name | [TABLE] tabEmployee",
+      "[FIELD] department | [TABLE] tabEmployee",
+      "[FIELD] name | [TABLE] tabDepartment"
+    ]
+  },
+  {
+    "anchor": "Get the total number of products sold per product category.",
+    "positives": [
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] qty | [TABLE] tabSales Invoice Item",
+      "[TABLE] tabItem",
+      "[FIELD] item_code | [TABLE] tabItem",
+      "[FIELD] item_group | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "Find the average time taken to deliver orders.",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] delivery_date | [TABLE] tabSales Order",
+      "[FIELD] transaction_date | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "List users who have not updated their profile in over a year.",
+    "positives": [
+      "[TABLE] tabUser",
+      "[FIELD] modified | [TABLE] tabUser"
+    ]
+  },
+  {
+    "anchor": "Retrieve details of the top-selling product along with its supplier information.",
+    "positives": [
+      "[TABLE] tabItem",
+      "[FIELD] item_code | [TABLE] tabItem",
+      "[FIELD] item_name | [TABLE] tabItem",
+      "[FIELD] supplier | [TABLE] tabItem",
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] qty | [TABLE] tabSales Invoice Item",
+      "[TABLE] tabSupplier",
+      "[FIELD] supplier_name | [TABLE] tabSupplier",
+      "[FIELD] supplier | [TABLE] tabSupplier"
+    ]
+  },
+  {
+    "anchor": "Find the number of orders placed in each quarter of the year.",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] name | [TABLE] tabSales Order",
+      "[FIELD] transaction_date | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "List the names and email addresses of all users who have verified their account.",
+    "positives": [
+      "[TABLE] tabUser",
+      "[FIELD] name | [TABLE] tabUser",
+      "[FIELD] email | [TABLE] tabUser",
+      "[FIELD] email_verified | [TABLE] tabUser"
+    ]
+  },
+  {
+    "anchor": "Retrieve a list of orders where the total order value exceeds the average order value.",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] name | [TABLE] tabSales Order",
+      "[FIELD] grand_total | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Find products that have never been reviewed.",
+    "positives": [
+      "[TABLE] tabItem",
+      "[TABLE] tabReview",
+      "[FIELD] name | [TABLE] tabItem",
+      "[FIELD] item_code | [TABLE] tabReview"
+    ]
+  },
+  {
+    "anchor": "List all departments with their average employee salary.",
+    "positives": [
+      "[TABLE] tabDepartment",
+      "[TABLE] tabEmployee",
+      "[FIELD] department | [TABLE] tabEmployee",
+      "[FIELD] salary | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "Retrieve customer names along with the date of their last order.",
+    "positives": [
+      "[TABLE] tabCustomer",
+      "[TABLE] tabSales Order",
+      "[FIELD] customer_name | [TABLE] tabCustomer",
+      "[FIELD] transaction_date | [TABLE] tabSales Order",
+      "[FIELD] customer | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Find the number of orders placed by each sales representative.",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] name | [TABLE] tabSales Order",
+      "[FIELD] sales_rep | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "List users along with the number of posts they have made.",
+    "positives": [
+      "[TABLE] tabUser",
+      "[TABLE] tabPost",
+      "[FIELD] name | [TABLE] tabUser",
+      "[FIELD] owner | [TABLE] tabPost"
+    ]
+  },
+  {
+    "anchor": "Retrieve the details of orders that include a discount.",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[TABLE] tabSales Order Item",
+      "[FIELD] discount_percentage | [TABLE] tabSales Order Item",
+      "[FIELD] parent | [TABLE] tabSales Order Item",
+      "[FIELD] name | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Find the highest-priced product in each product category.",
+    "positives": [
+      "[TABLE] tabItem",
+      "[FIELD] item_code | [TABLE] tabItem",
+      "[FIELD] item_name | [TABLE] tabItem",
+      "[FIELD] standard_rate | [TABLE] tabItem",
+      "[FIELD] item_group | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "List all events occurring in the next 7 days.",
+    "positives": [
+      "[TABLE] tabEvent",
+      "[FIELD] starts_on | [TABLE] tabEvent",
+      "[FIELD] ends_on | [TABLE] tabEvent"
+    ]
+  },
+  {
+    "anchor": "List all orders where the shipping cost is above the average shipping cost.",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] shipping_cost | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Retrieve the names and phone numbers of customers who have not placed any orders.",
+    "positives": [
+      "[TABLE] tabCustomer",
+      "[TABLE] tabSales Order",
+      "[FIELD] name | [TABLE] tabCustomer",
+      "[FIELD] phone | [TABLE] tabCustomer",
+      "[FIELD] customer | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Get the list of products along with the total quantity sold for each.",
+    "positives": [
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] qty | [TABLE] tabSales Invoice Item"
+    ]
+  },
+  {
+    "anchor": "Find the employee who has processed the maximum number of orders.",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] owner | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Retrieve the names of departments that have no employees assigned.",
+    "positives": [
+      "[TABLE] tabDepartment",
+      "[TABLE] tabEmployee",
+      "[FIELD] name | [TABLE] tabDepartment",
+      "[FIELD] department | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "List all transactions made in the last week.",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabPurchase Invoice",
+      "[TABLE] tabPayment Entry",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+      "[FIELD] posting_date | [TABLE] tabPayment Entry"
+    ]
+  },
+  {
+    "anchor": "Find the average product price for each supplier.",
+    "positives": [
+      "[TABLE] tabSupplier",
+      "[TABLE] tabItem",
+      "[TABLE] tabPurchase Invoice Item",
+      "[FIELD] supplier | [TABLE] tabItem",
+      "[FIELD] item_code | [TABLE] tabPurchase Invoice Item",
+      "[FIELD] rate | [TABLE] tabPurchase Invoice Item"
+    ]
+  },
+  {
+    "anchor": "Retrieve customer names along with the count of products they have reviewed.",
+    "positives": [
+      "[TABLE] tabCustomer",
+      "[TABLE] tabProduct Review",
+      "[FIELD] customer_name | [TABLE] tabCustomer",
+      "[FIELD] customer | [TABLE] tabProduct Review"
+    ]
+  },
+  {
+    "anchor": "Get the details of orders that include more than 5 distinct products.",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[TABLE] tabSales Order Item",
+      "[FIELD] name | [TABLE] tabSales Order",
+      "[FIELD] parent | [TABLE] tabSales Order Item",
+      "[FIELD] item_code | [TABLE] tabSales Order Item"
+    ]
+  },
+  {
+    "anchor": "List all products with a price increase compared to the previous year.",
+    "positives": [
+      "[TABLE] tabItem",
+      "[TABLE] tabItem Price",
+      "[FIELD] item_code | [TABLE] tabItem Price",
+      "[FIELD] price_list_rate | [TABLE] tabItem Price",
+      "[FIELD] valid_from | [TABLE] tabItem Price"
+    ]
+  },
+  {
+    "anchor": "Find the top 3 most popular product categories based on order quantity.",
+    "positives": [
+      "[TABLE] tabSales Order Item",
+      "[FIELD] item_code | [TABLE] tabSales Order Item",
+      "[FIELD] qty | [TABLE] tabSales Order Item",
+      "[TABLE] tabItem",
+      "[FIELD] item_group | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "Retrieve the list of orders along with the payment method used for each order.",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] name | [TABLE] tabSales Order",
+      "[FIELD] payment_method | [TABLE] tabSales Order Payment"
+    ]
+  },
+  {
+    "anchor": "Get the list of customers who have updated their profile in the last 24 hours.",
+    "positives": [
+      "[TABLE] tabCustomer",
+      "[FIELD] modified | [TABLE] tabCustomer"
+    ]
+  },
+  {
+    "anchor": "List all reviews with a rating below 2 along with the product name.",
+    "positives": [
+      "[TABLE] tabProduct",
+      "[TABLE] tabReview",
+      "[FIELD] product_name | [TABLE] tabProduct",
+      "[FIELD] rating | [TABLE] tabReview",
+      "[FIELD] product_id | [TABLE] tabReview",
+      "[FIELD] name | [TABLE] tabProduct"
+    ]
+  },
+  {
+    "anchor": "Find the total discount amount given for orders in the current month.",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] discount_amount | [TABLE] tabSales Order",
+      "[FIELD] transaction_date | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Retrieve the names of products that have been reordered more than twice.",
+    "positives": [
+      "[TABLE] tabSales Order Item",
+      "[FIELD] item_code | [TABLE] tabSales Order Item",
+      "[FIELD] sales_order | [TABLE] tabSales Order Item",
+      "[TABLE] tabSales Order",
+      "[FIELD] name | [TABLE] tabSales Order",
+      "[FIELD] is_reordered | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "List all users along with the date they last logged in.",
+    "positives": [
+      "[TABLE] tabUser",
+      "[FIELD] name | [TABLE] tabUser",
+      "[FIELD] last_login | [TABLE] tabUser"
+    ]
+  },
+  {
+    "anchor": "Get the number of orders processed by each warehouse.",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] name | [TABLE] tabSales Order",
+      "[FIELD] warehouse | [TABLE] tabSales Order Item",
+      "[TABLE] tabSales Order Item",
+      "[FIELD] parent | [TABLE] tabSales Order Item"
+    ]
+  },
+  {
+    "anchor": "Retrieve a list of all promotional codes used in the last quarter.",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] name | [TABLE] tabSales Invoice",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] discount_code | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "Find the average review rating for products in each category that have at least 5 reviews.",
+    "positives": [
+      "[TABLE] tabProduct",
+      "[TABLE] tabReview",
+      "[FIELD] category | [TABLE] tabProduct",
+      "[FIELD] product | [TABLE] tabReview",
+      "[FIELD] rating | [TABLE] tabReview"
+    ]
+  },
+  {
+    "anchor": "Find the top 3 departments with the highest average salary, using a CTE and window function for ranking.",
+    "positives": [
+      "[TABLE] tabDepartment",
+      "[TABLE] tabEmployee",
+      "[FIELD] department | [TABLE] tabEmployee",
+      "[FIELD] salary | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "Calculate the cumulative monthly sales per product category using window functions and a JOIN with a subquery for monthly totals.",
+    "positives": [
+      "[TABLE] tabSales Invoice Item",
+      "[TABLE] tabSales Invoice",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] qty | [TABLE] tabSales Invoice Item",
+      "[FIELD] base_net_amount | [TABLE] tabSales Invoice Item",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] name | [TABLE] tabSales Invoice",
+      "[FIELD] item_group | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "List customers who have placed orders in every available region using a nested subquery.",
+    "positives": [
+      "[TABLE] tabCustomer",
+      "[TABLE] tabSales Order",
+      "[FIELD] customer | [TABLE] tabSales Order",
+      "[FIELD] region | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Retrieve employees whose salary is above the 90th percentile across the company using a subquery.",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] salary | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "List product names along with their sales ranking for each month using window functions.",
+    "positives": [
+      "[TABLE] tabItem",
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] item_name | [TABLE] tabItem",
+      "[FIELD] name | [TABLE] tabSales Invoice",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] qty | [TABLE] tabSales Invoice Item",
+      "[FIELD] parent | [TABLE] tabSales Invoice Item"
+    ]
+  },
+  {
+    "anchor": "Find the top-selling products per quarter using a CTE and UNION to combine quarterly results.",
+    "positives": [
+      "[TABLE] tabSales Invoice Item",
+      "[TABLE] tabSales Invoice",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] qty | [TABLE] tabSales Invoice Item",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] name | [TABLE] tabSales Invoice",
+      "[FIELD] parent | [TABLE] tabSales Invoice Item"
+    ]
+  },
+  {
+    "anchor": "Compute the year-over-year revenue growth for each region using CTEs and window functions.",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] region | [TABLE] tabSales Invoice",
+      "[FIELD] net_total | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "Retrieve customers whose order frequency exceeds the average order frequency for their city using nested subqueries.",
+    "positives": [
+      "[TABLE] tabCustomer",
+      "[TABLE] tabSales Order",
+      "[FIELD] name | [TABLE] tabCustomer",
+      "[FIELD] customer | [TABLE] tabSales Order",
+      "[FIELD] city | [TABLE] tabCustomer",
+      "[FIELD] order_date | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "List employees along with the number of projects they have handled, and rank them within their department using window functions.",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[TABLE] tabProject",
+      "[TABLE] tabProject Assignment",
+      "[FIELD] name | [TABLE] tabEmployee",
+      "[FIELD] department | [TABLE] tabEmployee",
+      "[FIELD] employee | [TABLE] tabProject Assignment",
+      "[FIELD] project | [TABLE] tabProject Assignment"
+    ]
+  },
+  {
+    "anchor": "Find product categories that had increased sales compared to the previous quarter using a CTE and self-join.",
+    "positives": [
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] qty | [TABLE] tabSales Invoice Item",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] parent | [TABLE] tabSales Invoice Item",
+      "[FIELD] name | [TABLE] tabSales Invoice",
+      "[FIELD] item_group | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "Retrieve orders with a discount higher than the average discount for orders placed by the same customer using a subquery.",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] customer | [TABLE] tabSales Order",
+      "[FIELD] discount_percentage | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "List the top 5 customers with the highest lifetime value using a CTE and window functions.",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] grand_total | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "Find suppliers whose average delivery time is less than the overall average using a subquery and JOIN.",
+    "positives": [
+      "[TABLE] tabSupplier",
+      "[TABLE] tabPurchase Order",
+      "[FIELD] supplier | [TABLE] tabPurchase Order",
+      "[FIELD] delivery_time | [TABLE] tabPurchase Order"
+    ]
+  },
+  {
+    "anchor": "Retrieve detailed invoice information, including customer, order, and payment details, using multiple JOINs and a subquery for payment verification.",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] name | [TABLE] tabSales Invoice",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] parent | [TABLE] tabSales Invoice Item",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] qty | [TABLE] tabSales Invoice Item",
+      "[FIELD] rate | [TABLE] tabSales Invoice Item",
+      "[TABLE] tabCustomer",
+      "[FIELD] customer_name | [TABLE] tabCustomer",
+      "[FIELD] customer_group | [TABLE] tabCustomer",
+      "[TABLE] tabPayment Entry",
+      "[FIELD] reference_name | [TABLE] tabPayment Entry",
+      "[FIELD] paid_amount | [TABLE] tabPayment Entry",
+      "[FIELD] payment_type | [TABLE] tabPayment Entry"
+    ]
+  },
+  {
+    "anchor": "List all products that have never been returned by performing a LEFT JOIN with the returns table and filtering for NULL.",
+    "positives": [
+      "[TABLE] tabItem",
+      "[TABLE] tabSales Invoice Item",
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabSales Return",
+      "[FIELD] name | [TABLE] tabItem",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] parent | [TABLE] tabSales Invoice Item",
+      "[FIELD] name | [TABLE] tabSales Invoice",
+      "[FIELD] is_return | [TABLE] tabSales Invoice",
+      "[FIELD] return_against | [TABLE] tabSales Return"
+    ]
+  },
+  {
+    "anchor": "Calculate the moving average of daily sales for the past 30 days using window functions.",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "Find employees with a salary increase in the last year by comparing current salary to historical salary using a JOIN and subquery.",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[TABLE] tabSalary Structure Assignment",
+      "[FIELD] name | [TABLE] tabEmployee",
+      "[FIELD] employee | [TABLE] tabSalary Structure Assignment",
+      "[FIELD] salary_amount | [TABLE] tabSalary Structure Assignment",
+      "[FIELD] from_date | [TABLE] tabSalary Structure Assignment"
+    ]
+  },
+  {
+    "anchor": "List the regions where sales have increased by at least 20% compared to the previous month using a CTE and window functions.",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] region | [TABLE] tabSales Invoice",
+      "[FIELD] total | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "Retrieve the top performing marketing campaigns based on conversion rate and ROI using nested subqueries and multiple JOINs.",
+    "positives": [
+      "[TABLE] tabCampaign",
+      "[FIELD] name | [TABLE] tabCampaign",
+      "[FIELD] conversion_rate | [TABLE] tabCampaign",
+      "[FIELD] roi | [TABLE] tabCampaign",
+      "[TABLE] tabCampaignPerformance",
+      "[FIELD] campaign_name | [TABLE] tabCampaignPerformance",
+      "[FIELD] conversion_count | [TABLE] tabCampaignPerformance",
+      "[FIELD] roi_value | [TABLE] tabCampaignPerformance"
+    ]
+  },
+  {
+    "anchor": "Find the most consistent sales performers by calculating the standard deviation of monthly sales for each salesperson using a subquery.",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] name | [TABLE] tabSales Invoice",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] total | [TABLE] tabSales Invoice",
+      "[FIELD] owner | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "Find all customers who have placed orders totaling more than $1000",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[TABLE] tabSales Order Item",
+      "[FIELD] name | [TABLE] tabSales Order",
+      "[FIELD] customer | [TABLE] tabSales Order",
+      "[FIELD] parent | [TABLE] tabSales Order Item",
+      "[FIELD] amount | [TABLE] tabSales Order Item"
+    ]
+  },
+  {
+    "anchor": "List all products that have never been ordered",
+    "positives": [
+      "[TABLE] tabItem",
+      "[TABLE] tabSales Order Item",
+      "[FIELD] item_code | [TABLE] tabItem",
+      "[FIELD] item_code | [TABLE] tabSales Order Item"
+    ]
+  },
+  {
+    "anchor": "Find the average order value by month for the current year",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] name | [TABLE] tabSales Order",
+      "[FIELD] transaction_date | [TABLE] tabSales Order",
+      "[FIELD] grand_total | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Find employees who earn more than their department average",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] name | [TABLE] tabEmployee",
+      "[FIELD] department | [TABLE] tabEmployee",
+      "[FIELD] salary | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "Find the top 3 most popular products by quantity sold",
+    "positives": [
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] qty | [TABLE] tabSales Invoice Item"
+    ]
+  },
+  {
+    "anchor": "Find customers who have purchased from both the 'Electronics' and 'Clothing' categories",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] parent | [TABLE] tabSales Invoice Item",
+      "[FIELD] item_group | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "Calculate the running total of sales by day",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] base_net_amount | [TABLE] tabSales Invoice Item",
+      "[FIELD] parent | [TABLE] tabSales Invoice Item"
+    ]
+  },
+  {
+    "anchor": "Find departments where the total salary exceeds the company average department salary",
+    "positives": [
+      "[TABLE] tabDepartment",
+      "[TABLE] tabEmployee",
+      "[FIELD] department | [TABLE] tabEmployee",
+      "[FIELD] salary | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "Find the employee with the second highest salary in each department",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[TABLE] tabDepartment",
+      "[FIELD] salary | [TABLE] tabEmployee",
+      "[FIELD] department | [TABLE] tabEmployee",
+      "[FIELD] name | [TABLE] tabEmployee",
+      "[FIELD] department_name | [TABLE] tabDepartment"
+    ]
+  },
+  {
+    "anchor": "Find products that are priced above the average price of their category",
+    "positives": [
+      "[TABLE] tabItem",
+      "[FIELD] item_code | [TABLE] tabItem",
+      "[FIELD] item_name | [TABLE] tabItem",
+      "[FIELD] standard_rate | [TABLE] tabItem",
+      "[FIELD] item_group | [TABLE] tabItem",
+      "[TABLE] tabItem Group",
+      "[FIELD] name | [TABLE] tabItem Group"
+    ]
+  },
+  {
+    "anchor": "Find customers who have placed orders in consecutive months",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] customer | [TABLE] tabSales Order",
+      "[FIELD] transaction_date | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Find the percentage of total sales for each product category",
+    "positives": [
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] qty | [TABLE] tabSales Invoice Item",
+      "[FIELD] rate | [TABLE] tabSales Invoice Item",
+      "[TABLE] tabItem",
+      "[FIELD] item_name | [TABLE] tabItem",
+      "[FIELD] item_group | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "Find all managers who have more than 5 direct reports",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] reports_to | [TABLE] tabEmployee",
+      "[FIELD] name | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "Find customers who have placed exactly 3 orders",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] customer | [TABLE] tabSales Order",
+      "[FIELD] name | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Find the month with the highest sales for each year",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] grand_total | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "Find products that are always ordered in quantities greater than 2",
+    "positives": [
+      "[TABLE] tabSales Order Item",
+      "[FIELD] qty | [TABLE] tabSales Order Item",
+      "[FIELD] item_code | [TABLE] tabSales Order Item"
+    ]
+  },
+  {
+    "anchor": "Find employees who share the same salary within the same department",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[TABLE] tabDepartment",
+      "[FIELD] department | [TABLE] tabEmployee",
+      "[FIELD] salary | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "Find the customer who made the most recent order in each state",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] customer | [TABLE] tabSales Order",
+      "[FIELD] transaction_date | [TABLE] tabSales Order",
+      "[FIELD] state | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Find products that are in the top 10% of most expensive products",
+    "positives": [
+      "[TABLE] tabItem",
+      "[FIELD] price | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "Find the difference between each employee's salary and the department average",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] salary | [TABLE] tabEmployee",
+      "[TABLE] tabDepartment",
+      "[FIELD] department | [TABLE] tabEmployee",
+      "[FIELD] department_name | [TABLE] tabDepartment"
+    ]
+  },
+  {
+    "anchor": "Find all orders that include at least 3 different product categories",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[TABLE] tabSales Order Item",
+      "[FIELD] parent | [TABLE] tabSales Order Item",
+      "[FIELD] item_code | [TABLE] tabSales Order Item",
+      "[FIELD] parent | [TABLE] tabSales Order",
+      "[FIELD] item_group | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "Find customers who have placed orders in all categories",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[TABLE] tabSales Order Item",
+      "[TABLE] tabItem",
+      "[FIELD] customer | [TABLE] tabSales Order",
+      "[FIELD] name | [TABLE] tabSales Order",
+      "[FIELD] parent | [TABLE] tabSales Order Item",
+      "[FIELD] item_code | [TABLE] tabSales Order Item",
+      "[FIELD] item_group | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "Calculate the percentage of total revenue each product category contributes",
+    "positives": [
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] amount | [TABLE] tabSales Invoice Item",
+      "[TABLE] tabItem",
+      "[FIELD] item_group | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "Find employees who manage more people than the average manager",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] name | [TABLE] tabEmployee",
+      "[FIELD] reports_to | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "Identify products with inventory below the reorder level that haven't been ordered recently",
+    "positives": [
+      "[TABLE] tabItem",
+      "[FIELD] item_code | [TABLE] tabItem",
+      "[FIELD] reorder_level | [TABLE] tabItem",
+      "[TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin",
+      "[TABLE] tabPurchase Order",
+      "[FIELD] item_code | [TABLE] tabPurchase Order",
+      "[FIELD] transaction_date | [TABLE] tabPurchase Order"
+    ]
+  },
+  {
+    "anchor": "Find the most common shipping address for each customer",
+    "positives": [
+      "[TABLE] tabCustomer",
+      "[TABLE] tabAddress",
+      "[TABLE] tabDynamic Link",
+      "[FIELD] name | [TABLE] tabCustomer",
+      "[FIELD] customer | [TABLE] tabAddress",
+      "[FIELD] address_title | [TABLE] tabAddress",
+      "[FIELD] address_type | [TABLE] tabAddress",
+      "[FIELD] link_doctype | [TABLE] tabDynamic Link",
+      "[FIELD] link_name | [TABLE] tabDynamic Link",
+      "[FIELD] parent | [TABLE] tabDynamic Link",
+      "[FIELD] parenttype | [TABLE] tabDynamic Link"
+    ]
+  },
+  {
+    "anchor": "Calculate the average time between customer registration and first purchase",
+    "positives": [
+      "[TABLE] tabCustomer",
+      "[FIELD] name | [TABLE] tabCustomer",
+      "[FIELD] creation | [TABLE] tabCustomer",
+      "[TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "Find products that are consistently rated 4 stars or higher",
+    "positives": [
+      "[TABLE] tabProduct",
+      "[FIELD] name | [TABLE] tabProduct",
+      "[TABLE] tabProductReview",
+      "[FIELD] product | [TABLE] tabProductReview",
+      "[FIELD] rating | [TABLE] tabProductReview"
+    ]
+  },
+  {
+    "anchor": "Calculate the monthly growth rate of new customers",
+    "positives": [
+      "[TABLE] tabCustomer",
+      "[FIELD] creation | [TABLE] tabCustomer"
+    ]
+  },
+  {
+    "anchor": "Find customers who have purchased more than once in a single day",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] name | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "Identify employees who have been with the company longer than their manager",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] name | [TABLE] tabEmployee",
+      "[FIELD] date_of_joining | [TABLE] tabEmployee",
+      "[FIELD] reports_to | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "Find the most popular product combinations in orders (pairs)",
+    "positives": [
+      "[TABLE] tabSales Order Item",
+      "[FIELD] parent | [TABLE] tabSales Order Item",
+      "[FIELD] item_code | [TABLE] tabSales Order Item"
+    ]
+  },
+  {
+    "anchor": "Calculate the average order value by customer tier (bronze, silver, gold)",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[TABLE] tabCustomer",
+      "[FIELD] name | [TABLE] tabSales Order",
+      "[FIELD] customer | [TABLE] tabSales Order",
+      "[FIELD] base_grand_total | [TABLE] tabSales Order",
+      "[FIELD] customer_name | [TABLE] tabCustomer",
+      "[FIELD] customer_group | [TABLE] tabCustomer"
+    ]
+  },
+  {
+    "anchor": "Find customers who haven't purchased in the last 6 months but were previously active",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "Calculate the employee turnover rate by department",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] department | [TABLE] tabEmployee",
+      "[FIELD] status | [TABLE] tabEmployee",
+      "[TABLE] tabDepartment"
+    ]
+  },
+  {
+    "anchor": "Find products that are often out of stock (stock = 0) but have high demand",
+    "positives": [
+      "[TABLE] tabItem",
+      "[FIELD] item_code | [TABLE] tabItem",
+      "[FIELD] stock_uom | [TABLE] tabItem",
+      "[TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin",
+      "[TABLE] tabSales Order Item",
+      "[FIELD] item_code | [TABLE] tabSales Order Item",
+      "[FIELD] qty | [TABLE] tabSales Order Item"
+    ]
+  },
+  {
+    "anchor": "Calculate the average response time for customer support tickets by priority",
+    "positives": [
+      "[TABLE] tabSupport Ticket",
+      "[FIELD] priority | [TABLE] tabSupport Ticket",
+      "[FIELD] response_time | [TABLE] tabSupport Ticket"
+    ]
+  },
+  {
+    "anchor": "Find customers who always use the same payment method",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] payment_method | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "Identify the busiest hours for customer orders",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] creation | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Calculate the refund rate by product category",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabSales Invoice Item",
+      "[TABLE] tabProduct",
+      "[FIELD] name | [TABLE] tabSales Invoice",
+      "[FIELD] status | [TABLE] tabSales Invoice",
+      "[FIELD] is_return | [TABLE] tabSales Invoice",
+      "[FIELD] name | [TABLE] tabSales Invoice Item",
+      "[FIELD] parent | [TABLE] tabSales Invoice Item",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] qty | [TABLE] tabSales Invoice Item",
+      "[FIELD] item_code | [TABLE] tabProduct",
+      "[FIELD] category | [TABLE] tabProduct"
+    ]
+  },
+  {
+    "anchor": "Find employees with the highest average customer satisfaction ratings",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[TABLE] tabCustomer Satisfaction",
+      "[FIELD] employee | [TABLE] tabCustomer Satisfaction",
+      "[FIELD] rating | [TABLE] tabCustomer Satisfaction"
+    ]
+  },
+  {
+    "anchor": "Calculate the average discount percentage used by customer tier",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabCustomer",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] customer_name | [TABLE] tabCustomer",
+      "[FIELD] customer_group | [TABLE] tabCustomer",
+      "[FIELD] discount_amount | [TABLE] tabSales Invoice",
+      "[FIELD] grand_total | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "List all customers with their total number of orders",
+    "positives": [
+      "[TABLE] tabCustomer",
+      "[TABLE] tabSales Order",
+      "[FIELD] name | [TABLE] tabCustomer",
+      "[FIELD] customer | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Find products that have never been ordered",
+    "positives": [
+      "[TABLE] tabItem",
+      "[TABLE] tabSales Order Item",
+      "[FIELD] item_code | [TABLE] tabItem",
+      "[FIELD] item_code | [TABLE] tabSales Order Item"
+    ]
+  },
+  {
+    "anchor": "Calculate the total sales for each month",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "Find the top 5 best-selling products",
+    "positives": [
+      "[TABLE] tabSales Invoice Item",
+      "[TABLE] tabSales Invoice",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] qty | [TABLE] tabSales Invoice Item",
+      "[FIELD] parent | [TABLE] tabSales Invoice Item",
+      "[FIELD] name | [TABLE] tabSales Invoice",
+      "[FIELD] docstatus | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "List employees with their department names",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[TABLE] tabDepartment",
+      "[FIELD] department | [TABLE] tabEmployee",
+      "[FIELD] name | [TABLE] tabEmployee",
+      "[FIELD] department_name | [TABLE] tabDepartment"
+    ]
+  },
+  {
+    "anchor": "Find orders placed in the last 7 days",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] creation | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Count the number of customers by country",
+    "positives": [
+      "[TABLE] tabCustomer",
+      "[FIELD] name | [TABLE] tabCustomer",
+      "[FIELD] country | [TABLE] tabCustomer"
+    ]
+  },
+  {
+    "anchor": "Find the average order amount by customer",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] customer | [TABLE] tabSales Order",
+      "[FIELD] grand_total | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "List products with prices higher than the average price",
+    "positives": [
+      "[TABLE] tabItem",
+      "[FIELD] price | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "Find customers who haven't placed any orders",
+    "positives": [
+      "[TABLE] tabCustomer",
+      "[TABLE] tabSales Order",
+      "[FIELD] name | [TABLE] tabCustomer",
+      "[FIELD] customer | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Calculate the total revenue by product category",
+    "positives": [
+      "[TABLE] tabSales Invoice Item",
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabItem",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] amount | [TABLE] tabSales Invoice Item",
+      "[FIELD] parent | [TABLE] tabSales Invoice Item",
+      "[FIELD] name | [TABLE] tabSales Invoice",
+      "[FIELD] docstatus | [TABLE] tabSales Invoice",
+      "[FIELD] item_group | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "Find the most recent order for each customer",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] customer | [TABLE] tabSales Order",
+      "[FIELD] transaction_date | [TABLE] tabSales Order",
+      "[FIELD] name | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "List all products with their supplier names",
+    "positives": [
+      "[TABLE] tabItem",
+      "[TABLE] tabSupplier",
+      "[TABLE] tabItem Supplier",
+      "[FIELD] item_code | [TABLE] tabItem",
+      "[FIELD] supplier | [TABLE] tabItem Supplier",
+      "[FIELD] supplier_name | [TABLE] tabSupplier"
+    ]
+  },
+  {
+    "anchor": "Count the number of orders by status",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] status | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Find the employee with the most orders processed",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[TABLE] tabSales Order",
+      "[FIELD] employee | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "List customers and their favorite product category (most purchased)",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabSales Invoice Item",
+      "[TABLE] tabCustomer",
+      "[TABLE] tabItem",
+      "[TABLE] tabItem Group",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] name | [TABLE] tabSales Invoice",
+      "[FIELD] parent | [TABLE] tabSales Invoice Item",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] qty | [TABLE] tabSales Invoice Item",
+      "[FIELD] name | [TABLE] tabCustomer",
+      "[FIELD] item_name | [TABLE] tabItem",
+      "[FIELD] item_group | [TABLE] tabItem",
+      "[FIELD] name | [TABLE] tabItem Group"
+    ]
+  },
+  {
+    "anchor": "Find the day of the week with the most orders",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] transaction_date | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Calculate the average time between order placement and shipment",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[TABLE] tabDelivery Note",
+      "[FIELD] creation | [TABLE] tabSales Order",
+      "[FIELD] posting_date | [TABLE] tabDelivery Note",
+      "[FIELD] against_sales_order | [TABLE] tabDelivery Note"
+    ]
+  },
+  {
+    "anchor": "List products with low inventory (below 10 units)",
+    "positives": [
+      "[TABLE] tabItem",
+      "[FIELD] item_code | [TABLE] tabItem",
+      "[TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin"
+    ]
+  },
+  {
+    "anchor": "Find customers who ordered more than 3 times",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] customer | [TABLE] tabSales Order",
+      "[FIELD] name | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Calculate the total discount given to customers",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] discount_amount | [TABLE] tabSales Invoice",
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] discount_percentage | [TABLE] tabSales Invoice Item"
+    ]
+  },
+  {
+    "anchor": "List all customers",
+    "positives": [
+      "[TABLE] tabCustomer",
+      "[FIELD] name | [TABLE] tabCustomer",
+      "[FIELD] customer_name | [TABLE] tabCustomer"
+    ]
+  },
+  {
+    "anchor": "Count the total number of customers",
+    "positives": [
+      "[TABLE] tabCustomer",
+      "[FIELD] name | [TABLE] tabCustomer"
+    ]
+  },
+  {
+    "anchor": "List all products with prices over $50",
+    "positives": [
+      "[TABLE] tabItem",
+      "[FIELD] price | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "Find orders placed after January 1, 2023",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] transaction_date | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "List employees sorted by hire date (newest first)",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] name | [TABLE] tabEmployee",
+      "[FIELD] date_of_joining | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "Find products in the 'Electronics' category",
+    "positives": [
+      "[TABLE] tabItem",
+      "[FIELD] item_name | [TABLE] tabItem",
+      "[FIELD] item_code | [TABLE] tabItem",
+      "[FIELD] item_group | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "Count how many products are out of stock",
+    "positives": [
+      "[TABLE] tabItem",
+      "[FIELD] is_stock_item | [TABLE] tabItem",
+      "[FIELD] item_code | [TABLE] tabItem",
+      "[TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin"
+    ]
+  },
+  {
+    "anchor": "List customers from New York",
+    "positives": [
+      "[TABLE] tabCustomer",
+      "[FIELD] name | [TABLE] tabCustomer",
+      "[FIELD] city | [TABLE] tabAddress",
+      "[FIELD] customer | [TABLE] tabAddress"
+    ]
+  },
+  {
+    "anchor": "Find the most expensive product",
+    "positives": [
+      "[TABLE] tabItem",
+      "[FIELD] price | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "List all completed orders",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] name | [TABLE] tabSales Order",
+      "[FIELD] status | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Find customers whose names start with 'A'",
+    "positives": [
+      "[TABLE] tabCustomer",
+      "[FIELD] customer_name | [TABLE] tabCustomer"
+    ]
+  },
+  {
+    "anchor": "Calculate the average product price",
+    "positives": [
+      "[TABLE] tabItem",
+      "[FIELD] price_list_rate | [TABLE] tabItem Price"
+    ]
+  },
+  {
+    "anchor": "List products sorted by name (A-Z)",
+    "positives": [
+      "[TABLE] tabItem",
+      "[FIELD] item_name | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "Find orders with amounts between $100 and $500",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] base_grand_total | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Count how many orders were placed in 2023",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] creation | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "List all unique product categories",
+    "positives": [
+      "[TABLE] tabItem",
+      "[FIELD] item_group | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "Find the oldest employee",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] date_of_birth | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "List customers with their IDs and emails only",
+    "positives": [
+      "[TABLE] tabCustomer",
+      "[FIELD] name | [TABLE] tabCustomer",
+      "[FIELD] email_id | [TABLE] tabCustomer"
+    ]
+  },
+  {
+    "anchor": "Find products with exactly 10 items in stock",
+    "positives": [
+      "[TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin"
+    ]
+  },
+  {
+    "anchor": "Count how many customers have phone numbers",
+    "positives": [
+      "[TABLE] tabCustomer",
+      "[FIELD] phone | [TABLE] tabCustomer",
+      "[FIELD] mobile_no | [TABLE] tabCustomer"
+    ]
+  },
+  {
+    "anchor": "List orders sorted by amount (highest first)",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] base_grand_total | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Find products that need restocking (less than 5 in stock)",
+    "positives": [
+      "[TABLE] tabItem",
+      "[FIELD] item_code | [TABLE] tabItem",
+      "[FIELD] item_name | [TABLE] tabItem",
+      "[FIELD] stock_uom | [TABLE] tabItem",
+      "[TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin"
+    ]
+  },
+  {
+    "anchor": "List employees hired in the last 6 months",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] date_of_joining | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "Find the cheapest product",
+    "positives": [
+      "[TABLE] tabItem",
+      "[FIELD] price | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "Count how many products are in each category",
+    "positives": [
+      "[TABLE] tabItem",
+      "[FIELD] item_code | [TABLE] tabItem",
+      "[FIELD] item_name | [TABLE] tabItem",
+      "[FIELD] item_group | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "List customers with their names and emails, sorted by name",
+    "positives": [
+      "[TABLE] tabCustomer",
+      "[FIELD] customer_name | [TABLE] tabCustomer",
+      "[FIELD] email_id | [TABLE] tabCustomer"
+    ]
+  },
+  {
+    "anchor": "Find orders that were shipped late",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[TABLE] tabDelivery Note",
+      "[FIELD] delivery_date | [TABLE] tabSales Order",
+      "[FIELD] posting_date | [TABLE] tabDelivery Note",
+      "[FIELD] sales_order | [TABLE] tabDelivery Note"
+    ]
+  },
+  {
+    "anchor": "Calculate the total value of all products in stock",
+    "positives": [
+      "[TABLE] tabItem",
+      "[TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabItem",
+      "[FIELD] valuation_rate | [TABLE] tabItem",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin"
+    ]
+  },
+  {
+    "anchor": "List products with their names and prices, sorted by price",
+    "positives": [
+      "[TABLE] tabItem",
+      "[FIELD] item_name | [TABLE] tabItem",
+      "[FIELD] standard_rate | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "Find customers without email addresses",
+    "positives": [
+      "[TABLE] tabCustomer",
+      "[FIELD] email_id | [TABLE] tabCustomer"
+    ]
+  },
+  {
+    "anchor": "Count how many orders each status has",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] status | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "List employees with their names and hire dates",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] employee_name | [TABLE] tabEmployee",
+      "[FIELD] date_of_joining | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "Find products with names containing 'Pro'",
+    "positives": [
+      "[TABLE] tabItem",
+      "[FIELD] item_name | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "Calculate the total of all order amounts",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] grand_total | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "List customers and their registration dates, newest first",
+    "positives": [
+      "[TABLE] tabCustomer",
+      "[FIELD] name | [TABLE] tabCustomer",
+      "[FIELD] creation | [TABLE] tabCustomer"
+    ]
+  },
+  {
+    "anchor": "Find products priced between $20 and $50",
+    "positives": [
+      "[TABLE] tabItem",
+      "[FIELD] price | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "Count how many employees were hired each year",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] date_of_joining | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "List orders with their dates and amounts",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] name | [TABLE] tabSales Order",
+      "[FIELD] transaction_date | [TABLE] tabSales Order",
+      "[FIELD] grand_total | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "Find the newest customer",
+    "positives": [
+      "[TABLE] tabCustomer",
+      "[FIELD] creation | [TABLE] tabCustomer"
+    ]
+  },
+  {
+    "anchor": "List products with prices rounded to the nearest dollar",
+    "positives": [
+      "[TABLE] tabItem",
+      "[FIELD] item_name | [TABLE] tabItem",
+      "[FIELD] price | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "Find the average order amount",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] grand_total | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "List employees with their names in uppercase",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] employee_name | [TABLE] tabEmployee"
+    ]
+  }
+]

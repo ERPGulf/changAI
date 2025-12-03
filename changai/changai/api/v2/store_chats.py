@@ -1,7 +1,7 @@
 import json
 import frappe
 import requests 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=False)
 def save_message_doc(session_id:str,message_type:str,content:str):
     if message_type not in ["ai","human"]:
         frappe.throw("message_type must be 'human' or 'ai'")
@@ -29,7 +29,7 @@ def save_message_doc(session_id:str,message_type:str,content:str):
     return doc.name
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=False)
 def save_turn(session_id:str,user_text:str,bot_text:str):
     if user_text:
         user_row=save_message_doc(session_id,"human",user_text)
@@ -38,7 +38,7 @@ def save_turn(session_id:str,user_text:str,bot_text:str):
     return ai_row,user_row
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=False)
 def save_turn_2(session_id: str, user_text: str = None, bot_text: str = None):
     doc_name = frappe.db.exists("ChangAI Chat History", {"session_id": session_id})
 
@@ -83,7 +83,7 @@ def save_turn_2(session_id: str, user_text: str = None, bot_text: str = None):
 
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=False)
 def get_chat_history(session_id):
     rows=frappe.get_all("ChangAI Chat History",filters={"session_id":session_id},fields=["content","message_type"])
     rows.reverse()
@@ -93,7 +93,7 @@ def get_chat_history(session_id):
         result.append(rec)
     return result
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=False)
 def get_chat_history_1(session_id):
     doc_name = frappe.db.exists("ChangAI Chat History", {"session_id": session_id})
     if not doc_name:
@@ -159,7 +159,7 @@ Latest user message:
 """
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=False)
 def inject_prompt(user_qstn,session_id):
     rows=get_chat_history_1(session_id)
     prompt=PROMPT_FOLLOWUP.format(rows=rows,qstn=user_qstn)

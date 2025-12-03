@@ -756,7 +756,7 @@ app=workflow.compile(checkpointer=checkpointer)
 
 
 #to execute the sql returned inside frappe
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=False)
 def execute_query(query:str):
     q = (query or "").strip()
     # if not q.upper().startswith("SELECT") or ";" in q:
@@ -769,7 +769,7 @@ def execute_query(query:str):
 
 
 # to format the data returned afer execution using model
-# @frappe.whitelist(allow_guest=True)
+# @frappe.whitelist(allow_guest=False)
 # def format_data(qstn,sql,data):
 #     payload={
 #         "model":"gemma3:270m",
@@ -786,7 +786,7 @@ def execute_query(query:str):
 
 
 # to format the data returned afer execution using jinj2 template
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=False)
 def format_data_conversationally(user_data):
     """
     Formats user data using the single, powerful conversational Jinja2 template.
@@ -870,7 +870,7 @@ def save_logs(
 
 
 # Run
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=False)
 def run_text2sql_pipeline(user_question: str, chat_id: str):
     q = (user_question or "").strip()
     config = {
@@ -945,7 +945,7 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
         "Result": result,
         "Bot": formatted_result,
     }
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=False)
 def respond_from_cache(user_question:str):
     if user_question:
         doc=frappe.db.get_value("ChangAI Logs",{"user_question":user_question},["sql_generated","result"],as_dict=False)
@@ -971,7 +971,7 @@ def respond_from_cache(user_question:str):
 # print(result)
 
 
-# @frappe.whitelist(allow_guest=True)
+# @frappe.whitelist(allow_guest=False)
 # def get_checkpoint_id(chat_id):
 #     config = {
 #         "configurable": {"thread_id": chat_id},
