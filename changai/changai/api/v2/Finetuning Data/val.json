@@ -1,4 +1,828 @@
 [
+  {
+    "anchor": "pos closing cash not tallied today",
+    "positives": [
+      "[TABLE] tabPOS Closing Entry",
+      "[TABLE] tabPOS Closing Entry Detail",
+      "[FIELD] closing_amount | [TABLE] tabPOS Closing Entry Detail",
+      "[FIELD] opening_amount | [TABLE] tabPOS Closing Entry Detail",
+      "[FIELD] grand_total | [TABLE] tabPOS Closing Entry",
+      "[FIELD] difference | [TABLE] tabPOS Closing Entry Detail",
+      "[FIELD] posting_date | [TABLE] tabPOS Closing Entry"
+    ]
+  },
+  {
+    "anchor": "counter cash short in pos close",
+    "positives": [
+      "[TABLE] tabPOS Closing Entry",
+      "[TABLE] tabPOS Closing Entry Detail",
+      "[FIELD] closing_amount | [TABLE] tabPOS Closing Entry Detail",
+      "[FIELD] opening_amount | [TABLE] tabPOS Closing Entry Detail",
+      "[FIELD] difference | [TABLE] tabPOS Closing Entry Detail",
+      "[FIELD] error_message | [TABLE] tabPOS Closing Entry"
+    ]
+  },
+  {
+    "anchor": "pos shift close balance not zero",
+    "positives": [
+      "[TABLE] tabPOS Closing Entry",
+      "[TABLE] tabPOS Closing Entry Detail",
+      "[FIELD] closing_amount | [TABLE] tabPOS Closing Entry Detail",
+      "[FIELD] opening_amount | [TABLE] tabPOS Closing Entry Detail",
+      "[FIELD] total_quantity | [TABLE] tabPOS Closing Entry",
+      "[FIELD] posting_date | [TABLE] tabPOS Closing Entry"
+    ]
+  },
+  {
+    "anchor": "yday pos closing not done for this counter",
+    "positives": [
+      "[TABLE] tabPOS Closing Entry",
+      "[FIELD] posting_date | [TABLE] tabPOS Closing Entry",
+      "[FIELD] pos_profile | [TABLE] tabPOS Closing Entry",
+      "[FIELD] status | [TABLE] tabPOS Closing Entry",
+      "[FIELD] user | [TABLE] tabPOS Closing Entry"
+    ]
+  },
+  {
+    "anchor": "sales done but no pos closing entry made",
+    "positives": [
+      "[TABLE] tabPOS Invoice",
+      "[TABLE] tabPOS Closing Entry",
+      "[FIELD] posting_date | [TABLE] tabPOS Invoice",
+      "[FIELD] status | [TABLE] tabPOS Invoice",
+      "[FIELD] pos_profile | [TABLE] tabPOS Invoice",
+      "[FIELD] pos_opening_entry | [TABLE] tabPOS Closing Entry"
+    ]
+  },
+  {
+    "anchor": "pos profile user bypassed restriction",
+    "positives": [
+      "[TABLE] tabPOS Invoice",
+      "[TABLE] tabPOS Closing Entry",
+      "[TABLE] tabCustomer",
+      "[FIELD] pos_profile | [TABLE] tabPOS Invoice",
+      "[FIELD] pos_profile | [TABLE] tabPOS Closing Entry",
+      "[FIELD] customer_pos_id | [TABLE] tabCustomer",
+      "[FIELD] is_pos | [TABLE] tabPOS Invoice"
+    ]
+  },
+  {
+    "anchor": "cashier using wrong pos profile",
+    "positives": [
+      "[TABLE] tabPOS Invoice",
+      "[TABLE] tabPOS Closing Entry",
+      "[FIELD] pos_profile | [TABLE] tabPOS Invoice",
+      "[FIELD] pos_profile | [TABLE] tabPOS Closing Entry",
+      "[FIELD] owner | [TABLE] tabPOS Invoice",
+      "[FIELD] user | [TABLE] tabPOS Closing Entry"
+    ]
+  },
+  {
+    "anchor": "pos closing entry status stuck draft",
+    "positives": [
+      "[TABLE] tabPOS Closing Entry",
+      "[FIELD] status | [TABLE] tabPOS Closing Entry",
+      "[FIELD] posting_date | [TABLE] tabPOS Closing Entry",
+      "[FIELD] docstatus | [TABLE] tabPOS Closing Entry",
+      "[FIELD] error_message | [TABLE] tabPOS Closing Entry"
+    ]
+  },
+  {
+    "anchor": "shift cash extra than system",
+    "positives": [
+      "[TABLE] tabPOS Closing Entry",
+      "[TABLE] tabPOS Closing Entry Detail",
+      "[FIELD] closing_amount | [TABLE] tabPOS Closing Entry Detail",
+      "[FIELD] opening_amount | [TABLE] tabPOS Closing Entry Detail",
+      "[FIELD] difference | [TABLE] tabPOS Closing Entry Detail",
+      "[FIELD] grand_total | [TABLE] tabPOS Closing Entry"
+    ]
+  },
+  {
+    "anchor": "pos invoice not considered in closing",
+    "positives": [
+      "[TABLE] tabPOS Invoice",
+      "[TABLE] tabPOS Closing Entry",
+      "[TABLE] tabPOS Closing Entry Detail",
+      "[FIELD] posting_date | [TABLE] tabPOS Invoice",
+      "[FIELD] status | [TABLE] tabPOS Invoice",
+      "[FIELD] pos_profile | [TABLE] tabPOS Invoice",
+      "[FIELD] pos_opening_entry | [TABLE] tabPOS Closing Entry"
+    ]
+  },
+  {
+    "anchor": "neg stock in riyadh godown, why below zero?",
+    "positives": [
+      "[TABLE] tabBin",
+      "[TABLE] tabStock Ledger Entry",
+      "[TABLE] tabItem",
+      "[FIELD] warehouse | [TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] allow_negative_stock | [TABLE] tabItem",
+      "[FIELD] qty_after_transaction | [TABLE] tabStock Ledger Entry"
+    ]
+  },
+  {
+    "anchor": "store qty minus for this item, fix",
+    "positives": [
+      "[TABLE] tabBin",
+      "[TABLE] tabItem",
+      "[TABLE] tabStock Ledger Entry",
+      "[FIELD] item_code | [TABLE] tabBin",
+      "[FIELD] warehouse | [TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] allow_negative_stock | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "why warehouse stock < 0 for tv?",
+    "positives": [
+      "[TABLE] tabBin",
+      "[TABLE] tabItem",
+      "[TABLE] tabStock Ledger Entry",
+      "[FIELD] warehouse | [TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin",
+      "[FIELD] allow_negative_stock | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "neg stk jeddah wh stop it",
+    "positives": [
+      "[TABLE] tabBin",
+      "[TABLE] tabItem",
+      "[FIELD] warehouse | [TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] allow_negative_stock | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "block minus qty in branch warehouse",
+    "positives": [
+      "[TABLE] tabItem",
+      "[TABLE] tabBin",
+      "[FIELD] allow_negative_stock | [TABLE] tabItem",
+      "[FIELD] warehouse | [TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] safety_stock | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "godown showing minus qty after delivery",
+    "positives": [
+      "[TABLE] tabStock Ledger Entry",
+      "[TABLE] tabBin",
+      "[FIELD] qty_after_transaction | [TABLE] tabStock Ledger Entry",
+      "[FIELD] warehouse | [TABLE] tabStock Ledger Entry",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] warehouse | [TABLE] tabBin"
+    ]
+  },
+  {
+    "anchor": "item going negative after stock entry",
+    "positives": [
+      "[TABLE] tabStock Ledger Entry",
+      "[TABLE] tabItem",
+      "[TABLE] tabBin",
+      "[FIELD] qty_after_transaction | [TABLE] tabStock Ledger Entry",
+      "[FIELD] item_code | [TABLE] tabStock Ledger Entry",
+      "[FIELD] allow_negative_stock | [TABLE] tabItem",
+      "[FIELD] actual_qty | [TABLE] tabBin"
+    ]
+  },
+  {
+    "anchor": "stop sales if stock below zero",
+    "positives": [
+      "[TABLE] tabItem",
+      "[FIELD] allow_negative_stock | [TABLE] tabItem",
+      "[FIELD] is_stock_item | [TABLE] tabItem",
+      "[FIELD] safety_stock | [TABLE] tabItem"
+    ]
+  },
+  {
+    "anchor": "warehouse type rejected but still issuing stock",
+    "positives": [
+      "[TABLE] tabWarehouse",
+      "[TABLE] tabStock Ledger Entry",
+      "[FIELD] is_rejected_warehouse | [TABLE] tabWarehouse",
+      "[FIELD] warehouse_type | [TABLE] tabWarehouse",
+      "[FIELD] warehouse | [TABLE] tabStock Ledger Entry"
+    ]
+  },
+  {
+    "anchor": "qty mismatch bin vs stock ledger",
+    "positives": [
+      "[TABLE] tabBin",
+      "[TABLE] tabStock Ledger Entry",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] qty_after_transaction | [TABLE] tabStock Ledger Entry",
+      "[FIELD] warehouse | [TABLE] tabBin",
+      "[FIELD] warehouse | [TABLE] tabStock Ledger Entry"
+    ]
+  },
+  {
+    "anchor": "opening stock ok but live stock negative",
+    "positives": [
+      "[TABLE] tabItem",
+      "[TABLE] tabBin",
+      "[TABLE] tabStock Ledger Entry",
+      "[FIELD] opening_stock | [TABLE] tabItem",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] qty_after_transaction | [TABLE] tabStock Ledger Entry"
+    ]
+  },
+  {
+    "anchor": "reserved more than actual stock in wh",
+    "positives": [
+      "[TABLE] tabBin",
+      "[TABLE] tabItem",
+      "[FIELD] reserved_stock | [TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] safety_stock | [TABLE] tabItem",
+      "[FIELD] warehouse | [TABLE] tabBin"
+    ]
+  },
+  {
+    "anchor": "advance payment entry not showing in payment reconciliation",
+    "positives": [
+      "[TABLE] tabPayment Entry",
+      "[TABLE] tabPayment Entry Reference",
+      "[FIELD] reconcile_on_advance_payment_date | [TABLE] tabPayment Entry",
+      "[FIELD] reconcile_effect_on | [TABLE] tabPayment Entry Reference",
+      "[FIELD] is_opening | [TABLE] tabPayment Entry"
+    ]
+  },
+  {
+    "anchor": "sales invoice submitted but payment entry not linked automatically",
+    "positives": [
+      "[TABLE] tabPayment Entry Reference",
+      "[TABLE] tabPayment Entry",
+      "[TABLE] tabSales Invoice",
+      "[FIELD] reference_doctype | [TABLE] tabPayment Entry Reference",
+      "[FIELD] reference_name | [TABLE] tabPayment Entry Reference",
+      "[FIELD] only_include_allocated_payments | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "customer payment received but invoice still outstanding",
+    "positives": [
+      "[TABLE] tabPayment Entry",
+      "[TABLE] tabPayment Entry Reference",
+      "[TABLE] tabSales Invoice",
+      "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+      "[FIELD] allocated_amount | [TABLE] tabPayment Entry Reference",
+      "[FIELD] party | [TABLE] tabPayment Entry",
+      "[FIELD] payment_type | [TABLE] tabPayment Entry"
+    ]
+  },
+  {
+    "anchor": "payment entry not allocated to any invoice",
+    "positives": [
+      "[TABLE] tabPayment Entry",
+      "[TABLE] tabPayment Entry Reference",
+      "[FIELD] reference_doctype | [TABLE] tabPayment Entry Reference",
+      "[FIELD] reference_name | [TABLE] tabPayment Entry Reference",
+      "[FIELD] allocated_amount | [TABLE] tabPayment Entry Reference",
+      "[FIELD] party | [TABLE] tabPayment Entry"
+    ]
+  },
+  {
+    "anchor": "advance payment not adjusted against sales invoice",
+    "positives": [
+      "[TABLE] tabPayment Entry",
+      "[TABLE] tabPayment Entry Reference",
+      "[TABLE] tabSales Invoice",
+      "[FIELD] is_opening | [TABLE] tabPayment Entry",
+      "[FIELD] payment_term_outstanding | [TABLE] tabPayment Entry Reference",
+      "[FIELD] outstanding_amount | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "bank reconciliation uncleared cheques older than 90 days",
+    "positives": [
+      "[TABLE] tabPayment Entry",
+      "[TABLE] tabPayment Entry Reference",
+      "[TABLE] tabJournal Entry",
+      "[FIELD] clearance_date | [TABLE] tabPayment Entry",
+      "[FIELD] clearance_date | [TABLE] tabJournal Entry",
+      "[FIELD] cheque_date | [TABLE] tabJournal Entry",
+      "[FIELD] reference_no | [TABLE] tabPayment Entry"
+    ]
+  },
+  {
+    "anchor": "double payment showing for same invoice in reconciliation",
+    "positives": [
+      "[TABLE] tabPayment Entry",
+      "[TABLE] tabPayment Entry Reference",
+      "[TABLE] tabSales Invoice",
+      "[FIELD] reference_name | [TABLE] tabPayment Entry Reference",
+      "[FIELD] reference_doctype | [TABLE] tabPayment Entry Reference",
+      "[FIELD] allocated_amount | [TABLE] tabPayment Entry Reference",
+      "[FIELD] outstanding_amount | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "payment posted to wrong customer account",
+    "positives": [
+      "[TABLE] tabPayment Entry",
+      "[FIELD] party_type | [TABLE] tabPayment Entry",
+      "[FIELD] party | [TABLE] tabPayment Entry",
+      "[FIELD] paid_amount | [TABLE] tabPayment Entry",
+      "[FIELD] received_amount | [TABLE] tabPayment Entry"
+    ]
+  },
+  {
+    "anchor": "partial payment not reflected correctly on invoice",
+    "positives": [
+      "[TABLE] tabPayment Entry",
+      "[TABLE] tabPayment Entry Reference",
+      "[TABLE] tabSales Invoice",
+      "[FIELD] allocated_amount | [TABLE] tabPayment Entry Reference",
+      "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+      "[FIELD] due_date | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "payment entry created but not appearing in customer ledger",
+    "positives": [
+      "[TABLE] tabPayment Entry",
+      "[FIELD] posting_date | [TABLE] tabPayment Entry",
+      "[FIELD] party_type | [TABLE] tabPayment Entry",
+      "[FIELD] party | [TABLE] tabPayment Entry",
+      "[FIELD] paid_amount | [TABLE] tabPayment Entry",
+      "[FIELD] is_opening | [TABLE] tabPayment Entry"
+    ]
+  },
+  {
+    "anchor": "overdue invoices for this customer",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] due_date | [TABLE] tabSales Invoice",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] outstanding_amount | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "any late payments from client",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] due_date | [TABLE] tabSales Invoice",
+      "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "which invoices are overdue now",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] due_date | [TABLE] tabSales Invoice",
+      "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "overdue billing for last month",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] due_date | [TABLE] tabSales Invoice",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] outstanding_amount | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "customer has overdue invoice",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] due_date | [TABLE] tabSales Invoice",
+      "[FIELD] outstanding_amount | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "invoices pending beyond due date",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] due_date | [TABLE] tabSales Invoice",
+      "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+      "[FIELD] status | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "client overdue bills list",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] customer_name | [TABLE] tabSales Invoice",
+      "[FIELD] due_date | [TABLE] tabSales Invoice",
+      "[FIELD] outstanding_amount | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "show all outstanding overdue invoices",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+      "[FIELD] due_date | [TABLE] tabSales Invoice",
+      "[FIELD] status | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "which invoices crossed credit limit and overdue",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+      "[FIELD] due_date | [TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "late payment alert for customers",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] due_date | [TABLE] tabSales Invoice",
+      "[FIELD] outstanding_amount | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "who purchased this product today?",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] customer_name | [TABLE] tabSales Invoice",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item"
+    ]
+  },
+  {
+    "anchor": "which customer bought laptop last week",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] customer_name | [TABLE] tabSales Invoice",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item"
+    ]
+  },
+  {
+    "anchor": "list all employees currently on probation",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] status | [TABLE] tabEmployee",
+      "[FIELD] scheduled_confirmation_date | [TABLE] tabEmployee",
+      "[FIELD] final_confirmation_date | [TABLE] tabEmployee",
+      "[FIELD] date_of_joining | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "who are still in probation period",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] status | [TABLE] tabEmployee",
+      "[FIELD] scheduled_confirmation_date | [TABLE] tabEmployee",
+      "[FIELD] final_confirmation_date | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "employees whose confirmation date not reached yet",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] scheduled_confirmation_date | [TABLE] tabEmployee",
+      "[FIELD] final_confirmation_date | [TABLE] tabEmployee",
+      "[FIELD] status | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "show staff pending for confirmation this month",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] scheduled_confirmation_date | [TABLE] tabEmployee",
+      "[FIELD] final_confirmation_date | [TABLE] tabEmployee",
+      "[FIELD] status | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "which employees crossed probation but not confirmed",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] scheduled_confirmation_date | [TABLE] tabEmployee",
+      "[FIELD] final_confirmation_date | [TABLE] tabEmployee",
+      "[FIELD] date_of_joining | [TABLE] tabEmployee",
+      "[FIELD] status | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "any staff still marked probation after 6 months service",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] date_of_joining | [TABLE] tabEmployee",
+      "[FIELD] scheduled_confirmation_date | [TABLE] tabEmployee",
+      "[FIELD] final_confirmation_date | [TABLE] tabEmployee",
+      "[FIELD] status | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "department wise employees under probation",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] department | [TABLE] tabEmployee",
+      "[FIELD] status | [TABLE] tabEmployee",
+      "[FIELD] scheduled_confirmation_date | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "new joiners still not confirmed",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] date_of_joining | [TABLE] tabEmployee",
+      "[FIELD] status | [TABLE] tabEmployee",
+      "[FIELD] final_confirmation_date | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "who got confirmed last week from probation",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] final_confirmation_date | [TABLE] tabEmployee",
+      "[FIELD] scheduled_confirmation_date | [TABLE] tabEmployee",
+      "[FIELD] status | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "employees whose confirmation delayed beyond schedule",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] scheduled_confirmation_date | [TABLE] tabEmployee",
+      "[FIELD] final_confirmation_date | [TABLE] tabEmployee",
+      "[FIELD] status | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "buyer info for iphone purchase yesterday",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] customer_name | [TABLE] tabSales Invoice",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "customer who bought pen today",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] customer_name | [TABLE] tabSales Invoice",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item"
+    ]
+  },
+  {
+    "anchor": "buyers for this item last month",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] customer_name | [TABLE] tabSales Invoice",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item"
+    ]
+  },
+  {
+    "anchor": "who ordered samsung phone today",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] customer_name | [TABLE] tabSales Invoice",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "any buyer for headphones yesterday",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] customer_name | [TABLE] tabSales Invoice",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item"
+    ]
+  },
+  {
+    "anchor": "find customers who purchased iphone this week",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] customer_name | [TABLE] tabSales Invoice",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "who bought shoes today",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] customer_name | [TABLE] tabSales Invoice",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item"
+    ]
+  },
+  {
+    "anchor": "buyer details for macbook purchase",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] customer_name | [TABLE] tabSales Invoice",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "sales order still open from last quarter",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] posting_date | [TABLE] tabSales Order",
+      "[FIELD] delivery_date | [TABLE] tabSales Order",
+      "[FIELD] status | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "so pending from previous month please close",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] posting_date | [TABLE] tabSales Order",
+      "[FIELD] delivery_date | [TABLE] tabSales Order",
+      "[FIELD] status | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "open sales order older than 60 days",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] posting_date | [TABLE] tabSales Order",
+      "[FIELD] delivery_date | [TABLE] tabSales Order",
+      "[FIELD] status | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "which SOs are stuck more than 1 month",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] posting_date | [TABLE] tabSales Order",
+      "[FIELD] delivery_date | [TABLE] tabSales Order",
+      "[FIELD] status | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "check delayed sales orders not delivered",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] delivery_date | [TABLE] tabSales Order",
+      "[FIELD] status | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "so behind schedule please update",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] delivery_date | [TABLE] tabSales Order",
+      "[FIELD] status | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "pending so exceeding due date",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] delivery_date | [TABLE] tabSales Order",
+      "[FIELD] status | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "sales order late beyond promised date",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] delivery_date | [TABLE] tabSales Order",
+      "[FIELD] status | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "any delayed customer sales order still open",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] customer | [TABLE] tabSales Order",
+      "[FIELD] delivery_date | [TABLE] tabSales Order",
+      "[FIELD] status | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "oldest outstanding sales order check now",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] posting_date | [TABLE] tabSales Order",
+      "[FIELD] delivery_date | [TABLE] tabSales Order",
+      "[FIELD] status | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "who bought laptop yesterday?",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] customer_name | [TABLE] tabSales Invoice",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "whos the customer bought product last week?",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] customer_name | [TABLE] tabSales Invoice",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item"
+    ]
+  },
+  {
+    "anchor": "which buyer purchased iphone today?",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] customer_name | [TABLE] tabSales Invoice",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "SO pending more than 30 days close them",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] posting_date | [TABLE] tabSales Order",
+      "[FIELD] delivery_date | [TABLE] tabSales Order",
+      "[FIELD] status | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "sales order stuck for 2 months no delivery",
+    "positives": [
+      "[TABLE] tabSales Order",
+      "[FIELD] posting_date | [TABLE] tabSales Order",
+      "[FIELD] delivery_date | [TABLE] tabSales Order",
+      "[FIELD] status | [TABLE] tabSales Order"
+    ]
+  },
+  {
+    "anchor": "customer has overdue invoice but still delivered item",
+    "positives": [
+      "[TABLE] tabDelivery Note",
+      "[FIELD] customer | [TABLE] tabDelivery Note",
+      "[FIELD] dn_required | [TABLE] tabCustomer",
+      "[FIELD] delivery_note | [TABLE] tabSales Invoice Item"
+    ]
+  },
+  {
+    "anchor": "employees still under probation check list",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] scheduled_confirmation_date | [TABLE] tabEmployee",
+      "[FIELD] final_confirmation_date | [TABLE] tabEmployee",
+      "[FIELD] date_of_joining | [TABLE] tabEmployee",
+      "[FIELD] status | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "which employees are not confirmed yet",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] final_confirmation_date | [TABLE] tabEmployee",
+      "[FIELD] scheduled_confirmation_date | [TABLE] tabEmployee",
+      "[FIELD] status | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "which confirmed employees still marked probation",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] final_confirmation_date | [TABLE] tabEmployee",
+      "[FIELD] scheduled_confirmation_date | [TABLE] tabEmployee",
+      "[FIELD] status | [TABLE] tabEmployee"
+    ]
+  },
+  {
+    "anchor": "check if any staff not confirmed after 6 months",
+    "positives": [
+      "[TABLE] tabEmployee",
+      "[FIELD] final_confirmation_date | [TABLE] tabEmployee",
+      "[FIELD] scheduled_confirmation_date | [TABLE] tabEmployee",
+      "[FIELD] date_of_joining | [TABLE] tabEmployee"
+    ]
+  },
     {
         "anchor": "Which invoices are overdue as of today?",
         "positives": [

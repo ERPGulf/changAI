@@ -115,8 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }
 
-
-
     async function setChatHistory(message) {
         chatHistory.push({ role: 'user', text: message });
         renderMessages();
@@ -137,61 +135,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
         generateBotResponse(message, thinkingMsg, warmingTimeout);
     }
-    async function callchangAIapi(API_URL,payload){
-        const resp=await fetch(API_URL,{
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json",
-                "Accept":"application/json",
-                "X-Frappe-CSRF-Token": frappe.csrf_token, 
-            },
-            body:JSON.stringify(payload||{})
-        });
-        const text=await resp.text()
-        if (!resp.ok)
-        {
-            console.error("HTTP error from server:", resp.status, text);
-            throw new Error(`Server error: ${resp.status}`);
-        }
-        let data;
-        try{
-            data=JSON.parse(text)
-        }
-        catch(e){
-            console.error("Server did not return JSON. Body was:", text)
-            throw new Error("Server did not returned a valid json")
-        }
-        return data.message?? data;
-
+    function normalizeBotText(bot) {
+            if (typeof bot === "string") return bot;
+            if (bot && typeof bot === "object") {
+                return bot.answer || bot.text || "";
+            }
+            return "";
     }
+
     async function generateBotResponse(userMsg, thinkingMsg, warmingTimeout) {
         try {
             const API_URL = await frappe.db.get_single_value("ChangAI Settings", "vite_api_url");
-            const payload={
-                "user_question":userMsg,
-                "chat_id":"new_2"
+            const reqOpts = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Frappe-CSRF-Token": frappe.csrf_token
+                },
+                body: JSON.stringify({ user_question: userMsg,chat_id:"session_10" }),
             };
 
-            // const reqOpts = {
-            //     method: "POST",
-            //     headers: {
-            //         "Content-Type": "application/json",
-            //         "X-Frappe-CSRF-Token": frappe.csrf_token
-            //     },
-            //     body: JSON.stringify({ user_question: userMsg,chat_id:"session_1" }),
-            // };
+            const res = await fetch(API_URL, reqOpts);
+            const data =  await res.json()
+            console.log("API response:", data); 
 
-            // const res = await fetch(API_URL, reqOpts);
-            // const data =  await res.json()
-            const response=await callchangAIapi(API_URL,payload)
-            console.log("API response:", response); 
+            if (!res.ok) throw new Error(data.message?.error || "Something went wrong!!");
+
             clearTimeout(warmingTimeout);
-            const result = (response.Bot || "").trim();
-            thinkingMsg.text = result || "I couldn't generate a reply.";
+
+            if (data.message) {
+                const botText = normalizeBotText(data.message.Bot);
+                thinkingMsg.text = botText.trim() || "No response.";
+            }
 
             debugLogs.push({
                 user: userMsg,
-                response:response
+                response:data.message
             });
 
             renderMessages();

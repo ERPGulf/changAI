@@ -1,5 +1,0 @@
-templates:
-  - role: "Sales User"
-    predicate: "`company` = '{{user.company}}'"
-  - role: "Manager"
-    predicate: "1=1"

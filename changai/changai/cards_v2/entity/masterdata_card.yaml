@@ -1,27 +1,3 @@
-- entity_type: tabCustomer
-  entity_id: "A. Williams"
-  canonical_name: "A. Williams"
-
-  aliases:
-    - "Williams"
-    - "A Williams"
-    - "Mr Williams"
-
-  misspellings:
-    - "willimas"
-    - "wilams"
-    - "wiliams"
-
-  filters:
-    field: "customer"
-    value: "A. Williams"
-
-  embedding_text: >
-    Customer: A. Williams. Also known as Williams, A Williams, or Mr Williams.
-    Common misspellings include willimas, wilams, and wiliams.
-
-
-
 - type: alias
   entity: Customer
   id: "Acme, Inc."

@@ -1,21 +1,6 @@
 import json
 import frappe
 import requests 
-@frappe.whitelist(allow_guest=False)
-def save_message_doc(session_id:str,message_type:str,content:str):
-    if message_type not in ["ai","human"]:
-        frappe.throw("message_type must be 'human' or 'ai'")
-    doc=frappe.get_doc({
-        "doctype":"ChangAI Chat History",
-        "session_id": session_id,
-        "message_type": message_type,
-        "content": content or ""
-    })
-    doc.insert(ignore_permissions=True)
-    frappe.db.commit()
-    return doc.name
-
-
 def save_message_doc(session_id:str,message_type:str,content:str):
 
     doc=frappe.get_doc({
@@ -29,39 +14,29 @@ def save_message_doc(session_id:str,message_type:str,content:str):
     return doc.name
 
 
-@frappe.whitelist(allow_guest=False)
-def save_turn(session_id:str,user_text:str,bot_text:str):
-    if user_text:
-        user_row=save_message_doc(session_id,"human",user_text)
-    if bot_text:
-        ai_row=save_message_doc(session_id,"ai",bot_text)
-    return ai_row,user_row
+@frappe.whitelist(allow_guest=True)
+def save_turn_2(session_id: str, user_text: str=None, bot_text: dict=None):
+    import json
 
-
-@frappe.whitelist(allow_guest=False)
-def save_turn_2(session_id: str, user_text: str = None, bot_text: str = None):
+    # find existing document
     doc_name = frappe.db.exists("ChangAI Chat History", {"session_id": session_id})
 
-    current_value = ""
+    history = []
     if doc_name:
-        current_value = frappe.db.get_value(
-            "ChangAI Chat History",
-            doc_name,
-            "content"
-        ) or ""
+        raw = frappe.db.get_value("ChangAI Chat History", doc_name, "content")
+        if raw:
+            try:
+                history = json.loads(raw)
+            except Exception:
+                history = []
 
-    lines = []
-    if current_value:
-        lines.append(current_value)
     if user_text:
-        lines.append(json.dumps({"human": user_text}, ensure_ascii=False))
+        history.append({"human": user_text})
     if bot_text:
-        lines.append(json.dumps({"ai": bot_text}, ensure_ascii=False))
-
-    new_content = "\n".join(lines)
+        history.append({"ai": bot_text})
+    new_content = json.dumps(history, ensure_ascii=False, indent=2)
 
     if doc_name:
-        # Update directly, bypassing user-level permission checks
         frappe.db.set_value(
             "ChangAI Chat History",
             doc_name,
@@ -71,6 +46,7 @@ def save_turn_2(session_id: str, user_text: str = None, bot_text: str = None):
         )
         frappe.db.commit()
         return doc_name
+
     else:
         doc = frappe.get_doc({
             "doctype": "ChangAI Chat History",
@@ -82,76 +58,65 @@ def save_turn_2(session_id: str, user_text: str = None, bot_text: str = None):
         return doc.name
 
 
-
-@frappe.whitelist(allow_guest=False)
-def get_chat_history(session_id):
-    rows=frappe.get_all("ChangAI Chat History",filters={"session_id":session_id},fields=["content","message_type"])
-    rows.reverse()
-    result=[]
-    for item in rows:
-        rec={item["message_type"]:item["content"]}
-        result.append(rec)
-    return result
-
-@frappe.whitelist(allow_guest=False)
+@frappe.whitelist(allow_guest=True)
 def get_chat_history_1(session_id):
+    import json
     doc_name = frappe.db.exists("ChangAI Chat History", {"session_id": session_id})
     if not doc_name:
-        return ""
-    # Use db.get_value instead of get_doc to avoid read perm issues
-    current_value = frappe.db.get_value(
+        return []
+
+    raw = frappe.db.get_value(
         "ChangAI Chat History",
         doc_name,
         "content"
     )
-    return current_value or ""
 
-# PROMPT_FOLLOWUP="""
-# You are a Query Rewriter.
+    if not raw:
+        return []
 
-# Below is the recent chat history between the user and the assistant.
-# Title: Chat History
-# {rows}
+    try:
+        history = json.loads(raw)
+    except Exception:
+        return []
 
-# (Only the last 10 messages are shown.)
+    return history[-10:]
+PROMPT_FOLLOWUP = """You are ChangAI, an ERP entity-value detector + query rewriter.
 
-# Task:
-# 1. Review the conversation context.
-# 2. If the latest user message appears to be a *follow-up* (refers to something mentioned earlier),
-#    rewrite it into a complete, standalone question that includes the missing context based on the chat history.
-# 3. If it is **not** a follow-up, return the message unchanged.
+Return ONLY valid JSON with EXACTLY these keys:
+{{"standalone_question":"...","contains_values":true/false}}
 
-# Latest User Question:
-# {qstn}
-
-# Rules:
-# - Return ONLY the rewritten question text — no explanations, no extra text, no JSON, no placeholders.
-# - Do NOT prefix with anything like "Rewritten:" or "Question:".
-# - Output must contain only the final question as plain text.
-
-# """
-
-PROMPT_FOLLOWUP = """You are ChangAI, an ERP query rewriter.
-
-Task:
-Rewrite the latest user message into a complete standalone question.
-
-Chat history:
-- It is a list of JSON-like lines.
-- Use ONLY the human messages as context.
-- IGNORE all ai messages completely (do not copy their wording or numbers).
+Meaning of contains_values (STRICT):
+- true = the latest message contains ANY explicit or implied ENTITY IDENTIFIER that should be matched to master data
+  (customer/supplier/item/warehouse/employee/etc.)
+  Examples (TRUE):
+  - "A. Williams"
+  - "Acme, Inc."
+  - "Amrin"
+  - "PEN-001"
+  - "Dell Latitude 7440"
+  - "Vertex Global Traders"
+  - "invoice of ayan" (implied name)
+- false = NO entity identifier is mentioned.
+  This includes queries that only contain filters, time ranges, counts, ranking words, or statuses.
+  Examples (FALSE):
+  - "show all customers"
+  - "unpaid suppliers list"
+  - "sales orders pending delivery"
+  - "payment received this month"
+  - "top vendor dues list"
+  - "who bought pen today"  (treat generic product words like "pen" as NOT an entity)
+  - "today sales"
+  - "last 3 customers"
 
 Rules:
-- check at the lastest message compare with cht history and check if it can be a foloup if u feel like a followup thenr ewrite to a complete question based on history or previous messages.becasue soemtime s may ask like hw amny customers then after ask like active? or names ? these are not normal chat but they aree refing preious chat 
-- If the latest message is a follow-up, expand it using only human messages from history.
-- If it is NOT a follow-up, return it unchanged.
-- Do NOT answer the question.
-- Do NOT provide results, counts, or dates.
-- Do NOT add information that is not present in the human messages or the latest message.
-- Output exactly ONE plain-text question, no explanations, no SQL, no markdown.
-- Do not use ai message for formatting the latest question.
+- Only entity names/codes make contains_values=true.
+- Do NOT treat dates/periods (today, this month), counts (top 5, last 3), statuses (pending, unpaid), or generic nouns
+  (pen, invoice, supplier, customer) as values.
+- Rewrite only if needed; otherwise keep it unchanged.
+- When unsure, prefer contains_values=false unless a clear name/code exists.
 
-Chat history:
+
+Chat history (use ONLY human lines):
 {rows}
 
 Latest user message:

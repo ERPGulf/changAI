@@ -1,3 +1,8 @@
+{%- macro _clean(s) -%}
+  {%- set t = (s|string) -%}
+  {{ t.replace('{','').replace('}','') }}
+{%- endmacro -%}
+
 {%- macro _human_label(key) -%}{{ (key|string).replace('_',' ') }}{%- endmacro -%}
 {%- macro _be(n) -%}{{ 'is' if (n|string).strip() == '1' else 'are' }}{%- endmacro -%}
 {%- macro _pluralize(word) -%}
@@ -25,18 +30,23 @@
     {{ '' }}
   {%- endif -%}
 {%- endmacro -%}
-{%- if data is mapping -%}
+
+{# --- Conversational empty-list handling --- #}
+{%- if data is sequence and data is not string and (data|length == 0) -%}
+  I couldn’t find any records for that. Want me to try a different date range or loosen the filters?
+{%- elif data is mapping -%}
   {%- set items = data.items()|list -%}
   {%- if items|length == 1 -%}
     {%- set k = items[0][0] -%}
     {%- set v = items[0][1] -%}
     {%- set inferred = _doctype_from_count_key(k) -%}
-    There {{ _be(v) }} {{ v }} {{ _count_phrase(v, inferred) }}.
+    There {{ _be(v) }} {{ _clean(v) }} {{ _count_phrase(v, inferred) }}.
   {%- else -%}
     {%- for k, v in items -%}
-      {{ _human_label(k)|capitalize }}: {{ v }}{% if not loop.last %}, {% endif %}
+      {{ _human_label(k)|capitalize }}: {{ _clean(v) }}{% if not loop.last %}, {% endif %}
     {%- endfor -%}
   {%- endif -%}
+
 {%- elif data is sequence and data|length == 1 and data[0] is mapping -%}
   {%- set record = data[0] -%}
   {%- set items = record.items()|list -%}
@@ -44,18 +54,20 @@
     {%- set k = items[0][0] -%}
     {%- set v = items[0][1] -%}
     {%- set inferred = _doctype_from_count_key(k) -%}
-    There {{ _be(v) }} {{ v }} {{ _count_phrase(v, inferred) }}.
+    There {{ _be(v) }} {{ _clean(v) }} {{ _count_phrase(v, inferred) }}.
   {%- else -%}
     {%- for k, v in items -%}
-      {{ _human_label(k)|capitalize }}: {{ v }}{% if not loop.last %}, {% endif %}
+      {{ _human_label(k)|capitalize }}: {{ _clean(v) }}{% if not loop.last %}, {% endif %}
     {%- endfor -%}
   {%- endif -%}
+
 {%- elif data is sequence and data|length > 1 -%}
   I found {{ data|length }} records. Here are a few:
   {%- for rec in data[:5] %}
-  - {{ rec }}
+  - {{ _clean(rec) }}
   {%- endfor %}
   {%- if data|length > 5 %} …and {{ data|length - 5 }} more.{% endif %}
+
 {%- else -%}
-  {{ data if data is not none and data != '' else 'No data available.' }}
+  {{ _clean(data) if data is not none and data != '' else 'No data available.' }}
 {%- endif -%}
