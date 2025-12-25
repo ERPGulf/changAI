@@ -1,23 +1,160 @@
-# ChangAI v2 — Open Source ERPNext Text-to-SQL Engine (RAG + LangGraph)
+# ChangAI — Open-Source Text-to-SQL for ERPNext / Frappe
 
-ChangAI is an open-source, schema-aware AI assistant that converts natural language into valid, executable ERPNext SQL queries.  
-It uses a Retrieval-Augmented Generation (RAG) architecture, FAISS vector search, LangGraph orchestration, and Ollama for local LLM inference.
+**ChangAI** is a production-ready, open-source AI assistant that lets users query their ERPNext database in plain English.  
+It converts natural language questions into accurate, safe SQL queries — all while staying fully within your schema and running privately on your infrastructure.
+
+Built with modern RAG techniques, LangGraph orchestration, and self-correcting logic, ChangAI delivers reliable answers without hallucinations.
 
 ---
 
-## 1. Overview
+## Key Features
 
-ChangAI v2 is a modular, locally deployable text-to-SQL system for ERPNext.  
-It retrieves schema information dynamically, validates SQL against real ERP metadata, and produces clean, conversational answers.
+- **Accurate Text-to-SQL** — Generates valid MySQL queries for ERPNext doctypes  
+- **Advanced RAG Retrieval** — Dual FAISS indexes: one for schema, one for entities  
+- **Entity-Aware Queries** — Detects specific customers, items, or references and applies exact filters  
+- **Business Guardrail** — Routes non-ERP questions (e.g., "How are you?") to safe, direct responses  
+- **Self-Repair Loop** — Automatically fixes invalid SQL using SQLGlot validation + targeted hints (up to 2 retries)  
+- **Flexible Deployment** — Runs locally via Ollama **or** on your remote inference server (Replicate or custom endpoint)  
+- **Stateful Conversations** — Multi-turn chat with memory and context  
+- **Secure & Private** — No data leaves your server in local mode; full control in remote mode  
 
-### Core Features
-- RAG retrieval using FAISS and structured schema cards  
-- Contextual SQL generation with Ollama LLM  
-- Schema-level validation via SQLGlot  
-- Self-correcting repair loop  
-- Conversational output formatting with Jinja2  
-- Workflow orchestration via LangGraph  
 ---
+
+## How It Works
+
+### 1. Question Understanding
+- Rewrites user input into a clear, standalone question
+- Detects if specific values (e.g., customer names, item codes) are mentioned
+
+### 2. Smart Routing
+- Checks for business keywords
+- ERP-related → proceeds to SQL pipeline  
+- General chat → direct LLM response
+
+### 3. Precise Retrieval
+- **Schema Retriever** (FAISS): Finds relevant tables, fields, joins, metrics
+- **Entity Retriever** (FAISS): Matches mentioned customers/items to exact codes
+
+### 4. SQL Generation & Safety
+- Builds clean schema + entity context
+- Generates SQL using **Qwen3-4B** (fine-tuned on synthetic ERP data)
+- Validates with **SQLGlot** against real ERPNext metaschema
+- If invalid → automatic repair with precise feedback
+
+### 5. Execution & Answer
+- Executes read-only `SELECT` queries
+- Formats results into natural, conversational responses
+
+---
+
+## Models Used
+
+| Component              | Model Used                                      | Deployment                          |
+|------------------------|-------------------------------------------------|-------------------------------------|
+| Embeddings (Retrieval) | nomic-ai/modernbert-embed-base                  | Local Ollama **or** Remote Server   |
+| SQL Generation         | Qwen3-4B (fine-tuned on synthetic ERPNext data) | Local Ollama **or** Remote Server   |
+| Entity Retrieval       | nomic-ai/modernbert-embed-base                  | Local Ollama **or** Remote Server   |
+| Answer Formatting      | Qwen3-1.5B                                      | Local Ollama **or** Remote Server   |
+
+You have full flexibility:  
+- **Local mode** — Everything runs on your server via Ollama (maximum privacy, no external calls)  
+- **Remote mode** — Use your own hosted inference server (e.g., Replicate or self-hosted) for better performance or scaling
+
+Switch between them instantly in **ChangAI Settings** — no code changes needed.
+
+---
+## Architecture Overview
+
+### Full Pipeline Workflow
+<p align="center">
+  <img src="changai/images/ChangAI.png" width="800" alt="ChangAI Full Pipeline Workflow">
+</p>
+*End-to-end flow: question rewriting → guardrail routing → dual retrieval → context building → SQL generation → validation → self-repair → execution → natural language response*
+
+### RAG Retrieval Layer
+<p align="center">
+  <img src="changai/images/RAG Structure.png" width="750" alt="ChangAI RAG Retrieval with Dual FAISS Indexes">
+</p>
+*Dual FAISS indexes: one for schema (tables, fields, joins, metrics) and one for master entities (customers, items, suppliers)*
+
+
+## Installation & Setup
+
+1. Install the app in your Frappe bench:
+   ```bash
+   bench get-app changai https://github.com/erpgulf/changai
+   bench --site your-site.local install-app changai
+   ```
+
+2. Go to **ChangAI Settings** and choose your mode:
+   - **Local**: Enter your Ollama URL (usually `http://localhost:11434`)
+   - **Remote**: Enter your server URL, API token, and model version IDs
+
+3. Build FAISS indexes (one-time):
+   ```python
+   from changai.changai.api.v2.build_index import build_all_indexes
+   build_all_indexes()
+   ```
+
+---
+
+## Usage Example
+
+```python
+frappe.call("changai.changai.api.v2.text2sql_pipeline.run_text2sql_pipeline", 
+    user_question="Top 5 customers by sales this month",
+    chat_id="session-123")
+```
+
+**Response:**
+```json
+{
+  "SQL": "SELECT customer, SUM(base_grand_total) AS total ...",
+  "Result": [...],
+  "Bot": "Here are your top 5 customers this month:\n1. Al Falah Trading - $124,500\n2. Gulf Supplies - $98,200\n..."
+}
+```
+
+---
+
+## Why ChangAI Stands Out
+
+- **No hallucinations** — Strict validation + repair loop
+- **Entity precision** — Never guesses customer/item names
+- **Deployment freedom** — Local Ollama for privacy, remote server for speed
+- **Real-world ready** — Built and tested on live ERPNext instances
+
+---
+
+## Roadmap
+
+- Permission-aware SQL (respect user roles)
+- Built-in charts and visualizations
+- Query caching
+- Feedback-based continuous improvement
+- Multilingual support
+
+---
+
+## Contributing
+
+Contributions are welcome!  
+Whether it's new schema cards, bug fixes, performance tweaks, or features — we’d love your help.
+
+1. Fork the repo
+2. Create a branch (`feature/my-improvement`)
+3. Submit a PR to `version-2`
+
+---
+
+## License
+
+MIT License — free for commercial and personal use.
+
+**© 2025 ERPGulf & ChangAI Community**
+
+Made with ❤️ for the ERPNext ecosystem.  
+Simple. Reliable. Yours.
 
 ## 2. System Architecture
 
