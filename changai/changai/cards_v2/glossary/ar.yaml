@@ -1,4 +1,0 @@
-map:
-  "إجمالي المبيعات": ["grand_total","base_grand_total"]
-  "حسب العميل": ["customer_name"]
-  "تاريخ الفاتورة": ["posting_date"]

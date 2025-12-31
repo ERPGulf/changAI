@@ -1,5 +1,0 @@
-table: "tabSales Invoice"
-field: "status"
-values: ["Draft","Submitted","Paid","Overdue"]
-
-

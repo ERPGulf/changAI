@@ -1,0 +1,3 @@
+llama-cpp-python==0.2.90
+fastapi<0.116.0
+pydantic<3

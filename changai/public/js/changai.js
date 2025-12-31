@@ -143,51 +143,64 @@ document.addEventListener('DOMContentLoaded', () => {
             return "";
     }
 
-    async function generateBotResponse(userMsg, thinkingMsg, warmingTimeout) {
-        try {
-            const API_URL = await frappe.db.get_single_value("ChangAI Settings", "vite_api_url");
-            const reqOpts = {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-Frappe-CSRF-Token": frappe.csrf_token
-                },
-                body: JSON.stringify({ user_question: userMsg,chat_id:"session_10" }),
-            };
+function getOrCreateChatId() {
+  const KEY = "changai_chat_id";
+  let chatId = sessionStorage.getItem(KEY);
 
-            const res = await fetch(API_URL, reqOpts);
-            const data =  await res.json()
-            console.log("API response:", data); 
+  if (!chatId) {
+    chatId = `session_${Date.now()}_${Math.random().toString(16).slice(2)}`;
+    sessionStorage.setItem(KEY, chatId);
+  }
 
-            if (!res.ok) throw new Error(data.message?.error || "Something went wrong!!");
+  return chatId;
+}
 
-            clearTimeout(warmingTimeout);
+async function generateBotResponse(userMsg, thinkingMsg, warmingTimeout) {
+  try {
+    const API_URL = await frappe.db.get_single_value(
+      "ChangAI Settings",
+      "vite_api_url"
+    );
 
-            if (data.message) {
-                const botText = normalizeBotText(data.message.Bot);
-                thinkingMsg.text = botText.trim() || "No response.";
-            }
+    const reqOpts = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Frappe-CSRF-Token": frappe.csrf_token
+      },
+      body: JSON.stringify({
+        user_question: userMsg,
+        chat_id: getOrCreateChatId()
+      }),
+    };
 
-            debugLogs.push({
-                user: userMsg,
-                response:data.message
-            });
+    const res = await fetch(API_URL, reqOpts);
+    const data = await res.json();
 
-            renderMessages();
-            scrollToBottom();
-
-        } catch (error) {
-            console.error("API Error:", error);
-
-            clearTimeout(warmingTimeout);
-            thinkingMsg.text = error.message;
-            debugLogs.push({ user: userMsg, error: error.message });
-            renderMessages();
-            scrollToBottom();
-        }
+    if (!res.ok) {
+      throw new Error(data.message?.error || "Something went wrong!");
     }
 
+    clearTimeout(warmingTimeout);
 
+    if (data.message) {
+      thinkingMsg.text =
+        normalizeBotText(data.message.Bot)?.trim() || "No response.";
+    }
+
+    debugLogs.push({ user: userMsg, response: data.message });
+    renderMessages();
+    scrollToBottom();
+
+  } catch (error) {
+    console.error("API Error:", error);
+    clearTimeout(warmingTimeout);
+    thinkingMsg.text = error.message;
+    debugLogs.push({ user: userMsg, error: error.message });
+    renderMessages();
+    scrollToBottom();
+  }
+}
 
     function scrollToBottom() {
         chatMessagesContainer.scrollTo({

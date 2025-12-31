@@ -1,2535 +1,1992 @@
-- type: alias
-  entity: Customer
-  id: "Acme, Inc."
-  description: "Represents the customer entity 'Acme, Inc.', including its common short forms, informal spellings, and fuzzy variants used across invoices, orders, and related ERPNext documents. Enables semantic and fuzzy matching for customer-based lookups (e.g., retrieving invoices or orders belonging to Acme)."
-  labels:
-    - "Acme"
-    - "Acme Inc"
-    - "Acme,inc"
-    - "Acme Incorporated"
-    - "Acme Company"
-  typo_variants:
-    - "Aceme"
-    - "Akme"
-    - "Acnee"
-  ngrams:
-    - "Acme Inc"
-    - "customer acme"
-    - "acme company"
-  filters:
-    name: ["Acme, Inc."]
-    customer_name: ["Acme, Inc."]
-  valid_for_tables:
-    - { table: "tabCustomer",            field: "name" }
-    - { table: "tabCustomer",            field: "customer_name" }
-    - { table: "tabSales Invoice",       field: "customer" }
-    - { table: "tabSales Order",         field: "customer" }
-    - { table: "tabDelivery Note",       field: "customer" }
-    - { table: "tabQuotation",           field: "customer" }
-    - { table: "tabPayment Entry",       field: "party" }
-    - { table: "tabSales Invoice Payment", field: "parent" }
-    - { table: "tabPOS Invoice",         field: "customer" }
-    - { table: "tabCustomer Group",      field: "parent_customer" }
-  context:
-    tenant_id: ACME
-    notes: "Covers short, informal, and misspelled variants of 'Acme, Inc.' for fuzzy search matching."
-  examples:
-    - "acme invoices"
-    - "show sales for acme inc"
-    - "get pending bills of aceme company"
-  fuzzy:
-    wr_ratio_min: 82
-    token_set_min: 78
-  confidence: 0.93
-
-
-- type: alias
-  entity: Customer
-  id: "Amrin Yosuf"
-  description: "Represents the customer 'Amrin Yosuf' and its possible short forms, nicknames, and common misspellings. Used to resolve customer references in sales, payment, and delivery-related ERPNext doctypes during entity retrieval and fuzzy matching."
-  labels:
-    - "Amrin Yosuf"
-    - "Amrin"
-    - "Yosuf"
-    - "Ms Amrin"
-    - "A Yosuf"
-  typo_variants:
-    - "Amren Yosuf"
-    - "Amrin"
-    - "Yousof"
-    - "Yosuph"
-    - "Amrn"
-    - "Amrin Yousuf"
-    - "Amrin Yosuph"
-  ngrams:
-    - "customer yosuf"
-    - "amrin yosuf"
-    - "yosuf customer"
-    - "client amrin"
-  filters:
-    name: ["Amrin Yosuf"]
-    customer_name: ["Amrin Yosuf"]
-  valid_for_tables:
-    - { table: "tabCustomer",            field: "name" }
-    - { table: "tabCustomer",            field: "customer_name" }
-    - { table: "tabSales Invoice",       field: "customer" }
-    - { table: "tabSales Order",         field: "customer" }
-    - { table: "tabDelivery Note",       field: "customer" }
-    - { table: "tabQuotation",           field: "customer" }
-    - { table: "tabPayment Entry",       field: "party" }
-    - { table: "tabSales Invoice Payment", field: "parent" }
-    - { table: "tabPOS Invoice",         field: "customer" }
-    - { table: "tabCustomer Group",      field: "parent_customer" }
-  context:
-    tenant_id: ACME
-    notes: "Handles short forms and common misspellings like 'Amrin Yousuf' or 'Amren Yosuf'."
-  examples:
-    - "yosuf invoices"
-    - "sales to amrin yosuf"
-    - "get outstanding for amrin yousuf"
-  fuzzy:
-    wr_ratio_min: 82
-    token_set_min: 78
-  confidence: 0.93
-
-
-- type: alias
-  entity: Customer
-  id: "Ayaan"
-  description: "Represents the customer 'Ayaan' across ERPNext doctypes, including informal mentions and common spelling variations. Enables fuzzy entity resolution in sales, orders, payments, and POS contexts."
-  labels:
-    - "Ayaan"
-    - "Mr Ayaan"
-    - "Customer Ayaan"
-    - "customer ayaan"
-  typo_variants:
-    - "Ayan"
-    - "Ayaan."
-    - "Ayann"
-    - "Ayyaan"
-    - "Aayn"
-    - "Ayaan "
-    - "A yaan"
-  ngrams:
-    - "customer ayaan"
-    - "ayaan invoices"
-    - "ayan's invocies"
-    - "sales to ayaan"
-    - "ayaan buyer"
-  filters:
-    name: ["Ayaan"]
-    customer_name: ["Ayaan"]
-  valid_for_tables:
-    - { table: "tabCustomer", field: "name" }
-    - { table: "tabCustomer",field: "customer_name" }
-    - { table: "tabSales Invoice", field: "customer" }
-    - { table: "tabSales Order", field: "customer" }
-    - { table: "tabDelivery Note", field: "customer" }
-    - { table: "tabQuotation", field: "customer" }
-    - { table: "tabPayment Entry", field: "party" }
-    - { table: "tabSales Invoice Payment", field: "parent" }
-    - { table: "tabPOS Invoice", field: "customer" }
-    - { table: "tabCustomer Group", field: "parent_customer" }
-  context:
-    tenant_id: ACME
-    notes: "Handles short references and minor spelling mistakes for the customer Ayaan."
-  examples:
-    - "get ayaan invoices"
-    - "sales to ayan"
-    - "unpaid bills for ayaan"
-    - "ayaan orders delivered this week"
-    - "pos invoices for ayaan today"
-    - "items sold to ayaan in usd this month"
-  fuzzy:
-    wr_ratio_min: 82
-    token_set_min: 78
-  confidence: 0.93
-
-
-- type: alias
-  entity: Customer
-  id: "Ayrin Mehnz"
-  description: "Represents the customer 'Ayrin Mehnz' and its common short or misspelled variants. Used for resolving customer references in ERPNext sales, delivery, quotation, and payment doctypes through fuzzy and semantic matching."
-  labels:
-    - "Ayrin Mehnz"
-    - "Ayrin"
-    - "Mehnz"
-    - "Ms Mehnz"
-  typo_variants:
-    - "Ayran Mehnz"
-    - "Airin Mehnz"
-    - "Ayrin Menz"
-    - "Ayrin Mehnez"
-  ngrams:
-    - "customer mehnz"
-    - "ayrin mehnz"
-    - "mehnz invoices"
-  filters:
-    name: ["Ayrin Mehnz"]
-    customer_namer: ["Ayrin Mehnz"]
-  valid_for_tables:
-    - { table: "tabCustomer", field: "name" }
-    - { table: "tabCustomer", field: "customer_name" }
-    - { table: "tabSales Invoice", field: "customer" }
-    - { table: "tabSales Order", field: "customer" }
-    - { table: "tabDelivery Note", field: "customer" }
-    - { table: "tabQuotation", field: "customer" }
-    - { table: "tabPayment Entry", field: "party" }
-    - { table: "tabSales Invoice Payment", field: "parent" }
-    - { table: "tabPOS Invoice", field: "customer" }
-    - { table: "tabCustomer Group", field: "parent_customer" }
-  context:
-    tenant_id: ACME
-    notes: "Handles short or misspelled forms such as 'Airin', 'Menz', or 'Mehnez' when matching customer names."
-  examples:
-    - "get mehnz invoices"
-    - "sales to ayrin mehnz"
-    - "show pending payments for mehnz"
-  fuzzy:
-    wr_ratio_min: 82
-    token_set_min: 78
-  confidence: 0.93
-
-
-- type: alias
-  entity: Item
-  id: "3M N95 Particulate Respirator 8210 — Box of 20 Masks — NIOSH Approved, Industrial Dust Protection, Elastic Headbands"
-  description: "Represents the ERPNext Item '3M N95 Particulate Respirator 8210' (Box of 20 Masks), including short forms and spelling variants used in invoices or purchase records. Supports fuzzy matching for product lookups involving keywords like '3M mask', '8210 respirator', or 'N95'."
-  labels:
-    - "3M N95 Particulate Respirator"
-    - "3M Mask 8210"
-    - "3M N95"
-    - "3M 8210 respirator"
-    - "3M mask box 20"
-    - "3M respirator mask"
-  typo_variants:
-    - "3M N95 Mask"
-    - "3M 821"
-    - "3M Respirater"
-    - "3M N95 Resp"
-  ngrams:
-    - "3m respirator"
-    - "respirator mask"
-    - "3m 8210"
-    - "n95 mask 3m"
-  filters:
-    name: ["3M N95 Particulate Respirator 8210 — Box of 20 Masks — NIOSH Approved, Industrial Dust Protection, Elastic Headbands"]
-    item_code: ["8210"]
-  valid_for_tables:
-    - { table: "tabItem",                  field: "name" }
-    - { table: "tabItem",                  field: "item_code" }
-    - { table: "tabSales Invoice Item",    field: "item_code" }
-    - { table: "tabPurchase Invoice Item", field: "item_code" }
-  context:
-    tenant_id: ACME
-    notes: "Alias for the 3M N95 respirator item; supports fuzzy queries like '3m mask', 'respirater 8210', or '3m n95 box 20'."
-  examples:
-    - "get respirator invoices"
-    - "show purchase orders for 3m mask"
-    - "sales for 3m n95 respirator"
-    - "respirater 8210 item details"
-  fuzzy:
-    wr_ratio_min: 80
-    token_set_min: 75
-  confidence: 0.92
-
-
-- type: alias
-  entity: Item
-  id: "Bosch Serie 6 Front-Load Washing Machine 9 kg — 1400 RPM, Inverter Motor, AllergyPlus Mode, Silver Finish"
-  labels:
-    - "Bosch Serie 6"
-    - "Bosch Washing Machine"
-    - "Bosch Front Load 9kg"
-    - "Bosch AllergyPlus Silver"
-    - "Bosch Washer"
-  typo_variants:
-    - "Bosh Serie 6"
-    - "Bosch Seres 6"
-    - "Bosch Washing Machin"
-    - "Bosch Frontload"
-  ngrams:
-    - "bosch washing machine"
-    - "bosch 9kg washer"
-    - "bosch serie 6 silver"
-    - "bosch allergyplus"
-  filters:
-    name: ["Bosch Serie 6 Front-Load Washing Machine 9 kg — 1400 RPM, Inverter Motor, AllergyPlus Mode, Silver Finish"]
-    item_code: ["BOSCH-SERIE6-9KG"]
-  valid_for_tables:
-    - { table: "tabItem", field: "name" }
-    - { table: "tabItem",field: "item_code"}
-    - { table: "tabSales Invoice Item", field: "item_code" }
-    - { table: "tabPurchase Invoice Item", field: "item_code" }
-  context:
-    tenant_id: ACME
-    notes: "Handles fuzzy and partial references like 'bosch washer', 'bosch 9kg', or 'bosch allergyplus' in user queries."
-  examples:
-    - "get bosch washing machine"
-    - "bosch 9kg washer invoices"
-    - "show serie 6 washing machine items"
-  fuzzy: { wr_ratio_min: 80, token_set_min: 75 }
-  confidence: 0.91
-
-- type: alias
-  entity: Item
-  id: "Dell Latitude 7440 Ultralight 14” Business Laptop — Intel Core i7-1365U 13th Gen, 32 GB RAM, 1 TB SSD, Windows 11 Pro, FHD Display"
-
-  description: >
-    Entity card for item “Dell Latitude 7440 Ultralight Business Laptop”.
-    Use this card whenever a user query refers to or implies this product 
-    (even with partial names or misspellings like “dell 7440”, “latitude laptop”, “ultralight laptop”). 
-    Prioritize returning this entity whenever the query involves laptops, Dell products, or 
-    model references similar to Latitude 7440, especially in sales or purchase contexts.
-
-  labels:
-    - "Dell Latitude 7440"
-    - "Dell Ultralight Laptop"
-    - "Latitude 7440 i7"
-    - "Dell 14 inch business laptop"
-    - "Dell 7440 Laptop"
-    - "Latitude 7440 Business Series"
-
-  typo_variants:
-    - "Dell Latitdue 7440"
-    - "Dell Latitud 7440"
-    - "Dell Lattitude 7440"
-    - "Dell Latitude7440"
-    - "Del Latitude 7440"
-    - "Dell Laitude 7440"
-
-  ngrams:
-    - "dell latitude"
-    - "latitude laptop"
-    - "dell 7440"
-    - "dell ultralight"
-    - "business laptop dell"
-    - "latitude 7440 model"
-
-  filters:
-    name: ["Dell Latitude 7440 Ultralight 14” Business Laptop — Intel Core i7-1365U 13th Gen, 32 GB RAM, 1 TB SSD, Windows 11 Pro, FHD Display"]
-    item_code: ["DELL-LATITUDE-7440"]
-
-  valid_for_tables:
-    - { table: "tabItem", field: "name" }
-    - { table: "tabSales Invoice Item", field: "item_code" }
-    - { table: "tabPurchase Invoice Item", field: "item_code" }
-    - { table: "tabQuotation Item", field: "item_code" }
-    - { table: "tabDelivery Note Item", field: "item_code" }
-
-  context:
-    tenant_id: ACME
-    notes: "Includes spelling variations and model-based references for Latitude 7440 laptop."
-
-  examples:
-    - "get dell latitude laptop"
-    - "show dell 7440 items"
-    - "laptops by dell 7440"
-    - "sales invoices for dell ultralight laptop"
-    - "purchases of dell 7440 from summit traders"
-    - "williams bought dell 7440 laptop in usd currency"
-    - "compare dell 7440 sales vs hp printer sales this month"
-
-  fuzzy: { wr_ratio_min: 81, token_set_min: 77 }
-  confidence: 0.92
-
-
-- type: alias
-  entity: Item
-  id: "HP LaserJet Pro MFP M479fdw Color Wireless All-in-One Printer — Duplex, Fax, Wi-Fi, USB, 27 ppm, 512 MB RAM"
-  labels:
-    - "HP LaserJet MFP"
-    - "HP M479fdw Printer"
-    - "LaserJet Pro All-in-One"
-    - "HP Printer Wi-Fi"
-    - "HP Color Printer"
-  typo_variants:
-    - "HP Laser Jet Pro"
-    - "HP Laserjet MFP M479"
-    - "HP M479fwd"
-    - "HP M479 Printer"
-  ngrams:
-    - "hp laserjet printer"
-    - "hp mfp printer"
-    - "hp m479"
-    - "laserjet wifi printer"
-  filters:
-    name: ["HP LaserJet Pro MFP M479fdw Color Wireless All-in-One Printer — Duplex, Fax, Wi-Fi, USB, 27 ppm, 512 MB RAM"]
-    item_code: ["HP-M479FDW"]
-  valid_for_tables:
-    - { table: "tabItem", field: "name" }
-    - { table: "tabItem", field: "item_code" }
-    - { table: "tabSales Invoice Item", field: "item_code" }
-    - { table: "tabPurchase Invoice Item", field: "item_code" }
-  context:
-    tenant_id: ACME
-    notes: "Captures partial and fuzzy mentions like 'hp printer', 'laserjet wifi printer', 'm479fdw', or 'hp mfp'."
-  examples:
-    - "show hp printer item"
-    - "hp mfp invoices"
-    - "get laserjet pro printer"
-  fuzzy: { wr_ratio_min: 80, token_set_min: 75 }
-  confidence: 0.91
-
-
-- type: alias
-  entity: Item
-  id: "Item 1"
-  description: "Simple test item used for development and retriever validation."
-  labels:
-    - "Item 1"
-    - "Demo Item 1"
-  typo_variants:
-    - "Itm 1"
-    - "Item One"
-    - "Demo Itm"
-  ngrams:
-    - "demo item"
-    - "test item"
-    - "sample item one"
-  filters:
-    name: ["Item 1"]
-    item_code: ["ITEM-001"]
-  valid_for_tables:
-    - { table: "tabItem", field: "name" }
-    - { table: "tabItem", field: "item_code" }
-    - { table: "tabSales Invoice Item", field: "item_code" }
-    - { table: "tabPurchase Invoice Item", field: "item_code" }
-  context:
-    tenant_id: ACME
-    notes: "Used only for testing and validation."
-  examples:
-    - "fetch item 1"
-    - "show demo item"
-  fuzzy:
-    wr_ratio_min: 80
-    token_set_min: 75
-  confidence: 0.80
-
-- type: alias
-  entity: Item
-  id: "ITEM890"
-  description: "Represents the ERPNext Item 'Smart LED Desk Lamp' (ITEM890). Handles fuzzy and semantic queries involving 'lamp', 'smart lamp', or 'rechargeable light'."
-  labels:
-    - "ITEM890"
-    - "Smart LED Desk Lamp"
-    - "Lamp"
-    - "Rechargeable Desk Lamp"
-    - "Smart Lamp"
-  typo_variants:
-    - "Item 890"
-    - "ITEM-890"
-    - "Led Desk Lamp"
-    - "Smart Led Lamp"
-    - "Rechargeble Lamp"
-  ngrams:
-    - "smart lamp"
-    - "desk lamp"
-    - "rechargeable lamp"
-    - "lamp item 890"
-  filters:
-    name: ["ITEM890"]
-    item_code: ["ITEM890"]
-  valid_for_tables:
-    - { table: "tabItem", field: "name" }
-    - { table: "tabItem", field: "item_code" }
-    - { table: "tabSales Invoice Item", field: "item_code" }
-    - { table: "tabPurchase Invoice Item", field: "item_code" }
-  context:
-    tenant_id: ACME
-    notes: "Alias for a lamp item. Allows matching 'lamp 890', 'smart lamp', or 'rechargeable light'."
-  examples:
-    - "get lamp item"
-    - "lamp invoices"
-    - "show smart lamp sales"
-  fuzzy:
-    wr_ratio_min: 80
-    token_set_min: 75
-  confidence: 0.88
-
-- type: alias
-  entity: Supplier
-  id: "Apex Hardware & Tools"
-  description: "Represents the supplier 'Apex Hardware & Tools'. Handles fuzzy queries like 'Apex Tools' or 'Apex Hardware' in purchase and procurement contexts."
-  labels:
-    - "Apex Hardware"
-    - "Apex"
-    - "Apex Tools"
-    - "Apex Hardware & Tools"
-  typo_variants:
-    - "Apexx Hardware"
-    - "Apex Toolz"
-    - "Apex Hardwear"
-  ngrams:
-    - "apex tools"
-    - "apex hardware supplier"
-    - "apex vendor"
-  filters:
-    name: ["Apex Hardware & Tools"]
-    supplier_name: ["Apex Hardware & Tools"]
-  valid_for_tables:
-    - { table: "tabSupplier", field: "name" }
-    - { table: "tabSupplier", field: "supplier_name" }    
-    - { table: "tabPurchase Invoice", field: "supplier" }
-    - { table: "tabPurchase Order", field: "supplier" }
-    - { table: "tabPurchase Receipt", field: "supplier" }
-    - { table: "tabSupplier Quotation", field: "supplier" }
-    - { table: "tabPayment Entry", field: "party" }
-  context:
-    tenant_id: ACME
-    notes: "Supplier entity for Apex Hardware & Tools; supports fuzzy references like 'Apex Tools'."
-  examples:
-    - "apex tools bills"
-    - "purchases from apex"
-    - "apex hardware supplier list"
-  fuzzy:
-    wr_ratio_min: 82
-    token_set_min: 78
-  confidence: 0.90
-
-- type: alias
-  entity: Supplier
-  id: "Global Industrial Supply"
-  description: "Represents the supplier 'Global Industrial Supply', covering short forms like 'Global Supply' and 'Global Industrial'. Used for supplier lookups in purchases and invoices."
-  labels:
-    - "Global Supply"
-    - "Global Industrial"
-    - "Global Ind Supply"
-    - "Global Industrial Supply"
-    - "Global"
-  typo_variants:
-    - "Global Ind. Supply"
-    - "Global Industrial Suply"
-    - "Globl Supply"
-    - "Global Indstrial"
-  ngrams:
-    - "global industrial"
-    - "global supply vendor"
-    - "global supplier"
-    - "global ind supply"
-  filters:
-    name: ["Global Industrial Supply"]
-    supplier_name: ["Global Industrial Supply"]
-  valid_for_tables:
-    - { table: "tabSupplier", field: "name" }
-    - { table: "tabSupplier", field: "supplier_name" }
-    - { table: "tabPurchase Invoice", field: "supplier" }
-    - { table: "tabPurchase Order", field: "supplier" }
-    - { table: "tabPurchase Receipt", field: "supplier" }
-    - { table: "tabSupplier Quotation", field: "supplier" }
-    - { table: "tabPayment Entry", field: "party" }
-  context:
-    tenant_id: ACME
-    notes: "Supplier alias for Global Industrial Supply; handles short and partial references."
-  examples:
-    - "global supply purchases"
-    - "invoices from global industrial"
-    - "supplier global ind"
-  fuzzy:
-    wr_ratio_min: 82
-    token_set_min: 78
-  confidence: 0.89
-
-- type: alias
-  entity: Supplier
-  id: "MA Inc."
-  description: "Supplier entity for 'MA Inc.', including variants like 'M.A. Inc' and 'MA Incorporated'. Helps resolve supplier mentions in purchase documents even when abbreviated or punctuated differently."
-  labels:
-    - "MA Inc"
-    - "M.A. Inc"
-    - "MA Incorporated"
-    - "MA"
-  typo_variants:
-    - "M A Inc"
-    - "MA. Inc"
-    - "M.A Incorporated"
-    - "MA Incc"
-  ngrams:
-    - "ma supplier"
-    - "ma inc vendor"
-    - "m a incorporated"
-  filters:
-    name: ["MA Inc."]
-    supplier_name: ["MA Inc."]
-  valid_for_tables:
-    - { table: "tabSupplier", field: "name" }
-    - { table: "tabSupplier", field: "supplier_name" }
-    - { table: "tabPurchase Invoice", field: "supplier" }
-    - { table: "tabPurchase Order", field: "supplier" }
-    - { table: "tabPurchase Receipt", field: "supplier" }
-    - { table: "tabSupplier Quotation", field: "supplier" }
-    - { table: "tabPayment Entry", field: "party" }
-  context:
-    tenant_id: ACME
-    notes: "Supplier entity for MA Inc.; supports fuzzy forms like 'M A Inc' or 'MA Incorporated'."
-  examples:
-    - "ma inc purchase invoices"
-    - "bills from ma incorporated"
-    - "purchase orders from ma inc"
-  fuzzy:
-    wr_ratio_min: 82
-    token_set_min: 78
-  confidence: 0.88
-
-
-- type: alias
-  entity: Supplier
-  id: "Nova Chemical Co."
-  description: "Represents the supplier 'Nova Chemical Co.', covering references like 'Nova Chemical', 'Nova Chemicals', or 'Nova Chem Co'. Used in purchase and supplier contexts for chemical vendors."
-  labels:
-    - "Nova Chemicals"
-    - "Nova Chemical"
-    - "Nova Chem Co"
-    - "Nova Chemical Company"
-    - "Nova"
-  typo_variants:
-    - "Nova Chem"
-    - "Novaa Chemical"
-    - "Nova Chemicl"
-    - "Nova Chem Co."
-  ngrams:
-    - "nova chemical"
-    - "nova supplier"
-    - "nova chem vendor"
-    - "nova company"
-  filters:
-    name: ["Nova Chemical Co."]
-    supplier_name: ["Nova Chemical Co."]
-  valid_for_tables:
-    - { table: "tabSupplier", field: "name" }
-    - { table: "tabSupplier", field: "supplier_name"}
-    - { table: "tabPurchase Invoice", field: "supplier" }
-    - { table: "tabPurchase Order", field: "supplier" }
-    - { table: "tabPurchase Receipt", field: "supplier" }
-    - { table: "tabSupplier Quotation", field: "supplier" }
-    - { table: "tabPayment Entry", field: "party" }
-  context:
-    tenant_id: ACME
-    notes: "Supplier entity for Nova Chemical Co.; handles fuzzy matches like 'Nova Chem' or 'Nova Chemicals'."
-  examples:
-    - "nova chemical suppliers list"
-    - "invoices from nova chem co"
-    - "nova chemicals purchase orders"
-  fuzzy:
-    wr_ratio_min: 82
-    token_set_min: 78
-  confidence: 0.91
-
-
-- type: alias
-  entity: Supplier
-  id: "Rohit Sharma"
-  description: "Represents the individual supplier 'Rohit Sharma', supporting name variations and short forms. Used for resolving informal or lowercase supplier mentions."
-  labels:
-    - "Rohit Sharma"
-    - "Rohit S."
-    - "Supplier Rohit"
-  typo_variants:
-    - "Rohith Sharma"
-    - "Rohit Sharm"
-    - "Rohit Shrma"
-    - "Rohit S"
-  ngrams:
-    - "rohit supplier"
-    - "sharma vendor"
-    - "rohit s supplier"
-  filters:
-    name: ["Rohit Sharma"]
-    supplier_name: ["Rohit Sharma"]
-  valid_for_tables:
-    - { table: "tabSupplier", field: "name" }
-    - { table: "tabSupplier", field: "supplier_name"}
-    - { table: "tabPurchase Invoice", field: "supplier" }
-    - { table: "tabPurchase Order", field: "supplier" }
-    - { table: "tabPurchase Receipt", field: "supplier" }
-    - { table: "tabSupplier Quotation", field: "supplier" }
-    - { table: "tabPayment Entry", field: "party" }
-  context:
-    tenant_id: ACME
-    notes: "Supplier alias for individual supplier Rohit Sharma; supports lowercase and short forms."
-  examples:
-    - "rohit sharma purchase orders"
-    - "bills from rohit s"
-    - "rohit supplier invoices"
-  fuzzy:
-    wr_ratio_min: 83
-    token_set_min: 78
-  confidence: 0.90
-
-
-- type: alias
-  entity: Supplier
-  id: "Summit Traders Ltd."
-  description: "Represents the supplier 'Summit Traders Ltd.' and its variants like 'Summit Trading' or 'Summit Ltd'. Used for purchase invoices, receipts, and orders related to Summit Traders."
-  labels:
-    - "Summit Traders"
-    - "Summit Ltd"
-    - "Summit Trading"
-    - "Summit"
-    - "Summit Traders Limited"
-  typo_variants:
-    - "Summt Traders"
-    - "Summmit Traders"
-    - "Sumit Traders"
-    - "Summit Tradres"
-    - "Summitt Ltd"
-  ngrams:
-    - "supplier summit"
-    - "summit traders"
-    - "summit supplier"
-    - "summit ltd"
-    - "summit trading"
-  filters:
-    name: ["Summit Traders Ltd."]
-    supplier_name: ["Summit Traders Ltd."]
-  valid_for_tables:
-    - { table: "tabSupplier", field: "name" }
-    - { table: "tabSupplier",field: "supplier_name"}
-    - { table: "tabPurchase Order", field: "supplier" }
-    - { table: "tabPurchase Invoice", field: "supplier" }
-    - { table: "tabPurchase Receipt", field: "supplier" }
-  context:
-    tenant_id: ACME
-    notes: "Handles fuzzy variations like 'Summit Trading' or 'Summit Ltd' for purchase documents."
-  examples:
-    - "summit traders purchase orders"
-    - "invoices from summit ltd"
-    - "purchase receipts from summit trading"
-    - "show summit supplier orders this month"
-    - "items supplied by summit traders to williams"
-    - "summit traders supplied dell laptops in usd"
-  fuzzy:
-    wr_ratio_min: 82
-    token_set_min: 78
-  confidence: 0.93
-
-
-- type: alias
-  entity: Supplier
-  id: "Supplier 1"
-  description: "Placeholder supplier alias used for testing entity resolution and retriever consistency."
-  labels:
-    - "Supplier 1"
-    - "supplier1"
-    - "Supplier One"
-  typo_variants:
-    - "Suppler 1"
-    - "Suplier One"
-    - "Supplierone"
-  ngrams:
-    - "supplier one"
-    - "demo supplier"
-    - "test supplier1"
-  filters:
-    name: ["supplier1"]
-    supplier_name: ["supplier1"]
-  valid_for_tables:
-    - { table: "tabSupplier", field: "name" }
-    - { table: "tabSupplier", field: "supplier_name" }
-    - { table: "tabPurchase Invoice", field: "supplier" }
-    - { table: "tabPurchase Order", field: "supplier" }
-  context:
-    tenant_id: ACME
-    notes: "Placeholder supplier entry for testing simple alias resolution."
-  examples:
-    - "supplier1 invoices"
-    - "test supplier one orders"
-  fuzzy:
-    wr_ratio_min: 80
-    token_set_min: 75
-  confidence: 0.85
-
-
-- type: alias
-  entity: Supplier
-  id: "SmartEquip Suppliers"
-  description: "Represents the supplier 'SmartEquip Suppliers', covering short forms and partial mentions like 'Smart Equip', 'SmartEquip', or 'Smart Equipment'. Used for supplier lookups in purchase orders, invoices, and receipts."
-  labels:
-    - "Smart Equip"
-    - "Smart Equipment Suppliers"
-    - "SmartEquip"
-    - "SmartEquip Supplier"
-  typo_variants:
-    - "Smart Equipments"
-    - "Smart Equip Supplier"
-    - "SmartEquip Suppiers"
-    - "Smart Equip Supplr"
-  ngrams:
-    - "smart equip supplier"
-    - "smartequip"
-    - "smart equipment"
-  filters:
-    name: ["SmartEquip Suppliers"]
-    supplier_name: ["SmartEquip Suppliers"]
-  valid_for_tables:
-    - { table: "tabSupplier",           field: "name" }
-    - { table: "tabSupplier",           field: "supplier_name" }
-    - { table: "tabPurchase Invoice",   field: "supplier" }
-    - { table: "tabPurchase Order",     field: "supplier" }
-    - { table: "tabPurchase Receipt",   field: "supplier" }
-    - { table: "tabSupplier Quotation", field: "supplier" }
-    - { table: "tabPayment Entry",      field: "party" }
-  context:
-    tenant_id: ACME
-    notes: "Supplier alias for SmartEquip Suppliers; supports fuzzy and partial mentions like 'smart equip', 'smartequip supplier', or 'smart equipment'."
-  examples:
-    - "get smart equip suppliers invoices"
-    - "show lamps supplied by smartequip"
-    - "smart equip purchase invoices in usd"
-    - "purchase orders from smartequip this month"
-  fuzzy:
-    wr_ratio_min: 80
-    token_set_min: 75
-  confidence: 0.90
-
-
-- type: alias
-  entity: Supplier
-  id: "Vertex Global Traders"
-  labels:
-    - "Vertex Traders"
-    - "Vertex Global"
-    - "Vertex G Traders"
-    - "Vertex"
-  typo_variants:
-    - "Vertx Global"
-    - "Vertex Global Trade"
-    - "Verteks Global"
-    - "Vertex Trader"
-  ngrams:
-    - "vertex traders"
-    - "vertex global"
-    - "vertex supplier"
-  filters:
-    name: ["Vertex Global Traders"]
-    supplier_name: ["Vertex Global Traders"]
-  valid_for_tables:
-    - { table: "tabSupplier", field: "name" }
-    - { table: "tabSupplier", field: "supplier_name" }
-    - { table: "tabPurchase Invoice", field: "supplier" }
-    - { table: "tabPurchase Order", field: "supplier" }
-  context:
-    tenant_id: ACME
-    notes: "Supplier entity for Vertex Global Traders; handles fuzzy queries like 'vertex supplier', 'vertex trade', or 'vertex global'."
-  examples:
-    - "vertex supplier purchase order"              
-    - "invoices from vertex global"               
-    - "payments made to vertex traders"          
-    - "vertex global suppliers of dell laptops"
-
-  fuzzy: { wr_ratio_min: 81, token_set_min: 77 }
-  confidence: 0.92
-
-- type: alias
-  entity: Supplier
-  id: "Zuckerman Security Ltd."
-
-  description: >
-    Supplier entity for “Zuckerman Security Ltd.”.
-    Use this card whenever a query references or implies this supplier
-    (e.g., “Zuckerman Security”, “Zuckerman Ltd”, “Zuckerman”).
-    Apply its filters on supplier-linked fields (e.g., tabPurchase Invoice.supplier).
-
-  labels:
-    - "Zuckerman Security Ltd."
-    - "Zuckerman Security"
-    - "Zuckerman Ltd"
-    - "Zuckerman Sec."
-    - "Zuckerman"
-
-  typo_variants:
-    - "Zuckerman Sec"
-    - "Zuckermen Security"
-    - "Zuckrman Security"
-    - "Zuckerman Security Limited"
-    - "Zuckman Security"
-    - "Zuckerman Securty"
-
-  ngrams:
-    - "zuckerman security"
-    - "zuckerman supplier"
-    - "zuckerman ltd"
-    - "zuckerman sec"
-    - "supplier zuckerman"
-
-  filters:
-    name: ["Zuckerman Security Ltd."]
-    supplier_name: ["Zuckerman Security Ltd."]
-
-  valid_for_tables:
-    - { table: "tabSupplier",          field: "name" }
-    - { table: "tabSupplier",          field: "supplier_name" }
-    - { table: "tabPurchase Invoice",  field: "supplier" }
-    - { table: "tabPurchase Order",    field: "supplier" }
-    - { table: "tabPurchase Receipt",  field: "supplier" }
-    - { table: "tabSupplier Quotation", field: "supplier" }
-    - { table: "tabPayment Entry",     field: "party" }
-
-  context:
-    tenant_id: ACME
-    notes: "Supports short forms and common misspellings for supplier matching across purchase documents."
-
-  examples:
-    - "bills from zuckerman security"
-    - "purchase invoices from zuckerman ltd this quarter"
-    - "orders placed to zuckerman security"
-    - "show receipts from zuckerman supplier"
-    - "outstanding to zuckerman security limited"
-
-  fuzzy:
-    wr_ratio_min: 82
-    token_set_min: 78
-
-  confidence: 0.92
-
-- type: alias
-  entity: Currency
-  id: "AED"
-  description: "Represents the ISO 4217 currency code 'AED' (United Arab Emirates Dirham). Used for invoices, purchases, and payments in AED."
-  labels:
-    - "AED"
-  typo_variants:
-    - "A E D"
-    - "UAE Dirham"
-    - "Arab Emirates Dirham"
-  ngrams:
-    - "aed currency"
-    - "uae dirham"
-    - "aed code"
-  filters:
-    name: ["AED"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for United Arab Emirates Dirham."
-  examples:
-    - "sales invoices in aed"
-    - "payments in uae dirham"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.96
-
-
-- type: alias
-  entity: Currency
-  id: "AFN"
-  description: "Represents the ISO 4217 currency code 'AFN' (Afghan Afghani). Used for transactions recorded in Afghan currency."
-  labels:
-    - "AFN"
-  typo_variants:
-    - "A F N"
-    - "Afghan Afghani"
-    - "Afgan Afghani"
-  ngrams:
-    - "afn currency"
-    - "afghan afghani"
-    - "afn code"
-  filters:
-    name: ["AFN"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Afghan Afghani."
-  examples:
-    - "sales invoices in afn"
-    - "purchase invoices in afghan afghani"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "ALL"
-  description: "Represents the ISO 4217 currency code 'ALL' (Albanian Lek). Used for financial documents and payments in Albanian Lek."
-  labels:
-    - "ALL"
-  typo_variants:
-    - "A L L"
-    - "Albania Lek"
-    - "Albanian Lekk"
-  ngrams:
-    - "all currency"
-    - "albanian lek"
-    - "all code"
-  filters:
-    name: ["ALL"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Albanian Lek."
-  examples:
-    - "sales invoices in all"
-    - "payments in albanian lek"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "AMD"
-  description: "Represents the ISO 4217 currency code 'AMD' (Armenian Dram). Used across ERPNext to identify payments and invoices in Armenian currency."
-  labels:
-    - "AMD"
-  typo_variants:
-    - "A M D"
-    - "Armenia Dram"
-    - "Armenian Drram"
-  ngrams:
-    - "amd currency"
-    - "armenian dram"
-    - "amd code"
-  filters:
-    name: ["AMD"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Armenian Dram."
-  examples:
-    - "amd sales invoices"
-    - "payments in armenian dram"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "ARS"
-  description: "Represents the ISO 4217 currency code 'ARS' (Argentine Peso). Used for accounting and sales records in Argentinian currency."
-  labels:
-    - "ARS"
-  typo_variants:
-    - "A R S"
-    - "Argentina Peso"
-    - "Argentine Pesso"
-  ngrams:
-    - "ars currency"
-    - "argentine peso"
-    - "ars code"
-  filters:
-    name: ["ARS"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Argentine Peso."
-  examples:
-    - "sales in ars"
-    - "payments in argentine peso"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "AUD"
-  description: "Represents the ISO 4217 currency code 'AUD' (Australian Dollar). Used for invoices, purchase entries, and payments in Australian Dollars."
-  labels:
-    - "AUD"
-  typo_variants:
-    - "A U D"
-    - "Aussie Dollar"
-    - "Australian Dolar"
-  ngrams:
-    - "aud currency"
-    - "australian dollar"
-    - "aud code"
-  filters:
-    name: ["AUD"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Australian Dollar."
-  examples:
-    - "sales invoices in aud"
-    - "payments using australian dollar"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.96
-
-- type: alias
-  entity: Currency
-  id: "AWG"
-  description: "Represents the ISO 4217 currency code 'AWG' (Aruban Florin). Used for transactions, sales, and purchases in Aruban Florins."
-  labels:
-    - "AWG"
-  typo_variants:
-    - "A W G"
-    - "Aruba Florin"
-    - "Aruban Gulden"
-  ngrams:
-    - "awg currency"
-    - "aruban florin"
-    - "awg code"
-  filters:
-    name: ["AWG"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Aruban Florin."
-  examples:
-    - "sales invoices in awg"
-    - "payments made in aruban florin"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "BAM"
-  description: "Represents the ISO 4217 currency code 'BAM' (Bosnia and Herzegovina Convertible Mark). Used for ERPNext financial documents in convertible marks."
-  labels:
-    - "BAM"
-  typo_variants:
-    - "B A M"
-    - "Bosnian Mark"
-    - "Convertible Mark"
-  ngrams:
-    - "bam currency"
-    - "bosnian mark"
-    - "convertible mark"
-  filters:
-    name: ["BAM"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Bosnia and Herzegovina Convertible Mark."
-  examples:
-    - "bam invoices"
-    - "sales recorded in bosnian mark"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "BBD"
-  description: "Represents the ISO 4217 currency code 'BBD' (Barbados Dollar). Used to denote transactions in Barbadian Dollars."
-  labels:
-    - "BBD"
-  typo_variants:
-    - "B B D"
-    - "Barbados Dollar"
-    - "Barbadian Dolar"
-  ngrams:
-    - "bbd currency"
-    - "barbados dollar"
-    - "bbd code"
-  filters:
-    name: ["BBD"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Barbados Dollar."
-  examples:
-    - "sales invoices in bbd"
-    - "payments made in barbados dollar"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "BDT"
-  description: "Represents the ISO 4217 currency code 'BDT' (Bangladeshi Taka). Used to identify invoices, payments, and purchases in Bangladeshi currency."
-  labels:
-    - "BDT"
-  typo_variants:
-    - "B D T"
-    - "Bangla Taka"
-    - "Bangladeshi Tacca"
-  ngrams:
-    - "bdt currency"
-    - "bangladeshi taka"
-    - "bdt code"
-  filters:
-    name: ["BDT"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Bangladeshi Taka."
-  examples:
-    - "sales in bdt"
-    - "payments in bangladeshi taka"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "BGN"
-  description: "Represents the ISO 4217 currency code 'BGN' (Bulgarian Lev). Used for transactions and accounting entries in Bulgarian currency."
-  labels:
-    - "BGN"
-  typo_variants:
-    - "B G N"
-    - "Bulgarian Leva"
-    - "Bulgarian Levv"
-  ngrams:
-    - "bgn currency"
-    - "bulgarian lev"
-    - "bgn code"
-  filters:
-    name: ["BGN"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Bulgarian Lev."
-  examples:
-    - "bgn invoices"
-    - "payments using bulgarian lev"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "BHD"
-  description: "Represents the ISO 4217 currency code 'BHD' (Bahraini Dinar). Used across ERPNext to record invoices and payments in Bahraini Dinars."
-  labels:
-    - "BHD"
-  typo_variants:
-    - "B H D"
-    - "Bahrain Dinar"
-    - "Baharini Dinar"
-  ngrams:
-    - "bhd currency"
-    - "bahraini dinar"
-    - "bhd code"
-  filters:
-    name: ["BHD"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Bahraini Dinar."
-  examples:
-    - "bhd invoices"
-    - "sales in bahraini dinar"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.96
-
-
-- type: alias
-  entity: Currency
-  id: "BIF"
-  description: "Represents the ISO 4217 currency code 'BIF' (Burundian Franc). Used for tracking payments and invoices denominated in Burundian Francs."
-  labels:
-    - "BIF"
-  typo_variants:
-    - "B I F"
-    - "Burundi Franc"
-    - "Burundian Frank"
-  ngrams:
-    - "bif currency"
-    - "burundian franc"
-    - "bif code"
-  filters:
-    name: ["BIF"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Burundian Franc."
-  examples:
-    - "bif transactions"
-    - "sales in burundian franc"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "BMD"
-  description: "Represents the ISO 4217 currency code 'BMD' (Bermudian Dollar). Used to identify and filter records for transactions in Bermudian Dollars."
-  labels:
-    - "BMD"
-  typo_variants:
-    - "B M D"
-    - "Bermuda Dollar"
-    - "Bermudian Dolar"
-  ngrams:
-    - "bmd currency"
-    - "bermudian dollar"
-    - "bmd code"
-  filters:
-    name: ["BMD"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Bermudian Dollar."
-  examples:
-    - "bmd invoices"
-    - "bermudian dollar payments"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "BND"
-  description: "Represents the ISO 4217 currency code 'BND' (Brunei Dollar). Used for financial documents and payments in Brunei Dollars."
-  labels:
-    - "BND"
-  typo_variants:
-    - "B N D"
-    - "Brunei Dolar"
-    - "Brunei Dollar"
-  ngrams:
-    - "bnd currency"
-    - "brunei dollar"
-    - "bnd code"
-  filters:
-    name: ["BND"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Brunei Dollar."
-  examples:
-    - "sales in bnd"
-    - "payments using brunei dollar"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "BOB"
-  description: "Represents the ISO 4217 currency code 'BOB' (Boliviano). Used for identifying and filtering ERPNext transactions denominated in Bolivianos."
-  labels:
-    - "BOB"
-  typo_variants:
-    - "B O B"
-    - "Boliviano"
-    - "Bolivia Peso"
-  ngrams:
-    - "bob currency"
-    - "boliviano"
-    - "bob code"
-  filters:
-    name: ["BOB"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Boliviano."
-  examples:
-    - "sales invoices in bob"
-    - "payments recorded in bolivianos"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "BRL"
-  description: "Represents the ISO 4217 currency code 'BRL' (Brazilian Real). Used for invoices, purchases, and payments in Brazilian Reais."
-  labels:
-    - "BRL"
-  typo_variants:
-    - "B R L"
-    - "Brazilian Real"
-    - "Brasil Real"
-  ngrams:
-    - "brl currency"
-    - "brazilian real"
-    - "brl code"
-  filters:
-    name: ["BRL"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Brazilian Real."
-  examples:
-    - "sales in brl"
-    - "purchase invoices in brazilian real"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.96
-
-
-- type: alias
-  entity: Currency
-  id: "BSD"
-  description: "Represents the ISO 4217 currency code 'BSD' (Bahamian Dollar). Used for tracking financial entries in Bahamian Dollars."
-  labels:
-    - "BSD"
-  typo_variants:
-    - "B S D"
-    - "Bahama Dollar"
-    - "Bahamian Dolar"
-  ngrams:
-    - "bsd currency"
-    - "bahamian dollar"
-    - "bsd code"
-  filters:
-    name: ["BSD"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Bahamian Dollar."
-  examples:
-    - "sales invoices in bsd"
-    - "payments made in bahamian dollar"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "BTN"
-  description: "Represents the ISO 4217 currency code 'BTN' (Bhutanese Ngultrum). Used to track transactions and payments in Bhutanese currency."
-  labels:
-    - "BTN"
-  typo_variants:
-    - "B T N"
-    - "Bhutan Ngultrum"
-    - "Bhutanese Ngltrum"
-  ngrams:
-    - "btn currency"
-    - "bhutanese ngultrum"
-    - "btn code"
-  filters:
-    name: ["BTN"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Bhutanese Ngultrum."
-  examples:
-    - "sales invoices in btn"
-    - "payments in bhutanese ngultrum"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "BWP"
-  description: "Represents the ISO 4217 currency code 'BWP' (Botswana Pula). Used for financial documents denominated in Botswana Pula."
-  labels:
-    - "BWP"
-  typo_variants:
-    - "B W P"
-    - "Botswana Pulla"
-    - "Bostwana Pula"
-  ngrams:
-    - "bwp currency"
-    - "botswana pula"
-    - "bwp code"
-  filters:
-    name: ["BWP"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Botswana Pula."
-  examples:
-    - "purchase orders in bwp"
-    - "sales using botswana pula"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "BZD"
-  description: "Represents the ISO 4217 currency code 'BZD' (Belize Dollar). Used for transactions and reports involving Belize Dollars."
-  labels:
-    - "BZD"
-  typo_variants:
-    - "B Z D"
-    - "Belize Dolar"
-    - "Belizean Dollar"
-  ngrams:
-    - "bzd currency"
-    - "belize dollar"
-    - "bzd code"
-  filters:
-    name: ["BZD"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Belize Dollar."
-  examples:
-    - "sales invoices in bzd"
-    - "payments in belize dollar"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "CAD"
-  description: "Represents the ISO 4217 currency code 'CAD' (Canadian Dollar). Used to record transactions and financial entries in CAD across ERPNext."
-  labels:
-    - "CAD"
-  typo_variants:
-    - "C A D"
-    - "Canada Dollar"
-    - "Canadian Dolar"
-  ngrams:
-    - "cad currency"
-    - "canadian dollar"
-    - "cad code"
-  filters:
-    name: ["CAD"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Canadian Dollar."
-  examples:
-    - "sales invoices in cad"
-    - "payments in canadian dollar"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.96
-
-
-- type: alias
-  entity: Currency
-  id: "CDF"
-  description: "Represents the ISO 4217 currency code 'CDF' (Congolese Franc). Used for invoices and payments denominated in Congolese Francs."
-  labels:
-    - "CDF"
-  typo_variants:
-    - "C D F"
-    - "Congo Franc"
-    - "Congolese Frank"
-  ngrams:
-    - "cdf currency"
-    - "congolese franc"
-    - "cdf code"
-  filters:
-    name: ["CDF"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Congolese Franc."
-  examples:
-    - "sales invoices in cdf"
-    - "payments made in congolese franc"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "CHF"
-  description: "Represents the ISO 4217 currency code 'CHF' (Swiss Franc). Used across ERPNext to denote Swiss currency for invoices, payments, and transactions."
-  labels:
-    - "CHF"
-  typo_variants:
-    - "C H F"
-    - "Swiss Frank"
-    - "Switz Franc"
-  ngrams:
-    - "chf currency"
-    - "swiss franc"
-    - "chf code"
-  filters:
-    name: ["CHF"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Swiss Franc."
-  examples:
-    - "sales invoices in chf"
-    - "payments using swiss franc"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.96
-
-
-- type: alias
-  entity: Currency
-  id: "CLP"
-  description: "Represents the ISO 4217 currency code 'CLP' (Chilean Peso). Used for identifying financial transactions denominated in Chilean Pesos."
-  labels:
-    - "CLP"
-  typo_variants:
-    - "C L P"
-    - "Chili Peso"
-    - "Chilean Pesso"
-  ngrams:
-    - "clp currency"
-    - "chilean peso"
-    - "clp code"
-  filters:
-    name: ["CLP"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Chilean Peso."
-  examples:
-    - "sales invoices in clp"
-    - "payments in chilean peso"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "CNY"
-  description: "Represents the ISO 4217 currency code 'CNY' (Chinese Yuan Renminbi). Used to denote financial documents in Chinese Yuan."
-  labels:
-    - "CNY"
-  typo_variants:
-    - "C N Y"
-    - "Chinese Yuan"
-    - "Yuan Renminbi"
-  ngrams:
-    - "cny currency"
-    - "chinese yuan"
-    - "renminbi"
-  filters:
-    name: ["CNY"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Chinese Yuan Renminbi."
-  examples:
-    - "cny invoices"
-    - "sales in chinese yuan"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.96
-
-
-- type: alias
-  entity: Currency
-  id: "COP"
-  description: "Represents the ISO 4217 currency code 'COP' (Colombian Peso). Used for invoices, purchase orders, and payments in Colombian Pesos."
-  labels:
-    - "COP"
-  typo_variants:
-    - "C O P"
-    - "Columbian Peso"
-    - "Colombia Peso"
-  ngrams:
-    - "cop currency"
-    - "colombian peso"
-    - "cop code"
-  filters:
-    name: ["COP"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Colombian Peso."
-  examples:
-    - "cop purchase invoices"
-    - "payments in colombian peso"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "CRC"
-  description: "Represents the ISO 4217 currency code 'CRC' (Costa Rican Colón). Used to track financial transactions in Costa Rican Colones."
-  labels:
-    - "CRC"
-  typo_variants:
-    - "C R C"
-    - "Costa Rican Colon"
-    - "Costa Rica Coln"
-  ngrams:
-    - "crc currency"
-    - "costa rican colon"
-    - "crc code"
-  filters:
-    name: ["CRC"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Costa Rican Colón."
-  examples:
-    - "crc sales invoices"
-    - "purchase orders using costa rican colon"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "CUP"
-  description: "Represents the ISO 4217 currency code 'CUP' (Cuban Peso). Used for identifying and filtering transactions in Cuban currency."
-  labels:
-    - "CUP"
-  typo_variants:
-    - "C U P"
-    - "Cuban Pesso"
-    - "Cuba Peso"
-  ngrams:
-    - "cup currency"
-    - "cuban peso"
-    - "cup code"
-  filters:
-    name: ["CUP"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Cuban Peso."
-  examples:
-    - "sales invoices in cup"
-    - "transactions using cuban peso"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "CVE"
-  description: "Represents the ISO 4217 currency code 'CVE' (Cape Verdean Escudo). Used for invoices and payments in Cape Verdean currency."
-  labels:
-    - "CVE"
-  typo_variants:
-    - "C V E"
-    - "Cape Verd Escudo"
-    - "Cape Verde Escudo"
-  ngrams:
-    - "cve currency"
-    - "cape verde escudo"
-    - "cve code"
-  filters:
-    name: ["CVE"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Cape Verdean Escudo."
-  examples:
-    - "cve purchase invoices"
-    - "sales using cape verdean escudo"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "CYP"
-  description: "Represents the ISO 4217 currency code 'CYP' (Cypriot Pound, legacy currency). Included for compatibility with historical or migrated ERP data."
-  labels:
-    - "CYP"
-  typo_variants:
-    - "C Y P"
-    - "Cyprus Pound"
-    - "Cypriot Pnd"
-  ngrams:
-    - "cyp currency"
-    - "cyprus pound"
-    - "cyp code"
-  filters:
-    name: ["CYP"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "Legacy ISO 4217 currency code for Cypriot Pound."
-  examples:
-    - "old invoices in cyp"
-    - "cyprus pound transactions"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.94
-
-
-- type: alias
-  entity: Currency
-  id: "CZK"
-  description: "Represents the ISO 4217 currency code 'CZK' (Czech Koruna). Used for accounting, sales, and purchases in Czech currency."
-  labels:
-    - "CZK"
-  typo_variants:
-    - "C Z K"
-    - "Czech Krona"
-    - "Czech Koron"
-  ngrams:
-    - "czk currency"
-    - "czech koruna"
-    - "czk code"
-  filters:
-    name: ["CZK"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Czech Koruna."
-  examples:
-    - "sales in czk"
-    - "purchase invoices using czech koruna"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "DJF"
-  description: "Represents the ISO 4217 currency code 'DJF' (Djiboutian Franc). Used to represent and filter transactions made in Djibouti Francs."
-  labels:
-    - "DJF"
-  typo_variants:
-    - "D J F"
-    - "Djibuti Franc"
-    - "Djiboutian Frank"
-  ngrams:
-    - "djf currency"
-    - "djibouti franc"
-    - "djf code"
-  filters:
-    name: ["DJF"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Djiboutian Franc."
-  examples:
-    - "djf purchase orders"
-    - "sales recorded in djibouti franc"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "DKK"
-  description: "Represents the ISO 4217 currency code 'DKK' (Danish Krone). Used to identify and filter financial records denominated in Danish Krone across ERPNext documents."
-  labels:
-    - "DKK"
-  typo_variants:
-    - "D K K"
-    - "Danish Krone"
-    - "Danish Kroner"
-  ngrams:
-    - "dkk currency"
-    - "danish krone"
-    - "dkk code"
-  filters:
-    name: ["DKK"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Danish Krone."
-  examples:
-    - "sales invoices in dkk"
-    - "payments in danish krone"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "DOP"
-  description: "Represents the ISO 4217 currency code 'DOP' (Dominican Peso). Used to record and query financial transactions in Dominican Pesos."
-  labels:
-    - "DOP"
-  typo_variants:
-    - "D O P"
-    - "Dom Peso"
-    - "Dominican Pesso"
-  ngrams:
-    - "dop currency"
-    - "dominican peso"
-    - "dop code"
-  filters:
-    name: ["DOP"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Dominican Peso."
-  examples:
-    - "sales invoices in dop"
-    - "purchase orders in dominican peso"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "DZD"
-  description: "Represents the ISO 4217 currency code 'DZD' (Algerian Dinar). Used for identifying transactions in Algerian currency within ERPNext documents."
-  labels:
-    - "DZD"
-  typo_variants:
-    - "D Z D"
-    - "Algerian Dinnar"
-    - "DZ Dinar"
-  ngrams:
-    - "dzd currency"
-    - "algerian dinar"
-    - "dzd code"
-  filters:
-    name: ["DZD"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Algerian Dinar."
-  examples:
-    - "purchase invoices in dzd"
-    - "sales entries using algerian dinar"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "EGP"
-  description: "Represents the ISO 4217 currency code 'EGP' (Egyptian Pound). Used to identify and filter financial documents denominated in Egyptian Pounds."
-  labels:
-    - "EGP"
-  typo_variants:
-    - "E G P"
-    - "Egypt Pound"
-    - "Egyp Pound"
-    - "Egyptian Pnd"
-  ngrams:
-    - "egp currency"
-    - "egyptian pound"
-    - "egp code"
-  filters:
-    name: ["EGP"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Egyptian Pound."
-  examples:
-    - "sales invoices in egp"
-    - "payments in egyptian pounds"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "ERN"
-  description: "Represents the ISO 4217 currency code 'ERN' (Eritrean Nakfa). Used to track transactions and financial entries in Eritrean currency."
-  labels:
-    - "ERN"
-  typo_variants:
-    - "E R N"
-    - "Eritrean Nakfa"
-    - "Ern Nakfa"
-  ngrams:
-    - "ern currency"
-    - "eritrean nakfa"
-    - "ern code"
-  filters:
-    name: ["ERN"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Eritrean Nakfa."
-  examples:
-    - "purchase invoices in ern"
-    - "payments made in eritrean nakfa"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "ETB"
-  description: "Represents the ISO 4217 currency code 'ETB' (Ethiopian Birr). Used for invoices, purchases, and payments denominated in Ethiopian Birr."
-  labels:
-    - "ETB"
-  typo_variants:
-    - "E T B"
-    - "Ethiop Birr"
-    - "Ethio Birr"
-  ngrams:
-    - "etb currency"
-    - "ethiopian birr"
-    - "etb code"
-  filters:
-    name: ["ETB"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Ethiopian Birr."
-  examples:
-    - "etb sales invoices"
-    - "expenses in ethiopian birr"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "EUR"
-  description: "Represents the ISO 4217 currency code 'EUR' (Euro). Used globally for European Union transactions and widely supported in ERPNext documents."
-  labels:
-    - "EUR"
-  typo_variants:
-    - "E U R"
-    - "Euro"
-    - "Euros"
-    - "European Currency"
-  ngrams:
-    - "eur currency"
-    - "euro"
-    - "eur code"
-  filters:
-    name: ["EUR"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Euro."
-  examples:
-    - "sales in eur"
-    - "purchase orders in euro"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.97
-
-
-- type: alias
-  entity: Currency
-  id: "FJD"
-  description: "Represents the ISO 4217 currency code 'FJD' (Fijian Dollar). Used to tag financial entries, invoices, and payments in FJD."
-  labels:
-    - "FJD"
-  typo_variants:
-    - "F J D"
-    - "Fiji Dollar"
-    - "Fijian Dolar"
-  ngrams:
-    - "fjd currency"
-    - "fijian dollar"
-    - "fjd code"
-  filters:
-    name: ["FJD"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Fijian Dollar."
-  examples:
-    - "sales invoices in fjd"
-    - "payments made in fiji dollar"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "FKP"
-  description: "Represents the ISO 4217 currency code 'FKP' (Falkland Islands Pound). Used for identifying transactions denominated in Falkland Islands Pound in ERPNext financial documents."
-  labels:
-    - "FKP"
-  typo_variants:
-    - "F K P"
-    - "FK Pound"
-    - "Falkland Pound"
-  ngrams:
-    - "fkp currency"
-    - "falkland pound"
-    - "fkp code"
-  filters:
-    name: ["FKP"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Falkland Islands Pound."
-  examples:
-    - "sales invoices in fkp"
-    - "payments recorded in falkland pound"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "GBP"
-  description: "Represents the ISO 4217 currency code 'GBP' (British Pound Sterling). Used for sales, purchase, and payment records denominated in GBP."
-  labels:
-    - "GBP"
-  typo_variants:
-    - "G B P"
-    - "GB Pound"
-    - "British Pound"
-    - "Pound Sterling"
-  ngrams:
-    - "gbp currency"
-    - "british pound"
-    - "pound sterling"
-  filters:
-    name: ["GBP"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for British Pound Sterling."
-  examples:
-    - "invoices in gbp"
-    - "purchase orders using british pound"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.97
-
-
-- type: alias
-  entity: Currency
-  id: "GHS"
-  description: "Represents the ISO 4217 currency code 'GHS' (Ghanaian Cedi). Used to denote transactions and documents in Ghanaian currency across ERPNext financial modules."
-  labels:
-    - "GHS"
-  typo_variants:
-    - "G H S"
-    - "Ghanian Cedi"
-    - "GH Cedi"
-  ngrams:
-    - "ghs currency"
-    - "ghanaian cedi"
-    - "ghs code"
-  filters:
-    name: ["GHS"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Ghanaian Cedi."
-  examples:
-    - "sales invoices in ghs"
-    - "ghs purchase invoices this month"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "GIP"
-  description: "Represents the ISO 4217 currency code 'GIP' (Gibraltar Pound). Used to identify financial entries in Gibraltar Pound for invoices and payments."
-  labels:
-    - "GIP"
-  typo_variants:
-    - "G I P"
-    - "Gibralter Pound"
-    - "Gib Pound"
-  ngrams:
-    - "gip currency"
-    - "gibraltar pound"
-    - "gip code"
-  filters:
-    name: ["GIP"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Gibraltar Pound."
-  examples:
-    - "gip payment entries"
-    - "sales in gibraltar pound"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "GMD"
-  description: "Represents the ISO 4217 currency code 'GMD' (Gambian Dalasi). Used for recognizing and filtering transactions made in GMD."
-  labels:
-    - "GMD"
-  typo_variants:
-    - "G M D"
-    - "Gambian Dalassi"
-    - "GMD Dalasi"
-  ngrams:
-    - "gmd currency"
-    - "gambian dalasi"
-    - "gmd code"
-  filters:
-    name: ["GMD"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Gambian Dalasi."
-  examples:
-    - "payments in gmd currency"
-    - "sales using gambian dalasi"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "GNF"
-  description: "Represents the ISO 4217 currency code 'GNF' (Guinean Franc). Used for identifying and filtering transactions denominated in GNF across ERPNext financial documents."
-  labels:
-    - "GNF"
-  typo_variants:
-    - "G N F"
-    - "GN-Franc"
-    - "Guinean Franc"
-  ngrams:
-    - "gnf currency"
-    - "guinean franc"
-    - "gnf code"
-  filters:
-    name: ["GNF"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Guinean Franc."
-  examples:
-    - "sales invoices in gnf"
-    - "purchase orders using gnf currency"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "GTQ"
-  description: "Represents the ISO 4217 currency code 'GTQ' (Guatemalan Quetzal). Used for financial transactions, invoices, and currency filters in ERPNext."
-  labels:
-    - "GTQ"
-  typo_variants:
-    - "G T Q"
-    - "Guatemalan Quetzal"
-    - "GT-Quetzal"
-  ngrams:
-    - "gtq currency"
-    - "guatemalan quetzal"
-    - "gtq code"
-  filters:
-    name: ["GTQ"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Guatemalan Quetzal."
-  examples:
-    - "gtq invoices"
-    - "entries in guatemalan quetzal"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "GYD"
-  description: "Represents the ISO 4217 currency code 'GYD' (Guyanese Dollar). Used to identify transactions in Guyanese currency within ERPNext documents."
-  labels:
-    - "GYD"
-  typo_variants:
-    - "G Y D"
-    - "GY-Dollar"
-    - "Guyanese Dollar"
-  ngrams:
-    - "gyd currency"
-    - "guyanese dollar"
-    - "gyd code"
-  filters:
-    name: ["GYD"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Guyanese Dollar."
-  examples:
-    - "purchase invoices in gyd"
-    - "sales entries in guyanese dollar"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.95
-
-
-- type: alias
-  entity: Currency
-  id: "HKD"
-  description: "Represents the ISO 4217 currency code 'HKD' (Hong Kong Dollar). Used to track and query transactions in HKD across ERPNext documents."
-  labels:
-    - "HKD"
-  typo_variants:
-    - "H K D"
-    - "HK-Dollar"
-    - "Hongkong Dollar"
-  ngrams:
-    - "hkd currency"
-    - "hong kong dollar"
-    - "hkd code"
-  filters:
-    name: ["HKD"]
-  valid_for_tables:
-    - { table: "tabCurrency", field: "name" }
-    - { table: "tabSales Invoice", field: "currency" }
-    - { table: "tabPurchase Invoice", field: "currency" }
-    - { table: "tabPayment Entry", field: "party_account_currency" }
-  context:
-    tenant_id: ACME
-    notes: "ISO 4217 currency code for Hong Kong Dollar."
-  examples:
-    - "hkd sales invoices"
-    - "payments made in hong kong dollar"
-  fuzzy:
-    wr_ratio_min: 85
-    token_set_min: 80
-  confidence: 0.96
-
+[
+  {
+    "entity_type": "tabCustomer",
+    "entity_id": "A. Williams",
+    "canonical_name": "A. Williams",
+    "aliases": ["Williams", "A Williams", "Mr Williams"],
+    "attributes": {
+      "misspellings": ["willimas", "wilams", "wiliams"],
+      "filters": { "field": "customer", "value": "A. Williams" },
+      "valid_for_tables": [
+        { "table": "tabCustomer", "field": "name" },
+        { "table": "tabCustomer", "field": "customer_name" },
+        { "table": "tabSales Invoice", "field": "customer" },
+        { "table": "tabSales Order", "field": "customer" },
+        { "table": "tabDelivery Note", "field": "customer" },
+        { "table": "tabQuotation", "field": "customer" },
+        { "table": "tabPayment Entry", "field": "party" },
+        { "table": "tabSales Invoice Payment", "field": "parent" },
+        { "table": "tabPOS Invoice", "field": "customer" },
+        { "table": "tabCustomer Group", "field": "parent_customer" }
+      ],
+      "embedding_text": "Customer: A. Williams. Also known as Williams, A Williams, or Mr Williams. Common misspellings include willimas, wilams, and wiliams."
+    }
+  },
+  {
+    "entity_type": "tabCustomer",
+    "entity_id": "Acme, Inc.",
+    "canonical_name": "Acme, Inc.",
+    "aliases": [
+      "Acme",
+      "Acme Inc",
+      "Acme,inc",
+      "Acme Incorporated",
+      "Acme Company"
+    ],
+    "attributes": {
+      "misspellings": [
+        "Aceme",
+        "Akme",
+        "Acnee"
+      ],
+      "filters": {
+        "field": "customer",
+        "value": "Acme, Inc."
+      },
+      "valid_for_tables": [
+        { "table": "tabCustomer", "field": "name" },
+        { "table": "tabCustomer", "field": "customer_name" },
+        { "table": "tabSales Invoice", "field": "customer" },
+        { "table": "tabSales Order", "field": "customer" },
+        { "table": "tabDelivery Note", "field": "customer" },
+        { "table": "tabQuotation", "field": "customer" },
+        { "table": "tabPayment Entry", "field": "party" },
+        { "table": "tabSales Invoice Payment", "field": "parent" },
+        { "table": "tabPOS Invoice", "field": "customer" },
+        { "table": "tabCustomer Group", "field": "parent_customer" }
+      ],
+      "embedding_text": "Customer: Acme, Inc.. Also known as Acme, Acme Inc, Acme,inc, Acme Incorporated, or Acme Company. Common misspellings include Aceme, Akme, and Acnee."
+    }
+  },
+  {
+    "entity_type": "tabCustomer",
+    "entity_id": "Amrin Yosuf",
+    "canonical_name": "Amrin Yosuf",
+    "aliases": [
+      "Amrin Yosuf",
+      "Amrin",
+      "Yosuf",
+      "Ms Amrin",
+      "A Yosuf"
+    ],
+    "attributes": {
+      "misspellings": [
+        "Amren Yosuf",
+        "Amrin",
+        "Yousof",
+        "Yosuph",
+        "Amrn",
+        "Amrin Yousuf",
+        "Amrin Yosuph"
+      ],
+      "filters": {
+        "field": "customer",
+        "value": "Amrin Yosuf"
+      },
+      "valid_for_tables": [
+        { "table": "tabCustomer", "field": "name" },
+        { "table": "tabCustomer", "field": "customer_name" },
+        { "table": "tabSales Invoice", "field": "customer" },
+        { "table": "tabSales Order", "field": "customer" },
+        { "table": "tabDelivery Note", "field": "customer" },
+        { "table": "tabQuotation", "field": "customer" },
+        { "table": "tabPayment Entry", "field": "party" },
+        { "table": "tabSales Invoice Payment", "field": "parent" },
+        { "table": "tabPOS Invoice", "field": "customer" },
+        { "table": "tabCustomer Group", "field": "parent_customer" }
+      ],
+      "embedding_text": "Customer: Amrin Yosuf. Also known as Amrin Yosuf, Amrin, Yosuf, Ms Amrin, or A Yosuf. Common misspellings include Amren Yosuf, Amrin, Yousof, Yosuph, Amrn, Amrin Yousuf, and Amrin Yosuph."
+    }
+  },
+  {
+    "entity_type": "tabCustomer",
+    "entity_id": "Ayaan",
+    "canonical_name": "Ayaan",
+    "aliases": [
+      "Ayaan",
+      "Mr Ayaan",
+      "Customer Ayaan",
+      "customer ayaan"
+    ],
+    "attributes": {
+      "misspellings": [
+        "Ayan",
+        "Ayaan.",
+        "Ayann",
+        "Ayyaan",
+        "Aayn",
+        "Ayaan ",
+        "A yaan"
+      ],
+      "filters": {
+        "field": "customer",
+        "value": "Ayaan"
+      },
+      "valid_for_tables": [
+        { "table": "tabCustomer", "field": "name" },
+        { "table": "tabCustomer", "field": "customer_name" },
+        { "table": "tabSales Invoice", "field": "customer" },
+        { "table": "tabSales Order", "field": "customer" },
+        { "table": "tabDelivery Note", "field": "customer" },
+        { "table": "tabQuotation", "field": "customer" },
+        { "table": "tabPayment Entry", "field": "party" },
+        { "table": "tabSales Invoice Payment", "field": "parent" },
+        { "table": "tabPOS Invoice", "field": "customer" },
+        { "table": "tabCustomer Group", "field": "parent_customer" }
+      ],
+      "embedding_text": "Customer: Ayaan. Also known as Ayaan, Mr Ayaan, Customer Ayaan, or customer ayaan. Common misspellings include Ayan, Ayaan., Ayann, Ayyaan, Aayn, Ayaan , and A yaan."
+    }
+  },
+  {
+    "entity_type": "tabCustomer",
+    "entity_id": "Ayrin Mehnz",
+    "canonical_name": "Ayrin Mehnz",
+    "aliases": [
+      "Ayrin Mehnz",
+      "Ayrin",
+      "Mehnz",
+      "Ms Mehnz"
+    ],
+    "attributes": {
+      "misspellings": [
+        "Ayran Mehnz",
+        "Airin Mehnz",
+        "Ayrin Menz",
+        "Ayrin Mehnez"
+      ],
+      "filters": {
+        "field": "customer",
+        "value": "Ayrin Mehnz"
+      },
+      "valid_for_tables": [
+        { "table": "tabCustomer", "field": "name" },
+        { "table": "tabCustomer", "field": "customer_name" },
+        { "table": "tabSales Invoice", "field": "customer" },
+        { "table": "tabSales Order", "field": "customer" },
+        { "table": "tabDelivery Note", "field": "customer" },
+        { "table": "tabQuotation", "field": "customer" },
+        { "table": "tabPayment Entry", "field": "party" },
+        { "table": "tabSales Invoice Payment", "field": "parent" },
+        { "table": "tabPOS Invoice", "field": "customer" },
+        { "table": "tabCustomer Group", "field": "parent_customer" }
+      ],
+      "embedding_text": "Customer: Ayrin Mehnz. Also known as Ayrin Mehnz, Ayrin, Mehnz, or Ms Mehnz. Common misspellings include Ayran Mehnz, Airin Mehnz, Ayrin Menz, and Ayrin Mehnez."
+    }
+  },
+  {
+    "entity_type": "tabItem",
+    "entity_id": "3M N95 Particulate Respirator 8210 — Box of 20 Masks — NIOSH Approved, Industrial Dust Protection, Elastic Headbands",
+    "canonical_name": "3M N95 Particulate Respirator 8210 — Box of 20 Masks — NIOSH Approved, Industrial Dust Protection, Elastic Headbands",
+    "aliases": [
+      "3M N95 Particulate Respirator",
+      "3M Mask 8210",
+      "3M N95",
+      "3M 8210 respirator",
+      "3M mask box 20",
+      "3M respirator mask"
+    ],
+    "attributes": {
+      "misspellings": [
+        "3M N95 Mask",
+        "3M 821",
+        "3M Respirater",
+        "3M N95 Resp"
+      ],
+      "filters": {
+        "field": "item_code",
+        "value": "8210"
+      },
+      "valid_for_tables": [
+        { "table": "tabItem", "field": "name" },
+        { "table": "tabItem", "field": "item_code" },
+        { "table": "tabSales Invoice Item", "field": "item_code" },
+        { "table": "tabPurchase Invoice Item", "field": "item_code" }
+      ],
+      "embedding_text": "Item: 3M N95 Particulate Respirator 8210 — Box of 20 Masks — NIOSH Approved, Industrial Dust Protection, Elastic Headbands. Also known as 3M N95 Particulate Respirator, 3M Mask 8210, 3M N95, 3M 8210 respirator, 3M mask box 20, or 3M respirator mask. Common misspellings include 3M N95 Mask, 3M 821, 3M Respirater, and 3M N95 Resp."
+    }
+  },
+  {
+    "entity_type": "tabItem",
+    "entity_id": "Bosch Serie 6 Front-Load Washing Machine 9 kg — 1400 RPM, Inverter Motor, AllergyPlus Mode, Silver Finish",
+    "canonical_name": "Bosch Serie 6 Front-Load Washing Machine 9 kg — 1400 RPM, Inverter Motor, AllergyPlus Mode, Silver Finish",
+    "aliases": [
+      "Bosch Serie 6",
+      "Bosch Washing Machine",
+      "Bosch Front Load 9kg",
+      "Bosch AllergyPlus Silver",
+      "Bosch Washer"
+    ],
+    "attributes": {
+      "misspellings": [
+        "Bosh Serie 6",
+        "Bosch Seres 6",
+        "Bosch Washing Machin",
+        "Bosch Frontload"
+      ],
+      "filters": {
+        "field": "item_code",
+        "value": "BOSCH-SERIE6-9KG"
+      },
+      "valid_for_tables": [
+        { "table": "tabItem", "field": "name" },
+        { "table": "tabItem", "field": "item_code" },
+        { "table": "tabSales Invoice Item", "field": "item_code" },
+        { "table": "tabPurchase Invoice Item", "field": "item_code" }
+      ],
+      "embedding_text": "Item: Bosch Serie 6 Front-Load Washing Machine 9 kg — 1400 RPM, Inverter Motor, AllergyPlus Mode, Silver Finish. Also known as Bosch Serie 6, Bosch Washing Machine, Bosch Front Load 9kg, Bosch AllergyPlus Silver, or Bosch Washer. Common misspellings include Bosh Serie 6, Bosch Seres 6, Bosch Washing Machin, and Bosch Frontload."
+    }
+  },
+  {
+    "entity_type": "tabItem",
+    "entity_id": "Dell Latitude 7440 Ultralight 14” Business Laptop — Intel Core i7-1365U 13th Gen, 32 GB RAM, 1 TB SSD, Windows 11 Pro, FHD Display",
+    "canonical_name": "Dell Latitude 7440 Ultralight 14” Business Laptop — Intel Core i7-1365U 13th Gen, 32 GB RAM, 1 TB SSD, Windows 11 Pro, FHD Display",
+    "aliases": [
+      "Dell Latitude 7440",
+      "Dell Ultralight Laptop",
+      "Latitude 7440 i7",
+      "Dell 14 inch business laptop",
+      "Dell 7440 Laptop",
+      "Latitude 7440 Business Series"
+    ],
+    "attributes": {
+      "misspellings": [
+        "Dell Latitdue 7440",
+        "Dell Latitud 7440",
+        "Dell Lattitude 7440",
+        "Dell Latitude7440",
+        "Del Latitude 7440",
+        "Dell Laitude 7440"
+      ],
+      "filters": {
+        "field": "item_code",
+        "value": "DELL-LATITUDE-7440"
+      },
+      "valid_for_tables": [
+        { "table": "tabItem", "field": "name" },
+        { "table": "tabSales Invoice Item", "field": "item_code" },
+        { "table": "tabPurchase Invoice Item", "field": "item_code" },
+        { "table": "tabQuotation Item", "field": "item_code" },
+        { "table": "tabDelivery Note Item", "field": "item_code" }
+      ],
+      "embedding_text": "Item: Dell Latitude 7440 Ultralight 14” Business Laptop — Intel Core i7-1365U 13th Gen, 32 GB RAM, 1 TB SSD, Windows 11 Pro, FHD Display. Also known as Dell Latitude 7440, Dell Ultralight Laptop, Latitude 7440 i7, Dell 14 inch business laptop, Dell 7440 Laptop, or Latitude 7440 Business Series. Common misspellings include Dell Latitdue 7440, Dell Latitud 7440, Dell Lattitude 7440, Dell Latitude7440, Del Latitude 7440, and Dell Laitude 7440."
+    }
+  },
+  {
+    "entity_type": "tabItem",
+    "entity_id": "HP LaserJet Pro MFP M479fdw Color Wireless All-in-One Printer — Duplex, Fax, Wi-Fi, USB, 27 ppm, 512 MB RAM",
+    "canonical_name": "HP LaserJet Pro MFP M479fdw Color Wireless All-in-One Printer — Duplex, Fax, Wi-Fi, USB, 27 ppm, 512 MB RAM",
+    "aliases": [
+      "HP LaserJet MFP",
+      "HP M479fdw Printer",
+      "LaserJet Pro All-in-One",
+      "HP Printer Wi-Fi",
+      "HP Color Printer"
+    ],
+    "attributes": {
+      "misspellings": [
+        "HP Laser Jet Pro",
+        "HP Laserjet MFP M479",
+        "HP M479fwd",
+        "HP M479 Printer"
+      ],
+      "filters": {
+        "field": "item_code",
+        "value": "HP-M479FDW"
+      },
+      "valid_for_tables": [
+        { "table": "tabItem", "field": "name" },
+        { "table": "tabItem", "field": "item_code" },
+        { "table": "tabSales Invoice Item", "field": "item_code" },
+        { "table": "tabPurchase Invoice Item", "field": "item_code" }
+      ],
+      "embedding_text": "Item: HP LaserJet Pro MFP M479fdw Color Wireless All-in-One Printer — Duplex, Fax, Wi-Fi, USB, 27 ppm, 512 MB RAM. Also known as HP LaserJet MFP, HP M479fdw Printer, LaserJet Pro All-in-One, HP Printer Wi-Fi, or HP Color Printer. Common misspellings include HP Laser Jet Pro, HP Laserjet MFP M479, HP M479fwd, and HP M479 Printer."
+    }
+  },
+  {
+    "entity_type": "tabItem",
+    "entity_id": "Item 1",
+    "canonical_name": "Item 1",
+    "aliases": [
+      "Item 1",
+      "Demo Item 1"
+    ],
+    "attributes": {
+      "misspellings": [
+        "Itm 1",
+        "Item One",
+        "Demo Itm"
+      ],
+      "filters": {
+        "field": "item_code",
+        "value": "ITEM-001"
+      },
+      "valid_for_tables": [
+        { "table": "tabItem", "field": "name" },
+        { "table": "tabItem", "field": "item_code" },
+        { "table": "tabSales Invoice Item", "field": "item_code" },
+        { "table": "tabPurchase Invoice Item", "field": "item_code" }
+      ],
+      "embedding_text": "Item: Item 1. Also known as Item 1 or Demo Item 1. Common misspellings include Itm 1, Item One, and Demo Itm."
+    }
+  },
+  {
+    "entity_type": "tabItem",
+    "entity_id": "ITEM890",
+    "canonical_name": "ITEM890",
+    "aliases": [
+      "ITEM890",
+      "Smart LED Desk Lamp",
+      "Lamp",
+      "Rechargeable Desk Lamp",
+      "Smart Lamp"
+    ],
+    "attributes": {
+      "misspellings": [
+        "Item 890",
+        "ITEM-890",
+        "Led Desk Lamp",
+        "Smart Led Lamp",
+        "Rechargeble Lamp"
+      ],
+      "filters": {
+        "field": "item_code",
+        "value": "ITEM890"
+      },
+      "valid_for_tables": [
+        { "table": "tabItem", "field": "name" },
+        { "table": "tabItem", "field": "item_code" },
+        { "table": "tabSales Invoice Item", "field": "item_code" },
+        { "table": "tabPurchase Invoice Item", "field": "item_code" }
+      ],
+      "embedding_text": "Item: ITEM890. Also known as ITEM890, Smart LED Desk Lamp, Lamp, Rechargeable Desk Lamp, or Smart Lamp. Common misspellings include Item 890, ITEM-890, Led Desk Lamp, Smart Led Lamp, and Rechargeble Lamp."
+    }
+  },
+  {
+    "entity_type": "tabSupplier",
+    "entity_id": "Apex Hardware & Tools",
+    "canonical_name": "Apex Hardware & Tools",
+    "aliases": [
+      "Apex Hardware",
+      "Apex",
+      "Apex Tools",
+      "Apex Hardware & Tools"
+    ],
+    "attributes": {
+      "misspellings": [
+        "Apexx Hardware",
+        "Apex Toolz",
+        "Apex Hardwear"
+      ],
+      "filters": {
+        "field": "supplier",
+        "value": "Apex Hardware & Tools"
+      },
+      "valid_for_tables": [
+        { "table": "tabSupplier", "field": "name" },
+        { "table": "tabSupplier", "field": "supplier_name" },
+        { "table": "tabPurchase Invoice", "field": "supplier" },
+        { "table": "tabPurchase Order", "field": "supplier" },
+        { "table": "tabPurchase Receipt", "field": "supplier" },
+        { "table": "tabSupplier Quotation", "field": "supplier" },
+        { "table": "tabPayment Entry", "field": "party" }
+      ],
+      "embedding_text": "Supplier: Apex Hardware & Tools. Also known as Apex Hardware, Apex, Apex Tools, or Apex Hardware & Tools. Common misspellings include Apexx Hardware, Apex Toolz, and Apex Hardwear."
+    }
+  },
+  {
+    "entity_type": "tabSupplier",
+    "entity_id": "Global Industrial Supply",
+    "canonical_name": "Global Industrial Supply",
+    "aliases": [
+      "Global Supply",
+      "Global Industrial",
+      "Global Ind Supply",
+      "Global Industrial Supply",
+      "Global"
+    ],
+    "attributes": {
+      "misspellings": [
+        "Global Ind. Supply",
+        "Global Industrial Suply",
+        "Globl Supply",
+        "Global Indstrial"
+      ],
+      "filters": {
+        "field": "supplier",
+        "value": "Global Industrial Supply"
+      },
+      "valid_for_tables": [
+        { "table": "tabSupplier", "field": "name" },
+        { "table": "tabSupplier", "field": "supplier_name" },
+        { "table": "tabPurchase Invoice", "field": "supplier" },
+        { "table": "tabPurchase Order", "field": "supplier" },
+        { "table": "tabPurchase Receipt", "field": "supplier" },
+        { "table": "tabSupplier Quotation", "field": "supplier" },
+        { "table": "tabPayment Entry", "field": "party" }
+      ],
+      "embedding_text": "Supplier: Global Industrial Supply. Also known as Global Supply, Global Industrial, Global Ind Supply, Global Industrial Supply, or Global. Common misspellings include Global Ind. Supply, Global Industrial Suply, Globl Supply, and Global Indstrial."
+    }
+  },
+  {
+    "entity_type": "tabSupplier",
+    "entity_id": "MA Inc.",
+    "canonical_name": "MA Inc.",
+    "aliases": [
+      "MA Inc",
+      "M.A. Inc",
+      "MA Incorporated",
+      "MA"
+    ],
+    "attributes": {
+      "misspellings": [
+        "M A Inc",
+        "MA. Inc",
+        "M.A Incorporated",
+        "MA Incc"
+      ],
+      "filters": {
+        "field": "supplier",
+        "value": "MA Inc."
+      },
+      "valid_for_tables": [
+        { "table": "tabSupplier", "field": "name" },
+        { "table": "tabSupplier", "field": "supplier_name" },
+        { "table": "tabPurchase Invoice", "field": "supplier" },
+        { "table": "tabPurchase Order", "field": "supplier" },
+        { "table": "tabPurchase Receipt", "field": "supplier" },
+        { "table": "tabSupplier Quotation", "field": "supplier" },
+        { "table": "tabPayment Entry", "field": "party" }
+      ],
+      "embedding_text": "Supplier: MA Inc.. Also known as MA Inc, M.A. Inc, MA Incorporated, or MA. Common misspellings include M A Inc, MA. Inc, M.A Incorporated, and MA Incc."
+    }
+  },
+  {
+    "entity_type": "tabSupplier",
+    "entity_id": "Nova Chemical Co.",
+    "canonical_name": "Nova Chemical Co.",
+    "aliases": [
+      "Nova Chemicals",
+      "Nova Chemical",
+      "Nova Chem Co",
+      "Nova Chemical Company",
+      "Nova"
+    ],
+    "attributes": {
+      "misspellings": [
+        "Nova Chem",
+        "Novaa Chemical",
+        "Nova Chemicl",
+        "Nova Chem Co."
+      ],
+      "filters": {
+        "field": "supplier",
+        "value": "Nova Chemical Co."
+      },
+      "valid_for_tables": [
+        { "table": "tabSupplier", "field": "name" },
+        { "table": "tabSupplier", "field": "supplier_name" },
+        { "table": "tabPurchase Invoice", "field": "supplier" },
+        { "table": "tabPurchase Order", "field": "supplier" },
+        { "table": "tabPurchase Receipt", "field": "supplier" },
+        { "table": "tabSupplier Quotation", "field": "supplier" },
+        { "table": "tabPayment Entry", "field": "party" }
+      ],
+      "embedding_text": "Supplier: Nova Chemical Co.. Also known as Nova Chemicals, Nova Chemical, Nova Chem Co, Nova Chemical Company, or Nova. Common misspellings include Nova Chem, Novaa Chemical, Nova Chemicl, and Nova Chem Co.."
+    }
+  },
+  {
+    "entity_type": "tabSupplier",
+    "entity_id": "Rohit Sharma",
+    "canonical_name": "Rohit Sharma",
+    "aliases": [
+      "Rohit Sharma",
+      "Rohit S.",
+      "Supplier Rohit"
+    ],
+    "attributes": {
+      "misspellings": [
+        "Rohith Sharma",
+        "Rohit Sharm",
+        "Rohit Shrma",
+        "Rohit S"
+      ],
+      "filters": {
+        "field": "supplier",
+        "value": "Rohit Sharma"
+      },
+      "valid_for_tables": [
+        { "table": "tabSupplier", "field": "name" },
+        { "table": "tabSupplier", "field": "supplier_name" },
+        { "table": "tabPurchase Invoice", "field": "supplier" },
+        { "table": "tabPurchase Order", "field": "supplier" },
+        { "table": "tabPurchase Receipt", "field": "supplier" },
+        { "table": "tabSupplier Quotation", "field": "supplier" },
+        { "table": "tabPayment Entry", "field": "party" }
+      ],
+      "embedding_text": "Supplier: Rohit Sharma. Also known as Rohit Sharma, Rohit S., or Supplier Rohit. Common misspellings include Rohith Sharma, Rohit Sharm, Rohit Shrma, and Rohit S."
+    }
+  },
+  {
+    "entity_type": "tabSupplier",
+    "entity_id": "Summit Traders Ltd.",
+    "canonical_name": "Summit Traders Ltd.",
+    "aliases": [
+      "Summit Traders",
+      "Summit Ltd",
+      "Summit Trading",
+      "Summit",
+      "Summit Traders Limited"
+    ],
+    "attributes": {
+      "misspellings": [
+        "Summt Traders",
+        "Summmit Traders",
+        "Sumit Traders",
+        "Summit Tradres",
+        "Summitt Ltd"
+      ],
+      "filters": {
+        "field": "supplier",
+        "value": "Summit Traders Ltd."
+      },
+      "valid_for_tables": [
+        { "table": "tabSupplier", "field": "name" },
+        { "table": "tabSupplier", "field": "supplier_name" },
+        { "table": "tabPurchase Order", "field": "supplier" },
+        { "table": "tabPurchase Invoice", "field": "supplier" },
+        { "table": "tabPurchase Receipt", "field": "supplier" }
+      ],
+      "embedding_text": "Supplier: Summit Traders Ltd.. Also known as Summit Traders, Summit Ltd, Summit Trading, Summit, or Summit Traders Limited. Common misspellings include Summt Traders, Summmit Traders, Sumit Traders, Summit Tradres, and Summitt Ltd."
+    }
+  },
+  {
+    "entity_type": "tabSupplier",
+    "entity_id": "Supplier 1",
+    "canonical_name": "Supplier 1",
+    "aliases": [
+      "Supplier 1",
+      "supplier1",
+      "Supplier One"
+    ],
+    "attributes": {
+      "misspellings": [
+        "Suppler 1",
+        "Suplier One",
+        "Supplierone"
+      ],
+      "filters": {
+        "field": "supplier",
+        "value": "supplier1"
+      },
+      "valid_for_tables": [
+        { "table": "tabSupplier", "field": "name" },
+        { "table": "tabSupplier", "field": "supplier_name" },
+        { "table": "tabPurchase Invoice", "field": "supplier" },
+        { "table": "tabPurchase Order", "field": "supplier" }
+      ],
+      "embedding_text": "Supplier: Supplier 1. Also known as Supplier 1, supplier1, or Supplier One. Common misspellings include Suppler 1, Suplier One, and Supplierone."
+    }
+  },
+  {
+    "entity_type": "tabSupplier",
+    "entity_id": "SmartEquip Suppliers",
+    "canonical_name": "SmartEquip Suppliers",
+    "aliases": [
+      "Smart Equip",
+      "Smart Equipment Suppliers",
+      "SmartEquip",
+      "SmartEquip Supplier"
+    ],
+    "attributes": {
+      "misspellings": [
+        "Smart Equipments",
+        "Smart Equip Supplier",
+        "SmartEquip Suppiers",
+        "Smart Equip Supplr"
+      ],
+      "filters": {
+        "field": "supplier",
+        "value": "SmartEquip Suppliers"
+      },
+      "valid_for_tables": [
+        { "table": "tabSupplier", "field": "name" },
+        { "table": "tabSupplier", "field": "supplier_name" },
+        { "table": "tabPurchase Invoice", "field": "supplier" },
+        { "table": "tabPurchase Order", "field": "supplier" },
+        { "table": "tabPurchase Receipt", "field": "supplier" },
+        { "table": "tabSupplier Quotation", "field": "supplier" },
+        { "table": "tabPayment Entry", "field": "party" }
+      ],
+      "embedding_text": "Supplier: SmartEquip Suppliers. Also known as Smart Equip, Smart Equipment Suppliers, SmartEquip, or SmartEquip Supplier. Common misspellings include Smart Equipments, Smart Equip Supplier, SmartEquip Suppiers, and Smart Equip Supplr."
+    }
+  },
+  {
+    "entity_type": "tabSupplier",
+    "entity_id": "Vertex Global Traders",
+    "canonical_name": "Vertex Global Traders",
+    "aliases": [
+      "Vertex Traders",
+      "Vertex Global",
+      "Vertex G Traders",
+      "Vertex"
+    ],
+    "attributes": {
+      "misspellings": [
+        "Vertx Global",
+        "Vertex Global Trade",
+        "Verteks Global",
+        "Vertex Trader"
+      ],
+      "filters": {
+        "field": "supplier",
+        "value": "Vertex Global Traders"
+      },
+      "valid_for_tables": [
+        { "table": "tabSupplier", "field": "name" },
+        { "table": "tabSupplier", "field": "supplier_name" },
+        { "table": "tabPurchase Invoice", "field": "supplier" },
+        { "table": "tabPurchase Order", "field": "supplier" }
+      ],
+      "embedding_text": "Supplier: Vertex Global Traders. Also known as Vertex Traders, Vertex Global, Vertex G Traders, or Vertex. Common misspellings include Vertx Global, Vertex Global Trade, Verteks Global, and Vertex Trader."
+    }
+  },
+  {
+    "entity_type": "tabSupplier",
+    "entity_id": "Zuckerman Security Ltd.",
+    "canonical_name": "Zuckerman Security Ltd.",
+    "aliases": [
+      "Zuckerman Security Ltd.",
+      "Zuckerman Security",
+      "Zuckerman Ltd",
+      "Zuckerman Sec.",
+      "Zuckerman"
+    ],
+    "attributes": {
+      "misspellings": [
+        "Zuckerman Sec",
+        "Zuckermen Security",
+        "Zuckrman Security",
+        "Zuckerman Security Limited",
+        "Zuckman Security",
+        "Zuckerman Securty"
+      ],
+      "filters": {
+        "field": "supplier",
+        "value": "Zuckerman Security Ltd."
+      },
+      "valid_for_tables": [
+        { "table": "tabSupplier", "field": "name" },
+        { "table": "tabSupplier", "field": "supplier_name" },
+        { "table": "tabPurchase Invoice", "field": "supplier" },
+        { "table": "tabPurchase Order", "field": "supplier" },
+        { "table": "tabPurchase Receipt", "field": "supplier" },
+        { "table": "tabSupplier Quotation", "field": "supplier" },
+        { "table": "tabPayment Entry", "field": "party" }
+      ],
+      "embedding_text": "Supplier: Zuckerman Security Ltd.. Also known as Zuckerman Security Ltd., Zuckerman Security, Zuckerman Ltd, Zuckerman Sec., or Zuckerman. Common misspellings include Zuckerman Sec, Zuckermen Security, Zuckrman Security, Zuckerman Security Limited, Zuckman Security, and Zuckerman Securty."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "AED",
+    "canonical_name": "AED",
+    "aliases": [
+      "AED"
+    ],
+    "attributes": {
+      "misspellings": [
+        "A E D",
+        "UAE Dirham",
+        "Arab Emirates Dirham"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "AED"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: AED. Also known as AED. Common misspellings include A E D, UAE Dirham, and Arab Emirates Dirham."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "AFN",
+    "canonical_name": "AFN",
+    "aliases": [
+      "AFN"
+    ],
+    "attributes": {
+      "misspellings": [
+        "A F N",
+        "Afghan Afghani",
+        "Afgan Afghani"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "AFN"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: AFN. Also known as AFN. Common misspellings include A F N, Afghan Afghani, and Afgan Afghani."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "ALL",
+    "canonical_name": "ALL",
+    "aliases": [
+      "ALL"
+    ],
+    "attributes": {
+      "misspellings": [
+        "A L L",
+        "Albania Lek",
+        "Albanian Lekk"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "ALL"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: ALL. Also known as ALL. Common misspellings include A L L, Albania Lek, and Albanian Lekk."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "AMD",
+    "canonical_name": "AMD",
+    "aliases": [
+      "AMD"
+    ],
+    "attributes": {
+      "misspellings": [
+        "A M D",
+        "Armenia Dram",
+        "Armenian Drram"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "AMD"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: AMD. Also known as AMD. Common misspellings include A M D, Armenia Dram, and Armenian Drram."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "ARS",
+    "canonical_name": "ARS",
+    "aliases": [
+      "ARS"
+    ],
+    "attributes": {
+      "misspellings": [
+        "A R S",
+        "Argentina Peso",
+        "Argentine Pesso"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "ARS"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: ARS. Also known as ARS. Common misspellings include A R S, Argentina Peso, and Argentine Pesso."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "AUD",
+    "canonical_name": "AUD",
+    "aliases": [
+      "AUD"
+    ],
+    "attributes": {
+      "misspellings": [
+        "A U D",
+        "Aussie Dollar",
+        "Australian Dolar"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "AUD"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: AUD. Also known as AUD. Common misspellings include A U D, Aussie Dollar, and Australian Dolar."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "AWG",
+    "canonical_name": "AWG",
+    "aliases": [
+      "AWG"
+    ],
+    "attributes": {
+      "misspellings": [
+        "A W G",
+        "Aruba Florin",
+        "Aruban Gulden"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "AWG"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: AWG. Also known as AWG. Common misspellings include A W G, Aruba Florin, and Aruban Gulden."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "BAM",
+    "canonical_name": "BAM",
+    "aliases": [
+      "BAM"
+    ],
+    "attributes": {
+      "misspellings": [
+        "B A M",
+        "Bosnian Mark",
+        "Convertible Mark"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "BAM"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: BAM. Also known as BAM. Common misspellings include B A M, Bosnian Mark, and Convertible Mark."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "BBD",
+    "canonical_name": "BBD",
+    "aliases": [
+      "BBD"
+    ],
+    "attributes": {
+      "misspellings": [
+        "B B D",
+        "Barbados Dollar",
+        "Barbadian Dolar"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "BBD"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: BBD. Also known as BBD. Common misspellings include B B D, Barbados Dollar, and Barbadian Dolar."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "BDT",
+    "canonical_name": "BDT",
+    "aliases": [
+      "BDT"
+    ],
+    "attributes": {
+      "misspellings": [
+        "B D T",
+        "Bangla Taka",
+        "Bangladeshi Tacca"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "BDT"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: BDT. Also known as BDT. Common misspellings include B D T, Bangla Taka, and Bangladeshi Tacca."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "BGN",
+    "canonical_name": "BGN",
+    "aliases": [
+      "BGN"
+    ],
+    "attributes": {
+      "misspellings": [
+        "B G N",
+        "Bulgarian Leva",
+        "Bulgarian Levv"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "BGN"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: BGN. Also known as BGN. Common misspellings include B G N, Bulgarian Leva, and Bulgarian Levv."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "BHD",
+    "canonical_name": "BHD",
+    "aliases": [
+      "BHD"
+    ],
+    "attributes": {
+      "misspellings": [
+        "B H D",
+        "Bahrain Dinar",
+        "Baharini Dinar"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "BHD"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: BHD. Also known as BHD. Common misspellings include B H D, Bahrain Dinar, and Baharini Dinar."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "BIF",
+    "canonical_name": "BIF",
+    "aliases": [
+      "BIF"
+    ],
+    "attributes": {
+      "misspellings": [
+        "B I F",
+        "Burundi Franc",
+        "Burundian Frank"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "BIF"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: BIF. Also known as BIF. Common misspellings include B I F, Burundi Franc, and Burundian Frank."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "BMD",
+    "canonical_name": "BMD",
+    "aliases": [
+      "BMD"
+    ],
+    "attributes": {
+      "misspellings": [
+        "B M D",
+        "Bermuda Dollar",
+        "Bermudian Dolar"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "BMD"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: BMD. Also known as BMD. Common misspellings include B M D, Bermuda Dollar, and Bermudian Dolar."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "BND",
+    "canonical_name": "BND",
+    "aliases": [
+      "BND"
+    ],
+    "attributes": {
+      "misspellings": [
+        "B N D",
+        "Brunei Dolar",
+        "Brunei Dollar"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "BND"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: BND. Also known as BND. Common misspellings include B N D, Brunei Dolar, and Brunei Dollar."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "BOB",
+    "canonical_name": "BOB",
+    "aliases": [
+      "BOB"
+    ],
+    "attributes": {
+      "misspellings": [
+        "B O B",
+        "Boliviano",
+        "Bolivia Peso"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "BOB"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: BOB. Also known as BOB. Common misspellings include B O B, Boliviano, and Bolivia Peso."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "BRL",
+    "canonical_name": "BRL",
+    "aliases": [
+      "BRL"
+    ],
+    "attributes": {
+      "misspellings": [
+        "B R L",
+        "Brazilian Real",
+        "Brasil Real"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "BRL"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: BRL. Also known as BRL. Common misspellings include B R L, Brazilian Real, and Brasil Real."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "BSD",
+    "canonical_name": "BSD",
+    "aliases": [
+      "BSD"
+    ],
+    "attributes": {
+      "misspellings": [
+        "B S D",
+        "Bahama Dollar",
+        "Bahamian Dolar"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "BSD"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: BSD. Also known as BSD. Common misspellings include B S D, Bahama Dollar, and Bahamian Dolar."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "BTN",
+    "canonical_name": "BTN",
+    "aliases": [
+      "BTN"
+    ],
+    "attributes": {
+      "misspellings": [
+        "B T N",
+        "Bhutan Ngultrum",
+        "Bhutanese Ngltrum"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "BTN"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: BTN. Also known as BTN. Common misspellings include B T N, Bhutan Ngultrum, and Bhutanese Ngltrum."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "BWP",
+    "canonical_name": "BWP",
+    "aliases": [
+      "BWP"
+    ],
+    "attributes": {
+      "misspellings": [
+        "B W P",
+        "Botswana Pulla",
+        "Bostwana Pula"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "BWP"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: BWP. Also known as BWP. Common misspellings include B W P, Botswana Pulla, and Bostwana Pula."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "BZD",
+    "canonical_name": "BZD",
+    "aliases": [
+      "BZD"
+    ],
+    "attributes": {
+      "misspellings": [
+        "B Z D",
+        "Belize Dolar",
+        "Belizean Dollar"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "BZD"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: BZD. Also known as BZD. Common misspellings include B Z D, Belize Dolar, and Belizean Dollar."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "CAD",
+    "canonical_name": "CAD",
+    "aliases": [
+      "CAD"
+    ],
+    "attributes": {
+      "misspellings": [
+        "C A D",
+        "Canada Dollar",
+        "Canadian Dolar"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "CAD"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: CAD. Also known as CAD. Common misspellings include C A D, Canada Dollar, and Canadian Dolar."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "CDF",
+    "canonical_name": "CDF",
+    "aliases": [
+      "CDF"
+    ],
+    "attributes": {
+      "misspellings": [
+        "C D F",
+        "Congo Franc",
+        "Congolese Frank"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "CDF"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: CDF. Also known as CDF. Common misspellings include C D F, Congo Franc, and Congolese Frank."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "CHF",
+    "canonical_name": "CHF",
+    "aliases": [
+      "CHF"
+    ],
+    "attributes": {
+      "misspellings": [
+        "C H F",
+        "Swiss Frank",
+        "Switz Franc"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "CHF"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: CHF. Also known as CHF. Common misspellings include C H F, Swiss Frank, and Switz Franc."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "CLP",
+    "canonical_name": "CLP",
+    "aliases": [
+      "CLP"
+    ],
+    "attributes": {
+      "misspellings": [
+        "C L P",
+        "Chili Peso",
+        "Chilean Pesso"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "CLP"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: CLP. Also known as CLP. Common misspellings include C L P, Chili Peso, and Chilean Pesso."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "CNY",
+    "canonical_name": "CNY",
+    "aliases": [
+      "CNY"
+    ],
+    "attributes": {
+      "misspellings": [
+        "C N Y",
+        "Chinese Yuan",
+        "Yuan Renminbi"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "CNY"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: CNY. Also known as CNY. Common misspellings include C N Y, Chinese Yuan, and Yuan Renminbi."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "COP",
+    "canonical_name": "COP",
+    "aliases": [
+      "COP"
+    ],
+    "attributes": {
+      "misspellings": [
+        "C O P",
+        "Columbian Peso",
+        "Colombia Peso"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "COP"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: COP. Also known as COP. Common misspellings include C O P, Columbian Peso, and Colombia Peso."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "CRC",
+    "canonical_name": "CRC",
+    "aliases": [
+      "CRC"
+    ],
+    "attributes": {
+      "misspellings": [
+        "C R C",
+        "Costa Rican Colon",
+        "Costa Rica Coln"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "CRC"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: CRC. Also known as CRC. Common misspellings include C R C, Costa Rican Colon, and Costa Rica Coln."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "CUP",
+    "canonical_name": "CUP",
+    "aliases": [
+      "CUP"
+    ],
+    "attributes": {
+      "misspellings": [
+        "C U P",
+        "Cuban Pesso",
+        "Cuba Peso"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "CUP"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: CUP. Also known as CUP. Common misspellings include C U P, Cuban Pesso, and Cuba Peso."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "CVE",
+    "canonical_name": "CVE",
+    "aliases": [
+      "CVE"
+    ],
+    "attributes": {
+      "misspellings": [
+        "C V E",
+        "Cape Verd Escudo",
+        "Cape Verde Escudo"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "CVE"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: CVE. Also known as CVE. Common misspellings include C V E, Cape Verd Escudo, and Cape Verde Escudo."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "CYP",
+    "canonical_name": "CYP",
+    "aliases": [
+      "CYP"
+    ],
+    "attributes": {
+      "misspellings": [
+        "C Y P",
+        "Cyprus Pound",
+        "Cypriot Pnd"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "CYP"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: CYP. Also known as CYP. Common misspellings include C Y P, Cyprus Pound, and Cypriot Pnd."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "CZK",
+    "canonical_name": "CZK",
+    "aliases": [
+      "CZK"
+    ],
+    "attributes": {
+      "misspellings": [
+        "C Z K",
+        "Czech Krona",
+        "Czech Koron"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "CZK"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: CZK. Also known as CZK. Common misspellings include C Z K, Czech Krona, and Czech Koron."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "DJF",
+    "canonical_name": "DJF",
+    "aliases": [
+      "DJF"
+    ],
+    "attributes": {
+      "misspellings": [
+        "D J F",
+        "Djibuti Franc",
+        "Djiboutian Frank"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "DJF"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: DJF. Also known as DJF. Common misspellings include D J F, Djibuti Franc, and Djiboutian Frank."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "DKK",
+    "canonical_name": "DKK",
+    "aliases": [
+      "DKK"
+    ],
+    "attributes": {
+      "misspellings": [
+        "D K K",
+        "Danish Krone",
+        "Danish Kroner"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "DKK"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: DKK. Also known as DKK. Common misspellings include D K K, Danish Krone, and Danish Kroner."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "DOP",
+    "canonical_name": "DOP",
+    "aliases": [
+      "DOP"
+    ],
+    "attributes": {
+      "misspellings": [
+        "D O P",
+        "Dom Peso",
+        "Dominican Pesso"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "DOP"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: DOP. Also known as DOP. Common misspellings include D O P, Dom Peso, and Dominican Pesso."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "DZD",
+    "canonical_name": "DZD",
+    "aliases": [
+      "DZD"
+    ],
+    "attributes": {
+      "misspellings": [
+        "D Z D",
+        "Algerian Dinnar",
+        "DZ Dinar"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "DZD"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: DZD. Also known as DZD. Common misspellings include D Z D, Algerian Dinnar, and DZ Dinar."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "EGP",
+    "canonical_name": "EGP",
+    "aliases": [
+      "EGP"
+    ],
+    "attributes": {
+      "misspellings": [
+        "E G P",
+        "Egypt Pound",
+        "Egyp Pound",
+        "Egyptian Pnd"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "EGP"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: EGP. Also known as EGP. Common misspellings include E G P, Egypt Pound, Egyp Pound, and Egyptian Pnd."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "ERN",
+    "canonical_name": "ERN",
+    "aliases": [
+      "ERN"
+    ],
+    "attributes": {
+      "misspellings": [
+        "E R N",
+        "Eritrean Nakfa",
+        "Ern Nakfa"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "ERN"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: ERN. Also known as ERN. Common misspellings include E R N, Eritrean Nakfa, and Ern Nakfa."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "ETB",
+    "canonical_name": "ETB",
+    "aliases": [
+      "ETB"
+    ],
+    "attributes": {
+      "misspellings": [
+        "E T B",
+        "Ethiop Birr",
+        "Ethio Birr"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "ETB"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: ETB. Also known as ETB. Common misspellings include E T B, Ethiop Birr, and Ethio Birr."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "EUR",
+    "canonical_name": "EUR",
+    "aliases": [
+      "EUR"
+    ],
+    "attributes": {
+      "misspellings": [
+        "E U R",
+        "Euro",
+        "Euros",
+        "European Currency"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "EUR"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: EUR. Also known as EUR. Common misspellings include E U R, Euro, Euros, and European Currency."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "FJD",
+    "canonical_name": "FJD",
+    "aliases": [
+      "FJD"
+    ],
+    "attributes": {
+      "misspellings": [
+        "F J D",
+        "Fiji Dollar",
+        "Fijian Dolar"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "FJD"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: FJD. Also known as FJD. Common misspellings include F J D, Fiji Dollar, and Fijian Dolar."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "FKP",
+    "canonical_name": "FKP",
+    "aliases": [
+      "FKP"
+    ],
+    "attributes": {
+      "misspellings": [
+        "F K P",
+        "FK Pound",
+        "Falkland Pound"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "FKP"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: FKP. Also known as FKP. Common misspellings include F K P, FK Pound, and Falkland Pound."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "GBP",
+    "canonical_name": "GBP",
+    "aliases": [
+      "GBP"
+    ],
+    "attributes": {
+      "misspellings": [
+        "G B P",
+        "GB Pound",
+        "British Pound",
+        "Pound Sterling"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "GBP"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: GBP. Also known as GBP. Common misspellings include G B P, GB Pound, British Pound, and Pound Sterling."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "GHS",
+    "canonical_name": "GHS",
+    "aliases": [
+      "GHS"
+    ],
+    "attributes": {
+      "misspellings": [
+        "G H S",
+        "Ghanian Cedi",
+        "GH Cedi"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "GHS"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: GHS. Also known as GHS. Common misspellings include G H S, Ghanian Cedi, and GH Cedi."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "GIP",
+    "canonical_name": "GIP",
+    "aliases": [
+      "GIP"
+    ],
+    "attributes": {
+      "misspellings": [
+        "G I P",
+        "Gibralter Pound",
+        "Gib Pound"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "GIP"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: GIP. Also known as GIP. Common misspellings include G I P, Gibralter Pound, and Gib Pound."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "GMD",
+    "canonical_name": "GMD",
+    "aliases": [
+      "GMD"
+    ],
+    "attributes": {
+      "misspellings": [
+        "G M D",
+        "Gambian Dalassi",
+        "GMD Dalasi"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "GMD"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: GMD. Also known as GMD. Common misspellings include G M D, Gambian Dalassi, and GMD Dalasi."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "GNF",
+    "canonical_name": "GNF",
+    "aliases": [
+      "GNF"
+    ],
+    "attributes": {
+      "misspellings": [
+        "G N F",
+        "GN-Franc",
+        "Guinean Franc"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "GNF"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: GNF. Also known as GNF. Common misspellings include G N F, GN-Franc, and Guinean Franc."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "GTQ",
+    "canonical_name": "GTQ",
+    "aliases": [
+      "GTQ"
+    ],
+    "attributes": {
+      "misspellings": [
+        "G T Q",
+        "Guatemalan Quetzal",
+        "GT-Quetzal"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "GTQ"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: GTQ. Also known as GTQ. Common misspellings include G T Q, Guatemalan Quetzal, and GT-Quetzal."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "GYD",
+    "canonical_name": "GYD",
+    "aliases": [
+      "GYD"
+    ],
+    "attributes": {
+      "misspellings": [
+        "G Y D",
+        "GY-Dollar",
+        "Guyanese Dollar"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "GYD"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: GYD. Also known as GYD. Common misspellings include G Y D, GY-Dollar, and Guyanese Dollar."
+    }
+  },
+  {
+    "entity_type": "tabCurrency",
+    "entity_id": "HKD",
+    "canonical_name": "HKD",
+    "aliases": [
+      "HKD"
+    ],
+    "attributes": {
+      "misspellings": [
+        "H K D",
+        "HK-Dollar",
+        "Hongkong Dollar"
+      ],
+      "filters": {
+        "field": "currency",
+        "value": "HKD"
+      },
+      "valid_for_tables": [
+        { "table": "tabCurrency", "field": "name" },
+        { "table": "tabSales Invoice", "field": "currency" },
+        { "table": "tabPurchase Invoice", "field": "currency" },
+        { "table": "tabPayment Entry", "field": "party_account_currency" }
+      ],
+      "embedding_text": "Currency: HKD. Also known as HKD. Common misspellings include H K D, HK-Dollar, and Hongkong Dollar."
+    }
+  }
+]

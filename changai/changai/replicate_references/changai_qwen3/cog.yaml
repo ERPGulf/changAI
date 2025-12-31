@@ -1,0 +1,8 @@
+build:
+  python_version: "3.10"
+  python_packages:
+    - torch
+    - transformers
+    - accelerate
+    - cog
+predict: "predict.py:Predictor"

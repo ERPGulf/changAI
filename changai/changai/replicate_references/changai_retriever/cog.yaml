@@ -1,0 +1,14 @@
+build:
+  python_version: "3.10"
+  python_packages:
+    - torch==2.3.1
+    - faiss-cpu==1.8.0
+    - numpy==1.26.4
+    - sentence-transformers>=2.6.0
+    - langchain-community>=0.3.0
+    - langchain-core>=0.3.0
+    - langchain-huggingface>=0.1.0
+    - huggingface-hub>=0.23.0
+    - einops>=0.7.0
+
+predict: "predict.py:Predictor"

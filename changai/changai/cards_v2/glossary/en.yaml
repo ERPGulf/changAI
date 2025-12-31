@@ -1,5 +1,0 @@
-map:
-  "revenue": ["grand_total","base_grand_total"]
-  "total amount": ["grand_total"]
-  "by customer": ["customer_name"]
-  "invoice date": ["posting_date"]
