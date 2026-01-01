@@ -4,11 +4,11 @@
 
 Built with RAG, LLM-powered SQL generation, LangGraph orchestration, and strict SQL validation for safe and reliable ERP querying.
 
-<p align="center">
+<!-- <p align="center">
   <img src="changai/changai/changAI.gif" alt="ChangAI Demo" width="900">
   <br>
   <em>ChangAI in action: Ask 5 real business questions and get instant answers</em>
-</p>
+</p> -->
 
 ## Key Features
 
