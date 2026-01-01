@@ -5,7 +5,7 @@
 Built with RAG, LLM-powered SQL generation, LangGraph orchestration, and strict SQL validation for safe and reliable ERP querying.
 <p align="center">
   <video width="900" controls autoplay loop muted playsinline>
-    <source src="https://github.com/erpgulf/changai/raw/main/changai/changAI_demo.mp4" type="video/mp4">
+    <source src="changai/changai/changAI_demo.mp4" type="video/mp4">
   </video>
   <br>
   <em>ChangAI Demo in action</em>
