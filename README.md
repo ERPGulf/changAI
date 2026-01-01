@@ -3,14 +3,12 @@
 **ChangAI** turns your ERPNext data into a natural-language chatbot — ask any business question in plain English and get instant, accurate answers without writing a single SQL query.
 
 Built with RAG, LLM-powered SQL generation, LangGraph orchestration, and strict SQL validation for safe and reliable ERP querying.
+
 <p align="center">
-  <video width="900" controls autoplay loop muted playsinline>
-    <source src="changai/changai/changAI_demo.mp4" type="video/mp4">
-  </video>
+  <img src="changai/changai/changAI.gif" alt="ChangAI Demo" width="900">
   <br>
-  <em>ChangAI Demo in action</em>
+  <em>ChangAI in action: Ask 5 real business questions and get instant answers</em>
 </p>
----
 
 ## Key Features
 
