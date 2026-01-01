@@ -1,28 +1,7 @@
-Perfect — thanks for pasting the **full current README**.
-Below is **your SAME README**, with **ONLY the required additions merged in**, and **nothing else changed**.
+# ChangAI — Open-Source Chatbot for ERPNext / Frappe
 
-I have:
-
-* ✅ **Not rewritten** existing sections
-* ✅ **Not removed** anything
-* ✅ **Only inserted**:
-
-  * **Observability & Tracing**
-  * **Deployment Warm-Up notes**
-* ✅ Kept tone **professional, short, README-ready**
-
-You can **replace your README with this version directly**.
-
----
-
-# ChangAI — Open-Source Text-to-SQL for ERPNext / Frappe
-
-**ChangAI** is a production-ready, open-source AI assistant that lets users query their ERPNext database in plain English.
-It converts natural language questions into **accurate, safe SQL queries** — strictly bounded to your ERPNext schema and fully under your control.
-
-ChangAI is built for **real ERP systems**, not demos.
-It uses **RAG (Retrieval-Augmented Generation)**, **LangGraph orchestration**, and **strict SQL validation + repair** to ensure correctness, safety, and reliability.
-
+**ChangAI** is a production-ready, open-source AI‑powered assistant for ERPNext that lets business users ask natural‑language questions and get immediate, human‑friendly answers — turning ordinary ERP reporting and data queries into a conversational interface, without needing to write queries manually.
+Built with RAG, LLM-powered SQL generation, LangGraph orchestration, and strict SQL validation for safe and reliable ERP querying.
 ---
 
 ## Key Features
@@ -38,41 +17,12 @@ It uses **RAG (Retrieval-Augmented Generation)**, **LangGraph orchestration**, a
 * **Flexible Deployment** — Run fully local (Ollama) or remote (Replicate / Docker)
 * **Stateful Conversations** — Multi-turn chat with memory
 * **Secure & Private** — No writes, no schema hallucination, no uncontrolled execution
-
 ---
 
 ## How It Works
-
-### 1. Question Understanding
-
-* Rewrites user input into a clean, standalone question
-* Detects whether the question contains **specific values**
-  (customers, items, dates, limits, filters)
-
-### 2. Smart Routing
-
-* ERP-related → SQL pipeline
-* Non-ERP → direct conversational response
-
-### 3. Precise Retrieval (RAG)
-
-* **Schema Retriever (FAISS)**
-  Retrieves relevant tables, fields, joins, enums, metrics
-* **Entity Retriever (FAISS)**
-  Resolves customer/item names to exact ERPNext values
-
-### 4. SQL Generation & Safety
-
-* Builds **strict schema + entity context**
-* Generates SQL using **Qwen3-4B**
-* Validates against ERPNext metaschema using **SQLGlot**
-* Repairs invalid SQL with targeted feedback
-
-### 5. Execution & Answer
-
-* Executes **read-only SELECT queries only**
-* Formats results into natural, human-readable responses
-
+ChangAI clarifies user intent using recent chat history, rewrites the query only when needed, and detects entity or value-based inputs.
+A guardrail routes the request to either the ERP SQL pipeline or a non-ERP conversational response.
+For ERP queries, it retrieves the required schema and entity context (RAG), uses this context for LLM-based SQL generation, validates and repairs the SQL, executes read-only SELECT queries, and returns results in a clear, human-friendly format.
 ---
 
 ## Models Used
@@ -81,8 +31,8 @@ It uses **RAG (Retrieval-Augmented Generation)**, **LangGraph orchestration**, a
 | ------------------- | ------------------------------ | --------------- |
 | Embeddings (Schema) | nomic-ai/modernbert-embed-base | Local or Remote |
 | Embeddings (Entity) | nomic-ai/modernbert-embed-base | Local or Remote |
-| SQL Generation      | Qwen3-4B (ERP-tuned)           | Local or Remote |
-| Answer Formatting   | Qwen3-1.5B                     | Local or Remote |
+| SQL Generation      | Qwen/Qwen3-4B-Instruct-2507    | Local or Remote |
+| DB Result Formatting| Qwen/Qwen2.5-1.5B-Instruct     | Local or Remote |
 
 ---
 
@@ -90,7 +40,7 @@ It uses **RAG (Retrieval-Augmented Generation)**, **LangGraph orchestration**, a
 
 ### Local Mode (Ollama)
 
-* Runs entirely on your server
+* Runs entirely on your Local server
 * No external API calls
 * Best for privacy and on-prem deployments
 
