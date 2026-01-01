@@ -44,7 +44,7 @@ For ERP queries, it retrieves the required schema and entity context (RAG), uses
 * No external API calls
 * Best for privacy and on-prem deployments
 
-### Remote Mode (Replicate / Docker)
+### Remote Mode (Replicate)
 
 * You host the inference server
 * FAISS indexes are mounted inside the container
@@ -54,6 +54,18 @@ For ERP queries, it retrieves the required schema and entity context (RAG), uses
 You can switch modes anytime via **ChangAI Settings**
 (no code changes required).
 
+
+## Hugging Face Models & Dataset
+
+Hugging Face is used to host open, versioned model weights and datasets, enabling reproducible deployments and easy fine-tuning.
+
+Retrieval & Embedding Model (Schema + Entity)
+https://huggingface.co/hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned
+
+Dataset Repository
+https://huggingface.co/datasets/hyrinmansoor/ERP-retrieval-data-modernbert
+
+Official Qwen instruction models are used for SQL generation and result formatting.
 ---
 
 ## Observability & Tracing
