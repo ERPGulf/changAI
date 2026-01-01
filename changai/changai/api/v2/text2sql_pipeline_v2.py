@@ -40,7 +40,9 @@ def get_settings():
         "API_TOKEN":settings.api_token,
         "REMOTE": bool(settings.remote),
         "deploy_url":settings.deploy_url,
-        "entity_retriever":settings.entity_retriever
+        "entity_retriever":settings.entity_retriever,
+        "support_api_url":settings.support_url,
+        "get_ticket_details_url":settings.get_ticket_details_url
     }
     return config
 
@@ -389,34 +391,123 @@ def remote_llm_request(prompt: str):
     return {"Error": "Polling timeout", "last": last}
 
 
+# @frappe.whitelist(allow_guest=False)
+# def remote_llm_request_deploy_test(
+#     prompt: str = "",
+#     task: str = "llm",
+#     question: Optional[str] = None,
+#     db_result_json: Optional[str] = None,
+# ) -> Any:
+
+#     if task == "format_db":
+#         input_payload: Dict[str, Any] = {
+#             "task": "format_db",
+#             "question": question or "",
+#             "db_result_json": db_result_json or "{}",
+#         }
+#     else:
+#         input_payload = {
+#             "task": "llm",
+#             "user_input": prompt,
+#         }
+#     payload = {
+#         "input": input_payload
+#     }
+
+#     headers = {
+#         "Content-Type": "application/json",
+#         "Prefer": "wait",
+#         "Authorization": f"Bearer {CONFIG['API_TOKEN']}",
+#     }
+#     create = _post_json(CONFIG["deploy_url"], headers=headers, payload=payload, timeout=120)
+#     if not create.get("ok"):
+#         return {
+#             "Error": "Create prediction failed",
+#             "status_code": create.get("status_code"),
+#             "details": create.get("body"),
+#         }
+
+#     data = create.get("body") or {}
+#     urls = data.get("urls") or {}
+#     get_url = urls.get("get")
+#     if not get_url:
+#         return {
+#             "Error": "Missing get URL from deploy response",
+#             "details": data,
+#         }
+#     data = create.get("body") or {}
+
+#     urls = data.get("urls") or {}
+#     get_url = urls.get("get")
+#     if not get_url:
+#         return {
+#             "Error": "Missing get URL from deploy response",
+#             "details": data,
+#         }
+
+#     terminal = {"succeeded", "failed", "canceled"}
+#     deadline = time.time() + 300
+#     last = None
+#     while time.time() < deadline:
+#         poll_res = requests.get(get_url, headers=headers, timeout=120)
+#         try:
+#             poll = poll_res.json()
+#         except Exception:
+#             poll = {"raw_text": poll_res.text}
+
+#         status = poll.get("status")
+#         output = poll.get("output")
+#         last = poll
+
+#         if status in terminal:
+#             if status == "succeeded":
+#                 return output
+#             return {
+#                 "Error": f"Model ended with status {status}",
+#                 "details": poll,
+#             }
+
+#         time.sleep(2)
+
+#     return {"Error": "Polling timed out", "details": last}
+
+
 @frappe.whitelist(allow_guest=False)
 def remote_llm_request_deploy_test(
     prompt: str = "",
     task: str = "llm",
     question: Optional[str] = None,
     db_result_json: Optional[str] = None,
+    user_message: Optional[str] = None,
 ) -> Any:
-
     if task == "format_db":
         input_payload: Dict[str, Any] = {
             "task": "format_db",
             "question": question or "",
             "db_result_json": db_result_json or "{}",
         }
+
+    elif task == "helpdesk_task":
+        input_payload = {
+            "task": "helpdesk_task",
+            "user_message": user_message or prompt or "",
+        }
+
     else:
         input_payload = {
             "task": "llm",
             "user_input": prompt,
         }
-    payload = {
-        "input": input_payload
-    }
+
+    payload = {"input": input_payload}
 
     headers = {
         "Content-Type": "application/json",
         "Prefer": "wait",
         "Authorization": f"Bearer {CONFIG['API_TOKEN']}",
     }
+
+    # ---------------- Create prediction ----------------
     create = _post_json(CONFIG["deploy_url"], headers=headers, payload=payload, timeout=120)
     if not create.get("ok"):
         return {
@@ -433,19 +524,12 @@ def remote_llm_request_deploy_test(
             "Error": "Missing get URL from deploy response",
             "details": data,
         }
-    data = create.get("body") or {}
 
-    urls = data.get("urls") or {}
-    get_url = urls.get("get")
-    if not get_url:
-        return {
-            "Error": "Missing get URL from deploy response",
-            "details": data,
-        }
-
+    # ---------------- Poll until done ----------------
     terminal = {"succeeded", "failed", "canceled"}
     deadline = time.time() + 300
     last = None
+
     while time.time() < deadline:
         poll_res = requests.get(get_url, headers=headers, timeout=120)
         try:
@@ -454,22 +538,16 @@ def remote_llm_request_deploy_test(
             poll = {"raw_text": poll_res.text}
 
         status = poll.get("status")
-        output = poll.get("output")
         last = poll
 
         if status in terminal:
             if status == "succeeded":
-                return output
-            return {
-                "Error": f"Model ended with status {status}",
-                "details": poll,
-            }
+                return poll.get("output")
+            return {"Error": f"Model ended with status {status}", "details": poll}
 
         time.sleep(2)
 
     return {"Error": "Polling timed out", "details": last}
-
-
 
 @frappe.whitelist(allow_guest=False)
 def remote_embedder_request(formatted_q: str) -> Union[list, str]:
@@ -1316,3 +1394,58 @@ def debug_entity_retriever(q: str):
         "raw_response": resp,
         "parsed_entity_cards": call_entity_retriever(q),
     }
+
+@frappe.whitelist(allow_guest=False)
+def send_support_message(message):
+    url = CONFIG["support_api_url"]
+
+    res = requests.post(url, json={
+        "message": message
+    })
+
+    return res.json()
+
+@frappe.whitelist(allow_guest=False)
+def get_ticket_details(tid,message):
+    url = CONFIG["get_ticket_details_url"]
+    res = requests.post(url, json={
+        "message": message
+    })
+
+    return res.json()
+
+@frappe.whitelist(allow_guest=False)
+def support_bot(message):
+    prompt="""You are an ERPNext / Frappe Helpdesk classifier.
+
+Goal: Decide if the user message should (A) create a new support ticket or (B) fetch details of an existing ticket.
+
+Return ONLY valid JSON. No extra text.
+
+Rules:
+- If the user reports a problem, error, request for help, or something not working → CREATE_TICKET
+- If the user asks about an existing ticket (mentions ticket id/number like "ticket 29", "case #29", "my ticket", "show ticket") → TICKET_DETAILS
+- If unclear which one → UNKNOWN
+Output format (STRICT):
+{{
+  "task_flag": "CREATE_TICKET" | "TICKET_DETAILS" | "UNKNOWN"
+}}
+USER MESSAGE:
+{{message}}
+"""
+    output = remote_llm_request_deploy_test(
+        task="helpdesk_task",
+        question=None,
+        db_result_json=None,
+        prompt="",
+        user_message=message
+    )
+    res=output.get("task_flag")
+    if res=="CREATE_TICKET":
+        res=send_support_message(message)
+        return res
+    elif res=="TICKET_DETAILS":
+        res=get_ticket_details(message,ticket_id)
+        return res
+    else:
+        return No Response

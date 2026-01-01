@@ -31,7 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
     <div class="tab_box">
       <button id="tab-chat" class="tab_btn active">Chat</button>
       <button id="tab-debug" class="tab_btn">Debug</button>
+      <button id="tab-support" class="tab_btn">Support</button>
     </div>
+
 
     <div class="chat-body" id="chat-body">
       <div id="chat-messages"></div>
@@ -55,11 +57,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let activeTab = 'chat';
     const chatHistory = [];
     const debugLogs = [];
+    const supportHistory = [];
     const chatbotPopup = document.getElementById('chatbot-popup');
     const chatbotToggler = document.getElementById('chatbot-toggler');
     const tabChatBtn = document.getElementById('tab-chat');
     const closeBtn = document.getElementById('chatbot-arrowdown-btn');
     const tabDebugBtn = document.getElementById('tab-debug');
+    const tabSupportBtn = document.getElementById('tab-support');
     const chatMessagesContainer = document.getElementById('chat-body');
     const chatForm = document.getElementById('chat-form');
     const chatInput = document.getElementById('chat-input');
@@ -112,8 +116,68 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
         }
+        else if (activeTab === 'support') {
+            if (supportHistory.length === 0) {
+              const p = document.createElement('p');
+              p.className = 'message-text';
+              p.textContent = 'Send a message to Support.';
+              container.appendChild(p);
+            } else {
+              supportHistory.forEach(msg => {
+                const div = document.createElement('div');
+                div.className = `messageCon ${msg.role === 'user' ? 'user-message' : 'bot-message'}`;
+
+                // Support agent message styling (use same bot style)
+                div.innerHTML = `<p class="message-text">${msg.text}</p>`;
+                container.appendChild(div);
+              });
+            }
+}
+
 
     }
+    async function sendSupportMessage(message) {
+  supportHistory.push({ role: 'user', text: message });
+  renderMessages();
+  scrollToBottom();
+
+  const thinkingMsg = { role: 'support', text: 'Sending to support...' };
+  supportHistory.push(thinkingMsg);
+  renderMessages();
+  scrollToBottom();
+
+  try {
+    const res = await fetch("/api/method/changai.changai.api.v2.text2sql_pipeline_v2.send_support_message", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Frappe-CSRF-Token": frappe.csrf_token
+      },
+      body: JSON.stringify({
+        message      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message?.error || "Support request failed");
+    }
+    const ticket = data.message.data;
+    thinkingMsg.text = `Support Ticket Created
+    ID: ${ticket.ticket_id}
+    Subject: ${ticket.subject}
+    Status: ${ticket.status}
+    Priority: ${ticket.priority}`;
+    renderMessages();
+    scrollToBottom();
+
+  } catch (err) {
+    thinkingMsg.text = err.message || "Support request failed.";
+    renderMessages();
+    scrollToBottom();
+  }
+}
+
 
     async function setChatHistory(message) {
         chatHistory.push({ role: 'user', text: message });
@@ -232,29 +296,52 @@ async function generateBotResponse(userMsg, thinkingMsg, warmingTimeout) {
     chatbotToggler.addEventListener('click', () => toggleChatbot());
 
     chatForm.addEventListener('submit', e => {
-        e.preventDefault();
-        const message = chatInput.value.trim();
-        if (!message) return;
-        chatInput.value = '';
+      e.preventDefault();
+      const message = chatInput.value.trim();
+      if (!message) return;
+      chatInput.value = '';
+
+      if (activeTab === 'support') {
+        sendSupportMessage(message);
+      } else {
         setChatHistory(message);
+      }
     });
 
+
+
     tabChatBtn.addEventListener('click', () => {
-        activeTab = 'chat';
-        tabChatBtn.classList.add('active');
-        tabDebugBtn.classList.remove('active');
-        renderMessages();
-        scrollToBottom();
+      activeTab = 'chat';
+      tabChatBtn.classList.add('active');
+      tabDebugBtn.classList.remove('active');
+      tabSupportBtn.classList.remove('active');
+
+      chatInput.placeholder = "Message...";
+      renderMessages();
+      scrollToBottom();
     });
 
     tabDebugBtn.addEventListener('click', () => {
         activeTab = 'debug';
         tabDebugBtn.classList.add('active');
         tabChatBtn.classList.remove('active');
+        tabSupportBtn.classList.remove('active');
         renderMessages();
         scrollToBottom();
 
     });
+    tabSupportBtn.addEventListener('click', () => {
+      activeTab = 'support';
+
+      tabSupportBtn.classList.add('active');
+      tabChatBtn.classList.remove('active');
+      tabDebugBtn.classList.remove('active');
+
+      chatInput.placeholder = "Message Support...";
+      renderMessages();
+      scrollToBottom();
+    });
+
 
     // Initially hide chatbot popup
     toggleChatbot(false);
