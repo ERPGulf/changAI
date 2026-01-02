@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
   scrollToBottom();
 
   try {
-    const res = await fetch("/api/method/changai.changai.api.v2.text2sql_pipeline_v2.send_support_message", {
+    const res = await fetch("/api/method/changai.changai.api.v2.text2sql_pipeline_v2.support_bot", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -162,12 +162,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!res.ok) {
       throw new Error(data.message?.error || "Support request failed");
     }
-    const ticket = data.message.data;
-    thinkingMsg.text = `Support Ticket Created
-    ID: ${ticket.ticket_id}
-    Subject: ${ticket.subject}
-    Status: ${ticket.status}
-    Priority: ${ticket.priority}`;
+    const ticket = data;
+    thinkingMsg.text = JSON.stringify(ticket, null, 2);
     renderMessages();
     scrollToBottom();
 

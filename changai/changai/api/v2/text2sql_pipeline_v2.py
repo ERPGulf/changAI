@@ -1406,46 +1406,56 @@ def send_support_message(message):
     return res.json()
 
 @frappe.whitelist(allow_guest=False)
-def get_ticket_details(tid,message):
+def get_ticket_details(tid):
     url = CONFIG["get_ticket_details_url"]
     res = requests.post(url, json={
-        "message": message
+        "ticket_id": tid
     })
 
     return res.json()
 
+
 @frappe.whitelist(allow_guest=False)
 def support_bot(message):
-    prompt="""You are an ERPNext / Frappe Helpdesk classifier.
-
-Goal: Decide if the user message should (A) create a new support ticket or (B) fetch details of an existing ticket.
-
-Return ONLY valid JSON. No extra text.
-
-Rules:
-- If the user reports a problem, error, request for help, or something not working → CREATE_TICKET
-- If the user asks about an existing ticket (mentions ticket id/number like "ticket 29", "case #29", "my ticket", "show ticket") → TICKET_DETAILS
-- If unclear which one → UNKNOWN
-Output format (STRICT):
-{{
-  "task_flag": "CREATE_TICKET" | "TICKET_DETAILS" | "UNKNOWN"
-}}
-USER MESSAGE:
-{{message}}
-"""
     output = remote_llm_request_deploy_test(
         task="helpdesk_task",
+        prompt="",
         question=None,
         db_result_json=None,
-        prompt="",
         user_message=message
     )
-    res=output.get("task_flag")
-    if res=="CREATE_TICKET":
-        res=send_support_message(message)
-        return res
-    elif res=="TICKET_DETAILS":
-        res=get_ticket_details(message,ticket_id)
-        return res
-    else:
-        return No Response
+
+    task_flag = (output.get("task_flag") or "UNKNOWN").strip()
+    ticket_id = output.get("ticket_id")
+
+    # normalize ticket_id
+    if isinstance(ticket_id, str) and ticket_id.isdigit():
+        ticket_id = int(ticket_id)
+    if not isinstance(ticket_id, int):
+        ticket_id = None
+
+    # 2) route by task
+    if task_flag == "CREATE_TICKET":
+        try:
+            created = send_support_message(message)
+            return {"kind": "CREATE_TICKET", "data": created}
+
+        except Exception as e:
+            return {"Error":str(e)}
+    if task_flag == "TICKET_DETAILS":
+        if not ticket_id:
+            return {
+                "kind": "TICKET_DETAILS",
+                "error": "Ticket id missing. Please say like: ticket 29"
+            }
+        try:
+            details = get_ticket_details(ticket_id)
+            return {"kind": "TICKET_DETAILS", "data": details}
+        except Exception as e:
+            return {"Error":str(e)}
+
+    if task_flag == "GET_USER_TICKETS":
+        tickets = get_user_tickets()
+        return {"kind": "GET_USER_TICKETS", "data": tickets}
+
+    return {"kind": "UNKNOWN", "message": "Please describe the issue or provide a ticket number."}
