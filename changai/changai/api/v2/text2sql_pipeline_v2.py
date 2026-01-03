@@ -32,8 +32,8 @@ def get_settings():
         "LANGSMITH_PROJECT" : settings.langsmith_project,
         "ROOT_PATH":settings.root_path,
         "URL":settings.prediction_url if settings.remote else settings.ollama_url,
-        "LLM":settings.llm,
-        "EMBED_MODEL":settings.embedder,
+        "LOCAL_LLM":settings.local_llm,
+        "LOCAL_SCHEMA_RETRIEVER":settings.local_schema_retriever,
         "RETAIN_MEM":settings.retain_memory,
         "LLM_VERSION_ID":settings.llm_version_id,
         "EMBED_VERSION_ID":settings.embedder_version_id,
@@ -264,7 +264,7 @@ def _post_json(url: str, headers: Dict[str, str], payload: Dict[str, Any], timeo
 
 def local_llm_request(prompt: str) -> str:
     url = f"{CONFIG['URL'].rstrip('/')}/api/generate"
-    payload = {"model": CONFIG["LLM"], "prompt": prompt, "stream": False}
+    payload = {"model": CONFIG["LOCAL_LLM"], "prompt": prompt, "stream": False}
     resp = _post_json(url, headers={}, payload=payload, timeout=120)
     if not resp.get("ok"):
         return f"Error: local LLM call failed ({resp.get('status_code')}): {resp.get('body')}"
@@ -391,87 +391,6 @@ def remote_llm_request(prompt: str):
     return {"Error": "Polling timeout", "last": last}
 
 
-# @frappe.whitelist(allow_guest=False)
-# def remote_llm_request_deploy_test(
-#     prompt: str = "",
-#     task: str = "llm",
-#     question: Optional[str] = None,
-#     db_result_json: Optional[str] = None,
-# ) -> Any:
-
-#     if task == "format_db":
-#         input_payload: Dict[str, Any] = {
-#             "task": "format_db",
-#             "question": question or "",
-#             "db_result_json": db_result_json or "{}",
-#         }
-#     else:
-#         input_payload = {
-#             "task": "llm",
-#             "user_input": prompt,
-#         }
-#     payload = {
-#         "input": input_payload
-#     }
-
-#     headers = {
-#         "Content-Type": "application/json",
-#         "Prefer": "wait",
-#         "Authorization": f"Bearer {CONFIG['API_TOKEN']}",
-#     }
-#     create = _post_json(CONFIG["deploy_url"], headers=headers, payload=payload, timeout=120)
-#     if not create.get("ok"):
-#         return {
-#             "Error": "Create prediction failed",
-#             "status_code": create.get("status_code"),
-#             "details": create.get("body"),
-#         }
-
-#     data = create.get("body") or {}
-#     urls = data.get("urls") or {}
-#     get_url = urls.get("get")
-#     if not get_url:
-#         return {
-#             "Error": "Missing get URL from deploy response",
-#             "details": data,
-#         }
-#     data = create.get("body") or {}
-
-#     urls = data.get("urls") or {}
-#     get_url = urls.get("get")
-#     if not get_url:
-#         return {
-#             "Error": "Missing get URL from deploy response",
-#             "details": data,
-#         }
-
-#     terminal = {"succeeded", "failed", "canceled"}
-#     deadline = time.time() + 300
-#     last = None
-#     while time.time() < deadline:
-#         poll_res = requests.get(get_url, headers=headers, timeout=120)
-#         try:
-#             poll = poll_res.json()
-#         except Exception:
-#             poll = {"raw_text": poll_res.text}
-
-#         status = poll.get("status")
-#         output = poll.get("output")
-#         last = poll
-
-#         if status in terminal:
-#             if status == "succeeded":
-#                 return output
-#             return {
-#                 "Error": f"Model ended with status {status}",
-#                 "details": poll,
-#             }
-
-#         time.sleep(2)
-
-#     return {"Error": "Polling timed out", "details": last}
-
-
 @frappe.whitelist(allow_guest=False)
 def remote_llm_request_deploy_test(
     prompt: str = "",
@@ -525,7 +444,6 @@ def remote_llm_request_deploy_test(
             "details": data,
         }
 
-    # ---------------- Poll until done ----------------
     terminal = {"succeeded", "failed", "canceled"}
     deadline = time.time() + 300
     last = None
@@ -572,7 +490,7 @@ def local_embedder_request(question: str):
     if not os.path.exists(INDEX_PATH):
         return []
     if __vector_store is None:
-        _emb = OllamaEmbeddings(base_url=CONFIG["URL"], model=CONFIG["EMBED_MODEL"])
+        _emb = OllamaEmbeddings(base_url=CONFIG["URL"], model=CONFIG["LOCAL_SCHEMA_RETRIEVER"])
         __vector_store = FAISS.load_local(INDEX_PATH, embeddings=_emb, allow_dangerous_deserialization=True)
     return __vector_store.similarity_search(question, k=15)
     
