@@ -123,6 +123,11 @@ Latest user message:
 {qstn}
 """
 
+@frappe.whitelist(allow_guest=False)
+def respond_from_cache(user_question:str):
+    if user_question:
+        doc=frappe.db.get_value("ChangAI Logs",{"user_question":user_question},["sql_generated","result"],as_dict=False)
+        return doc
 
 @frappe.whitelist(allow_guest=False)
 def inject_prompt(user_qstn,session_id):

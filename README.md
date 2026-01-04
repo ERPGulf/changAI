@@ -4,12 +4,6 @@
 
 Built with RAG, LLM-powered SQL generation, LangGraph orchestration, and strict SQL validation for safe and reliable ERP querying.
 
-<!-- <p align="center">
-  <img src="changai/changai/changAI.gif" alt="ChangAI Demo" width="900">
-  <br>
-  <em>ChangAI in action: Ask 5 real business questions and get instant answers</em>
-</p> -->
-
 ## Key Features
 
 - **Accurate Text-to-SQL** — Generates valid, read-only MySQL `SELECT` queries
@@ -216,26 +210,74 @@ If you encounter issues, please open a GitHub issue with logs.
 
 ---
 
-## Contributing
+## 📝 Contributions
 
-We welcome contributions and suggestions from the community.
+If you want to contribute to this project and make it better, your help is very welcome!
+Contributing is also a great way to learn more about collaborative development on Github, new technologies in AI/ML, insights on ERPNext and their ecosystems and how to make constructive, helpful bug reports, feature requests and the noblest of all contributions: a good, clean pull request.
 
-You can help by:
+### How to make a clean pull request
 
-- Reporting bugs
-- Suggesting improvements
-- Improving performance or code quality
+Look for a project's contribution instructions. If there are any, follow them.
 
-### How to Contribute
+- Create a personal fork of the project on Github.
+- Clone the fork on your local machine. Your remote repo on Github is called `origin`.
+- Add the original repository as a remote called `upstream`.
+- If you created your fork a while ago be sure to pull upstream changes into your local repository.
+- Create a new branch to work on! Branch from `develop` if it exists, else from `master`.
+- Implement/fix your feature, comment your code.
+- Follow the code style of the project, including indentation.
+- If the project has tests run them!
+- Write or adapt tests as needed.
+- Add or change the documentation as needed.
+- If you're contributing training data, ensure it's clean and well-structured.
+- Squash your commits into a single commit with git's [interactive rebase](https://help.github.com/articles/interactive-rebase). Create a new branch if necessary.
+- Push your branch to your fork on Github, the remote `origin`.
+- From your fork open a pull request in the correct branch. Target the project's `develop` branch if there is one, else go for `master`!
 
-1. Fork the repository
-2. Create a branch (`feature/my-improvement`)
-3. Commit your changes
-4. Open a PR against `version-2`
+- If the maintainer requests further changes just push them to your branch. The PR will be updated automatically.
+- Once the pull request is approved and merged you can pull the changes from `upstream` to your local repo and delete
+your extra branch(es).
+
+And last but not least: Always write your commit messages in the present tense. Your commit message should describe what the commit, when applied, does to the code – not what you did to the code.
+
+### Contributing Training Data
+Your contributions are not limited to code! We highly encourage and welcome the submission of data for training our models. 
+This could include:
+- Structured and balanced dataset: Datasets for various models in the correct format including all details.
+- Natural language queries: Examples of questions users would ask.
+- Corresponding Frappe query examples: The ideal Frappe queries that should be generated from those natural language inputs.
+- Metadata improvements: Suggestions or corrections for doctype-fieldname pairs.
+High-quality training data is crucial for improving the chatbot's accuracy and expanding its understanding. Please refer to the formats of training datasets of various models used in the pipeline.
 
 ---
 
-## License
+## 🗣️ Feedback
 
-MIT License  
-© 2026 ERPGulf / ChangAI Team
+Your feedback is critical at this stage! 
+As there are many known issues and limitations in the release, we encourage you to share all experiences - good or bad - to help us improve faster and smarter.
+For better feedback and easier error diagnosis, a **Debug** tab is available. It displays the intermediate outputs of all models used in the pipeline, helping users and contributors trace issues and track model behaviour at each stage.
+Please report:
+
+- Natural language input used
+- The output generated
+- Any errors encountered
+- Your metadata file (if relevant)
+
+### 📮 Report issues via:
+
+- **GitHub Issues**: [https://github.com/ERPGulf/ChangAI/issues](https://github.com/ERPGulf/ChangAI/issues)
+
+---
+
+## 📜 License
+
+This project is released under the MIT License. See `LICENSE` for more details.
+
+---
+
+## 🙏 Acknowledgements
+
+* Frappe / ERPNext Team
+* ERPGulf Team
+
+---

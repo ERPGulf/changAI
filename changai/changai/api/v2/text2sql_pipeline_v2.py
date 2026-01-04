@@ -1,4 +1,3 @@
-import replicate
 from langgraph.graph import StateGraph,END
 from collections import OrderedDict
 from typing_extensions import TypedDict 
@@ -12,15 +11,13 @@ from langchain_ollama import OllamaEmbeddings
 from langchain_community.vectorstores import FAISS
 import frappe
 from langgraph.checkpoint.memory import MemorySaver
-from langchain_core.chat_history import InMemoryChatMessageHistory
 from changai.changai.api.v2.store_chats import save_turn_2,save_message_doc,inject_prompt
-import time
 non_erp_res=""
-MAX_TOKEN_LIMIT=1500
 import base64
+import time
 from werkzeug.wrappers import Response
-MAX_WINDOW_TURNS=10
 __vector_store = None
+
 
 def get_settings():
     settings=frappe.get_single("ChangAI Settings")
@@ -46,11 +43,8 @@ def get_settings():
     }
     return config
 
+
 CONFIG = get_settings()
-# LANGSMITH_TRACING=CONFIG["LANGSMITH_TRACING"]
-# LANGSMITH_ENDPOINT=CONFIG["LANGSMITH_ENDPOINT"]
-# LANGSMITH_API_KEY=CONFIG["LANGSMITH_API_KEY"]
-# LANGSMITH_PROJECT=CONFIG["LANGSMITH_PROJECT"]
 RETRY_LIMIT=2
 BACKEND_SERVER_SETTINGS = "Backend Server Settings"
 INDEX_PATH = f"{CONFIG['ROOT_PATH']}/changai/changai/changai/faiss_index_hnsw_v2"
@@ -61,7 +55,8 @@ NON_ERP_PROMPT_PATH=f"{CONFIG['ROOT_PATH']}/changai/changai/changai/prompts/non_
 TEMPLATE_PATH=f"{CONFIG['ROOT_PATH']}/changai/changai/changai/templates/conversation_template_v2.j2"
 BUSINESS_KEYWORDS_PATH = f"{CONFIG['ROOT_PATH']}/changai/changai/changai/api/v2/business_keywords_v1.json"
 
-@frappe.whitelist(allow_guest=True)
+
+@frappe.whitelist(allow_guest=False)
 def get_backend_server_settings(*keys):
     """
     Fetch multiple settings from the BACKEND_SERVER_SETTINGS.
@@ -69,6 +64,7 @@ def get_backend_server_settings(*keys):
     return {
         key: frappe.db.get_single_value(BACKEND_SERVER_SETTINGS, key) for key in keys
     }
+
 
 @frappe.whitelist(allow_guest=True)
 def generate_token_secure(api_key, api_secret, app_key):
@@ -155,16 +151,13 @@ def generate_token_secure(api_key, api_secret, app_key):
             mimetype="application/json",
         )
 
+
 #api for user token
 @frappe.whitelist(allow_guest=False)
 def generate_token_secure_for_users(username, password, app_key):
     """
     Generate a secure token for user authentication.
     """
-    # frappe.log_error(
-    #     title="Login attempt",
-    #     message=str(username) + "    " + str(password) + "    " + str(app_key + "  "),
-    # )
     try:
         try:
             app_key = base64.b64decode(app_key).decode("utf-8")
@@ -240,6 +233,7 @@ def call_model(prompt: str, task: str = "llm") -> Any:
         return remote_llm_request_deploy_test(prompt=prompt, task=task)
     else:
         return local_llm_request(prompt)
+
 
 def call_embedder(question):
     return remote_embedder_request(question) if CONFIG["REMOTE"] else local_embedder_request(question)
@@ -467,6 +461,7 @@ def remote_llm_request_deploy_test(
 
     return {"Error": "Polling timed out", "details": last}
 
+
 @frappe.whitelist(allow_guest=False)
 def remote_embedder_request(formatted_q: str) -> Union[list, str]:
     payload = {"version": CONFIG["EMBED_VERSION_ID"], "input": {"user_input": formatted_q}}
@@ -512,6 +507,7 @@ FORMAT_PROMPT=read_text(FORMAT_PROMPT_PATH)
 NON_ERP_PROMPT=read_text(NON_ERP_PROMPT_PATH)
 BUSINESS_KEYWORDS=read_json(BUSINESS_KEYWORDS_PATH)["business_keywords"]
 
+
 # # Shared State
 class SQLState(TypedDict,total=False):
     session_id:str
@@ -530,9 +526,6 @@ class SQLState(TypedDict,total=False):
     non_erp_res:str
     entity_cards: List[str]
     entity_raw: Any
-
-# InMemorySaver -> wiped after restart
-# checkpointer = MemorySaver()     
 
 
 def fill_sql_prompt(question: str, context: str) -> str:
@@ -565,9 +558,7 @@ def send_non_erp_request(state:SQLState) -> SQLState:
 def rewrite_question(state: SQLState) -> SQLState:
     user_qstn = state.get("question") or ""
     session_id = state.get("session_id")
-
     prompt = inject_prompt(user_qstn, session_id)
-
     try:
         raw = call_model(prompt, "llm")
         standalone = ""
@@ -641,7 +632,6 @@ def hits_to_prompt_context(state:SQLState) -> SQLState:
     }
 
 
-
 # # Node 3:Generate the SQL Prompt and call LLM(Ollama Http)
 @traceable(name="generate_sql", run_type="tool")
 def generate_sql(state:SQLState) -> SQLState:
@@ -705,7 +695,6 @@ def call_entity_retriever(qstn: str):
     return {"raw": body, "cards": cards}
 
 
-
 # # Node 5:Repair Loop :Simple prompt for one more try.
 @traceable(name="repair_sqlquery", run_type="tool")
 def repair_sqlquery(state: SQLState) -> SQLState:
@@ -731,6 +720,7 @@ def repair_sqlquery(state: SQLState) -> SQLState:
     except Exception as e:
         return {**state, "tries": tries, "error": f"Repair call failed {e}"}
 
+
 @traceable(name="detect_specific_entities", run_type="tool")
 def detect_specific_entities(state: SQLState) -> SQLState:
     if not state.get("contains_values"):
@@ -750,7 +740,6 @@ def detect_specific_entities(state: SQLState) -> SQLState:
     except Exception as e:
         frappe.log_error(f"Entity retriever failed: {e}", "ChangAI Entity Gate")
         return {**state, "entity_cards": [], "entity_raw": {"error": str(e)}}
-
 
 
 def route_guardrail(state:SQLState):
@@ -852,6 +841,189 @@ def validate_sql_against_mapping(sql_text: str, mapping: Dict[str, List[str]], d
     return result
 
 
+# Building the Workflow Graph
+workflow=StateGraph(SQLState)
+workflow.add_node("rewrite_question",rewrite_question)
+workflow.add_node("guardrail_router",guardrail_router)
+workflow.add_node("retrieve",schema_retriever)
+workflow.add_node("detect_entities", detect_specific_entities)
+workflow.add_node("build_context",hits_to_prompt_context)
+workflow.add_node("generate_sql",generate_sql)
+workflow.add_node("validate_sql",validate_sql)
+workflow.add_node("repair_sql",repair_sqlquery)
+workflow.add_node("send_non_erp_request",send_non_erp_request)
+workflow.set_entry_point("rewrite_question")
+workflow.add_edge("rewrite_question", "guardrail_router")
+workflow.add_conditional_edges("guardrail_router",route_guardrail,{"ERP":"retrieve","NON_ERP":"send_non_erp_request"})
+workflow.add_edge("send_non_erp_request", END)
+workflow.add_edge("retrieve","detect_entities")
+workflow.add_edge("detect_entities", "build_context")
+workflow.add_edge("build_context", "generate_sql")   
+workflow.add_edge("generate_sql","validate_sql")
+workflow.add_conditional_edges("validate_sql",router,{"repair":"repair_sql","end":END})
+workflow.add_edge("repair_sql","validate_sql")
+checkpointer=MemorySaver()
+app=workflow.compile(checkpointer=checkpointer)
+
+
+#to execute the sql returned inside frappe
+@frappe.whitelist(allow_guest=False)
+def execute_query(query:str):
+    # q = (query or "").strip()
+    # if not q.upper().startswith("SELECT") or ";" in q:
+    #     return {"error": "Only a single SELECT statement is allowed."}
+    try:
+        result=frappe.db.sql(query,as_dict=True)
+        return result
+    except Exception as e:
+        return {"error":f"SQL Execution Failed : {e}"}
+
+
+
+
+
+@frappe.whitelist(allow_guest=False)
+def send_support_message(message):
+    url = CONFIG["support_api_url"]
+
+    res = requests.post(url, json={
+        "message": message
+    })
+
+    return res.json()
+
+@frappe.whitelist(allow_guest=False)
+def get_ticket_details(tid):
+    url = CONFIG["get_ticket_details_url"]
+    res = requests.post(url, json={
+        "ticket_id": tid
+    })
+
+    return res.json()
+
+
+@frappe.whitelist(allow_guest=False)
+def support_bot(message):
+    output = remote_llm_request_deploy_test(
+        task="helpdesk_task",
+        prompt="",
+        question=None,
+        db_result_json=None,
+        user_message=message
+    )
+
+    task_flag = (output.get("task_flag") or "UNKNOWN").strip()
+    ticket_id = output.get("ticket_id")
+
+    # normalize ticket_id
+    if isinstance(ticket_id, str) and ticket_id.isdigit():
+        ticket_id = int(ticket_id)
+    if not isinstance(ticket_id, int):
+        ticket_id = None
+
+    # 2) route by task
+    if task_flag == "CREATE_TICKET":
+        try:
+            created = send_support_message(message)
+            return {"kind": "CREATE_TICKET", "data": created}
+
+        except Exception as e:
+            return {"Error":str(e)}
+    if task_flag == "TICKET_DETAILS":
+        if not ticket_id:
+            return {
+                "kind": "TICKET_DETAILS",
+                "error": "Ticket id missing. Please say like: ticket 29"
+            }
+        try:
+            details = get_ticket_details(ticket_id)
+            return {"kind": "TICKET_DETAILS", "data": details}
+        except Exception as e:
+            return {"Error":str(e)}
+
+    if task_flag == "GET_USER_TICKETS":
+        tickets = get_ticket_details()
+        return {"kind": "GET_USER_TICKETS", "data": tickets}
+
+    return {"kind": "UNKNOWN", "message": "Please describe the issue or provide a ticket number."}
+
+
+def save_logs(
+    user_question=None,
+    formatted_q=None,
+    context=None,
+    sql=None,
+    val=None,
+    result=None,
+    tries=None,
+    err=None,
+    formatted_result=None,
+):
+    def to_json_if_needed(v):
+        if isinstance(v, (dict, list)):
+            return json.dumps(v, default=str)
+        return v
+    val = to_json_if_needed(val)
+    result = to_json_if_needed(result)
+    err = to_json_if_needed(err)
+    context = to_json_if_needed(context)
+    formatted_result = to_json_if_needed(formatted_result)
+    doc = frappe.new_doc("ChangAI Logs")
+    doc.user_question = user_question
+    doc.rewritten_question = formatted_q
+    doc.schema_retrieved = context
+    doc.sql_generated = sql
+    doc.validation = val
+    doc.tries = tries
+    doc.error = err
+    doc.result = result
+    doc.formatted_result = formatted_result
+    doc.insert(ignore_permissions=True)
+    frappe.db.commit()
+    return doc.name
+
+
+@frappe.whitelist(allow_guest=False)
+def format_data_conversationally(user_data):
+    """
+    Formats user data using the single, powerful conversational Jinja2 template.
+    """
+    env = jinja2.Environment(
+        trim_blocks=True, lstrip_blocks=True, extensions=["jinja2.ext.do"]
+    )
+    template = env.from_string(CONVERSATION_TEMPLATE)
+    return template.render(data=user_data)
+
+
+
+@frappe.whitelist(allow_guest=False)
+def format_data(qstn, sql_data):
+    if isinstance(sql_data, (dict, list)):
+        db_result_json = json.dumps(sql_data, ensure_ascii=False, default=str)
+    else:
+        db_result_json = str(sql_data) if sql_data is not None else "{}"
+
+    output = remote_llm_request_deploy_test(
+        prompt="",
+        task="format_db",
+        question=qstn,
+        db_result_json=db_result_json,
+    )
+
+    if isinstance(output, dict):
+        if output.get("Error"):
+            return {
+                "answer": "Sorry, I couldn't format the data right now.",
+                "error": output
+            }
+        answer = output.get("answer") or output.get("text") or json.dumps(output)
+    else:
+        answer = str(output)
+
+    return {"answer": answer}
+
+
+
 def hits_to_schema_context(
     hits: Union[List[Any], Dict, str],
     title: str = "SCHEMA CONTEXT",
@@ -859,7 +1031,6 @@ def hits_to_schema_context(
     sort_sections: bool = True,
     show_entity_filters_yaml: bool = True
 ) -> str:
-
     if isinstance(hits, dict) and "message" in hits and isinstance(hits["message"], list):
         hits = hits["message"]
 
@@ -1069,120 +1240,17 @@ def hits_to_schema_context(
 
     while lines and not lines[-1].strip():
         lines.pop()
-
     return "\n".join(lines)
 
 
-# Building the Workflow Graph
-workflow=StateGraph(SQLState)
-workflow.add_node("rewrite_question",rewrite_question)
-workflow.add_node("guardrail_router",guardrail_router)
-workflow.add_node("retrieve",schema_retriever)
-workflow.add_node("detect_entities", detect_specific_entities)
-workflow.add_node("build_context",hits_to_prompt_context)
-workflow.add_node("generate_sql",generate_sql)
-workflow.add_node("validate_sql",validate_sql)
-workflow.add_node("repair_sql",repair_sqlquery)
-workflow.add_node("send_non_erp_request",send_non_erp_request)
-
-workflow.set_entry_point("rewrite_question")
-workflow.add_edge("rewrite_question", "guardrail_router")
-workflow.add_conditional_edges("guardrail_router",route_guardrail,{"ERP":"retrieve","NON_ERP":"send_non_erp_request"})
-workflow.add_edge("send_non_erp_request", END)
-workflow.add_edge("retrieve","detect_entities")
-workflow.add_edge("detect_entities", "build_context")
-workflow.add_edge("build_context", "generate_sql")   
-workflow.add_edge("generate_sql","validate_sql")
-workflow.add_conditional_edges("validate_sql",router,{"repair":"repair_sql","end":END})
-workflow.add_edge("repair_sql","validate_sql")
-checkpointer=MemorySaver()
-app=workflow.compile(checkpointer=checkpointer)
-
-
-#to execute the sql returned inside frappe
 @frappe.whitelist(allow_guest=False)
-def execute_query(query:str):
-    # q = (query or "").strip()
-    # if not q.upper().startswith("SELECT") or ";" in q:
-    #     return {"error": "Only a single SELECT statement is allowed."}
-    try:
-        result=frappe.db.sql(query,as_dict=True)
-        return result
-    except Exception as e:
-        return {"error":f"SQL Execution Failed : {e}"}
-
-
-@frappe.whitelist(allow_guest=False)
-def format_data(qstn, sql_data):
-    if isinstance(sql_data, (dict, list)):
-        db_result_json = json.dumps(sql_data, ensure_ascii=False, default=str)
-    else:
-        db_result_json = str(sql_data) if sql_data is not None else "{}"
-
-    output = remote_llm_request_deploy_test(
-        prompt="",
-        task="format_db",
-        question=qstn,
-        db_result_json=db_result_json,
-    )
-
-    if isinstance(output, dict):
-        if output.get("Error"):
-            return {
-                "answer": "Sorry, I couldn't format the data right now.",
-                "error": output
-            }
-        answer = output.get("answer") or output.get("text") or json.dumps(output)
-    else:
-        answer = str(output)
-
-    return {"answer": answer}
-# to format the data returned afer execution using jinj2 template
-@frappe.whitelist(allow_guest=False)
-def format_data_conversationally(user_data):
-    """
-    Formats user data using the single, powerful conversational Jinja2 template.
-    """
-    env = jinja2.Environment(
-        trim_blocks=True, lstrip_blocks=True, extensions=["jinja2.ext.do"]
-    )
-    template = env.from_string(CONVERSATION_TEMPLATE)
-    return template.render(data=user_data)
-
-
-def save_logs(
-    user_question=None,
-    formatted_q=None,
-    context=None,
-    sql=None,
-    val=None,
-    result=None,
-    tries=None,
-    err=None,
-    formatted_result=None,
-):
-    def to_json_if_needed(v):
-        if isinstance(v, (dict, list)):
-            return json.dumps(v, default=str)
-        return v
-    val = to_json_if_needed(val)
-    result = to_json_if_needed(result)
-    err = to_json_if_needed(err)
-    context = to_json_if_needed(context)
-    formatted_result = to_json_if_needed(formatted_result)
-    doc = frappe.new_doc("ChangAI Logs")
-    doc.user_question = user_question
-    doc.rewritten_question = formatted_q
-    doc.schema_retrieved = context
-    doc.sql_generated = sql
-    doc.validation = val
-    doc.tries = tries
-    doc.error = err
-    doc.result = result
-    doc.formatted_result = formatted_result
-    doc.insert(ignore_permissions=True)
-    frappe.db.commit()
-    return doc.name
+def debug_entity_retriever(q: str):
+    resp = remote_entity_embedder(q)   # this returns {"ok":..., "body":...}
+    return {
+        "query": q,
+        "raw_response": resp,
+        "parsed_entity_cards": call_entity_retriever(q),
+    }
 
 
 # Run
@@ -1284,96 +1352,3 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
         # "EntityDebug": entity_debug,
         "Bot": bot_answer,
     }
-
-
-@frappe.whitelist(allow_guest=False)
-def respond_from_cache(user_question:str):
-    if user_question:
-        doc=frappe.db.get_value("ChangAI Logs",{"user_question":user_question},["sql_generated","result"],as_dict=False)
-        return doc
-
-
-
-@frappe.whitelist(allow_guest=False)
-def test_rewrite_question(user_question: str, chat_id: str):
-    state: SQLState = {
-        "question": user_question,
-        "session_id": chat_id,
-    }
-
-    out = rewrite_question(state)
-    return out
-
-@frappe.whitelist(allow_guest=False)
-def debug_entity_retriever(q: str):
-    resp = remote_entity_embedder(q)   # this returns {"ok":..., "body":...}
-    return {
-        "query": q,
-        "raw_response": resp,
-        "parsed_entity_cards": call_entity_retriever(q),
-    }
-
-@frappe.whitelist(allow_guest=False)
-def send_support_message(message):
-    url = CONFIG["support_api_url"]
-
-    res = requests.post(url, json={
-        "message": message
-    })
-
-    return res.json()
-
-@frappe.whitelist(allow_guest=False)
-def get_ticket_details(tid):
-    url = CONFIG["get_ticket_details_url"]
-    res = requests.post(url, json={
-        "ticket_id": tid
-    })
-
-    return res.json()
-
-
-@frappe.whitelist(allow_guest=False)
-def support_bot(message):
-    output = remote_llm_request_deploy_test(
-        task="helpdesk_task",
-        prompt="",
-        question=None,
-        db_result_json=None,
-        user_message=message
-    )
-
-    task_flag = (output.get("task_flag") or "UNKNOWN").strip()
-    ticket_id = output.get("ticket_id")
-
-    # normalize ticket_id
-    if isinstance(ticket_id, str) and ticket_id.isdigit():
-        ticket_id = int(ticket_id)
-    if not isinstance(ticket_id, int):
-        ticket_id = None
-
-    # 2) route by task
-    if task_flag == "CREATE_TICKET":
-        try:
-            created = send_support_message(message)
-            return {"kind": "CREATE_TICKET", "data": created}
-
-        except Exception as e:
-            return {"Error":str(e)}
-    if task_flag == "TICKET_DETAILS":
-        if not ticket_id:
-            return {
-                "kind": "TICKET_DETAILS",
-                "error": "Ticket id missing. Please say like: ticket 29"
-            }
-        try:
-            details = get_ticket_details(ticket_id)
-            return {"kind": "TICKET_DETAILS", "data": details}
-        except Exception as e:
-            return {"Error":str(e)}
-
-    if task_flag == "GET_USER_TICKETS":
-        tickets = get_user_tickets()
-        return {"kind": "GET_USER_TICKETS", "data": tickets}
-
-    return {"kind": "UNKNOWN", "message": "Please describe the issue or provide a ticket number."}
