@@ -1,5 +1,91 @@
 [
     {
+        "anchor": "total sales excluding returns last month",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] is_return | [TABLE] tabSales Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "net sales after discount this month",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] net_total | [TABLE] tabSales Invoice",
+            "[FIELD] discount_amount | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "gross sales before discount this month",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "items sold quantity excluding cancelled invoices",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] docstatus | [TABLE] tabSales Invoice",
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] qty | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "which items were returned last month",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] is_return | [TABLE] tabSales Invoice",
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "customers with outstanding invoices",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "aging of unpaid invoices beyond 30 days",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+            "[FIELD] due_date | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "top items by revenue not by quantity",
+        "positives": [
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] base_amount | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "sales orders converted to invoices",
+        "positives": [
+            "[TABLE] tabSales Order",
+            "[FIELD] name | [TABLE] tabSales Order",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] sales_order | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "show invoices without any items",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] name | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
         "anchor": "Who bought the most glue sticks yesterday?",
         "positives": [
             "[TABLE] tabSales Invoice",
@@ -21,6 +107,123 @@
             "[FIELD] item_name | [TABLE] tabPOS Invoice Item",
             "[FIELD] qty | [TABLE] tabPOS Invoice Item",
             "[FIELD] base_net_amount | [TABLE] tabPOS Invoice Item"
+        ]
+    },
+    {
+        "anchor": "which items sold the most last month by qty",
+        "positives": [
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] qty | [TABLE] tabSales Invoice Item",
+            "[FIELD] parent | [TABLE] tabSales Invoice Item",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "top 5 products by sales amount last month",
+        "positives": [
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] amount | [TABLE] tabSales Invoice Item",
+            "[FIELD] parent | [TABLE] tabSales Invoice Item",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "average selling price for item PEN-001 last month",
+        "positives": [
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] rate | [TABLE] tabSales Invoice Item",
+            "[FIELD] parent | [TABLE] tabSales Invoice Item",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[TABLE] tabItem",
+            "[FIELD] item_code | [TABLE] tabItem",
+            "[FIELD] item_name | [TABLE] tabItem",
+            "[FIELD] name | [TABLE] tabItem"
+        ]
+    },
+    {
+        "anchor": "top customers who bought item PEN-001 last month",
+        "positives": [
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] qty | [TABLE] tabSales Invoice Item",
+            "[FIELD] parent | [TABLE] tabSales Invoice Item",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[TABLE] tabCustomer",
+            "[FIELD] customer_name | [TABLE] tabCustomer",
+            "[FIELD] name | [TABLE] tabCustomer"
+        ]
+    },
+    {
+        "anchor": "items sold last month and total revenue for each item",
+        "positives": [
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] qty | [TABLE] tabSales Invoice Item",
+            "[FIELD] amount | [TABLE] tabSales Invoice Item",
+            "[FIELD] parent | [TABLE] tabSales Invoice Item",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "sales return total last month",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] is_return | [TABLE] tabSales Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "returned invoices for customer Williams last month",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] is_return | [TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice",
+            "[TABLE] tabCustomer",
+            "[FIELD] customer_name | [TABLE] tabCustomer",
+            "[FIELD] name | [TABLE] tabCustomer"
+        ]
+    },
+    {
+        "anchor": "overdue invoices more than 30 days list",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+            "[FIELD] due_date | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "customers with no sales last month",
+        "positives": [
+            "[TABLE] tabCustomer",
+            "[FIELD] name | [TABLE] tabCustomer",
+            "[FIELD] customer_name | [TABLE] tabCustomer",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "compare gross sales vs net sales last month",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+            "[FIELD] base_net_total | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice"
         ]
     },
     {
