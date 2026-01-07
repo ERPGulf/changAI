@@ -97,6 +97,12 @@ If enabled in **ChangAI Settings**, all RAG retrieval, SQL generation, validatio
   <img src="changai/images/RAG Structure.png" width="750">
 </p>
 
+### Data Retrieval Process Flow
+
+<p align="center">
+  <img src="changai/images/data_retrieval_flow_chart.png" width="750">
+</p>
+
 ---
 
 ## Installation & Setup
