@@ -1,0 +1,758 @@
+[
+  {
+    "anchor": "top 10 customers by total sales amount in sales invoices last 90 days",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabCustomer",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] docstatus | [TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+      "[FIELD] name | [TABLE] tabCustomer",
+      "[JOIN] tabSales Invoice.customer = tabCustomer.name"
+    ]
+  },
+  {
+    "anchor": "can u pull the top 10 custmers by total ammount from sales invs last 90 days plz",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabCustomer",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] docstatus | [TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+      "[FIELD] name | [TABLE] tabCustomer",
+      "[JOIN] tabSales Invoice.customer = tabCustomer.name"
+    ]
+  },
+  {
+    "anchor": "hey, get me the 10 best clients by sales amnt in SI over the last 90 days, thanks",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabCustomer",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] docstatus | [TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+      "[FIELD] name | [TABLE] tabCustomer",
+      "[JOIN] tabSales Invoice.customer = tabCustomer.name"
+    ]
+  },
+  {
+    "anchor": "needa quick list of 10 customer by total sales stuff from invs for the last 90 days pls",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabCustomer",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] docstatus | [TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+      "[FIELD] name | [TABLE] tabCustomer",
+      "[JOIN] tabSales Invoice.customer = tabCustomer.name"
+    ]
+  },
+  {
+    "anchor": "show me top 10 buyers based on ammt from sales invoive in the past 90 days, thx",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabCustomer",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] docstatus | [TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+      "[FIELD] name | [TABLE] tabCustomer",
+      "[JOIN] tabSales Invoice.customer = tabCustomer.name"
+    ]
+  },
+  {
+    "anchor": "pls send me the 10 top cust by total sales on SIs over last 90 days, realy need this",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabCustomer",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] docstatus | [TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+      "[FIELD] name | [TABLE] tabCustomer",
+      "[JOIN] tabSales Invoice.customer = tabCustomer.name"
+    ]
+  },
+  {
+    "anchor": "items with lowest stock quantity across all warehouses",
+    "positives": [
+      "[TABLE] tabBin",
+      "[TABLE] tabItem",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin",
+      "[FIELD] name | [TABLE] tabItem",
+      "[JOIN] tabBin.item_code = tabItem.name"
+    ]
+  },
+  {
+    "anchor": "can u pls pull items with lowest stock in all warehous asap thx",
+    "positives": [
+      "[TABLE] tabBin",
+      "[TABLE] tabItem",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin",
+      "[FIELD] name | [TABLE] tabItem",
+      "[JOIN] tabBin.item_code = tabItem.name"
+    ]
+  },
+  {
+    "anchor": "need a quick list of lowest qty items across all whs like now plz",
+    "positives": [
+      "[TABLE] tabBin",
+      "[TABLE] tabItem",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin",
+      "[FIELD] name | [TABLE] tabItem",
+      "[JOIN] tabBin.item_code = tabItem.name"
+    ]
+  },
+  {
+    "anchor": "show me low stock items from every warehouse pls, need 2 check, thx",
+    "positives": [
+      "[TABLE] tabBin",
+      "[TABLE] tabItem",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin",
+      "[FIELD] name | [TABLE] tabItem",
+      "[JOIN] tabBin.item_code = tabItem.name"
+    ]
+  },
+  {
+    "anchor": "get me the stuff we got the least of in all the warehouses, thx!",
+    "positives": [
+      "[TABLE] tabBin",
+      "[TABLE] tabItem",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin",
+      "[FIELD] name | [TABLE] tabItem",
+      "[JOIN] tabBin.item_code = tabItem.name"
+    ]
+  },
+  {
+    "anchor": "hey can you find all the items that are low on stock across every whse, need this now!",
+    "positives": [
+      "[TABLE] tabBin",
+      "[TABLE] tabItem",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin",
+      "[FIELD] name | [TABLE] tabItem",
+      "[JOIN] tabBin.item_code = tabItem.name"
+    ]
+  },
+  {
+    "anchor": "total purchase amount by supplier this year",
+    "positives": [
+      "[TABLE] tabPurchase Invoice",
+      "[TABLE] tabSupplier",
+      "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+      "[FIELD] docstatus | [TABLE] tabPurchase Invoice",
+      "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabPurchase Invoice",
+      "[FIELD] name | [TABLE] tabSupplier",
+      "[JOIN] tabPurchase Invoice.supplier = tabSupplier.name"
+    ]
+  },
+  {
+    "anchor": "hey, can u get me the total ammount we paid to each supp this year pls",
+    "positives": [
+      "[TABLE] tabPurchase Invoice",
+      "[TABLE] tabSupplier",
+      "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+      "[FIELD] docstatus | [TABLE] tabPurchase Invoice",
+      "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabPurchase Invoice",
+      "[FIELD] name | [TABLE] tabSupplier",
+      "[JOIN] tabPurchase Invoice.supplier = tabSupplier.name"
+    ]
+  },
+  {
+    "anchor": "could u pull a quick list of inv's by vendor for this FY? thx!",
+    "positives": [
+      "[TABLE] tabPurchase Invoice",
+      "[TABLE] tabSupplier",
+      "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+      "[FIELD] docstatus | [TABLE] tabPurchase Invoice",
+      "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabPurchase Invoice",
+      "[FIELD] name | [TABLE] tabSupplier",
+      "[JOIN] tabPurchase Invoice.supplier = tabSupplier.name"
+    ]
+  },
+  {
+    "anchor": "need to know the total purchase amt by each supplier this year, asap!!",
+    "positives": [
+      "[TABLE] tabPurchase Invoice",
+      "[TABLE] tabSupplier",
+      "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+      "[FIELD] docstatus | [TABLE] tabPurchase Invoice",
+      "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabPurchase Invoice",
+      "[FIELD] name | [TABLE] tabSupplier",
+      "[JOIN] tabPurchase Invoice.supplier = tabSupplier.name"
+    ]
+  },
+  {
+    "anchor": "show me what weve spent on all vendors this yr, need it now",
+    "positives": [
+      "[TABLE] tabPurchase Invoice",
+      "[TABLE] tabSupplier",
+      "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+      "[FIELD] docstatus | [TABLE] tabPurchase Invoice",
+      "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabPurchase Invoice",
+      "[FIELD] name | [TABLE] tabSupplier",
+      "[JOIN] tabPurchase Invoice.supplier = tabSupplier.name"
+    ]
+  },
+  {
+    "anchor": "pls send me the total spent by supplier for curr year, thanks!",
+    "positives": [
+      "[TABLE] tabPurchase Invoice",
+      "[TABLE] tabSupplier",
+      "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+      "[FIELD] docstatus | [TABLE] tabPurchase Invoice",
+      "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabPurchase Invoice",
+      "[FIELD] name | [TABLE] tabSupplier",
+      "[JOIN] tabPurchase Invoice.supplier = tabSupplier.name"
+    ]
+  },
+  {
+    "anchor": "top 5 items by total quantity purchased in purchase invoices",
+    "positives": [
+      "[TABLE] tabPurchase Invoice",
+      "[TABLE] tabPurchase Invoice Item",
+      "[TABLE] tabItem",
+      "[FIELD] docstatus | [TABLE] tabPurchase Invoice",
+      "[FIELD] name | [TABLE] tabPurchase Invoice",
+      "[FIELD] parent | [TABLE] tabPurchase Invoice Item",
+      "[FIELD] item_code | [TABLE] tabPurchase Invoice Item",
+      "[FIELD] qty | [TABLE] tabPurchase Invoice Item",
+      "[FIELD] name | [TABLE] tabItem",
+      "[JOIN] tabPurchase Invoice Item.parent = tabPurchase Invoice.name",
+      "[JOIN] tabPurchase Invoice Item.item_code = tabItem.name"
+    ]
+  },
+  {
+    "anchor": "can u give me the top 5 items by total qty purchasd in bills plz",
+    "positives": [
+      "[TABLE] tabPurchase Invoice",
+      "[TABLE] tabPurchase Invoice Item",
+      "[TABLE] tabItem",
+      "[FIELD] docstatus | [TABLE] tabPurchase Invoice",
+      "[FIELD] name | [TABLE] tabPurchase Invoice",
+      "[FIELD] parent | [TABLE] tabPurchase Invoice Item",
+      "[FIELD] item_code | [TABLE] tabPurchase Invoice Item",
+      "[FIELD] qty | [TABLE] tabPurchase Invoice Item",
+      "[FIELD] name | [TABLE] tabItem",
+      "[JOIN] tabPurchase Invoice Item.parent = tabPurchase Invoice.name",
+      "[JOIN] tabPurchase Invoice Item.item_code = tabItem.name"
+    ]
+  },
+  {
+    "anchor": "need a quick check on 5 items with higest qty bought in invs for this month",
+    "positives": [
+      "[TABLE] tabPurchase Invoice",
+      "[TABLE] tabPurchase Invoice Item",
+      "[TABLE] tabItem",
+      "[FIELD] docstatus | [TABLE] tabPurchase Invoice",
+      "[FIELD] name | [TABLE] tabPurchase Invoice",
+      "[FIELD] parent | [TABLE] tabPurchase Invoice Item",
+      "[FIELD] item_code | [TABLE] tabPurchase Invoice Item",
+      "[FIELD] qty | [TABLE] tabPurchase Invoice Item",
+      "[FIELD] name | [TABLE] tabItem",
+      "[JOIN] tabPurchase Invoice Item.parent = tabPurchase Invoice.name",
+      "[JOIN] tabPurchase Invoice Item.item_code = tabItem.name"
+    ]
+  },
+  {
+    "anchor": "show me the top 5 items by total ammount purchas in pi's from last week asap",
+    "positives": [
+      "[TABLE] tabPurchase Invoice",
+      "[TABLE] tabPurchase Invoice Item",
+      "[TABLE] tabItem",
+      "[FIELD] docstatus | [TABLE] tabPurchase Invoice",
+      "[FIELD] name | [TABLE] tabPurchase Invoice",
+      "[FIELD] parent | [TABLE] tabPurchase Invoice Item",
+      "[FIELD] item_code | [TABLE] tabPurchase Invoice Item",
+      "[FIELD] qty | [TABLE] tabPurchase Invoice Item",
+      "[FIELD] name | [TABLE] tabItem",
+      "[JOIN] tabPurchase Invoice Item.parent = tabPurchase Invoice.name",
+      "[JOIN] tabPurchase Invoice Item.item_code = tabItem.name"
+    ]
+  },
+  {
+    "anchor": "pls find the 5 best seller items by total qty somthing in purchase invoices",
+    "positives": [
+      "[TABLE] tabPurchase Invoice",
+      "[TABLE] tabPurchase Invoice Item",
+      "[TABLE] tabItem",
+      "[FIELD] docstatus | [TABLE] tabPurchase Invoice",
+      "[FIELD] name | [TABLE] tabPurchase Invoice",
+      "[FIELD] parent | [TABLE] tabPurchase Invoice Item",
+      "[FIELD] item_code | [TABLE] tabPurchase Invoice Item",
+      "[FIELD] qty | [TABLE] tabPurchase Invoice Item",
+      "[FIELD] name | [TABLE] tabItem",
+      "[JOIN] tabPurchase Invoice Item.parent = tabPurchase Invoice.name",
+      "[JOIN] tabPurchase Invoice Item.item_code = tabItem.name"
+    ]
+  },
+  {
+    "anchor": "get the list of top 5 items by total qty bought in invioce for curr month thx",
+    "positives": [
+      "[TABLE] tabPurchase Invoice",
+      "[TABLE] tabPurchase Invoice Item",
+      "[TABLE] tabItem",
+      "[FIELD] docstatus | [TABLE] tabPurchase Invoice",
+      "[FIELD] name | [TABLE] tabPurchase Invoice",
+      "[FIELD] parent | [TABLE] tabPurchase Invoice Item",
+      "[FIELD] item_code | [TABLE] tabPurchase Invoice Item",
+      "[FIELD] qty | [TABLE] tabPurchase Invoice Item",
+      "[FIELD] name | [TABLE] tabItem",
+      "[JOIN] tabPurchase Invoice Item.parent = tabPurchase Invoice.name",
+      "[JOIN] tabPurchase Invoice Item.item_code = tabItem.name"
+    ]
+  },
+  {
+    "anchor": "daily sales trend from POS invoices for the last 14 days",
+    "positives": [
+      "[TABLE] tabPOS Invoice",
+      "[FIELD] posting_date | [TABLE] tabPOS Invoice",
+      "[FIELD] docstatus | [TABLE] tabPOS Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabPOS Invoice"
+    ]
+  },
+  {
+    "anchor": "hey can you get me the daily sales trend from pos inv for last 14 days plzz",
+    "positives": [
+      "[TABLE] tabPOS Invoice",
+      "[FIELD] posting_date | [TABLE] tabPOS Invoice",
+      "[FIELD] docstatus | [TABLE] tabPOS Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabPOS Invoice"
+    ]
+  },
+  {
+    "anchor": "pls send me a quick check of the sales trend from SI we had for the last 14 days",
+    "positives": [
+      "[TABLE] tabPOS Invoice",
+      "[FIELD] posting_date | [TABLE] tabPOS Invoice",
+      "[FIELD] docstatus | [TABLE] tabPOS Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabPOS Invoice"
+    ]
+  },
+  {
+    "anchor": "can you pull up the daily sales numbers from the invoce stuff for 14 days back",
+    "positives": [
+      "[TABLE] tabPOS Invoice",
+      "[FIELD] posting_date | [TABLE] tabPOS Invoice",
+      "[FIELD] docstatus | [TABLE] tabPOS Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabPOS Invoice"
+    ]
+  },
+  {
+    "anchor": "need the sales trend list from pos billings for past 14 days like asap thx",
+    "positives": [
+      "[TABLE] tabPOS Invoice",
+      "[FIELD] posting_date | [TABLE] tabPOS Invoice",
+      "[FIELD] docstatus | [TABLE] tabPOS Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabPOS Invoice"
+    ]
+  },
+  {
+    "anchor": "give me the trend on daily sales from invoices over the last 14 days plz ty",
+    "positives": [
+      "[TABLE] tabPOS Invoice",
+      "[FIELD] posting_date | [TABLE] tabPOS Invoice",
+      "[FIELD] docstatus | [TABLE] tabPOS Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabPOS Invoice"
+    ]
+  },
+  {
+    "anchor": "items with highest stock value based on valuation rate",
+    "positives": [
+      "[TABLE] tabBin",
+      "[TABLE] tabItem",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] valuation_rate | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin",
+      "[FIELD] name | [TABLE] tabItem",
+      "[JOIN] tabBin.item_code = tabItem.name"
+    ]
+  },
+  {
+    "anchor": "can u get me the items with the highest stock value based on payment rate quick thx",
+    "positives": [
+      "[TABLE] tabBin",
+      "[TABLE] tabItem",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] valuation_rate | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin",
+      "[FIELD] name | [TABLE] tabItem",
+      "[JOIN] tabBin.item_code = tabItem.name"
+    ]
+  },
+  {
+    "anchor": "hey pls pull list of items w/ highest stock value acc to value rate asap",
+    "positives": [
+      "[TABLE] tabBin",
+      "[TABLE] tabItem",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] valuation_rate | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin",
+      "[FIELD] name | [TABLE] tabItem",
+      "[JOIN] tabBin.item_code = tabItem.name"
+    ]
+  },
+  {
+    "anchor": "need to check highest qty stock value items using valuation rate plz thx",
+    "positives": [
+      "[TABLE] tabBin",
+      "[TABLE] tabItem",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] valuation_rate | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin",
+      "[FIELD] name | [TABLE] tabItem",
+      "[JOIN] tabBin.item_code = tabItem.name"
+    ]
+  },
+  {
+    "anchor": "give me a list of items that have the max stock value based on their valuation rate plz",
+    "positives": [
+      "[TABLE] tabBin",
+      "[TABLE] tabItem",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] valuation_rate | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin",
+      "[FIELD] name | [TABLE] tabItem",
+      "[JOIN] tabBin.item_code = tabItem.name"
+    ]
+  },
+  {
+    "anchor": "show me the items highest stock val w/ valuation rate already thx",
+    "positives": [
+      "[TABLE] tabBin",
+      "[TABLE] tabItem",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] valuation_rate | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin",
+      "[FIELD] name | [TABLE] tabItem",
+      "[JOIN] tabBin.item_code = tabItem.name"
+    ]
+  },
+  {
+    "anchor": "customers with most cancelled sales invoices this year",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabCustomer",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] docstatus | [TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] name | [TABLE] tabCustomer",
+      "[JOIN] tabSales Invoice.customer = tabCustomer.name"
+    ]
+  },
+  {
+    "anchor": "can u get me a list of the clients with most cancled sales inv this yr plz thx",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabCustomer",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] docstatus | [TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] name | [TABLE] tabCustomer",
+      "[JOIN] tabSales Invoice.customer = tabCustomer.name"
+    ]
+  },
+  {
+    "anchor": "need quick check on which custmers had the most SI cancels this year like asap",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabCustomer",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] docstatus | [TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] name | [TABLE] tabCustomer",
+      "[JOIN] tabSales Invoice.customer = tabCustomer.name"
+    ]
+  },
+  {
+    "anchor": "show me all the buyers that had cancled invoces this curr month fyi",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabCustomer",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] docstatus | [TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] name | [TABLE] tabCustomer",
+      "[JOIN] tabSales Invoice.customer = tabCustomer.name"
+    ]
+  },
+  {
+    "anchor": "give me the party names with the highest ammount of cancelled sales invoices for this year plz",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabCustomer",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] docstatus | [TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] name | [TABLE] tabCustomer",
+      "[JOIN] tabSales Invoice.customer = tabCustomer.name"
+    ]
+  },
+  {
+    "anchor": "pull up the buyers with most cancelled SIs this year need it now",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabCustomer",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] docstatus | [TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[FIELD] name | [TABLE] tabCustomer",
+      "[JOIN] tabSales Invoice.customer = tabCustomer.name"
+    ]
+  },
+  {
+    "anchor": "top selling items by revenue in sales invoices",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabSales Invoice Item",
+      "[TABLE] tabItem",
+      "[FIELD] docstatus | [TABLE] tabSales Invoice",
+      "[FIELD] name | [TABLE] tabSales Invoice",
+      "[FIELD] parent | [TABLE] tabSales Invoice Item",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] base_amount | [TABLE] tabSales Invoice Item",
+      "[FIELD] name | [TABLE] tabItem",
+      "[JOIN] tabSales Invoice Item.parent = tabSales Invoice.name",
+      "[JOIN] tabSales Invoice Item.item_code = tabItem.name"
+    ]
+  },
+  {
+    "anchor": "give me the top selling items by rev in the sales inv",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabSales Invoice Item",
+      "[TABLE] tabItem",
+      "[FIELD] docstatus | [TABLE] tabSales Invoice",
+      "[FIELD] name | [TABLE] tabSales Invoice",
+      "[FIELD] parent | [TABLE] tabSales Invoice Item",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] base_amount | [TABLE] tabSales Invoice Item",
+      "[FIELD] name | [TABLE] tabItem",
+      "[JOIN] tabSales Invoice Item.parent = tabSales Invoice.name",
+      "[JOIN] tabSales Invoice Item.item_code = tabItem.name"
+    ]
+  },
+  {
+    "anchor": "can u get a list of best sellin stuff by revenue from SI?",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabSales Invoice Item",
+      "[TABLE] tabItem",
+      "[FIELD] docstatus | [TABLE] tabSales Invoice",
+      "[FIELD] name | [TABLE] tabSales Invoice",
+      "[FIELD] parent | [TABLE] tabSales Invoice Item",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] base_amount | [TABLE] tabSales Invoice Item",
+      "[FIELD] name | [TABLE] tabItem",
+      "[JOIN] tabSales Invoice Item.parent = tabSales Invoice.name",
+      "[JOIN] tabSales Invoice Item.item_code = tabItem.name"
+    ]
+  },
+  {
+    "anchor": "need to check which items are selling most by amount in bills, pls",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabSales Invoice Item",
+      "[TABLE] tabItem",
+      "[FIELD] docstatus | [TABLE] tabSales Invoice",
+      "[FIELD] name | [TABLE] tabSales Invoice",
+      "[FIELD] parent | [TABLE] tabSales Invoice Item",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] base_amount | [TABLE] tabSales Invoice Item",
+      "[FIELD] name | [TABLE] tabItem",
+      "[JOIN] tabSales Invoice Item.parent = tabSales Invoice.name",
+      "[JOIN] tabSales Invoice Item.item_code = tabItem.name"
+    ]
+  },
+  {
+    "anchor": "pull the top items by revenue in invs, like, now plz",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabSales Invoice Item",
+      "[TABLE] tabItem",
+      "[FIELD] docstatus | [TABLE] tabSales Invoice",
+      "[FIELD] name | [TABLE] tabSales Invoice",
+      "[FIELD] parent | [TABLE] tabSales Invoice Item",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] base_amount | [TABLE] tabSales Invoice Item",
+      "[FIELD] name | [TABLE] tabItem",
+      "[JOIN] tabSales Invoice Item.parent = tabSales Invoice.name",
+      "[JOIN] tabSales Invoice Item.item_code = tabItem.name"
+    ]
+  },
+  {
+    "anchor": "show me highest rev items from sales invoices this month asap",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[TABLE] tabSales Invoice Item",
+      "[TABLE] tabItem",
+      "[FIELD] docstatus | [TABLE] tabSales Invoice",
+      "[FIELD] name | [TABLE] tabSales Invoice",
+      "[FIELD] parent | [TABLE] tabSales Invoice Item",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] base_amount | [TABLE] tabSales Invoice Item",
+      "[FIELD] name | [TABLE] tabItem",
+      "[JOIN] tabSales Invoice Item.parent = tabSales Invoice.name",
+      "[JOIN] tabSales Invoice Item.item_code = tabItem.name"
+    ]
+  },
+  {
+    "anchor": "warehouse wise stock quantity summary",
+    "positives": [
+      "[TABLE] tabBin",
+      "[TABLE] tabWarehouse",
+      "[FIELD] warehouse | [TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] name | [TABLE] tabWarehouse",
+      "[JOIN] tabBin.warehouse = tabWarehouse.name"
+    ]
+  },
+  {
+    "anchor": "get me a warehouse stock qty summary asap",
+    "positives": [
+      "[TABLE] tabBin",
+      "[TABLE] tabWarehouse",
+      "[FIELD] warehouse | [TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] name | [TABLE] tabWarehouse",
+      "[JOIN] tabBin.warehouse = tabWarehouse.name"
+    ]
+  },
+  {
+    "anchor": "can u pls pull the stock summery by warehouse for me thx",
+    "positives": [
+      "[TABLE] tabBin",
+      "[TABLE] tabWarehouse",
+      "[FIELD] warehouse | [TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] name | [TABLE] tabWarehouse",
+      "[JOIN] tabBin.warehouse = tabWarehouse.name"
+    ]
+  },
+  {
+    "anchor": "show all whse wise stock qtys plz need it now",
+    "positives": [
+      "[TABLE] tabBin",
+      "[TABLE] tabWarehouse",
+      "[FIELD] warehouse | [TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] name | [TABLE] tabWarehouse",
+      "[JOIN] tabBin.warehouse = tabWarehouse.name"
+    ]
+  },
+  {
+    "anchor": "need the qty summary for each warehouse like yesterday",
+    "positives": [
+      "[TABLE] tabBin",
+      "[TABLE] tabWarehouse",
+      "[FIELD] warehouse | [TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] name | [TABLE] tabWarehouse",
+      "[JOIN] tabBin.warehouse = tabWarehouse.name"
+    ]
+  },
+  {
+    "anchor": "give me a quick list of stock amounts by warehouse plz",
+    "positives": [
+      "[TABLE] tabBin",
+      "[TABLE] tabWarehouse",
+      "[FIELD] warehouse | [TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] name | [TABLE] tabWarehouse",
+      "[JOIN] tabBin.warehouse = tabWarehouse.name"
+    ]
+  },
+  {
+    "anchor": "suppliers with delayed purchase invoice payments",
+    "positives": [
+      "[TABLE] tabPurchase Invoice",
+      "[TABLE] tabSupplier",
+      "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+      "[FIELD] due_date | [TABLE] tabPurchase Invoice",
+      "[FIELD] outstanding_amount | [TABLE] tabPurchase Invoice",
+      "[FIELD] docstatus | [TABLE] tabPurchase Invoice",
+      "[FIELD] name | [TABLE] tabSupplier",
+      "[JOIN] tabPurchase Invoice.supplier = tabSupplier.name"
+    ]
+  },
+  {
+    "anchor": "can u pls check for vendors with unpaid SI's, like delayed paymtns",
+    "positives": [
+      "[TABLE] tabPurchase Invoice",
+      "[TABLE] tabSupplier",
+      "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+      "[FIELD] due_date | [TABLE] tabPurchase Invoice",
+      "[FIELD] outstanding_amount | [TABLE] tabPurchase Invoice",
+      "[FIELD] docstatus | [TABLE] tabPurchase Invoice",
+      "[FIELD] name | [TABLE] tabSupplier",
+      "[JOIN] tabPurchase Invoice.supplier = tabSupplier.name"
+    ]
+  },
+  {
+    "anchor": "need a quick list of supps past due on their inv, thx",
+    "positives": [
+      "[TABLE] tabPurchase Invoice",
+      "[TABLE] tabSupplier",
+      "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+      "[FIELD] due_date | [TABLE] tabPurchase Invoice",
+      "[FIELD] outstanding_amount | [TABLE] tabPurchase Invoice",
+      "[FIELD] docstatus | [TABLE] tabPurchase Invoice",
+      "[FIELD] name | [TABLE] tabSupplier",
+      "[JOIN] tabPurchase Invoice.supplier = tabSupplier.name"
+    ]
+  },
+  {
+    "anchor": "give me the details on any si bills overdue from our vendors ASAP",
+    "positives": [
+      "[TABLE] tabPurchase Invoice",
+      "[TABLE] tabSupplier",
+      "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+      "[FIELD] due_date | [TABLE] tabPurchase Invoice",
+      "[FIELD] outstanding_amount | [TABLE] tabPurchase Invoice",
+      "[FIELD] docstatus | [TABLE] tabPurchase Invoice",
+      "[FIELD] name | [TABLE] tabSupplier",
+      "[JOIN] tabPurchase Invoice.supplier = tabSupplier.name"
+    ]
+  },
+  {
+    "anchor": "show me the os invoices from suppliers with late payments this month",
+    "positives": [
+      "[TABLE] tabPurchase Invoice",
+      "[TABLE] tabSupplier",
+      "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+      "[FIELD] due_date | [TABLE] tabPurchase Invoice",
+      "[FIELD] outstanding_amount | [TABLE] tabPurchase Invoice",
+      "[FIELD] docstatus | [TABLE] tabPurchase Invoice",
+      "[FIELD] name | [TABLE] tabSupplier",
+      "[JOIN] tabPurchase Invoice.supplier = tabSupplier.name"
+    ]
+  },
+  {
+    "anchor": "pull the list of vendor invoices that are still pendng or delayed plz",
+    "positives": [
+      "[TABLE] tabPurchase Invoice",
+      "[TABLE] tabSupplier",
+      "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+      "[FIELD] due_date | [TABLE] tabPurchase Invoice",
+      "[FIELD] outstanding_amount | [TABLE] tabPurchase Invoice",
+      "[FIELD] docstatus | [TABLE] tabPurchase Invoice",
+      "[FIELD] name | [TABLE] tabSupplier",
+      "[JOIN] tabPurchase Invoice.supplier = tabSupplier.name"
+    ]
+  }
+]

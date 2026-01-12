@@ -2,1991 +2,464 @@
   {
     "entity_type": "tabCustomer",
     "entity_id": "A. Williams",
-    "canonical_name": "A. Williams",
-    "aliases": ["Williams", "A Williams", "Mr Williams"],
-    "attributes": {
-      "misspellings": ["willimas", "wilams", "wiliams"],
-      "filters": { "field": "customer", "value": "A. Williams" },
-      "valid_for_tables": [
-        { "table": "tabCustomer", "field": "name" },
-        { "table": "tabCustomer", "field": "customer_name" },
-        { "table": "tabSales Invoice", "field": "customer" },
-        { "table": "tabSales Order", "field": "customer" },
-        { "table": "tabDelivery Note", "field": "customer" },
-        { "table": "tabQuotation", "field": "customer" },
-        { "table": "tabPayment Entry", "field": "party" },
-        { "table": "tabSales Invoice Payment", "field": "parent" },
-        { "table": "tabPOS Invoice", "field": "customer" },
-        { "table": "tabCustomer Group", "field": "parent_customer" }
-      ],
-      "embedding_text": "Customer: A. Williams. Also known as Williams, A Williams, or Mr Williams. Common misspellings include willimas, wilams, and wiliams."
+    "filters": {
+      "field": "customer",
+      "value": "A. Williams"
     }
   },
   {
     "entity_type": "tabCustomer",
     "entity_id": "Acme, Inc.",
-    "canonical_name": "Acme, Inc.",
-    "aliases": [
-      "Acme",
-      "Acme Inc",
-      "Acme,inc",
-      "Acme Incorporated",
-      "Acme Company"
-    ],
-    "attributes": {
-      "misspellings": [
-        "Aceme",
-        "Akme",
-        "Acnee"
-      ],
       "filters": {
         "field": "customer",
         "value": "Acme, Inc."
-      },
-      "valid_for_tables": [
-        { "table": "tabCustomer", "field": "name" },
-        { "table": "tabCustomer", "field": "customer_name" },
-        { "table": "tabSales Invoice", "field": "customer" },
-        { "table": "tabSales Order", "field": "customer" },
-        { "table": "tabDelivery Note", "field": "customer" },
-        { "table": "tabQuotation", "field": "customer" },
-        { "table": "tabPayment Entry", "field": "party" },
-        { "table": "tabSales Invoice Payment", "field": "parent" },
-        { "table": "tabPOS Invoice", "field": "customer" },
-        { "table": "tabCustomer Group", "field": "parent_customer" }
-      ],
-      "embedding_text": "Customer: Acme, Inc.. Also known as Acme, Acme Inc, Acme,inc, Acme Incorporated, or Acme Company. Common misspellings include Aceme, Akme, and Acnee."
-    }
-  },
+      }    },
   {
     "entity_type": "tabCustomer",
     "entity_id": "Amrin Yosuf",
-    "canonical_name": "Amrin Yosuf",
-    "aliases": [
-      "Amrin Yosuf",
-      "Amrin",
-      "Yosuf",
-      "Ms Amrin",
-      "A Yosuf"
-    ],
-    "attributes": {
-      "misspellings": [
-        "Amren Yosuf",
-        "Amrin",
-        "Yousof",
-        "Yosuph",
-        "Amrn",
-        "Amrin Yousuf",
-        "Amrin Yosuph"
-      ],
       "filters": {
         "field": "customer",
         "value": "Amrin Yosuf"
-      },
-      "valid_for_tables": [
-        { "table": "tabCustomer", "field": "name" },
-        { "table": "tabCustomer", "field": "customer_name" },
-        { "table": "tabSales Invoice", "field": "customer" },
-        { "table": "tabSales Order", "field": "customer" },
-        { "table": "tabDelivery Note", "field": "customer" },
-        { "table": "tabQuotation", "field": "customer" },
-        { "table": "tabPayment Entry", "field": "party" },
-        { "table": "tabSales Invoice Payment", "field": "parent" },
-        { "table": "tabPOS Invoice", "field": "customer" },
-        { "table": "tabCustomer Group", "field": "parent_customer" }
-      ],
-      "embedding_text": "Customer: Amrin Yosuf. Also known as Amrin Yosuf, Amrin, Yosuf, Ms Amrin, or A Yosuf. Common misspellings include Amren Yosuf, Amrin, Yousof, Yosuph, Amrn, Amrin Yousuf, and Amrin Yosuph."
-    }
-  },
+      },},
   {
     "entity_type": "tabCustomer",
     "entity_id": "Ayaan",
-    "canonical_name": "Ayaan",
-    "aliases": [
-      "Ayaan",
-      "Mr Ayaan",
-      "Customer Ayaan",
-      "customer ayaan"
-    ],
-    "attributes": {
-      "misspellings": [
-        "Ayan",
-        "Ayaan.",
-        "Ayann",
-        "Ayyaan",
-        "Aayn",
-        "Ayaan ",
-        "A yaan"
-      ],
       "filters": {
         "field": "customer",
         "value": "Ayaan"
-      },
-      "valid_for_tables": [
-        { "table": "tabCustomer", "field": "name" },
-        { "table": "tabCustomer", "field": "customer_name" },
-        { "table": "tabSales Invoice", "field": "customer" },
-        { "table": "tabSales Order", "field": "customer" },
-        { "table": "tabDelivery Note", "field": "customer" },
-        { "table": "tabQuotation", "field": "customer" },
-        { "table": "tabPayment Entry", "field": "party" },
-        { "table": "tabSales Invoice Payment", "field": "parent" },
-        { "table": "tabPOS Invoice", "field": "customer" },
-        { "table": "tabCustomer Group", "field": "parent_customer" }
-      ],
-      "embedding_text": "Customer: Ayaan. Also known as Ayaan, Mr Ayaan, Customer Ayaan, or customer ayaan. Common misspellings include Ayan, Ayaan., Ayann, Ayyaan, Aayn, Ayaan , and A yaan."
-    }
+      }
   },
   {
     "entity_type": "tabCustomer",
     "entity_id": "Ayrin Mehnz",
-    "canonical_name": "Ayrin Mehnz",
-    "aliases": [
-      "Ayrin Mehnz",
-      "Ayrin",
-      "Mehnz",
-      "Ms Mehnz"
-    ],
-    "attributes": {
-      "misspellings": [
-        "Ayran Mehnz",
-        "Airin Mehnz",
-        "Ayrin Menz",
-        "Ayrin Mehnez"
-      ],
       "filters": {
         "field": "customer",
         "value": "Ayrin Mehnz"
       },
-      "valid_for_tables": [
-        { "table": "tabCustomer", "field": "name" },
-        { "table": "tabCustomer", "field": "customer_name" },
-        { "table": "tabSales Invoice", "field": "customer" },
-        { "table": "tabSales Order", "field": "customer" },
-        { "table": "tabDelivery Note", "field": "customer" },
-        { "table": "tabQuotation", "field": "customer" },
-        { "table": "tabPayment Entry", "field": "party" },
-        { "table": "tabSales Invoice Payment", "field": "parent" },
-        { "table": "tabPOS Invoice", "field": "customer" },
-        { "table": "tabCustomer Group", "field": "parent_customer" }
-      ],
-      "embedding_text": "Customer: Ayrin Mehnz. Also known as Ayrin Mehnz, Ayrin, Mehnz, or Ms Mehnz. Common misspellings include Ayran Mehnz, Airin Mehnz, Ayrin Menz, and Ayrin Mehnez."
-    }
   },
   {
     "entity_type": "tabItem",
     "entity_id": "3M N95 Particulate Respirator 8210 — Box of 20 Masks — NIOSH Approved, Industrial Dust Protection, Elastic Headbands",
-    "canonical_name": "3M N95 Particulate Respirator 8210 — Box of 20 Masks — NIOSH Approved, Industrial Dust Protection, Elastic Headbands",
-    "aliases": [
-      "3M N95 Particulate Respirator",
-      "3M Mask 8210",
-      "3M N95",
-      "3M 8210 respirator",
-      "3M mask box 20",
-      "3M respirator mask"
-    ],
     "attributes": {
-      "misspellings": [
-        "3M N95 Mask",
-        "3M 821",
-        "3M Respirater",
-        "3M N95 Resp"
-      ],
       "filters": {
-        "field": "item_code",
-        "value": "8210"
-      },
-      "valid_for_tables": [
-        { "table": "tabItem", "field": "name" },
-        { "table": "tabItem", "field": "item_code" },
-        { "table": "tabSales Invoice Item", "field": "item_code" },
-        { "table": "tabPurchase Invoice Item", "field": "item_code" }
-      ],
-      "embedding_text": "Item: 3M N95 Particulate Respirator 8210 — Box of 20 Masks — NIOSH Approved, Industrial Dust Protection, Elastic Headbands. Also known as 3M N95 Particulate Respirator, 3M Mask 8210, 3M N95, 3M 8210 respirator, 3M mask box 20, or 3M respirator mask. Common misspellings include 3M N95 Mask, 3M 821, 3M Respirater, and 3M N95 Resp."
+        "field": "item",
+        "value": "3M N95 Particulate Respirator 8210 — Box of 20 Masks — NIOSH Approved, Industrial Dust Protection, Elastic Headbands"
+      }
     }
   },
   {
     "entity_type": "tabItem",
-    "entity_id": "Bosch Serie 6 Front-Load Washing Machine 9 kg — 1400 RPM, Inverter Motor, AllergyPlus Mode, Silver Finish",
-    "canonical_name": "Bosch Serie 6 Front-Load Washing Machine 9 kg — 1400 RPM, Inverter Motor, AllergyPlus Mode, Silver Finish",
-    "aliases": [
-      "Bosch Serie 6",
-      "Bosch Washing Machine",
-      "Bosch Front Load 9kg",
-      "Bosch AllergyPlus Silver",
-      "Bosch Washer"
-    ],
-    "attributes": {
-      "misspellings": [
-        "Bosh Serie 6",
-        "Bosch Seres 6",
-        "Bosch Washing Machin",
-        "Bosch Frontload"
-      ],
+    "entity_id": "Bosch Serie 6 Front-Load Washing Machine 9 kg — 1400 RPM, Inverter Motor, AllergyPlus Mode, Silver Finish",,
       "filters": {
-        "field": "item_code",
-        "value": "BOSCH-SERIE6-9KG"
-      },
-      "valid_for_tables": [
-        { "table": "tabItem", "field": "name" },
-        { "table": "tabItem", "field": "item_code" },
-        { "table": "tabSales Invoice Item", "field": "item_code" },
-        { "table": "tabPurchase Invoice Item", "field": "item_code" }
-      ],
-      "embedding_text": "Item: Bosch Serie 6 Front-Load Washing Machine 9 kg — 1400 RPM, Inverter Motor, AllergyPlus Mode, Silver Finish. Also known as Bosch Serie 6, Bosch Washing Machine, Bosch Front Load 9kg, Bosch AllergyPlus Silver, or Bosch Washer. Common misspellings include Bosh Serie 6, Bosch Seres 6, Bosch Washing Machin, and Bosch Frontload."
-    }
-  },
+        "field": "item",
+        "value": "Bosch Serie 6 Front-Load Washing Machine 9 kg — 1400 RPM, Inverter Motor, AllergyPlus Mode, Silver Finish"
+      }  },
   {
     "entity_type": "tabItem",
     "entity_id": "Dell Latitude 7440 Ultralight 14” Business Laptop — Intel Core i7-1365U 13th Gen, 32 GB RAM, 1 TB SSD, Windows 11 Pro, FHD Display",
-    "canonical_name": "Dell Latitude 7440 Ultralight 14” Business Laptop — Intel Core i7-1365U 13th Gen, 32 GB RAM, 1 TB SSD, Windows 11 Pro, FHD Display",
-    "aliases": [
-      "Dell Latitude 7440",
-      "Dell Ultralight Laptop",
-      "Latitude 7440 i7",
-      "Dell 14 inch business laptop",
-      "Dell 7440 Laptop",
-      "Latitude 7440 Business Series"
-    ],
-    "attributes": {
-      "misspellings": [
-        "Dell Latitdue 7440",
-        "Dell Latitud 7440",
-        "Dell Lattitude 7440",
-        "Dell Latitude7440",
-        "Del Latitude 7440",
-        "Dell Laitude 7440"
-      ],
       "filters": {
-        "field": "item_code",
-        "value": "DELL-LATITUDE-7440"
-      },
-      "valid_for_tables": [
-        { "table": "tabItem", "field": "name" },
-        { "table": "tabSales Invoice Item", "field": "item_code" },
-        { "table": "tabPurchase Invoice Item", "field": "item_code" },
-        { "table": "tabQuotation Item", "field": "item_code" },
-        { "table": "tabDelivery Note Item", "field": "item_code" }
-      ],
-      "embedding_text": "Item: Dell Latitude 7440 Ultralight 14” Business Laptop — Intel Core i7-1365U 13th Gen, 32 GB RAM, 1 TB SSD, Windows 11 Pro, FHD Display. Also known as Dell Latitude 7440, Dell Ultralight Laptop, Latitude 7440 i7, Dell 14 inch business laptop, Dell 7440 Laptop, or Latitude 7440 Business Series. Common misspellings include Dell Latitdue 7440, Dell Latitud 7440, Dell Lattitude 7440, Dell Latitude7440, Del Latitude 7440, and Dell Laitude 7440."
-    }
+        "field": "item",
+        "value": "Dell Latitude 7440 Ultralight 14” Business Laptop — Intel Core i7-1365U 13th Gen, 32 GB RAM, 1 TB SSD, Windows 11 Pro, FHD Display"
+      }
   },
   {
     "entity_type": "tabItem",
     "entity_id": "HP LaserJet Pro MFP M479fdw Color Wireless All-in-One Printer — Duplex, Fax, Wi-Fi, USB, 27 ppm, 512 MB RAM",
-    "canonical_name": "HP LaserJet Pro MFP M479fdw Color Wireless All-in-One Printer — Duplex, Fax, Wi-Fi, USB, 27 ppm, 512 MB RAM",
-    "aliases": [
-      "HP LaserJet MFP",
-      "HP M479fdw Printer",
-      "LaserJet Pro All-in-One",
-      "HP Printer Wi-Fi",
-      "HP Color Printer"
-    ],
-    "attributes": {
-      "misspellings": [
-        "HP Laser Jet Pro",
-        "HP Laserjet MFP M479",
-        "HP M479fwd",
-        "HP M479 Printer"
-      ],
       "filters": {
-        "field": "item_code",
-        "value": "HP-M479FDW"
-      },
-      "valid_for_tables": [
-        { "table": "tabItem", "field": "name" },
-        { "table": "tabItem", "field": "item_code" },
-        { "table": "tabSales Invoice Item", "field": "item_code" },
-        { "table": "tabPurchase Invoice Item", "field": "item_code" }
-      ],
-      "embedding_text": "Item: HP LaserJet Pro MFP M479fdw Color Wireless All-in-One Printer — Duplex, Fax, Wi-Fi, USB, 27 ppm, 512 MB RAM. Also known as HP LaserJet MFP, HP M479fdw Printer, LaserJet Pro All-in-One, HP Printer Wi-Fi, or HP Color Printer. Common misspellings include HP Laser Jet Pro, HP Laserjet MFP M479, HP M479fwd, and HP M479 Printer."
-    }
+        "field": "item",
+        "value": "HP LaserJet Pro MFP M479fdw Color Wireless All-in-One Printer — Duplex, Fax, Wi-Fi, USB, 27 ppm, 512 MB RAM"
+      }
   },
   {
     "entity_type": "tabItem",
     "entity_id": "Item 1",
-    "canonical_name": "Item 1",
-    "aliases": [
-      "Item 1",
-      "Demo Item 1"
-    ],
-    "attributes": {
-      "misspellings": [
-        "Itm 1",
-        "Item One",
-        "Demo Itm"
-      ],
       "filters": {
-        "field": "item_code",
-        "value": "ITEM-001"
-      },
-      "valid_for_tables": [
-        { "table": "tabItem", "field": "name" },
-        { "table": "tabItem", "field": "item_code" },
-        { "table": "tabSales Invoice Item", "field": "item_code" },
-        { "table": "tabPurchase Invoice Item", "field": "item_code" }
-      ],
-      "embedding_text": "Item: Item 1. Also known as Item 1 or Demo Item 1. Common misspellings include Itm 1, Item One, and Demo Itm."
-    }
+        "field": "item",
+        "value": "Item 1"
+      }
   },
   {
     "entity_type": "tabItem",
     "entity_id": "ITEM890",
-    "canonical_name": "ITEM890",
-    "aliases": [
-      "ITEM890",
-      "Smart LED Desk Lamp",
-      "Lamp",
-      "Rechargeable Desk Lamp",
-      "Smart Lamp"
-    ],
-    "attributes": {
-      "misspellings": [
-        "Item 890",
-        "ITEM-890",
-        "Led Desk Lamp",
-        "Smart Led Lamp",
-        "Rechargeble Lamp"
-      ],
       "filters": {
-        "field": "item_code",
+        "field": "item",
         "value": "ITEM890"
-      },
-      "valid_for_tables": [
-        { "table": "tabItem", "field": "name" },
-        { "table": "tabItem", "field": "item_code" },
-        { "table": "tabSales Invoice Item", "field": "item_code" },
-        { "table": "tabPurchase Invoice Item", "field": "item_code" }
-      ],
-      "embedding_text": "Item: ITEM890. Also known as ITEM890, Smart LED Desk Lamp, Lamp, Rechargeable Desk Lamp, or Smart Lamp. Common misspellings include Item 890, ITEM-890, Led Desk Lamp, Smart Led Lamp, and Rechargeble Lamp."
-    }
-  },
-  {
-    "entity_type": "tabSupplier",
-    "entity_id": "Apex Hardware & Tools",
-    "canonical_name": "Apex Hardware & Tools",
-    "aliases": [
-      "Apex Hardware",
-      "Apex",
-      "Apex Tools",
-      "Apex Hardware & Tools"
-    ],
-    "attributes": {
-      "misspellings": [
-        "Apexx Hardware",
-        "Apex Toolz",
-        "Apex Hardwear"
-      ],
-      "filters": {
-        "field": "supplier",
-        "value": "Apex Hardware & Tools"
-      },
-      "valid_for_tables": [
-        { "table": "tabSupplier", "field": "name" },
-        { "table": "tabSupplier", "field": "supplier_name" },
-        { "table": "tabPurchase Invoice", "field": "supplier" },
-        { "table": "tabPurchase Order", "field": "supplier" },
-        { "table": "tabPurchase Receipt", "field": "supplier" },
-        { "table": "tabSupplier Quotation", "field": "supplier" },
-        { "table": "tabPayment Entry", "field": "party" }
-      ],
-      "embedding_text": "Supplier: Apex Hardware & Tools. Also known as Apex Hardware, Apex, Apex Tools, or Apex Hardware & Tools. Common misspellings include Apexx Hardware, Apex Toolz, and Apex Hardwear."
-    }
-  },
-  {
-    "entity_type": "tabSupplier",
-    "entity_id": "Global Industrial Supply",
-    "canonical_name": "Global Industrial Supply",
-    "aliases": [
-      "Global Supply",
-      "Global Industrial",
-      "Global Ind Supply",
-      "Global Industrial Supply",
-      "Global"
-    ],
-    "attributes": {
-      "misspellings": [
-        "Global Ind. Supply",
-        "Global Industrial Suply",
-        "Globl Supply",
-        "Global Indstrial"
-      ],
-      "filters": {
-        "field": "supplier",
-        "value": "Global Industrial Supply"
-      },
-      "valid_for_tables": [
-        { "table": "tabSupplier", "field": "name" },
-        { "table": "tabSupplier", "field": "supplier_name" },
-        { "table": "tabPurchase Invoice", "field": "supplier" },
-        { "table": "tabPurchase Order", "field": "supplier" },
-        { "table": "tabPurchase Receipt", "field": "supplier" },
-        { "table": "tabSupplier Quotation", "field": "supplier" },
-        { "table": "tabPayment Entry", "field": "party" }
-      ],
-      "embedding_text": "Supplier: Global Industrial Supply. Also known as Global Supply, Global Industrial, Global Ind Supply, Global Industrial Supply, or Global. Common misspellings include Global Ind. Supply, Global Industrial Suply, Globl Supply, and Global Indstrial."
-    }
-  },
-  {
-    "entity_type": "tabSupplier",
-    "entity_id": "MA Inc.",
-    "canonical_name": "MA Inc.",
-    "aliases": [
-      "MA Inc",
-      "M.A. Inc",
-      "MA Incorporated",
-      "MA"
-    ],
-    "attributes": {
-      "misspellings": [
-        "M A Inc",
-        "MA. Inc",
-        "M.A Incorporated",
-        "MA Incc"
-      ],
-      "filters": {
-        "field": "supplier",
-        "value": "MA Inc."
-      },
-      "valid_for_tables": [
-        { "table": "tabSupplier", "field": "name" },
-        { "table": "tabSupplier", "field": "supplier_name" },
-        { "table": "tabPurchase Invoice", "field": "supplier" },
-        { "table": "tabPurchase Order", "field": "supplier" },
-        { "table": "tabPurchase Receipt", "field": "supplier" },
-        { "table": "tabSupplier Quotation", "field": "supplier" },
-        { "table": "tabPayment Entry", "field": "party" }
-      ],
-      "embedding_text": "Supplier: MA Inc.. Also known as MA Inc, M.A. Inc, MA Incorporated, or MA. Common misspellings include M A Inc, MA. Inc, M.A Incorporated, and MA Incc."
-    }
-  },
-  {
-    "entity_type": "tabSupplier",
-    "entity_id": "Nova Chemical Co.",
-    "canonical_name": "Nova Chemical Co.",
-    "aliases": [
-      "Nova Chemicals",
-      "Nova Chemical",
-      "Nova Chem Co",
-      "Nova Chemical Company",
-      "Nova"
-    ],
-    "attributes": {
-      "misspellings": [
-        "Nova Chem",
-        "Novaa Chemical",
-        "Nova Chemicl",
-        "Nova Chem Co."
-      ],
-      "filters": {
-        "field": "supplier",
-        "value": "Nova Chemical Co."
-      },
-      "valid_for_tables": [
-        { "table": "tabSupplier", "field": "name" },
-        { "table": "tabSupplier", "field": "supplier_name" },
-        { "table": "tabPurchase Invoice", "field": "supplier" },
-        { "table": "tabPurchase Order", "field": "supplier" },
-        { "table": "tabPurchase Receipt", "field": "supplier" },
-        { "table": "tabSupplier Quotation", "field": "supplier" },
-        { "table": "tabPayment Entry", "field": "party" }
-      ],
-      "embedding_text": "Supplier: Nova Chemical Co.. Also known as Nova Chemicals, Nova Chemical, Nova Chem Co, Nova Chemical Company, or Nova. Common misspellings include Nova Chem, Novaa Chemical, Nova Chemicl, and Nova Chem Co.."
-    }
-  },
-  {
-    "entity_type": "tabSupplier",
-    "entity_id": "Rohit Sharma",
-    "canonical_name": "Rohit Sharma",
-    "aliases": [
-      "Rohit Sharma",
-      "Rohit S.",
-      "Supplier Rohit"
-    ],
-    "attributes": {
-      "misspellings": [
-        "Rohith Sharma",
-        "Rohit Sharm",
-        "Rohit Shrma",
-        "Rohit S"
-      ],
-      "filters": {
-        "field": "supplier",
-        "value": "Rohit Sharma"
-      },
-      "valid_for_tables": [
-        { "table": "tabSupplier", "field": "name" },
-        { "table": "tabSupplier", "field": "supplier_name" },
-        { "table": "tabPurchase Invoice", "field": "supplier" },
-        { "table": "tabPurchase Order", "field": "supplier" },
-        { "table": "tabPurchase Receipt", "field": "supplier" },
-        { "table": "tabSupplier Quotation", "field": "supplier" },
-        { "table": "tabPayment Entry", "field": "party" }
-      ],
-      "embedding_text": "Supplier: Rohit Sharma. Also known as Rohit Sharma, Rohit S., or Supplier Rohit. Common misspellings include Rohith Sharma, Rohit Sharm, Rohit Shrma, and Rohit S."
-    }
-  },
-  {
-    "entity_type": "tabSupplier",
-    "entity_id": "Summit Traders Ltd.",
-    "canonical_name": "Summit Traders Ltd.",
-    "aliases": [
-      "Summit Traders",
-      "Summit Ltd",
-      "Summit Trading",
-      "Summit",
-      "Summit Traders Limited"
-    ],
-    "attributes": {
-      "misspellings": [
-        "Summt Traders",
-        "Summmit Traders",
-        "Sumit Traders",
-        "Summit Tradres",
-        "Summitt Ltd"
-      ],
-      "filters": {
-        "field": "supplier",
-        "value": "Summit Traders Ltd."
-      },
-      "valid_for_tables": [
-        { "table": "tabSupplier", "field": "name" },
-        { "table": "tabSupplier", "field": "supplier_name" },
-        { "table": "tabPurchase Order", "field": "supplier" },
-        { "table": "tabPurchase Invoice", "field": "supplier" },
-        { "table": "tabPurchase Receipt", "field": "supplier" }
-      ],
-      "embedding_text": "Supplier: Summit Traders Ltd.. Also known as Summit Traders, Summit Ltd, Summit Trading, Summit, or Summit Traders Limited. Common misspellings include Summt Traders, Summmit Traders, Sumit Traders, Summit Tradres, and Summitt Ltd."
-    }
-  },
-  {
-    "entity_type": "tabSupplier",
-    "entity_id": "Supplier 1",
-    "canonical_name": "Supplier 1",
-    "aliases": [
-      "Supplier 1",
-      "supplier1",
-      "Supplier One"
-    ],
-    "attributes": {
-      "misspellings": [
-        "Suppler 1",
-        "Suplier One",
-        "Supplierone"
-      ],
-      "filters": {
-        "field": "supplier",
-        "value": "supplier1"
-      },
-      "valid_for_tables": [
-        { "table": "tabSupplier", "field": "name" },
-        { "table": "tabSupplier", "field": "supplier_name" },
-        { "table": "tabPurchase Invoice", "field": "supplier" },
-        { "table": "tabPurchase Order", "field": "supplier" }
-      ],
-      "embedding_text": "Supplier: Supplier 1. Also known as Supplier 1, supplier1, or Supplier One. Common misspellings include Suppler 1, Suplier One, and Supplierone."
-    }
-  },
-  {
-    "entity_type": "tabSupplier",
-    "entity_id": "SmartEquip Suppliers",
-    "canonical_name": "SmartEquip Suppliers",
-    "aliases": [
-      "Smart Equip",
-      "Smart Equipment Suppliers",
-      "SmartEquip",
-      "SmartEquip Supplier"
-    ],
-    "attributes": {
-      "misspellings": [
-        "Smart Equipments",
-        "Smart Equip Supplier",
-        "SmartEquip Suppiers",
-        "Smart Equip Supplr"
-      ],
-      "filters": {
-        "field": "supplier",
-        "value": "SmartEquip Suppliers"
-      },
-      "valid_for_tables": [
-        { "table": "tabSupplier", "field": "name" },
-        { "table": "tabSupplier", "field": "supplier_name" },
-        { "table": "tabPurchase Invoice", "field": "supplier" },
-        { "table": "tabPurchase Order", "field": "supplier" },
-        { "table": "tabPurchase Receipt", "field": "supplier" },
-        { "table": "tabSupplier Quotation", "field": "supplier" },
-        { "table": "tabPayment Entry", "field": "party" }
-      ],
-      "embedding_text": "Supplier: SmartEquip Suppliers. Also known as Smart Equip, Smart Equipment Suppliers, SmartEquip, or SmartEquip Supplier. Common misspellings include Smart Equipments, Smart Equip Supplier, SmartEquip Suppiers, and Smart Equip Supplr."
-    }
-  },
-  {
-    "entity_type": "tabSupplier",
-    "entity_id": "Vertex Global Traders",
-    "canonical_name": "Vertex Global Traders",
-    "aliases": [
-      "Vertex Traders",
-      "Vertex Global",
-      "Vertex G Traders",
-      "Vertex"
-    ],
-    "attributes": {
-      "misspellings": [
-        "Vertx Global",
-        "Vertex Global Trade",
-        "Verteks Global",
-        "Vertex Trader"
-      ],
-      "filters": {
-        "field": "supplier",
-        "value": "Vertex Global Traders"
-      },
-      "valid_for_tables": [
-        { "table": "tabSupplier", "field": "name" },
-        { "table": "tabSupplier", "field": "supplier_name" },
-        { "table": "tabPurchase Invoice", "field": "supplier" },
-        { "table": "tabPurchase Order", "field": "supplier" }
-      ],
-      "embedding_text": "Supplier: Vertex Global Traders. Also known as Vertex Traders, Vertex Global, Vertex G Traders, or Vertex. Common misspellings include Vertx Global, Vertex Global Trade, Verteks Global, and Vertex Trader."
-    }
-  },
-  {
-    "entity_type": "tabSupplier",
-    "entity_id": "Zuckerman Security Ltd.",
-    "canonical_name": "Zuckerman Security Ltd.",
-    "aliases": [
-      "Zuckerman Security Ltd.",
-      "Zuckerman Security",
-      "Zuckerman Ltd",
-      "Zuckerman Sec.",
-      "Zuckerman"
-    ],
-    "attributes": {
-      "misspellings": [
-        "Zuckerman Sec",
-        "Zuckermen Security",
-        "Zuckrman Security",
-        "Zuckerman Security Limited",
-        "Zuckman Security",
-        "Zuckerman Securty"
-      ],
-      "filters": {
-        "field": "supplier",
-        "value": "Zuckerman Security Ltd."
-      },
-      "valid_for_tables": [
-        { "table": "tabSupplier", "field": "name" },
-        { "table": "tabSupplier", "field": "supplier_name" },
-        { "table": "tabPurchase Invoice", "field": "supplier" },
-        { "table": "tabPurchase Order", "field": "supplier" },
-        { "table": "tabPurchase Receipt", "field": "supplier" },
-        { "table": "tabSupplier Quotation", "field": "supplier" },
-        { "table": "tabPayment Entry", "field": "party" }
-      ],
-      "embedding_text": "Supplier: Zuckerman Security Ltd.. Also known as Zuckerman Security Ltd., Zuckerman Security, Zuckerman Ltd, Zuckerman Sec., or Zuckerman. Common misspellings include Zuckerman Sec, Zuckermen Security, Zuckrman Security, Zuckerman Security Limited, Zuckman Security, and Zuckerman Securty."
-    }
-  },
-  {
-    "entity_type": "tabCurrency",
-    "entity_id": "AED",
-    "canonical_name": "AED",
-    "aliases": [
-      "AED"
-    ],
-    "attributes": {
-      "misspellings": [
-        "A E D",
-        "UAE Dirham",
-        "Arab Emirates Dirham"
-      ],
-      "filters": {
-        "field": "currency",
-        "value": "AED"
-      },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: AED. Also known as AED. Common misspellings include A E D, UAE Dirham, and Arab Emirates Dirham."
-    }
-  },
-  {
-    "entity_type": "tabCurrency",
-    "entity_id": "AFN",
-    "canonical_name": "AFN",
-    "aliases": [
-      "AFN"
-    ],
-    "attributes": {
-      "misspellings": [
-        "A F N",
-        "Afghan Afghani",
-        "Afgan Afghani"
-      ],
-      "filters": {
-        "field": "currency",
-        "value": "AFN"
-      },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: AFN. Also known as AFN. Common misspellings include A F N, Afghan Afghani, and Afgan Afghani."
-    }
-  },
-  {
-    "entity_type": "tabCurrency",
-    "entity_id": "ALL",
-    "canonical_name": "ALL",
-    "aliases": [
-      "ALL"
-    ],
-    "attributes": {
-      "misspellings": [
-        "A L L",
-        "Albania Lek",
-        "Albanian Lekk"
-      ],
-      "filters": {
-        "field": "currency",
-        "value": "ALL"
-      },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: ALL. Also known as ALL. Common misspellings include A L L, Albania Lek, and Albanian Lekk."
-    }
+},
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "AMD",
-    "canonical_name": "AMD",
-    "aliases": [
-      "AMD"
-    ],
-    "attributes": {
-      "misspellings": [
-        "A M D",
-        "Armenia Dram",
-        "Armenian Drram"
-      ],
       "filters": {
         "field": "currency",
         "value": "AMD"
-      },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: AMD. Also known as AMD. Common misspellings include A M D, Armenia Dram, and Armenian Drram."
-    }
+      }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "ARS",
-    "canonical_name": "ARS",
-    "aliases": [
-      "ARS"
-    ],
-    "attributes": {
-      "misspellings": [
-        "A R S",
-        "Argentina Peso",
-        "Argentine Pesso"
-      ],
       "filters": {
         "field": "currency",
         "value": "ARS"
-      },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: ARS. Also known as ARS. Common misspellings include A R S, Argentina Peso, and Argentine Pesso."
-    }
+      }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "AUD",
-    "canonical_name": "AUD",
-    "aliases": [
-      "AUD"
-    ],
-    "attributes": {
-      "misspellings": [
-        "A U D",
-        "Aussie Dollar",
-        "Australian Dolar"
-      ],
       "filters": {
         "field": "currency",
         "value": "AUD"
-      },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: AUD. Also known as AUD. Common misspellings include A U D, Aussie Dollar, and Australian Dolar."
-    }
+      }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "AWG",
-    "canonical_name": "AWG",
-    "aliases": [
-      "AWG"
-    ],
-    "attributes": {
-      "misspellings": [
-        "A W G",
-        "Aruba Florin",
-        "Aruban Gulden"
-      ],
       "filters": {
         "field": "currency",
         "value": "AWG"
-      },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: AWG. Also known as AWG. Common misspellings include A W G, Aruba Florin, and Aruban Gulden."
-    }
+      }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "BAM",
-    "canonical_name": "BAM",
-    "aliases": [
-      "BAM"
-    ],
-    "attributes": {
-      "misspellings": [
-        "B A M",
-        "Bosnian Mark",
-        "Convertible Mark"
-      ],
       "filters": {
         "field": "currency",
         "value": "BAM"
-      },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: BAM. Also known as BAM. Common misspellings include B A M, Bosnian Mark, and Convertible Mark."
-    }
+      }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "BBD",
-    "canonical_name": "BBD",
-    "aliases": [
-      "BBD"
-    ],
-    "attributes": {
-      "misspellings": [
-        "B B D",
-        "Barbados Dollar",
-        "Barbadian Dolar"
-      ],
       "filters": {
         "field": "currency",
         "value": "BBD"
-      },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: BBD. Also known as BBD. Common misspellings include B B D, Barbados Dollar, and Barbadian Dolar."
-    }
+},
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "BDT",
-    "canonical_name": "BDT",
-    "aliases": [
-      "BDT"
-    ],
-    "attributes": {
-      "misspellings": [
-        "B D T",
-        "Bangla Taka",
-        "Bangladeshi Tacca"
-      ],
       "filters": {
         "field": "currency",
         "value": "BDT"
-      },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: BDT. Also known as BDT. Common misspellings include B D T, Bangla Taka, and Bangladeshi Tacca."
-    }
+      }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "BGN",
-    "canonical_name": "BGN",
-    "aliases": [
-      "BGN"
-    ],
-    "attributes": {
-      "misspellings": [
-        "B G N",
-        "Bulgarian Leva",
-        "Bulgarian Levv"
-      ],
       "filters": {
         "field": "currency",
         "value": "BGN"
-      },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: BGN. Also known as BGN. Common misspellings include B G N, Bulgarian Leva, and Bulgarian Levv."
-    }
+      }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "BHD",
-    "canonical_name": "BHD",
-    "aliases": [
-      "BHD"
-    ],
-    "attributes": {
-      "misspellings": [
-        "B H D",
-        "Bahrain Dinar",
-        "Baharini Dinar"
-      ],
       "filters": {
         "field": "currency",
         "value": "BHD"
-      },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: BHD. Also known as BHD. Common misspellings include B H D, Bahrain Dinar, and Baharini Dinar."
-    }
+      }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "BIF",
-    "canonical_name": "BIF",
-    "aliases": [
-      "BIF"
-    ],
-    "attributes": {
-      "misspellings": [
-        "B I F",
-        "Burundi Franc",
-        "Burundian Frank"
-      ],
       "filters": {
         "field": "currency",
         "value": "BIF"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: BIF. Also known as BIF. Common misspellings include B I F, Burundi Franc, and Burundian Frank."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "BMD",
-    "canonical_name": "BMD",
-    "aliases": [
-      "BMD"
-    ],
-    "attributes": {
-      "misspellings": [
-        "B M D",
-        "Bermuda Dollar",
-        "Bermudian Dolar"
-      ],
       "filters": {
         "field": "currency",
         "value": "BMD"
-      },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: BMD. Also known as BMD. Common misspellings include B M D, Bermuda Dollar, and Bermudian Dolar."
-    }
+      }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "BND",
-    "canonical_name": "BND",
-    "aliases": [
-      "BND"
-    ],
-    "attributes": {
-      "misspellings": [
-        "B N D",
-        "Brunei Dolar",
-        "Brunei Dollar"
-      ],
       "filters": {
         "field": "currency",
         "value": "BND"
-      },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: BND. Also known as BND. Common misspellings include B N D, Brunei Dolar, and Brunei Dollar."
-    }
+      }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "BOB",
-    "canonical_name": "BOB",
-    "aliases": [
-      "BOB"
-    ],
-    "attributes": {
-      "misspellings": [
-        "B O B",
-        "Boliviano",
-        "Bolivia Peso"
-      ],
       "filters": {
         "field": "currency",
         "value": "BOB"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: BOB. Also known as BOB. Common misspellings include B O B, Boliviano, and Bolivia Peso."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "BRL",
-    "canonical_name": "BRL",
-    "aliases": [
-      "BRL"
-    ],
-    "attributes": {
-      "misspellings": [
-        "B R L",
-        "Brazilian Real",
-        "Brasil Real"
-      ],
       "filters": {
         "field": "currency",
         "value": "BRL"
-      },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: BRL. Also known as BRL. Common misspellings include B R L, Brazilian Real, and Brasil Real."
-    }
+      }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "BSD",
-    "canonical_name": "BSD",
-    "aliases": [
-      "BSD"
-    ],
-    "attributes": {
-      "misspellings": [
-        "B S D",
-        "Bahama Dollar",
-        "Bahamian Dolar"
-      ],
       "filters": {
         "field": "currency",
         "value": "BSD"
-      },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: BSD. Also known as BSD. Common misspellings include B S D, Bahama Dollar, and Bahamian Dolar."
-    }
+      }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "BTN",
-    "canonical_name": "BTN",
-    "aliases": [
-      "BTN"
-    ],
-    "attributes": {
-      "misspellings": [
-        "B T N",
-        "Bhutan Ngultrum",
-        "Bhutanese Ngltrum"
-      ],
       "filters": {
         "field": "currency",
         "value": "BTN"
-      },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: BTN. Also known as BTN. Common misspellings include B T N, Bhutan Ngultrum, and Bhutanese Ngltrum."
-    }
+      }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "BWP",
-    "canonical_name": "BWP",
-    "aliases": [
-      "BWP"
-    ],
-    "attributes": {
-      "misspellings": [
-        "B W P",
-        "Botswana Pulla",
-        "Bostwana Pula"
-      ],
       "filters": {
         "field": "currency",
         "value": "BWP"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: BWP. Also known as BWP. Common misspellings include B W P, Botswana Pulla, and Bostwana Pula."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "BZD",
-    "canonical_name": "BZD",
-    "aliases": [
-      "BZD"
-    ],
-    "attributes": {
-      "misspellings": [
-        "B Z D",
-        "Belize Dolar",
-        "Belizean Dollar"
-      ],
       "filters": {
         "field": "currency",
         "value": "BZD"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: BZD. Also known as BZD. Common misspellings include B Z D, Belize Dolar, and Belizean Dollar."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "CAD",
-    "canonical_name": "CAD",
-    "aliases": [
-      "CAD"
-    ],
-    "attributes": {
-      "misspellings": [
-        "C A D",
-        "Canada Dollar",
-        "Canadian Dolar"
-      ],
       "filters": {
         "field": "currency",
         "value": "CAD"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: CAD. Also known as CAD. Common misspellings include C A D, Canada Dollar, and Canadian Dolar."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "CDF",
-    "canonical_name": "CDF",
-    "aliases": [
-      "CDF"
-    ],
-    "attributes": {
-      "misspellings": [
-        "C D F",
-        "Congo Franc",
-        "Congolese Frank"
-      ],
       "filters": {
         "field": "currency",
         "value": "CDF"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: CDF. Also known as CDF. Common misspellings include C D F, Congo Franc, and Congolese Frank."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "CHF",
-    "canonical_name": "CHF",
-    "aliases": [
-      "CHF"
-    ],
-    "attributes": {
-      "misspellings": [
-        "C H F",
-        "Swiss Frank",
-        "Switz Franc"
-      ],
       "filters": {
         "field": "currency",
         "value": "CHF"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: CHF. Also known as CHF. Common misspellings include C H F, Swiss Frank, and Switz Franc."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "CLP",
-    "canonical_name": "CLP",
-    "aliases": [
-      "CLP"
-    ],
-    "attributes": {
-      "misspellings": [
-        "C L P",
-        "Chili Peso",
-        "Chilean Pesso"
-      ],
       "filters": {
         "field": "currency",
         "value": "CLP"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: CLP. Also known as CLP. Common misspellings include C L P, Chili Peso, and Chilean Pesso."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "CNY",
-    "canonical_name": "CNY",
-    "aliases": [
-      "CNY"
-    ],
-    "attributes": {
-      "misspellings": [
-        "C N Y",
-        "Chinese Yuan",
-        "Yuan Renminbi"
-      ],
       "filters": {
         "field": "currency",
         "value": "CNY"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: CNY. Also known as CNY. Common misspellings include C N Y, Chinese Yuan, and Yuan Renminbi."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "COP",
-    "canonical_name": "COP",
-    "aliases": [
-      "COP"
-    ],
-    "attributes": {
-      "misspellings": [
-        "C O P",
-        "Columbian Peso",
-        "Colombia Peso"
-      ],
       "filters": {
         "field": "currency",
         "value": "COP"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: COP. Also known as COP. Common misspellings include C O P, Columbian Peso, and Colombia Peso."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "CRC",
-    "canonical_name": "CRC",
-    "aliases": [
-      "CRC"
-    ],
-    "attributes": {
-      "misspellings": [
-        "C R C",
-        "Costa Rican Colon",
-        "Costa Rica Coln"
-      ],
       "filters": {
         "field": "currency",
         "value": "CRC"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: CRC. Also known as CRC. Common misspellings include C R C, Costa Rican Colon, and Costa Rica Coln."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "CUP",
-    "canonical_name": "CUP",
-    "aliases": [
-      "CUP"
-    ],
-    "attributes": {
-      "misspellings": [
-        "C U P",
-        "Cuban Pesso",
-        "Cuba Peso"
-      ],
       "filters": {
         "field": "currency",
         "value": "CUP"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: CUP. Also known as CUP. Common misspellings include C U P, Cuban Pesso, and Cuba Peso."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "CVE",
-    "canonical_name": "CVE",
-    "aliases": [
-      "CVE"
-    ],
-    "attributes": {
-      "misspellings": [
-        "C V E",
-        "Cape Verd Escudo",
-        "Cape Verde Escudo"
-      ],
       "filters": {
         "field": "currency",
         "value": "CVE"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: CVE. Also known as CVE. Common misspellings include C V E, Cape Verd Escudo, and Cape Verde Escudo."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "CYP",
-    "canonical_name": "CYP",
-    "aliases": [
-      "CYP"
-    ],
-    "attributes": {
-      "misspellings": [
-        "C Y P",
-        "Cyprus Pound",
-        "Cypriot Pnd"
-      ],
       "filters": {
         "field": "currency",
         "value": "CYP"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: CYP. Also known as CYP. Common misspellings include C Y P, Cyprus Pound, and Cypriot Pnd."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "CZK",
-    "canonical_name": "CZK",
-    "aliases": [
-      "CZK"
-    ],
-    "attributes": {
-      "misspellings": [
-        "C Z K",
-        "Czech Krona",
-        "Czech Koron"
-      ],
       "filters": {
         "field": "currency",
         "value": "CZK"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: CZK. Also known as CZK. Common misspellings include C Z K, Czech Krona, and Czech Koron."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "DJF",
-    "canonical_name": "DJF",
-    "aliases": [
-      "DJF"
-    ],
-    "attributes": {
-      "misspellings": [
-        "D J F",
-        "Djibuti Franc",
-        "Djiboutian Frank"
-      ],
       "filters": {
         "field": "currency",
         "value": "DJF"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: DJF. Also known as DJF. Common misspellings include D J F, Djibuti Franc, and Djiboutian Frank."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "DKK",
-    "canonical_name": "DKK",
-    "aliases": [
-      "DKK"
-    ],
-    "attributes": {
-      "misspellings": [
-        "D K K",
-        "Danish Krone",
-        "Danish Kroner"
-      ],
       "filters": {
         "field": "currency",
         "value": "DKK"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: DKK. Also known as DKK. Common misspellings include D K K, Danish Krone, and Danish Kroner."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "DOP",
-    "canonical_name": "DOP",
-    "aliases": [
-      "DOP"
-    ],
-    "attributes": {
-      "misspellings": [
-        "D O P",
-        "Dom Peso",
-        "Dominican Pesso"
-      ],
       "filters": {
         "field": "currency",
         "value": "DOP"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: DOP. Also known as DOP. Common misspellings include D O P, Dom Peso, and Dominican Pesso."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "DZD",
-    "canonical_name": "DZD",
-    "aliases": [
-      "DZD"
-    ],
-    "attributes": {
-      "misspellings": [
-        "D Z D",
-        "Algerian Dinnar",
-        "DZ Dinar"
-      ],
       "filters": {
         "field": "currency",
         "value": "DZD"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: DZD. Also known as DZD. Common misspellings include D Z D, Algerian Dinnar, and DZ Dinar."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "EGP",
-    "canonical_name": "EGP",
-    "aliases": [
-      "EGP"
-    ],
-    "attributes": {
-      "misspellings": [
-        "E G P",
-        "Egypt Pound",
-        "Egyp Pound",
-        "Egyptian Pnd"
-      ],
       "filters": {
         "field": "currency",
         "value": "EGP"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: EGP. Also known as EGP. Common misspellings include E G P, Egypt Pound, Egyp Pound, and Egyptian Pnd."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "ERN",
-    "canonical_name": "ERN",
-    "aliases": [
-      "ERN"
-    ],
-    "attributes": {
-      "misspellings": [
-        "E R N",
-        "Eritrean Nakfa",
-        "Ern Nakfa"
-      ],
       "filters": {
         "field": "currency",
         "value": "ERN"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: ERN. Also known as ERN. Common misspellings include E R N, Eritrean Nakfa, and Ern Nakfa."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "ETB",
-    "canonical_name": "ETB",
-    "aliases": [
-      "ETB"
-    ],
-    "attributes": {
-      "misspellings": [
-        "E T B",
-        "Ethiop Birr",
-        "Ethio Birr"
-      ],
       "filters": {
         "field": "currency",
         "value": "ETB"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: ETB. Also known as ETB. Common misspellings include E T B, Ethiop Birr, and Ethio Birr."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "EUR",
-    "canonical_name": "EUR",
-    "aliases": [
-      "EUR"
-    ],
-    "attributes": {
-      "misspellings": [
-        "E U R",
-        "Euro",
-        "Euros",
-        "European Currency"
-      ],
       "filters": {
         "field": "currency",
         "value": "EUR"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: EUR. Also known as EUR. Common misspellings include E U R, Euro, Euros, and European Currency."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "FJD",
-    "canonical_name": "FJD",
-    "aliases": [
-      "FJD"
-    ],
-    "attributes": {
-      "misspellings": [
-        "F J D",
-        "Fiji Dollar",
-        "Fijian Dolar"
-      ],
       "filters": {
         "field": "currency",
         "value": "FJD"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: FJD. Also known as FJD. Common misspellings include F J D, Fiji Dollar, and Fijian Dolar."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "FKP",
-    "canonical_name": "FKP",
-    "aliases": [
-      "FKP"
-    ],
-    "attributes": {
-      "misspellings": [
-        "F K P",
-        "FK Pound",
-        "Falkland Pound"
-      ],
       "filters": {
         "field": "currency",
         "value": "FKP"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: FKP. Also known as FKP. Common misspellings include F K P, FK Pound, and Falkland Pound."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "GBP",
-    "canonical_name": "GBP",
-    "aliases": [
-      "GBP"
-    ],
-    "attributes": {
-      "misspellings": [
-        "G B P",
-        "GB Pound",
-        "British Pound",
-        "Pound Sterling"
-      ],
       "filters": {
         "field": "currency",
         "value": "GBP"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: GBP. Also known as GBP. Common misspellings include G B P, GB Pound, British Pound, and Pound Sterling."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "GHS",
-    "canonical_name": "GHS",
-    "aliases": [
-      "GHS"
-    ],
-    "attributes": {
-      "misspellings": [
-        "G H S",
-        "Ghanian Cedi",
-        "GH Cedi"
-      ],
       "filters": {
         "field": "currency",
         "value": "GHS"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: GHS. Also known as GHS. Common misspellings include G H S, Ghanian Cedi, and GH Cedi."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "GIP",
-    "canonical_name": "GIP",
-    "aliases": [
-      "GIP"
-    ],
-    "attributes": {
-      "misspellings": [
-        "G I P",
-        "Gibralter Pound",
-        "Gib Pound"
-      ],
       "filters": {
         "field": "currency",
         "value": "GIP"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: GIP. Also known as GIP. Common misspellings include G I P, Gibralter Pound, and Gib Pound."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "GMD",
-    "canonical_name": "GMD",
-    "aliases": [
-      "GMD"
-    ],
-    "attributes": {
-      "misspellings": [
-        "G M D",
-        "Gambian Dalassi",
-        "GMD Dalasi"
-      ],
       "filters": {
         "field": "currency",
         "value": "GMD"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: GMD. Also known as GMD. Common misspellings include G M D, Gambian Dalassi, and GMD Dalasi."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "GNF",
-    "canonical_name": "GNF",
-    "aliases": [
-      "GNF"
-    ],
-    "attributes": {
-      "misspellings": [
-        "G N F",
-        "GN-Franc",
-        "Guinean Franc"
-      ],
       "filters": {
         "field": "currency",
         "value": "GNF"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: GNF. Also known as GNF. Common misspellings include G N F, GN-Franc, and Guinean Franc."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "GTQ",
-    "canonical_name": "GTQ",
-    "aliases": [
-      "GTQ"
-    ],
-    "attributes": {
-      "misspellings": [
-        "G T Q",
-        "Guatemalan Quetzal",
-        "GT-Quetzal"
-      ],
       "filters": {
         "field": "currency",
         "value": "GTQ"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: GTQ. Also known as GTQ. Common misspellings include G T Q, Guatemalan Quetzal, and GT-Quetzal."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "GYD",
-    "canonical_name": "GYD",
-    "aliases": [
-      "GYD"
-    ],
-    "attributes": {
-      "misspellings": [
-        "G Y D",
-        "GY-Dollar",
-        "Guyanese Dollar"
-      ],
       "filters": {
         "field": "currency",
         "value": "GYD"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: GYD. Also known as GYD. Common misspellings include G Y D, GY-Dollar, and Guyanese Dollar."
-    }
   },
   {
     "entity_type": "tabCurrency",
     "entity_id": "HKD",
-    "canonical_name": "HKD",
-    "aliases": [
-      "HKD"
-    ],
-    "attributes": {
-      "misspellings": [
-        "H K D",
-        "HK-Dollar",
-        "Hongkong Dollar"
-      ],
       "filters": {
         "field": "currency",
         "value": "HKD"
       },
-      "valid_for_tables": [
-        { "table": "tabCurrency", "field": "name" },
-        { "table": "tabSales Invoice", "field": "currency" },
-        { "table": "tabPurchase Invoice", "field": "currency" },
-        { "table": "tabPayment Entry", "field": "party_account_currency" }
-      ],
-      "embedding_text": "Currency: HKD. Also known as HKD. Common misspellings include H K D, HK-Dollar, and Hongkong Dollar."
     }
-  }
 ]
