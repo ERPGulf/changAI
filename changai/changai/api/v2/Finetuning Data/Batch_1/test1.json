@@ -1,0 +1,620 @@
+[
+  {
+    "anchor": "total sales amount last quarter for acme?",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[ENTITY_CARD] tabCustomer::Acme, Inc.",
+      "[ENTITY_FIELD] tabSales Invoice.customer | tabCustomer"
+    ]
+  },
+  {
+    "anchor": "can u get me total sales ammount for acme last qtr pls",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[ENTITY_CARD] tabCustomer::Acme, Inc.",
+      "[ENTITY_FIELD] tabSales Invoice.customer | tabCustomer"
+    ]
+  },
+  {
+    "anchor": "hey quick check on last qtr sales for the acme party, how much was it?",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[ENTITY_CARD] tabCustomer::Acme, Inc.",
+      "[ENTITY_FIELD] tabSales Invoice.customer | tabCustomer"
+    ]
+  },
+  {
+    "anchor": "need the total inv value for acme from last quarter, thx",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[ENTITY_CARD] tabCustomer::Acme, Inc.",
+      "[ENTITY_FIELD] tabSales Invoice.customer | tabCustomer"
+    ]
+  },
+  {
+    "anchor": "show me the sales figures for acme last Q2, like total amount n stuff",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[ENTITY_CARD] tabCustomer::Acme, Inc.",
+      "[ENTITY_FIELD] tabSales Invoice.customer | tabCustomer"
+    ]
+  },
+  {
+    "anchor": "plz send me last qtr's total sales amt for acme, need it asap",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] posting_date | [TABLE] tabSales Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[ENTITY_CARD] tabCustomer::Acme, Inc.",
+      "[ENTITY_FIELD] tabSales Invoice.customer | tabCustomer"
+    ]
+  },
+  {
+    "anchor": "pending sales invoices for beta corp",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] docstatus | [TABLE] tabSales Invoice",
+      "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[ENTITY_CARD] tabCustomer::Beta Corp",
+      "[ENTITY_FIELD] tabSales Invoice.customer | tabCustomer"
+    ]
+  },
+  {
+    "anchor": "hey can u send me the pending inv for beta corp plz",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] docstatus | [TABLE] tabSales Invoice",
+      "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[ENTITY_CARD] tabCustomer::Beta Corp",
+      "[ENTITY_FIELD] tabSales Invoice.customer | tabCustomer"
+    ]
+  },
+  {
+    "anchor": "need a quick check on os bills for beta corp, thx!",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] docstatus | [TABLE] tabSales Invoice",
+      "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[ENTITY_CARD] tabCustomer::Beta Corp",
+      "[ENTITY_FIELD] tabSales Invoice.customer | tabCustomer"
+    ]
+  },
+  {
+    "anchor": "give me all the pending sales invoices for beta corp, like now",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] docstatus | [TABLE] tabSales Invoice",
+      "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[ENTITY_CARD] tabCustomer::Beta Corp",
+      "[ENTITY_FIELD] tabSales Invoice.customer | tabCustomer"
+    ]
+  },
+  {
+    "anchor": "pls pull the list of unpaid SI's for beta corp as of today",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] docstatus | [TABLE] tabSales Invoice",
+      "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[ENTITY_CARD] tabCustomer::Beta Corp",
+      "[ENTITY_FIELD] tabSales Invoice.customer | tabCustomer"
+    ]
+  },
+  {
+    "anchor": "show me any outstanding invoices for my beta corp client, asap",
+    "positives": [
+      "[TABLE] tabSales Invoice",
+      "[FIELD] docstatus | [TABLE] tabSales Invoice",
+      "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+      "[FIELD] customer | [TABLE] tabSales Invoice",
+      "[ENTITY_CARD] tabCustomer::Beta Corp",
+      "[ENTITY_FIELD] tabSales Invoice.customer | tabCustomer"
+    ]
+  },
+  {
+    "anchor": "current stock qty for item iphone 14",
+    "positives": [
+      "[TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin",
+      "[ENTITY_CARD] tabItem::iPhone 14",
+      "[ENTITY_FIELD] tabBin.item_code | tabItem"
+    ]
+  },
+  {
+    "anchor": "can u pls check current stock qty for iphone14",
+    "positives": [
+      "[TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin",
+      "[ENTITY_CARD] tabItem::iPhone 14",
+      "[ENTITY_FIELD] tabBin.item_code | tabItem"
+    ]
+  },
+  {
+    "anchor": "need to pull the qty for item iphone 14 asap",
+    "positives": [
+      "[TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin",
+      "[ENTITY_CARD] tabItem::iPhone 14",
+      "[ENTITY_FIELD] tabBin.item_code | tabItem"
+    ]
+  },
+  {
+    "anchor": "hey can u send me the stock number for iphone14 plz thx",
+    "positives": [
+      "[TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin",
+      "[ENTITY_CARD] tabItem::iPhone 14",
+      "[ENTITY_FIELD] tabBin.item_code | tabItem"
+    ]
+  },
+  {
+    "anchor": "give me current stock on iphone 14 like right now",
+    "positives": [
+      "[TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin",
+      "[ENTITY_CARD] tabItem::iPhone 14",
+      "[ENTITY_FIELD] tabBin.item_code | tabItem"
+    ]
+  },
+  {
+    "anchor": "quick check on stock qty for iphone14 k thx",
+    "positives": [
+      "[TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin",
+      "[ENTITY_CARD] tabItem::iPhone 14",
+      "[ENTITY_FIELD] tabBin.item_code | tabItem"
+    ]
+  },
+  {
+    "anchor": "items with stock below reorder level",
+    "positives": [
+      "[TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] reorder_level | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin",
+      "[ENTITY_FIELD] tabBin.item_code | tabItem"
+    ]
+  },
+  {
+    "anchor": "can u pull items with stock below reordr lvl asap thx",
+    "positives": [
+      "[TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] reorder_level | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin",
+      "[ENTITY_FIELD] tabBin.item_code | tabItem"
+    ]
+  },
+  {
+    "anchor": "need a quick check on stock tht's below reorder level plz",
+    "positives": [
+      "[TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] reorder_level | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin",
+      "[ENTITY_FIELD] tabBin.item_code | tabItem"
+    ]
+  },
+  {
+    "anchor": "give me the list of items where stock is bellow reorder pls hurry",
+    "positives": [
+      "[TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] reorder_level | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin",
+      "[ENTITY_FIELD] tabBin.item_code | tabItem"
+    ]
+  },
+  {
+    "anchor": "show me all items with qty under reorder lvl like now!!",
+    "positives": [
+      "[TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] reorder_level | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin",
+      "[ENTITY_FIELD] tabBin.item_code | tabItem"
+    ]
+  },
+  {
+    "anchor": "list all the stuff that got stock under reorder point like yesterday",
+    "positives": [
+      "[TABLE] tabBin",
+      "[FIELD] actual_qty | [TABLE] tabBin",
+      "[FIELD] reorder_level | [TABLE] tabBin",
+      "[FIELD] item_code | [TABLE] tabBin",
+      "[ENTITY_FIELD] tabBin.item_code | tabItem"
+    ]
+  },
+  {
+    "anchor": "total purchase amount this year from abc suppliers",
+    "positives": [
+      "[TABLE] tabPurchase Invoice",
+      "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabPurchase Invoice",
+      "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+      "[ENTITY_CARD] tabSupplier::ABC Suppliers",
+      "[ENTITY_FIELD] tabPurchase Invoice.supplier | tabSupplier"
+    ]
+  },
+  {
+    "anchor": "can u get total ammount for this year from abc supplier plz",
+    "positives": [
+      "[TABLE] tabPurchase Invoice",
+      "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabPurchase Invoice",
+      "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+      "[ENTITY_CARD] tabSupplier::ABC Suppliers",
+      "[ENTITY_FIELD] tabPurchase Invoice.supplier | tabSupplier"
+    ]
+  },
+  {
+    "anchor": "show me total purchse from abc supps this yr plz thx",
+    "positives": [
+      "[TABLE] tabPurchase Invoice",
+      "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabPurchase Invoice",
+      "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+      "[ENTITY_CARD] tabSupplier::ABC Suppliers",
+      "[ENTITY_FIELD] tabPurchase Invoice.supplier | tabSupplier"
+    ]
+  },
+  {
+    "anchor": "need quick check on how much we spent with abc vendors this FY",
+    "positives": [
+      "[TABLE] tabPurchase Invoice",
+      "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabPurchase Invoice",
+      "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+      "[ENTITY_CARD] tabSupplier::ABC Suppliers",
+      "[ENTITY_FIELD] tabPurchase Invoice.supplier | tabSupplier"
+    ]
+  },
+  {
+    "anchor": "pull the total invs from abc suppliers for this year pls thx",
+    "positives": [
+      "[TABLE] tabPurchase Invoice",
+      "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabPurchase Invoice",
+      "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+      "[ENTITY_CARD] tabSupplier::ABC Suppliers",
+      "[ENTITY_FIELD] tabPurchase Invoice.supplier | tabSupplier"
+    ]
+  },
+  {
+    "anchor": "give me the total buy amt for this year from all abc parties",
+    "positives": [
+      "[TABLE] tabPurchase Invoice",
+      "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabPurchase Invoice",
+      "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+      "[ENTITY_CARD] tabSupplier::ABC Suppliers",
+      "[ENTITY_FIELD] tabPurchase Invoice.supplier | tabSupplier"
+    ]
+  },
+  {
+    "anchor": "unpaid purchase invoices",
+    "positives": [
+      "[TABLE] tabPurchase Invoice",
+      "[FIELD] outstanding_amount | [TABLE] tabPurchase Invoice",
+      "[FIELD] docstatus | [TABLE] tabPurchase Invoice"
+    ]
+  },
+  {
+    "anchor": "can u get the unpaid invoces for the vendors pls",
+    "positives": [
+      "[TABLE] tabPurchase Invoice",
+      "[FIELD] outstanding_amount | [TABLE] tabPurchase Invoice",
+      "[FIELD] docstatus | [TABLE] tabPurchase Invoice"
+    ]
+  },
+  {
+    "anchor": "quick check on o/s purchase bills from this month, k?",
+    "positives": [
+      "[TABLE] tabPurchase Invoice",
+      "[FIELD] outstanding_amount | [TABLE] tabPurchase Invoice",
+      "[FIELD] docstatus | [TABLE] tabPurchase Invoice"
+    ]
+  },
+  {
+    "anchor": "need to see all the os invoices, like from last week or somthing, thx",
+    "positives": [
+      "[TABLE] tabPurchase Invoice",
+      "[FIELD] outstanding_amount | [TABLE] tabPurchase Invoice",
+      "[FIELD] docstatus | [TABLE] tabPurchase Invoice"
+    ]
+  },
+  {
+    "anchor": "show me the due SI from all our supps, need it today!",
+    "positives": [
+      "[TABLE] tabPurchase Invoice",
+      "[FIELD] outstanding_amount | [TABLE] tabPurchase Invoice",
+      "[FIELD] docstatus | [TABLE] tabPurchase Invoice"
+    ]
+  },
+  {
+    "anchor": "list all the pendng purchase invoce for clients, asap!!",
+    "positives": [
+      "[TABLE] tabPurchase Invoice",
+      "[FIELD] outstanding_amount | [TABLE] tabPurchase Invoice",
+      "[FIELD] docstatus | [TABLE] tabPurchase Invoice"
+    ]
+  },
+  {
+    "anchor": "cash balance in main cash account",
+    "positives": [
+      "[TABLE] tabGL Entry",
+      "[FIELD] account | [TABLE] tabGL Entry",
+      "[FIELD] debit | [TABLE] tabGL Entry",
+      "[FIELD] credit | [TABLE] tabGL Entry",
+      "[ENTITY_CARD] tabAccount::Cash - Main",
+      "[ENTITY_FIELD] tabGL Entry.account | tabAccount"
+    ]
+  },
+  {
+    "anchor": "can u plz give me the cash bal in the main cash acnt?? thx",
+    "positives": [
+      "[TABLE] tabGL Entry",
+      "[FIELD] account | [TABLE] tabGL Entry",
+      "[FIELD] debit | [TABLE] tabGL Entry",
+      "[FIELD] credit | [TABLE] tabGL Entry",
+      "[ENTITY_CARD] tabAccount::Cash - Main",
+      "[ENTITY_FIELD] tabGL Entry.account | tabAccount"
+    ]
+  },
+  {
+    "anchor": "need a quick check on main cash a/c balance, like now!",
+    "positives": [
+      "[TABLE] tabGL Entry",
+      "[FIELD] account | [TABLE] tabGL Entry",
+      "[FIELD] debit | [TABLE] tabGL Entry",
+      "[FIELD] credit | [TABLE] tabGL Entry",
+      "[ENTITY_CARD] tabAccount::Cash - Main",
+      "[ENTITY_FIELD] tabGL Entry.account | tabAccount"
+    ]
+  },
+  {
+    "anchor": "hey can u pull the current cash balance for main cash accnt tnx",
+    "positives": [
+      "[TABLE] tabGL Entry",
+      "[FIELD] account | [TABLE] tabGL Entry",
+      "[FIELD] debit | [TABLE] tabGL Entry",
+      "[FIELD] credit | [TABLE] tabGL Entry",
+      "[ENTITY_CARD] tabAccount::Cash - Main",
+      "[ENTITY_FIELD] tabGL Entry.account | tabAccount"
+    ]
+  },
+  {
+    "anchor": "show me how much cash is in main cash account plz, like what\u2019s the bal?",
+    "positives": [
+      "[TABLE] tabGL Entry",
+      "[FIELD] account | [TABLE] tabGL Entry",
+      "[FIELD] debit | [TABLE] tabGL Entry",
+      "[FIELD] credit | [TABLE] tabGL Entry",
+      "[ENTITY_CARD] tabAccount::Cash - Main",
+      "[ENTITY_FIELD] tabGL Entry.account | tabAccount"
+    ]
+  },
+  {
+    "anchor": "list all cash bal in main cash account asap, got to know today",
+    "positives": [
+      "[TABLE] tabGL Entry",
+      "[FIELD] account | [TABLE] tabGL Entry",
+      "[FIELD] debit | [TABLE] tabGL Entry",
+      "[FIELD] credit | [TABLE] tabGL Entry",
+      "[ENTITY_CARD] tabAccount::Cash - Main",
+      "[ENTITY_FIELD] tabGL Entry.account | tabAccount"
+    ]
+  },
+  {
+    "anchor": "total expenses last month",
+    "positives": [
+      "[TABLE] tabGL Entry",
+      "[FIELD] posting_date | [TABLE] tabGL Entry",
+      "[FIELD] debit | [TABLE] tabGL Entry",
+      "[FIELD] account | [TABLE] tabGL Entry",
+      "[ENTITY_CARD] tabAccount::Expense",
+      "[ENTITY_FIELD] tabGL Entry.account | tabAccount"
+    ]
+  },
+  {
+    "anchor": "can u get me total expnses frm last mnth plz",
+    "positives": [
+      "[TABLE] tabGL Entry",
+      "[FIELD] posting_date | [TABLE] tabGL Entry",
+      "[FIELD] debit | [TABLE] tabGL Entry",
+      "[FIELD] account | [TABLE] tabGL Entry",
+      "[ENTITY_CARD] tabAccount::Expense",
+      "[ENTITY_FIELD] tabGL Entry.account | tabAccount"
+    ]
+  },
+  {
+    "anchor": "show me total expenses lastmnth thx",
+    "positives": [
+      "[TABLE] tabGL Entry",
+      "[FIELD] posting_date | [TABLE] tabGL Entry",
+      "[FIELD] debit | [TABLE] tabGL Entry",
+      "[FIELD] account | [TABLE] tabGL Entry",
+      "[ENTITY_CARD] tabAccount::Expense",
+      "[ENTITY_FIELD] tabGL Entry.account | tabAccount"
+    ]
+  },
+  {
+    "anchor": "need a quick check on last mth total expnse",
+    "positives": [
+      "[TABLE] tabGL Entry",
+      "[FIELD] posting_date | [TABLE] tabGL Entry",
+      "[FIELD] debit | [TABLE] tabGL Entry",
+      "[FIELD] account | [TABLE] tabGL Entry",
+      "[ENTITY_CARD] tabAccount::Expense",
+      "[ENTITY_FIELD] tabGL Entry.account | tabAccount"
+    ]
+  },
+  {
+    "anchor": "give me the total amouunt of expenses for last month asap",
+    "positives": [
+      "[TABLE] tabGL Entry",
+      "[FIELD] posting_date | [TABLE] tabGL Entry",
+      "[FIELD] debit | [TABLE] tabGL Entry",
+      "[FIELD] account | [TABLE] tabGL Entry",
+      "[ENTITY_CARD] tabAccount::Expense",
+      "[ENTITY_FIELD] tabGL Entry.account | tabAccount"
+    ]
+  },
+  {
+    "anchor": "pls send me the total expnses for last mnth, like now",
+    "positives": [
+      "[TABLE] tabGL Entry",
+      "[FIELD] posting_date | [TABLE] tabGL Entry",
+      "[FIELD] debit | [TABLE] tabGL Entry",
+      "[FIELD] account | [TABLE] tabGL Entry",
+      "[ENTITY_CARD] tabAccount::Expense",
+      "[ENTITY_FIELD] tabGL Entry.account | tabAccount"
+    ]
+  },
+  {
+    "anchor": "top 5 selling items this month",
+    "positives": [
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] qty | [TABLE] tabSales Invoice Item",
+      "[FIELD] parent | [TABLE] tabSales Invoice Item",
+      "[ENTITY_FIELD] tabSales Invoice Item.item_code | tabItem",
+      "[ENTITY_FIELD] tabSales Invoice Item.parent | tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "can u plz show me top 5 sellin items fo this month",
+    "positives": [
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] qty | [TABLE] tabSales Invoice Item",
+      "[FIELD] parent | [TABLE] tabSales Invoice Item",
+      "[ENTITY_FIELD] tabSales Invoice Item.item_code | tabItem",
+      "[ENTITY_FIELD] tabSales Invoice Item.parent | tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "need a quick check on the 5 most sold items this mnth thx",
+    "positives": [
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] qty | [TABLE] tabSales Invoice Item",
+      "[FIELD] parent | [TABLE] tabSales Invoice Item",
+      "[ENTITY_FIELD] tabSales Invoice Item.item_code | tabItem",
+      "[ENTITY_FIELD] tabSales Invoice Item.parent | tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "give me the 5 top sellin products for curr month ASAP",
+    "positives": [
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] qty | [TABLE] tabSales Invoice Item",
+      "[FIELD] parent | [TABLE] tabSales Invoice Item",
+      "[ENTITY_FIELD] tabSales Invoice Item.item_code | tabItem",
+      "[ENTITY_FIELD] tabSales Invoice Item.parent | tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "list all the top 5 items sold this month plz, need it now!",
+    "positives": [
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] qty | [TABLE] tabSales Invoice Item",
+      "[FIELD] parent | [TABLE] tabSales Invoice Item",
+      "[ENTITY_FIELD] tabSales Invoice Item.item_code | tabItem",
+      "[ENTITY_FIELD] tabSales Invoice Item.parent | tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "hey, pull together top 5 sellin stuff this month plz thx",
+    "positives": [
+      "[TABLE] tabSales Invoice Item",
+      "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+      "[FIELD] qty | [TABLE] tabSales Invoice Item",
+      "[FIELD] parent | [TABLE] tabSales Invoice Item",
+      "[ENTITY_FIELD] tabSales Invoice Item.item_code | tabItem",
+      "[ENTITY_FIELD] tabSales Invoice Item.parent | tabSales Invoice"
+    ]
+  },
+  {
+    "anchor": "pos sales total today",
+    "positives": [
+      "[TABLE] tabPOS Invoice",
+      "[FIELD] posting_date | [TABLE] tabPOS Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabPOS Invoice",
+      "[FIELD] docstatus | [TABLE] tabPOS Invoice"
+    ]
+  },
+  {
+    "anchor": "hey can u get the pos sales total for today plz thx",
+    "positives": [
+      "[TABLE] tabPOS Invoice",
+      "[FIELD] posting_date | [TABLE] tabPOS Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabPOS Invoice",
+      "[FIELD] docstatus | [TABLE] tabPOS Invoice"
+    ]
+  },
+  {
+    "anchor": "quick check on todays pos sales total!! need it asap",
+    "positives": [
+      "[TABLE] tabPOS Invoice",
+      "[FIELD] posting_date | [TABLE] tabPOS Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabPOS Invoice",
+      "[FIELD] docstatus | [TABLE] tabPOS Invoice"
+    ]
+  },
+  {
+    "anchor": "pls send me the total from pos sales 2day, like now",
+    "positives": [
+      "[TABLE] tabPOS Invoice",
+      "[FIELD] posting_date | [TABLE] tabPOS Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabPOS Invoice",
+      "[FIELD] docstatus | [TABLE] tabPOS Invoice"
+    ]
+  },
+  {
+    "anchor": "show me what the total pos sales are for this day",
+    "positives": [
+      "[TABLE] tabPOS Invoice",
+      "[FIELD] posting_date | [TABLE] tabPOS Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabPOS Invoice",
+      "[FIELD] docstatus | [TABLE] tabPOS Invoice"
+    ]
+  },
+  {
+    "anchor": "need to find out pos sales total 4 today, any idea?",
+    "positives": [
+      "[TABLE] tabPOS Invoice",
+      "[FIELD] posting_date | [TABLE] tabPOS Invoice",
+      "[FIELD] base_grand_total | [TABLE] tabPOS Invoice",
+      "[FIELD] docstatus | [TABLE] tabPOS Invoice"
+    ]
+  }
+]
