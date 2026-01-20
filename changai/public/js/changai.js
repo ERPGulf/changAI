@@ -202,16 +202,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             return "";
     }
-
 function getOrCreateChatId() {
   const KEY = "changai_chat_id";
   let chatId = sessionStorage.getItem(KEY);
 
   if (!chatId) {
-    chatId = `session_${Date.now()}_${Math.random().toString(16).slice(2)}`;
+    chatId = `session_${Date.now()}_${crypto.randomUUID()}`;
     sessionStorage.setItem(KEY, chatId);
   }
-
   return chatId;
 }
 
