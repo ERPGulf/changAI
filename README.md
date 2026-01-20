@@ -1,242 +1,218 @@
-#  ERP Chatbot - Alpha Release  
-**ChangAI - ERPNext Natural Language Interface**
+# ChangAI — Open-Source AI Assistant for ERPNext & Frappe
 
-Welcome to the **alpha version** of ChangAI - an AI-powered assistant that converts natural language queries into executable Frappe queries, executes them, and returns results in human-friendly language, using a fine-tuned multi-model pipeline. Built to simplify ERP access for business users with no technical knowledge.
+**ChangAI** turns your ERPNext data into a natural-language chatbot — ask any business question in plain English and get instant, accurate answers without writing a single SQL query.
 
-> ⚠️ This release is intended for internal testing and feedback only.  
+Built with RAG, LLM-powered SQL generation, LangGraph orchestration, and strict SQL validation for safe and reliable ERP querying.
 
-> Please read the known issues section carefully before use.
+## Key Features
 
----
-
-## ✨ Features
-
-* Natural language → ERPNext query conversion
-* Multi-model NLP pipeline (**Hugging Face models**)
-* Local inference **or** remote inference via **Replicate API**
-* Jinja2-based templates for conversational responses
-* Extendable for new doctypes and queries
-* Built-in dataset + Colab training workflows
-* Conversational handling for small talk and ERP queries
-
---------
-
-### 💬 Conversational Handling
-
-ChangAI seamlessly manages both casual interactions and ERP-related queries.
-
-Small talk (e.g., greetings) is handled through predefined responses.
-
-ERP queries are identified using business keywords and spelling correction.
-
-Valid queries are processed by the prediction pipeline, which generates and executes the corresponding Frappe query.
-
-Responses are returned in a natural, conversational format for better user experience.
-
-## 🧠 Pipeline & Models
-
-ChangAI uses **four fine-tuned Hugging Face models**, trained in **Google Colab** and deployed locally or on Replicate:
-
-| Stage                            | Model                                                     | Role                                 |
-| -------------------------------- | --------------------------------------------------------- | ------------------------------------ |
-| **1. Doctype Detection**         | `hyrinmansoor/text2frappe-s1-roberta` *(RoBERTa)*         | Detect target ERPNext Doctype        |
-| **2. Relevant Field Prediction** | `hyrinmansoor/text2frappe-s2-sbert` *(SBERT)*             | Suggest semantically relevant fields |
-| **3. Exact Field Selection**     | `hyrinmansoor/text2frappe-s2-flan-field` *(Flan-T5 base)* | Select metadata-validated fields     |
-| **4. Query Generation**          | `hyrinmansoor/text2frappe-s3-flan-query` *(Flan-T5 base)* | Generate executable SQL query        |
+- **Accurate Text-to-SQL** — Generates valid, read-only MySQL `SELECT` queries
+- **Dual RAG Retrieval** — Separate FAISS indexes for:
+  - ERPNext schema (tables, fields, joins, metrics)
+  - Master entities (customers, items, suppliers)
+- **Entity-Aware Queries** — Exact matching for customer/item names (no guessing)
+- **Business Guardrail** — Non-ERP questions are safely handled outside the SQL flow
+- **Self-Repairing SQL** — SQLGlot-based validation with guided retries (up to 2)
+- **Flexible Deployment** — Run fully local (Ollama) or remote (Replicate/Docker)
+- **Stateful Conversations** — Multi-turn chat with memory
+- **Secure & Private** — No writes, no schema hallucination, no uncontrolled execution
 
 ---
 
-## ⚙️ What It Does
+## How It Works
 
-* Understands natural ERP-related questions like:
-  *“How many contacts do we have?”*
-* Distinguishes **small talk, complete & incomplete queries**
-* Identifies the right **Doctype**
-* Predicts relevant **fields**
-* Generates valid Frappe queries using **`frappe.db.sql`**
-* Formats output using **Jinja2 templates** for natural replies
+ChangAI clarifies user intent using recent chat history, rewrites the query only when needed, and detects entity or value-based inputs.
+
+A guardrail routes the request to either the ERP SQL pipeline or a non-ERP conversational response.
+
+For ERP queries, it retrieves the required schema and entity context (via RAG), uses this context for LLM-based SQL generation, validates and repairs the SQL, executes read-only `SELECT` queries, and returns results in a clear, human-friendly format.
 
 ---
 
-## 🧾 Conversational Templates
+## Models Used
 
-Responses are formatted with **Jinja2 templates** for human-friendly answers.
+| Component              | Model Used                             | Deployment      |
+|------------------------|----------------------------------------|-----------------|
+| Embeddings (Schema)    | nomic-ai/modernbert-embed-base         | Local or Remote |
+| Embeddings (Entity)    | nomic-ai/modernbert-embed-base         | Local or Remote |
+| SQL Generation         | Qwen/Qwen3-4B-Instruct-2507             | Local or Remote |
+| DB Result Formatting   | Qwen/Qwen2.5-1.5B-Instruct              | Local or Remote |
 
-Example:
+---
 
-* **Template:** `"There are {{ count }} contacts registered in the system."`
-* **Output:** `"There are 154 contacts registered in the system."`
+## Deployment Modes
 
+### Local Mode (Ollama)
+
+- Runs entirely on your local server
+- No external API calls
+- Best for privacy and on-prem deployments
+
+### Remote Mode (Replicate)
+
+- You host the inference server
+- FAISS indexes are mounted inside the container
+- Supports scaling and better performance
+- **Recommended**: Use **Deployment URL** to avoid cold starts
+
+You can switch modes anytime via **ChangAI Settings** (no code changes required).
 
 ---
 
-✔ Examples:
+## Hugging Face Models & Dataset
 
-* How many customers do we have?
-* Get all sales invoices.
-* Active employees count?
-* How many sales invoices have discounts?
-* List all employees.
-* Who is the customer on the last invoice?
-* List item names within stock.
-* Show names of the disabled customers.
-* What is the total value of all sales orders?
-* List delivery date of all sales orders.
-* Get all names and grand total of all sales invoices.
-* Sales invoices not paid yet.
-* Show item names of all items.
-* Show item codes of all items.
-* Count of suppliers we work with.
-* List items with valuation rate above 700.
-* List items with valuation rate above 100.
-* Sales orders created today.
-* Customers created this month.
-* List all suppliers and their default currency.
-* Suppliers with default currency USD.
-* Show stock entries from past 7 days.
+Hugging Face hosts open, versioned model weights and datasets for reproducible deployments and easy fine-tuning.
+
+**Retrieval & Embedding Model** (Schema + Entity)  
+https://huggingface.co/hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned
+
+**Dataset Repository**  
+https://huggingface.co/datasets/hyrinmansoor/ERP-retrieval-data-modernbert
+
+Official Qwen instruction models are used for SQL generation and result formatting.
 
 ---
-🚀 Deployment
 
-ChangAI’s models are containerized with Docker and packaged using Cog for reproducible inference.
-They are deployed on Replicate, where each version runs in an isolated environment and is accessible via the Replicate API.
+## Observability & Tracing
 
-The serving logic is defined in predict.py (model loading, inference, query generation).
+ChangAI supports **LangSmith tracing** for debugging and performance monitoring.
 
-Using cog push, the models are published to Replicate under a unique version ID.
+If enabled in **ChangAI Settings**, all RAG retrieval, SQL generation, validation, and repair steps are automatically traced.
 
-## 🛠️ Installation Guide
+> Tracing is optional and recommended for development and debugging only.
 
-### 1. 🔹 Local Development (Training / Testing)
+---
+
+## Architecture Overview
+
+### Full Pipeline Workflow
+
+<p align="center">
+  <img src="changai/images/ChangAI_v2.png" width="800">
+</p>
+
+### RAG Retrieval Layer
+
+<p align="center">
+  <img src="changai/images/RAG Structure.png" width="750">
+</p>
+
+<!-- ### Data Retrieval Process Flow
+
+<p align="center">
+  <img src="changai/images/data_retrieval_flow_chart.png" width="600">
+</p> -->
+
+---
+
+## Installation & Setup
+
+### 1. Install ChangAI in Frappe
 
 ```bash
-git clone https://github.com/ERPGulf/Changai.git
-cd ChangAI
-
-# Create environment
-python3 -m venv venv
-source venv/bin/activate   # macOS/Linux
-venv\Scripts\activate      # Windows
-
-# Install dependencies
-pip install -r requirements.txt
+bench get-app changai https://github.com/erpgulf/changai
+bench --site your-site.local install-app changai
+bench migrate
+bench restart
 ```
 
-➡️ Train models in **Google Colab (GPU recommended)**.
-➡️ Export trained weights to local or Docker.
+### 2. Configure ChangAI Settings
 
----
+Go to **ERPNext → ChangAI Settings**
 
-### 2. 🔹 Run via Replicate (Inference / Production)
+#### Local Mode
 
-1. Install **Cog**
+- Uncheck **Remote**
+- Ollama URL: `http://localhost:11434`
+- LLM Model Name
+- Embedding Model Name
+- Entity Model Name
 
-   ```bash
-   pip install cog
-   ```
+#### Remote Mode (Replicate)
 
-2. Login
+- Check **Remote**
+- Prediction URL: `https://api.replicate.com/v1/predictions`
+- API Token
+- LLM Version ID
+- Embedder Version ID
+- Entity Retriever Version ID
+- **Deployment URL** (recommended)
 
-   ```bash
-   replicate login
-   ```
-
-3. Push model
-
-   ```bash
-   cog push r8.im/<username>/<model-name>
-   ```
-
-4. Call API
-
-**Python**
+### 3. Build FAISS Indexes (Required)
 
 ```python
-import replicate
-
-output = replicate.run(
-    "your-username/erp-chatbot:VERSION_ID",
-    input={"question": "How many sales invoices last month?"}
-)
-print(output)
+from changai.changai.api.v2.build_schema_entity_faiss_indexes import build_all_indexes
+build_all_indexes()
 ```
 
-**cURL**
+This creates:
+
+```
+changai/api/fvs_stores/
+├── schema_fvs/
+└── entity_fvs/
+```
+
+### 4. Remote Inference — Replicate
+
+> Replicate deployments **require Docker containers**.  
+> Models are built and pushed using **Cog**.
+
+#### 4.1 Copy Inference Folders
 
 ```bash
-curl -s \
-  -H "Authorization: Token $REPLICATE_API_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{"input": {"question": "Get all employees"}}' \
-  https://api.replicate.com/v1/predictions
+scp -r replicate_inference user@replicate-server:/workspace/
 ```
 
----
-
-## 🚀 Usage
-
-Run locally:
+#### 4.2 Build & Push Models
 
 ```bash
-python app.py
+cd changai_retriever && cog build && cog push r8.im/<username>/changai_retriever
+cd ../entity_retriever && cog build && cog push r8.im/<username>/entity_retriever
+cd ../changai_qwen3 && cog build && cog push r8.im/<username>/changai_qwen3
 ```
-
-**Sample Input:**
-
-```json
-{
-  "question": "How many contacts do we have?",
-  "meta_file_path": "metadata.csv"
-}
-```
-
-**Sample Response:**
-
-```json
-{
-  "query": "frappe.db.sql(\"SELECT COUNT(name) FROM `tabContact`\")",
-  "doctype": "Contact",
-  "fields": ["count(name)"],
-  "data": {"count": 154},
-  "query_data": "There are {{ count }} contacts in the system."
-}
-```
-
-💬 Final output:
-
-> "There are 154 contacts in the system."
 
 ---
 
-## 📄 Metadata Format
+## Deployment Warm-Up (Important)
 
-Metadata file (CSV/JSON) must list **valid doctype-fieldname pairs**.
+Before your first real request, warm up the models to avoid cold-start delays.
 
-**CSV Example**
+### Qwen3 Deployment
 
-| doctype        | fieldname        |
-| -------------- | ---------------- |
-| Company        | name             |
-| Company        | industry         |
-| Contact        | email\_id        |
-| Purchase Order | discount\_amount |
+1. Enable the **Deployment URL**
+2. Open the deployment page or Playground
+3. Run any simple prompt once
 
-⚠️ Must exclude layout fields (e.g. Section Break, Tab, etc.)
+> After this, the model stays warm until the deployment is disabled.
+
+### Retriever Models (Schema & Entity)
+
+Retrievers currently use prediction URLs (not deployments).
+
+For best first-time performance:
+
+- Open each retriever model page
+- Run one test prediction once
+
+> In future versions, retrievers will be merged into a single deployment to eliminate this delay.
 
 ---
 
-## ⚠️ Known Issues
+## Test in ChangAI UI
 
-* ❗ **Query Errors**: e.g. `IndexError`, `Unknown column`, `Invalid field name`
-* 🧠 **Field Prediction**: may hallucinate non-existent fields
-* 📄 **Doctype Coverage**: limited to trained doctypes only
-* 📦 **Metadata Dependency**: requires clean, correct metadata file
+Open **ERPNext → ChangAI** and start asking business questions.
 
-➡️ Fixes in progress:
+If you encounter issues, please open a GitHub issue with logs.
 
-* Stronger metadata validation
-* User-friendly error handling
-* Expanded doctype/query support
+---
+
+## Roadmap
+
+- Permission-aware SQL (DocPerm, roles)
+- Built-in charts and KPIs
+- Multilingual responses
+- Automated schema & entity generation from live ERPNext data
 
 ---
 
@@ -311,7 +287,3 @@ This project is released under the MIT License. See `LICENSE` for more details.
 * ERPGulf Team
 
 ---
-
-> \*"We're building not just a chatbot, but a bridge between language and logic. Thank you for testing and shaping it with us!"\*
-
-```

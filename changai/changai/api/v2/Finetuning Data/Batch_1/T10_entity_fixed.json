@@ -1,0 +1,4583 @@
+[
+    {
+        "anchor": "show sales invoices for Acme, Inc. this month",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Acme, Inc.|Acme, Inc.",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] status | [TABLE] tabSales Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "any pending payments from acme",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Acme, Inc.|Acme, Inc.",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+            "[FIELD] due_date | [TABLE] tabSales Invoice",
+            "[FIELD] status | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "acmee outstanding amount please",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Acme, Inc.|Acme, Inc.",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] due_date | [TABLE] tabSales Invoice",
+            "[FIELD] status | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "customer profile for Acme Inc",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Acme, Inc.|Acme, Inc.",
+            "[TABLE] tabCustomer",
+            "[FIELD] name | [TABLE] tabCustomer",
+            "[FIELD] customer_name | [TABLE] tabCustomer",
+            "[FIELD] customer_group | [TABLE] tabCustomer",
+            "[FIELD] territory | [TABLE] tabCustomer",
+            "[FIELD] customer_type | [TABLE] tabCustomer",
+            "[FIELD] disabled | [TABLE] tabCustomer",
+            "[FIELD] creation | [TABLE] tabCustomer"
+        ]
+    },
+    {
+        "anchor": "list delivery notes for acme company last 7 days",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Acme, Inc.|Acme, Inc.",
+            "[TABLE] tabDelivery Note",
+            "[FIELD] customer | [TABLE] tabDelivery Note",
+            "[FIELD] posting_date | [TABLE] tabDelivery Note",
+            "[FIELD] status | [TABLE] tabDelivery Note",
+            "[FIELD] name | [TABLE] tabDelivery Note"
+        ]
+    },
+    {
+        "anchor": "show unpaid invoices for acme incorporated",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Acme, Inc.|Acme, Inc.",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+            "[FIELD] due_date | [TABLE] tabSales Invoice",
+            "[FIELD] status | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "acme invoices overdue more than 30 days",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Acme, Inc.|Acme, Inc.",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] due_date | [TABLE] tabSales Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] status | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "how much did Acme buy from us last year",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Acme, Inc.|Acme, Inc.",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+            "[FIELD] base_net_total | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "show payment entries received from akme",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Acme, Inc.|Acme, Inc.",
+            "[TABLE] tabPayment Entry",
+            "[FIELD] party_type | [TABLE] tabPayment Entry",
+            "[FIELD] party | [TABLE] tabPayment Entry",
+            "[FIELD] posting_date | [TABLE] tabPayment Entry",
+            "[FIELD] paid_amount | [TABLE] tabPayment Entry",
+            "[FIELD] mode_of_payment | [TABLE] tabPayment Entry",
+            "[FIELD] status | [TABLE] tabPayment Entry",
+            "[FIELD] name | [TABLE] tabPayment Entry"
+        ]
+    },
+    {
+        "anchor": "acnee sales orders pending delivery",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Acme, Inc.|Acme, Inc.",
+            "[TABLE] tabSales Order",
+            "[FIELD] customer | [TABLE] tabSales Order",
+            "[FIELD] status | [TABLE] tabSales Order",
+            "[FIELD] delivery_date | [TABLE] tabSales Order",
+            "[FIELD] transaction_date | [TABLE] tabSales Order",
+            "[FIELD] name | [TABLE] tabSales Order"
+        ]
+    },
+    {
+        "anchor": "quotation status for Acme,inc",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Acme, Inc.|Acme, Inc.",
+            "[TABLE] tabQuotation",
+            "[FIELD] party_name | [TABLE] tabQuotation",
+            "[FIELD] quotation_to | [TABLE] tabQuotation",
+            "[FIELD] status | [TABLE] tabQuotation",
+            "[FIELD] transaction_date | [TABLE] tabQuotation",
+            "[FIELD] valid_till | [TABLE] tabQuotation",
+            "[FIELD] name | [TABLE] tabQuotation"
+        ]
+    },
+    {
+        "anchor": "show acme customer ledger this year",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Acme, Inc.|Acme, Inc.",
+            "[TABLE] tabGL Entry",
+            "[FIELD] party_type | [TABLE] tabGL Entry",
+            "[FIELD] party | [TABLE] tabGL Entry",
+            "[FIELD] posting_date | [TABLE] tabGL Entry",
+            "[FIELD] debit | [TABLE] tabGL Entry",
+            "[FIELD] credit | [TABLE] tabGL Entry",
+            "[FIELD] voucher_type | [TABLE] tabGL Entry",
+            "[FIELD] voucher_no | [TABLE] tabGL Entry",
+            "[FIELD] company | [TABLE] tabGL Entry"
+        ]
+    },
+    {
+        "anchor": "any credit limit issue for Acme",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Acme, Inc.|Acme, Inc.",
+            "[TABLE] tabCustomer",
+            "[FIELD] credit_limit | [TABLE] tabCustomer",
+            "[FIELD] customer_name | [TABLE] tabCustomer",
+            "[FIELD] name | [TABLE] tabCustomer",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "acme last 10 transactions",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Acme, Inc.|Acme, Inc.",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+            "[FIELD] status | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "show returns from acme this quarter",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Acme, Inc.|Acme, Inc.",
+            "[TABLE] tabSales Return",
+            "[FIELD] customer | [TABLE] tabSales Return",
+            "[FIELD] posting_date | [TABLE] tabSales Return",
+            "[FIELD] status | [TABLE] tabSales Return",
+            "[FIELD] name | [TABLE] tabSales Return"
+        ]
+    },
+    {
+        "anchor": "acme delivery pending but invoice created",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Acme, Inc.|Acme, Inc.",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice",
+            "[TABLE] tabDelivery Note",
+            "[FIELD] customer | [TABLE] tabDelivery Note",
+            "[FIELD] posting_date | [TABLE] tabDelivery Note",
+            "[FIELD] status | [TABLE] tabDelivery Note",
+            "[FIELD] name | [TABLE] tabDelivery Note"
+        ]
+    },
+    {
+        "anchor": "how many invoices did we raise for Acme Inc in 2024",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Acme, Inc.|Acme, Inc.",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "acme payment not showing for latest invoice",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Acme, Inc.|Acme, Inc.",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice",
+            "[TABLE] tabPayment Entry",
+            "[FIELD] party_type | [TABLE] tabPayment Entry",
+            "[FIELD] party | [TABLE] tabPayment Entry",
+            "[FIELD] posting_date | [TABLE] tabPayment Entry",
+            "[FIELD] paid_amount | [TABLE] tabPayment Entry",
+            "[FIELD] name | [TABLE] tabPayment Entry"
+        ]
+    },
+    {
+        "anchor": "show all active customers like acme",
+        "positives": [
+            "[TABLE] tabCustomer",
+            "[FIELD] disabled | [TABLE] tabCustomer",
+            "[FIELD] customer_name | [TABLE] tabCustomer",
+            "[FIELD] name | [TABLE] tabCustomer"
+        ]
+    },
+    {
+        "anchor": "any issues or complaints logged for Acme Company",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Acme, Inc.|Acme, Inc.",
+            "[TABLE] tabIssue",
+            "[FIELD] customer | [TABLE] tabIssue",
+            "[FIELD] status | [TABLE] tabIssue",
+            "[FIELD] subject | [TABLE] tabIssue",
+            "[FIELD] name | [TABLE] tabIssue",
+            "[FIELD] creation | [TABLE] tabIssue"
+        ]
+    },
+    {
+        "anchor": "show sales invoices for Amrin Yosuf this month",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Amrin Yosuf|Amrin Yosuf",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] status | [TABLE] tabSales Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "amrin invoices last month",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Amrin Yosuf|Amrin Yosuf",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] status | [TABLE] tabSales Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "yosuf outstanding amount please",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Amrin Yosuf|Amrin Yosuf",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+            "[FIELD] due_date | [TABLE] tabSales Invoice",
+            "[FIELD] status | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "get me the customer details for Ms Amrin",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Amrin Yosuf|Amrin Yosuf",
+            "[TABLE] tabCustomer",
+            "[FIELD] name | [TABLE] tabCustomer",
+            "[FIELD] customer_name | [TABLE] tabCustomer",
+            "[FIELD] customer_group | [TABLE] tabCustomer",
+            "[FIELD] territory | [TABLE] tabCustomer",
+            "[FIELD] customer_type | [TABLE] tabCustomer",
+            "[FIELD] disabled | [TABLE] tabCustomer",
+            "[FIELD] creation | [TABLE] tabCustomer"
+        ]
+    },
+    {
+        "anchor": "sales orders for A Yosuf pending delivery",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Amrin Yosuf|Amrin Yosuf",
+            "[TABLE] tabSales Order",
+            "[FIELD] customer | [TABLE] tabSales Order",
+            "[FIELD] status | [TABLE] tabSales Order",
+            "[FIELD] delivery_date | [TABLE] tabSales Order",
+            "[FIELD] transaction_date | [TABLE] tabSales Order",
+            "[FIELD] name | [TABLE] tabSales Order"
+        ]
+    },
+    {
+        "anchor": "delivery notes for amrin yosuf last 7 days",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Amrin Yosuf|Amrin Yosuf",
+            "[TABLE] tabDelivery Note",
+            "[FIELD] customer | [TABLE] tabDelivery Note",
+            "[FIELD] posting_date | [TABLE] tabDelivery Note",
+            "[FIELD] status | [TABLE] tabDelivery Note",
+            "[FIELD] name | [TABLE] tabDelivery Note"
+        ]
+    },
+    {
+        "anchor": "quotation status for Amrin",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Amrin Yosuf|Amrin Yosuf",
+            "[TABLE] tabQuotation",
+            "[FIELD] quotation_to | [TABLE] tabQuotation",
+            "[FIELD] party_name | [TABLE] tabQuotation",
+            "[FIELD] status | [TABLE] tabQuotation",
+            "[FIELD] transaction_date | [TABLE] tabQuotation",
+            "[FIELD] valid_till | [TABLE] tabQuotation",
+            "[FIELD] name | [TABLE] tabQuotation"
+        ]
+    },
+    {
+        "anchor": "payment entries received from amrin yosuf",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Amrin Yosuf|Amrin Yosuf",
+            "[TABLE] tabPayment Entry",
+            "[FIELD] party_type | [TABLE] tabPayment Entry",
+            "[FIELD] party | [TABLE] tabPayment Entry",
+            "[FIELD] posting_date | [TABLE] tabPayment Entry",
+            "[FIELD] paid_amount | [TABLE] tabPayment Entry",
+            "[FIELD] mode_of_payment | [TABLE] tabPayment Entry",
+            "[FIELD] status | [TABLE] tabPayment Entry",
+            "[FIELD] name | [TABLE] tabPayment Entry"
+        ]
+    },
+    {
+        "anchor": "amren yosuf invoices overdue",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Amrin Yosuf|Amrin Yosuf",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] due_date | [TABLE] tabSales Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] status | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "show unpaid invoices for Amrin Yousuf",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Amrin Yosuf|Amrin Yosuf",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+            "[FIELD] due_date | [TABLE] tabSales Invoice",
+            "[FIELD] status | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "how much did we sell to Yousof this year",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Amrin Yosuf|Amrin Yosuf",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+            "[FIELD] base_net_total | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "customer ledger for amrin yosuph",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Amrin Yosuf|Amrin Yosuf",
+            "[TABLE] tabGL Entry",
+            "[FIELD] party_type | [TABLE] tabGL Entry",
+            "[FIELD] party | [TABLE] tabGL Entry",
+            "[FIELD] posting_date | [TABLE] tabGL Entry",
+            "[FIELD] debit | [TABLE] tabGL Entry",
+            "[FIELD] credit | [TABLE] tabGL Entry",
+            "[FIELD] voucher_type | [TABLE] tabGL Entry",
+            "[FIELD] voucher_no | [TABLE] tabGL Entry",
+            "[FIELD] company | [TABLE] tabGL Entry"
+        ]
+    },
+    {
+        "anchor": "any returns from Amrin Yosuf this quarter",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Amrin Yosuf|Amrin Yosuf",
+            "[TABLE] tabSales Return",
+            "[FIELD] customer | [TABLE] tabSales Return",
+            "[FIELD] posting_date | [TABLE] tabSales Return",
+            "[FIELD] status | [TABLE] tabSales Return",
+            "[FIELD] name | [TABLE] tabSales Return"
+        ]
+    },
+    {
+        "anchor": "amrn payment not showing for latest invoice",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Amrin Yosuf|Amrin Yosuf",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice",
+            "[TABLE] tabPayment Entry",
+            "[FIELD] party_type | [TABLE] tabPayment Entry",
+            "[FIELD] party | [TABLE] tabPayment Entry",
+            "[FIELD] posting_date | [TABLE] tabPayment Entry",
+            "[FIELD] paid_amount | [TABLE] tabPayment Entry",
+            "[FIELD] name | [TABLE] tabPayment Entry"
+        ]
+    },
+    {
+        "anchor": "show last 5 transactions for client amrin",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Amrin Yosuf|Amrin Yosuf",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+            "[FIELD] status | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "is Amrin Yosuf over the credit limit",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Amrin Yosuf|Amrin Yosuf",
+            "[TABLE] tabCustomer",
+            "[FIELD] credit_limit | [TABLE] tabCustomer",
+            "[FIELD] customer_name | [TABLE] tabCustomer",
+            "[FIELD] name | [TABLE] tabCustomer",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "yosuph customer sales invoices created today",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Amrin Yosuf|Amrin Yosuf",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] status | [TABLE] tabSales Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "show pos invoices for Amrin this week",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Amrin Yosuf|Amrin Yosuf",
+            "[TABLE] tabPOS Invoice",
+            "[FIELD] customer | [TABLE] tabPOS Invoice",
+            "[FIELD] posting_date | [TABLE] tabPOS Invoice",
+            "[FIELD] status | [TABLE] tabPOS Invoice",
+            "[FIELD] grand_total | [TABLE] tabPOS Invoice",
+            "[FIELD] paid_amount | [TABLE] tabPOS Invoice",
+            "[FIELD] name | [TABLE] tabPOS Invoice"
+        ]
+    },
+    {
+        "anchor": "any issues or complaints logged for Amrin Yousuf",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Amrin Yosuf|Amrin Yosuf",
+            "[TABLE] tabIssue",
+            "[FIELD] customer | [TABLE] tabIssue",
+            "[FIELD] status | [TABLE] tabIssue",
+            "[FIELD] subject | [TABLE] tabIssue",
+            "[FIELD] name | [TABLE] tabIssue",
+            "[FIELD] creation | [TABLE] tabIssue"
+        ]
+    },
+    {
+        "anchor": "sales to yosuf customer in 2024",
+        "positives": [
+            "[ENTITY] Customer|tabCustomer|Amrin Yosuf|Amrin Yosuf",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+            "[FIELD] base_net_total | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "show purchase invoices from Zuckerman Security Ltd this month",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Zuckerman Security Ltd.|Zuckerman Security Ltd.",
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+            "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+            "[FIELD] status | [TABLE] tabPurchase Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabPurchase Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabPurchase Invoice",
+            "[FIELD] name | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "any pending payment to zuckerman security",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Zuckerman Security Ltd.|Zuckerman Security Ltd.",
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabPurchase Invoice",
+            "[FIELD] due_date | [TABLE] tabPurchase Invoice",
+            "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+            "[FIELD] status | [TABLE] tabPurchase Invoice",
+            "[FIELD] name | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "zuckerman security outstanding amount",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Zuckerman Security Ltd.|Zuckerman Security Ltd.",
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabPurchase Invoice",
+            "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+            "[FIELD] due_date | [TABLE] tabPurchase Invoice",
+            "[FIELD] status | [TABLE] tabPurchase Invoice",
+            "[FIELD] name | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "supplier profile for Zuckerman Ltd",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Zuckerman Security Ltd.|Zuckerman Security Ltd.",
+            "[TABLE] tabSupplier",
+            "[FIELD] name | [TABLE] tabSupplier",
+            "[FIELD] supplier_name | [TABLE] tabSupplier",
+            "[FIELD] supplier_group | [TABLE] tabSupplier",
+            "[FIELD] country | [TABLE] tabSupplier",
+            "[FIELD] disabled | [TABLE] tabSupplier",
+            "[FIELD] creation | [TABLE] tabSupplier"
+        ]
+    },
+    {
+        "anchor": "purchase orders placed to zuckerman security pending receipt",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Zuckerman Security Ltd.|Zuckerman Security Ltd.",
+            "[TABLE] tabPurchase Order",
+            "[FIELD] supplier | [TABLE] tabPurchase Order",
+            "[FIELD] status | [TABLE] tabPurchase Order",
+            "[FIELD] transaction_date | [TABLE] tabPurchase Order",
+            "[FIELD] schedule_date | [TABLE] tabPurchase Order",
+            "[FIELD] name | [TABLE] tabPurchase Order"
+        ]
+    },
+    {
+        "anchor": "purchase receipts from zuckerman supplier last 7 days",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Zuckerman Security Ltd.|Zuckerman Security Ltd.",
+            "[TABLE] tabPurchase Receipt",
+            "[FIELD] supplier | [TABLE] tabPurchase Receipt",
+            "[FIELD] posting_date | [TABLE] tabPurchase Receipt",
+            "[FIELD] status | [TABLE] tabPurchase Receipt",
+            "[FIELD] name | [TABLE] tabPurchase Receipt"
+        ]
+    },
+    {
+        "anchor": "supplier quotation status for zuckerman sec",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Zuckerman Security Ltd.|Zuckerman Security Ltd.",
+            "[TABLE] tabSupplier Quotation",
+            "[FIELD] supplier | [TABLE] tabSupplier Quotation",
+            "[FIELD] status | [TABLE] tabSupplier Quotation",
+            "[FIELD] transaction_date | [TABLE] tabSupplier Quotation",
+            "[FIELD] valid_till | [TABLE] tabSupplier Quotation",
+            "[FIELD] name | [TABLE] tabSupplier Quotation"
+        ]
+    },
+    {
+        "anchor": "payments made to zuckerman security this quarter",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Zuckerman Security Ltd.|Zuckerman Security Ltd.",
+            "[TABLE] tabPayment Entry",
+            "[FIELD] party_type | [TABLE] tabPayment Entry",
+            "[FIELD] party | [TABLE] tabPayment Entry",
+            "[FIELD] posting_date | [TABLE] tabPayment Entry",
+            "[FIELD] paid_amount | [TABLE] tabPayment Entry",
+            "[FIELD] mode_of_payment | [TABLE] tabPayment Entry",
+            "[FIELD] status | [TABLE] tabPayment Entry",
+            "[FIELD] name | [TABLE] tabPayment Entry"
+        ]
+    },
+    {
+        "anchor": "zuckermen security invoices overdue",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Zuckerman Security Ltd.|Zuckerman Security Ltd.",
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+            "[FIELD] due_date | [TABLE] tabPurchase Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabPurchase Invoice",
+            "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+            "[FIELD] status | [TABLE] tabPurchase Invoice",
+            "[FIELD] name | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "how much did we buy from zuckerman security last year",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Zuckerman Security Ltd.|Zuckerman Security Ltd.",
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+            "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabPurchase Invoice",
+            "[FIELD] base_net_total | [TABLE] tabPurchase Invoice",
+            "[FIELD] name | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "supplier ledger for zuckerman security",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Zuckerman Security Ltd.|Zuckerman Security Ltd.",
+            "[TABLE] tabGL Entry",
+            "[FIELD] party_type | [TABLE] tabGL Entry",
+            "[FIELD] party | [TABLE] tabGL Entry",
+            "[FIELD] posting_date | [TABLE] tabGL Entry",
+            "[FIELD] debit | [TABLE] tabGL Entry",
+            "[FIELD] credit | [TABLE] tabGL Entry",
+            "[FIELD] voucher_type | [TABLE] tabGL Entry",
+            "[FIELD] voucher_no | [TABLE] tabGL Entry",
+            "[FIELD] company | [TABLE] tabGL Entry"
+        ]
+    },
+    {
+        "anchor": "any returns to zuckerman security this quarter",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Zuckerman Security Ltd.|Zuckerman Security Ltd.",
+            "[TABLE] tabPurchase Return",
+            "[FIELD] supplier | [TABLE] tabPurchase Return",
+            "[FIELD] posting_date | [TABLE] tabPurchase Return",
+            "[FIELD] status | [TABLE] tabPurchase Return",
+            "[FIELD] name | [TABLE] tabPurchase Return"
+        ]
+    },
+    {
+        "anchor": "zuckerman payment not adjusted to invoice",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Zuckerman Security Ltd.|Zuckerman Security Ltd.",
+            "[TABLE] tabPayment Entry",
+            "[FIELD] party_type | [TABLE] tabPayment Entry",
+            "[FIELD] party | [TABLE] tabPayment Entry",
+            "[FIELD] unallocated_amount | [TABLE] tabPayment Entry",
+            "[FIELD] posting_date | [TABLE] tabPayment Entry",
+            "[FIELD] name | [TABLE] tabPayment Entry"
+        ]
+    },
+    {
+        "anchor": "show last 5 purchase transactions for zuckerman",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Zuckerman Security Ltd.|Zuckerman Security Ltd.",
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+            "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabPurchase Invoice",
+            "[FIELD] status | [TABLE] tabPurchase Invoice",
+            "[FIELD] name | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "is zuckerman security blocked or disabled",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Zuckerman Security Ltd.|Zuckerman Security Ltd.",
+            "[TABLE] tabSupplier",
+            "[FIELD] disabled | [TABLE] tabSupplier",
+            "[FIELD] supplier_name | [TABLE] tabSupplier",
+            "[FIELD] name | [TABLE] tabSupplier"
+        ]
+    },
+    {
+        "anchor": "zuckerman security purchase invoices created today",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Zuckerman Security Ltd.|Zuckerman Security Ltd.",
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+            "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+            "[FIELD] status | [TABLE] tabPurchase Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabPurchase Invoice",
+            "[FIELD] name | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "any issues or disputes logged against zuckerman security",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Zuckerman Security Ltd.|Zuckerman Security Ltd.",
+            "[TABLE] tabIssue",
+            "[FIELD] supplier | [TABLE] tabIssue",
+            "[FIELD] status | [TABLE] tabIssue",
+            "[FIELD] subject | [TABLE] tabIssue",
+            "[FIELD] name | [TABLE] tabIssue",
+            "[FIELD] creation | [TABLE] tabIssue"
+        ]
+    },
+    {
+        "anchor": "purchases from zuckerman ltd in 2024",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Zuckerman Security Ltd.|Zuckerman Security Ltd.",
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+            "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabPurchase Invoice",
+            "[FIELD] base_net_total | [TABLE] tabPurchase Invoice",
+            "[FIELD] name | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "show purchase invoices from Vertex Global Traders this month",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Vertex Global Traders|Vertex Global Traders",
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+            "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+            "[FIELD] status | [TABLE] tabPurchase Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabPurchase Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabPurchase Invoice",
+            "[FIELD] name | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "any pending payment to vertex traders",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Vertex Global Traders|Vertex Global Traders",
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabPurchase Invoice",
+            "[FIELD] due_date | [TABLE] tabPurchase Invoice",
+            "[FIELD] status | [TABLE] tabPurchase Invoice",
+            "[FIELD] name | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "vertex global outstanding amount",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Vertex Global Traders|Vertex Global Traders",
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabPurchase Invoice",
+            "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+            "[FIELD] name | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "supplier profile for Vertex Global",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Vertex Global Traders|Vertex Global Traders",
+            "[TABLE] tabSupplier",
+            "[FIELD] name | [TABLE] tabSupplier",
+            "[FIELD] supplier_name | [TABLE] tabSupplier",
+            "[FIELD] supplier_group | [TABLE] tabSupplier",
+            "[FIELD] country | [TABLE] tabSupplier",
+            "[FIELD] disabled | [TABLE] tabSupplier"
+        ]
+    },
+    {
+        "anchor": "purchase orders placed to vertex supplier pending",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Vertex Global Traders|Vertex Global Traders",
+            "[TABLE] tabPurchase Order",
+            "[FIELD] supplier | [TABLE] tabPurchase Order",
+            "[FIELD] status | [TABLE] tabPurchase Order",
+            "[FIELD] transaction_date | [TABLE] tabPurchase Order",
+            "[FIELD] schedule_date | [TABLE] tabPurchase Order",
+            "[FIELD] name | [TABLE] tabPurchase Order"
+        ]
+    },
+    {
+        "anchor": "purchase receipts from vertex global last week",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Vertex Global Traders|Vertex Global Traders",
+            "[TABLE] tabPurchase Receipt",
+            "[FIELD] supplier | [TABLE] tabPurchase Receipt",
+            "[FIELD] posting_date | [TABLE] tabPurchase Receipt",
+            "[FIELD] status | [TABLE] tabPurchase Receipt",
+            "[FIELD] name | [TABLE] tabPurchase Receipt"
+        ]
+    },
+    {
+        "anchor": "payments made to vertex traders this quarter",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Vertex Global Traders|Vertex Global Traders",
+            "[TABLE] tabPayment Entry",
+            "[FIELD] party_type | [TABLE] tabPayment Entry",
+            "[FIELD] party | [TABLE] tabPayment Entry",
+            "[FIELD] posting_date | [TABLE] tabPayment Entry",
+            "[FIELD] paid_amount | [TABLE] tabPayment Entry",
+            "[FIELD] name | [TABLE] tabPayment Entry"
+        ]
+    },
+    {
+        "anchor": "vertex invoices overdue",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Vertex Global Traders|Vertex Global Traders",
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+            "[FIELD] due_date | [TABLE] tabPurchase Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabPurchase Invoice",
+            "[FIELD] status | [TABLE] tabPurchase Invoice",
+            "[FIELD] name | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "how much did we buy from vertex global last year",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Vertex Global Traders|Vertex Global Traders",
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+            "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabPurchase Invoice",
+            "[FIELD] base_net_total | [TABLE] tabPurchase Invoice",
+            "[FIELD] name | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "supplier ledger for vertex traders",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Vertex Global Traders|Vertex Global Traders",
+            "[TABLE] tabGL Entry",
+            "[FIELD] party_type | [TABLE] tabGL Entry",
+            "[FIELD] party | [TABLE] tabGL Entry",
+            "[FIELD] posting_date | [TABLE] tabGL Entry",
+            "[FIELD] debit | [TABLE] tabGL Entry",
+            "[FIELD] credit | [TABLE] tabGL Entry",
+            "[FIELD] voucher_no | [TABLE] tabGL Entry"
+        ]
+    },
+    {
+        "anchor": "any returns to vertex global this month",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Vertex Global Traders|Vertex Global Traders",
+            "[TABLE] tabPurchase Return",
+            "[FIELD] supplier | [TABLE] tabPurchase Return",
+            "[FIELD] posting_date | [TABLE] tabPurchase Return",
+            "[FIELD] status | [TABLE] tabPurchase Return",
+            "[FIELD] name | [TABLE] tabPurchase Return"
+        ]
+    },
+    {
+        "anchor": "vertex payment not adjusted to invoice",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Vertex Global Traders|Vertex Global Traders",
+            "[TABLE] tabPayment Entry",
+            "[FIELD] party | [TABLE] tabPayment Entry",
+            "[FIELD] unallocated_amount | [TABLE] tabPayment Entry",
+            "[FIELD] posting_date | [TABLE] tabPayment Entry",
+            "[FIELD] name | [TABLE] tabPayment Entry"
+        ]
+    },
+    {
+        "anchor": "last 5 purchase transactions from vertex",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Vertex Global Traders|Vertex Global Traders",
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+            "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabPurchase Invoice",
+            "[FIELD] name | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "is vertex global traders disabled",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Vertex Global Traders|Vertex Global Traders",
+            "[TABLE] tabSupplier",
+            "[FIELD] disabled | [TABLE] tabSupplier",
+            "[FIELD] supplier_name | [TABLE] tabSupplier",
+            "[FIELD] name | [TABLE] tabSupplier"
+        ]
+    },
+    {
+        "anchor": "vertex global purchase invoices created today",
+        "positives": [
+            "[ENTITY] Supplier|tabSupplier|Vertex Global Traders|Vertex Global Traders",
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+            "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+            "[FIELD] status | [TABLE] tabPurchase Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabPurchase Invoice",
+            "[FIELD] name | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "which customers have increasing outstanding every month",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "items selling well but profit is low",
+        "positives": [
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] base_net_amount | [TABLE] tabSales Invoice Item",
+            "[FIELD] qty | [TABLE] tabSales Invoice Item",
+            "[FIELD] buying_rate | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "customers who used to buy regularly but stopped now",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "items with frequent stock adjustments",
+        "positives": [
+            "[TABLE] tabStock Ledger Entry",
+            "[FIELD] item_code | [TABLE] tabStock Ledger Entry",
+            "[FIELD] voucher_type | [TABLE] tabStock Ledger Entry",
+            "[FIELD] posting_date | [TABLE] tabStock Ledger Entry"
+        ]
+    },
+    {
+        "anchor": "warehouses where stock value is high but sales are low",
+        "positives": [
+            "[TABLE] tabBin",
+            "[FIELD] warehouse | [TABLE] tabBin",
+            "[FIELD] stock_value | [TABLE] tabBin",
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "suppliers with delayed deliveries frequently",
+        "positives": [
+            "[TABLE] tabPurchase Order",
+            "[FIELD] supplier | [TABLE] tabPurchase Order",
+            "[FIELD] schedule_date | [TABLE] tabPurchase Order",
+            "[FIELD] status | [TABLE] tabPurchase Order"
+        ]
+    },
+    {
+        "anchor": "purchase invoices created but not paid for long time",
+        "positives": [
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabPurchase Invoice",
+            "[FIELD] status | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "sales trend comparison between this year and last year",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "items that go out of stock repeatedly",
+        "positives": [
+            "[TABLE] tabBin",
+            "[FIELD] item_code | [TABLE] tabBin",
+            "[FIELD] actual_qty | [TABLE] tabBin"
+        ]
+    },
+    {
+        "anchor": "projects where cost exceeded planned budget",
+        "positives": [
+            "[TABLE] tabProject",
+            "[FIELD] total_costing_amount | [TABLE] tabProject",
+            "[FIELD] expected_cost | [TABLE] tabProject"
+        ]
+    },
+    {
+        "anchor": "employees logging high hours but low billable amount",
+        "positives": [
+            "[TABLE] tabTimesheet Detail",
+            "[FIELD] employee | [TABLE] tabTimesheet Detail",
+            "[FIELD] hours | [TABLE] tabTimesheet Detail",
+            "[TABLE] tabProject",
+            "[FIELD] billed_amount | [TABLE] tabProject"
+        ]
+    },
+    {
+        "anchor": "which month had highest stock loss",
+        "positives": [
+            "[TABLE] tabStock Ledger Entry",
+            "[FIELD] posting_date | [TABLE] tabStock Ledger Entry",
+            "[FIELD] difference_amount | [TABLE] tabStock Ledger Entry"
+        ]
+    },
+    {
+        "anchor": "sales invoices created but delivery not done",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice",
+            "[TABLE] tabDelivery Note",
+            "[FIELD] against_sales_invoice | [TABLE] tabDelivery Note"
+        ]
+    },
+    {
+        "anchor": "payments received but not linked to invoices",
+        "positives": [
+            "[TABLE] tabPayment Entry",
+            "[FIELD] unallocated_amount | [TABLE] tabPayment Entry",
+            "[FIELD] posting_date | [TABLE] tabPayment Entry"
+        ]
+    },
+    {
+        "anchor": "customers with frequent invoice cancellations",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] status | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "show top 10 customers by sales for the last 30 days",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "which item gave the highest revenue this month",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] parent | [TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] base_net_amount | [TABLE] tabSales Invoice Item",
+            "[FIELD] qty | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "top 5 items sold by quantity this quarter",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] parent | [TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] qty | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "customers with overdue invoices more than 60 days",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] due_date | [TABLE] tabSales Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "which suppliers have the highest outstanding payments",
+        "positives": [
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabPurchase Invoice",
+            "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+            "[FIELD] name | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "show purchase orders that are not received yet",
+        "positives": [
+            "[TABLE] tabPurchase Order",
+            "[FIELD] status | [TABLE] tabPurchase Order",
+            "[FIELD] supplier | [TABLE] tabPurchase Order",
+            "[FIELD] transaction_date | [TABLE] tabPurchase Order",
+            "[FIELD] name | [TABLE] tabPurchase Order"
+        ]
+    },
+    {
+        "anchor": "items with negative stock right now",
+        "positives": [
+            "[TABLE] tabBin",
+            "[FIELD] item_code | [TABLE] tabBin",
+            "[FIELD] warehouse | [TABLE] tabBin",
+            "[FIELD] actual_qty | [TABLE] tabBin"
+        ]
+    },
+    {
+        "anchor": "which warehouse has the highest stock value today",
+        "positives": [
+            "[TABLE] tabBin",
+            "[FIELD] warehouse | [TABLE] tabBin",
+            "[FIELD] stock_value | [TABLE] tabBin"
+        ]
+    },
+    {
+        "anchor": "dead stock items not moved in last 180 days",
+        "positives": [
+            "[TABLE] tabStock Ledger Entry",
+            "[FIELD] item_code | [TABLE] tabStock Ledger Entry",
+            "[FIELD] posting_date | [TABLE] tabStock Ledger Entry",
+            "[FIELD] voucher_type | [TABLE] tabStock Ledger Entry"
+        ]
+    },
+    {
+        "anchor": "fast moving items but stock less than 7 days",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] parent | [TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] qty | [TABLE] tabSales Invoice Item",
+            "[TABLE] tabBin",
+            "[FIELD] item_code | [TABLE] tabBin",
+            "[FIELD] actual_qty | [TABLE] tabBin"
+        ]
+    },
+    {
+        "anchor": "items sold a lot but currently out of stock",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] parent | [TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] qty | [TABLE] tabSales Invoice Item",
+            "[TABLE] tabBin",
+            "[FIELD] item_code | [TABLE] tabBin",
+            "[FIELD] actual_qty | [TABLE] tabBin"
+        ]
+    },
+    {
+        "anchor": "gross profit by customer group this year vs last year",
+        "positives": [
+            "[TABLE] tabCustomer",
+            "[FIELD] customer_group | [TABLE] tabCustomer",
+            "[FIELD] name | [TABLE] tabCustomer",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice",
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] parent | [TABLE] tabSales Invoice Item",
+            "[FIELD] base_net_amount | [TABLE] tabSales Invoice Item",
+            "[FIELD] buying_rate | [TABLE] tabSales Invoice Item",
+            "[FIELD] qty | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "why profit margin going down month by month",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice",
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] parent | [TABLE] tabSales Invoice Item",
+            "[FIELD] base_net_amount | [TABLE] tabSales Invoice Item",
+            "[FIELD] buying_rate | [TABLE] tabSales Invoice Item",
+            "[FIELD] qty | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "sales invoices submitted but not paid fully",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] docstatus | [TABLE] tabSales Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "customers who paid late consistently",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] due_date | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "items with zero sales in last 90 days",
+        "positives": [
+            "[TABLE] tabItem",
+            "[FIELD] name | [TABLE] tabItem",
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "stock entries created today",
+        "positives": [
+            "[TABLE] tabStock Entry",
+            "[FIELD] posting_date | [TABLE] tabStock Entry",
+            "[FIELD] stock_entry_type | [TABLE] tabStock Entry",
+            "[FIELD] name | [TABLE] tabStock Entry"
+        ]
+    },
+    {
+        "anchor": "stock transfers between warehouses this month",
+        "positives": [
+            "[TABLE] tabStock Entry",
+            "[FIELD] stock_entry_type | [TABLE] tabStock Entry",
+            "[FIELD] posting_date | [TABLE] tabStock Entry",
+            "[FIELD] from_warehouse | [TABLE] tabStock Entry",
+            "[FIELD] to_warehouse | [TABLE] tabStock Entry"
+        ]
+    },
+    {
+        "anchor": "items frequently adjusted using stock reconciliation",
+        "positives": [
+            "[TABLE] tabStock Reconciliation",
+            "[FIELD] posting_date | [TABLE] tabStock Reconciliation",
+            "[FIELD] name | [TABLE] tabStock Reconciliation",
+            "[TABLE] tabStock Ledger Entry",
+            "[FIELD] item_code | [TABLE] tabStock Ledger Entry"
+        ]
+    },
+    {
+        "anchor": "suppliers with price increases in recent purchases",
+        "positives": [
+            "[TABLE] tabPurchase Invoice Item",
+            "[FIELD] item_code | [TABLE] tabPurchase Invoice Item",
+            "[FIELD] rate | [TABLE] tabPurchase Invoice Item",
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] supplier | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "purchase invoices created but not approved",
+        "positives": [
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] docstatus | [TABLE] tabPurchase Invoice",
+            "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+            "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+            "[FIELD] name | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "employees who did not submit timesheet last week",
+        "positives": [
+            "[TABLE] tabEmployee",
+            "[FIELD] name | [TABLE] tabEmployee",
+            "[TABLE] tabTimesheet",
+            "[FIELD] employee | [TABLE] tabTimesheet",
+            "[FIELD] start_date | [TABLE] tabTimesheet"
+        ]
+    },
+    {
+        "anchor": "projects with no activity in last 30 days",
+        "positives": [
+            "[TABLE] tabProject",
+            "[FIELD] name | [TABLE] tabProject",
+            "[FIELD] modified | [TABLE] tabProject"
+        ]
+    },
+    {
+        "anchor": "tasks assigned to me and overdue",
+        "positives": [
+            "[TABLE] tabTask",
+            "[FIELD] assigned_to | [TABLE] tabTask",
+            "[FIELD] exp_end_date | [TABLE] tabTask",
+            "[FIELD] status | [TABLE] tabTask",
+            "[FIELD] name | [TABLE] tabTask"
+        ]
+    },
+    {
+        "anchor": "expense claims rejected this month",
+        "positives": [
+            "[TABLE] tabExpense Claim",
+            "[FIELD] status | [TABLE] tabExpense Claim",
+            "[FIELD] posting_date | [TABLE] tabExpense Claim",
+            "[FIELD] employee | [TABLE] tabExpense Claim",
+            "[FIELD] name | [TABLE] tabExpense Claim"
+        ]
+    },
+    {
+        "anchor": "journal entries impacting cash accounts",
+        "positives": [
+            "[TABLE] tabJournal Entry Account",
+            "[FIELD] account | [TABLE] tabJournal Entry Account",
+            "[FIELD] debit | [TABLE] tabJournal Entry Account",
+            "[FIELD] credit | [TABLE] tabJournal Entry Account"
+        ]
+    },
+    {
+        "anchor": "bank reconciliation not done for this month",
+        "positives": [
+            "[TABLE] tabBank Reconciliation Statement",
+            "[FIELD] bank_account | [TABLE] tabBank Reconciliation Statement",
+            "[FIELD] posting_date | [TABLE] tabBank Reconciliation Statement"
+        ]
+    },
+    {
+        "anchor": "customers with credit limit exceeded",
+        "positives": [
+            "[TABLE] tabCustomer",
+            "[FIELD] credit_limit | [TABLE] tabCustomer",
+            "[FIELD] name | [TABLE] tabCustomer",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "how much exchange gain or loss happened last year",
+        "positives": [
+            "[TABLE] tabGL Entry",
+            "[FIELD] posting_date | [TABLE] tabGL Entry",
+            "[FIELD] account | [TABLE] tabGL Entry",
+            "[FIELD] debit | [TABLE] tabGL Entry",
+            "[FIELD] credit | [TABLE] tabGL Entry",
+            "[FIELD] voucher_type | [TABLE] tabGL Entry",
+            "[FIELD] voucher_no | [TABLE] tabGL Entry",
+            "[FIELD] company | [TABLE] tabGL Entry"
+        ]
+    },
+    {
+        "anchor": "show all draft sales invoices created today",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] docstatus | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] owner | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "which quotations are expired but still not closed",
+        "positives": [
+            "[TABLE] tabQuotation",
+            "[FIELD] valid_till | [TABLE] tabQuotation",
+            "[FIELD] status | [TABLE] tabQuotation",
+            "[FIELD] transaction_date | [TABLE] tabQuotation",
+            "[FIELD] name | [TABLE] tabQuotation"
+        ]
+    },
+    {
+        "anchor": "sales orders pending delivery after the promised date",
+        "positives": [
+            "[TABLE] tabSales Order",
+            "[FIELD] delivery_date | [TABLE] tabSales Order",
+            "[FIELD] status | [TABLE] tabSales Order",
+            "[FIELD] customer | [TABLE] tabSales Order",
+            "[FIELD] transaction_date | [TABLE] tabSales Order",
+            "[FIELD] name | [TABLE] tabSales Order"
+        ]
+    },
+    {
+        "anchor": "delivery notes created but sales invoice not generated",
+        "positives": [
+            "[TABLE] tabDelivery Note",
+            "[FIELD] posting_date | [TABLE] tabDelivery Note",
+            "[FIELD] customer | [TABLE] tabDelivery Note",
+            "[FIELD] status | [TABLE] tabDelivery Note",
+            "[FIELD] name | [TABLE] tabDelivery Note",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "payments received this week by mode of payment",
+        "positives": [
+            "[TABLE] tabPayment Entry",
+            "[FIELD] posting_date | [TABLE] tabPayment Entry",
+            "[FIELD] mode_of_payment | [TABLE] tabPayment Entry",
+            "[FIELD] paid_amount | [TABLE] tabPayment Entry",
+            "[FIELD] party_type | [TABLE] tabPayment Entry"
+        ]
+    },
+    {
+        "anchor": "journal entries posted this month which are still in draft",
+        "positives": [
+            "[TABLE] tabJournal Entry",
+            "[FIELD] docstatus | [TABLE] tabJournal Entry",
+            "[FIELD] posting_date | [TABLE] tabJournal Entry",
+            "[FIELD] voucher_type | [TABLE] tabJournal Entry",
+            "[FIELD] name | [TABLE] tabJournal Entry"
+        ]
+    },
+    {
+        "anchor": "which expense claims are waiting for approval",
+        "positives": [
+            "[TABLE] tabExpense Claim",
+            "[FIELD] status | [TABLE] tabExpense Claim",
+            "[FIELD] employee | [TABLE] tabExpense Claim",
+            "[FIELD] posting_date | [TABLE] tabExpense Claim",
+            "[FIELD] name | [TABLE] tabExpense Claim"
+        ]
+    },
+    {
+        "anchor": "employees whose attendance is missing for yesterday",
+        "positives": [
+            "[TABLE] tabAttendance",
+            "[FIELD] attendance_date | [TABLE] tabAttendance",
+            "[FIELD] employee | [TABLE] tabAttendance",
+            "[FIELD] status | [TABLE] tabAttendance",
+            "[FIELD] name | [TABLE] tabAttendance"
+        ]
+    },
+    {
+        "anchor": "leave applications pending approval for next week",
+        "positives": [
+            "[TABLE] tabLeave Application",
+            "[FIELD] status | [TABLE] tabLeave Application",
+            "[FIELD] from_date | [TABLE] tabLeave Application",
+            "[FIELD] to_date | [TABLE] tabLeave Application",
+            "[FIELD] employee | [TABLE] tabLeave Application",
+            "[FIELD] name | [TABLE] tabLeave Application"
+        ]
+    },
+    {
+        "anchor": "which employees are on leave today",
+        "positives": [
+            "[TABLE] tabLeave Application",
+            "[FIELD] status | [TABLE] tabLeave Application",
+            "[FIELD] from_date | [TABLE] tabLeave Application",
+            "[FIELD] to_date | [TABLE] tabLeave Application",
+            "[FIELD] employee | [TABLE] tabLeave Application"
+        ]
+    },
+    {
+        "anchor": "projects with overdue tasks",
+        "positives": [
+            "[TABLE] tabTask",
+            "[FIELD] project | [TABLE] tabTask",
+            "[FIELD] exp_end_date | [TABLE] tabTask",
+            "[FIELD] status | [TABLE] tabTask",
+            "[FIELD] name | [TABLE] tabTask",
+            "[TABLE] tabProject",
+            "[FIELD] name | [TABLE] tabProject"
+        ]
+    },
+    {
+        "anchor": "timesheets submitted this month by employee",
+        "positives": [
+            "[TABLE] tabTimesheet",
+            "[FIELD] employee | [TABLE] tabTimesheet",
+            "[FIELD] start_date | [TABLE] tabTimesheet",
+            "[FIELD] end_date | [TABLE] tabTimesheet",
+            "[FIELD] docstatus | [TABLE] tabTimesheet",
+            "[FIELD] name | [TABLE] tabTimesheet"
+        ]
+    },
+    {
+        "anchor": "tasks where work is logged but status is still open",
+        "positives": [
+            "[TABLE] tabTimesheet Detail",
+            "[FIELD] task | [TABLE] tabTimesheet Detail",
+            "[FIELD] hours | [TABLE] tabTimesheet Detail",
+            "[TABLE] tabTask",
+            "[FIELD] status | [TABLE] tabTask",
+            "[FIELD] name | [TABLE] tabTask"
+        ]
+    },
+    {
+        "anchor": "material requests pending purchase order creation",
+        "positives": [
+            "[TABLE] tabMaterial Request",
+            "[FIELD] status | [TABLE] tabMaterial Request",
+            "[FIELD] transaction_date | [TABLE] tabMaterial Request",
+            "[FIELD] material_request_type | [TABLE] tabMaterial Request",
+            "[FIELD] name | [TABLE] tabMaterial Request"
+        ]
+    },
+    {
+        "anchor": "purchase orders created but purchase receipt not done",
+        "positives": [
+            "[TABLE] tabPurchase Order",
+            "[FIELD] status | [TABLE] tabPurchase Order",
+            "[FIELD] supplier | [TABLE] tabPurchase Order",
+            "[FIELD] transaction_date | [TABLE] tabPurchase Order",
+            "[FIELD] name | [TABLE] tabPurchase Order",
+            "[TABLE] tabPurchase Receipt",
+            "[FIELD] name | [TABLE] tabPurchase Receipt"
+        ]
+    },
+    {
+        "anchor": "monthly sales growth compared to last year",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "items with highest return rate",
+        "positives": [
+            "[TABLE] tabSales Return",
+            "[FIELD] posting_date | [TABLE] tabSales Return",
+            "[TABLE] tabSales Return Item",
+            "[FIELD] item_code | [TABLE] tabSales Return Item",
+            "[FIELD] qty | [TABLE] tabSales Return Item"
+        ]
+    },
+    {
+        "anchor": "weekly sales summary for the last 8 weeks",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "customers with no sales activity this quarter",
+        "positives": [
+            "[TABLE] tabCustomer",
+            "[FIELD] name | [TABLE] tabCustomer",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "items reordered frequently this month",
+        "positives": [
+            "[TABLE] tabPurchase Order",
+            "[FIELD] transaction_date | [TABLE] tabPurchase Order",
+            "[FIELD] name | [TABLE] tabPurchase Order",
+            "[TABLE] tabPurchase Order Item",
+            "[FIELD] item_code | [TABLE] tabPurchase Order Item"
+        ]
+    },
+    {
+        "anchor": "purchase receipts pending quality inspection",
+        "positives": [
+            "[TABLE] tabPurchase Receipt",
+            "[FIELD] status | [TABLE] tabPurchase Receipt",
+            "[FIELD] posting_date | [TABLE] tabPurchase Receipt",
+            "[FIELD] name | [TABLE] tabPurchase Receipt"
+        ]
+    },
+    {
+        "anchor": "items failing quality inspection frequently",
+        "positives": [
+            "[TABLE] tabQuality Inspection",
+            "[FIELD] item_code | [TABLE] tabQuality Inspection",
+            "[FIELD] status | [TABLE] tabQuality Inspection",
+            "[FIELD] inspection_date | [TABLE] tabQuality Inspection"
+        ]
+    },
+    {
+        "anchor": "stock reserved for sales orders but not delivered",
+        "positives": [
+            "[TABLE] tabSales Order",
+            "[FIELD] name | [TABLE] tabSales Order",
+            "[FIELD] status | [TABLE] tabSales Order",
+            "[TABLE] tabBin",
+            "[FIELD] reserved_qty | [TABLE] tabBin"
+        ]
+    },
+    {
+        "anchor": "items with reorder level breached",
+        "positives": [
+            "[TABLE] tabItem Reorder",
+            "[FIELD] warehouse | [TABLE] tabItem Reorder",
+            "[FIELD] reorder_level | [TABLE] tabItem Reorder",
+            "[FIELD] item_code | [TABLE] tabItem Reorder"
+        ]
+    },
+    {
+        "anchor": "stock ageing report for slow moving items",
+        "positives": [
+            "[TABLE] tabStock Ledger Entry",
+            "[FIELD] item_code | [TABLE] tabStock Ledger Entry",
+            "[FIELD] posting_date | [TABLE] tabStock Ledger Entry",
+            "[FIELD] voucher_type | [TABLE] tabStock Ledger Entry"
+        ]
+    },
+    {
+        "anchor": "items transferred between warehouses frequently",
+        "positives": [
+            "[TABLE] tabStock Entry",
+            "[FIELD] stock_entry_type | [TABLE] tabStock Entry",
+            "[FIELD] posting_date | [TABLE] tabStock Entry",
+            "[FIELD] name | [TABLE] tabStock Entry"
+        ]
+    },
+    {
+        "anchor": "material requests pending approval",
+        "positives": [
+            "[TABLE] tabMaterial Request",
+            "[FIELD] status | [TABLE] tabMaterial Request",
+            "[FIELD] transaction_date | [TABLE] tabMaterial Request",
+            "[FIELD] material_request_type | [TABLE] tabMaterial Request",
+            "[FIELD] name | [TABLE] tabMaterial Request"
+        ]
+    },
+    {
+        "anchor": "bom versions used in recent manufacturing orders",
+        "positives": [
+            "[TABLE] tabWork Order",
+            "[FIELD] bom_no | [TABLE] tabWork Order",
+            "[FIELD] posting_date | [TABLE] tabWork Order",
+            "[FIELD] name | [TABLE] tabWork Order"
+        ]
+    },
+    {
+        "anchor": "manufacturing orders delayed beyond planned date",
+        "positives": [
+            "[TABLE] tabWork Order",
+            "[FIELD] planned_end_date | [TABLE] tabWork Order",
+            "[FIELD] actual_end_date | [TABLE] tabWork Order",
+            "[FIELD] status | [TABLE] tabWork Order",
+            "[FIELD] name | [TABLE] tabWork Order"
+        ]
+    },
+    {
+        "anchor": "job cards with high variance between planned and actual time",
+        "positives": [
+            "[TABLE] tabJob Card",
+            "[FIELD] planned_start_time | [TABLE] tabJob Card",
+            "[FIELD] actual_start_time | [TABLE] tabJob Card",
+            "[FIELD] actual_end_time | [TABLE] tabJob Card",
+            "[FIELD] name | [TABLE] tabJob Card"
+        ]
+    },
+    {
+        "anchor": "manufacturing cost variance by item",
+        "positives": [
+            "[TABLE] tabWork Order",
+            "[FIELD] produced_qty | [TABLE] tabWork Order",
+            "[FIELD] total_operating_cost | [TABLE] tabWork Order",
+            "[FIELD] item_code | [TABLE] tabWork Order"
+        ]
+    },
+    {
+        "anchor": "maintenance schedules overdue",
+        "positives": [
+            "[TABLE] tabMaintenance Schedule",
+            "[FIELD] due_date | [TABLE] tabMaintenance Schedule",
+            "[FIELD] status | [TABLE] tabMaintenance Schedule",
+            "[FIELD] name | [TABLE] tabMaintenance Schedule"
+        ]
+    },
+    {
+        "anchor": "customers who stopped buying after first purchase",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "items with declining sales over last 6 months",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] qty | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "customers with multiple open quotations",
+        "positives": [
+            "[TABLE] tabQuotation",
+            "[FIELD] party_name | [TABLE] tabQuotation",
+            "[FIELD] status | [TABLE] tabQuotation",
+            "[FIELD] transaction_date | [TABLE] tabQuotation"
+        ]
+    },
+    {
+        "anchor": "sales orders cancelled after confirmation",
+        "positives": [
+            "[TABLE] tabSales Order",
+            "[FIELD] status | [TABLE] tabSales Order",
+            "[FIELD] transaction_date | [TABLE] tabSales Order",
+            "[FIELD] name | [TABLE] tabSales Order"
+        ]
+    },
+    {
+        "anchor": "average delivery delay by customer",
+        "positives": [
+            "[TABLE] tabSales Order",
+            "[FIELD] delivery_date | [TABLE] tabSales Order",
+            "[FIELD] customer | [TABLE] tabSales Order",
+            "[TABLE] tabDelivery Note",
+            "[FIELD] posting_date | [TABLE] tabDelivery Note"
+        ]
+    },
+    {
+        "anchor": "purchase price variance for items this quarter",
+        "positives": [
+            "[TABLE] tabPurchase Invoice Item",
+            "[FIELD] item_code | [TABLE] tabPurchase Invoice Item",
+            "[FIELD] rate | [TABLE] tabPurchase Invoice Item",
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] posting_date | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "suppliers frequently delaying invoices",
+        "positives": [
+            "[TABLE] tabPurchase Order",
+            "[FIELD] supplier | [TABLE] tabPurchase Order",
+            "[FIELD] schedule_date | [TABLE] tabPurchase Order",
+            "[FIELD] status | [TABLE] tabPurchase Order"
+        ]
+    },
+    {
+        "anchor": "items purchased but never sold",
+        "positives": [
+            "[TABLE] tabPurchase Invoice Item",
+            "[FIELD] item_code | [TABLE] tabPurchase Invoice Item",
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "inventory turnover ratio by item group",
+        "positives": [
+            "[TABLE] tabItem",
+            "[FIELD] item_group | [TABLE] tabItem",
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] qty | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "stock valuation changes month over month",
+        "positives": [
+            "[TABLE] tabBin",
+            "[FIELD] stock_value | [TABLE] tabBin",
+            "[FIELD] warehouse | [TABLE] tabBin"
+        ]
+    },
+    {
+        "anchor": "employees with frequent late attendance",
+        "positives": [
+            "[TABLE] tabAttendance",
+            "[FIELD] employee | [TABLE] tabAttendance",
+            "[FIELD] in_time | [TABLE] tabAttendance",
+            "[FIELD] attendance_date | [TABLE] tabAttendance"
+        ]
+    },
+    {
+        "anchor": "projects with margin below target",
+        "positives": [
+            "[TABLE] tabProject",
+            "[FIELD] total_costing_amount | [TABLE] tabProject",
+            "[FIELD] billed_amount | [TABLE] tabProject"
+        ]
+    },
+    {
+        "anchor": "timesheets approved but not billed",
+        "positives": [
+            "[TABLE] tabTimesheet",
+            "[FIELD] docstatus | [TABLE] tabTimesheet",
+            "[FIELD] billing_amount | [TABLE] tabTimesheet",
+            "[FIELD] name | [TABLE] tabTimesheet"
+        ]
+    },
+    {
+        "anchor": "quarterly revenue split by item group",
+        "positives": [
+            "[TABLE] tabItem",
+            "[FIELD] item_group | [TABLE] tabItem",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] base_net_amount | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "customers generating highest profit this year",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] base_net_amount | [TABLE] tabSales Invoice Item",
+            "[FIELD] buying_rate | [TABLE] tabSales Invoice Item",
+            "[FIELD] qty | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "items with selling price below buying price",
+        "positives": [
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] base_net_amount | [TABLE] tabSales Invoice Item",
+            "[FIELD] buying_rate | [TABLE] tabSales Invoice Item",
+            "[FIELD] qty | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "customers with repeated partial payments",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "average collection days by customer",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] due_date | [TABLE] tabSales Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "items frequently sold on discount",
+        "positives": [
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] discount_amount | [TABLE] tabSales Invoice Item",
+            "[FIELD] base_net_amount | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "suppliers with frequent purchase returns",
+        "positives": [
+            "[TABLE] tabPurchase Return",
+            "[FIELD] supplier | [TABLE] tabPurchase Return",
+            "[FIELD] posting_date | [TABLE] tabPurchase Return",
+            "[FIELD] status | [TABLE] tabPurchase Return"
+        ]
+    },
+    {
+        "anchor": "purchase items with price fluctuation month over month",
+        "positives": [
+            "[TABLE] tabPurchase Invoice Item",
+            "[FIELD] item_code | [TABLE] tabPurchase Invoice Item",
+            "[FIELD] rate | [TABLE] tabPurchase Invoice Item",
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] posting_date | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "warehouses with frequent negative stock entries",
+        "positives": [
+            "[TABLE] tabStock Ledger Entry",
+            "[FIELD] warehouse | [TABLE] tabStock Ledger Entry",
+            "[FIELD] qty_after_transaction | [TABLE] tabStock Ledger Entry",
+            "[FIELD] posting_date | [TABLE] tabStock Ledger Entry"
+        ]
+    },
+    {
+        "anchor": "items consuming most warehouse space",
+        "positives": [
+            "[TABLE] tabBin",
+            "[FIELD] item_code | [TABLE] tabBin",
+            "[FIELD] actual_qty | [TABLE] tabBin",
+            "[FIELD] warehouse | [TABLE] tabBin"
+        ]
+    },
+    {
+        "anchor": "employees with frequent leave applications",
+        "positives": [
+            "[TABLE] tabLeave Application",
+            "[FIELD] employee | [TABLE] tabLeave Application",
+            "[FIELD] from_date | [TABLE] tabLeave Application",
+            "[FIELD] to_date | [TABLE] tabLeave Application"
+        ]
+    },
+    {
+        "anchor": "employees with low attendance percentage",
+        "positives": [
+            "[TABLE] tabAttendance",
+            "[FIELD] employee | [TABLE] tabAttendance",
+            "[FIELD] attendance_date | [TABLE] tabAttendance",
+            "[FIELD] status | [TABLE] tabAttendance"
+        ]
+    },
+    {
+        "anchor": "projects with frequent scope changes",
+        "positives": [
+            "[TABLE] tabProject",
+            "[FIELD] modified | [TABLE] tabProject",
+            "[FIELD] status | [TABLE] tabProject",
+            "[FIELD] name | [TABLE] tabProject"
+        ]
+    },
+    {
+        "anchor": "tasks reopened multiple times",
+        "positives": [
+            "[TABLE] tabTask",
+            "[FIELD] status | [TABLE] tabTask",
+            "[FIELD] modified | [TABLE] tabTask",
+            "[FIELD] name | [TABLE] tabTask"
+        ]
+    },
+    {
+        "anchor": "support issues pending resolution beyond sla",
+        "positives": [
+            "[TABLE] tabIssue",
+            "[FIELD] status | [TABLE] tabIssue",
+            "[FIELD] opening_date | [TABLE] tabIssue",
+            "[FIELD] name | [TABLE] tabIssue"
+        ]
+    },
+    {
+        "anchor": "yearly sales comparison by customer group",
+        "positives": [
+            "[TABLE] tabCustomer",
+            "[FIELD] customer_group | [TABLE] tabCustomer",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "items with sales spike after price change",
+        "positives": [
+            "[TABLE] tabItem Price",
+            "[FIELD] item_code | [TABLE] tabItem Price",
+            "[FIELD] valid_from | [TABLE] tabItem Price",
+            "[FIELD] price_list_rate | [TABLE] tabItem Price",
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] qty | [TABLE] tabSales Invoice Item",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "customers with frequent credit note requests",
+        "positives": [
+            "[TABLE] tabSales Return",
+            "[FIELD] customer | [TABLE] tabSales Return",
+            "[FIELD] posting_date | [TABLE] tabSales Return",
+            "[FIELD] status | [TABLE] tabSales Return"
+        ]
+    },
+    {
+        "anchor": "items bought in bulk but sold in small quantities",
+        "positives": [
+            "[TABLE] tabPurchase Invoice Item",
+            "[FIELD] item_code | [TABLE] tabPurchase Invoice Item",
+            "[FIELD] qty | [TABLE] tabPurchase Invoice Item",
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] qty | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "average supplier delivery time by month",
+        "positives": [
+            "[TABLE] tabPurchase Order",
+            "[FIELD] supplier | [TABLE] tabPurchase Order",
+            "[FIELD] transaction_date | [TABLE] tabPurchase Order",
+            "[FIELD] schedule_date | [TABLE] tabPurchase Order",
+            "[TABLE] tabPurchase Receipt",
+            "[FIELD] posting_date | [TABLE] tabPurchase Receipt"
+        ]
+    },
+    {
+        "anchor": "purchase orders frequently amended",
+        "positives": [
+            "[TABLE] tabPurchase Order",
+            "[FIELD] amended_from | [TABLE] tabPurchase Order",
+            "[FIELD] modified | [TABLE] tabPurchase Order",
+            "[FIELD] name | [TABLE] tabPurchase Order"
+        ]
+    },
+    {
+        "anchor": "items with frequent stock write offs",
+        "positives": [
+            "[TABLE] tabStock Ledger Entry",
+            "[FIELD] item_code | [TABLE] tabStock Ledger Entry",
+            "[FIELD] voucher_type | [TABLE] tabStock Ledger Entry",
+            "[FIELD] posting_date | [TABLE] tabStock Ledger Entry"
+        ]
+    },
+    {
+        "anchor": "warehouses with slow stock movement",
+        "positives": [
+            "[TABLE] tabBin",
+            "[FIELD] warehouse | [TABLE] tabBin",
+            "[FIELD] actual_qty | [TABLE] tabBin",
+            "[FIELD] stock_value | [TABLE] tabBin"
+        ]
+    },
+    {
+        "anchor": "employees with overtime consistently",
+        "positives": [
+            "[TABLE] tabTimesheet Detail",
+            "[FIELD] employee | [TABLE] tabTimesheet Detail",
+            "[FIELD] hours | [TABLE] tabTimesheet Detail",
+            "[FIELD] from_time | [TABLE] tabTimesheet Detail",
+            "[FIELD] to_time | [TABLE] tabTimesheet Detail"
+        ]
+    },
+    {
+        "anchor": "departments with highest leave utilization",
+        "positives": [
+            "[TABLE] tabEmployee",
+            "[FIELD] department | [TABLE] tabEmployee",
+            "[TABLE] tabLeave Application",
+            "[FIELD] employee | [TABLE] tabLeave Application",
+            "[FIELD] total_leave_days | [TABLE] tabLeave Application"
+        ]
+    },
+    {
+        "anchor": "projects with delayed milestone completion",
+        "positives": [
+            "[TABLE] tabProject Milestone",
+            "[FIELD] milestone_date | [TABLE] tabProject Milestone",
+            "[FIELD] status | [TABLE] tabProject Milestone",
+            "[FIELD] project | [TABLE] tabProject Milestone"
+        ]
+    },
+    {
+        "anchor": "tasks with repeated reassignment",
+        "positives": [
+            "[TABLE] tabTask",
+            "[FIELD] assigned_to | [TABLE] tabTask",
+            "[FIELD] modified | [TABLE] tabTask",
+            "[FIELD] name | [TABLE] tabTask"
+        ]
+    },
+    {
+        "anchor": "manufacturing orders with scrap percentage high",
+        "positives": [
+            "[TABLE] tabWork Order",
+            "[FIELD] produced_qty | [TABLE] tabWork Order",
+            "[FIELD] scrap_material_cost | [TABLE] tabWork Order",
+            "[FIELD] name | [TABLE] tabWork Order"
+        ]
+    },
+    {
+        "anchor": "assets frequently under maintenance",
+        "positives": [
+            "[TABLE] tabMaintenance Visit",
+            "[FIELD] asset | [TABLE] tabMaintenance Visit",
+            "[FIELD] maintenance_type | [TABLE] tabMaintenance Visit",
+            "[FIELD] completion_status | [TABLE] tabMaintenance Visit"
+        ]
+    },
+    {
+        "anchor": "support tickets reopened after closure",
+        "positives": [
+            "[TABLE] tabIssue",
+            "[FIELD] status | [TABLE] tabIssue",
+            "[FIELD] modified | [TABLE] tabIssue",
+            "[FIELD] name | [TABLE] tabIssue"
+        ]
+    },
+    {
+        "anchor": "month wise cash inflow and outflow",
+        "positives": [
+            "[TABLE] tabGL Entry",
+            "[FIELD] posting_date | [TABLE] tabGL Entry",
+            "[FIELD] debit | [TABLE] tabGL Entry",
+            "[FIELD] credit | [TABLE] tabGL Entry",
+            "[FIELD] account | [TABLE] tabGL Entry"
+        ]
+    },
+    {
+        "anchor": "customers contributing top 80 percent of revenue",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "items with seasonal demand spikes",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] qty | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "forecast vs actual sales for last quarter",
+        "positives": [
+            "[TABLE] tabSales Forecast",
+            "[FIELD] fiscal_year | [TABLE] tabSales Forecast",
+            "[FIELD] sales_person | [TABLE] tabSales Forecast",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "items with frequent backorders",
+        "positives": [
+            "[TABLE] tabSales Order Item",
+            "[FIELD] item_code | [TABLE] tabSales Order Item",
+            "[FIELD] qty | [TABLE] tabSales Order Item",
+            "[FIELD] delivered_qty | [TABLE] tabSales Order Item"
+        ]
+    },
+    {
+        "anchor": "suppliers with frequent price changes",
+        "positives": [
+            "[TABLE] tabPurchase Invoice Item",
+            "[FIELD] item_code | [TABLE] tabPurchase Invoice Item",
+            "[FIELD] rate | [TABLE] tabPurchase Invoice Item",
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] supplier | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "employees with inconsistent attendance patterns",
+        "positives": [
+            "[TABLE] tabAttendance",
+            "[FIELD] employee | [TABLE] tabAttendance",
+            "[FIELD] attendance_date | [TABLE] tabAttendance",
+            "[FIELD] status | [TABLE] tabAttendance"
+        ]
+    },
+    {
+        "anchor": "departments with rising overtime costs",
+        "positives": [
+            "[TABLE] tabEmployee",
+            "[FIELD] department | [TABLE] tabEmployee",
+            "[TABLE] tabTimesheet Detail",
+            "[FIELD] hours | [TABLE] tabTimesheet Detail",
+            "[FIELD] employee | [TABLE] tabTimesheet Detail"
+        ]
+    },
+    {
+        "anchor": "projects with negative margin",
+        "positives": [
+            "[TABLE] tabProject",
+            "[FIELD] total_costing_amount | [TABLE] tabProject",
+            "[FIELD] billed_amount | [TABLE] tabProject"
+        ]
+    },
+    {
+        "anchor": "tasks overdue across all projects",
+        "positives": [
+            "[TABLE] tabTask",
+            "[FIELD] exp_end_date | [TABLE] tabTask",
+            "[FIELD] status | [TABLE] tabTask",
+            "[FIELD] project | [TABLE] tabTask"
+        ]
+    },
+    {
+        "anchor": "manufacturing capacity utilization trend",
+        "positives": [
+            "[TABLE] tabWork Order",
+            "[FIELD] planned_start_date | [TABLE] tabWork Order",
+            "[FIELD] planned_end_date | [TABLE] tabWork Order",
+            "[FIELD] actual_start_date | [TABLE] tabWork Order"
+        ]
+    },
+    {
+        "anchor": "items with high rejection rate in quality inspections",
+        "positives": [
+            "[TABLE] tabQuality Inspection",
+            "[FIELD] item_code | [TABLE] tabQuality Inspection",
+            "[FIELD] status | [TABLE] tabQuality Inspection",
+            "[FIELD] inspection_date | [TABLE] tabQuality Inspection"
+        ]
+    },
+    {
+        "anchor": "assets nearing end of useful life",
+        "positives": [
+            "[TABLE] tabAsset",
+            "[FIELD] purchase_date | [TABLE] tabAsset",
+            "[FIELD] expected_value_after_useful_life | [TABLE] tabAsset",
+            "[FIELD] name | [TABLE] tabAsset"
+        ]
+    },
+    {
+        "anchor": "maintenance cost trend by asset",
+        "positives": [
+            "[TABLE] tabMaintenance Visit",
+            "[FIELD] asset | [TABLE] tabMaintenance Visit",
+            "[FIELD] maintenance_cost | [TABLE] tabMaintenance Visit",
+            "[FIELD] completion_date | [TABLE] tabMaintenance Visit"
+        ]
+    },
+    {
+        "anchor": "support tickets by priority pending resolution",
+        "positives": [
+            "[TABLE] tabIssue",
+            "[FIELD] priority | [TABLE] tabIssue",
+            "[FIELD] status | [TABLE] tabIssue",
+            "[FIELD] opening_date | [TABLE] tabIssue"
+        ]
+    },
+    {
+        "anchor": "daily sales vs target for the current month",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+            "[TABLE] tabSales Target",
+            "[FIELD] target_amount | [TABLE] tabSales Target",
+            "[FIELD] fiscal_year | [TABLE] tabSales Target"
+        ]
+    },
+    {
+        "anchor": "monthly gross profit trend for the last year",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] base_net_amount | [TABLE] tabSales Invoice Item",
+            "[FIELD] buying_rate | [TABLE] tabSales Invoice Item",
+            "[FIELD] qty | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "items where cost increased but selling price stayed same",
+        "positives": [
+            "[TABLE] tabPurchase Invoice Item",
+            "[FIELD] item_code | [TABLE] tabPurchase Invoice Item",
+            "[FIELD] rate | [TABLE] tabPurchase Invoice Item",
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] rate | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "daily sales performance for each salesperson",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+            "[TABLE] tabSales Team",
+            "[FIELD] sales_person | [TABLE] tabSales Team",
+            "[FIELD] allocated_amount | [TABLE] tabSales Team"
+        ]
+    },
+    {
+        "anchor": "customers with sudden drop in order frequency",
+        "positives": [
+            "[TABLE] tabSales Order",
+            "[FIELD] customer | [TABLE] tabSales Order",
+            "[FIELD] transaction_date | [TABLE] tabSales Order",
+            "[FIELD] name | [TABLE] tabSales Order"
+        ]
+    },
+    {
+        "anchor": "items frequently included in cancelled orders",
+        "positives": [
+            "[TABLE] tabSales Order",
+            "[FIELD] status | [TABLE] tabSales Order",
+            "[TABLE] tabSales Order Item",
+            "[FIELD] item_code | [TABLE] tabSales Order Item"
+        ]
+    },
+    {
+        "anchor": "average order value trend month over month",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "customers buying across multiple item groups",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[TABLE] tabItem",
+            "[FIELD] item_group | [TABLE] tabItem"
+        ]
+    },
+    {
+        "anchor": "items with high variance between ordered and delivered quantity",
+        "positives": [
+            "[TABLE] tabSales Order Item",
+            "[FIELD] item_code | [TABLE] tabSales Order Item",
+            "[FIELD] qty | [TABLE] tabSales Order Item",
+            "[FIELD] delivered_qty | [TABLE] tabSales Order Item"
+        ]
+    },
+    {
+        "anchor": "sales orders frequently partially delivered",
+        "positives": [
+            "[TABLE] tabSales Order",
+            "[FIELD] status | [TABLE] tabSales Order",
+            "[FIELD] name | [TABLE] tabSales Order",
+            "[TABLE] tabDelivery Note Item",
+            "[FIELD] qty | [TABLE] tabDelivery Note Item"
+        ]
+    },
+    {
+        "anchor": "items with frequent purchase price increases",
+        "positives": [
+            "[TABLE] tabPurchase Invoice Item",
+            "[FIELD] item_code | [TABLE] tabPurchase Invoice Item",
+            "[FIELD] rate | [TABLE] tabPurchase Invoice Item",
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] posting_date | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "suppliers with consistent delivery delays",
+        "positives": [
+            "[TABLE] tabPurchase Order",
+            "[FIELD] supplier | [TABLE] tabPurchase Order",
+            "[FIELD] schedule_date | [TABLE] tabPurchase Order",
+            "[FIELD] transaction_date | [TABLE] tabPurchase Order"
+        ]
+    },
+    {
+        "anchor": "items returned frequently after delivery",
+        "positives": [
+            "[TABLE] tabSales Return",
+            "[FIELD] posting_date | [TABLE] tabSales Return",
+            "[TABLE] tabSales Return Item",
+            "[FIELD] item_code | [TABLE] tabSales Return Item"
+        ]
+    },
+    {
+        "anchor": "employees exceeding planned working hours",
+        "positives": [
+            "[TABLE] tabTimesheet Detail",
+            "[FIELD] employee | [TABLE] tabTimesheet Detail",
+            "[FIELD] hours | [TABLE] tabTimesheet Detail"
+        ]
+    },
+    {
+        "anchor": "departments with high attrition",
+        "positives": [
+            "[TABLE] tabEmployee",
+            "[FIELD] department | [TABLE] tabEmployee",
+            "[FIELD] relieving_date | [TABLE] tabEmployee"
+        ]
+    },
+    {
+        "anchor": "projects where milestone billing is delayed",
+        "positives": [
+            "[TABLE] tabProject Milestone",
+            "[FIELD] milestone_date | [TABLE] tabProject Milestone",
+            "[FIELD] status | [TABLE] tabProject Milestone"
+        ]
+    },
+    {
+        "anchor": "manufacturing orders with frequent rework",
+        "positives": [
+            "[TABLE] tabJob Card",
+            "[FIELD] work_order | [TABLE] tabJob Card",
+            "[FIELD] status | [TABLE] tabJob Card"
+        ]
+    },
+    {
+        "anchor": "support tickets unresolved beyond sla",
+        "positives": [
+            "[TABLE] tabIssue",
+            "[FIELD] opening_date | [TABLE] tabIssue",
+            "[FIELD] status | [TABLE] tabIssue",
+            "[FIELD] priority | [TABLE] tabIssue"
+        ]
+    },
+    {
+        "anchor": "customers who always pay before due date",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] due_date | [TABLE] tabSales Invoice",
+            "[TABLE] tabPayment Entry",
+            "[FIELD] posting_date | [TABLE] tabPayment Entry"
+        ]
+    },
+    {
+        "anchor": "items with repeated stock shortages",
+        "positives": [
+            "[TABLE] tabBin",
+            "[FIELD] item_code | [TABLE] tabBin",
+            "[FIELD] actual_qty | [TABLE] tabBin",
+            "[TABLE] tabStock Ledger Entry",
+            "[FIELD] posting_date | [TABLE] tabStock Ledger Entry"
+        ]
+    },
+    {
+        "anchor": "warehouses where stock accuracy is poor",
+        "positives": [
+            "[TABLE] tabStock Ledger Entry",
+            "[FIELD] warehouse | [TABLE] tabStock Ledger Entry",
+            "[FIELD] difference_amount | [TABLE] tabStock Ledger Entry",
+            "[FIELD] posting_date | [TABLE] tabStock Ledger Entry"
+        ]
+    },
+    {
+        "anchor": "suppliers who frequently change delivery schedules",
+        "positives": [
+            "[TABLE] tabPurchase Order",
+            "[FIELD] supplier | [TABLE] tabPurchase Order",
+            "[FIELD] schedule_date | [TABLE] tabPurchase Order",
+            "[FIELD] modified | [TABLE] tabPurchase Order"
+        ]
+    },
+    {
+        "anchor": "purchase invoices posted without purchase receipt",
+        "positives": [
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+            "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+            "[FIELD] name | [TABLE] tabPurchase Invoice",
+            "[TABLE] tabPurchase Receipt",
+            "[FIELD] name | [TABLE] tabPurchase Receipt"
+        ]
+    },
+    {
+        "anchor": "employees with frequent leave rejections",
+        "positives": [
+            "[TABLE] tabLeave Application",
+            "[FIELD] employee | [TABLE] tabLeave Application",
+            "[FIELD] status | [TABLE] tabLeave Application",
+            "[FIELD] from_date | [TABLE] tabLeave Application"
+        ]
+    },
+    {
+        "anchor": "employees working on multiple projects simultaneously",
+        "positives": [
+            "[TABLE] tabTimesheet Detail",
+            "[FIELD] employee | [TABLE] tabTimesheet Detail",
+            "[FIELD] project | [TABLE] tabTimesheet Detail"
+        ]
+    },
+    {
+        "anchor": "projects where actual cost exceeded planned cost",
+        "positives": [
+            "[TABLE] tabProject",
+            "[FIELD] expected_cost | [TABLE] tabProject",
+            "[FIELD] total_costing_amount | [TABLE] tabProject"
+        ]
+    },
+    {
+        "anchor": "tasks completed late compared to planned end date",
+        "positives": [
+            "[TABLE] tabTask",
+            "[FIELD] exp_end_date | [TABLE] tabTask",
+            "[FIELD] completed_on | [TABLE] tabTask",
+            "[FIELD] status | [TABLE] tabTask"
+        ]
+    },
+    {
+        "anchor": "manufacturing orders with high material variance",
+        "positives": [
+            "[TABLE] tabWork Order",
+            "[FIELD] material_transferred_for_manufacturing | [TABLE] tabWork Order",
+            "[FIELD] produced_qty | [TABLE] tabWork Order",
+            "[FIELD] name | [TABLE] tabWork Order"
+        ]
+    },
+    {
+        "anchor": "batches frequently failing quality inspection",
+        "positives": [
+            "[TABLE] tabQuality Inspection",
+            "[FIELD] batch_no | [TABLE] tabQuality Inspection",
+            "[FIELD] status | [TABLE] tabQuality Inspection",
+            "[FIELD] inspection_date | [TABLE] tabQuality Inspection"
+        ]
+    },
+    {
+        "anchor": "assets with maintenance cost higher than purchase value",
+        "positives": [
+            "[TABLE] tabAsset",
+            "[FIELD] purchase_amount | [TABLE] tabAsset",
+            "[TABLE] tabMaintenance Visit",
+            "[FIELD] maintenance_cost | [TABLE] tabMaintenance Visit"
+        ]
+    },
+    {
+        "anchor": "support tickets escalated multiple times",
+        "positives": [
+            "[TABLE] tabIssue",
+            "[FIELD] status | [TABLE] tabIssue",
+            "[FIELD] modified | [TABLE] tabIssue",
+            "[FIELD] priority | [TABLE] tabIssue"
+        ]
+    },
+    {
+        "anchor": "customers with repeated sales order delays",
+        "positives": [
+            "[TABLE] tabSales Order",
+            "[FIELD] customer | [TABLE] tabSales Order",
+            "[FIELD] delivery_date | [TABLE] tabSales Order",
+            "[FIELD] transaction_date | [TABLE] tabSales Order",
+            "[FIELD] status | [TABLE] tabSales Order"
+        ]
+    },
+    {
+        "anchor": "items with frequent price overrides in invoices",
+        "positives": [
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] rate | [TABLE] tabSales Invoice Item",
+            "[FIELD] price_list_rate | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "sales persons missing monthly targets",
+        "positives": [
+            "[TABLE] tabSales Person",
+            "[FIELD] name | [TABLE] tabSales Person",
+            "[TABLE] tabSales Target",
+            "[FIELD] sales_person | [TABLE] tabSales Target",
+            "[FIELD] target_amount | [TABLE] tabSales Target"
+        ]
+    },
+    {
+        "anchor": "customers with high discount percentage",
+        "positives": [
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] discount_percentage | [TABLE] tabSales Invoice Item",
+            "[FIELD] base_net_amount | [TABLE] tabSales Invoice Item",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "sales orders pending approval",
+        "positives": [
+            "[TABLE] tabSales Order",
+            "[FIELD] docstatus | [TABLE] tabSales Order",
+            "[FIELD] status | [TABLE] tabSales Order",
+            "[FIELD] transaction_date | [TABLE] tabSales Order"
+        ]
+    },
+    {
+        "anchor": "purchase orders exceeding approved budget",
+        "positives": [
+            "[TABLE] tabPurchase Order",
+            "[FIELD] base_grand_total | [TABLE] tabPurchase Order",
+            "[FIELD] project | [TABLE] tabPurchase Order",
+            "[TABLE] tabProject",
+            "[FIELD] expected_cost | [TABLE] tabProject"
+        ]
+    },
+    {
+        "anchor": "items with frequent emergency purchases",
+        "positives": [
+            "[TABLE] tabMaterial Request",
+            "[FIELD] material_request_type | [TABLE] tabMaterial Request",
+            "[FIELD] item_code | [TABLE] tabMaterial Request"
+        ]
+    },
+    {
+        "anchor": "vendors with repeated quality complaints",
+        "positives": [
+            "[TABLE] tabQuality Inspection",
+            "[FIELD] item_code | [TABLE] tabQuality Inspection",
+            "[TABLE] tabPurchase Receipt",
+            "[FIELD] supplier | [TABLE] tabPurchase Receipt"
+        ]
+    },
+    {
+        "anchor": "items blocked for sale but still in stock",
+        "positives": [
+            "[TABLE] tabItem",
+            "[FIELD] disabled | [TABLE] tabItem",
+            "[FIELD] name | [TABLE] tabItem",
+            "[TABLE] tabBin",
+            "[FIELD] actual_qty | [TABLE] tabBin"
+        ]
+    },
+    {
+        "anchor": "employees without assigned leave policy",
+        "positives": [
+            "[TABLE] tabEmployee",
+            "[FIELD] leave_policy | [TABLE] tabEmployee",
+            "[FIELD] name | [TABLE] tabEmployee"
+        ]
+    },
+    {
+        "anchor": "employees whose probation period is ending soon",
+        "positives": [
+            "[TABLE] tabEmployee",
+            "[FIELD] date_of_joining | [TABLE] tabEmployee",
+            "[FIELD] probation_end_date | [TABLE] tabEmployee"
+        ]
+    },
+    {
+        "anchor": "projects with billing delayed compared to work done",
+        "positives": [
+            "[TABLE] tabTimesheet",
+            "[FIELD] billing_amount | [TABLE] tabTimesheet",
+            "[TABLE] tabProject",
+            "[FIELD] billed_amount | [TABLE] tabProject"
+        ]
+    },
+    {
+        "anchor": "manufacturing orders waiting for raw materials",
+        "positives": [
+            "[TABLE] tabWork Order",
+            "[FIELD] status | [TABLE] tabWork Order",
+            "[FIELD] item_code | [TABLE] tabWork Order",
+            "[TABLE] tabBin",
+            "[FIELD] actual_qty | [TABLE] tabBin"
+        ]
+    },
+    {
+        "anchor": "open maintenance requests older than 30 days",
+        "positives": [
+            "[TABLE] tabMaintenance Request",
+            "[FIELD] status | [TABLE] tabMaintenance Request",
+            "[FIELD] creation | [TABLE] tabMaintenance Request"
+        ]
+    },
+    {
+        "anchor": "monthly customer acquisition trend",
+        "positives": [
+            "[TABLE] tabCustomer",
+            "[FIELD] creation | [TABLE] tabCustomer",
+            "[FIELD] name | [TABLE] tabCustomer"
+        ]
+    },
+    {
+        "anchor": "customers who placed orders but never converted to invoices",
+        "positives": [
+            "[TABLE] tabSales Order",
+            "[FIELD] customer | [TABLE] tabSales Order",
+            "[FIELD] status | [TABLE] tabSales Order",
+            "[FIELD] transaction_date | [TABLE] tabSales Order",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] sales_order | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "items ordered frequently but rarely delivered on time",
+        "positives": [
+            "[TABLE] tabSales Order Item",
+            "[FIELD] item_code | [TABLE] tabSales Order Item",
+            "[FIELD] delivery_date | [TABLE] tabSales Order Item",
+            "[TABLE] tabDelivery Note Item",
+            "[FIELD] posting_date | [TABLE] tabDelivery Note Item"
+        ]
+    },
+    {
+        "anchor": "customers whose average order value is shrinking month over month",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "items with sales growth but declining gross margin",
+        "positives": [
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] base_net_amount | [TABLE] tabSales Invoice Item",
+            "[FIELD] buying_rate | [TABLE] tabSales Invoice Item",
+            "[FIELD] qty | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "sales invoices posted but revenue not reflected in accounts",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[TABLE] tabGL Entry",
+            "[FIELD] voucher_no | [TABLE] tabGL Entry",
+            "[FIELD] voucher_type | [TABLE] tabGL Entry",
+            "[FIELD] posting_date | [TABLE] tabGL Entry"
+        ]
+    },
+    {
+        "anchor": "items frequently sold below price list rate",
+        "positives": [
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] rate | [TABLE] tabSales Invoice Item",
+            "[FIELD] price_list_rate | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "customers with repeated invoice write offs",
+        "positives": [
+            "[TABLE] tabGL Entry",
+            "[FIELD] voucher_type | [TABLE] tabGL Entry",
+            "[FIELD] debit | [TABLE] tabGL Entry",
+            "[FIELD] credit | [TABLE] tabGL Entry",
+            "[FIELD] posting_date | [TABLE] tabGL Entry"
+        ]
+    },
+    {
+        "anchor": "items creating stock valuation jumps unexpectedly",
+        "positives": [
+            "[TABLE] tabStock Ledger Entry",
+            "[FIELD] item_code | [TABLE] tabStock Ledger Entry",
+            "[FIELD] stock_value_difference | [TABLE] tabStock Ledger Entry",
+            "[FIELD] posting_date | [TABLE] tabStock Ledger Entry"
+        ]
+    },
+    {
+        "anchor": "warehouses where incoming stock is not consumed",
+        "positives": [
+            "[TABLE] tabBin",
+            "[FIELD] warehouse | [TABLE] tabBin",
+            "[FIELD] actual_qty | [TABLE] tabBin",
+            "[FIELD] stock_value | [TABLE] tabBin"
+        ]
+    },
+    {
+        "anchor": "purchase invoices booked without matching purchase order",
+        "positives": [
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] purchase_order | [TABLE] tabPurchase Invoice",
+            "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+            "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+            "[FIELD] name | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "suppliers with inconsistent billing amounts for same items",
+        "positives": [
+            "[TABLE] tabPurchase Invoice Item",
+            "[FIELD] item_code | [TABLE] tabPurchase Invoice Item",
+            "[FIELD] rate | [TABLE] tabPurchase Invoice Item",
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] supplier | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "employees whose leave balance is going negative",
+        "positives": [
+            "[TABLE] tabLeave Ledger Entry",
+            "[FIELD] employee | [TABLE] tabLeave Ledger Entry",
+            "[FIELD] leaves | [TABLE] tabLeave Ledger Entry",
+            "[FIELD] posting_date | [TABLE] tabLeave Ledger Entry"
+        ]
+    },
+    {
+        "anchor": "employees submitting timesheets after long delays",
+        "positives": [
+            "[TABLE] tabTimesheet",
+            "[FIELD] creation | [TABLE] tabTimesheet",
+            "[FIELD] start_date | [TABLE] tabTimesheet",
+            "[FIELD] employee | [TABLE] tabTimesheet"
+        ]
+    },
+    {
+        "anchor": "projects where billing lags behind work progress",
+        "positives": [
+            "[TABLE] tabProject",
+            "[FIELD] percent_complete | [TABLE] tabProject",
+            "[FIELD] billed_amount | [TABLE] tabProject",
+            "[FIELD] total_costing_amount | [TABLE] tabProject"
+        ]
+    },
+    {
+        "anchor": "tasks consuming more time than originally estimated",
+        "positives": [
+            "[TABLE] tabTask",
+            "[FIELD] expected_time | [TABLE] tabTask",
+            "[FIELD] actual_time | [TABLE] tabTask",
+            "[FIELD] status | [TABLE] tabTask"
+        ]
+    },
+    {
+        "anchor": "manufacturing orders with repeated stoppages",
+        "positives": [
+            "[TABLE] tabJob Card",
+            "[FIELD] work_order | [TABLE] tabJob Card",
+            "[FIELD] status | [TABLE] tabJob Card",
+            "[FIELD] modified | [TABLE] tabJob Card"
+        ]
+    },
+    {
+        "anchor": "customers whose payment cycle is getting longer every quarter",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] due_date | [TABLE] tabSales Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "customers whose sales contribution dropped sharply this year",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "customers whose payments are always partially settled",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "items with high sales quantity but low revenue",
+        "positives": [
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] qty | [TABLE] tabSales Invoice Item",
+            "[FIELD] base_net_amount | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "sales invoices frequently cancelled after submission",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] status | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "items ordered but never invoiced",
+        "positives": [
+            "[TABLE] tabSales Order Item",
+            "[FIELD] item_code | [TABLE] tabSales Order Item",
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "customers who frequently request delivery date changes",
+        "positives": [
+            "[TABLE] tabSales Order",
+            "[FIELD] customer | [TABLE] tabSales Order",
+            "[FIELD] delivery_date | [TABLE] tabSales Order",
+            "[FIELD] modified | [TABLE] tabSales Order"
+        ]
+    },
+    {
+        "anchor": "purchase invoices with mismatch against goods receipt",
+        "positives": [
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+            "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+            "[TABLE] tabPurchase Receipt Item",
+            "[FIELD] qty | [TABLE] tabPurchase Receipt Item"
+        ]
+    },
+    {
+        "anchor": "items repeatedly returned by customers",
+        "positives": [
+            "[TABLE] tabSales Return Item",
+            "[FIELD] item_code | [TABLE] tabSales Return Item",
+            "[FIELD] qty | [TABLE] tabSales Return Item",
+            "[FIELD] posting_date | [TABLE] tabSales Return Item"
+        ]
+    },
+    {
+        "anchor": "warehouses with frequent stock write offs",
+        "positives": [
+            "[TABLE] tabStock Ledger Entry",
+            "[FIELD] warehouse | [TABLE] tabStock Ledger Entry",
+            "[FIELD] voucher_type | [TABLE] tabStock Ledger Entry",
+            "[FIELD] posting_date | [TABLE] tabStock Ledger Entry"
+        ]
+    },
+    {
+        "anchor": "employees who often submit late attendance regularization",
+        "positives": [
+            "[TABLE] tabAttendance Request",
+            "[FIELD] employee | [TABLE] tabAttendance Request",
+            "[FIELD] attendance_date | [TABLE] tabAttendance Request",
+            "[FIELD] creation | [TABLE] tabAttendance Request"
+        ]
+    },
+    {
+        "anchor": "employees whose expense claims are usually rejected",
+        "positives": [
+            "[TABLE] tabExpense Claim",
+            "[FIELD] employee | [TABLE] tabExpense Claim",
+            "[FIELD] status | [TABLE] tabExpense Claim",
+            "[FIELD] posting_date | [TABLE] tabExpense Claim"
+        ]
+    },
+    {
+        "anchor": "projects where expenses are booked but revenue is missing",
+        "positives": [
+            "[TABLE] tabProject",
+            "[FIELD] total_costing_amount | [TABLE] tabProject",
+            "[FIELD] billed_amount | [TABLE] tabProject",
+            "[FIELD] status | [TABLE] tabProject"
+        ]
+    },
+    {
+        "anchor": "tasks reopened after client feedback",
+        "positives": [
+            "[TABLE] tabTask",
+            "[FIELD] status | [TABLE] tabTask",
+            "[FIELD] modified | [TABLE] tabTask",
+            "[FIELD] name | [TABLE] tabTask"
+        ]
+    },
+    {
+        "anchor": "manufacturing orders with output less than planned",
+        "positives": [
+            "[TABLE] tabWork Order",
+            "[FIELD] produced_qty | [TABLE] tabWork Order",
+            "[FIELD] qty | [TABLE] tabWork Order",
+            "[FIELD] status | [TABLE] tabWork Order"
+        ]
+    },
+    {
+        "anchor": "assets requiring maintenance sooner than scheduled",
+        "positives": [
+            "[TABLE] tabMaintenance Schedule",
+            "[FIELD] due_date | [TABLE] tabMaintenance Schedule",
+            "[FIELD] asset | [TABLE] tabMaintenance Schedule",
+            "[FIELD] status | [TABLE] tabMaintenance Schedule"
+        ]
+    },
+    {
+        "anchor": "support tickets resolved but customer satisfaction is low",
+        "positives": [
+            "[TABLE] tabIssue",
+            "[FIELD] status | [TABLE] tabIssue",
+            "[FIELD] resolution_date | [TABLE] tabIssue",
+            "[FIELD] name | [TABLE] tabIssue"
+        ]
+    },
+    {
+        "anchor": "items where stock value increased but sales did not",
+        "positives": [
+            "[TABLE] tabBin",
+            "[FIELD] item_code | [TABLE] tabBin",
+            "[FIELD] stock_value | [TABLE] tabBin",
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] qty | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "sales invoices submitted late after posting date",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] modified | [TABLE] tabSales Invoice",
+            "[FIELD] docstatus | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "items frequently backordered due to planning issues",
+        "positives": [
+            "[TABLE] tabSales Order Item",
+            "[FIELD] item_code | [TABLE] tabSales Order Item",
+            "[FIELD] qty | [TABLE] tabSales Order Item",
+            "[FIELD] delivered_qty | [TABLE] tabSales Order Item"
+        ]
+    },
+    {
+        "anchor": "customers with invoices raised but delivery never completed",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice",
+            "[TABLE] tabDelivery Note",
+            "[FIELD] against_sales_invoice | [TABLE] tabDelivery Note"
+        ]
+    },
+    {
+        "anchor": "purchase orders repeatedly delayed beyond schedule date",
+        "positives": [
+            "[TABLE] tabPurchase Order",
+            "[FIELD] supplier | [TABLE] tabPurchase Order",
+            "[FIELD] schedule_date | [TABLE] tabPurchase Order",
+            "[FIELD] status | [TABLE] tabPurchase Order"
+        ]
+    },
+    {
+        "anchor": "items with frequent purchase returns due to quality",
+        "positives": [
+            "[TABLE] tabPurchase Return",
+            "[FIELD] posting_date | [TABLE] tabPurchase Return",
+            "[FIELD] status | [TABLE] tabPurchase Return",
+            "[TABLE] tabPurchase Return Item",
+            "[FIELD] item_code | [TABLE] tabPurchase Return Item"
+        ]
+    },
+    {
+        "anchor": "warehouses with increasing stock adjustments every month",
+        "positives": [
+            "[TABLE] tabStock Ledger Entry",
+            "[FIELD] warehouse | [TABLE] tabStock Ledger Entry",
+            "[FIELD] voucher_type | [TABLE] tabStock Ledger Entry",
+            "[FIELD] posting_date | [TABLE] tabStock Ledger Entry"
+        ]
+    },
+    {
+        "anchor": "employees whose attendance corrections are unusually high",
+        "positives": [
+            "[TABLE] tabAttendance Request",
+            "[FIELD] employee | [TABLE] tabAttendance Request",
+            "[FIELD] attendance_date | [TABLE] tabAttendance Request",
+            "[FIELD] status | [TABLE] tabAttendance Request"
+        ]
+    },
+    {
+        "anchor": "employees claiming expenses close to policy limit often",
+        "positives": [
+            "[TABLE] tabExpense Claim",
+            "[FIELD] employee | [TABLE] tabExpense Claim",
+            "[FIELD] total_claimed_amount | [TABLE] tabExpense Claim",
+            "[FIELD] posting_date | [TABLE] tabExpense Claim"
+        ]
+    },
+    {
+        "anchor": "projects where actual work is high but billing is minimal",
+        "positives": [
+            "[TABLE] tabProject",
+            "[FIELD] percent_complete | [TABLE] tabProject",
+            "[FIELD] billed_amount | [TABLE] tabProject",
+            "[FIELD] total_costing_amount | [TABLE] tabProject"
+        ]
+    },
+    {
+        "anchor": "tasks that frequently miss estimated completion time",
+        "positives": [
+            "[TABLE] tabTask",
+            "[FIELD] expected_time | [TABLE] tabTask",
+            "[FIELD] actual_time | [TABLE] tabTask",
+            "[FIELD] status | [TABLE] tabTask"
+        ]
+    },
+    {
+        "anchor": "manufacturing orders consuming excess raw materials",
+        "positives": [
+            "[TABLE] tabWork Order",
+            "[FIELD] material_transferred_for_manufacturing | [TABLE] tabWork Order",
+            "[FIELD] produced_qty | [TABLE] tabWork Order",
+            "[FIELD] name | [TABLE] tabWork Order"
+        ]
+    },
+    {
+        "anchor": "assets that break down shortly after maintenance",
+        "positives": [
+            "[TABLE] tabMaintenance Visit",
+            "[FIELD] asset | [TABLE] tabMaintenance Visit",
+            "[FIELD] completion_date | [TABLE] tabMaintenance Visit",
+            "[FIELD] maintenance_type | [TABLE] tabMaintenance Visit"
+        ]
+    },
+    {
+        "anchor": "support tickets closed but reopened multiple times",
+        "positives": [
+            "[TABLE] tabIssue",
+            "[FIELD] status | [TABLE] tabIssue",
+            "[FIELD] modified | [TABLE] tabIssue",
+            "[FIELD] name | [TABLE] tabIssue"
+        ]
+    },
+    {
+        "anchor": "items with sharp drop in demand after price increase",
+        "positives": [
+            "[TABLE] tabItem Price",
+            "[FIELD] item_code | [TABLE] tabItem Price",
+            "[FIELD] valid_from | [TABLE] tabItem Price",
+            "[FIELD] price_list_rate | [TABLE] tabItem Price",
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] qty | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "sales invoices corrected multiple times before submission",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] amended_from | [TABLE] tabSales Invoice",
+            "[FIELD] modified | [TABLE] tabSales Invoice",
+            "[FIELD] docstatus | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "items frequently missing from delivery notes",
+        "positives": [
+            "[TABLE] tabSales Order Item",
+            "[FIELD] item_code | [TABLE] tabSales Order Item",
+            "[FIELD] qty | [TABLE] tabSales Order Item",
+            "[TABLE] tabDelivery Note Item",
+            "[FIELD] item_code | [TABLE] tabDelivery Note Item",
+            "[FIELD] qty | [TABLE] tabDelivery Note Item"
+        ]
+    },
+    {
+        "anchor": "customers requesting frequent invoice revisions",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] amended_from | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "purchase orders where final billed amount exceeded order value",
+        "positives": [
+            "[TABLE] tabPurchase Order",
+            "[FIELD] base_grand_total | [TABLE] tabPurchase Order",
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabPurchase Invoice",
+            "[FIELD] purchase_order | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "items frequently reordered despite sufficient stock",
+        "positives": [
+            "[TABLE] tabMaterial Request",
+            "[FIELD] item_code | [TABLE] tabMaterial Request",
+            "[FIELD] material_request_type | [TABLE] tabMaterial Request",
+            "[TABLE] tabBin",
+            "[FIELD] item_code | [TABLE] tabBin",
+            "[FIELD] actual_qty | [TABLE] tabBin"
+        ]
+    },
+    {
+        "anchor": "warehouses where stock keeps bouncing in and out",
+        "positives": [
+            "[TABLE] tabStock Ledger Entry",
+            "[FIELD] warehouse | [TABLE] tabStock Ledger Entry",
+            "[FIELD] voucher_type | [TABLE] tabStock Ledger Entry",
+            "[FIELD] posting_date | [TABLE] tabStock Ledger Entry"
+        ]
+    },
+    {
+        "anchor": "employees whose attendance regularization requests are frequent",
+        "positives": [
+            "[TABLE] tabAttendance Request",
+            "[FIELD] employee | [TABLE] tabAttendance Request",
+            "[FIELD] attendance_date | [TABLE] tabAttendance Request",
+            "[FIELD] status | [TABLE] tabAttendance Request"
+        ]
+    },
+    {
+        "anchor": "employees with frequent expense claim rejections",
+        "positives": [
+            "[TABLE] tabExpense Claim",
+            "[FIELD] employee | [TABLE] tabExpense Claim",
+            "[FIELD] status | [TABLE] tabExpense Claim",
+            "[FIELD] posting_date | [TABLE] tabExpense Claim"
+        ]
+    },
+    {
+        "anchor": "projects where work is progressing but billing is stalled",
+        "positives": [
+            "[TABLE] tabProject",
+            "[FIELD] percent_complete | [TABLE] tabProject",
+            "[FIELD] billed_amount | [TABLE] tabProject",
+            "[FIELD] status | [TABLE] tabProject"
+        ]
+    },
+    {
+        "anchor": "tasks moved back from completed to open status",
+        "positives": [
+            "[TABLE] tabTask",
+            "[FIELD] status | [TABLE] tabTask",
+            "[FIELD] modified | [TABLE] tabTask",
+            "[FIELD] completed_on | [TABLE] tabTask"
+        ]
+    },
+    {
+        "anchor": "manufacturing orders with material issued but not produced",
+        "positives": [
+            "[TABLE] tabWork Order",
+            "[FIELD] material_transferred_for_manufacturing | [TABLE] tabWork Order",
+            "[FIELD] produced_qty | [TABLE] tabWork Order",
+            "[FIELD] status | [TABLE] tabWork Order"
+        ]
+    },
+    {
+        "anchor": "assets with repeated breakdown maintenance",
+        "positives": [
+            "[TABLE] tabMaintenance Visit",
+            "[FIELD] asset | [TABLE] tabMaintenance Visit",
+            "[FIELD] maintenance_type | [TABLE] tabMaintenance Visit",
+            "[FIELD] completion_status | [TABLE] tabMaintenance Visit"
+        ]
+    },
+    {
+        "anchor": "support tickets that keep changing priority",
+        "positives": [
+            "[TABLE] tabIssue",
+            "[FIELD] priority | [TABLE] tabIssue",
+            "[FIELD] modified | [TABLE] tabIssue",
+            "[FIELD] status | [TABLE] tabIssue"
+        ]
+    },
+    {
+        "anchor": "support tickets frequently reassigned",
+        "positives": [
+            "[TABLE] tabIssue",
+            "[FIELD] assigned_to | [TABLE] tabIssue",
+            "[FIELD] modified | [TABLE] tabIssue",
+            "[FIELD] status | [TABLE] tabIssue"
+        ]
+    },
+    {
+        "anchor": "customers with high sales but low repeat rate",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "items frequently discounted during promotions",
+        "positives": [
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] discount_percentage | [TABLE] tabSales Invoice Item",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "sales orders modified multiple times before confirmation",
+        "positives": [
+            "[TABLE] tabSales Order",
+            "[FIELD] modified | [TABLE] tabSales Order",
+            "[FIELD] docstatus | [TABLE] tabSales Order",
+            "[FIELD] name | [TABLE] tabSales Order"
+        ]
+    },
+    {
+        "anchor": "purchase orders approved but not issued to supplier",
+        "positives": [
+            "[TABLE] tabPurchase Order",
+            "[FIELD] docstatus | [TABLE] tabPurchase Order",
+            "[FIELD] status | [TABLE] tabPurchase Order",
+            "[FIELD] transaction_date | [TABLE] tabPurchase Order"
+        ]
+    },
+    {
+        "anchor": "items purchased in bulk but moving slowly",
+        "positives": [
+            "[TABLE] tabPurchase Invoice Item",
+            "[FIELD] item_code | [TABLE] tabPurchase Invoice Item",
+            "[FIELD] qty | [TABLE] tabPurchase Invoice Item",
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] qty | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "stock entries posted outside working hours",
+        "positives": [
+            "[TABLE] tabStock Entry",
+            "[FIELD] posting_date | [TABLE] tabStock Entry",
+            "[FIELD] posting_time | [TABLE] tabStock Entry",
+            "[FIELD] name | [TABLE] tabStock Entry"
+        ]
+    },
+    {
+        "anchor": "warehouses with frequent stock transfers in and out",
+        "positives": [
+            "[TABLE] tabStock Ledger Entry",
+            "[FIELD] warehouse | [TABLE] tabStock Ledger Entry",
+            "[FIELD] voucher_type | [TABLE] tabStock Ledger Entry",
+            "[FIELD] posting_date | [TABLE] tabStock Ledger Entry"
+        ]
+    },
+    {
+        "anchor": "employees submitting expense claims close to limit",
+        "positives": [
+            "[TABLE] tabExpense Claim",
+            "[FIELD] employee | [TABLE] tabExpense Claim",
+            "[FIELD] total_claimed_amount | [TABLE] tabExpense Claim",
+            "[FIELD] posting_date | [TABLE] tabExpense Claim"
+        ]
+    },
+    {
+        "anchor": "expense claims approved but not reimbursed",
+        "positives": [
+            "[TABLE] tabExpense Claim",
+            "[FIELD] status | [TABLE] tabExpense Claim",
+            "[FIELD] posting_date | [TABLE] tabExpense Claim",
+            "[TABLE] tabPayment Entry",
+            "[FIELD] reference_name | [TABLE] tabPayment Entry"
+        ]
+    },
+    {
+        "anchor": "employees clocking in late frequently",
+        "positives": [
+            "[TABLE] tabAttendance",
+            "[FIELD] employee | [TABLE] tabAttendance",
+            "[FIELD] in_time | [TABLE] tabAttendance",
+            "[FIELD] attendance_date | [TABLE] tabAttendance"
+        ]
+    },
+    {
+        "anchor": "projects with frequent deadline extensions",
+        "positives": [
+            "[TABLE] tabProject",
+            "[FIELD] expected_end_date | [TABLE] tabProject",
+            "[FIELD] modified | [TABLE] tabProject",
+            "[FIELD] name | [TABLE] tabProject"
+        ]
+    },
+    {
+        "anchor": "tasks reopened after completion",
+        "positives": [
+            "[TABLE] tabTask",
+            "[FIELD] status | [TABLE] tabTask",
+            "[FIELD] modified | [TABLE] tabTask",
+            "[FIELD] name | [TABLE] tabTask"
+        ]
+    },
+    {
+        "anchor": "manufacturing orders waiting for quality clearance",
+        "positives": [
+            "[TABLE] tabWork Order",
+            "[FIELD] status | [TABLE] tabWork Order",
+            "[FIELD] name | [TABLE] tabWork Order",
+            "[TABLE] tabQuality Inspection",
+            "[FIELD] reference_name | [TABLE] tabQuality Inspection"
+        ]
+    },
+    {
+        "anchor": "customers with declining lifetime value",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "items with demand volatility month over month",
+        "positives": [
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] qty | [TABLE] tabSales Invoice Item",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "forecast accuracy by item for last quarter",
+        "positives": [
+            "[TABLE] tabSales Forecast",
+            "[FIELD] item_code | [TABLE] tabSales Forecast",
+            "[FIELD] forecast_qty | [TABLE] tabSales Forecast",
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] qty | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "items frequently hitting stock out situations",
+        "positives": [
+            "[TABLE] tabBin",
+            "[FIELD] item_code | [TABLE] tabBin",
+            "[FIELD] actual_qty | [TABLE] tabBin"
+        ]
+    },
+    {
+        "anchor": "inventory carrying cost trend",
+        "positives": [
+            "[TABLE] tabBin",
+            "[FIELD] stock_value | [TABLE] tabBin",
+            "[FIELD] warehouse | [TABLE] tabBin"
+        ]
+    },
+    {
+        "anchor": "suppliers with increasing purchase volume",
+        "positives": [
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] supplier | [TABLE] tabPurchase Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabPurchase Invoice",
+            "[FIELD] posting_date | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "average supplier invoice processing time",
+        "positives": [
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+            "[FIELD] creation | [TABLE] tabPurchase Invoice",
+            "[FIELD] supplier | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "employees with declining productivity",
+        "positives": [
+            "[TABLE] tabTimesheet Detail",
+            "[FIELD] employee | [TABLE] tabTimesheet Detail",
+            "[FIELD] hours | [TABLE] tabTimesheet Detail",
+            "[FIELD] from_time | [TABLE] tabTimesheet Detail"
+        ]
+    },
+    {
+        "anchor": "teams with frequent overtime spikes",
+        "positives": [
+            "[TABLE] tabEmployee",
+            "[FIELD] department | [TABLE] tabEmployee",
+            "[TABLE] tabTimesheet Detail",
+            "[FIELD] hours | [TABLE] tabTimesheet Detail"
+        ]
+    },
+    {
+        "anchor": "projects with scope creep indicators",
+        "positives": [
+            "[TABLE] tabProject",
+            "[FIELD] modified | [TABLE] tabProject",
+            "[FIELD] expected_cost | [TABLE] tabProject",
+            "[FIELD] total_costing_amount | [TABLE] tabProject"
+        ]
+    },
+    {
+        "anchor": "tasks frequently missing deadlines",
+        "positives": [
+            "[TABLE] tabTask",
+            "[FIELD] exp_end_date | [TABLE] tabTask",
+            "[FIELD] completed_on | [TABLE] tabTask",
+            "[FIELD] status | [TABLE] tabTask"
+        ]
+    },
+    {
+        "anchor": "manufacturing throughput trend",
+        "positives": [
+            "[TABLE] tabWork Order",
+            "[FIELD] produced_qty | [TABLE] tabWork Order",
+            "[FIELD] actual_start_date | [TABLE] tabWork Order",
+            "[FIELD] actual_end_date | [TABLE] tabWork Order"
+        ]
+    },
+    {
+        "anchor": "quality inspection pass rate by item",
+        "positives": [
+            "[TABLE] tabQuality Inspection",
+            "[FIELD] item_code | [TABLE] tabQuality Inspection",
+            "[FIELD] status | [TABLE] tabQuality Inspection"
+        ]
+    },
+    {
+        "anchor": "support workload trend by priority",
+        "positives": [
+            "[TABLE] tabIssue",
+            "[FIELD] priority | [TABLE] tabIssue",
+            "[FIELD] opening_date | [TABLE] tabIssue",
+            "[FIELD] status | [TABLE] tabIssue"
+        ]
+    },
+    {
+        "anchor": "monthly revenue contribution by salesperson",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
+            "[TABLE] tabSales Team",
+            "[FIELD] sales_person | [TABLE] tabSales Team",
+            "[FIELD] allocated_amount | [TABLE] tabSales Team"
+        ]
+    },
+    {
+        "anchor": "customers placing frequent small orders",
+        "positives": [
+            "[TABLE] tabSales Order",
+            "[FIELD] customer | [TABLE] tabSales Order",
+            "[FIELD] base_grand_total | [TABLE] tabSales Order",
+            "[FIELD] transaction_date | [TABLE] tabSales Order"
+        ]
+    },
+    {
+        "anchor": "items with long gaps between repeat purchases",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "average lead time from order to delivery",
+        "positives": [
+            "[TABLE] tabSales Order",
+            "[FIELD] transaction_date | [TABLE] tabSales Order",
+            "[FIELD] delivery_date | [TABLE] tabSales Order",
+            "[TABLE] tabDelivery Note",
+            "[FIELD] posting_date | [TABLE] tabDelivery Note"
+        ]
+    },
+    {
+        "anchor": "items frequently short shipped",
+        "positives": [
+            "[TABLE] tabDelivery Note Item",
+            "[FIELD] item_code | [TABLE] tabDelivery Note Item",
+            "[FIELD] qty | [TABLE] tabDelivery Note Item",
+            "[FIELD] against_sales_order | [TABLE] tabDelivery Note Item"
+        ]
+    },
+    {
+        "anchor": "suppliers supplying inconsistent quantities",
+        "positives": [
+            "[TABLE] tabPurchase Receipt Item",
+            "[FIELD] item_code | [TABLE] tabPurchase Receipt Item",
+            "[FIELD] qty | [TABLE] tabPurchase Receipt Item",
+            "[FIELD] received_qty | [TABLE] tabPurchase Receipt Item"
+        ]
+    },
+    {
+        "anchor": "purchase orders split into multiple receipts",
+        "positives": [
+            "[TABLE] tabPurchase Receipt",
+            "[FIELD] posting_date | [TABLE] tabPurchase Receipt",
+            "[FIELD] name | [TABLE] tabPurchase Receipt",
+            "[TABLE] tabPurchase Receipt Item",
+            "[FIELD] purchase_order | [TABLE] tabPurchase Receipt Item"
+        ]
+    },
+    {
+        "anchor": "items frequently reordered before hitting reorder level",
+        "positives": [
+            "[TABLE] tabMaterial Request",
+            "[FIELD] item_code | [TABLE] tabMaterial Request",
+            "[FIELD] material_request_type | [TABLE] tabMaterial Request",
+            "[FIELD] transaction_date | [TABLE] tabMaterial Request"
+        ]
+    },
+    {
+        "anchor": "stock reserved for production but not consumed",
+        "positives": [
+            "[TABLE] tabWork Order",
+            "[FIELD] name | [TABLE] tabWork Order",
+            "[FIELD] material_transferred_for_manufacturing | [TABLE] tabWork Order",
+            "[TABLE] tabStock Ledger Entry",
+            "[FIELD] item_code | [TABLE] tabStock Ledger Entry"
+        ]
+    },
+    {
+        "anchor": "items causing frequent stock reconciliation differences",
+        "positives": [
+            "[TABLE] tabStock Reconciliation",
+            "[FIELD] posting_date | [TABLE] tabStock Reconciliation",
+            "[TABLE] tabStock Ledger Entry",
+            "[FIELD] item_code | [TABLE] tabStock Ledger Entry",
+            "[FIELD] difference_amount | [TABLE] tabStock Ledger Entry"
+        ]
+    },
+    {
+        "anchor": "employees logging time without project assignment",
+        "positives": [
+            "[TABLE] tabTimesheet Detail",
+            "[FIELD] employee | [TABLE] tabTimesheet Detail",
+            "[FIELD] hours | [TABLE] tabTimesheet Detail",
+            "[FIELD] project | [TABLE] tabTimesheet Detail"
+        ]
+    },
+    {
+        "anchor": "departments with uneven workload distribution",
+        "positives": [
+            "[TABLE] tabEmployee",
+            "[FIELD] department | [TABLE] tabEmployee",
+            "[TABLE] tabTimesheet Detail",
+            "[FIELD] hours | [TABLE] tabTimesheet Detail"
+        ]
+    },
+    {
+        "anchor": "projects consuming budget faster than planned",
+        "positives": [
+            "[TABLE] tabProject",
+            "[FIELD] expected_cost | [TABLE] tabProject",
+            "[FIELD] total_costing_amount | [TABLE] tabProject"
+        ]
+    },
+    {
+        "anchor": "tasks stuck in progress for long time",
+        "positives": [
+            "[TABLE] tabTask",
+            "[FIELD] status | [TABLE] tabTask",
+            "[FIELD] modified | [TABLE] tabTask",
+            "[FIELD] exp_end_date | [TABLE] tabTask"
+        ]
+    },
+    {
+        "anchor": "support tickets assigned but not worked on",
+        "positives": [
+            "[TABLE] tabIssue",
+            "[FIELD] assigned_to | [TABLE] tabIssue",
+            "[FIELD] status | [TABLE] tabIssue",
+            "[FIELD] modified | [TABLE] tabIssue"
+        ]
+    },
+    {
+        "anchor": "customers whose credit utilization is increasing rapidly",
+        "positives": [
+            "[TABLE] tabCustomer",
+            "[FIELD] credit_limit | [TABLE] tabCustomer",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] outstanding_amount | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "items with margin erosion despite stable sales volume",
+        "positives": [
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] qty | [TABLE] tabSales Invoice Item",
+            "[FIELD] base_net_amount | [TABLE] tabSales Invoice Item",
+            "[FIELD] buying_rate | [TABLE] tabSales Invoice Item"
+        ]
+    },
+    {
+        "anchor": "sales invoices where tax amount changed after submission",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] total_taxes_and_charges | [TABLE] tabSales Invoice",
+            "[FIELD] amended_from | [TABLE] tabSales Invoice",
+            "[FIELD] modified | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "items frequently missing during picking process",
+        "positives": [
+            "[TABLE] tabPick List",
+            "[FIELD] item_code | [TABLE] tabPick List",
+            "[FIELD] picked_qty | [TABLE] tabPick List",
+            "[FIELD] name | [TABLE] tabPick List"
+        ]
+    },
+    {
+        "anchor": "customers with frequent order cancellations before delivery",
+        "positives": [
+            "[TABLE] tabSales Order",
+            "[FIELD] customer | [TABLE] tabSales Order",
+            "[FIELD] status | [TABLE] tabSales Order",
+            "[FIELD] transaction_date | [TABLE] tabSales Order"
+        ]
+    },
+    {
+        "anchor": "purchase orders with repeated quantity amendments",
+        "positives": [
+            "[TABLE] tabPurchase Order Item",
+            "[FIELD] item_code | [TABLE] tabPurchase Order Item",
+            "[FIELD] qty | [TABLE] tabPurchase Order Item",
+            "[FIELD] modified | [TABLE] tabPurchase Order Item"
+        ]
+    },
+    {
+        "anchor": "items stocked but not mapped to any warehouse bin",
+        "positives": [
+            "[TABLE] tabItem",
+            "[FIELD] name | [TABLE] tabItem",
+            "[TABLE] tabBin",
+            "[FIELD] item_code | [TABLE] tabBin"
+        ]
+    },
+    {
+        "anchor": "warehouses where stock reconciliation is done too often",
+        "positives": [
+            "[TABLE] tabStock Reconciliation",
+            "[FIELD] posting_date | [TABLE] tabStock Reconciliation",
+            "[FIELD] name | [TABLE] tabStock Reconciliation"
+        ]
+    },
+    {
+        "anchor": "employees whose leave approvals are delayed",
+        "positives": [
+            "[TABLE] tabLeave Application",
+            "[FIELD] employee | [TABLE] tabLeave Application",
+            "[FIELD] status | [TABLE] tabLeave Application",
+            "[FIELD] modified | [TABLE] tabLeave Application"
+        ]
+    },
+    {
+        "anchor": "employees with frequent advance salary requests",
+        "positives": [
+            "[TABLE] tabEmployee Advance",
+            "[FIELD] employee | [TABLE] tabEmployee Advance",
+            "[FIELD] posting_date | [TABLE] tabEmployee Advance",
+            "[FIELD] purpose | [TABLE] tabEmployee Advance"
+        ]
+    },
+    {
+        "anchor": "projects where scope expanded without budget revision",
+        "positives": [
+            "[TABLE] tabProject",
+            "[FIELD] expected_cost | [TABLE] tabProject",
+            "[FIELD] total_costing_amount | [TABLE] tabProject",
+            "[FIELD] modified | [TABLE] tabProject"
+        ]
+    },
+    {
+        "anchor": "tasks that remain unassigned for long time",
+        "positives": [
+            "[TABLE] tabTask",
+            "[FIELD] assigned_to | [TABLE] tabTask",
+            "[FIELD] creation | [TABLE] tabTask",
+            "[FIELD] status | [TABLE] tabTask"
+        ]
+    },
+    {
+        "anchor": "manufacturing orders where scrap exceeds acceptable limit",
+        "positives": [
+            "[TABLE] tabWork Order",
+            "[FIELD] scrap_material_cost | [TABLE] tabWork Order",
+            "[FIELD] produced_qty | [TABLE] tabWork Order",
+            "[FIELD] name | [TABLE] tabWork Order"
+        ]
+    },
+    {
+        "anchor": "assets where depreciation value changed unexpectedly",
+        "positives": [
+            "[TABLE] tabAsset",
+            "[FIELD] depreciation_amount | [TABLE] tabAsset",
+            "[FIELD] modified | [TABLE] tabAsset",
+            "[FIELD] name | [TABLE] tabAsset"
+        ]
+    },
+    {
+        "anchor": "support tickets assigned to agent but no response logged",
+        "positives": [
+            "[TABLE] tabIssue",
+            "[FIELD] assigned_to | [TABLE] tabIssue",
+            "[FIELD] first_responded_on | [TABLE] tabIssue",
+            "[FIELD] status | [TABLE] tabIssue"
+        ]
+    },
+    {
+        "anchor": "customers whose invoices are repeatedly disputed",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[FIELD] status | [TABLE] tabSales Invoice",
+            "[FIELD] amended_from | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "items with sudden spike in returns after recent sale",
+        "positives": [
+            "[TABLE] tabSales Return",
+            "[FIELD] posting_date | [TABLE] tabSales Return",
+            "[TABLE] tabSales Return Item",
+            "[FIELD] item_code | [TABLE] tabSales Return Item",
+            "[FIELD] qty | [TABLE] tabSales Return Item"
+        ]
+    },
+    {
+        "anchor": "sales orders confirmed but not picked yet",
+        "positives": [
+            "[TABLE] tabSales Order",
+            "[FIELD] status | [TABLE] tabSales Order",
+            "[FIELD] transaction_date | [TABLE] tabSales Order",
+            "[FIELD] name | [TABLE] tabSales Order",
+            "[TABLE] tabPick List",
+            "[FIELD] name | [TABLE] tabPick List"
+        ]
+    },
+    {
+        "anchor": "customers frequently requesting partial deliveries",
+        "positives": [
+            "[TABLE] tabSales Order",
+            "[FIELD] customer | [TABLE] tabSales Order",
+            "[FIELD] status | [TABLE] tabSales Order",
+            "[TABLE] tabDelivery Note Item",
+            "[FIELD] qty | [TABLE] tabDelivery Note Item"
+        ]
+    },
+    {
+        "anchor": "purchase invoices posted with incorrect tax amounts",
+        "positives": [
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] total_taxes_and_charges | [TABLE] tabPurchase Invoice",
+            "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+            "[FIELD] amended_from | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "suppliers whose invoice rates differ from purchase order",
+        "positives": [
+            "[TABLE] tabPurchase Order Item",
+            "[FIELD] rate | [TABLE] tabPurchase Order Item",
+            "[TABLE] tabPurchase Invoice Item",
+            "[FIELD] rate | [TABLE] tabPurchase Invoice Item",
+            "[FIELD] item_code | [TABLE] tabPurchase Invoice Item"
+        ]
+    },
+    {
+        "anchor": "items frequently adjusted due to damage or expiry",
+        "positives": [
+            "[TABLE] tabStock Entry",
+            "[FIELD] stock_entry_type | [TABLE] tabStock Entry",
+            "[FIELD] posting_date | [TABLE] tabStock Entry",
+            "[TABLE] tabStock Ledger Entry",
+            "[FIELD] item_code | [TABLE] tabStock Ledger Entry"
+        ]
+    },
+    {
+        "anchor": "warehouses where stock is aging beyond acceptable period",
+        "positives": [
+            "[TABLE] tabStock Ledger Entry",
+            "[FIELD] warehouse | [TABLE] tabStock Ledger Entry",
+            "[FIELD] posting_date | [TABLE] tabStock Ledger Entry",
+            "[FIELD] item_code | [TABLE] tabStock Ledger Entry"
+        ]
+    },
+    {
+        "anchor": "employees whose reimbursements are delayed",
+        "positives": [
+            "[TABLE] tabExpense Claim",
+            "[FIELD] employee | [TABLE] tabExpense Claim",
+            "[FIELD] status | [TABLE] tabExpense Claim",
+            "[FIELD] posting_date | [TABLE] tabExpense Claim"
+        ]
+    },
+    {
+        "anchor": "projects where timeline changed multiple times",
+        "positives": [
+            "[TABLE] tabProject",
+            "[FIELD] expected_end_date | [TABLE] tabProject",
+            "[FIELD] modified | [TABLE] tabProject",
+            "[FIELD] name | [TABLE] tabProject"
+        ]
+    },
+    {
+        "anchor": "tasks blocked due to dependency issues",
+        "positives": [
+            "[TABLE] tabTask",
+            "[FIELD] depends_on | [TABLE] tabTask",
+            "[FIELD] status | [TABLE] tabTask",
+            "[FIELD] name | [TABLE] tabTask"
+        ]
+    },
+    {
+        "anchor": "manufacturing orders delayed due to machine downtime",
+        "positives": [
+            "[TABLE] tabWork Order",
+            "[FIELD] status | [TABLE] tabWork Order",
+            "[FIELD] planned_end_date | [TABLE] tabWork Order",
+            "[FIELD] actual_end_date | [TABLE] tabWork Order"
+        ]
+    },
+    {
+        "anchor": "assets with repeated unplanned maintenance",
+        "positives": [
+            "[TABLE] tabMaintenance Visit",
+            "[FIELD] asset | [TABLE] tabMaintenance Visit",
+            "[FIELD] maintenance_type | [TABLE] tabMaintenance Visit",
+            "[FIELD] completion_date | [TABLE] tabMaintenance Visit"
+        ]
+    },
+    {
+        "anchor": "support tickets pending customer confirmation",
+        "positives": [
+            "[TABLE] tabIssue",
+            "[FIELD] status | [TABLE] tabIssue",
+            "[FIELD] modified | [TABLE] tabIssue",
+            "[FIELD] name | [TABLE] tabIssue"
+        ]
+    },
+    {
+        "anchor": "bank accounts with negative balance today",
+        "positives": [
+            "[TABLE] tabBank Account",
+            "[FIELD] account | [TABLE] tabBank Account",
+            "[TABLE] tabGL Entry",
+            "[FIELD] account | [TABLE] tabGL Entry",
+            "[FIELD] debit | [TABLE] tabGL Entry",
+            "[FIELD] credit | [TABLE] tabGL Entry",
+            "[FIELD] posting_date | [TABLE] tabGL Entry"
+        ]
+    },
+    {
+        "anchor": "journal entries posted without proper remarks",
+        "positives": [
+            "[TABLE] tabJournal Entry",
+            "[FIELD] user_remark | [TABLE] tabJournal Entry",
+            "[FIELD] posting_date | [TABLE] tabJournal Entry",
+            "[FIELD] name | [TABLE] tabJournal Entry"
+        ]
+    },
+    {
+        "anchor": "fixed assets added this year but not depreciated",
+        "positives": [
+            "[TABLE] tabAsset",
+            "[FIELD] purchase_date | [TABLE] tabAsset",
+            "[FIELD] calculate_depreciation | [TABLE] tabAsset",
+            "[FIELD] name | [TABLE] tabAsset"
+        ]
+    },
+    {
+        "anchor": "loan repayments overdue for employees",
+        "positives": [
+            "[TABLE] tabLoan",
+            "[FIELD] applicant | [TABLE] tabLoan",
+            "[FIELD] status | [TABLE] tabLoan",
+            "[TABLE] tabLoan Repayment Schedule",
+            "[FIELD] repayment_date | [TABLE] tabLoan Repayment Schedule",
+            "[FIELD] paid_amount | [TABLE] tabLoan Repayment Schedule"
+        ]
+    },
+    {
+        "anchor": "open quotations older than 30 days",
+        "positives": [
+            "[TABLE] tabQuotation",
+            "[FIELD] status | [TABLE] tabQuotation",
+            "[FIELD] transaction_date | [TABLE] tabQuotation",
+            "[FIELD] valid_till | [TABLE] tabQuotation"
+        ]
+    },
+    {
+        "anchor": "leads not contacted after creation",
+        "positives": [
+            "[TABLE] tabLead",
+            "[FIELD] creation | [TABLE] tabLead",
+            "[FIELD] status | [TABLE] tabLead",
+            "[FIELD] lead_owner | [TABLE] tabLead"
+        ]
+    },
+    {
+        "anchor": "opportunities stuck in negotiation stage",
+        "positives": [
+            "[TABLE] tabOpportunity",
+            "[FIELD] status | [TABLE] tabOpportunity",
+            "[FIELD] modified | [TABLE] tabOpportunity",
+            "[FIELD] opportunity_from | [TABLE] tabOpportunity"
+        ]
+    },
+    {
+        "anchor": "contracts expiring in the next 60 days",
+        "positives": [
+            "[TABLE] tabContract",
+            "[FIELD] end_date | [TABLE] tabContract",
+            "[FIELD] party_type | [TABLE] tabContract",
+            "[FIELD] party_name | [TABLE] tabContract"
+        ]
+    },
+    {
+        "anchor": "subscribed customers with failed auto renewals",
+        "positives": [
+            "[TABLE] tabSubscription",
+            "[FIELD] status | [TABLE] tabSubscription",
+            "[FIELD] renewal_date | [TABLE] tabSubscription",
+            "[FIELD] party | [TABLE] tabSubscription"
+        ]
+    },
+    {
+        "anchor": "email campaigns with low response rate",
+        "positives": [
+            "[TABLE] tabEmail Campaign",
+            "[FIELD] status | [TABLE] tabEmail Campaign",
+            "[FIELD] sent_on | [TABLE] tabEmail Campaign",
+            "[FIELD] name | [TABLE] tabEmail Campaign"
+        ]
+    },
+    {
+        "anchor": "quality inspections pending approval",
+        "positives": [
+            "[TABLE] tabQuality Inspection",
+            "[FIELD] status | [TABLE] tabQuality Inspection",
+            "[FIELD] inspection_date | [TABLE] tabQuality Inspection",
+            "[FIELD] name | [TABLE] tabQuality Inspection"
+        ]
+    },
+    {
+        "anchor": "maintenance schedules missed for assets",
+        "positives": [
+            "[TABLE] tabMaintenance Schedule",
+            "[FIELD] asset | [TABLE] tabMaintenance Schedule",
+            "[FIELD] due_date | [TABLE] tabMaintenance Schedule",
+            "[FIELD] status | [TABLE] tabMaintenance Schedule"
+        ]
+    },
+    {
+        "anchor": "production plans not converted to work orders",
+        "positives": [
+            "[TABLE] tabProduction Plan",
+            "[FIELD] status | [TABLE] tabProduction Plan",
+            "[FIELD] name | [TABLE] tabProduction Plan",
+            "[TABLE] tabWork Order",
+            "[FIELD] production_plan | [TABLE] tabWork Order"
+        ]
+    },
+    {
+        "anchor": "pick lists created but not completed",
+        "positives": [
+            "[TABLE] tabPick List",
+            "[FIELD] status | [TABLE] tabPick List",
+            "[FIELD] creation | [TABLE] tabPick List",
+            "[FIELD] name | [TABLE] tabPick List"
+        ]
+    },
+    {
+        "anchor": "cost centers with expenses higher than budget this quarter",
+        "positives": [
+            "[TABLE] tabCost Center",
+            "[FIELD] name | [TABLE] tabCost Center",
+            "[TABLE] tabGL Entry",
+            "[FIELD] cost_center | [TABLE] tabGL Entry",
+            "[FIELD] debit | [TABLE] tabGL Entry",
+            "[FIELD] posting_date | [TABLE] tabGL Entry"
+        ]
+    },
+    {
+        "anchor": "accounts where manual journal entries are frequent",
+        "positives": [
+            "[TABLE] tabJournal Entry",
+            "[FIELD] posting_date | [TABLE] tabJournal Entry",
+            "[FIELD] voucher_type | [TABLE] tabJournal Entry",
+            "[TABLE] tabJournal Entry Account",
+            "[FIELD] account | [TABLE] tabJournal Entry Account"
+        ]
+    },
+    {
+        "anchor": "tax categories with highest adjustments",
+        "positives": [
+            "[TABLE] tabJournal Entry Account",
+            "[FIELD] account | [TABLE] tabJournal Entry Account",
+            "[TABLE] tabAccount",
+            "[FIELD] account_type | [TABLE] tabAccount",
+            "[FIELD] tax_rate | [TABLE] tabAccount"
+        ]
+    },
+    {
+        "anchor": "loans given to employees still not recovered",
+        "positives": [
+            "[TABLE] tabLoan",
+            "[FIELD] applicant | [TABLE] tabLoan",
+            "[FIELD] loan_amount | [TABLE] tabLoan",
+            "[FIELD] status | [TABLE] tabLoan"
+        ]
+    },
+    {
+        "anchor": "salary structures changed frequently this year",
+        "positives": [
+            "[TABLE] tabSalary Structure",
+            "[FIELD] modified | [TABLE] tabSalary Structure",
+            "[FIELD] name | [TABLE] tabSalary Structure",
+            "[FIELD] is_active | [TABLE] tabSalary Structure"
+        ]
+    },
+    {
+        "anchor": "employees without any attendance marked this month",
+        "positives": [
+            "[TABLE] tabEmployee",
+            "[FIELD] name | [TABLE] tabEmployee",
+            "[TABLE] tabAttendance",
+            "[FIELD] employee | [TABLE] tabAttendance",
+            "[FIELD] attendance_date | [TABLE] tabAttendance"
+        ]
+    },
+    {
+        "anchor": "training events completed without attendance records",
+        "positives": [
+            "[TABLE] tabTraining Event",
+            "[FIELD] name | [TABLE] tabTraining Event",
+            "[FIELD] status | [TABLE] tabTraining Event",
+            "[TABLE] tabTraining Event Employee",
+            "[FIELD] employee | [TABLE] tabTraining Event Employee"
+        ]
+    },
+    {
+        "anchor": "job openings pending approval for long time",
+        "positives": [
+            "[TABLE] tabJob Opening",
+            "[FIELD] status | [TABLE] tabJob Opening",
+            "[FIELD] creation | [TABLE] tabJob Opening",
+            "[FIELD] name | [TABLE] tabJob Opening"
+        ]
+    },
+    {
+        "anchor": "job applicants stuck in interview stage",
+        "positives": [
+            "[TABLE] tabJob Applicant",
+            "[FIELD] status | [TABLE] tabJob Applicant",
+            "[FIELD] modified | [TABLE] tabJob Applicant",
+            "[FIELD] job_title | [TABLE] tabJob Applicant"
+        ]
+    },
+    {
+        "anchor": "employees onboarded but not assigned to any department",
+        "positives": [
+            "[TABLE] tabEmployee",
+            "[FIELD] department | [TABLE] tabEmployee",
+            "[FIELD] date_of_joining | [TABLE] tabEmployee",
+            "[FIELD] name | [TABLE] tabEmployee"
+        ]
+    },
+    {
+        "anchor": "service level agreements breached for customers",
+        "positives": [
+            "[TABLE] tabSLA",
+            "[FIELD] name | [TABLE] tabSLA",
+            "[TABLE] tabIssue",
+            "[FIELD] sla | [TABLE] tabIssue",
+            "[FIELD] status | [TABLE] tabIssue"
+        ]
+    },
+    {
+        "anchor": "maintenance visits logged without linked schedule",
+        "positives": [
+            "[TABLE] tabMaintenance Visit",
+            "[FIELD] asset | [TABLE] tabMaintenance Visit",
+            "[FIELD] maintenance_type | [TABLE] tabMaintenance Visit",
+            "[TABLE] tabMaintenance Schedule",
+            "[FIELD] asset | [TABLE] tabMaintenance Schedule"
+        ]
+    },
+    {
+        "anchor": "warranty claims pending resolution",
+        "positives": [
+            "[TABLE] tabWarranty Claim",
+            "[FIELD] status | [TABLE] tabWarranty Claim",
+            "[FIELD] customer | [TABLE] tabWarranty Claim",
+            "[FIELD] complaint_date | [TABLE] tabWarranty Claim"
+        ]
+    },
+    {
+        "anchor": "bom revisions created frequently for same item",
+        "positives": [
+            "[TABLE] tabBOM",
+            "[FIELD] item | [TABLE] tabBOM",
+            "[FIELD] modified | [TABLE] tabBOM",
+            "[FIELD] is_active | [TABLE] tabBOM"
+        ]
+    },
+    {
+        "anchor": "subcontracting orders pending material transfer",
+        "positives": [
+            "[TABLE] tabSubcontracting Order",
+            "[FIELD] status | [TABLE] tabSubcontracting Order",
+            "[FIELD] supplier | [TABLE] tabSubcontracting Order",
+            "[FIELD] name | [TABLE] tabSubcontracting Order"
+        ]
+    },
+    {
+        "anchor": "bank reconciliation statements pending for long time",
+        "positives": [
+            "[TABLE] tabBank Reconciliation Statement",
+            "[FIELD] bank_account | [TABLE] tabBank Reconciliation Statement",
+            "[FIELD] status | [TABLE] tabBank Reconciliation Statement",
+            "[FIELD] posting_date | [TABLE] tabBank Reconciliation Statement"
+        ]
+    },
+    {
+        "anchor": "bank accounts where balance fluctuates heavily day to day",
+        "positives": [
+            "[TABLE] tabGL Entry",
+            "[FIELD] account | [TABLE] tabGL Entry",
+            "[FIELD] posting_date | [TABLE] tabGL Entry",
+            "[FIELD] debit | [TABLE] tabGL Entry",
+            "[FIELD] credit | [TABLE] tabGL Entry"
+        ]
+    },
+    {
+        "anchor": "journal entries reversed multiple times",
+        "positives": [
+            "[TABLE] tabJournal Entry",
+            "[FIELD] name | [TABLE] tabJournal Entry",
+            "[FIELD] amended_from | [TABLE] tabJournal Entry",
+            "[FIELD] posting_date | [TABLE] tabJournal Entry"
+        ]
+    },
+    {
+        "anchor": "customers with sales invoices but no delivery notes created",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice",
+            "[TABLE] tabDelivery Note",
+            "[FIELD] against_sales_invoice | [TABLE] tabDelivery Note"
+        ]
+    },
+    {
+        "anchor": "items where reorder level is crossed frequently",
+        "positives": [
+            "[TABLE] tabBin",
+            "[FIELD] item_code | [TABLE] tabBin",
+            "[FIELD] actual_qty | [TABLE] tabBin",
+            "[TABLE] tabItem Reorder",
+            "[FIELD] warehouse | [TABLE] tabItem Reorder",
+            "[FIELD] reorder_level | [TABLE] tabItem Reorder"
+        ]
+    },
+    {
+        "anchor": "sales orders pending approval for more than 3 days",
+        "positives": [
+            "[TABLE] tabSales Order",
+            "[FIELD] status | [TABLE] tabSales Order",
+            "[FIELD] transaction_date | [TABLE] tabSales Order",
+            "[FIELD] owner | [TABLE] tabSales Order"
+        ]
+    },
+    {
+        "anchor": "purchase invoices stuck in draft status for long time",
+        "positives": [
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] docstatus | [TABLE] tabPurchase Invoice",
+            "[FIELD] posting_date | [TABLE] tabPurchase Invoice",
+            "[FIELD] supplier | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "items where selling price is below last purchase rate",
+        "positives": [
+            "[TABLE] tabSales Invoice Item",
+            "[FIELD] item_code | [TABLE] tabSales Invoice Item",
+            "[FIELD] rate | [TABLE] tabSales Invoice Item",
+            "[TABLE] tabPurchase Invoice Item",
+            "[FIELD] item_code | [TABLE] tabPurchase Invoice Item",
+            "[FIELD] rate | [TABLE] tabPurchase Invoice Item"
+        ]
+    },
+    {
+        "anchor": "suppliers with repeated late deliveries",
+        "positives": [
+            "[TABLE] tabPurchase Order",
+            "[FIELD] supplier | [TABLE] tabPurchase Order",
+            "[FIELD] schedule_date | [TABLE] tabPurchase Order",
+            "[FIELD] status | [TABLE] tabPurchase Order"
+        ]
+    },
+    {
+        "anchor": "stock entries posted without reference document",
+        "positives": [
+            "[TABLE] tabStock Entry",
+            "[FIELD] stock_entry_type | [TABLE] tabStock Entry",
+            "[FIELD] posting_date | [TABLE] tabStock Entry",
+            "[FIELD] name | [TABLE] tabStock Entry"
+        ]
+    },
+    {
+        "anchor": "employees whose leave requests are often rejected",
+        "positives": [
+            "[TABLE] tabLeave Application",
+            "[FIELD] employee | [TABLE] tabLeave Application",
+            "[FIELD] status | [TABLE] tabLeave Application",
+            "[FIELD] from_date | [TABLE] tabLeave Application"
+        ]
+    },
+    {
+        "anchor": "attendance records missing for working days",
+        "positives": [
+            "[TABLE] tabAttendance",
+            "[FIELD] employee | [TABLE] tabAttendance",
+            "[FIELD] attendance_date | [TABLE] tabAttendance",
+            "[FIELD] status | [TABLE] tabAttendance"
+        ]
+    },
+    {
+        "anchor": "employees with frequent shift changes",
+        "positives": [
+            "[TABLE] tabShift Assignment",
+            "[FIELD] employee | [TABLE] tabShift Assignment",
+            "[FIELD] shift_type | [TABLE] tabShift Assignment",
+            "[FIELD] start_date | [TABLE] tabShift Assignment"
+        ]
+    },
+    {
+        "anchor": "projects with high expense but low completion percentage",
+        "positives": [
+            "[TABLE] tabProject",
+            "[FIELD] total_costing_amount | [TABLE] tabProject",
+            "[FIELD] percent_complete | [TABLE] tabProject",
+            "[FIELD] status | [TABLE] tabProject"
+        ]
+    },
+    {
+        "anchor": "tasks assigned but never started",
+        "positives": [
+            "[TABLE] tabTask",
+            "[FIELD] assigned_to | [TABLE] tabTask",
+            "[FIELD] status | [TABLE] tabTask",
+            "[FIELD] creation | [TABLE] tabTask"
+        ]
+    },
+    {
+        "anchor": "manufacturing orders where planned qty differs from produced qty",
+        "positives": [
+            "[TABLE] tabWork Order",
+            "[FIELD] qty | [TABLE] tabWork Order",
+            "[FIELD] produced_qty | [TABLE] tabWork Order",
+            "[FIELD] status | [TABLE] tabWork Order"
+        ]
+    },
+    {
+        "anchor": "assets nearing end of useful life",
+        "positives": [
+            "[TABLE] tabAsset",
+            "[FIELD] gross_purchase_amount | [TABLE] tabAsset",
+            "[FIELD] depreciation_amount | [TABLE] tabAsset",
+            "[FIELD] status | [TABLE] tabAsset"
+        ]
+    },
+    {
+        "anchor": "support tickets waiting for internal response",
+        "positives": [
+            "[TABLE] tabIssue",
+            "[FIELD] status | [TABLE] tabIssue",
+            "[FIELD] assigned_to | [TABLE] tabIssue",
+            "[FIELD] modified | [TABLE] tabIssue"
+        ]
+    },
+    {
+        "anchor": "customers with invoices posted but no accounting entry",
+        "positives": [
+            "[TABLE] tabSales Invoice",
+            "[FIELD] name | [TABLE] tabSales Invoice",
+            "[FIELD] posting_date | [TABLE] tabSales Invoice",
+            "[TABLE] tabGL Entry",
+            "[FIELD] voucher_no | [TABLE] tabGL Entry"
+        ]
+    },
+    {
+        "anchor": "items with large valuation changes without stock movement",
+        "positives": [
+            "[TABLE] tabStock Ledger Entry",
+            "[FIELD] item_code | [TABLE] tabStock Ledger Entry",
+            "[FIELD] stock_value_difference | [TABLE] tabStock Ledger Entry",
+            "[FIELD] posting_date | [TABLE] tabStock Ledger Entry"
+        ]
+    },
+    {
+        "anchor": "purchase orders created but never submitted",
+        "positives": [
+            "[TABLE] tabPurchase Order",
+            "[FIELD] docstatus | [TABLE] tabPurchase Order",
+            "[FIELD] supplier | [TABLE] tabPurchase Order",
+            "[FIELD] transaction_date | [TABLE] tabPurchase Order"
+        ]
+    },
+    {
+        "anchor": "suppliers with frequent price changes for same item",
+        "positives": [
+            "[TABLE] tabPurchase Invoice Item",
+            "[FIELD] item_code | [TABLE] tabPurchase Invoice Item",
+            "[FIELD] rate | [TABLE] tabPurchase Invoice Item",
+            "[TABLE] tabPurchase Invoice",
+            "[FIELD] supplier | [TABLE] tabPurchase Invoice"
+        ]
+    },
+    {
+        "anchor": "stock transfers done repeatedly between same warehouses",
+        "positives": [
+            "[TABLE] tabStock Entry",
+            "[FIELD] stock_entry_type | [TABLE] tabStock Entry",
+            "[FIELD] posting_date | [TABLE] tabStock Entry",
+            "[TABLE] tabStock Ledger Entry",
+            "[FIELD] warehouse | [TABLE] tabStock Ledger Entry"
+        ]
+    },
+    {
+        "anchor": "items frequently blocked due to quality issues",
+        "positives": [
+            "[TABLE] tabQuality Inspection",
+            "[FIELD] item_code | [TABLE] tabQuality Inspection",
+            "[FIELD] status | [TABLE] tabQuality Inspection",
+            "[FIELD] inspection_date | [TABLE] tabQuality Inspection"
+        ]
+    },
+    {
+        "anchor": "employees with irregular shift attendance",
+        "positives": [
+            "[TABLE] tabAttendance",
+            "[FIELD] employee | [TABLE] tabAttendance",
+            "[FIELD] shift | [TABLE] tabAttendance",
+            "[FIELD] attendance_date | [TABLE] tabAttendance"
+        ]
+    },
+    {
+        "anchor": "employees whose payroll cost increased sharply",
+        "positives": [
+            "[TABLE] tabSalary Slip",
+            "[FIELD] employee | [TABLE] tabSalary Slip",
+            "[FIELD] gross_pay | [TABLE] tabSalary Slip",
+            "[FIELD] posting_date | [TABLE] tabSalary Slip"
+        ]
+    },
+    {
+        "anchor": "projects where tasks are completed but billing not raised",
+        "positives": [
+            "[TABLE] tabTask",
+            "[FIELD] project | [TABLE] tabTask",
+            "[FIELD] status | [TABLE] tabTask",
+            "[TABLE] tabProject",
+            "[FIELD] billed_amount | [TABLE] tabProject"
+        ]
+    },
+    {
+        "anchor": "tasks with repeated deadline extensions",
+        "positives": [
+            "[TABLE] tabTask",
+            "[FIELD] exp_end_date | [TABLE] tabTask",
+            "[FIELD] modified | [TABLE] tabTask",
+            "[FIELD] status | [TABLE] tabTask"
+        ]
+    },
+    {
+        "anchor": "manufacturing orders delayed due to material shortage",
+        "positives": [
+            "[TABLE] tabWork Order",
+            "[FIELD] status | [TABLE] tabWork Order",
+            "[FIELD] material_transferred_for_manufacturing | [TABLE] tabWork Order",
+            "[FIELD] planned_start_date | [TABLE] tabWork Order"
+        ]
+    },
+    {
+        "anchor": "assets with depreciation posted late",
+        "positives": [
+            "[TABLE] tabAsset Depreciation Schedule",
+            "[FIELD] schedule_date | [TABLE] tabAsset Depreciation Schedule",
+            "[FIELD] depreciation_amount | [TABLE] tabAsset Depreciation Schedule",
+            "[FIELD] asset | [TABLE] tabAsset Depreciation Schedule"
+        ]
+    },
+    {
+        "anchor": "support tickets with long response gaps",
+        "positives": [
+            "[TABLE] tabIssue",
+            "[FIELD] opening_date | [TABLE] tabIssue",
+            "[FIELD] first_responded_on | [TABLE] tabIssue",
+            "[FIELD] status | [TABLE] tabIssue"
+        ]
+    },
+    {
+        "anchor": "cheques received but not deposited yet",
+        "positives": [
+            "[TABLE] tabPayment Entry",
+            "[FIELD] mode_of_payment | [TABLE] tabPayment Entry",
+            "[FIELD] reference_date | [TABLE] tabPayment Entry",
+            "[FIELD] paid_amount | [TABLE] tabPayment Entry",
+            "[FIELD] party | [TABLE] tabPayment Entry"
+        ]
+    },
+    {
+        "anchor": "accounts with unusually high write offs this year",
+        "positives": [
+            "[TABLE] tabGL Entry",
+            "[FIELD] account | [TABLE] tabGL Entry",
+            "[FIELD] debit | [TABLE] tabGL Entry",
+            "[FIELD] posting_date | [TABLE] tabGL Entry"
+        ]
+    },
+    {
+        "anchor": "customers with advance payments but no invoices raised",
+        "positives": [
+            "[TABLE] tabPayment Entry",
+            "[FIELD] party | [TABLE] tabPayment Entry",
+            "[FIELD] paid_amount | [TABLE] tabPayment Entry",
+            "[FIELD] posting_date | [TABLE] tabPayment Entry",
+            "[TABLE] tabSales Invoice",
+            "[FIELD] customer | [TABLE] tabSales Invoice"
+        ]
+    },
+    {
+        "anchor": "open purchase receipts not billed yet",
+        "positives": [
+            "[TABLE] tabPurchase Receipt",
+            "[FIELD] status | [TABLE] tabPurchase Receipt",
+            "[FIELD] posting_date | [TABLE] tabPurchase Receipt",
+            "[FIELD] supplier | [TABLE] tabPurchase Receipt"
+        ]
+    },
+    {
+        "anchor": "purchase receipts created without inspection",
+        "positives": [
+            "[TABLE] tabPurchase Receipt",
+            "[FIELD] name | [TABLE] tabPurchase Receipt",
+            "[FIELD] posting_date | [TABLE] tabPurchase Receipt",
+            "[TABLE] tabQuality Inspection",
+            "[FIELD] reference_name | [TABLE] tabQuality Inspection"
+        ]
+    },
+    {
+        "anchor": "items received but not put away in warehouse",
+        "positives": [
+            "[TABLE] tabPurchase Receipt Item",
+            "[FIELD] item_code | [TABLE] tabPurchase Receipt Item",
+            "[FIELD] warehouse | [TABLE] tabPurchase Receipt Item",
+            "[TABLE] tabBin",
+            "[FIELD] item_code | [TABLE] tabBin"
+        ]
+    },
+    {
+        "anchor": "stock entries created but not submitted",
+        "positives": [
+            "[TABLE] tabStock Entry",
+            "[FIELD] docstatus | [TABLE] tabStock Entry",
+            "[FIELD] posting_date | [TABLE] tabStock Entry",
+            "[FIELD] stock_entry_type | [TABLE] tabStock Entry"
+        ]
+    },
+    {
+        "anchor": "items with serial numbers missing movement history",
+        "positives": [
+            "[TABLE] tabSerial No",
+            "[FIELD] item_code | [TABLE] tabSerial No",
+            "[FIELD] status | [TABLE] tabSerial No",
+            "[TABLE] tabStock Ledger Entry",
+            "[FIELD] serial_no | [TABLE] tabStock Ledger Entry"
+        ]
+    },
+    {
+        "anchor": "batches nearing expiry but still in stock",
+        "positives": [
+            "[TABLE] tabBatch",
+            "[FIELD] expiry_date | [TABLE] tabBatch",
+            "[FIELD] item | [TABLE] tabBatch",
+            "[TABLE] tabBin",
+            "[FIELD] item_code | [TABLE] tabBin"
+        ]
+    },
+    {
+        "anchor": "employees with probation period not confirmed",
+        "positives": [
+            "[TABLE] tabEmployee",
+            "[FIELD] date_of_joining | [TABLE] tabEmployee",
+            "[FIELD] employment_type | [TABLE] tabEmployee",
+            "[FIELD] status | [TABLE] tabEmployee"
+        ]
+    },
+    {
+        "anchor": "leave applications overlapping with attendance records",
+        "positives": [
+            "[TABLE] tabLeave Application",
+            "[FIELD] employee | [TABLE] tabLeave Application",
+            "[FIELD] from_date | [TABLE] tabLeave Application",
+            "[FIELD] to_date | [TABLE] tabLeave Application",
+            "[TABLE] tabAttendance",
+            "[FIELD] attendance_date | [TABLE] tabAttendance"
+        ]
+    },
+    {
+        "anchor": "timesheets submitted without task reference",
+        "positives": [
+            "[TABLE] tabTimesheet Detail",
+            "[FIELD] employee | [TABLE] tabTimesheet Detail",
+            "[FIELD] hours | [TABLE] tabTimesheet Detail",
+            "[FIELD] task | [TABLE] tabTimesheet Detail"
+        ]
+    },
+    {
+        "anchor": "projects marked completed but still incurring costs",
+        "positives": [
+            "[TABLE] tabProject",
+            "[FIELD] status | [TABLE] tabProject",
+            "[FIELD] total_costing_amount | [TABLE] tabProject",
+            "[FIELD] modified | [TABLE] tabProject"
+        ]
+    },
+    {
+        "anchor": "issues resolved without customer confirmation",
+        "positives": [
+            "[TABLE] tabIssue",
+            "[FIELD] status | [TABLE] tabIssue",
+            "[FIELD] resolution_date | [TABLE] tabIssue",
+            "[FIELD] name | [TABLE] tabIssue"
+        ]
+    }
+]

@@ -1,0 +1,906 @@
+[
+  {
+    "anchor": "Doctype: Purchase Invoice Advance\nQuestion: What is the advance amount and exchange gain/loss for entry ADV-5023?",
+    "positive": "advance_amount: Total advance amount paid to the supplier.",
+    "negatives": [
+      "reference_type: Document type the advance is linked to (e.g., Purchase Invoice).",
+      "reference_name: Specific document name or ID being referenced.",
+      "allocated_amount: Portion of the advance applied to the purchase invoice.",
+      "ref_exchange_rate: Exchange rate used for the referenced document.",
+      "remarks: Comments or notes about the advance entry.",
+      "reference_row: Row number in the refer
+      enced document, if applicable.",
+      "difference_posting_date: Date when gain/loss differences are posted to the ledger.",
+      "exchange_gain_loss: Currency gain or loss resulting from exchange rate differences."
+    ]
+  },
+  {
+    "anchor": "Doctype: Purchase Invoice Advance\nQuestion: What is the advance amount and exchange gain/loss for entry ADV-5023?",
+    "positive": "exchange_gain_loss: Currency gain or loss resulting from exchange rate differences.",
+    "negatives": [
+      "reference_type: Document type the advance is linked to (e.g., Purchase Invoice).",
+      "reference_name: Specific document name or ID being referenced.",
+      "allocated_amount: Portion of the advance applied to the purchase invoice.",
+      "ref_exchange_rate: Exchange rate used for the referenced document.",
+      "remarks: Comments or notes about the advance entry.",
+      "reference_row: Row number in the referenced document, if applicable.",
+      "difference_posting_date: Date when gain/loss differences are posted to the ledger.",
+    ]
+  },
+  {
+    "anchor": "Doctype: Purchase Invoice Advance\nQuestion: Show me the reference document type and its row number for entry ID ADV-7321.",
+    "positive": "reference_type: Document type the advance is linked to (e.g., Purchase Invoice).",
+    "negatives": [
+      "reference_name: Specific document name or ID being referenced.",
+      "remarks: Comments or notes about the advance entry.",
+      "advance_amount: Total advance amount paid to the supplier.",
+      "allocated_amount: Portion of the advance applied to the purchase invoice.",
+      "exchange_gain_loss: Currency gain or loss resulting from exchange rate differences.",
+      "ref_exchange_rate: Exchange rate used for the referenced document.",
+      "difference_posting_date: Date when gain/loss differences are posted to the ledger.",
+    ]
+  },
+  {
+    "anchor": "Doctype: Purchase Invoice Advance\nQuestion: Show me the reference document type and its row number for entry ID ADV-7321.",
+    "positive": "reference_row: Row number in the referenced document, if applicable.",
+    "negatives": [
+      "reference_name: Specific document name or ID being referenced.",
+      "remarks: Comments or notes about the advance entry.",
+      "advance_amount: Total advance amount paid to the supplier.",
+      "allocated_amount: Portion of the advance applied to the purchase invoice.",
+      "exchange_gain_loss: Currency gain or loss resulting from exchange rate differences.",
+      "ref_exchange_rate: Exchange rate used for the referenced document.",
+      "difference_posting_date: Date when gain/loss differences are posted to the ledger.",
+    ]
+  },
+  {
+    "anchor": "Doctype: Purchase Invoice Advance\nQuestion: List reference names and remarks for all entries made this financial quarter.",
+    "positive": "reference_name: Specific document name or ID being referenced.",
+    "negatives": [
+      "reference_type: Document type the advance is linked to (e.g., Purchase Invoice).",
+      "reference_row: Row number in the referenced document, if applicable.",
+      "advance_amount: Total advance amount paid to the supplier.",
+      "allocated_amount: Portion of the advance applied to the purchase invoice.",
+      "exchange_gain_loss: Currency gain or loss resulting from exchange rate differences.",
+      "ref_exchange_rate: Exchange rate used for the referenced document.",
+      "difference_posting_date: Date when gain/loss differences are posted to the ledger.",
+    ]
+  },
+  {
+    "anchor": "Doctype: Purchase Invoice Advance\nQuestion: List reference names and remarks for all entries made this financial quarter.",
+    "positive": "remarks: Comments or notes about the advance entry.",
+    "negatives": [
+      "reference_type: Document type the advance is linked to (e.g., Purchase Invoice).",
+      "reference_row: Row number in the referenced document, if applicable.",
+      "advance_amount: Total advance amount paid to the supplier.",
+      "allocated_amount: Portion of the advance applied to the purchase invoice.",
+      "exchange_gain_loss: Currency gain or loss resulting from exchange rate differences.",
+      "ref_exchange_rate: Exchange rate used for the referenced document.",
+      "difference_posting_date: Date when gain/loss differences are posted to the ledger.",
+    ]
+  },
+  [
+  {
+    "anchor": "Doctype: Purchase Invoice Advance\nQuestion: Can you get the advance and allocated amounts along with their posting differences?",
+    "positive": "advance_amount: Total advance amount paid to the supplier.",
+    "negatives": [
+      "allocated_amount: Portion of the advance applied to the purchase invoice.",
+      "difference_posting_date: Date when gain/loss differences are posted to the ledger.",
+      "reference_type: Document type the advance is linked to (e.g., Purchase Invoice).",
+      "reference_name: Specific document name or ID being referenced.",
+      "remarks: Comments or notes about the advance entry.",
+      "reference_row: Row number in the referenced document, if applicable.",
+      "exchange_gain_loss: Currency gain or loss resulting from exchange rate differences.",
+      "ref_exchange_rate: Exchange rate used for the referenced document."
+    ]
+  },
+  {
+    "anchor": "Doctype: Purchase Invoice Advance\nQuestion: Can you get the advance and allocated amounts along with their posting differences?",
+    "positive": "allocated_amount: Portion of the advance applied to the purchase invoice.",
+    "negatives": [
+      "advance_amount: Total advance amount paid to the supplier.",
+      "difference_posting_date: Date when gain/loss differences are posted to the ledger.",
+      "reference_type: Document type the advance is linked to (e.g., Purchase Invoice).",
+      "reference_name: Specific document name or ID being referenced.",
+      "remarks: Comments or notes about the advance entry.",
+      "reference_row: Row number in the referenced document, if applicable.",
+      "exchange_gain_loss: Currency gain or loss resulting from exchange rate differences.",
+      "ref_exchange_rate: Exchange rate used for the referenced document."
+    ]
+  },
+  {
+    "anchor": "Doctype: Purchase Invoice Advance\nQuestion: Can you get the advance and allocated amounts along with their posting differences?",
+    "positive": "difference_posting_date: Date when gain/loss differences are posted to the ledger.",
+    "negatives": [
+      "advance_amount: Total advance amount paid to the supplier.",
+      "allocated_amount: Portion of the advance applied to the purchase invoice.",
+      "reference_type: Document type the advance is linked to (e.g., Purchase Invoice).",
+      "reference_name: Specific document name or ID being referenced.",
+      "remarks: Comments or notes about the advance entry.",
+      "reference_row: Row number in the referenced document, if applicable.",
+      "exchange_gain_loss: Currency gain or loss resulting from exchange rate differences.",
+      "ref_exchange_rate: Exchange rate used for the referenced document."
+    ]
+  },
+  {
+    "anchor": "Doctype: Purchase Invoice Advance\nQuestion: Find the exchange gain/loss and rate used for document PINV-4451.",
+    "positive": "exchange_gain_loss: Currency gain or loss resulting from exchange rate differences.",
+    "negatives": [
+      "ref_exchange_rate: Exchange rate used for the referenced document.",
+      "reference_type: Document type the advance is linked to (e.g., Purchase Invoice).",
+      "reference_name: Specific document name or ID being referenced.",
+      "remarks: Comments or notes about the advance entry.",
+      "reference_row: Row number in the referenced document, if applicable.",
+      "advance_amount: Total advance amount paid to the supplier.",
+      "allocated_amount: Portion of the advance applied to the purchase invoice.",
+      "difference_posting_date: Date when gain/loss differences are posted to the ledger."
+    ]
+  },
+  {
+    "anchor": "Doctype: Purchase Invoice Advance\nQuestion: Find the exchange gain/loss and rate used for document PINV-4451.",
+    "positive": "ref_exchange_rate: Exchange rate used for the referenced document.",
+    "negatives": [
+      "exchange_gain_loss: Currency gain or loss resulting from exchange rate differences.",
+      "reference_type: Document type the advance is linked to (e.g., Purchase Invoice).",
+      "reference_name: Specific document name or ID being referenced.",
+      "remarks: Comments or notes about the advance entry.",
+      "reference_row: Row number in the referenced document, if applicable.",
+      "advance_amount: Total advance amount paid to the supplier.",
+      "allocated_amount: Portion of the advance applied to the purchase invoice.",
+      "difference_posting_date: Date when gain/loss differences are posted to the ledger."
+    ]
+  },
+  {
+    "anchor": "Doctype: Purchase Invoice Advance\nQuestion: Which documents and row numbers were used to apply QAR 2000 in advance payments?",
+    "positive": "reference_name: Specific document name or ID being referenced.",
+    "negatives": [
+      "reference_row: Row number in the referenced document, if applicable.",
+      "reference_type: Document type the advance is linked to (e.g., Purchase Invoice).",
+      "remarks: Comments or notes about the advance entry.",
+      "advance_amount: Total advance amount paid to the supplier.",
+      "allocated_amount: Portion of the advance applied to the purchase invoice.",
+      "exchange_gain_loss: Currency gain or loss resulting from exchange rate differences.",
+      "ref_exchange_rate: Exchange rate used for the referenced document.",
+      "difference_posting_date: Date when gain/loss differences are posted to the ledger."
+    ]
+  },
+  {
+    "anchor": "Doctype: Purchase Invoice Advance\nQuestion: Which documents and row numbers were used to apply QAR 2000 in advance payments?",
+    "positive": "reference_row: Row number in the referenced document, if applicable.",
+    "negatives": [
+      "reference_name: Specific document name or ID being referenced.",
+      "reference_type: Document type the advance is linked to (e.g., Purchase Invoice).",
+      "remarks: Comments or notes about the advance entry.",
+      "advance_amount: Total advance amount paid to the supplier.",
+      "allocated_amount: Portion of the advance applied to the purchase invoice.",
+      "exchange_gain_loss: Currency gain or loss resulting from exchange rate differences.",
+      "ref_exchange_rate: Exchange rate used for the referenced document.",
+      "difference_posting_date: Date when gain/loss differences are posted to the ledger."
+    ]
+  },
+  {
+    "anchor": "Doctype: Purchase Invoice Advance\nQuestion: Show reference type and remarks for customer advances posted in the last 7 days.",
+    "positive": "reference_type: Document type the advance is linked to (e.g., Purchase Invoice).",
+    "negatives": [
+      "remarks: Comments or notes about the advance entry.",
+      "reference_name: Specific document name or ID being referenced.",
+      "reference_row: Row number in the referenced document, if applicable.",
+      "advance_amount: Total advance amount paid to the supplier.",
+      "allocated_amount: Portion of the advance applied to the purchase invoice.",
+      "exchange_gain_loss: Currency gain or loss resulting from exchange rate differences.",
+      "ref_exchange_rate: Exchange rate used for the referenced document.",
+      "difference_posting_date: Date when gain/loss differences are posted to the ledger."
+    ]
+  },
+  {
+    "anchor": "Doctype: Purchase Invoice Advance\nQuestion: Show reference type and remarks for customer advances posted in the last 7 days.",
+    "positive": "remarks: Comments or notes about the advance entry.",
+    "negatives": [
+      "reference_type: Document type the advance is linked to (e.g., Purchase Invoice).",
+      "reference_name: Specific document name or ID being referenced.",
+      "reference_row: Row number in the referenced document, if applicable.",
+      "advance_amount: Total advance amount paid to the supplier.",
+      "allocated_amount: Portion of the advance applied to the purchase invoice.",
+      "exchange_gain_loss: Currency gain or loss resulting from exchange rate differences.",
+      "ref_exchange_rate: Exchange rate used for the referenced document.",
+      "difference_posting_date: Date when gain/loss differences are posted to the ledger."
+    ]
+  },
+  {
+    "anchor": "Doctype: Purchase Invoice Advance\nQuestion: Give me the document name, reference type, and allocated amount for ADV-8899.",
+    "positive": "allocated_amount: Portion of the advance applied to the purchase invoice.",
+    "negatives": [
+      "reference_name: Specific document name or ID being referenced.",
+      "reference_type: Document type the advance is linked to (e.g., Purchase Invoice).",
+      "remarks: Comments or notes about the advance entry.",
+      "reference_row: Row number in the referenced document, if applicable.",
+      "advance_amount: Total advance amount paid to the supplier.",
+      "exchange_gain_loss: Currency gain or loss resulting from exchange rate differences.",
+      "ref_exchange_rate: Exchange rate used for the referenced document.",
+      "difference_posting_date: Date when gain/loss differences are posted to the ledger."
+    ]
+  },
+  {
+    "anchor": "Doctype: Purchase Invoice Advance\nQuestion: Can you fetch the remarks and the exchange rate for any advance entry made by TechnoTrade Ltd?",
+    "positive": "remarks: Comments or notes about the advance entry.",
+    "negatives": [
+      "ref_exchange_rate: Exchange rate used for the referenced document.",
+      "reference_type: Document type the advance is linked to (e.g., Purchase Invoice).",
+      "reference_name: Specific document name or ID being referenced.",
+      "reference_row: Row number in the referenced document, if applicable.",
+      "advance_amount: Total advance amount paid to the supplier.",
+      "allocated_amount: Portion of the advance applied to the purchase invoice.",
+      "exchange_gain_loss: Currency gain or loss resulting from exchange rate differences.",
+      "difference_posting_date: Date when gain/loss differences are posted to the ledger."
+    ]
+  },
+  {
+    "anchor": "Doctype: Purchase Invoice Advance\nQuestion: Can you fetch the remarks and the exchange rate for any advance entry made by TechnoTrade Ltd?",
+    "positive": "ref_exchange_rate: Exchange rate used for the referenced document.",
+    "negatives": [
+      "remarks: Comments or notes about the advance entry.",
+      "reference_type: Document type the advance is linked to (e.g., Purchase Invoice).",
+      "reference_name: Specific document name or ID being referenced.",
+      "reference_row: Row number in the referenced document, if applicable.",
+      "advance_amount: Total advance amount paid to the supplier.",
+      "allocated_amount: Portion of the advance applied to the purchase invoice.",
+      "exchange_gain_loss: Currency gain or loss resulting from exchange rate differences.",
+      "difference_posting_date: Date when gain/loss differences are posted to the ledger."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Invoice Advance\nQuestion: When was the currency adjustment posted and what exchange rate was used for advance ADV-SI-220?",
+    "positive": "difference_posting_date: Date of posting the currency difference adjustment.",
+    "negatives": [
+      "ref_exchange_rate: Exchange rate used for the reference document.",
+      "reference_type: Document type the advance relates to (e.g., Sales Invoice).",
+      "reference_name: Specific document being referenced by this advance.",
+      "advance_amount: Amount received as advance from the customer.",
+      "allocated_amount: Portion of the advance matched to a sales invoice.",
+      "remarks: Comments about the advance payment received.",
+      "reference_row: Line number in the referenced document (if relevant).",
+      "exchange_gain_loss: Currency fluctuation impact between payment and invoice."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Invoice Advance\nQuestion: When was the currency adjustment posted and what exchange rate was used for advance ADV-SI-220?",
+    "positive": "ref_exchange_rate: Exchange rate used for the reference document.",
+    "negatives": [
+      "difference_posting_date: Date of posting the currency difference adjustment.",
+      "reference_type: Document type the advance relates to (e.g., Sales Invoice).",
+      "reference_name: Specific document being referenced by this advance.",
+      "advance_amount: Amount received as advance from the customer.",
+      "allocated_amount: Portion of the advance matched to a sales invoice.",
+      "remarks: Comments about the advance payment received.",
+      "reference_row: Line number in the referenced document (if relevant).",
+      "exchange_gain_loss: Currency fluctuation impact between payment and invoice."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Invoice Advance\nQuestion: Show the allocated amount and the date the exchange difference was recorded for customer entry ADV-SI-9981.",
+    "positive": "allocated_amount: Portion of the advance matched to a sales invoice.",
+    "negatives": [
+      "difference_posting_date: Date of posting the currency difference adjustment.",
+      "ref_exchange_rate: Exchange rate used for the reference document.",
+      "reference_type: Document type the advance relates to (e.g., Sales Invoice).",
+      "reference_name: Specific document being referenced by this advance.",
+      "advance_amount: Amount received as advance from the customer.",
+      "remarks: Comments about the advance payment received.",
+      "reference_row: Line number in the referenced document (if relevant).",
+      "exchange_gain_loss: Currency fluctuation impact between payment and invoice."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Invoice Advance\nQuestion: Show the allocated amount and the date the exchange difference was recorded for customer entry ADV-SI-9981.",
+    "positive": "difference_posting_date: Date of posting the currency difference adjustment.",
+    "negatives": [
+      "allocated_amount: Portion of the advance matched to a sales invoice.",
+      "ref_exchange_rate: Exchange rate used for the reference document.",
+      "reference_type: Document type the advance relates to (e.g., Sales Invoice).",
+      "reference_name: Specific document being referenced by this advance.",
+      "advance_amount: Amount received as advance from the customer.",
+      "remarks: Comments about the advance payment received.",
+      "reference_row: Line number in the referenced document (if relevant).",
+      "exchange_gain_loss: Currency fluctuation impact between payment and invoice."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Invoice Advance\nQuestion: What exchange rate and allocated amount were applied to the invoice for customer TechEdge?",
+    "positive": "ref_exchange_rate: Exchange rate used for the reference document.",
+    "negatives": [
+      "allocated_amount: Portion of the advance matched to a sales invoice.",
+      "difference_posting_date: Date of posting the currency difference adjustment.",
+      "reference_type: Document type the advance relates to (e.g., Sales Invoice).",
+      "reference_name: Specific document being referenced by this advance.",
+      "advance_amount: Amount received as advance from the customer.",
+      "remarks: Comments about the advance payment received.",
+      "reference_row: Line number in the referenced document (if relevant).",
+      "exchange_gain_loss: Currency fluctuation impact between payment and invoice."
+    ]
+  },
+  {
+    "anchor": "Doctype: Sales Invoice Advance\nQuestion: What exchange rate and allocated amount were applied to the invoice for customer TechEdge?",
+    "positive": "allocated_amount: Portion of the advance matched to a sales invoice.",
+    "negatives": [
+      "ref_exchange_rate: Exchange rate used for the reference document.",
+      "difference_posting_date: Date of posting the currency difference adjustment.",
+      "reference_type: Document type the advance relates to (e.g., Sales Invoice).",
+      "reference_name: Specific document being referenced by this advance.",
+      "advance_amount: Amount received as advance from the customer.",
+      "remarks: Comments about the advance payment received.",
+      "reference_row: Line number in the referenced document (if relevant).",
+      "exchange_gain_loss: Currency fluctuation impact between payment and invoice."
+    ]
+  },
+  {
+  "anchor": "Doctype: Asset Finance Book\nQuestion: How many depreciation entries have already been booked for asset AF-2025-001?",
+  "positive": "total_number_of_booked_depreciations: How many depreciation entries have already been booked.",
+  "negatives": [
+    "finance_book: Book under which depreciation is being recorded.",
+    "depreciation_method: Method used for depreciation (e.g., Straight Line, Reducing Balance).",
+    "total_number_of_depreciations: Total number of depreciation cycles planned.",
+    "daily_prorata_based: If enabled, calculates depreciation on a daily basis.",
+    "shift_based: Enables depreciation based on asset shifts or working hours.",
+    "frequency_of_depreciation: Interval at which depreciation is recorded (e.g., Monthly, Quarterly).",
+    "depreciation_start_date: Date when depreciation begins.",
+    "salvage_value_percentage: Expected salvage value expressed as a percentage.",
+    "expected_value_after_useful_life: Asset’s estimated value after depreciation ends.",
+    "value_after_depreciation: Final value of the asset after depreciation is complete.",
+    "rate_of_depreciation: Annual depreciation rate applied to the asset."
+  ]
+},
+{
+  "anchor": "Doctype: Asset Finance Book\nQuestion: What is the total number of booked depreciations for assets using the straight line method?",
+  "positive": "total_number_of_booked_depreciations: How many depreciation entries have already been booked.",
+  "negatives": [
+    "finance_book: Book under which depreciation is being recorded.",
+    "depreciation_method: Method used for depreciation (e.g., Straight Line, Reducing Balance).",
+    "total_number_of_depreciations: Total number of depreciation cycles planned.",
+    "daily_prorata_based: If enabled, calculates depreciation on a daily basis.",
+    "shift_based: Enables depreciation based on asset shifts or working hours.",
+    "frequency_of_depreciation: Interval at which depreciation is recorded (e.g., Monthly, Quarterly).",
+    "depreciation_start_date: Date when depreciation begins.",
+    "salvage_value_percentage: Expected salvage value expressed as a percentage.",
+    "expected_value_after_useful_life: Asset’s estimated value after depreciation ends.",
+    "value_after_depreciation: Final value of the asset after depreciation is complete.",
+    "rate_of_depreciation: Annual depreciation rate applied to the asset."
+  ]
+},
+{
+  "anchor": "Doctype: Asset Finance Book\nQuestion: For finance book MAIN, how many depreciation entries have been booked so far?",
+  "positive": "total_number_of_booked_depreciations: How many depreciation entries have already been booked.",
+  "negatives": [
+    "finance_book: Book under which depreciation is being recorded.",
+    "depreciation_method: Method used for depreciation (e.g., Straight Line, Reducing Balance).",
+    "total_number_of_depreciations: Total number of depreciation cycles planned.",
+    "daily_prorata_based: If enabled, calculates depreciation on a daily basis.",
+    "shift_based: Enables depreciation based on asset shifts or working hours.",
+    "frequency_of_depreciation: Interval at which depreciation is recorded (e.g., Monthly, Quarterly).",
+    "depreciation_start_date: Date when depreciation begins.",
+    "salvage_value_percentage: Expected salvage value expressed as a percentage.",
+    "expected_value_after_useful_life: Asset’s estimated value after depreciation ends.",
+    "value_after_depreciation: Final value of the asset after depreciation is complete.",
+    "rate_of_depreciation: Annual depreciation rate applied to the asset."
+  ]
+},
+{
+  "anchor": "Doctype: Asset Finance Book\nQuestion: List assets with more than 5 booked depreciations in the 2024 fiscal year.",
+  "positive": "total_number_of_booked_depreciations: How many depreciation entries have already been booked.",
+  "negatives": [
+    "finance_book: Book under which depreciation is being recorded.",
+    "depreciation_method: Method used for depreciation (e.g., Straight Line, Reducing Balance).",
+    "total_number_of_depreciations: Total number of depreciation cycles planned.",
+    "daily_prorata_based: If enabled, calculates depreciation on a daily basis.",
+    "shift_based: Enables depreciation based on asset shifts or working hours.",
+    "frequency_of_depreciation: Interval at which depreciation is recorded (e.g., Monthly, Quarterly).",
+    "depreciation_start_date: Date when depreciation begins.",
+    "salvage_value_percentage: Expected salvage value expressed as a percentage.",
+    "expected_value_after_useful_life: Asset’s estimated value after depreciation ends.",
+    "value_after_depreciation: Final value of the asset after depreciation is complete.",
+    "rate_of_depreciation: Annual depreciation rate applied to the asset."
+  ]
+},
+{
+  "anchor": "Doctype: Asset Finance Book\nQuestion: Which asset finance books have zero booked depreciations this quarter?",
+  "positive": "total_number_of_booked_depreciations: How many depreciation entries have already been booked.",
+  "negatives": [
+    "finance_book: Book under which depreciation is being recorded.",
+    "depreciation_method: Method used for depreciation (e.g., Straight Line, Reducing Balance).",
+    "total_number_of_depreciations: Total number of depreciation cycles planned.",
+    "daily_prorata_based: If enabled, calculates depreciation on a daily basis.",
+    "shift_based: Enables depreciation based on asset shifts or working hours.",
+    "frequency_of_depreciation: Interval at which depreciation is recorded (e.g., Monthly, Quarterly).",
+    "depreciation_start_date: Date when depreciation begins.",
+    "salvage_value_percentage: Expected salvage value expressed as a percentage.",
+    "expected_value_after_useful_life: Asset’s estimated value after depreciation ends.",
+    "value_after_depreciation: Final value of the asset after depreciation is complete.",
+    "rate_of_depreciation: Annual depreciation rate applied to the asset."
+  ]
+},
+{
+  "anchor": "Doctype: Asset Finance Book\nQuestion: What is the average number of booked depreciations for assets with monthly depreciation frequency?",
+  "positive": "total_number_of_booked_depreciations: How many depreciation entries have already been booked.",
+  "negatives": [
+    "finance_book: Book under which depreciation is being recorded.",
+    "depreciation_method: Method used for depreciation (e.g., Straight Line, Reducing Balance).",
+    "total_number_of_depreciations: Total number of depreciation cycles planned.",
+    "daily_prorata_based: If enabled, calculates depreciation on a daily basis.",
+    "shift_based: Enables depreciation based on asset shifts or working hours.",
+    "frequency_of_depreciation: Interval at which depreciation is recorded (e.g., Monthly, Quarterly).",
+    "depreciation_start_date: Date when depreciation begins.",
+    "salvage_value_percentage: Expected salvage value expressed as a percentage.",
+    "expected_value_after_useful_life: Asset’s estimated value after depreciation ends.",
+    "value_after_depreciation: Final value of the asset after depreciation is complete.",
+    "rate_of_depreciation: Annual depreciation rate applied to the asset."
+  ]
+},
+{
+  "anchor": "Doctype: Asset Finance Book\nQuestion: For assets with daily prorata enabled, how many depreciations have been booked?",
+  "positive": "total_number_of_booked_depreciations: How many depreciation entries have already been booked.",
+  "negatives": [
+    "finance_book: Book under which depreciation is being recorded.",
+    "depreciation_method: Method used for depreciation (e.g., Straight Line, Reducing Balance).",
+    "total_number_of_depreciations: Total number of depreciation cycles planned.",
+    "daily_prorata_based: If enabled, calculates depreciation on a daily basis.",
+    "shift_based: Enables depreciation based on asset shifts or working hours.",
+    "frequency_of_depreciation: Interval at which depreciation is recorded (e.g., Monthly, Quarterly).",
+    "depreciation_start_date: Date when depreciation begins.",
+    "salvage_value_percentage: Expected salvage value expressed as a percentage.",
+    "expected_value_after_useful_life: Asset’s estimated value after depreciation ends.",
+    "value_after_depreciation: Final value of the asset after depreciation is complete.",
+    "rate_of_depreciation: Annual depreciation rate applied to the asset."
+  ]
+},
+{
+  "anchor": "Doctype: Asset Finance Book\nQuestion: How many depreciation entries have been booked for assets with a salvage value above 10 percent?",
+  "positive": "total_number_of_booked_depreciations: How many depreciation entries have already been booked.",
+  "negatives": [
+    "finance_book: Book under which depreciation is being recorded.",
+    "depreciation_method: Method used for depreciation (e.g., Straight Line, Reducing Balance).",
+    "total_number_of_depreciations: Total number of depreciation cycles planned.",
+    "daily_prorata_based: If enabled, calculates depreciation on a daily basis.",
+    "shift_based: Enables depreciation based on asset shifts or working hours.",
+    "frequency_of_depreciation: Interval at which depreciation is recorded (e.g., Monthly, Quarterly).",
+    "depreciation_start_date: Date when depreciation begins.",
+    "salvage_value_percentage: Expected salvage value expressed as a percentage.",
+    "expected_value_after_useful_life: Asset’s estimated value after depreciation ends.",
+    "value_after_depreciation: Final value of the asset after depreciation is complete.",
+    "rate_of_depreciation: Annual depreciation rate applied to the asset."
+  ]
+},
+{
+  "anchor": "Doctype: Asset Finance Book\nQuestion: Which asset has the highest number of booked depreciations in the reducing balance method?",
+  "positive": "total_number_of_booked_depreciations: How many depreciation entries have already been booked.",
+  "negatives": [
+    "finance_book: Book under which depreciation is being recorded.",
+    "depreciation_method: Method used for depreciation (e.g., Straight Line, Reducing Balance).",
+    "total_number_of_depreciations: Total number of depreciation cycles planned.",
+    "daily_prorata_based: If enabled, calculates depreciation on a daily basis.",
+    "shift_based: Enables depreciation based on asset shifts or working hours.",
+    "frequency_of_depreciation: Interval at which depreciation is recorded (e.g., Monthly, Quarterly).",
+    "depreciation_start_date: Date when depreciation begins.",
+    "salvage_value_percentage: Expected salvage value expressed as a percentage.",
+    "expected_value_after_useful_life: Asset’s estimated value after depreciation ends.",
+    "value_after_depreciation: Final value of the asset after depreciation is complete.",
+    "rate_of_depreciation: Annual depreciation rate applied to the asset."
+  ]
+},
+{
+  "anchor": "Doctype: Asset Finance Book\nQuestion: For each asset, show the booked depreciation count and the value after depreciation is complete.",
+  "positive": "total_number_of_booked_depreciations: How many depreciation entries have already been booked.",
+  "negatives": [
+    "finance_book: Book under which depreciation is being recorded.",
+    "depreciation_method: Method used for depreciation (e.g., Straight Line, Reducing Balance).",
+    "total_number_of_depreciations: Total number of depreciation cycles planned.",
+    "daily_prorata_based: If enabled, calculates depreciation on a daily basis.",
+    "shift_based: Enables depreciation based on asset shifts or working hours.",
+    "frequency_of_depreciation: Interval at which depreciation is recorded (e.g., Monthly, Quarterly).",
+    "depreciation_start_date: Date when depreciation begins.",
+    "salvage_value_percentage: Expected salvage value expressed as a percentage.",
+    "expected_value_after_useful_life: Asset’s estimated value after depreciation ends.",
+    "value_after_depreciation: Final value of the asset after depreciation is complete.",
+    "rate_of_depreciation: Annual depreciation rate applied to the asset."
+  ]
+}
+]
+//Flan s2 - field detector
+ { 
+  "input": {
+    "doctype": "Purchase Invoice Advance",
+    "question": "Which reference types and names are associated with advance entries created this month?",
+    "top fields": [ "reference_type","reference_name","difference_posting_date","allocated_amount"]
+  },
+  "output": ["reference_type","reference_name"]
+  },
+  {
+    "input": {
+      "doctype": "Purchase Invoice Advance",
+      "question": "Which documents and row numbers were used to apply QAR 2000 in advance payments?",
+      "top fields": ["reference_name", "reference_row", "advance_amount", "allocated_amount", "remarks", "exchange_gain_loss"]
+    },
+    "output": ["reference_name", "reference_row"]
+  },
+  {
+    "input": {
+      "doctype": "Purchase Invoice Advance",
+      "question": "Show reference type and remarks for customer advances posted in the last 7 days.",
+      "top fields": ["reference_type", "remarks", "reference_row", "ref_exchange_rate", "advance_amount"]
+    },
+    "output": ["reference_type", "remarks"]
+  },
+  {
+    "input": {
+      "doctype": "Purchase Invoice Advance",
+      "question": "Give me the document name, reference type, and allocated amount for ADV-8899.",
+      "top fields": ["reference_name", "reference_type", "allocated_amount", "remarks", "difference_posting_date"]
+    },
+    "output": ["reference_name", "reference_type", "allocated_amount"]
+  },
+  {
+    "input": {
+      "doctype": "Purchase Invoice Advance",
+      "question": "Can you fetch the remarks and the exchange rate for any advance entry made by TechnoTrade Ltd?",
+      "top fields": ["remarks", "ref_exchange_rate", "reference_name", "advance_amount"]
+    },
+    "output": ["remarks", "ref_exchange_rate"]
+  },
+  {
+    "input": {
+      "doctype": "Purchase Invoice Advance",
+      "question": "Retrieve total advance paid and the date the currency difference was posted for ADV-3231.",
+      "top fields": ["advance_amount", "difference_posting_date", "remarks", "exchange_gain_loss"]
+    },
+    "output": ["advance_amount", "difference_posting_date"]
+  },
+  {
+    "input": {
+      "doctype": "Purchase Invoice Advance",
+      "question": "What was the exchange gain or loss and the amount allocated for entry ADV-5544?",
+      "top fields": ["exchange_gain_loss", "allocated_amount", "remarks", "advance_amount", "reference_type"]
+    },
+    "output": ["exchange_gain_loss", "allocated_amount"]
+  },
+  {
+    "input": {
+      "doctype": "Purchase Invoice Advance",
+      "question": "Show me any references and remarks linked to advances greater than QAR 10000.",
+      "top fields": ["reference_name", "remarks", "advance_amount", "ref_exchange_rate", "difference_posting_date"]
+    },
+    "output": ["reference_name", "remarks"]
+  },
+  {
+    "input": {
+      "doctype": "Purchase Invoice Advance",
+      "question": "Get the document type and name of the reference connected to 'Tech Advance'.",
+      "top fields": ["reference_type", "reference_name", "remarks", "ref_exchange_rate", "allocated_amount"]
+    },
+    "output": ["reference_type", "reference_name"]
+  },
+  {
+    "input": {
+      "doctype": "Purchase Invoice Advance",
+      "question": "Which references and their rows had QAR 2500 allocated this month?",
+      "top fields": ["reference_name", "reference_row", "allocated_amount", "advance_amount", "difference_posting_date"]
+    },
+    "output": ["reference_name", "reference_row"]
+  },
+  {
+    "input": {
+      "doctype": "Purchase Invoice Advance",
+      "question": "I want the exchange rate and the remarks added to the advance for ADV-7800.",
+      "top fields": ["ref_exchange_rate", "remarks", "reference_type", "allocated_amount"]
+    },
+    "output": ["ref_exchange_rate", "remarks"]
+  },
+  [
+  {
+    "input": {
+      "doctype": "Purchase Invoice Advance",
+      "question": "What is the total advance and when was the currency adjustment posted for ADV-PI-220?",
+      "top fields": [
+        "advance_amount",
+        "difference_posting_date",
+        "reference_name",
+        "ref_exchange_rate",
+        "allocated_amount"
+      ]
+    },
+    "output": [
+      "difference_posting_date"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Purchase Invoice Advance",
+      "question": "Show the exchange rate used for the advance ADV-PI-220.",
+      "top fields": [
+        "ref_exchange_rate",
+        "reference_type",
+        "advance_amount",
+        "remarks"
+      ]
+    },
+    "output": [
+      "ref_exchange_rate"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Purchase Invoice Advance",
+      "question": "Show allocated amount and date of adjustment for ADV-PI-9981.",
+      "top fields": [
+        "allocated_amount",
+        "difference_posting_date",
+        "reference_row",
+        "remarks"
+      ]
+    },
+    "output": [
+      "allocated_amount"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Purchase Invoice Advance",
+      "question": "Which supplier advance entries had exchange rate and allocation details?",
+      "top fields": [
+        "ref_exchange_rate",
+        "allocated_amount",
+        "remarks",
+        "advance_amount"
+      ]
+    },
+    "output": [
+      "ref_exchange_rate"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Purchase Invoice Advance",
+      "question": "Get allocation amount applied for the invoice paid to TechEdge.",
+      "top fields": [
+        "allocated_amount",
+        "remarks",
+        "reference_type",
+        "ref_exchange_rate"
+      ]
+    },
+    "output": [
+      "allocated_amount"
+    ]
+  }
+]
+
+
+
+
+  
+  [
+  {
+    "input": {
+      "doctype": "Sales Invoice Advance",
+      "question": "What is the total advance and when was the currency adjustment posted for ADV-SI-220?",
+      "top fields": [
+        "advance_amount",
+        "difference_posting_date",
+        "reference_name",
+        "ref_exchange_rate",
+        "allocated_amount"
+      ]
+    },
+    "output": [
+      "difference_posting_date"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice Advance",
+      "question": "Show the exchange rate used for the advance ADV-SI-220.",
+      "top fields": [
+        "ref_exchange_rate",
+        "reference_type",
+        "advance_amount",
+        "remarks"
+      ]
+    },
+    "output": [
+      "ref_exchange_rate"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice Advance",
+      "question": "Show allocated amount and date of adjustment for ADV-SI-9981.",
+      "top fields": [
+        "allocated_amount",
+        "difference_posting_date",
+        "reference_row",
+        "remarks"
+      ]
+    },
+    "output": [
+      "allocated_amount"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice Advance",
+      "question": "Which customer advance entries had exchange rate and allocation details?",
+      "top fields": [
+        "ref_exchange_rate",
+        "allocated_amount",
+        "remarks",
+        "advance_amount"
+      ]
+    },
+    "output": [
+      "ref_exchange_rate"
+    ]
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice Advance",
+      "question": "Get allocation amount applied for the invoice paid by TechEdge.",
+      "top fields": [
+        "allocated_amount",
+        "remarks",
+        "reference_type",
+        "ref_exchange_rate"
+      ]
+    },
+    "output": [
+      "allocated_amount"
+    ]
+  },
+
+
+//Flan s3 - query generator
+{
+  "input": {
+    "doctype": "Purchase Invoice Advance",
+    "question": "Which reference types and names are associated with advance entries created this month?",
+    "fields": [
+      "reference_type",
+      "reference_name",
+      "difference_posting_date",
+      "allocated_amount"
+    ]
+  },
+  "output": "frappe.get_all('Purchase Invoice Advance', filters={'difference_posting_date': ['between', ['2025-05-01', '2025-05-31']]}, fields=['reference_type', 'reference_name'])"
+},
+[
+  {
+    "input": {
+      "doctype": "Sales Invoice Advance",
+      "question": "What is the total advance and when was the currency adjustment posted for ADV-SI-220?",
+      "fields": [
+        "difference_posting_date"
+      ]
+    },
+    "output": "frappe.get_all('Sales Invoice Advance', filters={'name': 'ADV-SI-220'}, fields=['difference_posting_date'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice Advance",
+      "question": "Show the exchange rate used for the advance ADV-SI-220.",
+      "fields": [
+        "ref_exchange_rate"
+      ]
+    },
+    "output": "frappe.get_all('Sales Invoice Advance', filters={'name': 'ADV-SI-220'}, fields=['ref_exchange_rate'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice Advance",
+      "question": "Show allocated amount and date of adjustment for ADV-SI-9981.",
+      "fields": [
+        "allocated_amount"
+      ]
+    },
+    "output": "frappe.get_all('Sales Invoice Advance', filters={'name': 'ADV-SI-9981'}, fields=['allocated_amount'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice Advance",
+      "question": "Which customer advance entries had exchange rate and allocation details?",
+      "fields": [
+        "ref_exchange_rate"
+      ]
+    },
+    "output": "frappe.get_all('Sales Invoice Advance', filters={}, fields=['ref_exchange_rate'])"
+  },
+  {
+    "input": {
+      "doctype": "Sales Invoice Advance",
+      "question": "Get allocation amount applied for the invoice paid by TechEdge.",
+      "fields": [
+        "allocated_amount"
+      ]
+    },
+    "output": "frappe.get_all('Sales Invoice Advance', filters={'customer': 'TechEdge'}, fields=['allocated_amount'])"
+  },
+  [
+  {
+    "input": {
+      "doctype": "Asset Finance Book",
+      "question": "How many depreciation entries have already been booked for asset AF-2025-001?",
+      "fields": ["total_number_of_booked_depreciations"]
+    },
+    "output": "frappe.get_value('Asset Finance Book', {'name': 'AF-2025-001'}, 'total_number_of_booked_depreciations')"
+  },
+  {
+    "input": {
+      "doctype": "Asset Finance Book",
+      "question": "What is the total number of booked depreciations for assets using the straight line method?",
+      "fields": ["total_number_of_booked_depreciations"]
+    },
+    "output": "frappe.get_all('Asset Finance Book', filters={'depreciation_method': 'Straight Line'}, fields=['total_number_of_booked_depreciations'])"
+  },
+  {
+    "input": {
+      "doctype": "Asset Finance Book",
+      "question": "For finance book MAIN, how many depreciation entries have been booked so far?",
+      "fields": ["total_number_of_booked_depreciations"]
+    },
+    "output": "frappe.get_all('Asset Finance Book', filters={'finance_book': 'MAIN'}, fields=['total_number_of_booked_depreciations'])"
+  },
+  {
+    "input": {
+      "doctype": "Asset Finance Book",
+      "question": "List assets with more than 5 booked depreciations in the 2024 fiscal year.",
+      "fields": ["total_number_of_booked_depreciations"]
+    },
+    "output": "frappe.get_all('Asset Finance Book', filters={'total_number_of_booked_depreciations': ['>', 5], 'depreciation_start_date': ['between', ['2024-01-01', '2024-12-31']]}, fields=['name', 'total_number_of_booked_depreciations'])"
+  },
+  {
+    "input": {
+      "doctype": "Asset Finance Book",
+      "question": "Which asset finance books have zero booked depreciations this quarter?",
+      "fields": ["total_number_of_booked_depreciations"]
+    },
+    "output": "frappe.get_all('Asset Finance Book', filters={'total_number_of_booked_depreciations': 0, 'frequency_of_depreciation': 'Quarterly'}, fields=['name'])"
+  },
+  {
+    "input": {
+      "doctype": "Asset Finance Book",
+      "question": "What is the average number of booked depreciations for assets with monthly depreciation frequency?",
+      "fields": ["total_number_of_booked_depreciations"]
+    },
+    "output": "frappe.db.sql('SELECT AVG(total_number_of_booked_depreciations) FROM `tabAsset Finance Book` WHERE frequency_of_depreciation=\"Monthly\"')"
+  },
+  {
+    "input": {
+      "doctype": "Asset Finance Book",
+      "question": "For assets with daily prorata enabled, how many depreciations have been booked?",
+      "fields": ["total_number_of_booked_depreciations"]
+    },
+    "output": "frappe.get_all('Asset Finance Book', filters={'daily_prorata_based': 1}, fields=['name', 'total_number_of_booked_depreciations'])"
+  },
+  {
+    "input": {
+      "doctype": "Asset Finance Book",
+      "question": "How many depreciation entries have been booked for assets with a salvage value above 10 percent?",
+      "fields": ["total_number_of_booked_depreciations"]
+    },
+    "output": "frappe.get_all('Asset Finance Book', filters={'salvage_value_percentage': ['>', 10]}, fields=['name', 'total_number_of_booked_depreciations'])"
+  },
+  {
+    "input": {
+      "doctype": "Asset Finance Book",
+      "question": "Which asset has the highest number of booked depreciations in the reducing balance method?",
+      "fields": ["total_number_of_booked_depreciations"]
+    },
+    "output": "frappe.db.sql('SELECT name, total_number_of_booked_depreciations FROM `tabAsset Finance Book` WHERE depreciation_method=\"Reducing Balance\" ORDER BY total_number_of_booked_depreciations DESC LIMIT 1')"
+  },
+  {
+    "input": {
+      "doctype": "Asset Finance Book",
+      "question": "For each asset, show the booked depreciation count and the value after depreciation is complete.",
+      "fields": ["total_number_of_booked_depreciations", "value_after_depreciation"]
+    },
+    "output": "frappe.get_all('Asset Finance Book', fields=['name', 'total_number_of_booked_depreciations', 'value_after_depreciation'])"
+  }
+]
+
+]
+
