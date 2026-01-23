@@ -3,7 +3,7 @@ import ChatMessage from './components/ChatMessage.vue';
 import ChatbotHeader from './components/ChatbotHeader.vue';
 import ChatForm from './components/ChatForm.vue';
 import ChatbotIcon from './components/ChatbotIcon.vue';
-import { ref, watch, nextTick } from 'vue'
+import { ref, nextTick } from 'vue'
 
 const chatBodyRef = ref(null) 
 const showChatbot=ref(false)

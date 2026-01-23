@@ -99,7 +99,6 @@ def generate_token_secure(api_key, api_secret, app_key):
             return {"ok": False, "error": "OAuth client not found / invalid app_key"}
 
         if clientID is None:
-            # return app_key
             return Response(
                 json.dumps(
                     {"message": "Security Parameters are not valid", "user_count": 0}
@@ -477,7 +476,7 @@ def remote_embedder_request(formatted_q: str) -> Union[list, str]:
             result = response["body"]["output"]
             return result
     except Exception as e:
-        return {"Error":str(e)}
+        return "Error":str(e)
 
 
 def local_embedder_request(question: str):
@@ -805,8 +804,6 @@ def validate_sql_against_mapping(sql_text: str, mapping: Dict[str, List[str]], d
         if qualifier:
             qual = str(qualifier)
             base_table_for_alias = None
-            for j in ast.find_all(exp.Alias):
-                pass
             table_name = qual.strip("`")
             if table_name in mapping:
                 if col_name not in mapping[table_name]:
@@ -869,9 +866,6 @@ app=workflow.compile(checkpointer=checkpointer)
 #to execute the sql returned inside frappe
 @frappe.whitelist(allow_guest=False)
 def execute_query(query:str):
-    # q = (query or "").strip()
-    # if not q.upper().startswith("SELECT") or ";" in q:
-    #     return {"error": "Only a single SELECT statement is allowed."}
     try:
         result=frappe.db.sql(query,as_dict=True)
         return result
