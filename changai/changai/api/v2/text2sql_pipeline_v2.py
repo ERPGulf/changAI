@@ -16,9 +16,13 @@ non_erp_res=""
 import base64
 import time
 from werkzeug.wrappers import Response
+import frappe
+from google import genai
+from google.genai import types
+from google.oauth2 import service_account
 __vector_store = None
 
-
+@frappe.whitelist(allow_guest=True)
 def get_settings():
     settings=frappe.get_single("ChangAI Settings")
     langsmith_tracing = "true" if settings.langsmith_tracing else "false"
@@ -39,11 +43,20 @@ def get_settings():
         "deploy_url":settings.deploy_url,
         "entity_retriever":settings.entity_retriever,
         "support_api_url":settings.support_url,
-        "get_ticket_details_url":settings.get_ticket_details_url
+        "get_ticket_details_url":settings.get_ticket_details_url,
+        "llm":settings.llm,
+        "location":settings.gemini_location,
+        "retriever_structure":settings.retriever_structure,
+        "gemini_file_path":settings.gemini_file_path,
+        "gemini_project_id":settings.gemini_project_id
+
     }
     return config
 
-
+    # 1. Configuration
+PROJECT_ID = CONFIG["gemini_project_id"]
+KEY_PATH = CONFIG["gemini_file_path"]
+MODEL_ID = "gemini-2.5-flash"
 CONFIG = get_settings()
 RETRY_LIMIT=2
 BACKEND_SERVER_SETTINGS = "Backend Server Settings"
@@ -228,14 +241,15 @@ def whoami():
 
 @frappe.whitelist(allow_guest=False)
 def call_model(prompt: str, task: str = "llm") -> Any:
-    if CONFIG["REMOTE"]:
+    if CONFIG["REMOTE"] and CONFIG["llm"]=="QWEN3":
         return remote_llm_request_deploy_test(prompt=prompt, task=task)
-    else:
-        return local_llm_request(prompt)
+    elif CONFIG["llm"]=="Gemini":
+        return call_gemini(prompt)
+    return local_llm_request(prompt)
 
 
 def call_embedder(question):
-    return remote_embedder_request(question) if CONFIG["REMOTE"] else local_embedder_request(question)
+    return remote_embedder_request(question) if CONFIG["REMOTE"] and  else local_embedder_request(question)
 
 
 def _post_json(url: str, headers: Dict[str, str], payload: Dict[str, Any], timeout: int = 120):
@@ -385,6 +399,51 @@ def remote_llm_request(prompt: str):
 
 
 @frappe.whitelist(allow_guest=False)
+def call_gemini(prompt):
+    try:
+        # Authenticate once
+        creds = service_account.Credentials.from_service_account_file(
+            KEY_PATH, 
+            scopes=['https://www.googleapis.com/auth/cloud-platform']
+        )
+
+        # Initialize the Client once
+        client = genai.Client(
+            vertexai=True,
+            project=PROJECT_ID,
+            location=CONFIG["location"],
+            credentials=creds
+        )
+        # Set System Instruction
+        config = types.GenerateContentConfig(
+            system_instruction="You are an ERPNext assistant.Follow the task instructions exactly.",
+        )
+        contents = [
+            {
+                "role": "user",
+                "parts": [{"text": str(prompt)}]
+            }
+        ]
+
+        response = client.models.generate_content(
+            model=MODEL_ID,
+            config=config,
+            contents=contents
+        )
+        text = (response.text or "").strip()
+        if text.startswith("```"):
+            text = text.replace("```json", "").replace("```", "").strip()
+
+        return text
+
+
+    except Exception as e:
+        return {
+            "error": str(e)
+        }
+
+
+@frappe.whitelist(allow_guest=False)
 def remote_llm_request_deploy_test(
     prompt: str = "",
     task: str = "llm",
@@ -476,7 +535,8 @@ def remote_embedder_request(formatted_q: str) -> Union[list, str]:
             result = response["body"]["output"]
             return result
     except Exception as e:
-        return "Error":str(e)
+        return "Error: " + str(e)
+
 
 
 def local_embedder_request(question: str):
@@ -502,6 +562,8 @@ def read_text(path):
 CONVERSATION_TEMPLATE=read_text(TEMPLATE_PATH)
 mapping_data=read_json(MAPPING_SCHEMA_PATH)
 SQL_PROMPT=read_text(SQL_PROMPT_PATH)
+FILTER_TABLES=read_text("/opt/hyrin/frappe-bench/apps/changai/changai/changai/prompts/filter_tables.txt")
+filter_fields=read_text("/opt/hyrin/frappe-bench/apps/changai/changai/changai/prompts/filter_fields.txt")
 FORMAT_PROMPT=read_text(FORMAT_PROMPT_PATH)
 NON_ERP_PROMPT=read_text(NON_ERP_PROMPT_PATH)
 BUSINESS_KEYWORDS=read_json(BUSINESS_KEYWORDS_PATH)["business_keywords"]
@@ -552,6 +614,7 @@ def send_non_erp_request(state:SQLState) -> SQLState:
         return {**state,"prompt":prompt,"non_erp_res":response,"error":None}
     except Exception as e:
         return {**state,"non_erp_res": "", "error": f"NON-ERP call failed: {e}"}
+
 
 @traceable(name="rewrite_question", run_type="tool")
 def rewrite_question(state: SQLState) -> SQLState:
@@ -605,13 +668,55 @@ def rewrite_question(state: SQLState) -> SQLState:
             "contains_values": False,
             "formatting_prompt": prompt,
         }
+@frappe.whitelist(allow_guest=True)
+def call_fvs_table_search():
+    
+
+@frappe.whitelist(allow_guest=True)
+def call_retriev_multi_line(user_question, full_table_list):
+    # --- STAGE 1: TABLE SELECTION ---
+    # 1. Search Vector Store for top 10 tables
+    top_10_tables = call_fvs_table_search(user_question, k=10)
+    
+    # 2. Ask Gemini to prune those 10 tables down to the 2-3 needed for SQL
+    # Use .replace() to avoid KeyError with curly braces in your prompt
+    table_prompt = FILTER_TABLES_PROMPT.replace("{user_question}", user_question)
+    table_prompt = table_prompt.replace("{table_list}", str(top_10_tables))
+    
+    selected_tables = call_gemini(table_prompt) # Returns JSON list: ["tabBin", "tabItem"]
+
+    if not selected_tables:
+        return "No relevant tables found."
+
+    # --- STAGE 2: FIELD SELECTION ---
+    # 3. For each selected table, get top 40 fields from FVS
+    fields_to_prune = {}
+    for table in selected_tables:
+        # Filter your vector search by the specific table_name metadata
+        fields_to_prune[table] = call_fvs_field_search(user_question, table_name=table, k=40)
+
+    # 4. Ask Gemini to prune 40 fields per table down to the essential few
+    # Use .replace() here as well to protect the JSON example in your prompt
+    field_prompt = FILTER_FIELDS_PROMPT.replace("{user_question}", user_question)
+    field_prompt = field_prompt.replace("{fields_tables}", str(fields_to_prune))
+    
+    final_schema_context = call_gemini(field_prompt)
+    
+    return final_schema_context
+
+
+
 
 
 # # Node 1: Retrive with Fiass Vector Store.
 @traceable(name="schema_retriever", run_type="tool")
 def schema_retriever(state: SQLState) -> SQLState:
-    hits = call_embedder(state.get("formatted_q", "") or state.get("question", ""))
-    return {**state, "hits": hits}
+    if CONFIG["retriever_structure"]=="single line":
+        hits = call_embedder(state.get("formatted_q", "") or state.get("question", ""))
+        return {**state, "hits": hits}
+    else:
+        return call_retriev_multi_line()
+    
 
 
 # # Node 2: Build schema context from hits - for SQL Prompt
@@ -636,7 +741,8 @@ def hits_to_prompt_context(state:SQLState) -> SQLState:
 def generate_sql(state:SQLState) -> SQLState:
     prompt=fill_sql_prompt(state["formatted_q"],state["context"])
     try:
-        response=call_model(prompt, "llm")
+        # response=call_model(prompt, "llm")
+        response=call_model(prompt)
         return {**state,"sql_prompt":prompt,"sql":response,"error":None}
     except Exception as e:
         return {**state,"error": f"LLM call failed: {e}","sql_prompt":prompt}
@@ -730,7 +836,7 @@ def detect_specific_entities(state: SQLState) -> SQLState:
         return {**state, "entity_cards": [], "entity_raw": None}
 
     try:
-        out = call_entity_retriever(q)  # {"raw": ..., "cards": [...]}
+        out = call_entity_retriever(q)
         return {
             **state,
             "entity_cards": out.get("cards") or [],
@@ -873,9 +979,6 @@ def execute_query(query:str):
         return {"error":f"SQL Execution Failed : {e}"}
 
 
-
-
-
 @frappe.whitelist(allow_guest=False)
 def send_support_message(message):
     url = CONFIG["support_api_url"]
@@ -1000,24 +1103,27 @@ def format_data(qstn, sql_data):
         db_result_json = json.dumps(sql_data, ensure_ascii=False, default=str)
     else:
         db_result_json = str(sql_data) if sql_data is not None else "{}"
+    prompt=f"""
+INSTRUCTIONS:
+- Convert raw database results into a short, friendly, human-readable answer.
+- You may use BOTH: (1) the user question and (2) the DB result JSON to form the answer.
+- Use ONLY values present in the JSON. NEVER invent numbers or fields.
+- Keep the answer brief (1–6 lines).
+- If the question asks for last/top/highest/total, interpret based strictly on the JSON rows.
 
-    output = remote_llm_request_deploy_test(
-        prompt="",
-        task="format_db",
-        question=qstn,
-        db_result_json=db_result_json,
+QUESTION:
+{qstn}
+
+DATABASE_RESULT_JSON:
+{json.dumps(db_result_json, ensure_ascii=False, default=str)}
+
+OUTPUT:
+Write a clear final answer for the user based strictly on the JSON above.
+"""
+    output = call_model(
+        prompt=prompt
     )
-
-    if isinstance(output, dict):
-        if output.get("Error"):
-            return {
-                "answer": "Sorry, I couldn't format the data right now.",
-                "error": output
-            }
-        answer = output.get("answer") or output.get("text") or json.dumps(output)
-    else:
-        answer = str(output)
-
+    answer = str(output)
     return {"answer": answer}
 
 
@@ -1229,7 +1335,7 @@ def hits_to_schema_context(
         for ent, filt in entities:
             if show_entity_filters_yaml and isinstance(filt, dict) and filt:
                 lines.append(f"  - Entity: {ent}")
-                lines.append(f"    Filters:")
+                lines.append(f"    Filters:",{filt})
                 for k, v in filt.items():
                     vv = ", ".join(map(str, v)) if isinstance(v, (list, tuple)) else str(v)
                     lines.append(f"      {k}: {vv}")
@@ -1313,8 +1419,8 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
             "Question":user_question,
             "Formatted_Question":formatted_q,
             "Context": context,
-            "SQLPrompt":sql_prompt,
-            "Reformatting_Prompt":formatting_prompt,
+            # "SQLPrompt":sql_prompt,
+            # "Reformatting_Prompt":formatting_prompt,
             "SQL": sql,
             "Validation": val,
             "EntityDebug": entity_debug,
@@ -1350,3 +1456,40 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
         # "EntityDebug": entity_debug,
         "Bot": bot_answer,
     }
+
+
+
+@frappe.whitelist(allow_guest=False)
+def call_gemini_1(prompt):
+        # Authenticate once
+        creds = service_account.Credentials.from_service_account_file(
+            KEY_PATH, 
+            scopes=['https://www.googleapis.com/auth/cloud-platform']
+        )
+        # prompt=FILTER_TABLES.format(user_question=user_question, table_list=table_list)
+        client = genai.Client(
+            vertexai=True,
+            project=PROJECT_ID,
+            location=CONFIG["location"],
+            credentials=creds
+        )
+        config = types.GenerateContentConfig(
+            system_instruction="You are an ERPNext assistant.Follow the task instructions exactly.",
+        )
+        contents = [
+            {
+                "role": "user",
+                "parts": [{"text": str(prompt)}]
+            }
+        ]
+
+        response = client.models.generate_content(
+            model=MODEL_ID,
+            config=config,
+            contents=contents
+        )
+        text = (response.text or "").strip()
+        if text.startswith("```"):
+            text = text.replace("```json", "").replace("```", "").strip()
+
+        return text

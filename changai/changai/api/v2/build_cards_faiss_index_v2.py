@@ -10,33 +10,20 @@ from langchain_community.docstore.in_memory import InMemoryDocstore
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 
-
-# ---------------------------
-# CONFIG
-# ---------------------------
-
 BASE_CARDS_DIR = "/opt/hyrin/frappe-bench/apps/changai/changai/changai/cards_v2"
 
 SCHEMA_DIR = os.path.join(BASE_CARDS_DIR, "schema")
 ENTITY_DIR = os.path.join(BASE_CARDS_DIR, "entity")
 
-# Store outputs separately
 OUT_BASE = "/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/fvs_stores"
 OUT_SCHEMA = os.path.join(OUT_BASE, "schema_fvs")
 OUT_ENTITY = os.path.join(OUT_BASE, "entity_fvs")
 
-# Embedding model (same for both indexes, or you can use different)
 EMBED_MODEL_NAME = "hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned"
 
-# FAISS HNSW params
 HNSW_M = 32
 EF_CONSTRUCTION = 256
 EF_SEARCH = 64
-
-
-# ---------------------------
-# HELPERS
-# ---------------------------
 
 def load_yaml_dir(path: str) -> List[Dict[str, Any]]:
     """
@@ -267,11 +254,6 @@ def build_faiss_store(
 
     print(f"✅ Saved FAISS store to: {out_dir}")
     print(f"   Docs: {len(docs)} | Dim: {dim} | M:{HNSW_M} | efC:{EF_CONSTRUCTION} | efS:{EF_SEARCH}")
-
-
-# ---------------------------
-# MAIN (ONE RUN BUILDS BOTH)
-# ---------------------------
 
 def build_all_indexes():
     schema_cards = load_yaml_dir(SCHEMA_DIR)
