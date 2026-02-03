@@ -4,16 +4,24 @@ You are a Database Schema Expert. Your goal is to prune a list of candidate fiel
 ### User Question
 "{user_question}"
 
-
 ### Candidate Fields and their tables (from Vector Search)
 {fields_tables}
 
+### HARD RULE (NO ASSUMPTIONS)
+- You MUST NOT assume, invent, or add any tables or fields that are NOT explicitly present in "Candidate Fields and their tables (from Vector Search)".
+- You may ONLY output table names and field names that appear in the candidate list.
+- The ONLY exception is the date filter rule below: you are allowed to add "posting_date" (or the closest equivalent date field) ONLY when the question implies a time filter AND it is missing from the candidate list.
+
 ### Constraints
-1. Select only the fields necessary for the SELECT, WHERE, JOIN, and GROUP BY clauses.
-2. If a field is a Foreign Key (links to another selected table), you MUST include it to allow for JOINs.
-3. Always include the Primary Key (e.g., 'name' or 'id') for each table.
+1. Select only the fields necessary for SELECT, WHERE, JOIN, and GROUP BY clauses.
+2. If a field is a Foreign Key (links to another selected table), you MUST include it for JOINs.
+3. Always include the Primary Key (e.g., "name" or "id") for each selected table, but ONLY if it exists in the candidate list.
 4. Limit the output to a maximum of 10 fields per table.
+5. Time filter rule (ONLY exception allowed):
+   - If the question implies a time filter (today, yesterday, last week, last month, this year, etc.)
+   - AND "posting_date" (or the closest equivalent date field) is NOT present in the candidate list,
+   - THEN you MAY add that date field to the output.
 
 ### Output Format
-Return a JSON object where keys are table names and values are arrays of selected field names.
-Example: {{"tabBin": ["item_code", "actual_qty", "warehouse"], "tabItem": ["name", "item_name"]}}
+Return ONLY a JSON object where keys are table names and values are arrays of selected field names.
+Example: {"tabBin": ["item_code", "actual_qty", "warehouse"], "tabItem": ["name", "item_name"]}

@@ -19,8 +19,21 @@ from werkzeug.wrappers import Response
 import frappe
 from google import genai
 from google.genai import types
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from google.oauth2 import service_account
+import frappe
+from typing import List, Dict, Any, Optional
+from langchain_community.vectorstores import FAISS
+from langchain_huggingface import HuggingFaceEmbeddings
+import os
+import yaml
+from typing import Any, Dict, List, Optional
+from langchain_core.documents import Document
+from langchain_community.vectorstores import FAISS
+from langchain_huggingface import HuggingFaceEmbeddings
 __vector_store = None
+_SCHEMA_VS = None
+
 
 @frappe.whitelist(allow_guest=True)
 def get_settings():
@@ -53,11 +66,11 @@ def get_settings():
     }
     return config
 
-    # 1. Configuration
+
+MODEL_ID = "gemini-2.5-flash-lite"
+CONFIG = get_settings()
 PROJECT_ID = CONFIG["gemini_project_id"]
 KEY_PATH = CONFIG["gemini_file_path"]
-MODEL_ID = "gemini-2.5-flash"
-CONFIG = get_settings()
 RETRY_LIMIT=2
 BACKEND_SERVER_SETTINGS = "Backend Server Settings"
 INDEX_PATH = f"{CONFIG['ROOT_PATH']}/changai/changai/changai/faiss_index_hnsw_v2"
@@ -249,7 +262,7 @@ def call_model(prompt: str, task: str = "llm") -> Any:
 
 
 def call_embedder(question):
-    return remote_embedder_request(question) if CONFIG["REMOTE"] and  else local_embedder_request(question)
+    return remote_embedder_request(question) if CONFIG["REMOTE"]  else local_embedder_request(question)
 
 
 def _post_json(url: str, headers: Dict[str, str], payload: Dict[str, Any], timeout: int = 120):
@@ -538,7 +551,6 @@ def remote_embedder_request(formatted_q: str) -> Union[list, str]:
         return "Error: " + str(e)
 
 
-
 def local_embedder_request(question: str):
     global __vector_store
     if not os.path.exists(INDEX_PATH):
@@ -587,6 +599,11 @@ class SQLState(TypedDict,total=False):
     non_erp_res:str
     entity_cards: List[str]
     entity_raw: Any
+    retrieval_mode: str
+    top_tables: List[str]
+    selected_tables: List[str]
+    top_fields: Dict[str, Any]
+    selected_fields: str
 
 
 def fill_sql_prompt(question: str, context: str) -> str:
@@ -668,44 +685,189 @@ def rewrite_question(state: SQLState) -> SQLState:
             "contains_values": False,
             "formatting_prompt": prompt,
         }
-@frappe.whitelist(allow_guest=True)
-def call_fvs_table_search():
-    
+emb=HuggingFaceEmbeddings(model_name="hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned")
+
+vs = FAISS.load_local(
+    "/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/v2/table_only_fvs",
+    emb,
+    allow_dangerous_deserialization=True
+)
+
+def call_fvs_table_search(q):
+    hits = vs.similarity_search(q, k=10)
+    out, seen = [], set()
+    for h in hits:
+        t = h.metadata.get("table")
+        if t and t not in seen:
+            seen.add(t)
+            out.append(t)
+    return out
+
+
+
+def _parse_json_list(raw: str):
+    try:
+        data = json.loads(raw)
+        return data if isinstance(data, list) else []
+    except Exception:
+        return []
+
 
 @frappe.whitelist(allow_guest=True)
-def call_retriev_multi_line(user_question, full_table_list):
-    # --- STAGE 1: TABLE SELECTION ---
-    # 1. Search Vector Store for top 10 tables
-    top_10_tables = call_fvs_table_search(user_question, k=10)
-    
-    # 2. Ask Gemini to prune those 10 tables down to the 2-3 needed for SQL
-    # Use .replace() to avoid KeyError with curly braces in your prompt
-    table_prompt = FILTER_TABLES_PROMPT.replace("{user_question}", user_question)
-    table_prompt = table_prompt.replace("{table_list}", str(top_10_tables))
-    
-    selected_tables = call_gemini(table_prompt) # Returns JSON list: ["tabBin", "tabItem"]
+def call_retriev_multi_line(user_question):
+    top_tables = call_fvs_table_search(user_question)
+    table_prompt = FILTER_TABLES.replace("{user_question}", user_question)
+    table_prompt = table_prompt.replace("{table_list}", json.dumps(top_tables, ensure_ascii=False))
+    selected_raw = call_gemini(table_prompt)
+    selected_tables = _parse_json_list(selected_raw)
+    top_set = set(top_tables)
+    selected_tables = [t for t in selected_tables if t in top_set]
 
     if not selected_tables:
-        return "No relevant tables found."
+        return {"tables": [], "final_schema_context": ""}
 
-    # --- STAGE 2: FIELD SELECTION ---
-    # 3. For each selected table, get top 40 fields from FVS
-    fields_to_prune = {}
+    fields_candidates = {}
     for table in selected_tables:
-        # Filter your vector search by the specific table_name metadata
-        fields_to_prune[table] = call_fvs_field_search(user_question, table_name=table, k=40)
+        fields_candidates[table] = call_fvs_field_search(
+            user_question,
+            table_name=table,
+            selected_tables=selected_tables,
+            k=40
+        )
 
-    # 4. Ask Gemini to prune 40 fields per table down to the essential few
-    # Use .replace() here as well to protect the JSON example in your prompt
-    field_prompt = FILTER_FIELDS_PROMPT.replace("{user_question}", user_question)
-    field_prompt = field_prompt.replace("{fields_tables}", str(fields_to_prune))
-    
-    final_schema_context = call_gemini(field_prompt)
-    
-    return final_schema_context
+    field_prompt = filter_fields.replace("{user_question}", user_question)
+    field_prompt = field_prompt.replace("{fields_tables}", json.dumps(fields_candidates, ensure_ascii=False))
+
+    selected_raw = call_gemini(field_prompt)
+    selected_raw = call_gemini(field_prompt)
+    selected_map = {}
+    try:
+        selected_map = json.loads(selected_raw) if isinstance(selected_raw, str) else {}
+    except Exception:
+        selected_map = {}
+
+    # Build final context with join_hint/options preserved
+    final_ctx = {"tables": {}, "joins": []}
+
+    for tbl, rows in fields_candidates.items():
+        picked = set(selected_map.get(tbl, [])) if isinstance(selected_map, dict) else set()
+        out_rows = []
+        for r in rows:
+            if not picked or r.get("field") in picked:
+                out_rows.append(r)
+                if r.get("join_hint"):
+                    final_ctx["joins"].append(r["join_hint"])
+        if out_rows:
+            final_ctx["tables"][tbl] = out_rows
+
+    final_ctx["joins"] = list(dict.fromkeys(final_ctx["joins"]))
+
+    return {
+            "selected_tables": selected_tables,
+            "top_fields": fields_candidates,
+            "selected_fields": json.dumps(final_ctx, ensure_ascii=False),
+            "top_tables": top_tables
+        }
 
 
+# ---------- GLOBAL CACHES ----------
+_FIELDS_EMB = None
+_FULL_FIELDS_VS = None
+_SUB_VS_CACHE = {}  # key: tuple(sorted(selected_tables)) -> FAISS sub index
 
+FULL_FIELDS_VS_PATH = "/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/v2/business_only_schema_fvs"
+
+
+def get_fields_embedder():
+    global _FIELDS_EMB
+    if _FIELDS_EMB is None:
+        _FIELDS_EMB = HuggingFaceEmbeddings(
+            model_name="hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned"
+        )
+    return _FIELDS_EMB
+
+
+def get_full_fields_vs():
+    global _FULL_FIELDS_VS
+    if _FULL_FIELDS_VS is None:
+        emb = get_fields_embedder()
+        _FULL_FIELDS_VS = FAISS.load_local(
+            FULL_FIELDS_VS_PATH,
+            emb,
+            allow_dangerous_deserialization=True
+        )
+    return _FULL_FIELDS_VS
+
+
+def get_sub_vs(selected_tables: list):
+    """Build sub-index ONCE per unique selected_tables set (cached)."""
+    key = tuple(sorted([t for t in selected_tables if isinstance(t, str)]))
+    if not key:
+        return None
+
+    global _SUB_VS_CACHE
+    if key in _SUB_VS_CACHE:
+        return _SUB_VS_CACHE[key]
+
+    full_vs = get_full_fields_vs()
+    emb = get_fields_embedder()
+
+    selected_set = set(key)
+    doc_dict = getattr(full_vs.docstore, "_dict", {})
+    docs = []
+    for d in doc_dict.values():
+        meta = getattr(d, "metadata", {}) or {}
+        if meta.get("table") in selected_set:
+            docs.append(d)
+
+    sub = FAISS.from_documents(docs, emb)
+    _SUB_VS_CACHE[key] = sub
+    return sub
+def call_fvs_field_search(
+    user_question: str,
+    table_name: str,
+    selected_tables: List[str],
+    k: int = 40,
+) -> List[Dict[str, Any]]:
+
+    if not user_question or not table_name:
+        return []
+
+    sub_vs = get_sub_vs(selected_tables)
+    if sub_vs is None:
+        return []
+
+    # Reduce k from 200 -> ~60 (you only need 40)
+    hits = sub_vs.similarity_search(user_question, k=min(60, max(40, k)))
+
+    results: List[Dict[str, Any]] = []
+    seen = set()
+
+    for d in hits:
+        meta = getattr(d, "metadata", {}) or {}
+        tbl = meta.get("table")
+        fld = meta.get("field")
+        if tbl != table_name:
+            continue
+
+        key = (tbl, fld)
+        if key in seen:
+            continue
+        seen.add(key)
+
+        row = {
+            "field": fld,
+        }
+        if meta.get("join_hint"):
+            row["join_hint"] = meta.get("join_hint")
+        if meta.get("options"):
+            row["options"] = meta.get("options")
+
+        results.append(row)
+        if len(results) >= k:
+            break
+
+    return results
 
 
 # # Node 1: Retrive with Fiass Vector Store.
@@ -715,8 +877,15 @@ def schema_retriever(state: SQLState) -> SQLState:
         hits = call_embedder(state.get("formatted_q", "") or state.get("question", ""))
         return {**state, "hits": hits}
     else:
-        return call_retriev_multi_line()
-    
+        out = call_retriev_multi_line(state.get("formatted_q") or state.get("question") or "")
+        return {
+            **state,
+            "retrieval_mode": "multi",
+            "top_tables": out.get("top_tables", []),
+            "top_fields": out.get("top_fields", {}),
+            "selected_fields": out.get("selected_fields", ""),
+            "selected_tables": out.get("selected_tables", []),
+        }
 
 
 # # Node 2: Build schema context from hits - for SQL Prompt
@@ -739,7 +908,15 @@ def hits_to_prompt_context(state:SQLState) -> SQLState:
 # # Node 3:Generate the SQL Prompt and call LLM(Ollama Http)
 @traceable(name="generate_sql", run_type="tool")
 def generate_sql(state:SQLState) -> SQLState:
-    prompt=fill_sql_prompt(state["formatted_q"],state["context"])
+    selected_fields = state.get("selected_fields") or ""
+    entity_cards = state.get("entity_cards") or []
+    entity_block = ""
+    if entity_cards:
+        entity_block = "\n\nENTITY_CARDS:\n" + "\n".join(map(str, entity_cards))
+    if CONFIG["retriever_structure"]=="multi line":
+        prompt=fill_sql_prompt(state["formatted_q"],selected_fields + entity_block)
+    else:
+        prompt=fill_sql_prompt(state["formatted_q"],state["context"])
     try:
         # response=call_model(prompt, "llm")
         response=call_model(prompt)
@@ -751,7 +928,7 @@ def generate_sql(state:SQLState) -> SQLState:
 # # Node 4:Validate the SQL Generate with meta schema mapping using SQLGlot
 @traceable(name="validate_sql", run_type="tool")
 def validate_sql(state: SQLState) -> SQLState:
-    sql = (state.get("sql") or "")
+    sql = clean_sql(state.get("sql") or "")
     if not sql:
         return {
             **state,
@@ -847,8 +1024,26 @@ def detect_specific_entities(state: SQLState) -> SQLState:
         return {**state, "entity_cards": [], "entity_raw": {"error": str(e)}}
 
 
+def route_after_entities(state: SQLState) -> str:
+    return "DIRECT" if CONFIG.get("retriever_structure") == "multi line" else "CONTEXT"
+
+
 def route_guardrail(state:SQLState):
     return "ERP" if state.get("query_type")=="ERP" else "NON_ERP"
+def clean_sql(s):
+    if isinstance(s, dict):
+        s = s.get("output") or s.get("sql") or s.get("text") or json.dumps(s, ensure_ascii=False, default=str)
+    elif isinstance(s, list):
+        s = "\n".join(map(str, s))
+    else:
+        s = str(s) if s is not None else ""
+
+    s = s.strip()
+    s = re.sub(r"^\s*```(?:sql)?\s*", "", s, flags=re.I)
+    s = re.sub(r"\s*```\s*$", "", s)
+    s = re.sub(r"^\s*sql\s*\n", "", s, flags=re.I)
+
+    return s.strip()
 
 
 # # Router to decide next stage:
@@ -864,84 +1059,105 @@ def router(state:SQLState) -> str:
         return "repair"
     return "end"
 
+from sqlglot import exp
+import sqlglot
+from typing import Dict, List
+from typing import Dict, List, Any, Set, Tuple
+import sqlglot
+from sqlglot import exp
 
-def validate_sql_against_mapping(sql_text: str, mapping: Dict[str, List[str]], dialect: str = "mysql"):
+def validate_sql_against_mapping(
+    sql_text: str,
+    mapping: Dict[str, List[str]],
+    dialect: str = "mysql"
+) -> Dict[str, Any]:
     result = {
         "ok": True,
         "unknown_tables": [],
         "unknown_columns": [],
         "ambiguous_columns": [],
-        "details": {}
+        "details": {
+            "from_tables": [],
+            "alias_to_table": {},
+            "derived_aliases": [],
+        },
     }
+
     try:
         ast = sqlglot.parse_one(sql_text, read=dialect)
     except Exception as e:
         result["ok"] = False
         result["details"]["parse_error"] = str(e)
         return result
+    base_tables: List[str] = []
+    alias_to_table: Dict[str, str] = {}
 
-    tables = []
     for t in ast.find_all(exp.Table):
         name = t.name
-        if name:
-            tables.append(name)
+        if not name:
+            continue
+        base_tables.append(name)
 
-    tables = list(dict.fromkeys(tables))
-    unknown_tables = [t for t in tables if t not in mapping]
+        a = t.args.get("alias")
+        if a and a.name:
+            alias_to_table[a.name] = name
+
+    base_tables = list(dict.fromkeys(base_tables))
+    result["details"]["from_tables"] = base_tables
+    result["details"]["alias_to_table"] = alias_to_table
+    unknown_tables = [t for t in base_tables if t not in mapping]
     if unknown_tables:
         result["ok"] = False
         result["unknown_tables"] = unknown_tables
+    derived_aliases: Set[str] = set()
+    for sq in ast.find_all(exp.Subquery):
+        a = sq.args.get("alias")
+        if a and a.name:
+            derived_aliases.add(a.name)
+    for cte in ast.find_all(exp.CTE):
+        a = cte.args.get("alias")
+        if a and a.name:
+            derived_aliases.add(a.name)
 
-    col_to_tables = {}
-    for tbl, cols in mapping.items():
-        for c in cols:
-            col_to_tables.setdefault(c, set()).add(tbl)
+    result["details"]["derived_aliases"] = sorted(derived_aliases)
+    unknown_cols: List[Tuple[str, str]] = []
+    ambiguous: Set[str] = set()
 
-    from_tables = set(tables)
-    ambiguous = set()
-    unknown_cols = []
+    base_tables_set = set(base_tables)
 
     for col in ast.find_all(exp.Column):
         col_name = col.name
-        qualifier = col.table
+        qual = col.table  # qualifier (alias or table), may be None
         if not col_name:
             continue
-
-        if qualifier:
-            qual = str(qualifier)
-            base_table_for_alias = None
-            table_name = qual.strip("`")
-            if table_name in mapping:
-                if col_name not in mapping[table_name]:
-                    unknown_cols.append((col_name, table_name))
-            else:
-                resolved = False
-                for sub in ast.find_all(exp.From):
-                    for source in sub.find_all(exp.Table):
-                        alias = source.args.get("alias")
-                        if alias and alias.name == qual and source.name in mapping:
-                            if col_name not in mapping[source.name]:
-                                unknown_cols.append((col_name, source.name))
-                            resolved = True
-                            break
-                    if resolved:
-                        break
-                if not resolved:
-                    unknown_cols.append((f"{qual}.{col_name}", None))
+        if qual:
+            q = str(qual)
+            if q in derived_aliases:
+                continue
+            if q in mapping:
+                if col_name not in mapping[q]:
+                    unknown_cols.append((f"{q}.{col_name}", q))
+                continue
+            if q in alias_to_table:
+                real_table = alias_to_table[q]
+                if real_table in mapping and col_name not in mapping[real_table]:
+                    unknown_cols.append((f"{q}.{col_name}", real_table))
+                continue
+            unknown_cols.append((f"{q}.{col_name}", None))
         else:
-            candidates = [t for t in from_tables if col_name in mapping.get(t, [])]
+            candidates = [t for t in base_tables_set if col_name in mapping.get(t, [])]
             if len(candidates) == 0:
                 unknown_cols.append((col_name, None))
             elif len(candidates) > 1:
                 ambiguous.add(col_name)
-            # if exactly 1 → fine
 
     if unknown_cols or ambiguous:
         result["ok"] = False
         result["unknown_columns"] = unknown_cols
         result["ambiguous_columns"] = sorted(ambiguous)
-    result["details"]["from_tables"] = tables
+
     return result
+
 
 
 # Building the Workflow Graph
@@ -960,8 +1176,8 @@ workflow.add_edge("rewrite_question", "guardrail_router")
 workflow.add_conditional_edges("guardrail_router",route_guardrail,{"ERP":"retrieve","NON_ERP":"send_non_erp_request"})
 workflow.add_edge("send_non_erp_request", END)
 workflow.add_edge("retrieve","detect_entities")
-workflow.add_edge("detect_entities", "build_context")
-workflow.add_edge("build_context", "generate_sql")   
+workflow.add_conditional_edges("detect_entities", route_after_entities, {"CONTEXT":"build_context","DIRECT":"generate_sql"})
+workflow.add_edge("build_context", "generate_sql")
 workflow.add_edge("generate_sql","validate_sql")
 workflow.add_conditional_edges("validate_sql",router,{"repair":"repair_sql","end":END})
 workflow.add_edge("repair_sql","validate_sql")
@@ -1405,22 +1621,21 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
             "Bot": non_erp_res,
         }
 
-    sql = (final.get("sql") or "").strip()
+    sql  = clean_sql(final.get("sql") or "")
+    fields=(final.get("selected_fields") or "").strip()
     formatted_q = (final.get("formatted_q") or "").strip()
     formatting_prompt = (final.get("formatting_prompt") or "")
     sql_prompt = (final.get("sql_prompt") or "")
     val = final.get("validation") or {}
     ok = bool(val.get("ok"))
     if not ok or not sql.upper().startswith("SELECT"):
-        context = (final.get("context") or "")[:800]
+        context = (final.get("context") or final.get("selected_fields") or "")[:800]
         tries = int(final.get("tries") or 0)
         err = final.get("error")
         return {
             "Question":user_question,
             "Formatted_Question":formatted_q,
             "Context": context,
-            # "SQLPrompt":sql_prompt,
-            # "Reformatting_Prompt":formatting_prompt,
             "SQL": sql,
             "Validation": val,
             "EntityDebug": entity_debug,
@@ -1431,8 +1646,11 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
         }
     
     result = execute_query(sql)
-    context = (final.get("context") or "")[:800]
+    context = (final.get("context") or final.get("selected_fields") or "")[:800]
+    contains_values=final.get("contains_values") or ""
     tries = int(final.get("tries") or 0)
+    top_tables=final.get("top_tables") or ""
+    top_fields=final.get("top_fields") or ""
     err = final.get("error")
     formatted_result = format_data(formatted_q,result)
     bot_answer = formatted_result
@@ -1446,15 +1664,18 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
         "Question":user_question,
         # "Reformatting_Prompt":formatting_prompt,
         # "Formatted_Question":formatted_q,
-        # "Context": context,
+        "Context": context,
         # "SQLPrompt":sql_prompt,
+        "contains_values":contains_values,
         "SQL": sql,
         "Validation": val,
         "Tries": tries,
         "Error": err,
         "Result": result,
-        # "EntityDebug": entity_debug,
+        "EntityDebug": entity_debug,
         "Bot": bot_answer,
+        "Top Tables":top_tables,
+        "Top Fields":top_fields
     }
 
 

@@ -114,6 +114,9 @@ Rules:
   (pen, invoice, supplier, customer) as values.
 - Rewrite only if needed; otherwise keep it unchanged.
 - When unsure, prefer contains_values=false unless a clear name/code exists.
+- true also when the message contains a PRODUCT CATEGORY or ITEM GROUP
+  that must be resolved to master data records.
+
 
 
 Chat history (use ONLY human lines):
