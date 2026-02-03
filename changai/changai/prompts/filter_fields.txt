@@ -24,4 +24,4 @@ You are a Database Schema Expert. Your goal is to prune a list of candidate fiel
 
 ### Output Format
 Return ONLY a JSON object where keys are table names and values are arrays of selected field names.
-Example: {"tabBin": ["item_code", "actual_qty", "warehouse"], "tabItem": ["name", "item_name"]}
+Very Important Dont Ever Assume Fields that are not given in the above candidate tables and fields.

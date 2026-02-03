@@ -703,8 +703,6 @@ def call_fvs_table_search(q):
             out.append(t)
     return out
 
-
-
 def _parse_json_list(raw: str):
     try:
         data = json.loads(raw)
