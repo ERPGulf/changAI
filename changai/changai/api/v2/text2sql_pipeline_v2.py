@@ -590,6 +590,7 @@ class SQLState(TypedDict,total=False):
     hits: List[Any]
     context :str
     sql:str
+    orm:str
     validation:Dict[str,Any]
     error:Optional[str]
     tries:int
@@ -694,7 +695,7 @@ vs = FAISS.load_local(
 )
 
 def call_fvs_table_search(q):
-    hits = vs.similarity_search(q, k=10)
+    hits = vs.similarity_search(q, k=15)
     out, seen = [], set()
     for h in hits:
         t = h.metadata.get("table")
@@ -720,10 +721,8 @@ def call_retriev_multi_line(user_question):
     selected_tables = _parse_json_list(selected_raw)
     top_set = set(top_tables)
     selected_tables = [t for t in selected_tables if t in top_set]
-
     if not selected_tables:
-        return {"tables": [], "final_schema_context": ""}
-
+        return {"selected_fields": {}, "selected_tables": [], "top_tables": top_tables}
     fields_candidates = {}
     for table in selected_tables:
         fields_candidates[table] = call_fvs_field_search(
@@ -732,46 +731,19 @@ def call_retriev_multi_line(user_question):
             selected_tables=selected_tables,
             k=40
         )
-
     field_prompt = filter_fields.replace("{user_question}", user_question)
     field_prompt = field_prompt.replace("{fields_tables}", json.dumps(fields_candidates, ensure_ascii=False))
-
     selected_raw = call_gemini(field_prompt)
-    selected_raw = call_gemini(field_prompt)
-    selected_map = {}
     try:
         selected_map = json.loads(selected_raw) if isinstance(selected_raw, str) else {}
     except Exception:
         selected_map = {}
-
-    # Build final context with join_hint/options preserved
-    final_ctx = {"tables": {}, "joins": []}
-
-    for tbl, rows in fields_candidates.items():
-        picked = set(selected_map.get(tbl, [])) if isinstance(selected_map, dict) else set()
-        out_rows = []
-        for r in rows:
-            if not picked or r.get("field") in picked:
-                out_rows.append(r)
-                if r.get("join_hint"):
-                    final_ctx["joins"].append(r["join_hint"])
-        if out_rows:
-            final_ctx["tables"][tbl] = out_rows
-
-    final_ctx["joins"] = list(dict.fromkeys(final_ctx["joins"]))
-
-    return {
-            "selected_tables": selected_tables,
-            "top_fields": fields_candidates,
-            "selected_fields": json.dumps(final_ctx, ensure_ascii=False),
-            "top_tables": top_tables
-        }
+    return {"selected_fields": json.dumps(selected_map, ensure_ascii=False),"top_tables":top_tables,"top_fields":fields_candidates}
 
 
-# ---------- GLOBAL CACHES ----------
 _FIELDS_EMB = None
 _FULL_FIELDS_VS = None
-_SUB_VS_CACHE = {}  # key: tuple(sorted(selected_tables)) -> FAISS sub index
+_SUB_VS_CACHE = {}
 
 FULL_FIELDS_VS_PATH = "/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/v2/business_only_schema_fvs"
 
@@ -817,7 +789,6 @@ def get_sub_vs(selected_tables: list):
         meta = getattr(d, "metadata", {}) or {}
         if meta.get("table") in selected_set:
             docs.append(d)
-
     sub = FAISS.from_documents(docs, emb)
     _SUB_VS_CACHE[key] = sub
     return sub
@@ -912,13 +883,18 @@ def generate_sql(state:SQLState) -> SQLState:
     if entity_cards:
         entity_block = "\n\nENTITY_CARDS:\n" + "\n".join(map(str, entity_cards))
     if CONFIG["retriever_structure"]=="multi line":
-        prompt=fill_sql_prompt(state["formatted_q"],selected_fields + entity_block)
+        context = (selected_fields or "") + (entity_block or "")
+        prompt = fill_sql_prompt(state["formatted_q"], context)
     else:
         prompt=fill_sql_prompt(state["formatted_q"],state["context"])
     try:
         # response=call_model(prompt, "llm")
         response=call_model(prompt)
-        return {**state,"sql_prompt":prompt,"sql":response,"error":None}
+        if isinstance(response, str):
+            response = json.loads(response)
+        sql = response.get("sql", "")
+        orm = response.get("orm", "")
+        return {**state,"sql_prompt":prompt,"sql":sql,"orm":orm,"error":None}
     except Exception as e:
         return {**state,"error": f"LLM call failed: {e}","sql_prompt":prompt}
 
@@ -996,7 +972,11 @@ def repair_sqlquery(state: SQLState) -> SQLState:
 
     try:
         response = call_model(patched_prompt,"llm")
-        return {**state, "sql": response, "tries": tries, "error": None}
+        if isinstance(response, str):
+            response = json.loads(response)
+            sql = response.get("sql", "")
+            orm = response.get("orm", "")
+        return {**state, "sql": sql, "tries": tries, "error": None}
     except Exception as e:
         return {**state, "tries": tries, "error": f"Repair call failed {e}"}
 
@@ -1619,7 +1599,8 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
             "Bot": non_erp_res,
         }
 
-    sql  = clean_sql(final.get("sql") or "")
+    sql  = clean_sql(final.get("sql"))or ""
+    orm  = clean_sql(final.get("orm"))or ""
     fields=(final.get("selected_fields") or "").strip()
     formatted_q = (final.get("formatted_q") or "").strip()
     formatting_prompt = (final.get("formatting_prompt") or "")
@@ -1663,17 +1644,18 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
         # "Reformatting_Prompt":formatting_prompt,
         # "Formatted_Question":formatted_q,
         "Context": context,
-        # "SQLPrompt":sql_prompt,
+        "SQLPrompt":sql_prompt,
+        "top_tables":top_tables,
+        "top_fields":top_fields,
         "contains_values":contains_values,
         "SQL": sql,
+        "ORM":orm,
         "Validation": val,
         "Tries": tries,
         "Error": err,
-        "Result": result,
+        # "Result": result,
         "EntityDebug": entity_debug,
-        "Bot": bot_answer,
-        "Top Tables":top_tables,
-        "Top Fields":top_fields
+        "Bot": bot_answer
     }
 
 
