@@ -1043,6 +1043,9 @@ from typing import Dict, List
 from typing import Dict, List, Any, Set, Tuple
 import sqlglot
 from sqlglot import exp
+from typing import Any, Dict, List, Tuple, Set
+import sqlglot
+from sqlglot import exp
 
 def validate_sql_against_mapping(
     sql_text: str,
@@ -1058,6 +1061,7 @@ def validate_sql_against_mapping(
             "from_tables": [],
             "alias_to_table": {},
             "derived_aliases": [],
+            "select_aliases": [],  # ✅ added (optional, but useful for debugging)
         },
     }
 
@@ -1067,6 +1071,7 @@ def validate_sql_against_mapping(
         result["ok"] = False
         result["details"]["parse_error"] = str(e)
         return result
+
     base_tables: List[str] = []
     alias_to_table: Dict[str, str] = {}
 
@@ -1083,10 +1088,12 @@ def validate_sql_against_mapping(
     base_tables = list(dict.fromkeys(base_tables))
     result["details"]["from_tables"] = base_tables
     result["details"]["alias_to_table"] = alias_to_table
+
     unknown_tables = [t for t in base_tables if t not in mapping]
     if unknown_tables:
         result["ok"] = False
         result["unknown_tables"] = unknown_tables
+
     derived_aliases: Set[str] = set()
     for sq in ast.find_all(exp.Subquery):
         a = sq.args.get("alias")
@@ -1098,9 +1105,19 @@ def validate_sql_against_mapping(
             derived_aliases.add(a.name)
 
     result["details"]["derived_aliases"] = sorted(derived_aliases)
+
+    # ✅ NEW: collect SELECT projection aliases (e.g. COUNT(*) AS invoice_count)
+    select_aliases: Set[str] = set()
+    for sel in ast.find_all(exp.Select):
+        for proj in sel.expressions:
+            if isinstance(proj, exp.Alias):
+                if proj.alias:  # alias is a string
+                    select_aliases.add(proj.alias)
+
+    result["details"]["select_aliases"] = sorted(select_aliases)
+
     unknown_cols: List[Tuple[str, str]] = []
     ambiguous: Set[str] = set()
-
     base_tables_set = set(base_tables)
 
     for col in ast.find_all(exp.Column):
@@ -1108,21 +1125,33 @@ def validate_sql_against_mapping(
         qual = col.table  # qualifier (alias or table), may be None
         if not col_name:
             continue
+
         if qual:
             q = str(qual)
+
+            # If referencing a derived table alias, skip schema validation here
             if q in derived_aliases:
                 continue
+
             if q in mapping:
                 if col_name not in mapping[q]:
                     unknown_cols.append((f"{q}.{col_name}", q))
                 continue
+
             if q in alias_to_table:
                 real_table = alias_to_table[q]
                 if real_table in mapping and col_name not in mapping[real_table]:
                     unknown_cols.append((f"{q}.{col_name}", real_table))
                 continue
+
             unknown_cols.append((f"{q}.{col_name}", None))
+
         else:
+            # ✅ NEW: if unqualified identifier matches a SELECT alias, allow it
+            # This fixes ORDER BY invoice_count / HAVING invoice_count, etc.
+            if col_name in select_aliases:
+                continue
+
             candidates = [t for t in base_tables_set if col_name in mapping.get(t, [])]
             if len(candidates) == 0:
                 unknown_cols.append((col_name, None))
@@ -1570,7 +1599,6 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
     entity_debug = {
     "contains_values": final.get("contains_values"),
     "entity_cards": final.get("entity_cards") or [],
-    "entity_raw": final.get("entity_raw"),
 }
     type_ = final.get("query_type") or "NON_ERP"
     if type_ == "NON_ERP":
