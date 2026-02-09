@@ -340,3 +340,16 @@ async function generateBotResponse(userMsg, thinkingMsg, warmingTimeout) {
     // Initially hide chatbot popup
     toggleChatbot(false);
 });
+
+frappe.ui.form.on("ChangAI Settings", {
+  update_masterdata_file(frm) {
+    frappe.call({
+      method: "changai.changai.api.v2.auto_gen_api.sync_master_data_smart",
+      // freeze: true,
+      // freeze_message: "Running test...",
+      callback(r) {
+        console.log(r.message)
+      }
+    });
+  }
+});

@@ -134,7 +134,7 @@ def generate_token_secure(api_key, api_secret, app_key):
             )
 
         client_id = clientID  # Replace with your OAuth client ID
-        client_secret = clientSecret  # Replace with your OAuth client secret
+        client_secret = clientSecret
 
         url = (
             frappe.local.conf.host_name
