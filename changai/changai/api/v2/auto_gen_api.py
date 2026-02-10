@@ -1,13 +1,275 @@
 from changai.changai.api.v2.text2sql_pipeline_v2 import call_gemini
 from frappe.utils import nowdate, add_days,now_datetime,add_to_date
-import json,os,frappe,yaml,re,openai
-
+import json,os,frappe,yaml,re,openai,time
+from anthropic import Anthropic
+import anthropic
+import gc
 
 BASE_DIR = os.path.dirname(__file__)
 DATA_DIR = os.path.join(BASE_DIR, "data")
 TABLES_JSON = os.path.join(DATA_DIR, "tables.json")
 SCHEMA_YAML = os.path.join(DATA_DIR, "schema.yaml")
+SCHEMA_YAML_1 = os.path.join(DATA_DIR, "schema_1.yaml")
 
+@frappe.whitelist(allow_guest=False)
+def sync_master_data_smart():
+    BASE_DIR = os.path.dirname(__file__)
+    DATA_DIR = os.path.join(BASE_DIR, "data")
+    os.makedirs(DATA_DIR, exist_ok=True)
+
+    file_path = os.path.join(DATA_DIR, "meta_schema.yaml")  # ✅ define
+
+    try:
+        with open(file_path, "r") as f:
+            payload = yaml.safe_load(f) or {}
+    except (FileNotFoundError, yaml.YAMLError):
+        payload = {}
+
+    if not isinstance(payload, dict):
+        payload = {}
+
+    meta = payload.get("_meta") or {}
+    data = payload.get("data") or []
+
+    if not isinstance(meta, dict):
+        meta = {}
+    if not isinstance(data, list):
+        data = []
+
+    last_sync = meta.get("last_sync")
+
+    existing_keys = set()
+    for row in data:
+        if isinstance(row, dict):
+            dt = row.get("entity_type")
+            eid = row.get("entity_id")
+            if dt and eid:
+                existing_keys.add((dt, eid))
+
+    modules = ["Customer", "Item", "Currency", "Supplier"]
+
+    base_filters = {}
+    if last_sync:
+        base_filters = {"creation": [">", last_sync]}
+
+    added_total = 0
+    added_by_module = {}
+    fetched_by_module = {}
+
+    for mod in modules:
+        entity_type = f"tab{mod}"
+        records = frappe.get_all(mod, filters=base_filters, fields=["name"])
+        fetched_by_module[mod] = len(records)
+
+        added_count = 0
+        for rec in records:
+            key = (entity_type, rec.name)
+            if key in existing_keys:
+                continue
+
+            data.append({
+                "entity_type": entity_type,
+                "entity_id": rec.name,
+                "filters": {"field": "name", "value": rec.name}
+            })
+            existing_keys.add(key)
+            added_count += 1
+            added_total += 1
+
+        added_by_module[mod] = added_count
+
+    meta["last_sync"] = str(now_datetime())
+    payload = {"_meta": meta, "data": data}
+
+    with open(file_path, "w") as f:
+        yaml.safe_dump(payload, f, default_flow_style=False, sort_keys=False)
+
+    return {
+        "ok": True,
+        "message": (
+            f"Sync complete ✅ Added {added_total} new records."
+            if added_total else
+            "Sync complete ✅ No new records to add."
+        ),
+        "added_total": added_total,
+        "added_by_module": added_by_module,
+        "fetched_by_module": fetched_by_module,
+        "last_sync_used": last_sync or "FIRST_RUN(full_fetch)",
+        "new_last_sync": meta["last_sync"]
+    }
+def _load_json_list(path):
+    """
+    Load a JSON file that is expected to contain a LIST.
+
+    Returns:
+      - list if file exists and contains a JSON array
+      - empty list [] on any error or if content is not a list
+    """
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        return data if isinstance(data, list) else []
+
+    except FileNotFoundError:
+        return []
+
+    except json.JSONDecodeError:
+        # corrupted / partially-written file
+        return []
+
+    except Exception:
+        return []
+
+
+
+def get_doctypes_changed_since(last_sync):
+    # ✅ includes parent + child doctypes (no disabled filter)
+    filters = {}
+
+    if last_sync:
+        try:
+            since = add_to_date(last_sync, minutes=-2)
+        except Exception:
+            since = last_sync
+        filters["modified"] = [">=", since]
+
+    doctypes = frappe.get_all("DocType", filters=filters, pluck="name")
+    out = []
+
+    for dt in doctypes:
+        if dt in SKIP_DOCTYPES:
+            continue
+
+        meta = frappe.get_meta(dt)
+        if getattr(meta, "is_virtual", 0):
+            continue
+
+        out.append(dt)
+
+    return out
+def _save_json_list(path, items):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(items, f, indent=2, ensure_ascii=False)
+@frappe.whitelist(allow_guest=False)
+def sync_tables_and_schema_smart():
+    os.makedirs(DATA_DIR, exist_ok=True)
+    payload = _load_yaml(SCHEMA_YAML_1)
+    meta = payload.get("_meta") or {}
+    tables_blocks = payload.get("tables") or []
+
+    if not isinstance(meta, dict):
+        meta = {}
+    if not isinstance(tables_blocks, list):
+        tables_blocks = []
+
+    last_doctype_sync = meta.get("last_doctype_sync")
+    changed_doctypes = get_doctypes_changed_since(last_doctype_sync)
+    changed_tables = sorted({_tab(dt) for dt in changed_doctypes})
+
+    existing_tables = _load_json_list(TABLES_JSON)
+    existing_set = set(existing_tables)
+    new_tables = [t for t in changed_tables if t not in existing_set]
+    merged = sorted(existing_set | set(new_tables))
+
+    if new_tables:
+        _save_json_list(TABLES_JSON, merged)
+
+    by_table = {
+        b.get("table"): b
+        for b in tables_blocks
+        if isinstance(b, dict) and b.get("table")
+    }
+
+    created_table_blocks = 0
+    new_fields_added = 0
+    removed_fields_total = 0
+
+    for table in changed_tables:
+        dt = _strip_tab(table)
+        if not frappe.db.exists("DocType", dt):
+            continue
+
+        meta_dt = frappe.get_meta(dt)
+
+        # ✅ build current fields (name first)
+        current_fieldnames = ["name"]
+        current_fields = [{"name": "name", "description": ""}]
+
+        for df in meta_dt.fields:
+            if not df.fieldname:
+                continue
+            if (df.fieldtype or "") in IGNORED_FIELDTYPES:
+                continue
+            if df.fieldname == "name":
+                continue
+            current_fieldnames.append(df.fieldname)
+            current_fields.append(_field_dict(df))
+
+        current_fieldnames = _dedup_keep_order(current_fieldnames)
+        current_set = set(current_fieldnames)
+        block = by_table.get(table)
+
+        # NEW TABLE
+        if not block:
+            block = {
+                "table": table,
+                "description": (meta_dt.description or "").strip(),
+                "fields": current_fields,  # ✅ includes options/join_hint
+            }
+            tables_blocks.append(block)
+            by_table[table] = block
+            created_table_blocks += 1
+            new_fields_added += len(current_fieldnames)
+            continue
+
+        # EXISTING TABLE: remove missing fields + add new fields
+        fields_list = block.get("fields") or []
+        if not isinstance(fields_list, list):
+            fields_list = []
+
+        before = len(fields_list)
+        fields_list = [
+            f for f in fields_list
+            if isinstance(f, dict) and f.get("name") in current_set
+        ]
+        removed_fields_total += (before - len(fields_list))
+
+        existing_fieldnames = {
+            f.get("name") for f in fields_list if isinstance(f, dict)
+        }
+
+        add_map = {f["name"]: f for f in current_fields if f.get("name")}
+        new_fieldnames = [
+            fn for fn in current_fieldnames if fn not in existing_fieldnames
+        ]
+
+        if new_fieldnames:
+            for fn in new_fieldnames:
+                fields_list.append(add_map.get(fn, {"name": fn, "description": ""}))
+            new_fields_added += len(new_fieldnames)
+
+        # ensure 'name' stays first
+        name_entry = [f for f in fields_list if f.get("name") == "name"]
+        rest = [f for f in fields_list if f.get("name") != "name"]
+        block["fields"] = name_entry + rest
+
+    meta["last_sync"] = str(now_datetime())
+    meta["last_doctype_sync"] = meta["last_sync"]
+
+    payload = {"_meta": meta, "tables": tables_blocks}
+    _save_yaml(SCHEMA_YAML_1, payload)
+
+    return {
+        "ok": True,
+        "message": "Skeleton sync done ✅ (includes child tables + options + join_hint, no OpenAI)",
+        "new_tables_added": len(new_tables),
+        "new_table_blocks_created": created_table_blocks,
+        "new_fields_added": new_fields_added,
+        "removed_fields_total": removed_fields_total,
+        "new_last_doctype_sync": meta["last_doctype_sync"],
+    }
 
 @frappe.whitelist(allow_guest=False)
 def generate_response(user_query):
@@ -34,113 +296,6 @@ def generate_response(user_query):
             "message": "Something went wrong while generating the response."
         }
 
-
-@frappe.whitelist(allow_guest=False)
-def sync_master_data_smart():
-    file_path = "/opt/hyrin/frappe-bench/apps/changai/changai/changai/data/master_data.yaml"
-    os.makedirs(os.path.dirname(file_path), exist_ok=True)
-    try:
-        with open(file_path, "r") as f:
-            payload = yaml.safe_load(f) or {}
-    except (FileNotFoundError, yaml.YAMLError):
-        payload = {}
-
-    if not isinstance(payload, dict):
-        payload = {}
-
-    meta = payload.get("_meta") or {}
-    data = payload.get("data") or []
-
-    if not isinstance(meta, dict):
-        meta = {}
-    if not isinstance(data, list):
-        data = []
-
-    last_sync = meta.get("last_sync")
-    existing_keys = set()
-    for row in data:
-        if isinstance(row, dict):
-            dt = row.get("entity_type")
-            eid = row.get("entity_id")
-            if dt and eid:
-                existing_keys.add((dt, eid))
-
-    modules = ["Customer", "Item", "Currency","Supplier"]
-    added_by_module = {}
-    fetched_by_module = {}
-    base_filters = {}
-    if last_sync:
-        base_filters = {"creation": [">", last_sync]}
-
-    added_total = 0
-
-    for mod in modules:
-        entity_type = f"tab{mod}"
-        records = frappe.get_all(mod, filters=base_filters, fields=["name"])
-        fetched_by_module[mod] = len(records)
-
-        added_count = 0
-        for rec in records:
-            key = (entity_type, rec.name)
-            if key in existing_keys:
-                continue
-
-            data.append({
-                "entity_type": entity_type,
-                "entity_id": rec.name,
-                "filters": {"field": "name", "value": rec.name}
-            })
-            existing_keys.add(key)
-            added_count += 1
-            added_total += 1
-
-        added_by_module[mod] = added_count
-
-    # ---------- Update checkpoint + write ----------
-    meta["last_sync"] = str(now_datetime())
-    payload = {"_meta": meta, "data": data}
-
-    with open(file_path, "w") as f:
-        yaml.safe_dump(payload, f, default_flow_style=False, sort_keys=False)
-
-    return {
-        "ok": True,
-        "message": (
-            f"Sync complete ✅ Added {added_total} new records."
-            if added_total else
-            "Sync complete ✅ No new records to add."
-        ),
-        "added_total": added_total,
-        "added_by_module": added_by_module,
-        "fetched_by_module": fetched_by_module,
-        "last_sync_used": last_sync or "FIRST_RUN(full_fetch)",
-        "new_last_sync": meta["last_sync"]
-    }
-
-BASE_DIR = os.path.dirname(__file__)
-DATA_DIR = os.path.join(BASE_DIR, "data")
-TABLES_JSON = os.path.join(DATA_DIR, "tables.json")
-SCHEMA_YAML = os.path.join(DATA_DIR, "schema.yaml")
-
-SKIP_DOCTYPES = {
-    "DocType", "User", "Role", "Has Role", "Module Def",
-    "Property Setter", "Customize Form", "User Permission",
-    "Activity Log", "Access Log", "Error Log", "Version",
-    "Installed Applications", "Prepared Report",
-}
-
-def _load_json_list(path):
-    try:
-        with open(path, "r") as f:
-            x = json.load(f)
-        return x if isinstance(x, list) else []
-    except Exception:
-        return []
-
-def _save_json_list(path, items):
-    with open(path, "w") as f:
-        json.dump(items, f, indent=2, ensure_ascii=False)
-
 def _load_yaml(path):
     try:
         with open(path, "r") as f:
@@ -149,29 +304,12 @@ def _load_yaml(path):
     except Exception:
         return {}
 
+
 def _save_yaml(path, obj):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w") as f:
         yaml.safe_dump(obj, f, sort_keys=False, allow_unicode=True)
 
-def _tab(dt):
-    return f"tab{dt}"
-
-def _strip_tab(t):
-    return t[3:] if t.startswith("tab") else t
-
-# ✅ Incremental DocType fetch using modified + 2-minute buffer
-def get_doctypes_changed_since(last_sync):
-    filters = {"disabled": 0, "istable": 0}
-
-    if last_sync:
-        try:
-            since = add_to_date(last_sync, minutes=-2)  # buffer
-        except Exception:
-            since = last_sync
-        filters["modified"] = [">=", since]
-
-    doctypes = frappe.get_all("DocType", filters=filters, pluck="name")
-    return [dt for dt in doctypes if dt not in SKIP_DOCTYPES]
 
 def _get_openai_client():
     settings = frappe.get_single("ChangAI Settings")
@@ -188,150 +326,236 @@ def _get_openai_client():
 
     return openai.OpenAI(api_key=api_key)
 
+
+def _extract_json_object(text: str):
+    if not text or not str(text).strip():
+        return None
+
+    text = str(text).strip()
+    try:
+        obj = json.loads(text)
+        return obj if isinstance(obj, dict) else None
+    except Exception:
+        pass
+    start = text.find("{")
+    end = text.rfind("}")
+    if start != -1 and end != -1 and end > start:
+        candidate = text[start:end + 1]
+        try:
+            obj = json.loads(candidate)
+            return obj if isinstance(obj, dict) else None
+        except Exception:
+            return None
+
+    return None
+
+
+def _get_claude_client():
+    settings = frappe.get_single("ChangAI Settings")
+    api_key = None
+    try:
+        api_key = settings.get_password("claude_api_key")
+    except Exception:
+        api_key = None
+
+    if not api_key:
+        api_key = os.getenv("ANTHROPIC_API_KEY")
+
+    if not api_key:
+        frappe.logger().error(
+            "Claude API key missing. Set ChangAI Settings claude_api_key or env ANTHROPIC_API_KEY."
+        )
+        return None
+
+    return Anthropic(api_key=api_key)
+
+
 def _smart_desc_map(client, table_name, fields):
-    minimal = [
-        {"name": f.get("name"), "description": f.get("description", "")}
-        for f in fields
-    ]
+    """
+    Shorter prompt to reduce tokens + faster + less memory.
+    """
+    if not client:
+        return {}
+
+    minimal = [{"name": f.get("name"), "description": (f.get("description") or "")} for f in fields]
 
     prompt = f"""
-You are an expert ERP Data Engineer. For the database table '{table_name}',
-rewrite the description for each field so an embedding model can distinguish EXACTLY why/when to use it.
+Write ERPNext field descriptions for table: {table_name}
 
-Return JSON only: {{ "fieldname": "new description", ... }}
+Rules:
+- Do NOT rename field names.
+- Output ONLY a JSON object: {{"field_name": "description"}}
+- Each description must explain WHEN/WHY to use the field (business usage + disambiguation if needed).
+- 1–2 sentences per field.
 
-Fields:
-{json.dumps(minimal, indent=2)}
-"""
+Fields JSON:
+{json.dumps(minimal, ensure_ascii=False)}
+""".strip()
 
-    resp = client.chat.completions.create(
-        model="gpt-4o",
-        messages=[
-            {"role": "system", "content": "Output JSON only."},
-            {"role": "user", "content": prompt}
-        ],
-        response_format={"type": "json_object"}
-    )
-    return json.loads(resp.choices[0].message.content)
+    for attempt in range(3):
+        try:
+            msg = client.messages.create(
+                model="claude-sonnet-4-5",
+                max_tokens=900,
+                temperature=0.2,
+                system="Return ONLY a JSON object. No markdown. No extra text.",
+                messages=[{"role": "user", "content": prompt}]            )
+
+            text_parts = []
+            for b in getattr(msg, "content", []) or []:
+                if getattr(b, "type", None) == "text" and getattr(b, "text", None):
+                    text_parts.append(b.text)
+            text = "\n".join(text_parts).strip()
+
+            parsed = _extract_json_object(text)
+            if isinstance(parsed, dict):
+                out = {}
+                for k, v in parsed.items():
+                    if isinstance(k, str) and isinstance(v, str) and k.strip() and v.strip():
+                        out[k.strip()] = v.strip()
+                return out
+
+            frappe.logger().warning(
+                f"Claude returned non-JSON table={table_name} attempt={attempt+1} preview={text[:200]!r}"
+            )
+            time.sleep(2 * (attempt + 1))
+
+        except anthropic.RateLimitError as e:
+            frappe.logger().warning(f"Claude RateLimit table={table_name} attempt={attempt+1}: {e}")
+            time.sleep(2 * (attempt + 1))
+
+        except anthropic.APIConnectionError as e:
+            frappe.logger().warning(f"Claude ConnectionError table={table_name} attempt={attempt+1}: {e}")
+            time.sleep(2 * (attempt + 1))
+
+        except anthropic.APIStatusError as e:
+            status = getattr(e, "status_code", None)
+            frappe.logger().warning(f"Claude StatusError table={table_name} attempt={attempt+1} status={status}: {e}")
+            if status in (401, 403):
+                break
+            time.sleep(2 * (attempt + 1))
+
+        except Exception as e:
+            frappe.logger().error(f"Claude unknown error table={table_name} attempt={attempt+1}: {e}")
+            time.sleep(2 * (attempt + 1))
+
+    return {}
+
 
 @frappe.whitelist(allow_guest=False)
-def sync_tables_and_schema_smart():
-    os.makedirs(DATA_DIR, exist_ok=True)
-    payload = _load_yaml(SCHEMA_YAML)
+def fill_missing_field_descriptions(
+    batch_size: int = 3,
+    max_tables: int = 0,
+    checkpoint_every_table: int = 1,
+):
+    """
+    Fixes:
+    - Smaller batch size default (safer)
+    - Checkpoint saves after each table (so progress isn't lost)
+    - Optional max_tables for testing/partial runs
+    - GC to reduce memory buildup
+
+    Args:
+      batch_size: fields per LLM call
+      max_tables: 0 = no limit, else stop after processing N tables with updates
+      checkpoint_every_table: save YAML after each updated table (recommended 1)
+    """
+    frappe.logger().info("Description job started")
+
+    payload = _load_yaml(SCHEMA_YAML_1)
     meta = payload.get("_meta") or {}
     tables_blocks = payload.get("tables") or []
-    if not isinstance(meta, dict): meta = {}
-    if not isinstance(tables_blocks, list): tables_blocks = []
+    if not isinstance(tables_blocks, list):
+        return {"ok": False, "message": "schema.yaml invalid"}
 
-    last_doctype_sync = meta.get("last_doctype_sync")
+    client = _get_claude_client()
+    if not client:
+        return {"ok": False, "message": "Claude API key not configured (claude_api_key / ANTHROPIC_API_KEY)"}
 
-    changed_doctypes = get_doctypes_changed_since(last_doctype_sync)
-    changed_tables = sorted({_tab(dt) for dt in changed_doctypes})
+    BATCH_SIZE = max(1, int(batch_size))
+    updated_tables = 0
+    updated_fields = 0
 
-    existing_tables = _load_json_list(TABLES_JSON)
-    existing_set = set(existing_tables)
+    processed_updated_tables = 0
 
-    new_tables = [t for t in changed_tables if t not in existing_set]
-    merged = sorted(existing_set | set(new_tables))
-
-    if new_tables:
-        _save_json_list(TABLES_JSON, merged)
-
-    by_table = {b.get("table"): b for b in tables_blocks if isinstance(b, dict) and b.get("table")}
-
-    client = None
-    created_table_blocks = 0
-    new_fields_added = 0
-    new_field_descriptions_generated = 0
-    removed_fields_total = 0  # ✅ NEW
-
-    # ✅ Process NEW tables + CHANGED tables (so field renames in existing doctypes get handled)
-    tables_to_process = sorted(set(new_tables) | set(changed_tables))
-
-    for table in tables_to_process:
-        dt = _strip_tab(table)
-        if not frappe.db.exists("DocType", dt):
+    for block in tables_blocks:
+        if not isinstance(block, dict):
             continue
 
-        meta_dt = frappe.get_meta(dt)
-        current_fieldnames = [f.fieldname for f in meta_dt.fields if f.fieldname]
-        current_set = set(current_fieldnames)
+        table = block.get("table")
+        fields = block.get("fields") or []
+        if not table or not isinstance(fields, list):
+            continue
 
-        block = by_table.get(table)
+        pending_fields = [
+            f for f in fields
+            if isinstance(f, dict)
+            and f.get("name")
+            and not (f.get("description") or "").strip()
+        ]
+        if not pending_fields:
+            continue
 
-        # New table block
-        if not block:
-            block = {
-                "table": table,
-                "description": (meta_dt.description or "").strip(),
-                "fields": [{"name": fn, "description": ""} for fn in current_fieldnames]
-            }
-            tables_blocks.append(block)
-            by_table[table] = block
-            created_table_blocks += 1
-            new_fields_added += len(current_fieldnames)
+        frappe.logger().info(f"Table={table} pending_fields={len(pending_fields)}")
+        updated_in_table = 0
 
-            if block["fields"]:
-                client = client or _get_openai_client()
-                desc_map = _smart_desc_map(client, table, block["fields"])
-                for fld in block["fields"]:
-                    fn = fld.get("name")
-                    if fn in desc_map:
-                        fld["description"] = desc_map[fn]
-                        new_field_descriptions_generated += 1
+        for i in range(0, len(pending_fields), BATCH_SIZE):
+            batch = pending_fields[i:i + BATCH_SIZE]
+            frappe.logger().info(f"Table={table} batch={i//BATCH_SIZE + 1} size={len(batch)}")
 
-        else:
-            fields_list = block.get("fields") or []
-            if not isinstance(fields_list, list):
-                fields_list = []
+            desc_map = _smart_desc_map(client, table, batch) or {}
 
-            # ✅ REMOVE missing fields (handles rename/delete)
-            before = len(fields_list)
-            fields_list = [
-                f for f in fields_list
-                if isinstance(f, dict) and f.get("name") in current_set
-            ]
-            removed_fields_total += (before - len(fields_list))
+            for f in batch:
+                fn = f.get("name")
+                if fn and fn in desc_map and desc_map[fn].strip():
+                    f["description"] = desc_map[fn]
+                    updated_fields += 1
+                    updated_in_table += 1
 
-            existing_fieldnames = {
-                x.get("name")
-                for x in fields_list
-                if isinstance(x, dict) and x.get("name")
-            }
+            # reduce memory buildup during long jobs
+            gc.collect()
 
-            # ✅ Add new fields (includes renamed new name)
-            new_fieldnames = [fn for fn in current_fieldnames if fn not in existing_fieldnames]
-            if not new_fieldnames:
-                block["fields"] = fields_list
-                continue
+        if updated_in_table:
+            updated_tables += 1
+            processed_updated_tables += 1
 
-            new_fields = [{"name": fn, "description": ""} for fn in new_fieldnames]
-            fields_list.extend(new_fields)
-            block["fields"] = fields_list
-            new_fields_added += len(new_fields)
+            # ✅ checkpoint save so progress survives worker kill/timeout
+            if int(checkpoint_every_table) >= 1:
+                meta["last_desc_sync_partial"] = str(now_datetime())
+                payload = {"_meta": meta, "tables": tables_blocks}
+                _save_yaml(SCHEMA_YAML_1, payload)
+                frappe.logger().info(f"Checkpoint saved after table={table} updated_fields_in_table={updated_in_table}")
 
-            client = client or _get_openai_client()
-            desc_map = _smart_desc_map(client, table, new_fields)
-            for fld in new_fields:
-                fn = fld.get("name")
-                if fn in desc_map:
-                    fld["description"] = desc_map[fn]
-                    new_field_descriptions_generated += 1
+            # ✅ optional: stop early for testing
+            if int(max_tables) and processed_updated_tables >= int(max_tables):
+                frappe.logger().info(f"Stopping early due to max_tables={max_tables}")
+                break
 
-    meta["last_sync"] = str(now_datetime())
-    meta["last_doctype_sync"] = meta["last_sync"]
-
+    meta["last_desc_sync"] = str(now_datetime())
     payload = {"_meta": meta, "tables": tables_blocks}
-    _save_yaml(SCHEMA_YAML, payload)
+    _save_yaml(SCHEMA_YAML_1, payload)
+
+    frappe.logger().info(f"Description job finished tables={updated_tables} fields={updated_fields}")
 
     return {
         "ok": True,
-        "message": "Sync done ✅ (incremental doctypes + schema update)",
-        "new_tables_added": len(new_tables),
-        "new_table_blocks_created": created_table_blocks,
-        "new_fields_added": new_fields_added,
-        "removed_fields_total": removed_fields_total,  # ✅ NEW
-        "new_field_descriptions_generated": new_field_descriptions_generated,
-        "last_doctype_sync_used": last_doctype_sync or "FIRST_RUN",
-        "new_last_doctype_sync": meta["last_doctype_sync"]
+        "message": "Field descriptions generated ✅",
+        "tables_updated": updated_tables,
+        "fields_updated": updated_fields,
+        "last_desc_sync": meta["last_desc_sync"],
     }
+
+
+@frappe.whitelist()
+def sync_schema_and_enqueue_descriptions():
+    # keep schema sync (can be heavy, but usually OK). If it causes 504, enqueue it too.
+    sync_tables_and_schema_smart()
+
+    # ✅ increase timeout (not unlimited, but practical)
+    frappe.enqueue(
+        "changai.changai.api.v2.auto_gen_api.fill_missing_field_descriptions",
+        queue="long",
+        timeout=14400
+    )
+
+    return {"ok": True, "message": "Schema updated ✅ Field descriptions running in background 🧠"}

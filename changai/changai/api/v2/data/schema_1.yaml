@@ -1,0 +1,25 @@
+_meta:
+  last_sync: '2026-02-10 19:11:38.405335'
+  last_doctype_sync: '2026-02-10 19:11:38.405335'
+  last_desc_sync: '2026-02-10 18:49:28.309586'
+tables:
+- table: tabAbout Us Settings
+  description: Settings for the About Us Page
+  fields:
+  - name: name
+    description: Unique identifier for the About Us Settings configuration record.
+      This field is automatically generated and serves as the primary key for tracking
+      and referencing specific About Us page configurations. Use this when querying
+      or linking to a particular About Us settings instance, especially in systems
+      where multiple versions or configurations may exist for audit or versioning
+      purposes. Differs from other content fields as it is system-generated and immutable,
+      not user-editable content.
+  - name: footer
+    description: Footer content displayed at the bottom of the About Us page or section.
+      This field stores the closing text, disclaimers, copyright notices, or additional
+      company information that appears after the main About Us content. Use this when
+      you need to define or retrieve what legal notices, contact details, or supplementary
+      information appears at the end of the About Us presentation. Differs from main
+      About Us content body as it specifically targets bottom-of-page elements and
+      is typically shorter, more standardized text focused on legal, contact, or navigational
+      elements rather than company narrative or story.
