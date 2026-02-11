@@ -1,5 +1,6 @@
 # ChangAI — Open-Source AI Assistant for ERPNext & Frappe
 
+Test changes 
 **ChangAI** turns your ERPNext data into a natural-language chatbot — ask any business question in plain English and get instant, accurate answers without writing a single SQL query.
 
 Built with RAG, LLM-powered SQL generation, LangGraph orchestration, and strict SQL validation for safe and reliable ERP querying.
