@@ -138,7 +138,6 @@ def run_yaml(out_path: str, modules: List[str]) -> Dict[str, Any]:
         yaml.safe_dump(tables_yaml, f, sort_keys=False, allow_unicode=True)
 
     return {
-        "Hi":"Hi",
         "output_path": out_path,
         "modules_count": len(modules),
         "tables_count": len(tables_yaml),

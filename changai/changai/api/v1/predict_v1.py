@@ -1,5 +1,3 @@
-# Prediction interface for Cog ⚙️
-# https://cog.run/python
 import json
 from transformers import (
     RobertaTokenizerFast,
@@ -12,10 +10,6 @@ import torch
 torch._dynamo.config.suppress_errors = True
 
 import torch
-
-# import cog
-# from sentence_transformers import SentenceTransformer,util
-# from cog import BasePredictor, Input, Path
 
 # Load the HF_Models Repo IDs.
 ROBERTO_REPO = "hyrinmansoor/text2frappe-s1-roberta"

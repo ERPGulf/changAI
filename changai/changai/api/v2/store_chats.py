@@ -80,7 +80,7 @@ def get_chat_history_1(session_id):
         return []
 
     return history[-10:]
-PROMPT_FOLLOWUP = """You are ChangAI, an ERP entity-value detector + query rewriter.
+PROMPT_FOLLOWUP ="""You are ChangAI, an ERP entity-value detector + query rewriter.
 
 Return ONLY valid JSON with EXACTLY these keys:
 {{"standalone_question":"...","contains_values":true/false}}
@@ -88,33 +88,33 @@ Return ONLY valid JSON with EXACTLY these keys:
 Meaning of contains_values (STRICT):
 - true = the latest message contains ANY explicit or implied ENTITY IDENTIFIER that should be matched to master data
   (customer/supplier/item/warehouse/employee/etc.)
-  Examples (TRUE):
-  - "A. Williams"
-  - "Acme, Inc."
-  - "Amrin"
-  - "PEN-001"
-  - "Dell Latitude 7440"
-  - "Vertex Global Traders"
-  - "invoice of ayan" (implied name)
+
+Examples (TRUE):
+- "invoice of ayan" (implied name)
+- "who bought laptop last month"
+- "sales of pens today"
+- "top items in electronics category"
+
 - false = NO entity identifier is mentioned.
   This includes queries that only contain filters, time ranges, counts, ranking words, or statuses.
-  Examples (FALSE):
-  - "show all customers"
-  - "unpaid suppliers list"
-  - "sales orders pending delivery"
-  - "payment received this month"
-  - "top vendor dues list"
-  - "who bought pen today"  (treat generic product words like "pen" as NOT an entity)
-  - "today sales"
-  - "last 3 customers"
+
+Examples (FALSE):
+- "show all customers"
+- "unpaid suppliers list"
+- "sales orders pending delivery"
+- "payment received this month"
+- "top vendor dues list"
+- "today sales"
+- "last 3 customers"
 
 Rules:
-- Only entity names/codes make contains_values=true.
-- Do NOT treat dates/periods (today, this month), counts (top 5, last 3), statuses (pending, unpaid), or generic nouns
-  (pen, invoice, supplier, customer) as values.
+- Any reference to a product or product category (even if generic, e.g., laptop, pen, printer, phone, chair, electronics)
+  MUST be treated as an entity and set contains_values = true.
+- Only entity names/codes or product/category references make contains_values=true.
 - Rewrite only if needed; otherwise keep it unchanged.
-- When unsure, prefer contains_values=false unless a clear name/code exists.
-
+- When unsure between item vs non-item, prefer contains_values=true.
+- true also when the message contains a PRODUCT CATEGORY or ITEM GROUP or any similar entity filters like emntioned before,
+  that must be resolved to master data records.
 
 Chat history (use ONLY human lines):
 {rows}
@@ -122,7 +122,6 @@ Chat history (use ONLY human lines):
 Latest user message:
 {qstn}
 """
-
 @frappe.whitelist(allow_guest=False)
 def respond_from_cache(user_question:str):
     if user_question:

@@ -1,10 +1,28 @@
+function getOrCreateChatId() {
+  const KEY = "changai_chat_id";
+  let chatId = sessionStorage.getItem(KEY);
+
+  if (!chatId) {
+    chatId = `session_${Date.now()}_${crypto.randomUUID()}`;
+    sessionStorage.setItem(KEY, chatId);
+  }
+  return chatId;
+}
+
+function normalizeBotText(bot) {
+            if (typeof bot === "string") return bot;
+            if (bot && typeof bot === "object") {
+                return bot.answer || bot.text || "";
+            }
+            return "";
+    }
 document.addEventListener('DOMContentLoaded', () => {
     const chatbotHTML = `
   <button id="chatbot-toggler" class="chatbot-toggler">
     <svg class="icon icon-chat" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
         <path
         d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8l-4 4v-4H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"
-        fill="currentColor" stroke="currentColor" stroke-width="2s"
+        fill="currentColor" stroke="currentColor" stroke-width="2"
         stroke-linecap="miter" stroke-linejoin="miter" />
     </svg>
   <!-- close (X) -->
@@ -195,26 +213,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         generateBotResponse(message, thinkingMsg, warmingTimeout);
     }
-    function normalizeBotText(bot) {
-            if (typeof bot === "string") return bot;
-            if (bot && typeof bot === "object") {
-                return bot.answer || bot.text || "";
-            }
-            return "";
-    }
-
-function getOrCreateChatId() {
-  const KEY = "changai_chat_id";
-  let chatId = sessionStorage.getItem(KEY);
-
-  if (!chatId) {
-    chatId = `session_${Date.now()}_${Math.random().toString(16).slice(2)}`;
-    sessionStorage.setItem(KEY, chatId);
-  }
-
-  return chatId;
-}
-
 async function generateBotResponse(userMsg, thinkingMsg, warmingTimeout) {
   try {
     const API_URL = await frappe.db.get_single_value(
@@ -341,4 +339,28 @@ async function generateBotResponse(userMsg, thinkingMsg, warmingTimeout) {
 
     // Initially hide chatbot popup
     toggleChatbot(false);
+});
+
+frappe.ui.form.on("ChangAI Settings", {
+  update_masterdata_file(frm) {
+    frappe.call({
+      method: "changai.changai.api.v2.auto_gen_api.sync_master_data_smart",
+      freeze: true,
+      freeze_message: "Updating Master Data...",
+      callback(r) {
+        console.log(r.message)
+      }
+    });
+  },
+  update_schema_file(frm) {
+  frappe.call({
+  method: "changai.changai.api.v2.auto_gen_api.sync_schema_and_enqueue_descriptions",
+  freeze: true,
+  freeze_message: "Syncing schema...",
+  callback(r) {
+    console.log(r.message)
+      }
+});
+
+  }
 });

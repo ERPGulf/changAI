@@ -1,15 +1,40 @@
 [
-  {
-    "anchor": "total sales amount last quarter for acme?",
+{
+  "query": "total sales amount last quarter for acme?",
+  "query_id": "erp_sales_002",
+  "schema_context": {
     "positives": [
-      "[TABLE] tabSales Invoice",
-      "[FIELD] posting_date | [TABLE] tabSales Invoice",
-      "[FIELD] base_grand_total | [TABLE] tabSales Invoice",
-      "[FIELD] customer | [TABLE] tabSales Invoice",
-      "[ENTITY_CARD] tabCustomer::Acme, Inc.",
-      "[ENTITY_FIELD] tabSales Invoice.customer | tabCustomer"
-    ]
-  },
+      {
+        "name": "Sales Invoice",
+        "type": "header_document",
+        "description": "Primary table for finalized sales transactions. Use for financial reporting.",
+        "temporal_filter": "posting_date (Standard date field for quarterly/monthly sales)",
+        "status_filter": "docstatus=1 (Ensures only submitted/legal invoices are counted)",
+        "aggregation_fields": ["base_grand_total (Total value in company currency)"],
+        "link_fields": ["customer (Links to Customer master via name)"]
+      },
+      {
+        "name": "Customer",
+        "type": "master_data",
+        "description": "Stores company names and identifiers. Required to resolve 'Acme' to a specific ID.",
+        "search_fields": ["customer_name", "name"]
+      }
+    ],
+    "hard_negatives": [
+      {
+        "name": "Sales Order",
+        "reason": "This is a booking/commitment, not a finalized sale. Using this would overstate actual revenue.",
+        "confusing_field": "transaction_date (Looks like posting_date but represents order date)"
+      },
+      {
+        "name": "Item",
+        "reason": "Contains product info. While 'Acme' might be a supplier, it is not the correct table for sales totals.",
+        "confusing_field": "valuation_rate (Could be mistaken for sales price)"
+      }
+    ],
+    "join_logic": "tabSales Invoice.customer = tabCustomer.name"
+  }
+},
   {
     "anchor": "can u get me total sales ammount for acme last qtr pls",
     "positives": [

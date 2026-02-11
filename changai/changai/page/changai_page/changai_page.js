@@ -1,9 +1,4 @@
 frappe.pages['changai-page'].on_page_load = function (wrapper) {
-	var page = frappe.ui.make_app_page({
-		parent: wrapper,
-		title: 'Changai',
-		single_column: true
-	});
 
 	const $page = $(wrapper);
 	$page.find('.layout-main-section').html(`

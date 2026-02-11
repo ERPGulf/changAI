@@ -261,7 +261,6 @@ Write a clear final answer for the user based strictly on the JSON above.
                 conf = 0.5
             conf = max(0.0, min(1.0, conf))
 
-            reason = str(obj.get("reason") or "").strip()[:160] or "Classified."
 
             return {
                 "task_flag": flag,

@@ -1,0 +1,4 @@
+From the following list of available tables, return only the table names needed to generate an SQL query that answers the user question.
+User Question:
+{user_question}
+Available Tables: {table_list} Output only the table names (as a JSON array).

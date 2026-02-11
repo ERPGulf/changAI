@@ -16,9 +16,26 @@ non_erp_res=""
 import base64
 import time
 from werkzeug.wrappers import Response
+import frappe
+from google import genai
+from google.genai import types
+from langchain_community.embeddings import HuggingFaceEmbeddings
+from google.oauth2 import service_account
+import frappe
+from typing import List, Dict, Any, Optional
+from langchain_community.vectorstores import FAISS
+from langchain_huggingface import HuggingFaceEmbeddings
+import os
+import yaml
+from typing import Any, Dict, List, Optional
+from langchain_core.documents import Document
+from langchain_community.vectorstores import FAISS
+from langchain_huggingface import HuggingFaceEmbeddings
 __vector_store = None
+_SCHEMA_VS = None
 
 
+@frappe.whitelist(allow_guest=True)
 def get_settings():
     settings=frappe.get_single("ChangAI Settings")
     langsmith_tracing = "true" if settings.langsmith_tracing else "false"
@@ -39,12 +56,21 @@ def get_settings():
         "deploy_url":settings.deploy_url,
         "entity_retriever":settings.entity_retriever,
         "support_api_url":settings.support_url,
-        "get_ticket_details_url":settings.get_ticket_details_url
+        "get_ticket_details_url":settings.get_ticket_details_url,
+        "llm":settings.llm,
+        "location":settings.gemini_location,
+        "retriever_structure":settings.retriever_structure,
+        "gemini_file_path":settings.gemini_file_path,
+        "gemini_project_id":settings.gemini_project_id
+
     }
     return config
 
 
+MODEL_ID = "gemini-2.5-flash-lite"
 CONFIG = get_settings()
+PROJECT_ID = CONFIG["gemini_project_id"]
+KEY_PATH = CONFIG["gemini_file_path"]
 RETRY_LIMIT=2
 BACKEND_SERVER_SETTINGS = "Backend Server Settings"
 INDEX_PATH = f"{CONFIG['ROOT_PATH']}/changai/changai/changai/faiss_index_hnsw_v2"
@@ -99,7 +125,6 @@ def generate_token_secure(api_key, api_secret, app_key):
             return {"ok": False, "error": "OAuth client not found / invalid app_key"}
 
         if clientID is None:
-            # return app_key
             return Response(
                 json.dumps(
                     {"message": "Security Parameters are not valid", "user_count": 0}
@@ -109,7 +134,7 @@ def generate_token_secure(api_key, api_secret, app_key):
             )
 
         client_id = clientID  # Replace with your OAuth client ID
-        client_secret = clientSecret  # Replace with your OAuth client secret
+        client_secret = clientSecret
 
         url = (
             frappe.local.conf.host_name
@@ -229,14 +254,15 @@ def whoami():
 
 @frappe.whitelist(allow_guest=False)
 def call_model(prompt: str, task: str = "llm") -> Any:
-    if CONFIG["REMOTE"]:
+    if CONFIG["REMOTE"] and CONFIG["llm"]=="QWEN3":
         return remote_llm_request_deploy_test(prompt=prompt, task=task)
-    else:
-        return local_llm_request(prompt)
+    elif CONFIG["llm"]=="Gemini":
+        return call_gemini(prompt)
+    return local_llm_request(prompt)
 
 
 def call_embedder(question):
-    return remote_embedder_request(question) if CONFIG["REMOTE"] else local_embedder_request(question)
+    return remote_embedder_request(question) if CONFIG["REMOTE"]  else local_embedder_request(question)
 
 
 def _post_json(url: str, headers: Dict[str, str], payload: Dict[str, Any], timeout: int = 120):
@@ -386,6 +412,51 @@ def remote_llm_request(prompt: str):
 
 
 @frappe.whitelist(allow_guest=False)
+def call_gemini(prompt):
+    try:
+        # Authenticate once
+        creds = service_account.Credentials.from_service_account_file(
+            KEY_PATH, 
+            scopes=['https://www.googleapis.com/auth/cloud-platform']
+        )
+
+        # Initialize the Client once
+        client = genai.Client(
+            vertexai=True,
+            project=PROJECT_ID,
+            location=CONFIG["location"],
+            credentials=creds
+        )
+        # Set System Instruction
+        config = types.GenerateContentConfig(
+            system_instruction="You are an ERPNext assistant.Follow the task instructions exactly.",
+        )
+        contents = [
+            {
+                "role": "user",
+                "parts": [{"text": str(prompt)}]
+            }
+        ]
+
+        response = client.models.generate_content(
+            model=MODEL_ID,
+            config=config,
+            contents=contents
+        )
+        text = (response.text or "").strip()
+        if text.startswith("```"):
+            text = text.replace("```json", "").replace("```", "").strip()
+
+        return text
+
+
+    except Exception as e:
+        return {
+            "error": str(e)
+        }
+
+
+@frappe.whitelist(allow_guest=False)
 def remote_llm_request_deploy_test(
     prompt: str = "",
     task: str = "llm",
@@ -477,7 +548,7 @@ def remote_embedder_request(formatted_q: str) -> Union[list, str]:
             result = response["body"]["output"]
             return result
     except Exception as e:
-        return {"Error":str(e)}
+        return "Error: " + str(e)
 
 
 def local_embedder_request(question: str):
@@ -503,6 +574,8 @@ def read_text(path):
 CONVERSATION_TEMPLATE=read_text(TEMPLATE_PATH)
 mapping_data=read_json(MAPPING_SCHEMA_PATH)
 SQL_PROMPT=read_text(SQL_PROMPT_PATH)
+FILTER_TABLES=read_text("/opt/hyrin/frappe-bench/apps/changai/changai/changai/prompts/filter_tables.txt")
+filter_fields=read_text("/opt/hyrin/frappe-bench/apps/changai/changai/changai/prompts/filter_fields.txt")
 FORMAT_PROMPT=read_text(FORMAT_PROMPT_PATH)
 NON_ERP_PROMPT=read_text(NON_ERP_PROMPT_PATH)
 BUSINESS_KEYWORDS=read_json(BUSINESS_KEYWORDS_PATH)["business_keywords"]
@@ -517,6 +590,7 @@ class SQLState(TypedDict,total=False):
     hits: List[Any]
     context :str
     sql:str
+    orm:str
     validation:Dict[str,Any]
     error:Optional[str]
     tries:int
@@ -526,6 +600,11 @@ class SQLState(TypedDict,total=False):
     non_erp_res:str
     entity_cards: List[str]
     entity_raw: Any
+    retrieval_mode: str
+    top_tables: List[str]
+    selected_tables: List[str]
+    top_fields: Dict[str, Any]
+    selected_fields: str
 
 
 def fill_sql_prompt(question: str, context: str) -> str:
@@ -553,6 +632,7 @@ def send_non_erp_request(state:SQLState) -> SQLState:
         return {**state,"prompt":prompt,"non_erp_res":response,"error":None}
     except Exception as e:
         return {**state,"non_erp_res": "", "error": f"NON-ERP call failed: {e}"}
+
 
 @traceable(name="rewrite_question", run_type="tool")
 def rewrite_question(state: SQLState) -> SQLState:
@@ -606,13 +686,175 @@ def rewrite_question(state: SQLState) -> SQLState:
             "contains_values": False,
             "formatting_prompt": prompt,
         }
+emb=HuggingFaceEmbeddings(model_name="hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned")
+
+vs = FAISS.load_local(
+    "/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/v2/table_only_fvs",
+    emb,
+    allow_dangerous_deserialization=True
+)
+
+def call_fvs_table_search(q):
+    hits = vs.similarity_search(q, k=15)
+    out, seen = [], set()
+    for h in hits:
+        t = h.metadata.get("table")
+        if t and t not in seen:
+            seen.add(t)
+            out.append(t)
+    return out
+
+def _parse_json_list(raw: str):
+    try:
+        data = json.loads(raw)
+        return data if isinstance(data, list) else []
+    except Exception:
+        return []
+
+
+@frappe.whitelist(allow_guest=True)
+def call_retriev_multi_line(user_question):
+    top_tables = call_fvs_table_search(user_question)
+    table_prompt = FILTER_TABLES.replace("{user_question}", user_question)
+    table_prompt = table_prompt.replace("{table_list}", json.dumps(top_tables, ensure_ascii=False))
+    selected_raw = call_gemini(table_prompt)
+    selected_tables = _parse_json_list(selected_raw)
+    top_set = set(top_tables)
+    selected_tables = [t for t in selected_tables if t in top_set]
+    if not selected_tables:
+        return {"selected_fields": {}, "selected_tables": [], "top_tables": top_tables}
+    fields_candidates = {}
+    for table in selected_tables:
+        fields_candidates[table] = call_fvs_field_search(
+            user_question,
+            table_name=table,
+            selected_tables=selected_tables,
+            k=40
+        )
+    field_prompt = filter_fields.replace("{user_question}", user_question)
+    field_prompt = field_prompt.replace("{fields_tables}", json.dumps(fields_candidates, ensure_ascii=False))
+    selected_raw = call_gemini(field_prompt)
+    try:
+        selected_map = json.loads(selected_raw) if isinstance(selected_raw, str) else {}
+    except Exception:
+        selected_map = {}
+    return {"selected_fields": json.dumps(selected_map, ensure_ascii=False),"top_tables":top_tables,"top_fields":fields_candidates}
+
+
+_FIELDS_EMB = None
+_FULL_FIELDS_VS = None
+_SUB_VS_CACHE = {}
+
+FULL_FIELDS_VS_PATH = "/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/v2/business_only_schema_fvs"
+
+
+def get_fields_embedder():
+    global _FIELDS_EMB
+    if _FIELDS_EMB is None:
+        _FIELDS_EMB = HuggingFaceEmbeddings(
+            model_name="hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned"
+        )
+    return _FIELDS_EMB
+
+
+def get_full_fields_vs():
+    global _FULL_FIELDS_VS
+    if _FULL_FIELDS_VS is None:
+        emb = get_fields_embedder()
+        _FULL_FIELDS_VS = FAISS.load_local(
+            FULL_FIELDS_VS_PATH,
+            emb,
+            allow_dangerous_deserialization=True
+        )
+    return _FULL_FIELDS_VS
+
+
+def get_sub_vs(selected_tables: list):
+    """Build sub-index ONCE per unique selected_tables set (cached)."""
+    key = tuple(sorted([t for t in selected_tables if isinstance(t, str)]))
+    if not key:
+        return None
+
+    global _SUB_VS_CACHE
+    if key in _SUB_VS_CACHE:
+        return _SUB_VS_CACHE[key]
+
+    full_vs = get_full_fields_vs()
+    emb = get_fields_embedder()
+
+    selected_set = set(key)
+    doc_dict = getattr(full_vs.docstore, "_dict", {})
+    docs = []
+    for d in doc_dict.values():
+        meta = getattr(d, "metadata", {}) or {}
+        if meta.get("table") in selected_set:
+            docs.append(d)
+    sub = FAISS.from_documents(docs, emb)
+    _SUB_VS_CACHE[key] = sub
+    return sub
+def call_fvs_field_search(
+    user_question: str,
+    table_name: str,
+    selected_tables: List[str],
+    k: int = 40,
+) -> List[Dict[str, Any]]:
+
+    if not user_question or not table_name:
+        return []
+
+    sub_vs = get_sub_vs(selected_tables)
+    if sub_vs is None:
+        return []
+
+    # Reduce k from 200 -> ~60 (you only need 40)
+    hits = sub_vs.similarity_search(user_question, k=min(60, max(40, k)))
+
+    results: List[Dict[str, Any]] = []
+    seen = set()
+
+    for d in hits:
+        meta = getattr(d, "metadata", {}) or {}
+        tbl = meta.get("table")
+        fld = meta.get("field")
+        if tbl != table_name:
+            continue
+
+        key = (tbl, fld)
+        if key in seen:
+            continue
+        seen.add(key)
+
+        row = {
+            "field": fld,
+        }
+        if meta.get("join_hint"):
+            row["join_hint"] = meta.get("join_hint")
+        if meta.get("options"):
+            row["options"] = meta.get("options")
+
+        results.append(row)
+        if len(results) >= k:
+            break
+
+    return results
 
 
 # # Node 1: Retrive with Fiass Vector Store.
 @traceable(name="schema_retriever", run_type="tool")
 def schema_retriever(state: SQLState) -> SQLState:
-    hits = call_embedder(state.get("formatted_q", "") or state.get("question", ""))
-    return {**state, "hits": hits}
+    if CONFIG["retriever_structure"]=="single line":
+        hits = call_embedder(state.get("formatted_q", "") or state.get("question", ""))
+        return {**state, "hits": hits}
+    else:
+        out = call_retriev_multi_line(state.get("formatted_q") or state.get("question") or "")
+        return {
+            **state,
+            "retrieval_mode": "multi",
+            "top_tables": out.get("top_tables", []),
+            "top_fields": out.get("top_fields", {}),
+            "selected_fields": out.get("selected_fields", ""),
+            "selected_tables": out.get("selected_tables", []),
+        }
 
 
 # # Node 2: Build schema context from hits - for SQL Prompt
@@ -635,10 +877,24 @@ def hits_to_prompt_context(state:SQLState) -> SQLState:
 # # Node 3:Generate the SQL Prompt and call LLM(Ollama Http)
 @traceable(name="generate_sql", run_type="tool")
 def generate_sql(state:SQLState) -> SQLState:
-    prompt=fill_sql_prompt(state["formatted_q"],state["context"])
+    selected_fields = state.get("selected_fields") or ""
+    entity_cards = state.get("entity_cards") or []
+    entity_block = ""
+    if entity_cards:
+        entity_block = "\n\nENTITY_CARDS:\n" + "\n".join(map(str, entity_cards))
+    if CONFIG["retriever_structure"]=="multi line":
+        context = (selected_fields or "") + (entity_block or "")
+        prompt = fill_sql_prompt(state["formatted_q"], context)
+    else:
+        prompt=fill_sql_prompt(state["formatted_q"],state["context"])
     try:
-        response=call_model(prompt, "llm")
-        return {**state,"sql_prompt":prompt,"sql":response,"error":None}
+        # response=call_model(prompt, "llm")
+        response=call_model(prompt)
+        if isinstance(response, str):
+            response = json.loads(response)
+        sql = response.get("sql", "")
+        orm = response.get("orm", "")
+        return {**state,"sql_prompt":prompt,"sql":sql,"orm":orm,"error":None}
     except Exception as e:
         return {**state,"error": f"LLM call failed: {e}","sql_prompt":prompt}
 
@@ -646,7 +902,7 @@ def generate_sql(state:SQLState) -> SQLState:
 # # Node 4:Validate the SQL Generate with meta schema mapping using SQLGlot
 @traceable(name="validate_sql", run_type="tool")
 def validate_sql(state: SQLState) -> SQLState:
-    sql = (state.get("sql") or "")
+    sql = clean_sql(state.get("sql") or "")
     if not sql:
         return {
             **state,
@@ -716,7 +972,11 @@ def repair_sqlquery(state: SQLState) -> SQLState:
 
     try:
         response = call_model(patched_prompt,"llm")
-        return {**state, "sql": response, "tries": tries, "error": None}
+        if isinstance(response, str):
+            response = json.loads(response)
+            sql = response.get("sql", "")
+            orm = response.get("orm", "")
+        return {**state, "sql": sql, "tries": tries, "error": None}
     except Exception as e:
         return {**state, "tries": tries, "error": f"Repair call failed {e}"}
 
@@ -731,7 +991,7 @@ def detect_specific_entities(state: SQLState) -> SQLState:
         return {**state, "entity_cards": [], "entity_raw": None}
 
     try:
-        out = call_entity_retriever(q)  # {"raw": ..., "cards": [...]}
+        out = call_entity_retriever(q)
         return {
             **state,
             "entity_cards": out.get("cards") or [],
@@ -742,8 +1002,26 @@ def detect_specific_entities(state: SQLState) -> SQLState:
         return {**state, "entity_cards": [], "entity_raw": {"error": str(e)}}
 
 
+def route_after_entities(state: SQLState) -> str:
+    return "DIRECT" if CONFIG.get("retriever_structure") == "multi line" else "CONTEXT"
+
+
 def route_guardrail(state:SQLState):
     return "ERP" if state.get("query_type")=="ERP" else "NON_ERP"
+def clean_sql(s):
+    if isinstance(s, dict):
+        s = s.get("output") or s.get("sql") or s.get("text") or json.dumps(s, ensure_ascii=False, default=str)
+    elif isinstance(s, list):
+        s = "\n".join(map(str, s))
+    else:
+        s = str(s) if s is not None else ""
+
+    s = s.strip()
+    s = re.sub(r"^\s*```(?:sql)?\s*", "", s, flags=re.I)
+    s = re.sub(r"\s*```\s*$", "", s)
+    s = re.sub(r"^\s*sql\s*\n", "", s, flags=re.I)
+
+    return s.strip()
 
 
 # # Router to decide next stage:
@@ -759,15 +1037,34 @@ def router(state:SQLState) -> str:
         return "repair"
     return "end"
 
+from sqlglot import exp
+import sqlglot
+from typing import Dict, List
+from typing import Dict, List, Any, Set, Tuple
+import sqlglot
+from sqlglot import exp
+from typing import Any, Dict, List, Tuple, Set
+import sqlglot
+from sqlglot import exp
 
-def validate_sql_against_mapping(sql_text: str, mapping: Dict[str, List[str]], dialect: str = "mysql"):
+def validate_sql_against_mapping(
+    sql_text: str,
+    mapping: Dict[str, List[str]],
+    dialect: str = "mysql"
+) -> Dict[str, Any]:
     result = {
         "ok": True,
         "unknown_tables": [],
         "unknown_columns": [],
         "ambiguous_columns": [],
-        "details": {}
+        "details": {
+            "from_tables": [],
+            "alias_to_table": {},
+            "derived_aliases": [],
+            "select_aliases": [],  # ✅ added (optional, but useful for debugging)
+        },
     }
+
     try:
         ast = sqlglot.parse_one(sql_text, read=dialect)
     except Exception as e:
@@ -775,70 +1072,99 @@ def validate_sql_against_mapping(sql_text: str, mapping: Dict[str, List[str]], d
         result["details"]["parse_error"] = str(e)
         return result
 
-    tables = []
+    base_tables: List[str] = []
+    alias_to_table: Dict[str, str] = {}
+
     for t in ast.find_all(exp.Table):
         name = t.name
-        if name:
-            tables.append(name)
+        if not name:
+            continue
+        base_tables.append(name)
 
-    tables = list(dict.fromkeys(tables))
-    unknown_tables = [t for t in tables if t not in mapping]
+        a = t.args.get("alias")
+        if a and a.name:
+            alias_to_table[a.name] = name
+
+    base_tables = list(dict.fromkeys(base_tables))
+    result["details"]["from_tables"] = base_tables
+    result["details"]["alias_to_table"] = alias_to_table
+
+    unknown_tables = [t for t in base_tables if t not in mapping]
     if unknown_tables:
         result["ok"] = False
         result["unknown_tables"] = unknown_tables
 
-    col_to_tables = {}
-    for tbl, cols in mapping.items():
-        for c in cols:
-            col_to_tables.setdefault(c, set()).add(tbl)
+    derived_aliases: Set[str] = set()
+    for sq in ast.find_all(exp.Subquery):
+        a = sq.args.get("alias")
+        if a and a.name:
+            derived_aliases.add(a.name)
+    for cte in ast.find_all(exp.CTE):
+        a = cte.args.get("alias")
+        if a and a.name:
+            derived_aliases.add(a.name)
 
-    from_tables = set(tables)
-    ambiguous = set()
-    unknown_cols = []
+    result["details"]["derived_aliases"] = sorted(derived_aliases)
+
+    # ✅ NEW: collect SELECT projection aliases (e.g. COUNT(*) AS invoice_count)
+    select_aliases: Set[str] = set()
+    for sel in ast.find_all(exp.Select):
+        for proj in sel.expressions:
+            if isinstance(proj, exp.Alias):
+                if proj.alias:  # alias is a string
+                    select_aliases.add(proj.alias)
+
+    result["details"]["select_aliases"] = sorted(select_aliases)
+
+    unknown_cols: List[Tuple[str, str]] = []
+    ambiguous: Set[str] = set()
+    base_tables_set = set(base_tables)
 
     for col in ast.find_all(exp.Column):
         col_name = col.name
-        qualifier = col.table
+        qual = col.table  # qualifier (alias or table), may be None
         if not col_name:
             continue
 
-        if qualifier:
-            qual = str(qualifier)
-            base_table_for_alias = None
-            for j in ast.find_all(exp.Alias):
-                pass
-            table_name = qual.strip("`")
-            if table_name in mapping:
-                if col_name not in mapping[table_name]:
-                    unknown_cols.append((col_name, table_name))
-            else:
-                resolved = False
-                for sub in ast.find_all(exp.From):
-                    for source in sub.find_all(exp.Table):
-                        alias = source.args.get("alias")
-                        if alias and alias.name == qual and source.name in mapping:
-                            if col_name not in mapping[source.name]:
-                                unknown_cols.append((col_name, source.name))
-                            resolved = True
-                            break
-                    if resolved:
-                        break
-                if not resolved:
-                    unknown_cols.append((f"{qual}.{col_name}", None))
+        if qual:
+            q = str(qual)
+
+            # If referencing a derived table alias, skip schema validation here
+            if q in derived_aliases:
+                continue
+
+            if q in mapping:
+                if col_name not in mapping[q]:
+                    unknown_cols.append((f"{q}.{col_name}", q))
+                continue
+
+            if q in alias_to_table:
+                real_table = alias_to_table[q]
+                if real_table in mapping and col_name not in mapping[real_table]:
+                    unknown_cols.append((f"{q}.{col_name}", real_table))
+                continue
+
+            unknown_cols.append((f"{q}.{col_name}", None))
+
         else:
-            candidates = [t for t in from_tables if col_name in mapping.get(t, [])]
+            # ✅ NEW: if unqualified identifier matches a SELECT alias, allow it
+            # This fixes ORDER BY invoice_count / HAVING invoice_count, etc.
+            if col_name in select_aliases:
+                continue
+
+            candidates = [t for t in base_tables_set if col_name in mapping.get(t, [])]
             if len(candidates) == 0:
                 unknown_cols.append((col_name, None))
             elif len(candidates) > 1:
                 ambiguous.add(col_name)
-            # if exactly 1 → fine
 
     if unknown_cols or ambiguous:
         result["ok"] = False
         result["unknown_columns"] = unknown_cols
         result["ambiguous_columns"] = sorted(ambiguous)
-    result["details"]["from_tables"] = tables
+
     return result
+
 
 
 # Building the Workflow Graph
@@ -857,8 +1183,8 @@ workflow.add_edge("rewrite_question", "guardrail_router")
 workflow.add_conditional_edges("guardrail_router",route_guardrail,{"ERP":"retrieve","NON_ERP":"send_non_erp_request"})
 workflow.add_edge("send_non_erp_request", END)
 workflow.add_edge("retrieve","detect_entities")
-workflow.add_edge("detect_entities", "build_context")
-workflow.add_edge("build_context", "generate_sql")   
+workflow.add_conditional_edges("detect_entities", route_after_entities, {"CONTEXT":"build_context","DIRECT":"generate_sql"})
+workflow.add_edge("build_context", "generate_sql")
 workflow.add_edge("generate_sql","validate_sql")
 workflow.add_conditional_edges("validate_sql",router,{"repair":"repair_sql","end":END})
 workflow.add_edge("repair_sql","validate_sql")
@@ -868,17 +1194,41 @@ app=workflow.compile(checkpointer=checkpointer)
 
 #to execute the sql returned inside frappe
 @frappe.whitelist(allow_guest=False)
-def execute_query(query:str):
-    # q = (query or "").strip()
-    # if not q.upper().startswith("SELECT") or ";" in q:
-    #     return {"error": "Only a single SELECT statement is allowed."}
+def execute_query(sql:str,orm:str):
     try:
-        result=frappe.db.sql(query,as_dict=True)
-        return result
+        if orm:
+            result=frappe.db.sql(sql,as_dict=True)
+            return result
     except Exception as e:
         return {"error":f"SQL Execution Failed : {e}"}
 
+@frappe.whitelist(allow_guest=False)
+def execute_query_1(mode: str, sql,orm):
+    try:
+        mode = (mode or "").lower().strip()
 
+        if mode == "sql":
+            if not sql.lower().strip().startswith("select"):
+                frappe.throw("Only SELECT queries are allowed.")
+
+            return frappe.db.sql(sql, as_dict=True)
+
+        elif mode == "orm":
+            if not isinstance(orm, dict):
+                frappe.throw("ORM query must be JSON object.")
+
+            return frappe.get_all(
+                query.get("doctype"),
+                filters=query.get("filters"),
+                fields=query.get("fields"),
+            )
+
+        else:
+            frappe.throw("Mode must be 'sql' or 'orm'.")
+
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), "Query Execution Failed")
+        return {"error": str(e)}
 
 
 
@@ -989,8 +1339,12 @@ def format_data_conversationally(user_data):
     Formats user data using the single, powerful conversational Jinja2 template.
     """
     env = jinja2.Environment(
-        trim_blocks=True, lstrip_blocks=True, extensions=["jinja2.ext.do"]
-    )
+    autoescape=True,
+    trim_blocks=True,
+    lstrip_blocks=True,
+    extensions=["jinja2.ext.do"]
+)
+
     template = env.from_string(CONVERSATION_TEMPLATE)
     return template.render(data=user_data)
 
@@ -1002,24 +1356,27 @@ def format_data(qstn, sql_data):
         db_result_json = json.dumps(sql_data, ensure_ascii=False, default=str)
     else:
         db_result_json = str(sql_data) if sql_data is not None else "{}"
+    prompt=f"""
+INSTRUCTIONS:
+- Convert raw database results into a short, friendly, human-readable answer.
+- You may use BOTH: (1) the user question and (2) the DB result JSON to form the answer.
+- Use ONLY values present in the JSON. NEVER invent numbers or fields.
+- Keep the answer brief (1–6 lines).
+- If the question asks for last/top/highest/total, interpret based strictly on the JSON rows.
 
-    output = remote_llm_request_deploy_test(
-        prompt="",
-        task="format_db",
-        question=qstn,
-        db_result_json=db_result_json,
+QUESTION:
+{qstn}
+
+DATABASE_RESULT_JSON:
+{json.dumps(db_result_json, ensure_ascii=False, default=str)}
+
+OUTPUT:
+Write a clear final answer for the user based strictly on the JSON above.
+"""
+    output = call_model(
+        prompt=prompt
     )
-
-    if isinstance(output, dict):
-        if output.get("Error"):
-            return {
-                "answer": "Sorry, I couldn't format the data right now.",
-                "error": output
-            }
-        answer = output.get("answer") or output.get("text") or json.dumps(output)
-    else:
-        answer = str(output)
-
+    answer = str(output)
     return {"answer": answer}
 
 
@@ -1231,7 +1588,7 @@ def hits_to_schema_context(
         for ent, filt in entities:
             if show_entity_filters_yaml and isinstance(filt, dict) and filt:
                 lines.append(f"  - Entity: {ent}")
-                lines.append(f"    Filters:")
+                lines.append(f"    Filters:",{filt})
                 for k, v in filt.items():
                     vv = ", ".join(map(str, v)) if isinstance(v, (list, tuple)) else str(v)
                     lines.append(f"      {k}: {vv}")
@@ -1272,7 +1629,6 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
     entity_debug = {
     "contains_values": final.get("contains_values"),
     "entity_cards": final.get("entity_cards") or [],
-    "entity_raw": final.get("entity_raw"),
 }
     type_ = final.get("query_type") or "NON_ERP"
     if type_ == "NON_ERP":
@@ -1301,22 +1657,22 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
             "Bot": non_erp_res,
         }
 
-    sql = (final.get("sql") or "").strip()
+    sql  = clean_sql(final.get("sql"))or ""
+    orm  = clean_sql(final.get("orm"))or ""
+    fields=(final.get("selected_fields") or "").strip()
     formatted_q = (final.get("formatted_q") or "").strip()
     formatting_prompt = (final.get("formatting_prompt") or "")
     sql_prompt = (final.get("sql_prompt") or "")
     val = final.get("validation") or {}
     ok = bool(val.get("ok"))
     if not ok or not sql.upper().startswith("SELECT"):
-        context = (final.get("context") or "")[:800]
+        context = (final.get("context") or final.get("selected_fields") or "")[:800]
         tries = int(final.get("tries") or 0)
         err = final.get("error")
         return {
             "Question":user_question,
             "Formatted_Question":formatted_q,
             "Context": context,
-            "SQLPrompt":sql_prompt,
-            "Reformatting_Prompt":formatting_prompt,
             "SQL": sql,
             "Validation": val,
             "EntityDebug": entity_debug,
@@ -1325,10 +1681,12 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
             "Result": [],
             "Bot": "I couldn’t produce a valid SQL yet. Please try rephrasing.",
         }
-    
-    result = execute_query(sql)
-    context = (final.get("context") or "")[:800]
+    sql_result = execute_query(sql,orm)
+    context = (final.get("context") or final.get("selected_fields") or "")[:800]
+    contains_values=final.get("contains_values") or ""
     tries = int(final.get("tries") or 0)
+    top_tables=final.get("top_tables") or ""
+    top_fields=final.get("top_fields") or ""
     err = final.get("error")
     formatted_result = format_data(formatted_q,result)
     bot_answer = formatted_result
@@ -1342,13 +1700,54 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
         "Question":user_question,
         # "Reformatting_Prompt":formatting_prompt,
         # "Formatted_Question":formatted_q,
-        # "Context": context,
-        # "SQLPrompt":sql_prompt,
+        "Context": context,
+        "SQLPrompt":sql_prompt,
+        "top_tables":top_tables,
+        "top_fields":top_fields,
+        "contains_values":contains_values,
         "SQL": sql,
+        "ORM":orm,
         "Validation": val,
         "Tries": tries,
         "Error": err,
-        "Result": result,
-        # "EntityDebug": entity_debug,
-        "Bot": bot_answer,
+        # "Result": result,
+        "EntityDebug": entity_debug,
+        "Bot": bot_answer
     }
+
+
+
+@frappe.whitelist(allow_guest=False)
+def call_gemini_1(prompt):
+        # Authenticate once
+        creds = service_account.Credentials.from_service_account_file(
+            KEY_PATH, 
+            scopes=['https://www.googleapis.com/auth/cloud-platform']
+        )
+        # prompt=FILTER_TABLES.format(user_question=user_question, table_list=table_list)
+        client = genai.Client(
+            vertexai=True,
+            project=PROJECT_ID,
+            location=CONFIG["location"],
+            credentials=creds
+        )
+        config = types.GenerateContentConfig(
+            system_instruction="You are an ERPNext assistant.Follow the task instructions exactly.",
+        )
+        contents = [
+            {
+                "role": "user",
+                "parts": [{"text": str(prompt)}]
+            }
+        ]
+
+        response = client.models.generate_content(
+            model=MODEL_ID,
+            config=config,
+            contents=contents
+        )
+        text = (response.text or "").strip()
+        if text.startswith("```"):
+            text = text.replace("```json", "").replace("```", "").strip()
+
+        return text
