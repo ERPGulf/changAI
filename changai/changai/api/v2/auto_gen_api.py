@@ -162,6 +162,8 @@ def get_doctypes_changed_since(last_sync):
         "Email",
         "Integration",
         "Automation",
+        "Workflow",
+        ""
     }
     if last_sync:
         try:
@@ -412,56 +414,48 @@ def _get_claude_client():
 
 
 def _smart_desc_map(client, table_name, fields):
-    """
-    Shorter prompt to reduce tokens + faster + less memory.
-    """
     if not client:
         return {}
 
-    minimal = [{"name": f.get("name"), "description": (f.get("description") or "")} for f in fields]
+    # ✅ only names (no description noise)
+    field_names = [f.get("name") for f in fields if isinstance(f, dict) and f.get("name")]
+    if not field_names:
+        return {}
 
     prompt = f"""
-You are generating SHORT, HIGH-SIGNAL field descriptions for an ERP schema embedding model.
+Generate SHORT, HIGH-SIGNAL ERP field descriptions for embedding retrieval.
 
 Table: {table_name}
 
-GOAL:
-Help an embedding model correctly match user questions to the right field.
+Rules:
+- Do NOT rename fields.
+- 1 sentence per field.
+- Focus on WHEN/WHY this field is used in business questions.
+- Output ONLY JSON object: {{"field_name": "description"}}
 
-STRICT RULES:
-- Do NOT rename field names.
-- Do NOT explain database concepts (primary key, immutable, system-generated, etc).
-- Do NOT add generic phrases like "used for reporting" or "stores data".
-- Output ONLY a JSON object in this format:
-  {{"field_name": "description"}}
-
-DESCRIPTION GUIDELINES (VERY IMPORTANT):
-- 1 sentence only (max 2 if absolutely necessary).
-- Focus on WHEN and WHY a user would reference this field in a question.
-- Mention how it differs from similar fields ONLY if useful for disambiguation.
-- Write as if the description will be embedded, not read by humans.
-
-Fields JSON:
-{json.dumps(minimal, ensure_ascii=False)}
+Fields:
+{json.dumps(field_names, ensure_ascii=False)}
 """.strip()
-
 
     for attempt in range(3):
         try:
             msg = client.messages.create(
                 model="claude-sonnet-4-5",
-                max_tokens=900,
+                max_tokens=500,         # ✅ smaller is enough now
                 temperature=0.2,
                 system="Return ONLY a JSON object. No markdown. No extra text.",
-                messages=[{"role": "user", "content": prompt}]            )
+                messages=[{"role": "user", "content": prompt}],
+                timeout=60,
+            )
 
             text_parts = []
             for b in getattr(msg, "content", []) or []:
                 if getattr(b, "type", None) == "text" and getattr(b, "text", None):
                     text_parts.append(b.text)
-            text = "\n".join(text_parts).strip()
 
+            text = "\n".join(text_parts).strip()
             parsed = _extract_json_object(text)
+
             if isinstance(parsed, dict):
                 out = {}
                 for k, v in parsed.items():
@@ -474,36 +468,21 @@ Fields JSON:
             )
             time.sleep(2 * (attempt + 1))
 
-        except anthropic.RateLimitError as e:
-            frappe.logger().warning(f"Claude RateLimit table={table_name} attempt={attempt+1}: {e}")
-            time.sleep(2 * (attempt + 1))
-
-        except anthropic.APIConnectionError as e:
-            frappe.logger().warning(f"Claude ConnectionError table={table_name} attempt={attempt+1}: {e}")
-            time.sleep(2 * (attempt + 1))
-
-        except anthropic.APIStatusError as e:
-            status = getattr(e, "status_code", None)
-            frappe.logger().warning(f"Claude StatusError table={table_name} attempt={attempt+1} status={status}: {e}")
-            if status in (401, 403):
-                break
-            time.sleep(2 * (attempt + 1))
-
         except Exception as e:
-            frappe.logger().error(f"Claude unknown error table={table_name} attempt={attempt+1}: {e}")
+            frappe.logger().error(f"Claude error table={table_name} attempt={attempt+1}: {e}")
             time.sleep(2 * (attempt + 1))
 
     return {}
 
 
+
 @frappe.whitelist(allow_guest=False)
 def fill_missing_field_descriptions(
-    batch_size: int = 3,
+    batch_size: int = 25,
     max_tables: int = 0,
     checkpoint_every_table: int = 1,
 ):
     frappe.logger().info("Description job started")
-
     payload = _load_yaml(SCHEMA_YAML)
     meta = payload.get("_meta") or {}
     tables_blocks = payload.get("tables") or []
@@ -517,27 +496,25 @@ def fill_missing_field_descriptions(
     BATCH_SIZE = max(1, int(batch_size))
     updated_tables = 0
     updated_fields = 0
-
     processed_updated_tables = 0
 
     for block in tables_blocks:
         if not isinstance(block, dict):
+            continue
+        if block.get("desc_done"):
             continue
 
         table = block.get("table")
         fields = block.get("fields") or []
         if not table or not isinstance(fields, list):
             continue
-
         pending_fields = [
             f for f in fields
-            if isinstance(f, dict)
-            and f.get("name")
-            and not (f.get("description") or "").strip()
+            if isinstance(f, dict) and f.get("name") and not (f.get("description") or "").strip()
         ]
         if not pending_fields:
+            block["desc_done"] = True
             continue
-
         frappe.logger().info(f"Table={table} pending_fields={len(pending_fields)}")
         updated_in_table = 0
 
@@ -550,26 +527,31 @@ def fill_missing_field_descriptions(
             for f in batch:
                 fn = f.get("name")
                 if fn and fn in desc_map and desc_map[fn].strip():
-                    f["description"] = desc_map[fn]
+                    f["description"] = desc_map[fn].strip()
                     updated_fields += 1
                     updated_in_table += 1
-            gc.collect()
+        gc.collect()
 
         if updated_in_table:
             updated_tables += 1
             processed_updated_tables += 1
+            still_pending = any(
+                isinstance(x, dict) and x.get("name") and not (x.get("description") or "").strip()
+                for x in (block.get("fields") or [])
+            )
+            block["desc_done"] = not still_pending
+
             if int(checkpoint_every_table) >= 1:
                 meta["last_desc_sync_partial"] = str(now_datetime())
-                payload = {"_meta": meta, "tables": tables_blocks}
-                _save_yaml(SCHEMA_YAML, payload)
+                _save_yaml(SCHEMA_YAML, {"_meta": meta, "tables": tables_blocks})
                 frappe.logger().info(f"Checkpoint saved after table={table} updated_fields_in_table={updated_in_table}")
+
             if int(max_tables) and processed_updated_tables >= int(max_tables):
                 frappe.logger().info(f"Stopping early due to max_tables={max_tables}")
                 break
 
     meta["last_desc_sync"] = str(now_datetime())
-    payload = {"_meta": meta, "tables": tables_blocks}
-    _save_yaml(SCHEMA_YAML, payload)
+    _save_yaml(SCHEMA_YAML, {"_meta": meta, "tables": tables_blocks})
 
     frappe.logger().info(f"Description job finished tables={updated_tables} fields={updated_fields}")
 
