@@ -1,38 +1,47 @@
 _meta:
-  last_sync: '2026-02-10 19:09:37.909191'
-  last_doctype_sync: '2026-02-10 19:09:37.909191'
-  last_desc_sync_sample: '2026-02-10 18:30:56.092376'
+  last_sync: '2026-02-11 09:20:33.296896'
+  last_doctype_sync: '2026-02-11 09:20:33.296896'
+  last_desc_sync_partial: '2026-02-11 10:20:16.275247'
 tables:
 - table: tabAbout Us Settings
   description: Settings for the About Us Page
   fields:
   - name: name
-    description: ''
+    description: Unique identifier or label for the About Us settings configuration
   - name: page_title
-    description: ''
+    description: Title displayed on the About Us page header or browser tab
   - name: company_introduction
-    description: ''
+    description: Main introductory text or description about the company shown on
+      the About Us page
   - name: company_history_heading
-    description: ''
+    description: Title or header text displayed above the company history section
+      on the About Us page.
   - name: company_history
-    description: ''
+    description: Narrative text describing the company's background, founding story,
+      milestones, and evolution over time.
   - name: team_members_heading
-    description: ''
+    description: Title or header text displayed above the team members section on
+      the About Us page.
   - name: team_members_subtitle
-    description: ''
+    description: Subtitle or heading text displayed above the team members section
+      on the About Us page
   - name: team_members
-    description: ''
+    description: List or content of individual team member profiles, names, roles,
+      or bios shown in the About Us section
   - name: footer
-    description: ''
+    description: Footer text or content displayed at the bottom of the About Us page
 - table: tabAbout Us Team Member
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Short display name or identifier for the team member, used when searching
+      for team members by their common or abbreviated name.
   - name: full_name
-    description: ''
+    description: Complete formal name of the team member including first, middle,
+      and last names, used when the full legal or professional name is needed.
   - name: bio
-    description: ''
+    description: Biographical text or profile description about the team member including
+      their background, expertise, role details, and accomplishments.
 - table: tabAccount
   description: Heads (or groups) against which Accounting Entries are made and balances
     are maintained.
@@ -44,16 +53,20 @@ tables:
   - name: account_name
     description: ''
   - name: account_number
-    description: ''
+    description: Unique identifier for the account used in financial transactions
+      and reporting queries.
   - name: is_group
-    description: ''
+    description: Indicates whether the account is a parent grouping account rather
+      than a transactional account.
   - name: company
-    description: ''
+    description: The specific company or entity that owns or is associated with this
+      account in multi-company environments.
     join_hint:
       table: tabCompany
       'on': company = tabCompany.name
   - name: root_type
-    description: ''
+    description: Top-level classification of account as Asset, Liability, Equity,
+      Income, or Expense for financial statement categorization
     options:
     - Asset
     - Liability
@@ -61,22 +74,27 @@ tables:
     - Expense
     - Equity
   - name: report_type
-    description: ''
+    description: Balance Sheet or Profit and Loss statement assignment determining
+      where the account appears in financial reports
     options:
     - Balance Sheet
     - Profit and Loss
   - name: account_currency
-    description: ''
+    description: Currency in which transactions for this account are denominated and
+      recorded
     join_hint:
       table: tabCurrency
       'on': account_currency = tabCurrency.name
   - name: parent_account
-    description: ''
+    description: Links account to its parent in the chart of accounts hierarchy for
+      rollup reporting and multi-level financial structures.
     join_hint:
       table: tabAccount
       'on': parent_account = tabAccount.name
   - name: account_type
-    description: ''
+    description: Categorizes account as asset, liability, equity, revenue, or expense
+      for financial statement classification and balance sheet vs income statement
+      placement.
     options:
     - Accumulated Depreciation
     - Asset Received But Not Billed
@@ -110,77 +128,96 @@ tables:
     - Tax
     - Temporary
   - name: tax_rate
-    description: ''
+    description: Default tax percentage applied to transactions using this account
+      for automatic tax calculation on sales or purchases.
   - name: freeze_account
-    description: ''
+    description: Whether the account is frozen and cannot accept new transactions
+      or postings.
     options:
     - 'No'
     - 'Yes'
   - name: balance_must_be
-    description: ''
+    description: Required balance constraint for the account such as debit, credit,
+      or no restriction.
     options:
     - Debit
     - Credit
   - name: lft
-    description: ''
+    description: Left boundary value in nested set model for hierarchical account
+      tree traversal and parent-child queries.
   - name: rgt
-    description: ''
+    description: Right boundary value in nested set hierarchy for account tree traversal
+      and subtree queries.
   - name: old_parent
-    description: ''
+    description: Previous parent account before reparenting or restructuring the account
+      hierarchy.
   - name: include_in_gross
-    description: ''
+    description: Whether this account's balance is included in gross profit or gross
+      margin calculations.
 - table: tabAccount Closing Balance
   description: ''
   fields:
   - name: name
-    description: ''
+    description: name
   - name: closing_date
-    description: ''
+    description: The specific date when the account balance was closed or finalized
+      for a reporting period.
   - name: account
-    description: ''
+    description: The account identifier for which the closing balance is recorded.
     join_hint:
       table: tabAccount
       'on': account = tabAccount.name
   - name: cost_center
-    description: ''
+    description: Cost center associated with the account closing balance for departmental
+      or divisional financial tracking.
     join_hint:
       table: tabCost Center
       'on': cost_center = tabCost Center.name
   - name: debit
-    description: ''
+    description: Debit balance amount at account closing, representing assets or expenses
+      with debit-side balances.
   - name: credit
-    description: ''
+    description: Credit balance amount at account closing, representing liabilities,
+      equity, or revenue with credit-side balances.
   - name: account_currency
-    description: ''
+    description: Currency in which the account balance and transactions are denominated,
+      used when filtering or analyzing balances by specific currency.
     join_hint:
       table: tabCurrency
       'on': account_currency = tabCurrency.name
   - name: debit_in_account_currency
-    description: ''
+    description: Total debit amount in the account's native currency, used when calculating
+      net balance or analyzing debit activity without currency conversion.
   - name: credit_in_account_currency
-    description: ''
+    description: Total credit amount in the account's native currency, used when calculating
+      net balance or analyzing credit activity without currency conversion.
   - name: project
-    description: ''
+    description: Filter or group account closing balances by specific project to analyze
+      project-level financial positions.
     join_hint:
       table: tabProject
       'on': project = tabProject.name
   - name: company
-    description: ''
+    description: Filter or group account closing balances by specific company entity
+      in multi-company environments.
     join_hint:
       table: tabCompany
       'on': company = tabCompany.name
   - name: finance_book
-    description: ''
+    description: Filter account closing balances by alternative accounting book for
+      parallel accounting scenarios like tax vs management reporting.
     join_hint:
       table: tabFinance Book
       'on': finance_book = tabFinance Book.name
   - name: period_closing_voucher
-    description: ''
+    description: The voucher document used to close accounting periods and transfer
+      balances.
     join_hint:
       table: tabPeriod Closing Voucher
       'on': period_closing_voucher = tabPeriod Closing Voucher.name
   - name: is_period_closing_voucher_entry
-    description: ''
+    description: Indicates whether this balance entry was created by the period closing
+      process.
 - table: tabAccounting Dimension
   description: ''
   fields:
@@ -194,36 +231,46 @@ tables:
   - name: label
     description: ''
   - name: fieldname
-    description: ''
+    description: Name or code identifying the accounting dimension used for financial
+      segmentation and reporting analysis
   - name: dimension_defaults
-    description: ''
+    description: Default dimension values automatically applied to transactions when
+      no specific dimension is specified
   - name: disabled
-    description: ''
+    description: Indicates whether the accounting dimension is currently inactive
+      and unavailable for use in transactions
 - table: tabAccounting Dimension Detail
   description: ''
   fields:
   - name: name
-    description: ''
+    description: name
   - name: company
-    description: ''
+    description: The specific company entity this accounting dimension belongs to
+      in multi-company environments.
     join_hint:
       table: tabCompany
       'on': company = tabCompany.name
   - name: reference_document
-    description: ''
+    description: The source transaction or document that created or is linked to this
+      accounting dimension entry.
     join_hint:
       table: tabDocType
       'on': reference_document = tabDocType.name
   - name: default_dimension
-    description: ''
+    description: The default accounting dimension value automatically applied to transactions
+      when no specific dimension is selected.
   - name: mandatory_for_bs
-    description: ''
+    description: Indicates whether this dimension must be specified on balance sheet
+      account transactions.
   - name: mandatory_for_pl
-    description: ''
+    description: Indicates whether this dimension must be specified on profit and
+      loss account transactions.
   - name: automatically_post_balancing_accounting_entry
-    description: ''
+    description: Whether the system automatically creates offsetting journal entries
+      to balance transactions for this accounting dimension.
   - name: offsetting_account
-    description: ''
+    description: The account used to automatically balance entries when posting transactions
+      involving this accounting dimension.
     join_hint:
       table: tabAccount
       'on': offsetting_account = tabAccount.name
@@ -231,29 +278,36 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: name
   - name: accounting_dimension
-    description: ''
+    description: The specific accounting dimension (like cost center, project, department)
+      that this filter applies to
   - name: fieldname
-    description: ''
+    description: The document field being filtered on to determine which accounting
+      dimension values are allowed or applied
   - name: disabled
-    description: ''
+    description: Whether this accounting dimension filter is inactive and excluded
+      from transactions or reports.
   - name: company
-    description: ''
+    description: The specific company entity to which this accounting dimension filter
+      applies.
     join_hint:
       table: tabCompany
       'on': company = tabCompany.name
   - name: apply_restriction_on_values
-    description: ''
+    description: Whether this filter enforces restrictions on which dimension values
+      can be selected or used in transactions.
   - name: allow_or_restrict
-    description: ''
+    description: Whether the filter permits or blocks the specified accounts and dimensions
+      from being used together
     options:
     - Allow
     - Restrict
   - name: accounts
-    description: ''
+    description: The account or account range that this filter rule applies to
   - name: dimensions
-    description: ''
+    description: The dimension values or combinations that are allowed or restricted
+      for the specified accounts
 - table: tabAccounting Period
   description: ''
   fields:
@@ -264,178 +318,238 @@ tables:
   - name: start_date
     description: ''
   - name: end_date
-    description: ''
+    description: The final date of the accounting period, used when filtering or identifying
+      periods by their closing boundary.
   - name: company
-    description: ''
+    description: The company entity to which this accounting period belongs, used
+      to filter periods by organizational unit.
     join_hint:
       table: tabCompany
       'on': company = tabCompany.name
   - name: closed_documents
-    description: ''
+    description: Indicates whether documents can still be posted to this period or
+      if it has been locked for further transactions.
 - table: tabAccounts Settings
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Account settings configuration name or identifier
   - name: unlink_payment_on_cancellation_of_invoice
-    description: ''
+    description: Controls whether payments are automatically disconnected when an
+      invoice is cancelled
   - name: unlink_advance_payment_on_cancelation_of_order
-    description: ''
+    description: Controls whether advance payments are automatically disconnected
+      when a sales or purchase order is cancelled
   - name: delete_linked_ledger_entries
-    description: ''
+    description: Controls whether ledger entries can be deleted when their source
+      transactions are removed.
   - name: enable_immutable_ledger
-    description: ''
+    description: Determines if ledger entries are locked from modification or deletion
+      after creation.
   - name: check_supplier_invoice_uniqueness
-    description: ''
+    description: Enforces validation to prevent duplicate supplier invoice numbers
+      from being entered.
   - name: automatically_fetch_payment_terms
-    description: ''
+    description: Whether payment terms are auto-populated from customer or supplier
+      master data when creating invoices or purchase orders.
   - name: enable_common_party_accounting
-    description: ''
+    description: Whether a single party can act as both customer and supplier with
+      unified accounting treatment across sales and purchase transactions.
   - name: allow_multi_currency_invoices_against_single_party_account
-    description: ''
+    description: Whether invoices in different currencies can be posted to the same
+      customer or supplier account without requiring separate currency-specific accounts.
   - name: merge_similar_account_heads
-    description: ''
+    description: Whether duplicate or similar account heads are combined into single
+      entries for simplified chart of accounts display
   - name: book_deferred_entries_based_on
-    description: ''
+    description: The trigger event or timing basis that determines when deferred revenue
+      or expense entries are recorded (e.g., delivery date, invoice date, payment
+      date)
     options:
     - Days
     - Months
   - name: automatically_process_deferred_accounting_entry
-    description: ''
+    description: Whether the system automatically creates and posts deferred accounting
+      journal entries without manual intervention
   - name: book_deferred_entries_via_journal_entry
-    description: ''
+    description: Whether deferred revenue or expense entries are recorded through
+      journal entries rather than automatic posting
   - name: submit_journal_entries
-    description: ''
+    description: Whether journal entries require submission or approval workflow before
+      posting to the ledger
   - name: determine_address_tax_category_from
-    description: ''
+    description: Source used to determine tax category when multiple addresses exist,
+      such as shipping address versus billing address
     options:
     - Billing Address
     - Shipping Address
   - name: add_taxes_from_item_tax_template
-    description: ''
+    description: Controls whether tax rates are automatically applied from item-level
+      tax templates when adding products to transactions.
   - name: add_taxes_from_taxes_and_charges_template
-    description: ''
+    description: Controls whether tax rates are automatically applied from document-level
+      taxes and charges templates to transactions.
   - name: book_tax_discount_loss
-    description: ''
+    description: Controls whether tax amounts lost due to discounts are recorded as
+      separate accounting entries.
   - name: round_row_wise_tax
-    description: ''
+    description: Whether tax amounts are rounded at each line item level rather than
+      at the document total level.
   - name: show_inclusive_tax_in_print
-    description: ''
+    description: Whether printed documents display prices with tax already included
+      in the amount shown.
   - name: show_taxes_as_table_in_print
-    description: ''
+    description: Whether printed documents display tax breakdown in a separate table
+      format rather than inline.
   - name: show_payment_schedule_in_print
-    description: ''
+    description: Controls whether payment schedule details appear on printed invoices
+      or account documents.
   - name: maintain_same_internal_transaction_rate
-    description: ''
+    description: Determines if internal transfers between company entities use a consistent
+      exchange rate throughout the transaction.
   - name: fetch_valuation_rate_for_internal_transaction
-    description: ''
+    description: Specifies whether to retrieve and apply valuation exchange rates
+      when processing internal company transfers.
   - name: maintain_same_rate_action
-    description: ''
+    description: Controls whether exchange rates remain constant across related transactions
+      or documents when currency conversions occur.
     options:
     - Stop
     - Warn
   - name: role_to_override_stop_action
-    description: ''
+    description: Specifies which user role has permission to bypass or override stop/block
+      actions on accounts or transactions.
     join_hint:
       table: tabRole
       'on': role_to_override_stop_action = tabRole.name
   - name: allow_stale
-    description: ''
+    description: Determines whether outdated or expired exchange rates can still be
+      used for currency conversions instead of requiring current rates.
   - name: allow_pegged_currencies_exchange_rates
-    description: ''
+    description: Whether the system permits exchange rate entry for currencies that
+      are pegged or fixed to another currency.
   - name: stale_days
-    description: ''
+    description: Number of days after which account records or transactions are considered
+      stale or outdated.
   - name: auto_reconcile_payments
-    description: ''
+    description: Whether payments are automatically matched and reconciled with corresponding
+      invoices or transactions without manual intervention.
   - name: auto_reconciliation_job_trigger
-    description: ''
+    description: Controls when automatic bank reconciliation processes are initiated
+      or scheduled to run.
   - name: reconciliation_queue_size
-    description: ''
+    description: Maximum number of reconciliation transactions that can be queued
+      for processing at once.
   - name: exchange_gain_loss_posting_date
-    description: ''
+    description: Determines which date is used when posting foreign exchange gain
+      or loss transactions to the general ledger.
     options:
     - Invoice
     - Payment
     - Reconciliation Date
   - name: over_billing_allowance
-    description: ''
+    description: Maximum percentage or amount by which invoices can exceed sales order
+      values before blocking.
   - name: role_allowed_to_over_bill
-    description: ''
+    description: User role permitted to create invoices exceeding sales order limits
+      despite over-billing restrictions.
     join_hint:
       table: tabRole
       'on': role_allowed_to_over_bill = tabRole.name
   - name: credit_controller
-    description: ''
+    description: Person or role responsible for managing customer credit limits and
+      payment collections.
     join_hint:
       table: tabRole
       'on': credit_controller = tabRole.name
   - name: make_payment_via_journal_entry
-    description: ''
+    description: Whether payments are processed through journal entries instead of
+      payment transactions
   - name: post_change_gl_entries
-    description: ''
+    description: Whether changes to transactions automatically create general ledger
+      adjustment entries
   - name: calculate_depr_using_total_days
-    description: ''
+    description: Whether depreciation calculations use actual calendar days instead
+      of monthly periods
   - name: book_asset_depreciation_entry_automatically
-    description: ''
+    description: Whether depreciation entries for fixed assets are posted automatically
+      without manual intervention.
   - name: acc_frozen_upto
-    description: ''
+    description: Date until which accounting transactions are locked and cannot be
+      modified or deleted.
   - name: ignore_account_closing_balance
-    description: ''
+    description: Whether to exclude account closing balances when calculating or displaying
+      financial totals.
   - name: use_legacy_controller_for_pcv
-    description: ''
+    description: Controls whether the system uses the old or new controller for processing
+      petty cash vouchers.
   - name: frozen_accounts_modifier
-    description: ''
+    description: Determines how the system handles or restricts transactions on accounts
+      marked as frozen.
     join_hint:
       table: tabRole
       'on': frozen_accounts_modifier = tabRole.name
   - name: show_balance_in_coa
-    description: ''
+    description: Controls whether account balances are displayed in the chart of accounts
+      view.
   - name: enable_party_matching
-    description: ''
+    description: Controls whether the system matches transactions to parties (customers,
+      vendors, employees) in accounts receivable and payable.
   - name: enable_fuzzy_matching
-    description: ''
+    description: Controls whether the system uses approximate matching algorithms
+      when reconciling transactions or identifying duplicate entries.
   - name: general_ledger_remarks_length
-    description: ''
+    description: Maximum character limit for remarks or notes entered on general ledger
+      journal entries.
   - name: receivable_payable_remarks_length
-    description: ''
+    description: Maximum character length allowed for remarks or notes on receivable
+      and payable transactions.
   - name: receivable_payable_fetch_method
-    description: ''
+    description: Method or strategy used to retrieve and calculate receivable and
+      payable balances, such as real-time calculation versus cached aggregation.
     options:
     - Buffered Cursor
     - UnBuffered Cursor
     - Raw SQL
   - name: ignore_is_opening_check_for_reporting
-    description: ''
+    description: Whether opening balance entries are excluded from financial reports
+      and analytics calculations.
   - name: create_pr_in_draft_status
-    description: ''
+    description: Whether new purchase requisitions are created in draft status requiring
+      approval before submission
 - table: tabActivity Cost
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Activity name or title describing the cost entry
   - name: activity_type
-    description: ''
+    description: Category or classification of the activity such as meeting, travel,
+      training, or project work
     join_hint:
       table: tabActivity Type
       'on': activity_type = tabActivity Type.name
   - name: employee
-    description: ''
+    description: Employee who performed or is associated with this activity cost
     join_hint:
       table: tabEmployee
       'on': employee = tabEmployee.name
   - name: employee_name
-    description: ''
+    description: Name of the employee whose activity costs are being tracked for labor
+      expense analysis and project costing.
   - name: department
-    description: ''
+    description: Department to which the employee belongs for cost allocation and
+      departmental expense reporting.
     join_hint:
       table: tabDepartment
       'on': department = tabDepartment.name
   - name: billing_rate
-    description: ''
+    description: Hourly or unit rate charged to customers or projects for this employee's
+      work.
   - name: costing_rate
-    description: ''
+    description: Hourly or unit rate used to calculate the cost of an activity or
+      resource allocation.
   - name: title
-    description: ''
+    description: Name or label identifying the specific activity being costed.
 - table: tabActivity Type
   description: ''
   fields:
@@ -446,9 +560,11 @@ tables:
   - name: costing_rate
     description: ''
   - name: billing_rate
-    description: ''
+    description: Rate charged to customers for this activity type when billing for
+      time or services.
   - name: disabled
-    description: ''
+    description: Whether this activity type is currently inactive and unavailable
+      for selection in new transactions.
 - table: tabAddress
   description: ''
   fields:
@@ -472,94 +588,119 @@ tables:
     - Permanent
     - Other
   - name: address_line1
-    description: ''
+    description: Primary street address including street number and name, used when
+      searching for main location details.
   - name: address_line2
-    description: ''
+    description: Secondary address information such as apartment, suite, or unit number,
+      used when filtering by specific sub-locations within a building.
   - name: custom_building_number
-    description: ''
+    description: Custom building identifier or code distinct from the street address,
+      used when referencing internal building numbering systems or campus locations.
   - name: city
-    description: ''
+    description: Municipality or town name for filtering or grouping addresses by
+      urban locality.
   - name: county
-    description: ''
+    description: Administrative subdivision within a state for regional analysis between
+      city and state level.
   - name: state
-    description: ''
+    description: State or province for filtering or grouping addresses by top-level
+      regional jurisdiction.
   - name: country
-    description: ''
+    description: Country name for filtering or grouping addresses by geographic region
+      or nation.
     join_hint:
       table: tabCountry
       'on': country = tabCountry.name
   - name: pincode
-    description: ''
+    description: Postal or ZIP code for locating addresses within specific delivery
+      zones or geographic areas.
   - name: email_id
-    description: ''
+    description: Email address associated with this location or contact for communication
+      purposes.
   - name: phone
-    description: ''
+    description: Primary telephone contact number for the address location
   - name: fax
-    description: ''
+    description: Fax number for the address location
   - name: tax_category
-    description: ''
+    description: Tax classification or jurisdiction category assigned to the address
+      for tax calculation purposes
     join_hint:
       table: tabTax Category
       'on': tax_category = tabTax Category.name
   - name: is_primary_address
-    description: ''
+    description: Identifies the main or default address for a customer, supplier,
+      or entity when multiple addresses exist.
   - name: is_shipping_address
-    description: ''
+    description: Indicates whether this address is used for delivering goods or shipments.
   - name: disabled
-    description: ''
+    description: Marks whether this address is inactive and should not be used for
+      transactions or communications.
   - name: is_your_company_address
-    description: ''
+    description: Indicates whether this address belongs to your own company versus
+      a customer, supplier, or other external party.
   - name: links
-    description: ''
+    description: Related records or documents connected to this address such as contacts,
+      transactions, or delivery notes.
 - table: tabAddress Template
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Name or title of the address template used to identify different
+      address format configurations
   - name: country
-    description: ''
+    description: Country for which this address template defines the formatting and
+      field arrangement rules
     join_hint:
       table: tabCountry
       'on': country = tabCountry.name
   - name: is_default
-    description: ''
+    description: Indicates whether this address template is automatically applied
+      when no specific template is selected
   - name: template
-    description: ''
+    description: Address format template defining the layout and field order for displaying
+      addresses in a specific country or region
 - table: tabAdvance Payment Ledger Entry
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier for the advance payment ledger entry record
   - name: company
-    description: ''
+    description: Company entity to which this advance payment transaction belongs
     join_hint:
       table: tabCompany
       'on': company = tabCompany.name
   - name: voucher_type
-    description: ''
+    description: Classification of the accounting voucher document associated with
+      this advance payment
     join_hint:
       table: tabDocType
       'on': voucher_type = tabDocType.name
   - name: voucher_no
-    description: ''
+    description: Identifier of the advance payment transaction being recorded in this
+      ledger entry.
   - name: against_voucher_type
-    description: ''
+    description: Type of document (e.g., Sales Invoice, Purchase Invoice) that this
+      advance payment is being applied against or allocated to.
     join_hint:
       table: tabDocType
       'on': against_voucher_type = tabDocType.name
   - name: against_voucher_no
-    description: ''
+    description: Specific document number that this advance payment is being applied
+      against or allocated to.
   - name: amount
-    description: ''
+    description: Monetary value of the advance payment transaction in the specified
+      currency.
   - name: currency
-    description: ''
+    description: Currency code for the advance payment amount.
     join_hint:
       table: tabCurrency
       'on': currency = tabCurrency.name
   - name: event
-    description: ''
+    description: Business event or trigger that created or modified this advance payment
+      ledger entry.
   - name: delinked
-    description: ''
+    description: Indicates whether this advance payment ledger entry has been disconnected
+      or unlinked from its original invoice or payment document.
 - table: tabAdvance Tax
   description: ''
   fields:
@@ -573,88 +714,105 @@ tables:
   - name: reference_name
     description: ''
   - name: reference_detail
-    description: ''
+    description: Identifies the specific tax payment voucher or transaction reference
+      for the advance tax entry
   - name: account_head
-    description: ''
+    description: Tax ledger account under which the advance tax payment is classified
     join_hint:
       table: tabAccount
       'on': account_head = tabAccount.name
   - name: allocated_amount
-    description: ''
+    description: Amount of advance tax that has been applied or adjusted against actual
+      tax liability
 - table: tabAdvance Taxes and Charges
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier for the specific advance tax or charge line item
   - name: add_deduct_tax
-    description: ''
+    description: Whether this line adds tax to or deducts tax from the transaction
+      total
     options:
     - Add
     - Deduct
   - name: charge_type
-    description: ''
+    description: Category or method of tax calculation such as actual amount, percentage
+      of net total, or on previous row total
     options:
     - Actual
     - On Paid Amount
     - On Previous Row Amount
     - On Previous Row Total
   - name: row_id
-    description: ''
+    description: Sequence number identifying the position of this tax or charge line
+      within the advance payment document.
   - name: account_head
-    description: ''
+    description: Ledger account to which this advance tax or charge amount is posted.
     join_hint:
       table: tabAccount
       'on': account_head = tabAccount.name
   - name: description
-    description: ''
+    description: Explanatory text describing the nature or purpose of this specific
+      advance tax or charge.
   - name: included_in_paid_amount
-    description: ''
+    description: Whether this advance tax or charge was already included in the amount
+      paid upfront by the customer or supplier.
   - name: cost_center
-    description: ''
+    description: The cost center to which this advance tax or charge should be allocated
+      for financial tracking and reporting.
     join_hint:
       table: tabCost Center
       'on': cost_center = tabCost Center.name
   - name: project
-    description: ''
+    description: The project to which this advance tax or charge should be attributed
+      for project-based accounting and cost tracking.
     join_hint:
       table: tabProject
       'on': project = tabProject.name
   - name: rate
-    description: ''
+    description: Percentage or rate applied to calculate the advance tax or charge
+      amount
   - name: currency
-    description: ''
+    description: Currency in which the advance tax or charge amount is denominated
     join_hint:
       table: tabCurrency
       'on': currency = tabCurrency.name
   - name: tax_amount
-    description: ''
+    description: Calculated monetary value of the advance tax or charge after applying
+      the rate
   - name: total
-    description: ''
+    description: Total amount including tax for this advance tax line item.
   - name: allocated_amount
-    description: ''
+    description: Portion of the advance tax amount that has been allocated or applied
+      to invoices or transactions.
   - name: base_tax_amount
-    description: ''
+    description: Tax amount converted to the company's base currency before any allocations.
   - name: base_total
-    description: ''
+    description: Total amount of advance taxes and charges in base currency before
+      any adjustments or conversions
 - table: tabAllowed Dimension
   description: ''
   fields:
   - name: name
-    description: ''
+    description: name
   - name: accounting_dimension
-    description: ''
+    description: The dimension type being restricted, such as cost center, department,
+      project, or branch
     join_hint:
       table: tabDocType
       'on': accounting_dimension = tabDocType.name
   - name: dimension_value
-    description: ''
+    description: The specific value within the dimension that is allowed, such as
+      a particular cost center code or department name
 - table: tabAllowed To Transact With
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Name or identifier of the party, entity, or counterparty that is
+      allowed to be transacted with
   - name: company
-    description: ''
+    description: Company that has authorization or permission to transact with the
+      specified party
     join_hint:
       table: tabCompany
       'on': company = tabCompany.name
@@ -662,14 +820,17 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier or label for this specific amended document naming
+      configuration
   - name: document_type
-    description: ''
+    description: Type of document (e.g., Sales Invoice, Purchase Order) that this
+      naming rule applies to when amendments occur
     join_hint:
       table: tabDocType
       'on': document_type = tabDocType.name
   - name: action
-    description: ''
+    description: Naming action or pattern applied when the document is amended, such
+      as appending suffixes or version numbers
     options:
     - Amend Counter
     - Default Naming
@@ -689,34 +850,41 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Appointment title or identifier that describes what the appointment
+      is for
   - name: scheduled_time
-    description: ''
+    description: Date and time when the appointment is planned to occur
   - name: status
-    description: ''
+    description: Current state of the appointment such as scheduled, confirmed, completed,
+      or cancelled
     options:
     - Open
     - Unverified
     - Closed
   - name: customer_name
-    description: ''
+    description: Full name of the customer who scheduled or is associated with the
+      appointment.
   - name: customer_phone_number
-    description: ''
+    description: Phone number to contact the customer about the appointment.
   - name: customer_skype
-    description: ''
+    description: Skype username or ID for reaching the customer via Skype for the
+      appointment.
   - name: customer_email
-    description: ''
+    description: Email address of the customer for whom the appointment is scheduled.
   - name: customer_details
-    description: ''
+    description: Additional information about the customer such as phone number, address,
+      or special notes.
   - name: appointment_with
-    description: ''
+    description: Name or identifier of the staff member, service provider, or resource
+      assigned to conduct the appointment.
     join_hint:
       table: tabDocType
       'on': appointment_with = tabDocType.name
   - name: party
-    description: ''
+    description: The customer, patient, or contact person associated with this appointment
   - name: calendar_event
-    description: ''
+    description: Links this appointment to a calendar entry for scheduling and time
+      management
     join_hint:
       table: tabEvent
       'on': calendar_event = tabEvent.name
@@ -724,28 +892,31 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier or label for the appointment booking configuration
   - name: enable_scheduling
-    description: ''
+    description: Whether appointment scheduling functionality is turned on or off
+      for this configuration
   - name: availability_of_slots
-    description: ''
+    description: Number of open time slots or the schedule pattern defining when appointments
+      can be booked
   - name: number_of_agents
-    description: ''
+    description: Total count of agents available for appointment bookings.
   - name: agent_list
-    description: ''
+    description: Specific agents assigned or available to handle appointments.
   - name: holiday_list
-    description: ''
+    description: Days when appointments cannot be scheduled due to holidays or closures.
     join_hint:
       table: tabHoliday List
       'on': holiday_list = tabHoliday List.name
   - name: appointment_duration
-    description: ''
+    description: Default length of time allocated for each appointment in minutes
   - name: email_reminders
-    description: ''
+    description: Whether automated email reminders are enabled for upcoming appointments
   - name: advance_booking_days
-    description: ''
+    description: Maximum number of days in advance that appointments can be scheduled
   - name: success_redirect_url
-    description: ''
+    description: URL where users are redirected after successfully completing an appointment
+      booking.
 - table: tabAppointment Booking Slots
   description: ''
   fields:
@@ -764,158 +935,203 @@ tables:
   - name: from_time
     description: ''
   - name: to_time
-    description: ''
+    description: End time of the appointment booking slot, used when searching for
+      availability windows or filtering slots by when they finish.
 - table: tabAsset
   description: ''
   fields:
   - name: name
-    description: ''
+    description: The asset's identifying name or label used when searching for or
+      referring to a specific asset
   - name: company
-    description: ''
+    description: The company entity that owns or is associated with the asset
     join_hint:
       table: tabCompany
       'on': company = tabCompany.name
   - name: item_code
-    description: ''
+    description: The product or item catalog code linked to the asset for tracking
+      the underlying item type
     join_hint:
       table: tabItem
       'on': item_code = tabItem.name
   - name: item_name
-    description: ''
+    description: Name or identifier of the asset item being tracked, used when searching
+      for specific equipment, vehicles, or property.
   - name: asset_owner
-    description: ''
+    description: Individual person responsible for or assigned to the asset, used
+      when identifying who holds or manages specific assets.
     options:
     - Company
     - Supplier
     - Customer
   - name: asset_owner_company
-    description: ''
+    description: Company or organizational entity that owns the asset, used when filtering
+      assets by corporate ownership or legal entity.
     join_hint:
       table: tabCompany
       'on': asset_owner_company = tabCompany.name
   - name: is_existing_asset
-    description: ''
+    description: Indicates whether the asset was already owned before system implementation
+      or acquired previously, distinguishing legacy assets from newly purchased ones.
   - name: is_composite_asset
-    description: ''
+    description: Indicates whether the asset is made up of multiple sub-assets or
+      components that can be tracked separately.
   - name: supplier
-    description: ''
+    description: The vendor or company from whom the asset was purchased or acquired.
     join_hint:
       table: tabSupplier
       'on': supplier = tabSupplier.name
   - name: customer
-    description: ''
+    description: The customer who owns or is associated with this asset, used when
+      tracking customer-owned equipment or assets under customer contracts.
     join_hint:
       table: tabCustomer
       'on': customer = tabCustomer.name
   - name: journal_entry_for_scrap
-    description: ''
+    description: The accounting journal entry created when this asset is scrapped
+      or disposed of, used to track the financial transaction of asset disposal.
     join_hint:
       table: tabJournal Entry
       'on': journal_entry_for_scrap = tabJournal Entry.name
   - name: naming_series
-    description: ''
+    description: The prefix pattern used to generate the asset's identifier code,
+      used when searching for assets by their numbering scheme or series.
     options:
     - ACC-ASS-.YYYY.-
   - name: asset_name
-    description: ''
+    description: The identifying name or label of the asset used when searching for
+      or referring to a specific asset.
   - name: asset_category
-    description: ''
+    description: The classification or type of asset used to filter or group assets
+      by their functional category such as equipment, vehicles, or furniture.
     join_hint:
       table: tabAsset Category
       'on': asset_category = tabAsset Category.name
   - name: location
-    description: ''
+    description: The physical location or site where the asset is currently situated
+      or assigned.
     join_hint:
       table: tabLocation
       'on': location = tabLocation.name
   - name: split_from
-    description: ''
+    description: Original asset identifier when this asset was created by splitting
+      or dividing a parent asset into multiple child assets
     join_hint:
       table: tabAsset
       'on': split_from = tabAsset.name
   - name: custodian
-    description: ''
+    description: Person or employee responsible for the physical possession and day-to-day
+      care of the asset
     join_hint:
       table: tabEmployee
       'on': custodian = tabEmployee.name
   - name: department
-    description: ''
+    description: Organizational department or business unit that owns, uses, or is
+      charged for the asset
     join_hint:
       table: tabDepartment
       'on': department = tabDepartment.name
   - name: disposal_date
-    description: ''
+    description: Date when the asset was sold, scrapped, or otherwise removed from
+      service.
   - name: cost_center
-    description: ''
+    description: Department or business unit responsible for the asset's expenses
+      and depreciation.
     join_hint:
       table: tabCost Center
       'on': cost_center = tabCost Center.name
   - name: purchase_receipt
-    description: ''
+    description: Reference to the receiving document that recorded the asset's initial
+      acquisition into inventory.
     join_hint:
       table: tabPurchase Receipt
       'on': purchase_receipt = tabPurchase Receipt.name
   - name: purchase_receipt_item
-    description: ''
+    description: Links asset to the specific line item on the goods receipt document
+      when the asset was physically received into inventory.
   - name: purchase_invoice
-    description: ''
+    description: Links asset to the supplier invoice document used for the purchase
+      transaction and accounting entry.
     join_hint:
       table: tabPurchase Invoice
       'on': purchase_invoice = tabPurchase Invoice.name
   - name: purchase_invoice_item
-    description: ''
+    description: Links asset to the specific line item on the supplier invoice that
+      corresponds to this asset's purchase details and pricing.
   - name: purchase_date
-    description: ''
+    description: Date when the asset was purchased or acquired by the organization.
   - name: available_for_use_date
-    description: ''
+    description: Date when the asset was ready and placed into service or operational
+      use, which may differ from purchase date and typically triggers depreciation.
   - name: gross_purchase_amount
-    description: ''
+    description: Total purchase price of the asset before any depreciation, discounts,
+      or adjustments.
   - name: asset_quantity
-    description: ''
+    description: Number of units of this asset, relevant when asking about asset counts
+      or quantities owned.
   - name: additional_asset_cost
-    description: ''
+    description: Extra costs beyond the base asset price such as installation, shipping,
+      or setup fees.
   - name: total_asset_cost
-    description: ''
+    description: Complete cost of the asset including base price and all additional
+      costs, used for total valuation queries.
   - name: calculate_depreciation
-    description: ''
+    description: Whether depreciation is automatically calculated for this asset,
+      relevant when users ask which assets are or aren't being depreciated.
   - name: opening_accumulated_depreciation
-    description: ''
+    description: Total depreciation already recorded before the asset entered the
+      current system, used when users ask about historical depreciation or asset book
+      value at migration.
   - name: opening_number_of_booked_depreciations
-    description: ''
+    description: Count of depreciation periods already recorded before the asset entered
+      the current system, relevant when users ask about depreciation history or remaining
+      useful life calculations.
   - name: is_fully_depreciated
-    description: ''
+    description: Whether the asset has reached its full depreciation value and no
+      further depreciation will be calculated.
   - name: finance_books
-    description: ''
+    description: The specific finance book or accounting ledger used to track this
+      asset's depreciation and value for financial reporting purposes.
   - name: depreciation_method
-    description: ''
+    description: The calculation method used to depreciate the asset such as straight-line,
+      declining balance, or written down value.
     options:
     - Straight Line
     - Double Declining Balance
     - Manual
   - name: value_after_depreciation
-    description: ''
+    description: Current net book value of the asset after applying accumulated depreciation
+      charges.
   - name: total_number_of_depreciations
-    description: ''
+    description: Count of depreciation periods or transactions that have been processed
+      for the asset.
   - name: frequency_of_depreciation
-    description: ''
+    description: How often depreciation is calculated and recorded for the asset,
+      such as monthly, quarterly, or annually.
   - name: next_depreciation_date
-    description: ''
+    description: Date when the asset's next depreciation calculation is scheduled
+      to occur, used when querying upcoming depreciation events or schedules.
   - name: policy_number
-    description: ''
+    description: Insurance policy identifier for the asset, used when searching for
+      assets by their insurance coverage or policy details.
   - name: insurer
-    description: ''
+    description: Name of the insurance company providing coverage for the asset, used
+      when filtering or grouping assets by insurance provider.
   - name: insured_value
-    description: ''
+    description: The monetary amount for which the asset is insured against loss or
+      damage.
   - name: insurance_start_date
-    description: ''
+    description: The date when insurance coverage for the asset begins.
   - name: insurance_end_date
-    description: ''
+    description: The date when insurance coverage for the asset expires or terminates.
   - name: comprehensive_insurance
-    description: ''
+    description: Whether the asset is covered by comprehensive insurance for damage,
+      theft, or loss.
   - name: maintenance_required
-    description: ''
+    description: Whether the asset requires scheduled or ongoing maintenance activities.
   - name: status
-    description: ''
+    description: Current operational or lifecycle status of the asset such as active,
+      disposed, under maintenance, or retired.
     options:
     - Draft
     - Submitted
@@ -930,21 +1146,25 @@ tables:
     - Capitalized
     - Work In Progress
   - name: booked_fixed_asset
-    description: ''
+    description: Whether the asset has been formally recorded in fixed asset accounting
+      records for depreciation and financial reporting.
   - name: purchase_amount
-    description: ''
+    description: Original acquisition cost or purchase price paid for the asset.
   - name: default_finance_book
-    description: ''
+    description: Primary finance book used for tracking this asset's depreciation
+      and accounting entries when multiple books exist.
     join_hint:
       table: tabFinance Book
       'on': default_finance_book = tabFinance Book.name
   - name: depr_entry_posting_status
-    description: ''
+    description: Status indicating whether depreciation journal entries for this asset
+      have been posted to the general ledger.
     options:
     - Successful
     - Failed
   - name: amended_from
-    description: ''
+    description: Reference to the previous asset document that this asset record was
+      amended or corrected from.
     join_hint:
       table: tabAsset
       'on': amended_from = tabAsset.name
@@ -961,111 +1181,136 @@ tables:
   - name: date
     description: ''
   - name: user
-    description: ''
+    description: Person who performed or logged the activity on the asset
     join_hint:
       table: tabUser
       'on': user = tabUser.name
   - name: subject
-    description: ''
+    description: Brief title or summary describing what the asset activity was about
 - table: tabAsset Capitalization
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier for the asset capitalization transaction
   - name: title
-    description: ''
+    description: Human-readable label or subject describing the asset capitalization
+      entry
   - name: naming_series
-    description: ''
+    description: Prefix pattern used to auto-generate the asset capitalization name
     options:
     - ACC-ASC-.YYYY.-
   - name: capitalization_method
-    description: ''
+    description: Method used to capitalize the asset, such as manual entry, automatic
+      from purchase order, or batch capitalization.
     options:
     - Create a new composite asset
     - Choose a WIP composite asset
   - name: target_item_code
-    description: ''
+    description: Code identifying the specific item or asset being capitalized.
     join_hint:
       table: tabItem
       'on': target_item_code = tabItem.name
   - name: target_item_name
-    description: ''
+    description: Name or description of the specific item or asset being capitalized.
   - name: target_asset
-    description: ''
+    description: Asset identifier being capitalized or created from the capitalization
+      transaction.
     join_hint:
       table: tabAsset
       'on': target_asset = tabAsset.name
   - name: target_asset_name
-    description: ''
+    description: Name of the asset being capitalized or created from the capitalization
+      transaction.
   - name: target_qty
-    description: ''
+    description: Quantity of the asset being capitalized or created in the transaction.
   - name: target_asset_location
-    description: ''
+    description: Location where the capitalized asset will be physically placed or
+      assigned after capitalization.
     join_hint:
       table: tabLocation
       'on': target_asset_location = tabLocation.name
   - name: company
-    description: ''
+    description: Company entity that owns or is capitalizing the asset.
     join_hint:
       table: tabCompany
       'on': company = tabCompany.name
   - name: posting_date
-    description: ''
+    description: Date when the asset capitalization transaction is recorded in the
+      financial ledger.
   - name: posting_time
-    description: ''
+    description: Time when the asset capitalization transaction was posted, used when
+      querying capitalizations by specific time of day.
   - name: set_posting_time
-    description: ''
+    description: Indicates whether the posting time was manually specified rather
+      than automatically assigned at submission.
   - name: finance_book
-    description: ''
+    description: Specific finance book or accounting ledger where this asset capitalization
+      is recorded, used for multi-book accounting scenarios.
     join_hint:
       table: tabFinance Book
       'on': finance_book = tabFinance Book.name
   - name: target_batch_no
-    description: ''
+    description: Batch number assigned to the capitalized asset after conversion from
+      consumable or inventory.
     join_hint:
       table: tabBatch
       'on': target_batch_no = tabBatch.name
   - name: target_serial_no
-    description: ''
+    description: Serial number assigned to the capitalized asset after conversion
+      from consumable or inventory.
   - name: amended_from
-    description: ''
+    description: Reference to the previous asset capitalization document that this
+      record amends or replaces.
     join_hint:
       table: tabAsset Capitalization
       'on': amended_from = tabAsset Capitalization.name
   - name: target_is_fixed_asset
-    description: ''
+    description: Whether the capitalized asset is classified as a fixed asset for
+      accounting and depreciation purposes.
   - name: target_has_batch_no
-    description: ''
+    description: Whether the capitalized asset requires batch number tracking for
+      inventory management and traceability.
   - name: target_has_serial_no
-    description: ''
+    description: Whether the capitalized asset requires serial number tracking for
+      individual item identification and warranty management.
   - name: stock_items
-    description: ''
+    description: Individual stock or inventory items being capitalized and converted
+      into fixed assets.
   - name: stock_items_total
-    description: ''
+    description: Total monetary value or count of all stock items included in this
+      asset capitalization transaction.
   - name: asset_items
-    description: ''
+    description: Fixed asset items created or updated as a result of capitalizing
+      stock inventory.
   - name: asset_items_total
-    description: ''
+    description: Total value or count of asset line items being capitalized in this
+      transaction.
   - name: service_items
-    description: ''
+    description: Number of service-related line items included in the capitalization.
   - name: service_items_total
-    description: ''
+    description: Total value of service line items being capitalized, distinct from
+      physical asset items.
   - name: total_value
-    description: ''
+    description: Total capitalized value of the asset for questions about asset worth,
+      book value, or capitalization amounts.
   - name: target_incoming_rate
-    description: ''
+    description: Expected or planned rate at which asset value will be added or capitalized,
+      used when asking about future capitalization schedules or planned asset value
+      increases.
   - name: cost_center
-    description: ''
+    description: Cost center assigned to the capitalized asset for questions about
+      departmental allocation, expense tracking by business unit, or organizational
+      responsibility.
     join_hint:
       table: tabCost Center
       'on': cost_center = tabCost Center.name
   - name: project
-    description: ''
+    description: Project from which costs are being capitalized into a fixed asset.
     join_hint:
       table: tabProject
       'on': project = tabProject.name
   - name: target_fixed_asset_account
-    description: ''
+    description: Fixed asset account where the capitalized project costs will be recorded.
     join_hint:
       table: tabAccount
       'on': target_fixed_asset_account = tabAccount.name
@@ -1082,33 +1327,40 @@ tables:
   - name: asset_name
     description: ''
   - name: finance_book
-    description: ''
+    description: Identifies which financial book or accounting entity this asset capitalization
+      belongs to for multi-book accounting scenarios.
     join_hint:
       table: tabFinance Book
       'on': finance_book = tabFinance Book.name
   - name: item_code
-    description: ''
+    description: Unique identifier code for the capitalized asset item being tracked.
     join_hint:
       table: tabItem
       'on': item_code = tabItem.name
   - name: item_name
-    description: ''
+    description: Descriptive name of the capitalized asset item for human-readable
+      identification.
   - name: current_asset_value
-    description: ''
+    description: The present-day value of the capitalized asset after accounting for
+      depreciation or adjustments since acquisition.
   - name: asset_value
-    description: ''
+    description: The original or initial value of the asset at the time of capitalization
+      or purchase.
   - name: cost_center
-    description: ''
+    description: The organizational unit or department to which this capitalized asset's
+      costs and expenses are allocated.
     join_hint:
       table: tabCost Center
       'on': cost_center = tabCost Center.name
   - name: project
-    description: ''
+    description: Project associated with the capitalized asset for tracking capital
+      expenditures and asset allocation by project.
     join_hint:
       table: tabProject
       'on': project = tabProject.name
   - name: fixed_asset_account
-    description: ''
+    description: General ledger account where the capitalized asset value is recorded
+      for balance sheet reporting.
     join_hint:
       table: tabAccount
       'on': fixed_asset_account = tabAccount.name
@@ -1116,32 +1368,37 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier or title for this specific asset capitalization
+      service item record
   - name: item_code
-    description: ''
+    description: Code or SKU of the service item being capitalized as an asset
     join_hint:
       table: tabItem
       'on': item_code = tabItem.name
   - name: item_name
-    description: ''
+    description: Descriptive name of the service item being capitalized as an asset
   - name: expense_account
-    description: ''
+    description: Account charged for service expenses related to asset capitalization
+      activities.
     join_hint:
       table: tabAccount
       'on': expense_account = tabAccount.name
   - name: qty
-    description: ''
+    description: Quantity of the service item applied to the asset capitalization.
   - name: uom
-    description: ''
+    description: Unit of measurement for the service item quantity in asset capitalization.
     join_hint:
       table: tabUOM
       'on': uom = tabUOM.name
   - name: rate
-    description: ''
+    description: Unit price or hourly rate applied to the service item for calculating
+      capitalization costs.
   - name: amount
-    description: ''
+    description: Total monetary value of the service item being capitalized into the
+      asset.
   - name: cost_center
-    description: ''
+    description: Organizational unit or department to which the service item's capitalization
+      expense is allocated.
     join_hint:
       table: tabCost Center
       'on': cost_center = tabCost Center.name
@@ -1149,50 +1406,59 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier for this asset capitalization stock item record
   - name: item_code
-    description: ''
+    description: Stock item code being capitalized as a fixed asset
     join_hint:
       table: tabItem
       'on': item_code = tabItem.name
   - name: item_name
-    description: ''
+    description: Name of the stock item being capitalized as a fixed asset
   - name: warehouse
-    description: ''
+    description: Location where the capitalized asset stock item is stored or received.
     join_hint:
       table: tabWarehouse
       'on': warehouse = tabWarehouse.name
   - name: purchase_receipt_item
-    description: ''
+    description: Links to the specific purchase receipt line item that brought this
+      asset stock into inventory.
   - name: stock_qty
-    description: ''
+    description: Quantity of the asset item in stock units available for capitalization.
   - name: actual_qty
-    description: ''
+    description: Quantity of stock item physically available or consumed during asset
+      capitalization
   - name: valuation_rate
-    description: ''
+    description: Per-unit cost or rate used to value the stock item for capitalization
+      purposes
   - name: amount
-    description: ''
+    description: Total monetary value of the stock item being capitalized, typically
+      quantity multiplied by valuation rate
   - name: stock_uom
-    description: ''
+    description: Unit of measurement for the capitalized asset stock item quantity.
     join_hint:
       table: tabUOM
       'on': stock_uom = tabUOM.name
   - name: serial_and_batch_bundle
-    description: ''
+    description: Reference to bundled serial numbers or batch identifiers for tracking
+      individual asset items.
     join_hint:
       table: tabSerial and Batch Bundle
       'on': serial_and_batch_bundle = tabSerial and Batch Bundle.name
   - name: use_serial_batch_fields
-    description: ''
+    description: Indicates whether this asset capitalization uses serial number or
+      batch tracking for inventory control.
   - name: serial_no
-    description: ''
+    description: Unique identifier for individually tracked items in asset capitalization,
+      used when querying specific serialized equipment or assets.
   - name: batch_no
-    description: ''
+    description: Batch identifier for grouped items in asset capitalization, used
+      when querying assets purchased or capitalized together as a lot.
     join_hint:
       table: tabBatch
       'on': batch_no = tabBatch.name
   - name: cost_center
-    description: ''
+    description: Department or business unit to which the capitalized asset stock
+      item is allocated for expense tracking and budgeting purposes.
     join_hint:
       table: tabCost Center
       'on': cost_center = tabCost Center.name
@@ -1200,44 +1466,55 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier code or short name for the asset category
   - name: asset_category_name
-    description: ''
+    description: Full descriptive name of the asset category used for classification
+      and reporting
   - name: enable_cwip_accounting
-    description: ''
+    description: Indicates whether Capital Work in Progress accounting is activated
+      for assets in this category
   - name: non_depreciable_category
-    description: ''
+    description: Indicates whether assets in this category are excluded from depreciation
+      calculations.
   - name: finance_books
-    description: ''
+    description: Links this asset category to specific finance books for multi-book
+      accounting or reporting across different legal entities or accounting standards.
   - name: accounts
-    description: ''
+    description: Defines the default general ledger accounts used for asset transactions
+      in this category, such as asset account, depreciation account, and accumulated
+      depreciation account.
 - table: tabAsset Category Account
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Name of the asset category used to classify and group similar fixed
+      assets
   - name: company_name
-    description: ''
+    description: Company to which this asset category account configuration belongs
     join_hint:
       table: tabCompany
       'on': company_name = tabCompany.name
   - name: fixed_asset_account
-    description: ''
+    description: General ledger account where the capitalized value of assets in this
+      category is recorded
     join_hint:
       table: tabAccount
       'on': fixed_asset_account = tabAccount.name
   - name: accumulated_depreciation_account
-    description: ''
+    description: Account where cumulative depreciation for assets in this category
+      is recorded over their lifetime.
     join_hint:
       table: tabAccount
       'on': accumulated_depreciation_account = tabAccount.name
   - name: depreciation_expense_account
-    description: ''
+    description: Account where periodic depreciation expense is charged for assets
+      in this category during each accounting period.
     join_hint:
       table: tabAccount
       'on': depreciation_expense_account = tabAccount.name
   - name: capital_work_in_progress_account
-    description: ''
+    description: Account for tracking costs of assets in this category that are under
+      construction or development and not yet ready for use.
     join_hint:
       table: tabAccount
       'on': capital_work_in_progress_account = tabAccount.name
@@ -1245,65 +1522,83 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier for this specific depreciation schedule record
   - name: asset
-    description: ''
+    description: The asset being depreciated in this schedule
     join_hint:
       table: tabAsset
       'on': asset = tabAsset.name
   - name: naming_series
-    description: ''
+    description: Prefix pattern used to generate the depreciation schedule name
     options:
     - ACC-ADS-.YYYY.-
   - name: company
-    description: ''
+    description: Company entity that owns the asset being depreciated
     join_hint:
       table: tabCompany
       'on': company = tabCompany.name
   - name: gross_purchase_amount
-    description: ''
+    description: Original purchase price of the asset before any depreciation
   - name: opening_accumulated_depreciation
-    description: ''
+    description: Total depreciation accumulated on the asset at the beginning of the
+      period
   - name: opening_number_of_booked_depreciations
-    description: ''
+    description: Number of depreciation entries already recorded before the current
+      schedule period, used when querying historical depreciation counts or calculating
+      remaining depreciations.
   - name: finance_book
-    description: ''
+    description: Name of the finance book (e.g., Tax Book, GAAP Book) that this depreciation
+      schedule applies to, used when filtering or comparing depreciation across different
+      accounting standards.
     join_hint:
       table: tabFinance Book
       'on': finance_book = tabFinance Book.name
   - name: finance_book_id
-    description: ''
+    description: Numeric identifier for the finance book, used for joining to finance
+      book records or filtering by specific book ID.
   - name: depreciation_method
-    description: ''
+    description: Method used to calculate asset depreciation such as straight-line,
+      declining balance, or units of production.
     options:
     - Straight Line
     - Double Declining Balance
     - Written Down Value
     - Manual
   - name: total_number_of_depreciations
-    description: ''
+    description: Total count of depreciation periods or installments planned for the
+      asset over its useful life.
   - name: rate_of_depreciation
-    description: ''
+    description: Percentage or rate applied to calculate periodic depreciation expense
+      for the asset.
   - name: daily_prorata_based
-    description: ''
+    description: Indicates whether depreciation is calculated proportionally based
+      on the number of days the asset was in use during the period.
   - name: shift_based
-    description: ''
+    description: Indicates whether depreciation is calculated based on the number
+      of shifts or operational hours the asset was used rather than time elapsed.
   - name: frequency_of_depreciation
-    description: ''
+    description: Defines how often depreciation is calculated and recorded, such as
+      monthly, quarterly, or annually.
   - name: expected_value_after_useful_life
-    description: ''
+    description: Residual or salvage value of the asset after full depreciation, used
+      when calculating total depreciable amount or end-of-life asset worth.
   - name: depreciation_schedule
-    description: ''
+    description: Name or identifier of the depreciation schedule record, used when
+      referencing which schedule applies to specific assets or depreciation calculations.
   - name: notes
-    description: ''
+    description: Additional comments or explanations about the depreciation schedule,
+      used when searching for context about depreciation methods, assumptions, or
+      special conditions.
   - name: status
-    description: ''
+    description: Current state of the depreciation schedule such as draft, submitted,
+      or cancelled.
     options:
     - Draft
     - Active
     - Cancelled
   - name: amended_from
-    description: ''
+    description: Links to the previous version of this depreciation schedule if it
+      was amended or corrected.
     join_hint:
       table: tabAsset Depreciation Schedule
       'on': amended_from = tabAsset Depreciation Schedule.name
@@ -1325,57 +1620,73 @@ tables:
     - Written Down Value
     - Manual
   - name: total_number_of_depreciations
-    description: ''
+    description: Total planned depreciation entries for the asset over its useful
+      life in this finance book.
   - name: total_number_of_booked_depreciations
-    description: ''
+    description: Count of depreciation entries already posted or recorded for the
+      asset in this finance book.
   - name: daily_prorata_based
-    description: ''
+    description: Whether depreciation is calculated on a daily prorated basis rather
+      than monthly or annual periods.
   - name: shift_based
-    description: ''
+    description: Whether depreciation is calculated based on asset usage shifts rather
+      than time periods.
   - name: frequency_of_depreciation
-    description: ''
+    description: How often depreciation is calculated and posted (monthly, quarterly,
+      yearly).
   - name: depreciation_start_date
-    description: ''
+    description: The date from which depreciation calculation begins for the asset
+      in this finance book.
   - name: salvage_value_percentage
-    description: ''
+    description: Percentage of original asset value expected to remain at end of useful
+      life, used when calculating depreciation based on a percentage rather than absolute
+      amount.
   - name: expected_value_after_useful_life
-    description: ''
+    description: Estimated residual value of the asset when it reaches the end of
+      its planned useful life before any actual depreciation calculations.
   - name: value_after_depreciation
-    description: ''
+    description: Current net book value of the asset after applying accumulated depreciation
+      to date.
   - name: rate_of_depreciation
-    description: ''
+    description: Percentage rate applied annually or per period to calculate depreciation
+      expense for the asset in this finance book.
 - table: tabAsset Maintenance
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier or code for this specific maintenance record or
+      maintenance task
   - name: asset_name
-    description: ''
+    description: The specific asset or equipment that is being maintained or serviced
     join_hint:
       table: tabAsset
       'on': asset_name = tabAsset.name
   - name: asset_category
-    description: ''
+    description: The classification or type of asset being maintained, such as vehicle,
+      machinery, or building
   - name: company
-    description: ''
+    description: Company that owns or is responsible for the asset being maintained
     join_hint:
       table: tabCompany
       'on': company = tabCompany.name
   - name: item_code
-    description: ''
+    description: Unique identifier code for the asset item undergoing maintenance
   - name: item_name
-    description: ''
+    description: Descriptive name of the asset item being maintained
   - name: maintenance_team
-    description: ''
+    description: Team or group assigned to perform maintenance work on the asset.
     join_hint:
       table: tabAsset Maintenance Team
       'on': maintenance_team = tabAsset Maintenance Team.name
   - name: maintenance_manager
-    description: ''
+    description: Manager responsible for overseeing maintenance activities for the
+      asset.
   - name: maintenance_manager_name
-    description: ''
+    description: Name of the manager responsible for overseeing maintenance activities,
+      used when searching by person name rather than ID.
   - name: asset_maintenance_tasks
-    description: ''
+    description: Tasks or activities performed during maintenance of an asset, such
+      as inspection, repair, or replacement work.
 - table: tabAsset Maintenance Log
   description: ''
   fields:
@@ -1391,45 +1702,59 @@ tables:
     options:
     - ACC-AML-.YYYY.-
   - name: asset_name
-    description: ''
+    description: Name of the specific asset being maintained, used when asking about
+      maintenance history or logs for a particular asset.
   - name: item_code
-    description: ''
+    description: SKU or product code of the asset type, used when querying maintenance
+      by standardized item identifier rather than individual asset name.
   - name: item_name
-    description: ''
+    description: Generic product or item type description, used when asking about
+      maintenance patterns across all assets of the same item category.
   - name: task
-    description: ''
+    description: Unique identifier for a specific maintenance activity or work order
+      performed on an asset.
     join_hint:
       table: tabAsset Maintenance Task
       'on': task = tabAsset Maintenance Task.name
   - name: task_name
-    description: ''
+    description: Descriptive label of the maintenance work performed, used when searching
+      by activity description rather than ID.
   - name: maintenance_type
-    description: ''
+    description: Category of maintenance work such as preventive, corrective, or emergency,
+      used to filter or analyze maintenance patterns.
   - name: periodicity
-    description: ''
+    description: Frequency or schedule interval for recurring maintenance activities
+      such as daily, weekly, monthly, quarterly, or annual.
   - name: has_certificate
-    description: ''
+    description: Indicates whether a maintenance activity resulted in or requires
+      a certification document or compliance certificate.
   - name: maintenance_status
-    description: ''
+    description: Current state of the maintenance task such as scheduled, in progress,
+      completed, overdue, or cancelled.
     options:
     - Planned
     - Completed
     - Cancelled
     - Overdue
   - name: assign_to_name
-    description: ''
+    description: Name of the person assigned to perform the maintenance task or repair
+      work.
   - name: task_assignee_email
-    description: ''
+    description: Email address of the person assigned to the maintenance task for
+      contact or notification purposes.
   - name: due_date
-    description: ''
+    description: Target completion date for the maintenance task or when the work
+      must be finished.
   - name: completion_date
-    description: ''
+    description: Date when the asset maintenance work was finished or closed out.
   - name: description
-    description: ''
+    description: Summary or title of the maintenance issue or work order being logged.
   - name: actions_performed
-    description: ''
+    description: Detailed record of specific maintenance tasks, repairs, or services
+      executed during the maintenance activity.
   - name: amended_from
-    description: ''
+    description: Links to the original maintenance log entry that was amended or corrected
+      by this record.
     join_hint:
       table: tabAsset Maintenance Log
       'on': amended_from = tabAsset Maintenance Log.name
@@ -1446,15 +1771,18 @@ tables:
     - Preventive Maintenance
     - Calibration
   - name: maintenance_status
-    description: ''
+    description: Current state of the maintenance task such as planned, in progress,
+      completed, or cancelled.
     options:
     - Planned
     - Overdue
     - Cancelled
   - name: start_date
-    description: ''
+    description: Date when the maintenance task is scheduled to begin or actually
+      began.
   - name: periodicity
-    description: ''
+    description: Frequency or recurrence pattern of the maintenance task such as daily,
+      weekly, monthly, or one-time.
     options:
     - Daily
     - Weekly
@@ -1465,73 +1793,88 @@ tables:
     - 2 Yearly
     - 3 Yearly
   - name: end_date
-    description: ''
+    description: Date when the maintenance task is scheduled to be completed or was
+      actually finished.
   - name: certificate_required
-    description: ''
+    description: Indicates whether a certification or compliance document must be
+      obtained upon completing this maintenance task.
   - name: assign_to
-    description: ''
+    description: Person or team responsible for performing this maintenance task.
     join_hint:
       table: tabUser
       'on': assign_to = tabUser.name
   - name: assign_to_name
-    description: ''
+    description: Name of the person or team responsible for completing the maintenance
+      task.
   - name: next_due_date
-    description: ''
+    description: Scheduled date when the maintenance task is next required to be performed.
   - name: last_completion_date
-    description: ''
+    description: Date when the maintenance task was most recently completed.
   - name: description
-    description: ''
+    description: Details what maintenance work needs to be performed on the asset,
+      such as inspection, repair, or replacement tasks.
 - table: tabAsset Maintenance Team
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier for the asset maintenance team record.
   - name: maintenance_team_name
-    description: ''
+    description: Full name of the maintenance team responsible for servicing assets.
   - name: maintenance_manager
-    description: ''
+    description: Person who manages and oversees this maintenance team's operations
+      and assignments.
     join_hint:
       table: tabUser
       'on': maintenance_manager = tabUser.name
   - name: maintenance_manager_name
-    description: ''
+    description: Name of the person responsible for managing this asset maintenance
+      team, used when searching for teams by their manager or supervisor.
   - name: company
-    description: ''
+    description: Company or organizational entity that owns or operates this maintenance
+      team, used to filter teams by business unit or legal entity.
     join_hint:
       table: tabCompany
       'on': company = tabCompany.name
   - name: maintenance_team_members
-    description: ''
+    description: List of individuals assigned to this maintenance team who perform
+      repair and upkeep work on assets.
 - table: tabAsset Movement
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier or reference code for this specific asset movement
+      transaction
   - name: company
-    description: ''
+    description: Company or business entity where the asset movement occurred
     join_hint:
       table: tabCompany
       'on': company = tabCompany.name
   - name: purpose
-    description: ''
+    description: Reason or business justification for moving the asset, such as transfer,
+      maintenance, or relocation
     options:
     - Issue
     - Receipt
     - Transfer
     - Transfer and Issue
   - name: transaction_date
-    description: ''
+    description: Date when the asset movement or transfer occurred, used to track
+      timing of asset location changes or custody transfers.
   - name: assets
-    description: ''
+    description: Specific asset item being moved or transferred, used to identify
+      which equipment or property is changing location or ownership.
   - name: reference_doctype
-    description: ''
+    description: Type of source document that triggered the asset movement such as
+      delivery note, purchase receipt, or asset transfer form.
     join_hint:
       table: tabDocType
       'on': reference_doctype = tabDocType.name
   - name: reference_name
-    description: ''
+    description: Unique identifier or code assigned to this specific asset movement
+      transaction for tracking and reference purposes.
   - name: amended_from
-    description: ''
+    description: Links to the original asset movement document that this record corrects
+      or replaces after amendment.
     join_hint:
       table: tabAsset Movement
       'on': amended_from = tabAsset Movement.name
@@ -1539,36 +1882,40 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier or reference code for this specific asset movement
+      item transaction
   - name: company
-    description: ''
+    description: Company entity that owns or is responsible for the asset being moved
     join_hint:
       table: tabCompany
       'on': company = tabCompany.name
   - name: asset
-    description: ''
+    description: Specific asset item being transferred or relocated in this movement
     join_hint:
       table: tabAsset
       'on': asset = tabAsset.name
   - name: source_location
-    description: ''
+    description: Location where the asset is being moved from in this movement transaction.
     join_hint:
       table: tabLocation
       'on': source_location = tabLocation.name
   - name: from_employee
-    description: ''
+    description: Employee who previously held or was responsible for the asset before
+      this movement.
     join_hint:
       table: tabEmployee
       'on': from_employee = tabEmployee.name
   - name: asset_name
-    description: ''
+    description: Name or identifier of the specific asset being moved or transferred.
   - name: target_location
-    description: ''
+    description: Destination location where the asset is being moved to in this movement
+      transaction.
     join_hint:
       table: tabLocation
       'on': target_location = tabLocation.name
   - name: to_employee
-    description: ''
+    description: Employee who will be responsible for or assigned to the asset after
+      the movement.
     join_hint:
       table: tabEmployee
       'on': to_employee = tabEmployee.name
@@ -1576,68 +1923,85 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier or reference code for the specific asset repair
+      record
   - name: asset
-    description: ''
+    description: The specific asset or equipment that is being repaired or has undergone
+      repair
     join_hint:
       table: tabAsset
       'on': asset = tabAsset.name
   - name: company
-    description: ''
+    description: The company or business entity that owns the asset or is responsible
+      for the repair
     join_hint:
       table: tabCompany
       'on': company = tabCompany.name
   - name: asset_name
-    description: ''
+    description: The specific asset being repaired, used when asking which equipment
+      or item is undergoing maintenance or repair work.
   - name: naming_series
-    description: ''
+    description: The prefix or pattern used to generate repair record identifiers,
+      relevant when searching for repairs by document number format.
     options:
     - ACC-ASR-.YYYY.-
   - name: failure_date
-    description: ''
+    description: The date when the asset broke down or malfunctioned, used to find
+      repairs by when the problem originally occurred.
   - name: repair_status
-    description: ''
+    description: Current state of the asset repair such as pending, in progress, completed,
+      or cancelled.
     options:
     - Pending
     - Completed
     - Cancelled
   - name: completion_date
-    description: ''
+    description: Date when the asset repair was finished or closed.
   - name: cost_center
-    description: ''
+    description: Department or business unit charged for the repair expenses.
     join_hint:
       table: tabCost Center
       'on': cost_center = tabCost Center.name
   - name: project
-    description: ''
+    description: Project associated with the asset repair work for cost allocation
+      or tracking repair activities by project.
     join_hint:
       table: tabProject
       'on': project = tabProject.name
   - name: purchase_invoice
-    description: ''
+    description: Invoice document linked to the repair for tracking vendor billing
+      and payment for repair services or parts.
     join_hint:
       table: tabPurchase Invoice
       'on': purchase_invoice = tabPurchase Invoice.name
   - name: capitalize_repair_cost
-    description: ''
+    description: Whether the repair cost should be added to the asset's book value
+      rather than expensed immediately.
   - name: stock_consumption
-    description: ''
+    description: Total value of inventory items consumed or used during the asset
+      repair process.
   - name: repair_cost
-    description: ''
+    description: Total cost incurred for the repair including labor, services, and
+      other charges excluding stock consumption.
   - name: stock_items
-    description: ''
+    description: List or details of specific inventory items used or consumed in this
+      asset repair.
   - name: total_repair_cost
-    description: ''
+    description: Total cost incurred for the repair work performed on the asset.
   - name: increase_in_asset_life
-    description: ''
+    description: Additional useful life in years or months added to the asset as a
+      result of the repair or refurbishment.
   - name: description
-    description: ''
+    description: Detailed explanation of the repair work performed, issues addressed,
+      or parts replaced on the asset.
   - name: actions_performed
-    description: ''
+    description: Specific repair work, maintenance tasks, or corrective actions completed
+      during the asset repair service.
   - name: downtime
-    description: ''
+    description: Duration the asset was unavailable or out of service due to the repair.
   - name: amended_from
-    description: ''
+    description: Reference to the original asset repair record that this document
+      corrects or replaces.
     join_hint:
       table: tabAsset Repair
       'on': amended_from = tabAsset Repair.name
@@ -1657,15 +2021,18 @@ tables:
       table: tabWarehouse
       'on': warehouse = tabWarehouse.name
   - name: valuation_rate
-    description: ''
+    description: Unit cost or price per item consumed during the asset repair.
   - name: consumed_quantity
-    description: ''
+    description: Number of units of the item used or consumed in the asset repair.
   - name: total_value
-    description: ''
+    description: Total monetary value of the consumed item calculated from quantity
+      and rate.
   - name: serial_no
-    description: ''
+    description: Unique identifier of the specific item consumed during the asset
+      repair, used when tracking individual serialized parts or components.
   - name: serial_and_batch_bundle
-    description: ''
+    description: Reference to grouped serial or batch numbers for items consumed in
+      the repair, used when multiple units or batches are consumed together.
     join_hint:
       table: tabSerial and Batch Bundle
       'on': serial_and_batch_bundle = tabSerial and Batch Bundle.name
@@ -1673,86 +2040,101 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier for this specific asset shift allocation record
   - name: asset
-    description: ''
+    description: The asset being assigned to shifts or work schedules
     join_hint:
       table: tabAsset
       'on': asset = tabAsset.name
   - name: naming_series
-    description: ''
+    description: Prefix pattern used to generate the name identifier for asset shift
+      allocation records
     options:
     - ACC-ASA-.YYYY.-
   - name: finance_book
-    description: ''
+    description: Identifies which financial book or accounting entity this asset shift
+      allocation applies to when multiple books are maintained.
     join_hint:
       table: tabFinance Book
       'on': finance_book = tabFinance Book.name
   - name: amended_from
-    description: ''
+    description: References the original asset shift allocation document that this
+      record corrects or replaces.
     join_hint:
       table: tabAsset Shift Allocation
       'on': amended_from = tabAsset Shift Allocation.name
   - name: depreciation_schedule
-    description: ''
+    description: Links to the specific depreciation schedule affected by this shift
+      allocation for tracking depreciation changes across shifts.
 - table: tabAsset Shift Factor
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier or code for this asset shift factor record
   - name: shift_name
-    description: ''
+    description: Name of the work shift or time period this factor applies to
   - name: shift_factor
-    description: ''
+    description: Multiplier or adjustment value applied to asset calculations during
+      this shift
   - name: default
-    description: ''
+    description: Indicates whether this shift factor is the default selection for
+      asset depreciation calculations.
 - table: tabAsset Value Adjustment
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier or reference code for this specific asset value
+      adjustment transaction
   - name: company
-    description: ''
+    description: Company entity to which this asset value adjustment belongs
     join_hint:
       table: tabCompany
       'on': company = tabCompany.name
   - name: asset
-    description: ''
+    description: The specific asset being adjusted in value through this transaction
     join_hint:
       table: tabAsset
       'on': asset = tabAsset.name
   - name: asset_category
-    description: ''
+    description: Category of the asset being adjusted, used when filtering or analyzing
+      adjustments by asset type or classification.
   - name: date
-    description: ''
+    description: Date when the asset value adjustment was recorded or became effective,
+      used for time-based queries and period-specific reporting.
   - name: finance_book
-    description: ''
+    description: Specific finance book or accounting ledger where this adjustment
+      is recorded, used when querying adjustments for particular legal entities or
+      reporting frameworks.
     join_hint:
       table: tabFinance Book
       'on': finance_book = tabFinance Book.name
   - name: amended_from
-    description: ''
+    description: References the previous version of this asset value adjustment if
+      it was corrected or modified after initial creation.
     join_hint:
       table: tabAsset Value Adjustment
       'on': amended_from = tabAsset Value Adjustment.name
   - name: current_asset_value
-    description: ''
+    description: The asset's book value before this adjustment is applied.
   - name: new_asset_value
-    description: ''
+    description: The asset's book value after this adjustment is applied.
   - name: difference_amount
-    description: ''
+    description: The calculated variance between current asset value and book value
+      that needs to be adjusted.
   - name: difference_account
-    description: ''
+    description: The general ledger account where the asset value difference is posted.
     join_hint:
       table: tabAccount
       'on': difference_account = tabAccount.name
   - name: journal_entry
-    description: ''
+    description: The accounting journal entry created to record the asset value adjustment
+      transaction.
     join_hint:
       table: tabJournal Entry
       'on': journal_entry = tabJournal Entry.name
   - name: cost_center
-    description: ''
+    description: Cost center to which the asset value adjustment is allocated for
+      accounting and expense tracking purposes.
     join_hint:
       table: tabCost Center
       'on': cost_center = tabCost Center.name
@@ -1760,40 +2142,52 @@ tables:
   description: Automatically Assign Documents to Users
   fields:
   - name: name
-    description: ''
+    description: Unique identifier or label for the assignment rule used when users
+      search for specific rules by name
   - name: document_type
-    description: ''
+    description: The type of document or transaction this assignment rule applies
+      to, relevant when users ask which rules affect specific document types
     join_hint:
       table: tabDocType
       'on': document_type = tabDocType.name
   - name: due_date_based_on
-    description: ''
+    description: The reference field or event that determines when the due date is
+      calculated from, used when users need to understand due date calculation logic
   - name: priority
-    description: ''
+    description: Order in which assignment rules are evaluated and applied when multiple
+      rules match.
   - name: disabled
-    description: ''
+    description: Whether this assignment rule is currently active or temporarily turned
+      off from processing.
   - name: description
-    description: ''
+    description: Explanation of what this assignment rule does or when it should trigger.
   - name: assign_condition
-    description: ''
+    description: Condition that triggers automatic assignment of a record to a user
+      or team
   - name: unassign_condition
-    description: ''
+    description: Condition that triggers automatic removal of assignment from a user
+      or team
   - name: close_condition
-    description: ''
+    description: Condition that triggers automatic closure of an assigned record
   - name: assignment_days
-    description: ''
+    description: Number of days within which the assignment rule applies or tasks
+      must be completed after assignment.
   - name: rule
-    description: ''
+    description: The specific assignment rule name or identifier that determines how
+      records are automatically assigned to users or teams.
     options:
     - Round Robin
     - Load Balancing
     - Based on Field
   - name: field
-    description: ''
+    description: The data field or attribute that the assignment rule evaluates to
+      determine assignment routing.
   - name: users
-    description: ''
+    description: Users who are assigned to or can access this assignment rule for
+      document routing or workflow automation.
   - name: last_user
-    description: ''
+    description: The most recent user who modified or interacted with this assignment
+      rule.
     join_hint:
       table: tabUser
       'on': last_user = tabUser.name
@@ -1801,9 +2195,9 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier or label for the assignment rule day configuration
   - name: day
-    description: ''
+    description: Specific day of the week when the assignment rule is active or applies
     options:
     - Monday
     - Tuesday
@@ -1816,9 +2210,10 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: name
   - name: user
-    description: ''
+    description: The specific user assigned to this assignment rule for routing or
+      workflow purposes
     join_hint:
       table: tabUser
       'on': user = tabUser.name
@@ -1838,14 +2233,17 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Authorization control name or identifier used to reference specific
+      access permissions, approval workflows, or security controls
 - table: tabAuthorization Rule
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier or label for the authorization rule used when searching
+      or referencing specific approval workflows
   - name: transaction
-    description: ''
+    description: The document type or transaction this authorization rule applies
+      to, such as Purchase Order, Sales Invoice, or Payment Entry
     options:
     - Sales Order
     - Purchase Order
@@ -1855,7 +2253,8 @@ tables:
     - Purchase Invoice
     - Purchase Receipt
   - name: based_on
-    description: ''
+    description: The field or condition that triggers this authorization rule, such
+      as Grand Total, Customer, or Territory
     options:
     - Grand Total
     - Average Discount
@@ -1864,47 +2263,57 @@ tables:
     - Item Group wise Discount
     - Not Applicable
   - name: customer_or_item
-    description: ''
+    description: Specifies whether this authorization rule applies to customers or
+      items, used when filtering rules by entity type.
     options:
     - Customer
     - Item
     - Item Group
   - name: master_name
-    description: ''
+    description: The specific customer name or item name that this authorization rule
+      governs.
   - name: company
-    description: ''
+    description: The company entity to which this authorization rule is scoped or
+      restricted.
     join_hint:
       table: tabCompany
       'on': company = tabCompany.name
   - name: value
-    description: ''
+    description: The monetary amount or threshold that triggers or limits the authorization
+      requirement for transactions or approvals.
   - name: system_role
-    description: ''
+    description: The role in the system that is subject to or governed by this authorization
+      rule.
     join_hint:
       table: tabRole
       'on': system_role = tabRole.name
   - name: to_emp
-    description: ''
+    description: The employee to whom authorization or approval authority is delegated
+      or escalated under this rule.
     join_hint:
       table: tabEmployee
       'on': to_emp = tabEmployee.name
   - name: system_user
-    description: ''
+    description: Specific individual user assigned to approve transactions under this
+      authorization rule.
     join_hint:
       table: tabUser
       'on': system_user = tabUser.name
   - name: to_designation
-    description: ''
+    description: Job title or position level that must approve transactions when this
+      rule applies.
     join_hint:
       table: tabDesignation
       'on': to_designation = tabDesignation.name
   - name: approving_role
-    description: ''
+    description: System role or permission group authorized to approve transactions
+      under this rule.
     join_hint:
       table: tabRole
       'on': approving_role = tabRole.name
   - name: approving_user
-    description: ''
+    description: User who has authority to approve transactions or requests under
+      this authorization rule.
     join_hint:
       table: tabUser
       'on': approving_user = tabUser.name
@@ -1912,39 +2321,51 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier or label for the automated email report configuration
   - name: report
-    description: ''
+    description: The specific report document or template that will be automatically
+      emailed
     join_hint:
       table: tabReport
       'on': report = tabReport.name
   - name: user
-    description: ''
+    description: The recipient or owner who will receive the automated email report
     join_hint:
       table: tabUser
       'on': user = tabUser.name
   - name: enabled
-    description: ''
+    description: Whether the automated email report is currently active and will be
+      sent on schedule.
   - name: report_type
-    description: ''
+    description: The category or format of report being automatically emailed, such
+      as sales summary, inventory status, or financial statement.
   - name: reference_report
-    description: ''
+    description: The specific report template or saved report configuration that will
+      be used when generating and sending the automated email.
   - name: send_if_data
-    description: ''
+    description: Controls whether the automated email report is sent only when data
+      exists or always sent regardless of data presence.
   - name: data_modified_till
-    description: ''
+    description: Cutoff date/time for including data modifications in the automated
+      email report.
   - name: no_of_rows
-    description: ''
+    description: Maximum number of data rows to include in the automated email report
+      output.
   - name: filters
-    description: ''
+    description: Conditions that determine which records are included in the automated
+      email report based on field values and criteria.
   - name: filter_meta
-    description: ''
+    description: Metadata about the filter configuration such as filter type, operator,
+      or structure used in the automated email report.
   - name: from_date_field
-    description: ''
+    description: The field name used to determine the starting date range for filtering
+      records in the automated email report.
   - name: to_date_field
-    description: ''
+    description: End date field for the report's date range filter when using dynamic
+      date periods.
   - name: dynamic_date_period
-    description: ''
+    description: Predefined time period (e.g., last month, this quarter, last year)
+      for automatically calculating report date ranges.
     options:
     - Daily
     - Weekly
@@ -1953,11 +2374,12 @@ tables:
     - Half Yearly
     - Yearly
   - name: use_first_day_of_period
-    description: ''
+    description: Whether the report date range starts from the first day of the dynamic
+      period instead of a rolling window.
   - name: email_to
-    description: ''
+    description: Recipient email addresses for automated report delivery
   - name: day_of_week
-    description: ''
+    description: Scheduled day when the automated report is sent
     options:
     - Monday
     - Tuesday
@@ -1967,47 +2389,53 @@ tables:
     - Saturday
     - Sunday
   - name: sender
-    description: ''
+    description: Email address or name appearing as the sender of the automated report
     join_hint:
       table: tabEmail Account
       'on': sender = tabEmail Account.name
   - name: frequency
-    description: ''
+    description: How often the automated email report is sent (daily, weekly, monthly).
     options:
     - Daily
     - Weekdays
     - Weekly
     - Monthly
   - name: format
-    description: ''
+    description: File format of the email report attachment (PDF, Excel, CSV).
     options:
     - HTML
     - XLSX
     - CSV
   - name: description
-    description: ''
+    description: Text explaining the purpose or content of the automated email report.
 - table: tabAuto Repeat
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier for the auto repeat configuration
   - name: reference_doctype
-    description: ''
+    description: Type of document being automatically repeated (e.g., Sales Invoice,
+      Purchase Order)
     join_hint:
       table: tabDocType
       'on': reference_doctype = tabDocType.name
   - name: reference_document
-    description: ''
+    description: Specific document instance that serves as the template for auto-generation
   - name: submit_on_creation
-    description: ''
+    description: Whether automatically repeated documents are submitted immediately
+      upon creation or remain in draft status.
   - name: start_date
-    description: ''
+    description: The date when the automatic repetition schedule begins creating recurring
+      documents.
   - name: end_date
-    description: ''
+    description: The date when the automatic repetition schedule stops creating recurring
+      documents.
   - name: disabled
-    description: ''
+    description: Whether the automatic repeat schedule is currently inactive or turned
+      off.
   - name: frequency
-    description: ''
+    description: How often the document automatically repeats, such as daily, weekly,
+      monthly, or yearly intervals.
     options:
     - Daily
     - Weekly
@@ -2016,33 +2444,44 @@ tables:
     - Half-yearly
     - Yearly
   - name: repeat_on_day
-    description: ''
+    description: The specific day of the week or month when the document should automatically
+      repeat.
   - name: repeat_on_last_day
-    description: ''
+    description: Whether the recurring schedule repeats on the last day of each period
+      (month/year).
   - name: next_schedule_date
-    description: ''
+    description: The upcoming date when the next automatic repetition is scheduled
+      to occur.
   - name: repeat_on_days
-    description: ''
+    description: Specific days of the week or month on which the automatic repetition
+      is configured to occur.
   - name: notify_by_email
-    description: ''
+    description: Whether email notifications are sent when this auto-repeat document
+      is created or processed.
   - name: recipients
-    description: ''
+    description: Email addresses or users who receive notifications when this auto-repeat
+      document is generated.
   - name: template
-    description: ''
+    description: Email template used to format notification messages sent for this
+      auto-repeat document.
     join_hint:
       table: tabEmail Template
       'on': template = tabEmail Template.name
   - name: subject
-    description: ''
+    description: Subject line or title used when auto-generating recurring documents
+      or notifications from this repeat configuration.
   - name: message
-    description: ''
+    description: Body text or content included in auto-generated communications when
+      this repeat schedule executes.
   - name: print_format
-    description: ''
+    description: Template format applied when automatically printing or generating
+      PDF versions of recurring documents.
     join_hint:
       table: tabPrint Format
       'on': print_format = tabPrint Format.name
   - name: status
-    description: ''
+    description: Current state of the auto-repeat schedule indicating whether it is
+      active, paused, disabled, or completed.
     options:
     - Active
     - Disabled
@@ -2051,9 +2490,10 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier for the auto repeat day configuration
   - name: day
-    description: ''
+    description: Specific day of the week or month when the automatic repeat should
+      occur
     options:
     - Monday
     - Tuesday
@@ -2066,9 +2506,9 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier or label for the availability slot
   - name: day_of_week
-    description: ''
+    description: Day when the slot is available for scheduling or booking
     options:
     - Sunday
     - Monday
@@ -2078,147 +2518,193 @@ tables:
     - Friday
     - Saturday
   - name: from_time
-    description: ''
+    description: Start time when the availability slot begins
   - name: to_time
-    description: ''
+    description: End time of an available slot or time period when availability concludes
 - table: tabBOM
   description: ''
   fields:
   - name: name
-    description: ''
+    description: BOM identifier or title used to reference a specific bill of materials
+      configuration
   - name: item
-    description: ''
+    description: Finished product or assembly that this BOM produces or manufactures
     join_hint:
       table: tabItem
       'on': item = tabItem.name
   - name: company
-    description: ''
+    description: Company entity that owns or uses this bill of materials
     join_hint:
       table: tabCompany
       'on': company = tabCompany.name
   - name: uom
-    description: ''
+    description: Unit of measurement for the component or material quantity in the
+      bill of materials.
     join_hint:
       table: tabUOM
       'on': uom = tabUOM.name
   - name: quantity
-    description: ''
+    description: Amount of component or material required in the bill of materials
+      assembly.
   - name: is_active
-    description: ''
+    description: Whether this bill of materials entry is currently valid and should
+      be used in production or costing calculations.
   - name: is_default
-    description: ''
+    description: Indicates whether this BOM is the default bill of materials for the
+      item when multiple BOMs exist.
   - name: allow_alternative_item
-    description: ''
+    description: Controls whether substitute or alternative items can be used in place
+      of the specified BOM components during production or material planning.
   - name: set_rate_of_sub_assembly_item_based_on_bom
-    description: ''
+    description: Determines if the cost/price of sub-assembly items should be automatically
+      calculated from their underlying BOM rather than using a fixed rate.
   - name: project
-    description: ''
+    description: Project associated with this bill of materials for tracking manufacturing
+      or assembly costs and materials by project.
     join_hint:
       table: tabProject
       'on': project = tabProject.name
   - name: rm_cost_as_per
-    description: ''
+    description: Method used to determine raw material costs in BOM calculations,
+      such as valuation rate, price list, or last purchase rate.
     options:
     - Valuation Rate
     - Last Purchase Rate
     - Price List
   - name: buying_price_list
-    description: ''
+    description: Price list used to fetch purchase prices for raw materials and components
+      in the BOM cost calculation.
     join_hint:
       table: tabPrice List
       'on': buying_price_list = tabPrice List.name
   - name: price_list_currency
-    description: ''
+    description: Currency used in the price list associated with this BOM for standard
+      pricing references.
     join_hint:
       table: tabCurrency
       'on': price_list_currency = tabCurrency.name
   - name: plc_conversion_rate
-    description: ''
+    description: Exchange rate to convert between the price list currency and the
+      BOM's transaction currency.
   - name: currency
-    description: ''
+    description: Transaction currency for this BOM's costs and pricing calculations.
     join_hint:
       table: tabCurrency
       'on': currency = tabCurrency.name
   - name: conversion_rate
-    description: ''
+    description: Rate used to convert quantities between the finished item and raw
+      material units of measure in the bill of materials.
   - name: items
-    description: ''
+    description: Child items table containing the raw materials, components, or sub-assemblies
+      required to manufacture the finished product.
   - name: with_operations
-    description: ''
+    description: Indicates whether this BOM includes manufacturing operations, routing
+      steps, or workstation instructions for production.
   - name: transfer_material_against
-    description: ''
+    description: Specifies whether materials are transferred against a work order
+      or a BOM during manufacturing execution.
     options:
     - Work Order
     - Job Card
   - name: routing
-    description: ''
+    description: The manufacturing routing or process sequence that defines operations
+      to produce this BOM item.
     join_hint:
       table: tabRouting
       'on': routing = tabRouting.name
   - name: fg_based_operating_cost
-    description: ''
+    description: Indicates whether operating costs are calculated based on the finished
+      goods quantity rather than individual operation costs.
   - name: operating_cost_per_bom_quantity
-    description: ''
+    description: Total operating cost to produce one BOM quantity unit, used when
+      calculating manufacturing costs or profitability per batch.
   - name: operations
-    description: ''
+    description: Manufacturing operations or process steps required to produce the
+      item, referenced when analyzing production workflows or routing sequences.
   - name: scrap_items
-    description: ''
+    description: Materials expected to be wasted or discarded during production, used
+      when calculating material waste or scrap allowances in manufacturing.
   - name: process_loss_percentage
-    description: ''
+    description: Percentage of material expected to be lost or wasted during the manufacturing
+      process for this BOM item.
   - name: process_loss_qty
-    description: ''
+    description: Absolute quantity of material expected to be lost or wasted during
+      the manufacturing process for this BOM item.
   - name: operating_cost
-    description: ''
+    description: Labor, machine, or overhead cost incurred to execute the manufacturing
+      operation for this BOM item, excluding material costs.
   - name: raw_material_cost
-    description: ''
+    description: Cost of raw materials required to produce one unit of the finished
+      item in this BOM.
   - name: scrap_material_cost
-    description: ''
+    description: Cost of materials expected to be wasted or scrapped during production
+      of one unit.
   - name: base_operating_cost
-    description: ''
+    description: Labor and overhead costs for manufacturing operations excluding material
+      costs.
   - name: base_raw_material_cost
-    description: ''
+    description: Cost of raw materials needed to produce one unit of the finished
+      item, excluding scrap or waste materials.
   - name: base_scrap_material_cost
-    description: ''
+    description: Cost of materials expected to be wasted or scrapped during production
+      of one unit of the finished item.
   - name: total_cost
-    description: ''
+    description: Complete cost to produce one unit including raw materials, scrap,
+      operations, and all other BOM-related expenses.
   - name: base_total_cost
-    description: ''
+    description: Total cost of all materials and operations required to manufacture
+      one unit of the finished item at base quantities.
   - name: item_name
-    description: ''
+    description: The finished product or assembly that this bill of materials defines
+      how to manufacture.
   - name: description
-    description: ''
+    description: Explanatory text about this bill of materials structure, purpose,
+      or manufacturing notes.
   - name: has_variants
-    description: ''
+    description: Indicates whether this BOM produces items with multiple attribute
+      variations like size or color.
   - name: inspection_required
-    description: ''
+    description: Indicates whether manufactured items from this BOM must undergo quality
+      inspection before use or sale.
   - name: quality_inspection_template
-    description: ''
+    description: The specific inspection checklist or template used when quality inspection
+      is required for this BOM.
     join_hint:
       table: tabQuality Inspection Template
       'on': quality_inspection_template = tabQuality Inspection Template.name
   - name: exploded_items
-    description: ''
+    description: Flattened list of all components including sub-assembly items when
+      querying complete material requirements across all BOM levels.
   - name: show_in_website
-    description: ''
+    description: Whether this BOM is visible on the website for customer or public
+      viewing.
   - name: route
-    description: ''
+    description: Manufacturing method or production path such as subcontracting, in-house
+      manufacturing, or purchase for this BOM.
   - name: thumbnail
-    description: ''
+    description: Image preview of the bill of materials or finished product for visual
+      identification
   - name: show_items
-    description: ''
+    description: Controls whether component items and raw materials are displayed
+      in the BOM view
   - name: show_operations
-    description: ''
+    description: Controls whether manufacturing operations and routing steps are displayed
+      in the BOM view
   - name: web_long_description
-    description: ''
+    description: Detailed product description for the BOM displayed on web or e-commerce
+      platforms.
   - name: bom_creator
-    description: ''
+    description: User or person who created or defined this bill of materials.
     join_hint:
       table: tabBOM Creator
       'on': bom_creator = tabBOM Creator.name
   - name: bom_creator_item
-    description: ''
+    description: Specific item or product that was used as the template or source
+      when creating this BOM.
   - name: amended_from
-    description: ''
+    description: Links to the original BOM document that this BOM was amended or corrected
+      from, used when tracking BOM revision history or finding which BOM replaced
+      another.
     join_hint:
       table: tabBOM
       'on': amended_from = tabBOM.name
@@ -2226,76 +2712,94 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier or title for this BOM creator record
   - name: item_code
-    description: ''
+    description: SKU or product code of the item being manufactured in this BOM
     join_hint:
       table: tabItem
       'on': item_code = tabItem.name
   - name: item_name
-    description: ''
+    description: Descriptive name of the finished product or manufactured item in
+      this BOM
   - name: item_group
-    description: ''
+    description: Category or classification of the item being produced in the bill
+      of materials, used when filtering or analyzing BOMs by product type or family.
     join_hint:
       table: tabItem Group
       'on': item_group = tabItem Group.name
   - name: qty
-    description: ''
+    description: Quantity of the finished item or component specified in this BOM
+      entry, referenced when calculating material requirements or production volumes.
   - name: project
-    description: ''
+    description: Specific project associated with this BOM configuration, used when
+      BOMs are customized or tracked separately for different customer projects or
+      initiatives.
     join_hint:
       table: tabProject
       'on': project = tabProject.name
   - name: uom
-    description: ''
+    description: Unit of measurement for the BOM item quantity, relevant when users
+      ask about measurement units or quantity specifications in bill of materials
     join_hint:
       table: tabUOM
       'on': uom = tabUOM.name
   - name: rm_cost_as_per
-    description: ''
+    description: Pricing basis for raw material costs in the BOM, used when users
+      inquire about cost calculation methods or valuation sources for materials
     options:
     - Valuation Rate
     - Last Purchase Rate
     - Price List
   - name: set_rate_based_on_warehouse
-    description: ''
+    description: Whether item rates are determined by specific warehouse locations,
+      relevant when users ask about location-dependent pricing or warehouse-specific
+      costing
   - name: buying_price_list
-    description: ''
+    description: Price list used to determine purchase costs for raw materials and
+      components in this BOM
     join_hint:
       table: tabPrice List
       'on': buying_price_list = tabPrice List.name
   - name: price_list_currency
-    description: ''
+    description: Currency in which the buying price list prices are denominated
     join_hint:
       table: tabCurrency
       'on': price_list_currency = tabCurrency.name
   - name: plc_conversion_rate
-    description: ''
+    description: Exchange rate to convert buying price list currency to company base
+      currency for cost calculations
   - name: currency
-    description: ''
+    description: Currency in which BOM costs and prices are denominated for this bill
+      of materials
     join_hint:
       table: tabCurrency
       'on': currency = tabCurrency.name
   - name: conversion_rate
-    description: ''
+    description: Exchange rate used to convert BOM costs from the BOM currency to
+      the company's base currency
   - name: default_warehouse
-    description: ''
+    description: Warehouse from which raw materials and components for this BOM are
+      sourced by default
     join_hint:
       table: tabWarehouse
       'on': default_warehouse = tabWarehouse.name
   - name: company
-    description: ''
+    description: Company entity that owns or manages the bill of materials being created.
     join_hint:
       table: tabCompany
       'on': company = tabCompany.name
   - name: items
-    description: ''
+    description: List of components, materials, or sub-assemblies included in the
+      bill of materials.
   - name: raw_material_cost
-    description: ''
+    description: Total cost of raw materials required to produce the item defined
+      in this BOM.
   - name: remarks
-    description: ''
+    description: User-entered notes or comments about the BOM creation process or
+      configuration.
   - name: status
-    description: ''
+    description: Current state of the BOM creation workflow such as draft, in progress,
+      completed, or failed.
     options:
     - Draft
     - Submitted
@@ -2304,9 +2808,12 @@ tables:
     - Failed
     - Cancelled
   - name: error_log
-    description: ''
+    description: Error messages or failure details encountered during BOM creation
+      or processing.
   - name: amended_from
-    description: ''
+    description: Links to the original BOM Creator document that this version was
+      amended from, used when tracking BOM revision history or finding the source
+      document before amendments.
     join_hint:
       table: tabBOM Creator
       'on': amended_from = tabBOM Creator.name
@@ -2314,188 +2821,239 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier for this BOM creator item record
   - name: item_code
-    description: ''
+    description: Alphanumeric code identifying the specific item in the BOM creator
     join_hint:
       table: tabItem
       'on': item_code = tabItem.name
   - name: item_name
-    description: ''
+    description: Human-readable name or description of the item in the BOM creator
   - name: item_group
-    description: ''
+    description: Category or classification of the finished good item being created
+      in the BOM.
     join_hint:
       table: tabItem Group
       'on': item_group = tabItem Group.name
   - name: fg_item
-    description: ''
+    description: The finished good item code or name that this BOM produces.
     join_hint:
       table: tabItem
       'on': fg_item = tabItem.name
   - name: source_warehouse
-    description: ''
+    description: Warehouse location from which raw materials or components are sourced
+      for this BOM.
     join_hint:
       table: tabWarehouse
       'on': source_warehouse = tabWarehouse.name
   - name: is_expandable
-    description: ''
+    description: Indicates whether this BOM item can be further broken down into sub-components
+      or child items.
   - name: sourced_by_supplier
-    description: ''
+    description: Indicates whether this BOM item is procured externally from a supplier
+      rather than manufactured internally.
   - name: bom_created
-    description: ''
+    description: Indicates whether a bill of materials has been successfully created
+      for this item.
   - name: allow_alternative_item
-    description: ''
+    description: Whether substitute items can be used in place of this BOM component
+      during production or material shortages.
   - name: description
-    description: ''
+    description: Descriptive text or notes about this BOM item component explaining
+      its purpose or specifications.
   - name: qty
-    description: ''
+    description: Quantity of this item required in the bill of materials for producing
+      one unit of the finished product.
   - name: rate
-    description: ''
+    description: Price or cost per unit of the BOM item component used in cost calculations
+      and valuation.
   - name: uom
-    description: ''
+    description: Unit of measurement for the BOM item component (e.g., kg, pieces,
+      liters) as specified in the bill of materials.
     join_hint:
       table: tabUOM
       'on': uom = tabUOM.name
   - name: stock_qty
-    description: ''
+    description: Quantity of the BOM item component in stock/inventory UOM, accounting
+      for UOM conversion from the BOM UOM.
   - name: conversion_factor
-    description: ''
+    description: Multiplier to convert the BOM item quantity from its unit of measure
+      to the stock unit of measure.
   - name: stock_uom
-    description: ''
+    description: Standard unit of measure used for inventory tracking and stock management
+      of this BOM item.
     join_hint:
       table: tabUOM
       'on': stock_uom = tabUOM.name
   - name: amount
-    description: ''
+    description: Total monetary value or cost of this item in the bill of materials.
   - name: base_rate
-    description: ''
+    description: Rate per unit of this BOM item in base currency before any adjustments
+      or conversions.
   - name: base_amount
-    description: ''
+    description: Total cost of this BOM item in base currency, typically rate multiplied
+      by quantity.
   - name: do_not_explode
-    description: ''
+    description: Flag indicating whether this BOM item should be treated as a single
+      unit rather than expanded into its sub-components during BOM explosion or manufacturing.
   - name: parent_row_no
-    description: ''
+    description: Row number of the parent item in the BOM structure to establish hierarchical
+      relationships between components.
   - name: fg_reference_id
-    description: ''
+    description: Reference identifier for the finished good that this BOM item belongs
+      to or produces.
   - name: instruction
-    description: ''
+    description: Manufacturing or assembly instructions specific to this BOM item
+      for production guidance.
 - table: tabBOM Explosion Item
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier for this BOM explosion item record.
   - name: item_code
-    description: ''
+    description: Code of the component or raw material item in the bill of materials
+      explosion.
     join_hint:
       table: tabItem
       'on': item_code = tabItem.name
   - name: item_name
-    description: ''
+    description: Name of the component or raw material item in the bill of materials
+      explosion.
   - name: source_warehouse
-    description: ''
+    description: Warehouse location from which the BOM component item is sourced or
+      issued during production.
     join_hint:
       table: tabWarehouse
       'on': source_warehouse = tabWarehouse.name
   - name: operation
-    description: ''
+    description: Manufacturing operation or workstation step where this BOM component
+      is consumed or used.
     join_hint:
       table: tabOperation
       'on': operation = tabOperation.name
   - name: description
-    description: ''
+    description: Textual details or notes about the BOM explosion item explaining
+      its purpose or specifications.
   - name: image_view
-    description: ''
+    description: Visual representation of the BOM item for identifying components
+      by appearance in production or assembly queries.
   - name: stock_qty
-    description: ''
+    description: Available inventory quantity of the BOM component for checking material
+      availability before production.
   - name: rate
-    description: ''
+    description: Unit cost or price of the BOM component used in calculating total
+      material costs and production expenses.
   - name: qty_consumed_per_unit
-    description: ''
+    description: Quantity of this component material required to produce one unit
+      of the parent item in the bill of materials.
   - name: stock_uom
-    description: ''
+    description: Unit of measurement for the component item's inventory quantity in
+      this BOM explosion.
     join_hint:
       table: tabUOM
       'on': stock_uom = tabUOM.name
   - name: amount
-    description: ''
+    description: Total monetary value of the component quantity consumed in this BOM
+      explosion line.
   - name: include_item_in_manufacturing
-    description: ''
+    description: Whether this BOM item is included when manufacturing the parent item,
+      used to filter active components in production planning and material requirements.
   - name: sourced_by_supplier
-    description: ''
+    description: Whether this BOM item is procured from an external supplier rather
+      than manufactured in-house, used to distinguish purchased components from manufactured
+      subassemblies.
 - table: tabBOM Item
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier for this BOM item row in the bill of materials.
   - name: item_code
-    description: ''
+    description: Code of the component or raw material included in this BOM line.
     join_hint:
       table: tabItem
       'on': item_code = tabItem.name
   - name: item_name
-    description: ''
+    description: Name of the component or raw material included in this BOM line.
   - name: operation
-    description: ''
+    description: Manufacturing operation or workstation where this BOM item is consumed
+      or assembled.
     join_hint:
       table: tabOperation
       'on': operation = tabOperation.name
   - name: do_not_explode
-    description: ''
+    description: Indicates whether this BOM item should be treated as a single unit
+      without expanding into its sub-components during production or material planning.
   - name: bom_no
-    description: ''
+    description: Identifier linking this item to its parent bill of materials structure.
     join_hint:
       table: tabBOM
       'on': bom_no = tabBOM.name
   - name: source_warehouse
-    description: ''
+    description: Warehouse from which the component item should be sourced or issued
+      for production.
     join_hint:
       table: tabWarehouse
       'on': source_warehouse = tabWarehouse.name
   - name: allow_alternative_item
-    description: ''
+    description: Whether a substitute component can be used in place of this BOM item
+      during manufacturing.
   - name: is_stock_item
-    description: ''
+    description: Whether this BOM component is a stocked inventory item versus a non-stock
+      or service item.
   - name: description
-    description: ''
+    description: Text description of the component or material item included in the
+      bill of materials
   - name: image_view
-    description: ''
+    description: Attached image or visual reference for the BOM component item
   - name: qty
-    description: ''
+    description: Quantity of this component required in the bill of materials assembly
   - name: uom
-    description: ''
+    description: Unit of measurement for the BOM item quantity as specified in the
+      bill of materials recipe or formula.
     join_hint:
       table: tabUOM
       'on': uom = tabUOM.name
   - name: stock_qty
-    description: ''
+    description: Quantity of the BOM item converted to stock UOM for inventory consumption
+      calculations.
   - name: stock_uom
-    description: ''
+    description: Standard inventory unit of measurement used for stock tracking and
+      warehouse transactions, which may differ from the BOM recipe UOM.
     join_hint:
       table: tabUOM
       'on': stock_uom = tabUOM.name
   - name: conversion_factor
-    description: ''
+    description: Factor to convert the BOM item's unit of measure to the base or standard
+      unit for quantity calculations.
   - name: rate
-    description: ''
+    description: Effective cost or price per unit of this BOM item after applying
+      conversion factors or adjustments.
   - name: base_rate
-    description: ''
+    description: Standard or original cost per unit of this BOM item before any conversion
+      or adjustments are applied.
   - name: amount
-    description: ''
+    description: Total cost of this BOM item component in transaction currency for
+      the specified quantity.
   - name: base_amount
-    description: ''
+    description: Total cost of this BOM item component converted to company base currency.
   - name: qty_consumed_per_unit
-    description: ''
+    description: Quantity of this component material required to produce one unit
+      of the finished item.
   - name: has_variants
-    description: ''
+    description: Indicates whether the BOM item has multiple variants or configurations
+      that can be selected during manufacturing or assembly.
   - name: include_item_in_manufacturing
-    description: ''
+    description: Controls whether this BOM component is actually consumed or included
+      when manufacturing the parent item.
   - name: original_item
-    description: ''
+    description: References the source or template item code when this BOM item was
+      copied or derived from another item.
     join_hint:
       table: tabItem
       'on': original_item = tabItem.name
   - name: sourced_by_supplier
-    description: ''
+    description: Indicates whether this BOM item is procured from an external supplier
+      rather than manufactured internally
 - table: tabBOM Operation
   description: ''
   fields:
@@ -2509,64 +3067,84 @@ tables:
       table: tabOperation
       'on': operation = tabOperation.name
   - name: workstation_type
-    description: ''
+    description: Category or classification of workstation where the BOM operation
+      is performed, used when filtering operations by general workstation capabilities
+      or groupings.
     join_hint:
       table: tabWorkstation Type
       'on': workstation_type = tabWorkstation Type.name
   - name: workstation
-    description: ''
+    description: Specific workstation or machine where the BOM operation is executed,
+      used when identifying exact production location or resource assignment.
     join_hint:
       table: tabWorkstation
       'on': workstation = tabWorkstation.name
   - name: time_in_mins
-    description: ''
+    description: Duration in minutes required to complete the BOM operation at the
+      workstation, used when calculating production time, scheduling, or capacity
+      planning.
   - name: fixed_time
-    description: ''
+    description: Time required for operation setup or preparation regardless of batch
+      size.
   - name: hour_rate
-    description: ''
+    description: Actual or effective hourly cost rate applied to this operation including
+      adjustments or overrides.
   - name: base_hour_rate
-    description: ''
+    description: Standard or default hourly cost rate for this operation before any
+      adjustments.
   - name: operating_cost
-    description: ''
+    description: Total cost to perform this operation including adjustments, used
+      when calculating actual production costs per operation
   - name: base_operating_cost
-    description: ''
+    description: Standard or default cost for this operation before any adjustments
+      or multipliers are applied
   - name: batch_size
-    description: ''
+    description: Quantity of items processed together in this operation, used when
+      calculating per-unit operation costs or scheduling batch production
   - name: set_cost_based_on_bom_qty
-    description: ''
+    description: Indicates whether operation cost scales with BOM quantity or remains
+      fixed per batch.
   - name: cost_per_unit
-    description: ''
+    description: Actual cost charged per unit for this operation in transaction currency,
+      used when calculating total operation costs for production orders.
   - name: base_cost_per_unit
-    description: ''
+    description: Standard operation cost per unit in base currency before any quantity-based
+      adjustments or currency conversion.
   - name: description
-    description: ''
+    description: Detailed explanation or notes about what work is performed in this
+      manufacturing operation step.
 - table: tabBOM Scrap Item
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier for this BOM scrap item record.
   - name: item_code
-    description: ''
+    description: Code of the item that is scrapped or wasted during the BOM production
+      process.
     join_hint:
       table: tabItem
       'on': item_code = tabItem.name
   - name: item_name
-    description: ''
+    description: Name of the item that is scrapped or wasted during the BOM production
+      process.
   - name: stock_qty
-    description: ''
+    description: Quantity of scrap material generated from the BOM production process.
   - name: rate
-    description: ''
+    description: Unit valuation or cost per unit of the scrap item.
   - name: amount
-    description: ''
+    description: Total monetary value of the scrap quantity, typically stock_qty multiplied
+      by rate.
   - name: stock_uom
-    description: ''
+    description: Unit of measurement for the scrap item quantity in inventory (e.g.,
+      kg, pieces, liters).
     join_hint:
       table: tabUOM
       'on': stock_uom = tabUOM.name
   - name: base_rate
-    description: ''
+    description: Price per unit of the scrap item in the company's base currency.
   - name: base_amount
-    description: ''
+    description: Total value of the scrap item in the company's base currency, calculated
+      from quantity and rate.
 - table: tabBOM Update Batch
   description: ''
   fields:
@@ -2577,9 +3155,11 @@ tables:
   - name: batch_no
     description: ''
   - name: boms_updated
-    description: ''
+    description: Number of bill of materials records that were modified or refreshed
+      in this batch update operation.
   - name: status
-    description: ''
+    description: Current state of the batch update process such as pending, in progress,
+      completed, or failed.
     options:
     - Pending
     - Completed
@@ -2587,42 +3167,49 @@ tables:
   description: BOM Update Tool Log with job status maintained
   fields:
   - name: name
-    description: ''
+    description: Unique identifier or label for the specific BOM update log entry
   - name: update_type
-    description: ''
+    description: Type of change made to the BOM such as creation, modification, or
+      deletion
     options:
     - Replace BOM
     - Update Cost
   - name: status
-    description: ''
+    description: Current state of the BOM update such as pending, approved, or rejected
     options:
     - Queued
     - In Progress
     - Completed
     - Failed
   - name: current_bom
-    description: ''
+    description: The bill of materials identifier that was active before the update
+      occurred.
     join_hint:
       table: tabBOM
       'on': current_bom = tabBOM.name
   - name: new_bom
-    description: ''
+    description: The bill of materials identifier that became active after the update
+      was applied.
     join_hint:
       table: tabBOM
       'on': new_bom = tabBOM.name
   - name: error_log
-    description: ''
+    description: Details of failures or issues encountered during the BOM update process.
     join_hint:
       table: tabError Log
       'on': error_log = tabError Log.name
   - name: current_level
-    description: ''
+    description: Indicates the hierarchical depth or tier in the bill of materials
+      structure being processed or updated.
   - name: processed_boms
-    description: ''
+    description: Tracks which bill of materials records have been completed or handled
+      during the update operation.
   - name: bom_batches
-    description: ''
+    description: Groups or collections of BOM updates processed together in a single
+      batch run.
   - name: amended_from
-    description: ''
+    description: Links to the previous BOM update log entry when a BOM change record
+      is amended or corrected after initial creation.
     join_hint:
       table: tabBOM Update Log
       'on': amended_from = tabBOM Update Log.name
@@ -2634,14 +3221,16 @@ tables:
     It also updates latest price in all the BOMs.'
   fields:
   - name: name
-    description: ''
+    description: Unique identifier for the BOM update operation or record
   - name: current_bom
-    description: ''
+    description: The existing bill of materials being replaced or modified in this
+      update
     join_hint:
       table: tabBOM
       'on': current_bom = tabBOM.name
   - name: new_bom
-    description: ''
+    description: The replacement or updated bill of materials that will supersede
+      the current BOM
     join_hint:
       table: tabBOM
       'on': new_bom = tabBOM.name
@@ -2649,18 +3238,21 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier for this BOM website item record
   - name: item_code
-    description: ''
+    description: SKU or product code of the item in the bill of materials for website
+      display
     join_hint:
       table: tabItem
       'on': item_code = tabItem.name
   - name: item_name
-    description: ''
+    description: Display name or title of the item shown on the website for this BOM
+      entry
   - name: description
-    description: ''
+    description: Description or details of the website item included in the bill of
+      materials.
   - name: qty
-    description: ''
+    description: Quantity of the website item required in the bill of materials.
 - table: tabBOM Website Operation
   description: ''
   fields:
@@ -2677,9 +3269,11 @@ tables:
       table: tabWorkstation
       'on': workstation = tabWorkstation.name
   - name: time_in_mins
-    description: ''
+    description: Duration required to complete this website operation step in the
+      bill of materials manufacturing process.
   - name: thumbnail
-    description: ''
+    description: Image preview or icon representing this website operation for visual
+      identification in the BOM.
 - table: tabBank
   description: ''
   fields:
@@ -2690,11 +3284,13 @@ tables:
   - name: swift_number
     description: ''
   - name: website
-    description: ''
+    description: Bank's official website URL for reference or online banking access
   - name: bank_transaction_mapping
-    description: ''
+    description: Configuration linking bank transaction types or codes to internal
+      accounting categories or GL accounts
   - name: plaid_access_token
-    description: ''
+    description: Authentication token for connecting to bank accounts through Plaid
+      API integration
 - table: tabBank Account
   description: ''
   fields:
@@ -3996,6 +4592,8 @@ tables:
     description: ''
   - name: openai_api_key
     description: ''
+  - name: claude_api_key
+    description: ''
   - name: support_url
     description: ''
   - name: get_ticket_details_url
@@ -4020,8 +4618,6 @@ tables:
     - '300'
     - '400'
     - 500+
-  - name: claude_api_key
-    description: ''
 - table: tabChangelog Feed
   description: ''
   fields:
@@ -22421,32 +23017,11 @@ tables:
   description: ''
   fields:
   - name: name
-    description: Unique system-generated identifier for this specific Sales Invoice
-      record. This field serves as the primary key and document number displayed to
-      users (e.g., 'SINV-2023-00001'). Use this field when searching for a specific
-      invoice by its document ID, referencing invoices in reports, filtering by exact
-      invoice number, or establishing relationships with child tables like payment
-      entries or delivery notes. This differs from 'title' which is a display label,
-      not the actual document identifier used in transactions and audit trails.
+    description: ''
   - name: custom_ksa_einvoicing_xml
-    description: Stores the XML representation of the invoice specifically formatted
-      for Kingdom of Saudi Arabia (KSA) electronic invoicing (e-invoicing/Fatoora)
-      compliance requirements. This field is populated when generating ZATCA-compliant
-      XML for submission to Saudi tax authorities. Use this when retrieving the submitted
-      e-invoice XML payload, auditing KSA tax compliance, regenerating QR codes for
-      Arabic invoices, or troubleshooting e-invoicing integration issues. This field
-      is only relevant for Saudi Arabian businesses subject to Phase 2 e-invoicing
-      regulations and remains empty for non-KSA invoices or when e-invoicing is not
-      enabled.
+    description: ''
   - name: title
-    description: Human-readable display name or label for the Sales Invoice, typically
-      derived from the customer name for quick visual identification (e.g., 'ABC Corporation').
-      This field is used for UI display purposes, dropdown selections, and user-friendly
-      reporting where showing the customer name is more intuitive than the system
-      document ID. Use this when presenting invoice lists to users who need to identify
-      invoices by customer rather than document number, or in dashboards and charts.
-      This differs from 'name' which is the unique system identifier; 'title' is non-unique
-      and multiple invoices can share the same title if they belong to the same customer.
+    description: ''
   - name: naming_series
     description: ''
     options:

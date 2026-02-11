@@ -9,16 +9,43 @@ BASE_DIR = os.path.dirname(__file__)
 DATA_DIR = os.path.join(BASE_DIR, "data")
 TABLES_JSON = os.path.join(DATA_DIR, "tables.json")
 SCHEMA_YAML = os.path.join(DATA_DIR, "schema.yaml")
-SCHEMA_YAML_1 = os.path.join(DATA_DIR, "schema_1.yaml")
+# Fieldtypes to ignore when building schema.yaml (not useful for embedding / SQL)
+IGNORED_FIELDTYPES = {
+    # Layout / UI
+    "Section Break",
+    "Column Break",
+    "Tab Break",
+    "Table Break",
+    "Fold",
+    "Heading",
+
+    # Display-only content
+    "HTML",
+    "HTML Editor",
+    "Text Editor",
+    "Markdown Editor",
+    "Code",
+
+    # Action / UI controls
+    "Button",
+
+    # Attachments / media (usually not part of analytical queries)
+    "Attach",
+    "Attach Image",
+    "Image",
+    "Signature",
+
+    # Visual selectors / scans (rarely needed for reporting)
+    "Icon",
+    "Barcode",
+}
 
 @frappe.whitelist(allow_guest=False)
 def sync_master_data_smart():
     BASE_DIR = os.path.dirname(__file__)
     DATA_DIR = os.path.join(BASE_DIR, "data")
     os.makedirs(DATA_DIR, exist_ok=True)
-
     file_path = os.path.join(DATA_DIR, "meta_schema.yaml")  # ✅ define
-
     try:
         with open(file_path, "r") as f:
             payload = yaml.safe_load(f) or {}
@@ -97,14 +124,18 @@ def sync_master_data_smart():
         "last_sync_used": last_sync or "FIRST_RUN(full_fetch)",
         "new_last_sync": meta["last_sync"]
     }
-def _load_json_list(path):
-    """
-    Load a JSON file that is expected to contain a LIST.
+def _tab(dt: str) -> str:
+    """Convert DocType name -> MariaDB table name used by Frappe."""
+    dt = (dt or "").strip()
+    return f"tab{dt}"
 
-    Returns:
-      - list if file exists and contains a JSON array
-      - empty list [] on any error or if content is not a list
-    """
+def _strip_tab(t: str) -> str:
+    """Convert table name like 'tabSales Invoice' -> 'Sales Invoice'."""
+    t = (t or "").strip()
+    return t[3:] if t.startswith("tab") else t
+
+
+def _load_json_list(path):
     try:
         with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
@@ -121,12 +152,17 @@ def _load_json_list(path):
     except Exception:
         return []
 
-
-
 def get_doctypes_changed_since(last_sync):
-    # ✅ includes parent + child doctypes (no disabled filter)
     filters = {}
-
+    SKIP_MODULES = {
+        "Core",
+        "Custom",
+        "Website",
+        "Desk",
+        "Email",
+        "Integration",
+        "Automation",
+    }
     if last_sync:
         try:
             since = add_to_date(last_sync, minutes=-2)
@@ -138,16 +174,24 @@ def get_doctypes_changed_since(last_sync):
     out = []
 
     for dt in doctypes:
-        if dt in SKIP_DOCTYPES:
+        meta = frappe.get_meta(dt)
+
+        # Skip system/internal modules
+        if meta.module in SKIP_MODULES:
             continue
 
-        meta = frappe.get_meta(dt)
+        # Skip virtual doctypes
         if getattr(meta, "is_virtual", 0):
+            continue
+
+        # Skip Single doctypes (settings)
+        if getattr(meta, "issingle", 0):
             continue
 
         out.append(dt)
 
     return out
+
 def _save_json_list(path, items):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
@@ -155,7 +199,7 @@ def _save_json_list(path, items):
 @frappe.whitelist(allow_guest=False)
 def sync_tables_and_schema_smart():
     os.makedirs(DATA_DIR, exist_ok=True)
-    payload = _load_yaml(SCHEMA_YAML_1)
+    payload = _load_yaml(SCHEMA_YAML)
     meta = payload.get("_meta") or {}
     tables_blocks = payload.get("tables") or []
 
@@ -192,8 +236,6 @@ def sync_tables_and_schema_smart():
             continue
 
         meta_dt = frappe.get_meta(dt)
-
-        # ✅ build current fields (name first)
         current_fieldnames = ["name"]
         current_fields = [{"name": "name", "description": ""}]
 
@@ -211,12 +253,11 @@ def sync_tables_and_schema_smart():
         current_set = set(current_fieldnames)
         block = by_table.get(table)
 
-        # NEW TABLE
         if not block:
             block = {
                 "table": table,
                 "description": (meta_dt.description or "").strip(),
-                "fields": current_fields,  # ✅ includes options/join_hint
+                "fields": current_fields,
             }
             tables_blocks.append(block)
             by_table[table] = block
@@ -259,7 +300,7 @@ def sync_tables_and_schema_smart():
     meta["last_doctype_sync"] = meta["last_sync"]
 
     payload = {"_meta": meta, "tables": tables_blocks}
-    _save_yaml(SCHEMA_YAML_1, payload)
+    _save_yaml(SCHEMA_YAML, payload)
 
     return {
         "ok": True,
@@ -380,17 +421,30 @@ def _smart_desc_map(client, table_name, fields):
     minimal = [{"name": f.get("name"), "description": (f.get("description") or "")} for f in fields]
 
     prompt = f"""
-Write ERPNext field descriptions for table: {table_name}
+You are generating SHORT, HIGH-SIGNAL field descriptions for an ERP schema embedding model.
 
-Rules:
+Table: {table_name}
+
+GOAL:
+Help an embedding model correctly match user questions to the right field.
+
+STRICT RULES:
 - Do NOT rename field names.
-- Output ONLY a JSON object: {{"field_name": "description"}}
-- Each description must explain WHEN/WHY to use the field (business usage + disambiguation if needed).
-- 1–2 sentences per field.
+- Do NOT explain database concepts (primary key, immutable, system-generated, etc).
+- Do NOT add generic phrases like "used for reporting" or "stores data".
+- Output ONLY a JSON object in this format:
+  {{"field_name": "description"}}
+
+DESCRIPTION GUIDELINES (VERY IMPORTANT):
+- 1 sentence only (max 2 if absolutely necessary).
+- Focus on WHEN and WHY a user would reference this field in a question.
+- Mention how it differs from similar fields ONLY if useful for disambiguation.
+- Write as if the description will be embedded, not read by humans.
 
 Fields JSON:
 {json.dumps(minimal, ensure_ascii=False)}
 """.strip()
+
 
     for attempt in range(3):
         try:
@@ -448,21 +502,9 @@ def fill_missing_field_descriptions(
     max_tables: int = 0,
     checkpoint_every_table: int = 1,
 ):
-    """
-    Fixes:
-    - Smaller batch size default (safer)
-    - Checkpoint saves after each table (so progress isn't lost)
-    - Optional max_tables for testing/partial runs
-    - GC to reduce memory buildup
-
-    Args:
-      batch_size: fields per LLM call
-      max_tables: 0 = no limit, else stop after processing N tables with updates
-      checkpoint_every_table: save YAML after each updated table (recommended 1)
-    """
     frappe.logger().info("Description job started")
 
-    payload = _load_yaml(SCHEMA_YAML_1)
+    payload = _load_yaml(SCHEMA_YAML)
     meta = payload.get("_meta") or {}
     tables_blocks = payload.get("tables") or []
     if not isinstance(tables_blocks, list):
@@ -511,29 +553,23 @@ def fill_missing_field_descriptions(
                     f["description"] = desc_map[fn]
                     updated_fields += 1
                     updated_in_table += 1
-
-            # reduce memory buildup during long jobs
             gc.collect()
 
         if updated_in_table:
             updated_tables += 1
             processed_updated_tables += 1
-
-            # ✅ checkpoint save so progress survives worker kill/timeout
             if int(checkpoint_every_table) >= 1:
                 meta["last_desc_sync_partial"] = str(now_datetime())
                 payload = {"_meta": meta, "tables": tables_blocks}
-                _save_yaml(SCHEMA_YAML_1, payload)
+                _save_yaml(SCHEMA_YAML, payload)
                 frappe.logger().info(f"Checkpoint saved after table={table} updated_fields_in_table={updated_in_table}")
-
-            # ✅ optional: stop early for testing
             if int(max_tables) and processed_updated_tables >= int(max_tables):
                 frappe.logger().info(f"Stopping early due to max_tables={max_tables}")
                 break
 
     meta["last_desc_sync"] = str(now_datetime())
     payload = {"_meta": meta, "tables": tables_blocks}
-    _save_yaml(SCHEMA_YAML_1, payload)
+    _save_yaml(SCHEMA_YAML, payload)
 
     frappe.logger().info(f"Description job finished tables={updated_tables} fields={updated_fields}")
 
@@ -548,14 +584,10 @@ def fill_missing_field_descriptions(
 
 @frappe.whitelist()
 def sync_schema_and_enqueue_descriptions():
-    # keep schema sync (can be heavy, but usually OK). If it causes 504, enqueue it too.
     sync_tables_and_schema_smart()
-
-    # ✅ increase timeout (not unlimited, but practical)
     frappe.enqueue(
         "changai.changai.api.v2.auto_gen_api.fill_missing_field_descriptions",
         queue="long",
         timeout=14400
     )
-
     return {"ok": True, "message": "Schema updated ✅ Field descriptions running in background 🧠"}

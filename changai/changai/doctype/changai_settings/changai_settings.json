@@ -1,0 +1,387 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-11-05 17:44:25.583856",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "server_section",
+  "remote",
+  "langchain_tracing_details_section",
+  "langsmith_api_key",
+  "langsmith_endpoint",
+  "column_break_fnau",
+  "langsmith_tracing",
+  "langsmith_project",
+  "models_section",
+  "embedder",
+  "qwen3_4b_instruct",
+  "llm",
+  "column_break_irkb",
+  "dataset_repo",
+  "qwen25_15b",
+  "gemini_authentication_section",
+  "auth_json",
+  "gemini_location",
+  "gemini_file_path",
+  "gemini_project_id",
+  "section_break_gnue",
+  "root_path",
+  "retain_memory",
+  "vite_api_url",
+  "testing_section",
+  "retriever_structure",
+  "local_server_tab",
+  "ollama_section",
+  "ollama_url",
+  "local_llm",
+  "local_schema_retriever",
+  "local_entity_retriever",
+  "remote_server_tab",
+  "replicate_section",
+  "prediction_url",
+  "deploy_url",
+  "llm_version_id",
+  "embedder_version_id",
+  "api_token",
+  "column_break_qwoc",
+  "deploy",
+  "entity_retriever",
+  "openai_api_key",
+  "claude_api_key",
+  "support_tab",
+  "support_section",
+  "support_url",
+  "get_ticket_details_url",
+  "training_tab",
+  "training_section",
+  "choose_module",
+  "choose_file_size",
+  "create_train_data",
+  "create_validation_data",
+  "master_table_and_schema_updation_section",
+  "update_masterdata_file",
+  "update_schema_file"
+ ],
+ "fields": [
+  {
+   "fieldname": "server_section",
+   "fieldtype": "Section Break",
+   "label": "Server"
+  },
+  {
+   "default": "0",
+   "fieldname": "remote",
+   "fieldtype": "Check",
+   "label": "Remote"
+  },
+  {
+   "fieldname": "langchain_tracing_details_section",
+   "fieldtype": "Section Break",
+   "label": "Langchain Tracing Details"
+  },
+  {
+   "fieldname": "langsmith_api_key",
+   "fieldtype": "Data",
+   "label": "LANGSMITH_API_KEY"
+  },
+  {
+   "fieldname": "langsmith_endpoint",
+   "fieldtype": "Data",
+   "label": "LANGSMITH_ENDPOINT"
+  },
+  {
+   "fieldname": "column_break_fnau",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "langsmith_tracing",
+   "fieldtype": "Check",
+   "label": "LANGSMITH_TRACING"
+  },
+  {
+   "fieldname": "langsmith_project",
+   "fieldtype": "Data",
+   "label": "LANGSMITH_PROJECT"
+  },
+  {
+   "fieldname": "models_section",
+   "fieldtype": "Section Break",
+   "label": "HUGGING FACE Models & Datasets Repo"
+  },
+  {
+   "fieldname": "embedder",
+   "fieldtype": "Data",
+   "label": "Embedder Repo"
+  },
+  {
+   "fieldname": "qwen3_4b_instruct",
+   "fieldtype": "Data",
+   "label": "QWEN3-4b Instruct"
+  },
+  {
+   "fieldname": "llm",
+   "fieldtype": "Select",
+   "label": "LLM",
+   "options": "QWEN3\nGemini"
+  },
+  {
+   "fieldname": "column_break_irkb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "dataset_repo",
+   "fieldtype": "Data",
+   "label": "Dataset Repo"
+  },
+  {
+   "fieldname": "qwen25_15b",
+   "fieldtype": "Data",
+   "label": "QWEN2.5-1.5b Instruct"
+  },
+  {
+   "depends_on": "eval:doc.llm == \"Gemini\"",
+   "fieldname": "gemini_authentication_section",
+   "fieldtype": "Section Break",
+   "label": "Gemini Authentication"
+  },
+  {
+   "fieldname": "auth_json",
+   "fieldtype": "Attach",
+   "label": "Authentication JSON"
+  },
+  {
+   "depends_on": "eval:doc.llm == \"Gemini\"",
+   "fieldname": "gemini_location",
+   "fieldtype": "Data",
+   "label": "Gemini_location"
+  },
+  {
+   "fieldname": "gemini_file_path",
+   "fieldtype": "Data",
+   "label": "Gemini file path"
+  },
+  {
+   "fieldname": "gemini_project_id",
+   "fieldtype": "Data",
+   "label": "Gemini project ID"
+  },
+  {
+   "fieldname": "section_break_gnue",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "root_path",
+   "fieldtype": "Data",
+   "label": "Root Path"
+  },
+  {
+   "default": "0",
+   "fieldname": "retain_memory",
+   "fieldtype": "Check",
+   "label": "Retain Memory"
+  },
+  {
+   "fieldname": "vite_api_url",
+   "fieldtype": "Data",
+   "label": "Vite API Url"
+  },
+  {
+   "fieldname": "testing_section",
+   "fieldtype": "Section Break",
+   "label": "Testing"
+  },
+  {
+   "fieldname": "retriever_structure",
+   "fieldtype": "Select",
+   "label": "Retriever_structure",
+   "options": "single line\nmulti line"
+  },
+  {
+   "fieldname": "local_server_tab",
+   "fieldtype": "Tab Break",
+   "label": "Local Server"
+  },
+  {
+   "fieldname": "ollama_section",
+   "fieldtype": "Section Break",
+   "label": "Local - Ollama"
+  },
+  {
+   "fieldname": "ollama_url",
+   "fieldtype": "Data",
+   "label": "Ollama URL"
+  },
+  {
+   "fieldname": "local_llm",
+   "fieldtype": "Data",
+   "label": "Local LLM"
+  },
+  {
+   "fieldname": "local_schema_retriever",
+   "fieldtype": "Data",
+   "label": "Local Schema Retriever"
+  },
+  {
+   "fieldname": "local_entity_retriever",
+   "fieldtype": "Data",
+   "label": "Local Entity Retriever"
+  },
+  {
+   "fieldname": "remote_server_tab",
+   "fieldtype": "Tab Break",
+   "label": "Remote Server"
+  },
+  {
+   "fieldname": "replicate_section",
+   "fieldtype": "Section Break",
+   "label": "Remote - Replicate"
+  },
+  {
+   "fieldname": "prediction_url",
+   "fieldtype": "Data",
+   "label": "Replicate Prediction Url"
+  },
+  {
+   "fieldname": "deploy_url",
+   "fieldtype": "Data",
+   "label": "Replicate Deploy Url"
+  },
+  {
+   "fieldname": "llm_version_id",
+   "fieldtype": "Data",
+   "label": "SQL Generator LLM Version id"
+  },
+  {
+   "fieldname": "embedder_version_id",
+   "fieldtype": "Data",
+   "label": "Schema Retriever Version ID"
+  },
+  {
+   "fieldname": "api_token",
+   "fieldtype": "Data",
+   "label": "Replicate API token"
+  },
+  {
+   "fieldname": "column_break_qwoc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "deploy",
+   "fieldtype": "Check",
+   "label": "Deploy"
+  },
+  {
+   "fieldname": "entity_retriever",
+   "fieldtype": "Data",
+   "label": "Entity Retriever Version ID"
+  },
+  {
+   "fieldname": "openai_api_key",
+   "fieldtype": "Password",
+   "label": "OpenAI API key"
+  },
+  {
+   "fieldname": "claude_api_key",
+   "fieldtype": "Password",
+   "label": "Claude API Key"
+  },
+  {
+   "fieldname": "support_tab",
+   "fieldtype": "Tab Break",
+   "label": "Support"
+  },
+  {
+   "fieldname": "support_section",
+   "fieldtype": "Section Break",
+   "label": "Support"
+  },
+  {
+   "fieldname": "support_url",
+   "fieldtype": "Data",
+   "label": "Create Ticket URL"
+  },
+  {
+   "fieldname": "get_ticket_details_url",
+   "fieldtype": "Data",
+   "label": "Get Ticket Details URL"
+  },
+  {
+   "fieldname": "training_tab",
+   "fieldtype": "Tab Break",
+   "label": "Training"
+  },
+  {
+   "fieldname": "training_section",
+   "fieldtype": "Section Break",
+   "label": "Training Data creation"
+  },
+  {
+   "fieldname": "choose_module",
+   "fieldtype": "Select",
+   "label": "Choose Module",
+   "options": "Accounts\nCRM\nBuying\nProjects\nSelling\nManufacturing\nStock\nSupport\nAssets"
+  },
+  {
+   "fieldname": "choose_file_size",
+   "fieldtype": "Select",
+   "label": "Choose Train Records Count",
+   "options": "100\n200\n300\n400\n500+"
+  },
+  {
+   "fieldname": "create_train_data",
+   "fieldtype": "Button",
+   "label": "Create training data"
+  },
+  {
+   "fieldname": "create_validation_data",
+   "fieldtype": "Button",
+   "label": "Create validation data"
+  },
+  {
+   "fieldname": "master_table_and_schema_updation_section",
+   "fieldtype": "Section Break",
+   "label": "Master file and Schema Updation"
+  },
+  {
+   "default": "0",
+   "fieldname": "update_masterdata_file",
+   "fieldtype": "Button",
+   "label": "Update MasterData file"
+  },
+  {
+   "default": "0",
+   "fieldname": "update_schema_file",
+   "fieldtype": "Button",
+   "label": "Update Schema file"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-02-11 12:29:31.176378",
+ "modified_by": "Administrator",
+ "module": "Changai",
+ "name": "ChangAI Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

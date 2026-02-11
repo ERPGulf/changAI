@@ -1194,12 +1194,42 @@ app=workflow.compile(checkpointer=checkpointer)
 
 #to execute the sql returned inside frappe
 @frappe.whitelist(allow_guest=False)
-def execute_query(query:str):
+def execute_query(sql:str,orm:str):
     try:
-        result=frappe.db.sql(query,as_dict=True)
-        return result
+        if orm:
+            result=frappe.db.sql(sql,as_dict=True)
+            return result
     except Exception as e:
         return {"error":f"SQL Execution Failed : {e}"}
+
+@frappe.whitelist(allow_guest=False)
+def execute_query_1(mode: str, sql,orm):
+    try:
+        mode = (mode or "").lower().strip()
+
+        if mode == "sql":
+            if not sql.lower().strip().startswith("select"):
+                frappe.throw("Only SELECT queries are allowed.")
+
+            return frappe.db.sql(sql, as_dict=True)
+
+        elif mode == "orm":
+            if not isinstance(orm, dict):
+                frappe.throw("ORM query must be JSON object.")
+
+            return frappe.get_all(
+                query.get("doctype"),
+                filters=query.get("filters"),
+                fields=query.get("fields"),
+            )
+
+        else:
+            frappe.throw("Mode must be 'sql' or 'orm'.")
+
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), "Query Execution Failed")
+        return {"error": str(e)}
+
 
 
 @frappe.whitelist(allow_guest=False)
@@ -1651,8 +1681,7 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
             "Result": [],
             "Bot": "I couldn’t produce a valid SQL yet. Please try rephrasing.",
         }
-    
-    result = execute_query(sql)
+    sql_result = execute_query(sql,orm)
     context = (final.get("context") or final.get("selected_fields") or "")[:800]
     contains_values=final.get("contains_values") or ""
     tries = int(final.get("tries") or 0)
