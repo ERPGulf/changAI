@@ -1,7 +1,7 @@
 import os
 import yaml
 from typing import Dict, List, Any, Optional
-
+from pathlib import Path
 import frappe
 
 
@@ -10,11 +10,10 @@ BUSINESS_MODULES = [
     "Selling", "Projects", "Buying", "CRM", "Accounts",
 ]
 
+
 CUSTOM_BUSINESS_MODULES = ["Zatca Erpgulf"]
 
-
-def _ensure_dir(p: str) -> None:
-    os.makedirs(p, exist_ok=True)
+ALLOWED_OUT_BASE = "/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/v2/enriched_schema_test"
 
 
 def _tab(dt: str) -> str:
@@ -106,9 +105,19 @@ def get_doctypes_for_modules(modules: List[str]) -> List[Dict[str, Any]]:
         fields=["name", "module"],
         order_by="module asc, name asc",
     )
+def _ensure_dir(p: str) -> None:
+    os.makedirs(p, exist_ok=True)
 
+def _assert_path_inside_base(file_path: str, base_dir: str) -> str:
+    base = Path(base_dir).resolve()
+    p = Path(file_path).resolve()
+    if base != p and base not in p.parents:
+        raise ValueError(f"Unsafe out_path (outside allowed base): {p}")
+    return str(p)
 
 def run_yaml(out_path: str, modules: List[str]) -> Dict[str, Any]:
+    out_path = _assert_path_inside_base(out_path, ALLOWED_OUT_BASE)
+
     _ensure_dir(os.path.dirname(out_path))
 
     doctypes = get_doctypes_for_modules(modules)
@@ -133,7 +142,6 @@ def run_yaml(out_path: str, modules: List[str]) -> Dict[str, Any]:
         per_table_field_counts[t["table"]] = fc
         total_fields += fc
 
-    # YAML output only (list)
     with open(out_path, "w", encoding="utf-8") as f:
         yaml.safe_dump(tables_yaml, f, sort_keys=False, allow_unicode=True)
 
@@ -151,9 +159,7 @@ def run_yaml(out_path: str, modules: List[str]) -> Dict[str, Any]:
 def main(out_path: Optional[str] = None):
     modules = list(dict.fromkeys(BUSINESS_MODULES + CUSTOM_BUSINESS_MODULES))
 
-    default_path = "/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/v2/enriched_schema_test/enriched_schema.yaml"
+    default_path = os.path.join(ALLOWED_OUT_BASE, "enriched_schema.yaml")
     out_path = out_path or default_path
 
     return run_yaml(out_path=out_path, modules=modules)
-
-# DO NOT call main() here. Use bench execute.

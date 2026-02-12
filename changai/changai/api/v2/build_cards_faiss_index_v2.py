@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 import glob
 import json
 import yaml
@@ -25,6 +26,13 @@ HNSW_M = 32
 EF_CONSTRUCTION = 256
 EF_SEARCH = 64
 
+def _assert_file_inside_base(file_path: str, base_dir: str) -> str:
+    base = Path(base_dir).resolve()
+    p = Path(file_path).resolve()
+    if base != p and base not in p.parents:
+        raise ValueError(f"Unsafe file path (outside base dir): {p}")
+    return str(p)
+
 def load_yaml_dir(path: str) -> List[Dict[str, Any]]:
     """
     Loads all *.yaml in a folder.
@@ -32,8 +40,10 @@ def load_yaml_dir(path: str) -> List[Dict[str, Any]]:
     Returns a flat list of dict items.
     """
     out: List[Dict[str, Any]] = []
-    for fp in sorted(glob.glob(os.path.join(path, "*.yaml"))):
-        with open(fp, "r", encoding="utf-8") as f:
+    base_dir = Path(path).resolve()
+    for fp in sorted(glob.glob(os.path.join(str(base_dir), "*.yaml"))):
+        safe_fp = _assert_file_inside_base(fp, str(base_dir))
+        with open(safe_fp, "r", encoding="utf-8") as f:
             doc = yaml.safe_load(f)
 
         if doc is None:
@@ -148,7 +158,7 @@ def build_schema_docs(schema_cards: List[Dict[str, Any]]) -> List[Document]:
             ]
 
             if enum_vals:
-                parts.append(f"[ENUM] {', '.join(map(str, enum_vals))}")
+                parts.append(f"[ENUM] {', '.join([str(v) for v in enum_vals])}")
 
             opt_text = _serialize_options(options)
             if opt_text:
@@ -213,20 +223,26 @@ def build_entity_docs(entity_cards: List[Dict[str, Any]]) -> List[Document]:
     return docs
 
 
+def _assert_dir_inside_base(dir_path: str, base_dir: str) -> Path:
+    base = Path(base_dir).resolve()
+    d = Path(dir_path).resolve()
+    if base != d and base not in d.parents:
+        raise ValueError(f"Unsafe output dir (outside base): {d}")
+    return d
+
+
 def build_faiss_store(
     docs: List[Document],
     embeddings: HuggingFaceEmbeddings,
     out_dir: str,
 ) -> None:
-    """
-    Builds FAISS HNSW index + LangChain FAISS store and saves to out_dir.
-    """
     if not docs:
         raise RuntimeError(f"No documents provided for FAISS build: {out_dir}")
 
-    os.makedirs(out_dir, exist_ok=True)
+    safe_out_dir = _assert_dir_inside_base(out_dir, OUT_BASE)
+    safe_out_dir.mkdir(parents=True, exist_ok=True)
 
-    print(f"Encoding {len(docs)} documents for: {out_dir}")
+    print(f"Encoding {len(docs)} documents for: {safe_out_dir}")
     doc_texts = [d.page_content for d in docs]
     vectors = embeddings.embed_documents(doc_texts)
 
@@ -245,14 +261,14 @@ def build_faiss_store(
         normalize_L2=True,
     )
 
-    store.save_local(out_dir)
+    store.save_local(str(safe_out_dir))
 
-    # helpful mapping (optional)
     mapping = {docs[i].metadata.get("source_id", i): i for i in range(len(docs))}
-    with open(os.path.join(out_dir, "source_id_to_idx.json"), "w", encoding="utf-8") as f:
+    mapping_path = safe_out_dir / "source_id_to_idx.json"
+    with mapping_path.open("w", encoding="utf-8") as f:
         json.dump(mapping, f, ensure_ascii=False)
 
-    print(f"✅ Saved FAISS store to: {out_dir}")
+    print(f"✅ Saved FAISS store to: {safe_out_dir}")
     print(f"   Docs: {len(docs)} | Dim: {dim} | M:{HNSW_M} | efC:{EF_CONSTRUCTION} | efS:{EF_SEARCH}")
 
 def build_all_indexes():

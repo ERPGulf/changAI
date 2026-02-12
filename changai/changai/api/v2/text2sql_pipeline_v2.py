@@ -17,6 +17,7 @@ import base64
 import time
 from werkzeug.wrappers import Response
 import frappe
+from pathlib import Path
 from google import genai
 from google.genai import types
 from langchain_community.embeddings import HuggingFaceEmbeddings
@@ -35,8 +36,8 @@ __vector_store = None
 _SCHEMA_VS = None
 
 
-@frappe.whitelist(allow_guest=True)
-def get_settings():
+@frappe.whitelist(allow_guest=False)
+def get_settings() -> Dict[str, Any]:
     settings=frappe.get_single("ChangAI Settings")
     langsmith_tracing = "true" if settings.langsmith_tracing else "false"
     config={
@@ -80,10 +81,19 @@ FORMAT_PROMPT_PATH=f"{CONFIG['ROOT_PATH']}/changai/changai/changai/prompts/user_
 NON_ERP_PROMPT_PATH=f"{CONFIG['ROOT_PATH']}/changai/changai/changai/prompts/non_erp_prompt.txt"
 TEMPLATE_PATH=f"{CONFIG['ROOT_PATH']}/changai/changai/changai/templates/conversation_template_v2.j2"
 BUSINESS_KEYWORDS_PATH = f"{CONFIG['ROOT_PATH']}/changai/changai/changai/api/v2/business_keywords_v1.json"
+ALLOWED_BASE = CONFIG["ROOT_PATH"]
+
+
+def _assert_file_inside_base(file_path: str, base_dir: str) -> str:
+    base = Path(base_dir).resolve()
+    p = Path(file_path).resolve()
+    if base != p and base not in p.parents:
+        raise ValueError(f"Unsafe path: {p}")
+    return str(p)
 
 
 @frappe.whitelist(allow_guest=False)
-def get_backend_server_settings(*keys):
+def get_backend_server_settings(*keys: str) -> Dict[str, Any]:
     """
     Fetch multiple settings from the BACKEND_SERVER_SETTINGS.
     """
@@ -93,7 +103,7 @@ def get_backend_server_settings(*keys):
 
 
 @frappe.whitelist(allow_guest=True)
-def generate_token_secure(api_key, api_secret, app_key):
+def generate_token_secure(api_key: str, api_secret: str, app_key: str):
 
     try:
         try:
@@ -178,8 +188,8 @@ def generate_token_secure(api_key, api_secret, app_key):
 
 
 #api for user token
-@frappe.whitelist(allow_guest=False)
-def generate_token_secure_for_users(username, password, app_key):
+@frappe.whitelist(allow_guest=True)
+def generate_token_secure_for_users(username: str, password: str, app_key: str) -> Dict[str, Any]:
     """
     Generate a secure token for user authentication.
     """
@@ -237,7 +247,7 @@ def generate_token_secure_for_users(username, password, app_key):
 
 # Api for  checking user name  using token
 @frappe.whitelist(allow_guest=False)
-def whoami():
+def whoami() -> Dict[str, Any]:
     """This function returns the current session user"""
     try:
         response_content = {
@@ -261,7 +271,7 @@ def call_model(prompt: str, task: str = "llm") -> Any:
     return local_llm_request(prompt)
 
 
-def call_embedder(question):
+def call_embedder(question: str) -> Any:
     return remote_embedder_request(question) if CONFIG["REMOTE"]  else local_embedder_request(question)
 
 
@@ -292,7 +302,7 @@ def local_llm_request(prompt: str) -> str:
     return (text or "").strip() or "Error: Empty response from local LLM."
 
 
-def return_headers():
+def return_headers() -> Dict[str, str]:
     return {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {CONFIG['API_TOKEN']}",
@@ -300,7 +310,7 @@ def return_headers():
 
 
 @frappe.whitelist(allow_guest=False)
-def create_llm_prediction(prompt: str):
+def create_llm_prediction(prompt: str) -> Dict[str, Any]:
     payload = {
         "version": CONFIG["LLM_VERSION_ID"],
         "input": {"user_input": prompt},
@@ -334,7 +344,7 @@ def create_llm_prediction(prompt: str):
     return {"ok": True, "pred_id": pred_id, "status": status}
 
 
-def get_llm_prediction(pred_id:str):
+def get_llm_prediction(pred_id: str) -> Dict[str, Any]:
     try:
         poll_url=f"{CONFIG['URL']}/{pred_id}"
         resp=requests.get(poll_url,headers=return_headers(),timeout=120)
@@ -359,7 +369,7 @@ def get_llm_prediction(pred_id:str):
 
 
 @frappe.whitelist(allow_guest=False)
-def remote_llm_request(prompt: str):
+def remote_llm_request(prompt: str) -> Any:
     payload = {
         "version": CONFIG["LLM_VERSION_ID"],
         "input": {"user_input": prompt},
@@ -412,7 +422,7 @@ def remote_llm_request(prompt: str):
 
 
 @frappe.whitelist(allow_guest=False)
-def call_gemini(prompt):
+def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
     try:
         # Authenticate once
         creds = service_account.Credentials.from_service_account_file(
@@ -534,7 +544,7 @@ def remote_llm_request_deploy_test(
 
 
 @frappe.whitelist(allow_guest=False)
-def remote_embedder_request(formatted_q: str) -> Union[list, str]:
+def remote_embedder_request(formatted_q: str) -> Union[List[Any], str]:
     payload = {"version": CONFIG["EMBED_VERSION_ID"], "input": {"user_input": formatted_q}}
     headers = {
         "Content-Type": "application/json",
@@ -551,7 +561,7 @@ def remote_embedder_request(formatted_q: str) -> Union[list, str]:
         return "Error: " + str(e)
 
 
-def local_embedder_request(question: str):
+def local_embedder_request(question: str) -> List[Any]:
     global __vector_store
     if not os.path.exists(INDEX_PATH):
         return []
@@ -561,13 +571,15 @@ def local_embedder_request(question: str):
     return __vector_store.similarity_search(question, k=15)
     
 
-def read_json(path):
-    with open(path, "r", encoding="utf-8") as f:
+def read_json(path: str) -> Dict[str, Any]:
+    safe_path = _assert_file_inside_base(path, ALLOWED_BASE)
+    with open(safe_path, "r", encoding="utf-8") as f:
         return json.load(f)
 
 
-def read_text(path):
-    with open(path,"r",encoding="utf-8") as f:
+def read_text(path: str) -> str:
+    safe_path = _assert_file_inside_base(path, ALLOWED_BASE)
+    with open(safe_path, "r", encoding="utf-8") as f:
         return f.read()
 
 
@@ -614,12 +626,14 @@ def fill_sql_prompt(question: str, context: str) -> str:
 def guardrail_router(state: SQLState) -> SQLState:
     raw_q = state.get("formatted_q") or state.get("question") or ""
     q = str(raw_q).lower().strip()
+
     safe_keywords: List[str] = []
     for kw in BUSINESS_KEYWORDS:
         try:
             safe_keywords.append(str(kw).lower())
         except Exception:
             continue
+
     is_erp = any(kw in q for kw in safe_keywords)
     return {**state, "query_type": "ERP" if is_erp else "NON_ERP"}
 
@@ -655,21 +669,15 @@ def rewrite_question(state: SQLState) -> SQLState:
                 obj = None
                 standalone = s
         else:
-            # e.g., list outputs or other types
             standalone = str(raw).strip()
 
-        # If JSON parsed to dict, extract fields
         if isinstance(obj, dict):
             standalone = (obj.get("standalone_question") or "").strip() or standalone
             contains_values = bool(obj.get("contains_values"))
         else:
-            # If JSON parsed to list, fallback to string
             if isinstance(obj, list) and not standalone:
                 standalone = json.dumps(obj)
-
-        # Final fallback
         standalone = standalone or user_qstn.strip()
-
         return {
             **state,
             "formatted_q": standalone,
@@ -686,6 +694,7 @@ def rewrite_question(state: SQLState) -> SQLState:
             "contains_values": False,
             "formatting_prompt": prompt,
         }
+
 emb=HuggingFaceEmbeddings(model_name="hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned")
 
 vs = FAISS.load_local(
@@ -694,7 +703,7 @@ vs = FAISS.load_local(
     allow_dangerous_deserialization=True
 )
 
-def call_fvs_table_search(q):
+def call_fvs_table_search(q: str) -> List[str]:
     hits = vs.similarity_search(q, k=15)
     out, seen = [], set()
     for h in hits:
@@ -704,7 +713,7 @@ def call_fvs_table_search(q):
             out.append(t)
     return out
 
-def _parse_json_list(raw: str):
+def _parse_json_list(raw: str) -> List[Any]:
     try:
         data = json.loads(raw)
         return data if isinstance(data, list) else []
@@ -712,8 +721,8 @@ def _parse_json_list(raw: str):
         return []
 
 
-@frappe.whitelist(allow_guest=True)
-def call_retriev_multi_line(user_question):
+@frappe.whitelist(allow_guest=False)
+def call_retriev_multi_line(user_question: str) -> Dict[str, Any]:
     top_tables = call_fvs_table_search(user_question)
     table_prompt = FILTER_TABLES.replace("{user_question}", user_question)
     table_prompt = table_prompt.replace("{table_list}", json.dumps(top_tables, ensure_ascii=False))
@@ -769,7 +778,7 @@ def get_full_fields_vs():
     return _FULL_FIELDS_VS
 
 
-def get_sub_vs(selected_tables: list):
+def get_sub_vs(selected_tables: List[str]) -> Optional[FAISS]:
     """Build sub-index ONCE per unique selected_tables set (cached)."""
     key = tuple(sorted([t for t in selected_tables if isinstance(t, str)]))
     if not key:
@@ -935,7 +944,7 @@ def remote_entity_embedder(q: str) -> Union[list, str]:
 
 
 @frappe.whitelist(allow_guest=False)
-def call_entity_retriever(qstn: str):
+def call_entity_retriever(qstn: str) -> Dict[str, Any]:
     response = remote_entity_embedder(qstn)
 
     if not response.get("ok"):
@@ -1006,13 +1015,15 @@ def route_after_entities(state: SQLState) -> str:
     return "DIRECT" if CONFIG.get("retriever_structure") == "multi line" else "CONTEXT"
 
 
-def route_guardrail(state:SQLState):
-    return "ERP" if state.get("query_type")=="ERP" else "NON_ERP"
-def clean_sql(s):
+def route_guardrail(state: SQLState) -> str:
+    return "ERP" if state.get("query_type") == "ERP" else "NON_ERP"
+
+
+def clean_sql(s: Any) -> str:
     if isinstance(s, dict):
         s = s.get("output") or s.get("sql") or s.get("text") or json.dumps(s, ensure_ascii=False, default=str)
     elif isinstance(s, list):
-        s = "\n".join(map(str, s))
+        s = "\n".join([str(x) for x in s])  # no map()
     else:
         s = str(s) if s is not None else ""
 
@@ -1020,7 +1031,6 @@ def clean_sql(s):
     s = re.sub(r"^\s*```(?:sql)?\s*", "", s, flags=re.I)
     s = re.sub(r"\s*```\s*$", "", s)
     s = re.sub(r"^\s*sql\s*\n", "", s, flags=re.I)
-
     return s.strip()
 
 
@@ -1192,68 +1202,65 @@ checkpointer=MemorySaver()
 app=workflow.compile(checkpointer=checkpointer)
 
 
-#to execute the sql returned inside frappe
 @frappe.whitelist(allow_guest=False)
-def execute_query(sql:str,orm:str):
+def execute_query(sql: str, orm: str) -> Any:
+    """
+    Execute only SELECT SQL when sql is provided.
+    (Your old code checked orm but executed sql.)
+    """
     try:
-        if orm:
-            result=frappe.db.sql(sql,as_dict=True)
-            return result
+        if sql:
+            if not str(sql).lower().strip().startswith("select"):
+                frappe.throw(_("Only SELECT queries are allowed."))
+            return frappe.db.sql(sql, as_dict=True)
+        return []
     except Exception as e:
-        return {"error":f"SQL Execution Failed : {e}"}
+        return {"error": f"SQL Execution Failed: {e}"}
+
 
 @frappe.whitelist(allow_guest=False)
-def execute_query_1(mode: str, sql,orm):
+def execute_query_1(mode: str, sql: str, orm: Optional[Dict[str, Any]]) -> Any:
     try:
         mode = (mode or "").lower().strip()
 
         if mode == "sql":
-            if not sql.lower().strip().startswith("select"):
-                frappe.throw("Only SELECT queries are allowed.")
-
+            if not (sql or "").lower().strip().startswith("select"):
+                frappe.throw(_("Only SELECT queries are allowed."))
             return frappe.db.sql(sql, as_dict=True)
 
-        elif mode == "orm":
+        if mode == "orm":
             if not isinstance(orm, dict):
-                frappe.throw("ORM query must be JSON object.")
+                frappe.throw(_("ORM query must be JSON object."))
 
-            return frappe.get_all(
-                query.get("doctype"),
-                filters=query.get("filters"),
-                fields=query.get("fields"),
-            )
+            doctype = orm.get("doctype")
+            filters = orm.get("filters")
+            fields = orm.get("fields")
 
-        else:
-            frappe.throw("Mode must be 'sql' or 'orm'.")
+            return frappe.get_all(doctype, filters=filters, fields=fields)
+
+        frappe.throw(_("Mode must be 'sql' or 'orm'."))
 
     except Exception as e:
         frappe.log_error(frappe.get_traceback(), "Query Execution Failed")
         return {"error": str(e)}
 
 
-
 @frappe.whitelist(allow_guest=False)
-def send_support_message(message):
+def send_support_message(message: str) -> Any:
     url = CONFIG["support_api_url"]
-
-    res = requests.post(url, json={
-        "message": message
-    })
-
+    res = requests.post(url, json={"message": message}, timeout=15)
     return res.json()
 
+
 @frappe.whitelist(allow_guest=False)
-def get_ticket_details(tid):
+def get_ticket_details(tid: Union[int, str]) -> Any:
     url = CONFIG["get_ticket_details_url"]
-    res = requests.post(url, json={
-        "ticket_id": tid
-    })
-
+    res = requests.post(url, json={"ticket_id": tid}, timeout=15)
     return res.json()
 
 
 @frappe.whitelist(allow_guest=False)
-def support_bot(message):
+def support_bot(message: str) -> Dict[str, Any]:
     output = remote_llm_request_deploy_test(
         task="helpdesk_task",
         prompt="",
@@ -1299,64 +1306,56 @@ def support_bot(message):
 
 
 def save_logs(
-    user_question=None,
-    formatted_q=None,
-    context=None,
-    sql=None,
-    val=None,
-    result=None,
-    tries=None,
-    err=None,
-    formatted_result=None,
-):
-    def to_json_if_needed(v):
+    user_question: Optional[str] = None,
+    formatted_q: Optional[str] = None,
+    context: Optional[str] = None,
+    sql: Optional[str] = None,
+    val: Any = None,
+    result: Any = None,
+    tries: Optional[int] = None,
+    err: Any = None,
+    formatted_result: Any = None,
+) -> str:
+    def to_json_if_needed(v: Any) -> Any:
         if isinstance(v, (dict, list)):
-            return json.dumps(v, default=str)
+            return json.dumps(v, default=str, ensure_ascii=False)
         return v
-    val = to_json_if_needed(val)
-    result = to_json_if_needed(result)
-    err = to_json_if_needed(err)
-    context = to_json_if_needed(context)
-    formatted_result = to_json_if_needed(formatted_result)
+
     doc = frappe.new_doc("ChangAI Logs")
     doc.user_question = user_question
     doc.rewritten_question = formatted_q
-    doc.schema_retrieved = context
-    doc.sql_generated = sql
-    doc.validation = val
+    doc.schema_retrieved = to_json_if_needed(context)
+    doc.sql_generated = to_json_if_needed(sql)
+    doc.validation = to_json_if_needed(val)
     doc.tries = tries
-    doc.error = err
-    doc.result = result
-    doc.formatted_result = formatted_result
+    doc.error = to_json_if_needed(err)
+    doc.result = to_json_if_needed(result)
+    doc.formatted_result = to_json_if_needed(formatted_result)
     doc.insert(ignore_permissions=True)
-    frappe.db.commit()
+    # frappe.db.commit() removed
     return doc.name
 
 
 @frappe.whitelist(allow_guest=False)
-def format_data_conversationally(user_data):
-    """
-    Formats user data using the single, powerful conversational Jinja2 template.
-    """
+def format_data_conversationally(user_data: Any) -> str:
     env = jinja2.Environment(
-    autoescape=True,
-    trim_blocks=True,
-    lstrip_blocks=True,
-    extensions=["jinja2.ext.do"]
-)
-
+        autoescape=True,
+        trim_blocks=True,
+        lstrip_blocks=True,
+        extensions=["jinja2.ext.do"],
+    )
     template = env.from_string(CONVERSATION_TEMPLATE)
     return template.render(data=user_data)
 
 
-
 @frappe.whitelist(allow_guest=False)
-def format_data(qstn, sql_data):
+def format_data(qstn: str, sql_data: Any) -> Dict[str, str]:
     if isinstance(sql_data, (dict, list)):
         db_result_json = json.dumps(sql_data, ensure_ascii=False, default=str)
     else:
         db_result_json = str(sql_data) if sql_data is not None else "{}"
-    prompt=f"""
+
+    prompt = f"""
 INSTRUCTIONS:
 - Convert raw database results into a short, friendly, human-readable answer.
 - You may use BOTH: (1) the user question and (2) the DB result JSON to form the answer.
@@ -1368,17 +1367,14 @@ QUESTION:
 {qstn}
 
 DATABASE_RESULT_JSON:
-{json.dumps(db_result_json, ensure_ascii=False, default=str)}
+{db_result_json}
 
 OUTPUT:
 Write a clear final answer for the user based strictly on the JSON above.
 """
-    output = call_model(
-        prompt=prompt
-    )
+    output = call_model(prompt=prompt)
     answer = str(output)
     return {"answer": answer}
-
 
 
 def hits_to_schema_context(
@@ -1588,7 +1584,7 @@ def hits_to_schema_context(
         for ent, filt in entities:
             if show_entity_filters_yaml and isinstance(filt, dict) and filt:
                 lines.append(f"  - Entity: {ent}")
-                lines.append(f"    Filters:",{filt})
+                lines.append("    Filters:")
                 for k, v in filt.items():
                     vv = ", ".join(map(str, v)) if isinstance(v, (list, tuple)) else str(v)
                     lines.append(f"      {k}: {vv}")
@@ -1716,38 +1712,24 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
     }
 
 
-
 @frappe.whitelist(allow_guest=False)
-def call_gemini_1(prompt):
-        # Authenticate once
-        creds = service_account.Credentials.from_service_account_file(
-            KEY_PATH, 
-            scopes=['https://www.googleapis.com/auth/cloud-platform']
-        )
-        # prompt=FILTER_TABLES.format(user_question=user_question, table_list=table_list)
-        client = genai.Client(
-            vertexai=True,
-            project=PROJECT_ID,
-            location=CONFIG["location"],
-            credentials=creds
-        )
-        config = types.GenerateContentConfig(
-            system_instruction="You are an ERPNext assistant.Follow the task instructions exactly.",
-        )
-        contents = [
-            {
-                "role": "user",
-                "parts": [{"text": str(prompt)}]
-            }
-        ]
-
-        response = client.models.generate_content(
-            model=MODEL_ID,
-            config=config,
-            contents=contents
-        )
-        text = (response.text or "").strip()
-        if text.startswith("```"):
-            text = text.replace("```json", "").replace("```", "").strip()
-
-        return text
+def call_gemini_1(prompt: str) -> Union[str, Dict[str, Any]]:
+    creds = service_account.Credentials.from_service_account_file(
+        KEY_PATH,
+        scopes=["https://www.googleapis.com/auth/cloud-platform"],
+    )
+    client = genai.Client(
+        vertexai=True,
+        project=PROJECT_ID,
+        location=CONFIG["location"],
+        credentials=creds,
+    )
+    cfg = types.GenerateContentConfig(
+        system_instruction="You are an ERPNext assistant. Follow the task instructions exactly.",
+    )
+    contents = [{"role": "user", "parts": [{"text": str(prompt)}]}]
+    response = client.models.generate_content(model=MODEL_ID, config=cfg, contents=contents)
+    text = (response.text or "").strip()
+    if text.startswith("```"):
+        text = text.replace("```json", "").replace("```", "").strip()
+    return text

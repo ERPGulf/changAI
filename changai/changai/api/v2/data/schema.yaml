@@ -1,8 +1,8 @@
 _meta:
-  last_sync: '2026-02-11 19:23:11.431555'
-  last_doctype_sync: '2026-02-11 19:23:11.431555'
+  last_sync: '2026-02-12 14:44:02.882616'
+  last_doctype_sync: '2026-02-12 14:44:02.882616'
   last_desc_sync_partial: '2026-02-11 18:03:00.028676'
-  last_desc_sync: '2026-02-11 19:31:57.141142'
+  last_desc_sync: '2026-02-12 19:50:38.738950'
 tables:
 - table: tabAbout Us Settings
   description: Settings for the About Us Page

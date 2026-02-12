@@ -1,5 +1,5 @@
 _meta:
-  last_sync: '2026-02-11 19:35:16.233975'
+  last_sync: '2026-02-12 20:16:33.990116'
 data:
 - entity_type: tabCustomer
   entity_id: test
@@ -197,12 +197,12 @@ data:
     field: name
     value: Pen123
 - entity_type: tabItem
-  entity_id: "3M N95 Particulate Respirator 8210 \u2013 Box of 20 Masks \u2013 NIOSH\
-    \ Approved, Industrial Dust Protection, Elastic Headbands"
+  entity_id: 3M N95 Particulate Respirator 8210 – Box of 20 Masks – NIOSH Approved,
+    Industrial Dust Protection, Elastic Headbands
   filters:
     field: name
-    value: "3M N95 Particulate Respirator 8210 \u2013 Box of 20 Masks \u2013 NIOSH\
-      \ Approved, Industrial Dust Protection, Elastic Headbands"
+    value: 3M N95 Particulate Respirator 8210 – Box of 20 Masks – NIOSH Approved,
+      Industrial Dust Protection, Elastic Headbands
 - entity_type: tabItem
   entity_id: chair 27
   filters:
@@ -224,33 +224,33 @@ data:
     field: name
     value: HP-M479FDW
 - entity_type: tabItem
-  entity_id: "Bosch Serie 6 Front-Load Washing Machine 9 kg \u2013 1400 RPM, Inverter\
-    \ Motor, AllergyPlus Mode, Silver Finish"
+  entity_id: Bosch Serie 6 Front-Load Washing Machine 9 kg – 1400 RPM, Inverter Motor,
+    AllergyPlus Mode, Silver Finish
   filters:
     field: name
-    value: "Bosch Serie 6 Front-Load Washing Machine 9 kg \u2013 1400 RPM, Inverter\
-      \ Motor, AllergyPlus Mode, Silver Finish"
+    value: Bosch Serie 6 Front-Load Washing Machine 9 kg – 1400 RPM, Inverter Motor,
+      AllergyPlus Mode, Silver Finish
 - entity_type: tabItem
-  entity_id: "Dell Latitude 7440 Ultralight 14\u2033 Business Laptop \u2013 Intel\
-    \ Core i7-1365U 13th Gen, 32 GB RAM, 1 TB SSD, Windows 11 Pro, FHD Display"
+  entity_id: Dell Latitude 7440 Ultralight 14″ Business Laptop – Intel Core i7-1365U
+    13th Gen, 32 GB RAM, 1 TB SSD, Windows 11 Pro, FHD Display
   filters:
     field: name
-    value: "Dell Latitude 7440 Ultralight 14\u2033 Business Laptop \u2013 Intel Core\
-      \ i7-1365U 13th Gen, 32 GB RAM, 1 TB SSD, Windows 11 Pro, FHD Display"
+    value: Dell Latitude 7440 Ultralight 14″ Business Laptop – Intel Core i7-1365U
+      13th Gen, 32 GB RAM, 1 TB SSD, Windows 11 Pro, FHD Display
 - entity_type: tabItem
-  entity_id: "HP LaserJet Pro MFP M479fdw Color Wireless All-in-One Printer \u2013\
-    \ Duplex, Fax, Wi-Fi, USB, 27 ppm, 512 MB RAM"
+  entity_id: HP LaserJet Pro MFP M479fdw Color Wireless All-in-One Printer – Duplex,
+    Fax, Wi-Fi, USB, 27 ppm, 512 MB RAM
   filters:
     field: name
-    value: "HP LaserJet Pro MFP M479fdw Color Wireless All-in-One Printer \u2013 Duplex,\
-      \ Fax, Wi-Fi, USB, 27 ppm, 512 MB RAM"
+    value: HP LaserJet Pro MFP M479fdw Color Wireless All-in-One Printer – Duplex,
+      Fax, Wi-Fi, USB, 27 ppm, 512 MB RAM
 - entity_type: tabItem
-  entity_id: "Samsung 55-Inch QLED Smart TV Model QN90D \u2014 4K Ultra HD, HDR10+,\
-    \ Voice Control, Wi-Fi 6,"
+  entity_id: Samsung 55-Inch QLED Smart TV Model QN90D — 4K Ultra HD, HDR10+, Voice
+    Control, Wi-Fi 6,
   filters:
     field: name
-    value: "Samsung 55-Inch QLED Smart TV Model QN90D \u2014 4K Ultra HD, HDR10+,\
-      \ Voice Control, Wi-Fi 6,"
+    value: Samsung 55-Inch QLED Smart TV Model QN90D — 4K Ultra HD, HDR10+, Voice
+      Control, Wi-Fi 6,
 - entity_type: tabItem
   entity_id: ITEM890
   filters:

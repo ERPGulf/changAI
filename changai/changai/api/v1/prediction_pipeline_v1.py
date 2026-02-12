@@ -11,29 +11,24 @@ import requests
 import frappe
 import spacy
 import jinja2
+from typing import Any, Dict, Optional
 from symspellpy.symspellpy import SymSpell, Verbosity
 from changai.changai.api.v2.text2sql_pipeline import get_settings
 
 CONFIG=get_settings()
-
+pleasantry_file_path = frappe.get_app_path("changai", "changai", "api", "pleasantry.json")
+business_keywords_file = frappe.get_app_path("changai", "changai", "api", "business_keywords.json")
+custom_dictionary = frappe.get_app_path("changai", "changai", "api", "erp_dictionary.txt")
 nlp = spacy.load("en_core_web_sm", disable=["tagger", "parser"])
 sym_spell = SymSpell(max_dictionary_edit_distance=2, prefix_length=7)
-custom_dictionary = f"{CONFIG['ROOT_PATH']}/changai/changai/changai/api/erp_dictionary.txt"
-# custom_dictionary=os.get_env("ERP_DICTIONARY")
 sym_spell.load_dictionary(custom_dictionary, term_index=0, count_index=1)
-
-# Load pleasantries once
-pleasantry_file_path = f"{CONFIG['ROOT_PATH']}/changai/changai/changai/api/pleasantry.json"
-# pleasantry_file_path=os.get_env("PLEASANTRY")
 with open(pleasantry_file_path, "r", encoding="utf-8") as f:
     PLEASANTRIES = sorted(json.load(f).items(), key=lambda x: len(x[0]), reverse=True)
-# Cache compiled patterns once at startup
 COMPILED_PLEASANTRIES = [
     (re.compile(pattern, re.IGNORECASE), response)
     for pattern, response in PLEASANTRIES
 ]
 STOP_WORDS = {
-    # Pronouns
     "tell","as","a","all",
     "i", "me", "my", "mine", "myself",
     "you", "your", "yours", "yourself", "yourselves",
@@ -42,34 +37,27 @@ STOP_WORDS = {
     "it", "its", "itself",
     "we", "us", "our", "ours", "ourselves",
     "they", "them", "their", "theirs", "themselves",
-    # Articles & determiners
     "a", "an", "the", "this", "that", "these", "those", "such",
-    # Auxiliary & modal verbs
     "is", "am", "are", "was", "were", "be", "being", "been",
     "do", "does", "did", "doing",
     "have", "has", "had", "having",
     "will", "would", "shall", "should", "can", "could", "may", "might", "must",
-    # Conjunctions
     "and", "or", "but", "if", "because", "while", "although", "though", "unless", 
     "until", "since", "so", "yet",
-    # Prepositions
     "in", "on", "at", "by", "for", "with", "about", "against", 
     "between", "into", "through", "during", "before", "after",
     "above", "below", "to", "from", "up", "down", "out", "off", "over", "under","of",
-    # Question words
     "what", "which", "who", "whom", "whose", 
     "when", "where", "why", "how",
-    # Degree / comparison
     "than", "more", "most", "much", "many", "few", "less", "least", "enough",
-    # Common fillers
     "ok", "okay", "well", "like", "just", "really", "very", "also", "too", "still",
-    # Contractions / informal
     "what's", "that's", "it's", "there's", "here's", "let's", "who's", "where's", 
     "how's", "i'm", "you're", "he's", "she's", "we're", "they're",
     "i've", "you've", "we've", "they've",
     "i'll", "you'll", "he'll", "she'll", "we'll", "they'll",
     "i'd", "you'd", "he'd", "she'd", "we'd", "they'd","did"
 }
+
 stop_words=list(STOP_WORDS)
 stop_word_pattern = r'^(?:' + '|'.join(re.escape(word) for word in stop_words) + r')$'
 stop_word_regex = re.compile(stop_word_pattern, re.IGNORECASE)
@@ -186,8 +174,6 @@ I couldn’t find any records for {{ doctype or 'your query' }}.
 
 
 # Load business keywords once
-business_keywords_file = f"{CONFIG['ROOT_PATH']}/changai/changai/changai/api/business_keywords.json"
-# business_keywords_file=os.get_env("BUSINESS_KEYWORDS")
 with open(business_keywords_file, "r", encoding="utf-8") as f:
     BUSINESS_KEYWORDS = {kw.lower() for kw in json.load(f)["business_keywords"]}
 
@@ -199,7 +185,7 @@ non_erp_responses = [
     "I'm designed to handle ERP queries. Could you rephrase that in a business context?"
 ]
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=False)
 def correct_sentence(text):
     doc = nlp(text)
     entities = [(ent.text, ent.start_char, ent.end_char) for ent in doc.ents]
@@ -234,7 +220,7 @@ def correct_sentence(text):
     return corrected_text
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=False)
 def run_query(query):
     """Run a query."""
     try:
@@ -248,7 +234,7 @@ def run_query(query):
 
 
 # To convert the Python Date Objects into an ISO format.
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=False)
 def sanitize_dates(obj):
     if isinstance(obj, list):
         return [sanitize_dates(i) for i in obj]
@@ -260,8 +246,8 @@ def sanitize_dates(obj):
         return obj
 
 
-@frappe.whitelist(allow_guest=True)
-def fetch_data_from_server(qstn):
+@frappe.whitelist(allow_guest=False)
+def fetch_data_from_server(qstn: str) -> dict:
     """
     Handles a user question by detecting greetings or sending it to a prediction API.
     Returns either a greeting response, ERP query results, or an error message.
@@ -318,14 +304,12 @@ def fetch_data_from_server(qstn):
         return {"error": str(e)}
 
 
-# Corrects user qstn and maps to ERP or Small Talk.
-@frappe.whitelist(allow_guest=True)
-def fuzzy_intent_router(text):
+@frappe.whitelist(allow_guest=False)
+def fuzzy_intent_router(text: str) -> Dict[str, Any]:
     """Responds to a user question with a fuzzy match"""
     corrected_text = correct_sentence(text)
     corrected_text_lower = corrected_text.lower()
     corrected_words = set(re.findall(r"\b\w+\b", corrected_text_lower))
-    # ERP keywords
     if BUSINESS_KEYWORDS & corrected_words:
         return {"type": "ERP", "response": 0, "corrected": corrected_text}
     safe_text = re.sub(r"[^\w\s]", "", corrected_text_lower) 
@@ -339,8 +323,8 @@ def fuzzy_intent_router(text):
     }
 
 
-@frappe.whitelist(allow_guest=True)
-def format_data_conversationally(user_data, doctype=None):
+@frappe.whitelist(allow_guest=False)
+def format_data_conversationally(user_data: Any, doctype: Optional[str] = None) -> str:
     """
     Formats user data using the single, powerful conversational Jinja2 template.
     """
