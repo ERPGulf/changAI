@@ -6,10 +6,17 @@ from transformers import (
     T5ForConditionalGeneration,
 )
 import torch
-
+import frappe
 torch._dynamo.config.suppress_errors = True
 
-import torch
+meta_path = frappe.get_app_path(
+    "changai", "changai", "api", "v1", "meta.json"
+)
+
+id2label_path = frappe.get_app_path(
+    "changai", "changai", "api", "v1", "id2label.json"
+)
+
 
 # Load the HF_Models Repo IDs.
 ROBERTO_REPO = "hyrinmansoor/text2frappe-s1-roberta"
@@ -31,10 +38,9 @@ class Predictor(BasePredictor):
 
         self.tokenizer_s3 = T5Tokenizer.from_pretrained(FLANS3_REPO)
         self.model_s3 = T5ForConditionalGeneration.from_pretrained(FLANS3_REPO)
-        with open("meta.json") as f:
+        with open(meta_path, "r", encoding="utf-8") as f:
             self.meta = json.load(f)
-        # Load Meta and Dcotypes IDs.
-        with open("id2label.json") as f:
+        with open(id2label_path, "r", encoding="utf-8") as f:
             self.id2label = json.load(f)
 
     def predict_doctype(self, question):

@@ -1,31 +1,23 @@
 import frappe
 import json
 
-OUTPUT_FILE = "/content/changai_table_names.json"
-
 BUSINESS_MODULES = [
-    "Selling",
-    "Buying",
-    "Stock",
-    "Accounts",
-    "HR",
-    "CRM",
-    "Support",
-    "Projects",
-    "Assets",
-    "Manufacturing"
+    "Selling","Buying","Stock","Accounts","HR","CRM","Support","Projects","Assets","Manufacturing"
 ]
 
-# Fetch doctypes from these modules
-doctypes = frappe.get_all(
-    "DocType",
-    filters={"module": ["in", BUSINESS_MODULES]},
-    fields=["name", "module"]
-)
+def business_doctypes():
+    return frappe.get_all(
+        "DocType",
+        filters={"module": ["in", BUSINESS_MODULES]},
+        fields=["name", "module"],
+    )
 
-table_names = [f"tab{d.name}" for d in doctypes]
+def export_table_names():
+    doctypes = business_doctypes()
+    table_names = [f"tab{d['name']}" for d in doctypes]
 
-with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
-    json.dump(table_names, f, indent=2)
+    output_file = frappe.get_site_path("private", "files", "changai_table_names.json")
+    with open(output_file, "w", encoding="utf-8") as f:
+        json.dump(table_names, f, indent=2)
 
-print(f"✅ Saved {len(table_names)} table names to {OUTPUT_FILE}")
+    return {"count": len(table_names), "path": output_file}

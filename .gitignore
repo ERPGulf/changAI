@@ -6,3 +6,4 @@ tags
 node_modules
 __pycache__
 .env
+changai/changai/api/v2/data

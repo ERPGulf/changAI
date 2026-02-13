@@ -1,6 +1,6 @@
 import json
 import frappe
-import requests 
+ 
 def save_message_doc(session_id:str,message_type:str,content:str):
 
     doc=frappe.get_doc({
@@ -10,14 +10,11 @@ def save_message_doc(session_id:str,message_type:str,content:str):
         "content": content or ""
     })
     doc.insert(ignore_permissions=True)
-    frappe.db.commit()
     return doc.name
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=False)
 def save_turn_2(session_id: str, user_text: str=None, bot_text: dict=None):
-    import json
-
     # find existing document
     doc_name = frappe.db.exists("ChangAI Chat History", {"session_id": session_id})
 
@@ -44,7 +41,6 @@ def save_turn_2(session_id: str, user_text: str=None, bot_text: dict=None):
             new_content,
             update_modified=True
         )
-        frappe.db.commit()
         return doc_name
 
     else:
@@ -54,13 +50,11 @@ def save_turn_2(session_id: str, user_text: str=None, bot_text: dict=None):
             "content": new_content
         })
         doc.insert(ignore_permissions=True)
-        frappe.db.commit()
         return doc.name
 
 
-@frappe.whitelist(allow_guest=True)
-def get_chat_history_1(session_id):
-    import json
+@frappe.whitelist(allow_guest=False)
+def get_chat_history_1(session_id: str) -> list:
     doc_name = frappe.db.exists("ChangAI Chat History", {"session_id": session_id})
     if not doc_name:
         return []
@@ -128,8 +122,9 @@ def respond_from_cache(user_question:str):
         doc=frappe.db.get_value("ChangAI Logs",{"user_question":user_question},["sql_generated","result"],as_dict=False)
         return doc
 
+
 @frappe.whitelist(allow_guest=False)
-def inject_prompt(user_qstn,session_id):
+def inject_prompt(user_qstn: str, session_id: str) -> str:
     rows=get_chat_history_1(session_id)
     prompt=PROMPT_FOLLOWUP.format(rows=rows,qstn=user_qstn)
     return prompt
