@@ -38,6 +38,7 @@ def _path(name: str) -> str:
 
 TABLES_JSON = "tables.json"
 SCHEMA_YAML = "schema.yaml"
+TRAIN_JOSNL="training_data.jsonl"
 META_SCHEMA_YAML = "meta_schema.yaml"
 
 IGNORED_FIELDTYPES: Set[str] = {
@@ -394,9 +395,9 @@ Fields:
 
 @frappe.whitelist(allow_guest=False)
 def fill_missing_field_descriptions(
-    batch_size: int = 15,          # Lowered for token safety
+    batch_size: int = 15,         
     max_tables: int = 0,
-    checkpoint_every_table: int = 10, # Increased to reduce Disk I/O load
+    checkpoint_every_table: int = 10,
 ) -> Dict[str, Any]:
     payload = _load_yaml(SCHEMA_YAML)
     meta = payload.get("_meta") or {}
@@ -562,61 +563,312 @@ Fields:
             time.sleep(2 * (attempt + 1))
 
     return {}
+def _get_training_data_dir() -> str:
+    d = frappe.get_app_path("changai", "changai", "api", "v2", "data", "training_data")
+    os.makedirs(d, exist_ok=True)
+    return d
+
+def _training_file_path(module_name: str) -> str:
+    filename = f"{(module_name or '').lower()}_training_data.jsonl"
+    return safe_path_in_dir(_get_training_data_dir(), filename)
 
 
-@frappe.whitelist(allow_guest=True)
-def test_openai_connection(api_key: str = None) -> dict:
-    """
-    Simple OpenAI connectivity test.
-    Verifies:
-    - API key validity
-    - Network connectivity
-    - Model availability
-    - JSON response parsing
-    """
+# @frappe.whitelist()
+# def generate_training_data(module_name: str, total_count: int):
+#     client = _get_openai_client()
+#     total_count = int(total_count)
+#     output_file = _training_file_path(module_name)
+#     existing_q = set()
+#     existing_triplets = set()
+#     if os.path.exists(output_file):
+#         with open(output_file, "r", encoding="utf-8") as rf:
+#             for ln in rf:
+#                 ln = ln.strip()
+#                 if not ln:
+#                     continue
+#                 try:
+#                     obj = json.loads(ln)
+#                 except Exception:
+#                     continue
+#                 q = (obj.get("sentence1") or "").strip()
+#                 s2 = (obj.get("sentence2") or "").strip()
+#                 label = float(obj.get("label") or 0)
 
-    try:
-        # 1️⃣ Get API key
-        if not api_key:
-            settings = frappe.get_single("ChangAI Settings")
-            try:
-                api_key = settings.get_password("openai_api_key")
-            except Exception:
-                api_key = None
+#                 if q:
+#                     existing_q.add(q)
+#                 if q and s2:
+#                     existing_triplets.add((q, s2, label))
+#     prompt_template = """
+# You are generating ERPNext schema-retrieval training data to train an embedder that maps business questions to the correct ERPNext tables/fields.
+# MODULE: {module}
+# OUTPUT FORMAT (STRICT):
+# - Output MUST be JSONL.
+# - Each line = ONE JSON object.
+# - Do NOT wrap in an array.
+# - Do NOT add any extra text.
+# COUNT RULE (IMPORTANT — READ CAREFULLY):
+# - You must create EXACTLY 10 UNIQUE business questions (sentence1).
+# - sentence1 must be UNIQUE across the dataset (no duplicates).
+# - You MUST output MULTIPLE JSONL lines per question when needed:
+#   - one line per required positive candidate
+#   - plus up to 2 lines for negative candidates
+# - Therefore: TOTAL JSONL LINE COUNT MUST NOT BE 10.
+#   It MUST be dynamic and will be MORE than 10 in most cases.
+# QUESTION STYLE (CRITICAL — MUST FOLLOW):
 
-        if not api_key:
-            api_key = os.getenv("OPENAI_API_KEY")
+# Questions must reflect how real ERPNext business users ask in daily operations.
 
-        if not api_key:
-            return {"ok": False, "error": "No OpenAI API key found"}
+# Common Question Categories:
 
-        # 2️⃣ Create client
-        from openai import OpenAI
-        client = OpenAI(api_key=api_key)
+# - Totals: total sales, revenue, purchase, tax, outstanding
+# - Counts: number of invoices, orders, customers, items
+# - Rankings: top/bottom customers, items, suppliers
+# - Pending/Open/Overdue documents
+# - Date-based queries: today, this month, last quarter, YTD
+# - Stock & warehouse analysis
+# - Payment status & collections
+# - Profitability & margin
+# - Supplier/customer performance
+# - Trends & comparisons over time
+# - Item performance (most sold, highest revenue, best margin, slow/fast moving, returns, stock aging, valuation)
+# - Entity-specific queries (customer, supplier, item, warehouse mentioned by name)
+# - Project costing & profitability
+# - HR & payroll summaries
+# - Tax & compliance reports
+# - Cash flow & finance summaries
+# - Production & manufacturing status
+# - Customer support & SLA tracking
+# - Budget vs actual comparisons
+# - Multi-company consolidated reports
+# - Audit/control checks
+# - Logistics & shipping status
+# - Recurring revenue/subscriptions
+# - Discounts & promotion impact
+# - Approval/workflow status
 
-        # 3️⃣ Make simple request
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": "Return ONLY JSON."},
-                {"role": "user", "content": "Reply exactly with {\"status\":\"ok\"}"}
-            ],
-            temperature=0,
-            max_tokens=50,
-            timeout=60,
-        )
+# Style Rules:
 
-        content = response.choices[0].message.content.strip()
+# - Short to medium length
+# - Casual but professional
+# - Natural business language
+# - No spelling mistakes
+# - No technical/database wording
+# - No placeholder wording like "a specific item"
+# - Must sound like a manager, accountant, warehouse head, HR officer, or operations staff
+# For example:
 
-        return {
-            "ok": True,
-            "model": "gpt-4o-mini",
-            "response": content
-        }
+# If MODULE is Selling → generate only sales/customer/item revenue related questions such as totals (sales revenue, discounts, outstanding sales), counts (number of quotations, sales orders, invoices, customers), rankings (top customers, best‑selling items, highest revenue orders), pending/open/overdue (quotations not converted, overdue invoices, open sales orders), date‑based queries (sales today, this month, last quarter, year‑to‑date), customer performance (repeat orders, credit utilization, payment timeliness), and trends (sales growth, item demand trends, seasonal comparisons).
 
-    except Exception as e:
-        frappe.logger().exception("OpenAI test failed")
-        return {
-            "ok": False,
-            "error": str(e)
-        }
+# If MODULE is Buying → generate supplier/purchase related questions such as totals (purchase spend, supplier credits, outstanding payables), counts (number of purchase orders, receipts, supplier invoices), rankings (top suppliers by spend, lowest cost suppliers, most reliable suppliers), pending/open/overdue (open purchase orders, overdue supplier invoices), date‑based queries (purchases today, this month, last quarter, year‑to‑date), supplier performance (on‑time delivery, quality issues, average lead time), and trends (purchase spend trends, supplier category comparisons).
+
+# If MODULE is Stock → generate inventory/warehouse related questions such as totals (stock valuation, total items in warehouse, stock inflow/outflow), counts (number of items below reorder level, stock transfers, warehouses), rankings (fast‑moving items, slow‑moving items, top warehouses by stock value), pending/open/overdue (pending stock transfers, unfulfilled delivery notes), date‑based queries (stock movement today, this month, last quarter, year‑to‑date), warehouse analysis (stock aging, negative stock, capacity utilization), and trends (inventory turnover, stock consumption trends, seasonal demand).
+
+# If MODULE is Accounts → generate finance/payment/tax related questions such as totals (revenue, expenses, outstanding receivables/payables, tax liability), counts (number of invoices, journal entries, payments received/made), rankings (top customers by payments, suppliers by outstanding balances), pending/open/overdue (overdue invoices, pending payments, unapproved entries), date‑based queries (cash flow today, this month, last quarter, year‑to‑date), payment status (paid vs. unpaid invoices, partial payments, collections), profitability/margin (gross margin, net profit, project profitability), and trends (revenue vs. expense trends, tax trends, cash flow comparisons).
+
+
+# FOR EACH of the 10 UNIQUE QUESTIONS:
+# - Add ALL required positives (label=1.0): the MINIMUM tables/fields needed to generate correct SQL.
+# - Add MAXIMUM 2 negatives (label=0.0): near-miss candidates not needed.
+# FORMAT PER LINE (STRICT):
+# {{"gid":"{module}","sentence1":"...","sentence2":"...","label":1.0}}
+# sentence2 format ONLY:
+# - Table:
+#   "[TABLE] tabDoctype | desc: <2-3 sentences, specific reasoning>"
+# - Field:
+#   "[FIELD] fieldname | [TABLE] tabDoctype | desc: <2-3 sentences, specific reasoning>"
+# DESCRIPTION REQUIREMENTS (VERY IMPORTANT):
+# - Required for BOTH positives and negatives.
+# - 2–3 sentences.
+# - Must be CLEAR and easy to understand:
+#   1) First sentence: explain WHAT this table/field represents in ERPNext (business meaning).
+#   2) Second sentence: explain WHY it is needed (or not needed) for THIS question (SQL logic: filter/group/sum/join/date/status).
+# - No generic phrases like "to get data" / "to retrieve details".
+# - For negatives (label=0.0): explain why it looks related but is not required (wrong document stage, wrong module, wrong metric, etc.).
+# OTHER RULES:
+# - Use real ERPNext names only (tabBin, tabStock Ledger Entry, tabSales Invoice, tabPurchase Invoice, tabCustomer, tabItem, tabWarehouse, etc.).
+# - Never fake names like tab1/tab2 or "Lead tab3".
+# - No duplicate sentence2 lines across the entire output.
+# Return ONLY JSONL.
+# """
+#     written_lines = 0
+#     new_unique_questions = 0
+#     with open(output_file, "a", encoding="utf-8") as f:
+#         while len(existing_q) < total_count:
+#             prompt = prompt_template.format(module=module_name)
+#             resp = client.chat.completions.create(
+#                 model="gpt-4",
+#                 messages=[
+#                     {"role": "system", "content": "Output ONLY JSONL. No extra text."},
+#                     {"role": "user", "content": prompt}
+#                 ],
+#                 temperature=0.3,
+#                 max_tokens=2000
+#             )
+#             text = (resp.choices[0].message.content or "").strip()
+#             lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
+#             for ln in lines:
+#                 try:
+#                     obj = json.loads(ln)
+#                 except Exception:
+#                     continue
+#                 q = (obj.get("sentence1") or "").strip()
+#                 s2 = (obj.get("sentence2") or "").strip()
+#                 label = float(obj.get("label") or 0)
+#                 if not q or not s2:
+#                     continue
+#                 triplet = (q, s2, label)
+#                 if triplet in existing_triplets:
+#                     continue
+#                 is_new_question = q not in existing_q
+#                 if is_new_question:
+#                     if len(existing_q) >= total_count:
+#                         continue
+#                     existing_q.add(q)
+#                     new_unique_questions += 1
+#                 f.write(json.dumps(obj, ensure_ascii=False) + "\n")
+#                 existing_triplets.add(triplet)
+#                 written_lines += 1
+#                 if len(existing_q) >= total_count:
+#                     break
+#     return {
+#         "ok": True,
+#         "file": output_file,
+#         "unique_questions_total": len(existing_q),
+#         "unique_questions_added_this_run": new_unique_questions,
+#         "lines_written_this_run": written_lines
+#     }
+
+@frappe.whitelist()
+def generate_training_data_1(module_name: str, total_count: int):
+    client = _get_openai_client()
+    total_count = int(total_count)
+    output_file = _training_file_path(module_name)
+    existing_q = set()
+    existing_triplets = set()
+    if os.path.exists(output_file):
+        with open(output_file, "r", encoding="utf-8") as rf:
+            for ln in rf:
+                ln = ln.strip()
+                if not ln:
+                    continue
+                try:
+                    obj = json.loads(ln)
+                except Exception:
+                    continue
+                q = (obj.get("sentence1") or "").strip()
+                s2 = (obj.get("sentence2") or "").strip()
+                label = float(obj.get("label") or 0)
+
+                if q:
+                    existing_q.add(q)
+                if q and s2:
+                    existing_triplets.add((q, s2, label))
+    
+    # Module-specific examples
+    # Module-specific examples
+    module_examples = {
+    "Selling": "sales revenue/discounts/outstanding, quotation/order/invoice counts, top customers/best-selling items/highest revenue orders, quotations not converted/overdue invoices/open sales orders, sales today/this month/last quarter/YTD, customer performance (repeat orders, credit utilization, payment timeliness), trends (sales growth, item demand, seasonal comparisons)",
+    
+    "Accounts": "revenue/expenses/outstanding receivables-payables/tax liability, invoice/journal entry/payment counts, top customers by payments/suppliers by outstanding balances, overdue invoices/pending payments/unapproved entries, cash flow today/this month/last quarter/YTD, payment status (paid vs unpaid, partial payments, collections), profitability/margin (gross margin, net profit, project profitability), trends (revenue vs expense, tax trends, cash flow comparisons)",
+    
+    "CRM": "lead counts/conversion rates, opportunity pipeline value, lead sources performance, won/lost deals, sales funnel analysis, contact/lead activity tracking, follow-up pending/overdue, campaign effectiveness, lead response time, customer acquisition cost, deals by territory/sales person, lead aging, opportunity win probability",
+    
+    "Buying": "purchase spend/supplier credits/outstanding payables, PO/receipt/supplier invoice counts, top suppliers by spend/lowest cost/most reliable, open POs/overdue supplier invoices, purchases today/this month/last quarter/YTD, supplier performance (on-time delivery, quality issues, average lead time), trends (purchase spend, supplier category comparisons)",
+    
+    "Projects": "project profitability/costs/margins, task completion rates, project timeline/delays, resource allocation/utilization, billable vs non-billable hours, project budget vs actual, milestone tracking, overdue tasks/projects, timesheet summaries, project-wise revenue/expenses, team performance by project, project status (on-track/at-risk/delayed)",
+    
+    "Manufacturing": "production order status/completion, work order quantities/delays, BOM costs/material consumption, production efficiency/yield rates, machine/workstation utilization, job card completion/pending, manufacturing costs vs planned, scrap/wastage analysis, production capacity utilization, WIP (work in progress) valuation, operations completion tracking, downtime analysis",
+    
+    "Stock": "stock valuation/total items/stock inflow-outflow, items below reorder/stock transfers/warehouse counts, fast-moving/slow-moving items/top warehouses by stock value, pending stock transfers/unfulfilled delivery notes, stock movement today/this month/last quarter/YTD, warehouse analysis (stock aging, negative stock, capacity utilization), trends (inventory turnover, stock consumption, seasonal demand)",
+    
+    "Support": "ticket counts by status/priority, resolution time/SLA compliance, open/overdue tickets, customer satisfaction scores, first response time, ticket aging/backlog, support agent performance, escalated tickets, ticket trends by category/type, average handling time, ticket volume by channel, recurring issues/top complaints",
+    
+    "Assets": "asset valuation/depreciation, asset counts by category/location, maintenance schedules/overdue maintenance, asset utilization rates, capitalized vs expensed items, asset disposal/write-offs, depreciation expense this period, asset register by department, insurance renewals due, warranty expiry tracking, asset acquisition costs, asset condition tracking",
+    
+    "HR": "payroll summaries/salary disbursements, employee counts by department/designation, attendance/leave tracking, leave balances/pending approvals, benefit allocations/deductions, performance reviews/appraisal cycles, hiring status/open positions, department-wise costs, overtime/shift patterns, resignation/termination tracking, employee onboarding status, training completion rates"
+}
+
+    module_example = module_examples.get(module_name, "relevant business queries for this module")
+    prompt_template = """
+Generate ERPNext schema-retrieval training data for MODULE: {module}
+
+OUTPUT FORMAT (STRICT):
+- JSONL only (one JSON object per line, no array wrapper, no extra text)
+- Format: {{"gid":"{module}","sentence1":"...","sentence2":"...","label":1.0}}
+
+COUNT RULE:
+- EXACTLY 10 UNIQUE business questions (sentence1)
+- Multiple JSONL lines per question: ALL required positives (label=1.0) + up to 2 negatives (label=0.0)
+- Positives = ALL tables/fields needed for correct SQL (varies per question)
+- Total output lines will be dynamic and significantly > 10
+
+QUESTION STYLE (CRITICAL):
+Reflect real ERPNext user queries. Common categories: totals (sales, revenue, purchase, tax, outstanding), counts (invoices, orders, customers, items), rankings (top/bottom customers/items/suppliers), pending/open/overdue documents, date-based (today, this month, last quarter, YTD), stock/warehouse analysis, payment status/collections, profitability/margin, supplier/customer performance, trends/comparisons over time, item performance (most sold, highest revenue, best margin, slow/fast moving, returns, stock aging, valuation), entity-specific (customer/supplier/item/warehouse by name), project costing/profitability, HR/payroll summaries, tax/compliance reports, cash flow/finance summaries, production/manufacturing status, customer support/SLA tracking, budget vs actual, multi-company consolidated reports, audit/control checks, logistics/shipping status, recurring revenue/subscriptions, discounts/promotion impact, approval/workflow status.
+
+Style: short-medium length, casual professional, natural business language, no technical/database terms, no placeholders ("a specific item"), sound like manager/accountant/warehouse head/HR officer/ops staff.
+
+For MODULE {module}, generate questions like: {module_example}
+
+sentence2 FORMAT:
+- Table: "[TABLE] tabDoctype | desc: <2-3 sentences>"
+- Field: "[FIELD] fieldname | [TABLE] tabDoctype | desc: <2-3 sentences>"
+
+DESCRIPTION (2-3 sentences, BOTH positives/negatives):
+1) WHAT: business meaning in ERPNext
+2) WHY: needed/not needed for this question (SQL logic: filter/group/sum/join/date/status)
+For negatives: explain why it seems related but isn't (wrong stage/module/metric)
+
+RULES:
+- Use Only the Real ERPNext Tables and field names
+- No duplicates in sentence2 across output
+- ALL required positives + max 2 negatives per question
+
+Return ONLY JSONL.
+"""
+    written_lines = 0
+    new_unique_questions = 0
+    with open(output_file, "a", encoding="utf-8") as f:
+        while len(existing_q) < total_count:
+            prompt = prompt_template.format(module=module_name, module_example=module_example)
+            resp = client.chat.completions.create(
+                model="gpt-4",
+                messages=[
+                    {"role": "system", "content": "Output ONLY JSONL. No extra text."},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0.3,
+                max_tokens=2000
+            )
+            text = (resp.choices[0].message.content or "").strip()
+            lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
+            for ln in lines:
+                try:
+                    obj = json.loads(ln)
+                except Exception:
+                    continue
+                q = (obj.get("sentence1") or "").strip()
+                s2 = (obj.get("sentence2") or "").strip()
+                label = float(obj.get("label") or 0)
+                if not q or not s2:
+                    continue
+                triplet = (q, s2, label)
+                if triplet in existing_triplets:
+                    continue
+                is_new_question = q not in existing_q
+                if is_new_question:
+                    if len(existing_q) >= total_count:
+                        continue
+                    existing_q.add(q)
+                    new_unique_questions += 1
+                f.write(json.dumps(obj, ensure_ascii=False) + "\n")
+                existing_triplets.add(triplet)
+                written_lines += 1
+                if len(existing_q) >= total_count:
+                    break
+    return {
+        "ok": True,
+        "file": output_file,
+        "unique_questions_total": len(existing_q),
+        "unique_questions_added_this_run": new_unique_questions,
+        "lines_written_this_run": written_lines
+    }

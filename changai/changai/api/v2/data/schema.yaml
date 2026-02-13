@@ -2,7 +2,7 @@ _meta:
   last_sync: '2026-02-12 14:44:02.882616'
   last_doctype_sync: '2026-02-12 14:44:02.882616'
   last_desc_sync_partial: '2026-02-11 18:03:00.028676'
-  last_desc_sync: '2026-02-12 19:50:38.738950'
+  last_desc_sync: '2026-02-13 07:43:27.339163'
 tables:
 - table: tabAbout Us Settings
   description: Settings for the About Us Page
@@ -21297,12 +21297,15 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Used to identify and differentiate users in business communications
+      and reporting.
   - name: user
-    description: ''
+    description: Represents the unique identifier for a user, essential for tracking
+      user activity and access within the system.
     join_hint:
       table: tabUser
       'on': user = tabUser.name
+  desc_done: true
 - table: tabPrice List
   description: A Price List is a collection of Item Prices either Selling, Buying,
     or both
@@ -35365,34 +35368,44 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Identifies the unique name of the system settings for easy reference
+      in business queries.
   - name: app_name
-    description: ''
+    description: Specifies the application associated with the settings, crucial for
+      context in multi-app environments.
   - name: country
-    description: ''
+    description: Indicates the country for localization purposes, impacting compliance
+      and regional settings.
     join_hint:
       table: tabCountry
       'on': country = tabCountry.name
   - name: language
-    description: ''
+    description: Defines the language used in the application, essential for user
+      accessibility and experience.
     join_hint:
       table: tabLanguage
       'on': language = tabLanguage.name
   - name: time_zone
-    description: ''
+    description: Sets the time zone for accurate scheduling and reporting across different
+      regions.
   - name: currency
-    description: ''
+    description: Specifies the currency used for transactions, vital for financial
+      reporting and analysis.
     join_hint:
       table: tabCurrency
       'on': currency = tabCurrency.name
   - name: enable_onboarding
-    description: ''
+    description: Indicates whether onboarding features are activated, important for
+      user engagement strategies.
   - name: setup_complete
-    description: ''
+    description: Shows if the initial setup is finished, critical for determining
+      readiness for operations.
   - name: disable_document_sharing
-    description: ''
+    description: Controls the ability to share documents, relevant for security and
+      compliance considerations.
   - name: date_format
-    description: ''
+    description: Determines how dates are displayed, important for clarity in reporting
+      and user interfaces.
     options:
     - yyyy-mm-dd
     - dd-mm-yyyy
@@ -35401,12 +35414,14 @@ tables:
     - mm/dd/yyyy
     - mm-dd-yyyy
   - name: time_format
-    description: ''
+    description: Specifies the format for time representation, essential for user
+      preferences and scheduling.
     options:
     - HH:mm:ss
     - HH:mm
   - name: number_format
-    description: ''
+    description: Defines how numbers are formatted, crucial for financial data presentation
+      and accuracy.
     options:
     - '#,###.##'
     - '#.###,##'
@@ -35419,9 +35434,11 @@ tables:
     - '#.###'
     - '#,###'
   - name: use_number_format_from_currency
-    description: ''
+    description: Indicates if the number format should align with the currency settings,
+      important for consistency.
   - name: first_day_of_the_week
-    description: ''
+    description: Sets the starting day of the week for calendars, relevant for scheduling
+      and planning.
     options:
     - Sunday
     - Monday
@@ -35431,7 +35448,8 @@ tables:
     - Friday
     - Saturday
   - name: float_precision
-    description: ''
+    description: Specifies the precision for floating-point numbers, important for
+      financial calculations and reporting.
     options:
     - '2'
     - '3'
@@ -35442,7 +35460,8 @@ tables:
     - '8'
     - '9'
   - name: currency_precision
-    description: ''
+    description: Defines the number of decimal places for currency values, crucial
+      for accurate financial reporting.
     options:
     - '0'
     - '1'
@@ -35455,135 +35474,192 @@ tables:
     - '8'
     - '9'
   - name: rounding_method
-    description: ''
+    description: Specifies how numerical values are rounded, impacting pricing and
+      financial calculations.
     options:
     - Banker's Rounding (legacy)
     - Banker's Rounding
     - Commercial Rounding
   - name: apply_strict_user_permissions
-    description: ''
+    description: Enforces strict access controls for users, essential for maintaining
+      data security and compliance.
   - name: allow_older_web_view_links
-    description: ''
+    description: Enables access to legacy web links, useful for maintaining continuity
+      in user experience.
   - name: session_expiry
-    description: ''
+    description: Sets the duration before user sessions expire, important for balancing
+      security and user convenience.
   - name: document_share_key_expiry
-    description: ''
+    description: Determines the validity period of document sharing keys, critical
+      for protecting sensitive information.
   - name: deny_multiple_sessions
-    description: ''
+    description: Prevents users from logging in on multiple devices simultaneously,
+      enhancing account security.
   - name: disable_user_pass_login
-    description: ''
+    description: Disables traditional username and password logins, often used to
+      enforce modern authentication methods.
   - name: max_signups_allowed_per_hour
-    description: ''
+    description: Limits the number of user registrations within an hour, helping to
+      manage system load and prevent abuse.
   - name: allow_login_using_mobile_number
-    description: ''
+    description: Facilitates user login via mobile numbers, improving accessibility
+      and user experience.
   - name: allow_login_using_user_name
-    description: ''
+    description: Permits login with usernames, providing flexibility in user authentication
+      methods.
   - name: login_with_email_link
-    description: ''
+    description: Enables passwordless login through email links, enhancing security
+      and user convenience.
   - name: login_with_email_link_expiry
-    description: ''
+    description: Sets the expiration time for email login links, crucial for maintaining
+      security standards.
   - name: rate_limit_email_link_login
-    description: ''
+    description: Controls the frequency of email link logins, preventing abuse and
+      ensuring system stability.
   - name: allow_consecutive_login_attempts
-    description: ''
+    description: Determines if users can attempt multiple logins in succession, impacting
+      security and user experience.
   - name: allow_login_after_fail
-    description: ''
+    description: This field determines if users can attempt to log in again after
+      a failed login attempt, impacting user experience and security protocols.
   - name: enable_two_factor_auth
-    description: ''
+    description: This field activates two-factor authentication to enhance security
+      during user logins, reducing the risk of unauthorized access.
   - name: bypass_2fa_for_retricted_ip_users
-    description: ''
+    description: This field allows users from specific IP addresses to skip two-factor
+      authentication, which can be useful for trusted internal networks.
   - name: bypass_restrict_ip_check_if_2fa_enabled
-    description: ''
+    description: This field permits users with two-factor authentication enabled to
+      bypass IP restrictions, facilitating access for users with dynamic IPs.
   - name: two_factor_method
-    description: ''
+    description: This field specifies the method of two-factor authentication used,
+      such as SMS or authenticator apps, influencing security measures.
     options:
     - OTP App
     - SMS
     - Email
   - name: lifespan_qrcode_image
-    description: ''
+    description: This field sets the validity period for QR code images used in two-factor
+      authentication, ensuring timely user verification.
   - name: otp_issuer_name
-    description: ''
+    description: This field defines the name of the issuer for one-time passwords,
+      providing clarity and trust for users receiving OTPs.
   - name: otp_sms_template
-    description: ''
+    description: This field contains the template for SMS messages sent with one-time
+      passwords, ensuring consistent communication with users.
   - name: logout_on_password_reset
-    description: ''
+    description: This field dictates whether users are logged out after a password
+      reset, enhancing security by preventing unauthorized access.
   - name: force_user_to_reset_password
-    description: ''
+    description: This field mandates users to change their password under certain
+      conditions, such as security breaches, to protect sensitive information.
   - name: reset_password_link_expiry_duration
-    description: ''
+    description: This field specifies how long a password reset link remains valid,
+      balancing user convenience with security.
   - name: password_reset_limit
-    description: ''
+    description: This field sets the maximum number of password reset requests allowed
+      in a given timeframe, preventing abuse of the reset feature.
   - name: enable_password_policy
-    description: ''
+    description: This field activates a password policy to enforce security standards,
+      ensuring users create strong passwords.
   - name: minimum_password_score
-    description: ''
+    description: This field defines the minimum score a password must achieve based
+      on complexity criteria, enhancing overall account security.
     options:
     - '2'
     - '3'
     - '4'
   - name: email_footer_address
-    description: ''
+    description: This field specifies the address included in email footers, ensuring
+      compliance and providing users with contact information.
   - name: email_retry_limit
-    description: ''
+    description: Defines the maximum number of attempts to resend failed emails, crucial
+      for ensuring communication reliability.
   - name: disable_standard_email_footer
-    description: ''
+    description: When enabled, removes the default footer from emails, allowing for
+      customized branding in communications.
   - name: hide_footer_in_auto_email_reports
-    description: ''
+    description: Hides the footer in automatically generated email reports, streamlining
+      the presentation of critical data.
   - name: attach_view_link
-    description: ''
+    description: Enables the inclusion of a link to view documents online, facilitating
+      easy access for recipients.
   - name: store_attached_pdf_document
-    description: ''
+    description: Determines whether attached PDF documents are stored in the system,
+      important for record-keeping and retrieval.
   - name: welcome_email_template
-    description: ''
+    description: Specifies the template used for sending welcome emails to new users,
+      enhancing onboarding experiences.
     join_hint:
       table: tabEmail Template
       'on': welcome_email_template = tabEmail Template.name
   - name: reset_password_template
-    description: ''
+    description: Defines the email template for password reset requests, ensuring
+      consistent communication during security processes.
     join_hint:
       table: tabEmail Template
       'on': reset_password_template = tabEmail Template.name
   - name: max_file_size
-    description: ''
+    description: Sets the maximum allowable file size for uploads, essential for managing
+      storage and performance.
   - name: allow_guests_to_upload_files
-    description: ''
+    description: When enabled, permits non-registered users to upload files, broadening
+      collaboration opportunities.
   - name: force_web_capture_mode_for_uploads
-    description: ''
+    description: Enforces a specific upload mode, ensuring consistency in how files
+      are submitted through the web interface.
   - name: strip_exif_metadata_from_uploaded_images
-    description: ''
+    description: Removes metadata from images upon upload, protecting user privacy
+      and sensitive information.
   - name: delete_background_exported_reports_after
-    description: ''
+    description: Specifies the retention period for exported reports, aiding in data
+      management and compliance.
   - name: allowed_file_extensions
-    description: ''
+    description: Lists the file types permitted for upload, crucial for maintaining
+      system security and compatibility.
   - name: default_app
-    description: ''
+    description: Identifies the primary application used within the system, streamlining
+      user navigation and access.
   - name: disable_system_update_notification
-    description: ''
+    description: When activated, suppresses notifications about system updates, allowing
+      for uninterrupted user experience.
   - name: disable_change_log_notification
-    description: ''
+    description: Used to suppress notifications about changes in system settings,
+      important for minimizing user distractions during critical updates.
   - name: backup_limit
-    description: ''
+    description: Defines the maximum number of backups retained, crucial for managing
+      storage and ensuring data recovery options.
   - name: encrypt_backup
-    description: ''
+    description: Indicates whether backups should be encrypted, essential for protecting
+      sensitive data from unauthorized access.
   - name: max_auto_email_report_per_user
-    description: ''
+    description: Sets the limit on automated email reports sent to users, important
+      for controlling email traffic and user engagement.
   - name: max_report_rows
-    description: ''
+    description: Determines the maximum number of rows in generated reports, vital
+      for performance optimization and user readability.
   - name: enable_scheduler
-    description: ''
+    description: Activates the scheduling feature for automated tasks, important for
+      improving operational efficiency and task management.
   - name: dormant_days
-    description: ''
+    description: Specifies the number of days a user can be inactive before being
+      considered dormant, useful for user management and engagement strategies.
   - name: allow_error_traceback
-    description: ''
+    description: Enables detailed error reporting for troubleshooting, critical for
+      maintaining system reliability and user support.
   - name: enable_telemetry
-    description: ''
+    description: Activates data collection on system usage, important for performance
+      analysis and improving user experience.
   - name: link_field_results_limit
-    description: ''
+    description: Sets a cap on the number of linked field results displayed, essential
+      for maintaining clarity and performance in data presentation.
   - name: show_absolute_datetime_in_timeline
-    description: ''
+    description: Controls the display of absolute timestamps in timelines, important
+      for accurate event tracking and reporting.
   - name: log_api_requests
-    description: ''
+    description: Enables logging of API requests for monitoring and debugging, crucial
+      for ensuring system integrity and performance.
+  desc_done: true
 - table: tabTag
   description: ''
   fields:
@@ -35653,32 +35729,41 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: The title of the task, used to identify and reference it in project
+      discussions.
   - name: subject
-    description: ''
+    description: The main focus or topic of the task, helping to clarify its purpose
+      in business operations.
   - name: project
-    description: ''
+    description: The associated project that the task belongs to, essential for tracking
+      progress and resource allocation.
     join_hint:
       table: tabProject
       'on': project = tabProject.name
   - name: issue
-    description: ''
+    description: A related problem or concern that the task aims to address, guiding
+      prioritization and resolution efforts.
     join_hint:
       table: tabIssue
       'on': issue = tabIssue.name
   - name: type
-    description: ''
+    description: The classification of the task, which aids in understanding its nature
+      and required resources.
     join_hint:
       table: tabTask Type
       'on': type = tabTask Type.name
   - name: color
-    description: ''
+    description: A visual identifier for the task, used to enhance organization and
+      quick recognition in task lists.
   - name: is_group
-    description: ''
+    description: Indicates whether the task is part of a group, which is important
+      for managing related activities collectively.
   - name: is_template
-    description: ''
+    description: Shows if the task is a template for future tasks, facilitating consistency
+      and efficiency in task creation.
   - name: status
-    description: ''
+    description: The current state of the task, crucial for monitoring progress and
+      making informed management decisions.
     options:
     - Open
     - Working
@@ -35688,48 +35773,64 @@ tables:
     - Completed
     - Cancelled
   - name: priority
-    description: ''
+    description: The level of urgency assigned to the task, guiding resource allocation
+      and scheduling in business operations.
     options:
     - Low
     - Medium
     - High
     - Urgent
   - name: task_weight
-    description: ''
+    description: A measure of the task's complexity or effort required, used for workload
+      balancing and project planning.
   - name: parent_task
-    description: ''
+    description: The overarching task that this task is linked to, important for understanding
+      dependencies and project structure.
     join_hint:
       table: tabTask
       'on': parent_task = tabTask.name
   - name: completed_by
-    description: ''
+    description: The individual who completed the task, necessary for accountability
+      and performance evaluation.
     join_hint:
       table: tabUser
       'on': completed_by = tabUser.name
   - name: completed_on
-    description: ''
+    description: The date when the task was finished, which is vital for tracking
+      timelines and project milestones.
   - name: exp_start_date
-    description: ''
+    description: The expected start date for the task, used for scheduling and resource
+      planning in project management.
   - name: expected_time
-    description: ''
+    description: Used to estimate the time required to complete a task, aiding in
+      resource allocation and scheduling.
   - name: start
-    description: ''
+    description: Indicates the planned start date of a task, essential for project
+      timeline management.
   - name: exp_end_date
-    description: ''
+    description: Represents the expected completion date, helping to track project
+      deadlines and deliverables.
   - name: progress
-    description: ''
+    description: Tracks the current status of task completion, allowing for performance
+      monitoring and adjustments.
   - name: duration
-    description: ''
+    description: Defines the total time allocated for a task, critical for planning
+      and ensuring timely project execution.
   - name: is_milestone
-    description: ''
+    description: Identifies key points in the project timeline, helping stakeholders
+      recognize significant achievements.
   - name: description
-    description: ''
+    description: Provides detailed information about the task, facilitating better
+      understanding and communication among team members.
   - name: depends_on
-    description: ''
+    description: Indicates prerequisite tasks that must be completed before starting
+      this task, crucial for sequencing work.
   - name: depends_on_tasks
-    description: ''
+    description: Lists tasks that are dependent on this task's completion, important
+      for managing project flow.
   - name: act_start_date
-    description: ''
+    description: Records the actual start date of a task, allowing for comparison
+      with planned timelines and performance analysis.
   - name: actual_time
     description: Used to track the real hours spent on a task for labor cost analysis
       and productivity reporting.
@@ -35772,7 +35873,7 @@ tables:
   - name: template_task
     description: Used to identify if a task is a reusable template for standardizing
       project creation and task duplication.
-  desc_done: false
+  desc_done: true
 - table: tabTask Depends On
   description: ''
   fields:
@@ -35820,91 +35921,114 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Identifies the tax rule for easy reference in financial reporting
+      and compliance.
   - name: tax_type
-    description: ''
+    description: Specifies the type of tax applied, crucial for determining tax liabilities.
     options:
     - Sales
     - Purchase
   - name: use_for_shopping_cart
-    description: ''
+    description: Indicates if the tax rule is applicable during online transactions,
+      impacting customer pricing.
   - name: sales_tax_template
-    description: ''
+    description: Links to the template used for calculating sales tax, ensuring consistency
+      in tax application.
     join_hint:
       table: tabSales Taxes and Charges Template
       'on': sales_tax_template = tabSales Taxes and Charges Template.name
   - name: purchase_tax_template
-    description: ''
+    description: Associates with the template for purchase tax calculations, important
+      for vendor transactions.
     join_hint:
       table: tabPurchase Taxes and Charges Template
       'on': purchase_tax_template = tabPurchase Taxes and Charges Template.name
   - name: customer
-    description: ''
+    description: Connects the tax rule to specific customers, allowing for tailored
+      tax applications based on customer profiles.
     join_hint:
       table: tabCustomer
       'on': customer = tabCustomer.name
   - name: supplier
-    description: ''
+    description: Links the tax rule to suppliers, essential for managing tax obligations
+      on purchases.
     join_hint:
       table: tabSupplier
       'on': supplier = tabSupplier.name
   - name: item
-    description: ''
+    description: Associates the tax rule with specific items, critical for accurate
+      tax calculations on sales.
     join_hint:
       table: tabItem
       'on': item = tabItem.name
   - name: billing_city
-    description: ''
+    description: Specifies the city for billing, necessary for determining local tax
+      rates.
   - name: billing_county
-    description: ''
+    description: Indicates the county for billing, which can affect tax calculations
+      based on regional regulations.
   - name: billing_state
-    description: ''
+    description: Defines the state for billing, crucial for compliance with state-specific
+      tax laws.
   - name: billing_zipcode
-    description: ''
+    description: Identifies the billing zip code, important for precise tax rate application
+      based on location.
   - name: billing_country
-    description: ''
+    description: Specifies the country for billing, essential for international tax
+      compliance.
     join_hint:
       table: tabCountry
       'on': billing_country = tabCountry.name
   - name: tax_category
-    description: ''
+    description: Categorizes the tax rule, helping in the organization and retrieval
+      of tax-related data.
     join_hint:
       table: tabTax Category
       'on': tax_category = tabTax Category.name
   - name: customer_group
-    description: ''
+    description: Links the tax rule to specific customer groups, allowing for differentiated
+      tax treatment based on group characteristics.
     join_hint:
       table: tabCustomer Group
       'on': customer_group = tabCustomer Group.name
   - name: supplier_group
-    description: ''
+    description: Used to categorize suppliers for targeted procurement strategies
+      and performance analysis.
     join_hint:
       table: tabSupplier Group
       'on': supplier_group = tabSupplier Group.name
   - name: item_group
-    description: ''
+    description: Defines product categories for inventory management and sales reporting.
     join_hint:
       table: tabItem Group
       'on': item_group = tabItem Group.name
   - name: shipping_city
-    description: ''
+    description: Indicates the city for shipping, essential for logistics planning
+      and delivery time estimation.
   - name: shipping_county
-    description: ''
+    description: Provides geographical context for shipping, useful in regional sales
+      analysis and compliance.
   - name: shipping_state
-    description: ''
+    description: Specifies the state for shipping, important for tax calculations
+      and shipping regulations.
   - name: shipping_zipcode
-    description: ''
+    description: Identifies the precise delivery area, crucial for accurate shipping
+      costs and delivery timelines.
   - name: shipping_country
-    description: ''
+    description: Denotes the country for shipping, necessary for international trade
+      compliance and tariffs.
     join_hint:
       table: tabCountry
       'on': shipping_country = tabCountry.name
   - name: from_date
-    description: ''
+    description: Marks the start date for the validity of the tax rule, important
+      for compliance and reporting periods.
   - name: to_date
-    description: ''
+    description: Indicates the end date for the tax rule's applicability, essential
+      for managing rule changes over time.
   - name: priority
-    description: ''
+    description: Determines the order of rule application, critical for resolving
+      conflicts in tax calculations.
   - name: company
     description: Used to filter tax rules by specific company entity when analyzing
       tax configurations or determining which tax rates apply to transactions for
@@ -35912,7 +36036,7 @@ tables:
     join_hint:
       table: tabCompany
       'on': company = tabCompany.name
-  desc_done: false
+  desc_done: true
 - table: tabTax Withheld Vouchers
   description: ''
   fields:
@@ -36094,37 +36218,46 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier for the timesheet entry, essential for tracking
+      and referencing individual records.
   - name: title
-    description: ''
+    description: Descriptive title of the timesheet entry, used for quick identification
+      of the work performed.
   - name: naming_series
-    description: ''
+    description: Defines the numbering pattern for timesheet entries, important for
+      maintaining order and consistency.
     options:
     - TS-.YYYY.-
   - name: company
-    description: ''
+    description: Indicates the company associated with the timesheet, crucial for
+      multi-company reporting and analysis.
     join_hint:
       table: tabCompany
       'on': company = tabCompany.name
   - name: customer
-    description: ''
+    description: Links the timesheet to a specific customer, necessary for billing
+      and project tracking.
     join_hint:
       table: tabCustomer
       'on': customer = tabCustomer.name
   - name: currency
-    description: ''
+    description: Specifies the currency used in the timesheet, important for financial
+      reporting and conversions.
     join_hint:
       table: tabCurrency
       'on': currency = tabCurrency.name
   - name: exchange_rate
-    description: ''
+    description: Represents the conversion rate for the currency, used for accurate
+      financial calculations.
   - name: sales_invoice
-    description: ''
+    description: Connects the timesheet to a sales invoice, essential for billing
+      and revenue recognition.
     join_hint:
       table: tabSales Invoice
       'on': sales_invoice = tabSales Invoice.name
   - name: status
-    description: ''
+    description: Indicates the current state of the timesheet, important for workflow
+      management and approvals.
     options:
     - Draft
     - Submitted
@@ -36133,49 +36266,65 @@ tables:
     - Completed
     - Cancelled
   - name: parent_project
-    description: ''
+    description: Associates the timesheet with a larger project, necessary for project
+      management and resource allocation.
     join_hint:
       table: tabProject
       'on': parent_project = tabProject.name
   - name: employee
-    description: ''
+    description: Identifies the employee who logged the timesheet, crucial for performance
+      tracking and payroll.
     join_hint:
       table: tabEmployee
       'on': employee = tabEmployee.name
   - name: employee_name
-    description: ''
+    description: Displays the name of the employee, used for clarity in reports and
+      communications.
   - name: department
-    description: ''
+    description: Specifies the department responsible for the timesheet, important
+      for departmental budgeting and analysis.
     join_hint:
       table: tabDepartment
       'on': department = tabDepartment.name
   - name: user
-    description: ''
+    description: Indicates the user who created or modified the timesheet, essential
+      for audit trails and accountability.
     join_hint:
       table: tabUser
       'on': user = tabUser.name
   - name: start_date
-    description: ''
+    description: Marks the beginning date of the timesheet entry, important for time
+      tracking and project timelines.
   - name: end_date
-    description: ''
+    description: Indicates the completion date of the timesheet, crucial for tracking
+      project timelines and deadlines.
   - name: time_logs
-    description: ''
+    description: Records detailed entries of hours worked, essential for analyzing
+      employee productivity and project progress.
   - name: total_hours
-    description: ''
+    description: Summarizes the total hours worked, providing insights into labor
+      utilization and resource allocation.
   - name: total_billable_hours
-    description: ''
+    description: Captures hours that can be charged to clients, vital for revenue
+      forecasting and billing accuracy.
   - name: base_total_billable_amount
-    description: ''
+    description: Represents the total amount billed to clients based on billable hours,
+      important for financial reporting.
   - name: base_total_billed_amount
-    description: ''
+    description: Shows the total amount invoiced to clients, necessary for cash flow
+      management and financial analysis.
   - name: base_total_costing_amount
-    description: ''
+    description: Reflects the total costs incurred for labor, aiding in profitability
+      assessments and budgeting.
   - name: total_billed_hours
-    description: ''
+    description: Counts the hours that have been invoiced, important for tracking
+      billing efficiency and client agreements.
   - name: total_billable_amount
-    description: ''
+    description: Indicates the overall amount that can be billed, essential for revenue
+      tracking and client relationship management.
   - name: total_billed_amount
-    description: ''
+    description: Displays the total amount that has been billed, crucial for financial
+      reconciliation and performance evaluation.
   - name: total_costing_amount
     description: Used to analyze actual labor costs incurred for timesheet entries
       when calculating project profitability or employee cost allocation.
@@ -36191,66 +36340,88 @@ tables:
     join_hint:
       table: tabTimesheet
       'on': amended_from = tabTimesheet.name
-  desc_done: false
+  desc_done: true
 - table: tabTimesheet Detail
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Identifies the individual associated with the timesheet entry for
+      accountability.
   - name: activity_type
-    description: ''
+    description: Categorizes the nature of the work performed, aiding in resource
+      allocation analysis.
     join_hint:
       table: tabActivity Type
       'on': activity_type = tabActivity Type.name
   - name: from_time
-    description: ''
+    description: Marks the start time of the activity, essential for calculating total
+      hours worked.
   - name: description
-    description: ''
+    description: Provides context for the timesheet entry, useful for project management
+      and reporting.
   - name: expected_hours
-    description: ''
+    description: Indicates the anticipated duration of the task, helping in performance
+      evaluation.
   - name: to_time
-    description: ''
+    description: Denotes the end time of the activity, critical for accurate billing
+      and payroll.
   - name: hours
-    description: ''
+    description: Represents the actual hours worked, necessary for assessing productivity
+      and project costs.
   - name: completed
-    description: ''
+    description: Flags whether the task is finished, important for project tracking
+      and resource planning.
   - name: project
-    description: ''
+    description: Links the timesheet entry to a specific project, facilitating project-level
+      financial analysis.
     join_hint:
       table: tabProject
       'on': project = tabProject.name
   - name: project_name
-    description: ''
+    description: Names the project associated with the entry, aiding in reporting
+      and stakeholder communication.
   - name: task
-    description: ''
+    description: Specifies the particular task undertaken, useful for detailed performance
+      assessments.
     join_hint:
       table: tabTask
       'on': task = tabTask.name
   - name: is_billable
-    description: ''
+    description: Indicates if the hours can be charged to a client, crucial for revenue
+      tracking.
   - name: sales_invoice
-    description: ''
+    description: Connects the timesheet entry to a sales invoice, important for financial
+      reconciliation.
     join_hint:
       table: tabSales Invoice
       'on': sales_invoice = tabSales Invoice.name
   - name: billing_hours
-    description: ''
+    description: Details the hours eligible for billing, essential for accurate client
+      invoicing.
   - name: base_billing_rate
-    description: ''
+    description: Defines the standard rate charged for services, critical for revenue
+      forecasting.
   - name: base_billing_amount
-    description: ''
+    description: Used to determine the initial charge for services rendered before
+      any adjustments.
   - name: base_costing_rate
-    description: ''
+    description: Indicates the fundamental cost rate for labor or materials, essential
+      for budgeting and forecasting.
   - name: base_costing_amount
-    description: ''
+    description: Represents the total base cost incurred, critical for assessing profitability.
   - name: billing_rate
-    description: ''
+    description: Defines the rate charged to clients, key for revenue calculations
+      and pricing strategies.
   - name: billing_amount
-    description: ''
+    description: The total amount billed to clients, necessary for financial reporting
+      and cash flow analysis.
   - name: costing_rate
-    description: ''
+    description: Reflects the current cost rate, important for real-time expense tracking
+      and management.
   - name: costing_amount
-    description: ''
+    description: The total cost incurred, vital for evaluating project performance
+      and financial health.
+  desc_done: true
 - table: tabToDo
   description: ''
   fields:
@@ -37266,91 +37437,112 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Unique identifier for the warranty claim used to track and manage
+      claims.
   - name: naming_series
-    description: ''
+    description: Indicates the format of the claim number for systematic identification.
     options:
     - SER-WRN-.YYYY.-
   - name: status
-    description: ''
+    description: Reflects the current state of the warranty claim, essential for workflow
+      management.
     options:
     - Open
     - Closed
     - Work In Progress
     - Cancelled
   - name: complaint_date
-    description: ''
+    description: Records when the complaint was filed, crucial for tracking response
+      times.
   - name: customer
-    description: ''
+    description: Identifies the customer associated with the claim, important for
+      customer service and follow-up.
     join_hint:
       table: tabCustomer
       'on': customer = tabCustomer.name
   - name: serial_no
-    description: ''
+    description: Tracks the specific item involved in the claim, necessary for warranty
+      validation.
     join_hint:
       table: tabSerial No
       'on': serial_no = tabSerial No.name
   - name: complaint
-    description: ''
+    description: Describes the issue reported by the customer, vital for understanding
+      and resolving the problem.
   - name: item_code
-    description: ''
+    description: References the product code related to the claim, used for inventory
+      and warranty checks.
     join_hint:
       table: tabItem
       'on': item_code = tabItem.name
   - name: item_name
-    description: ''
+    description: Names the product associated with the claim, important for clarity
+      in communication.
   - name: description
-    description: ''
+    description: Provides additional details about the claim, useful for comprehensive
+      case analysis.
   - name: warranty_amc_status
-    description: ''
+    description: Indicates if the item is under warranty or AMC, essential for determining
+      coverage.
     options:
     - Under Warranty
     - Out of Warranty
     - Under AMC
     - Out of AMC
   - name: warranty_expiry_date
-    description: ''
+    description: Shows when the warranty period ends, critical for assessing claim
+      validity.
   - name: amc_expiry_date
-    description: ''
+    description: Indicates the end date of the Annual Maintenance Contract, important
+      for service continuity.
   - name: resolution_date
-    description: ''
+    description: Records when the claim was resolved, important for performance metrics.
   - name: resolved_by
-    description: ''
+    description: Identifies the person who handled the resolution, useful for accountability
+      and service quality.
     join_hint:
       table: tabUser
       'on': resolved_by = tabUser.name
   - name: resolution_details
-    description: ''
+    description: Used to document the outcome and actions taken for warranty claims.
   - name: customer_name
-    description: ''
+    description: Identifies the customer associated with the warranty claim for tracking
+      and reporting purposes.
   - name: contact_person
-    description: ''
+    description: Specifies the primary contact for the warranty claim to facilitate
+      communication.
     join_hint:
       table: tabContact
       'on': contact_person = tabContact.name
   - name: contact_display
-    description: ''
+    description: Provides a formatted view of the contact information for ease of
+      access in reports.
   - name: contact_mobile
-    description: ''
+    description: Lists the mobile number of the contact person for quick communication
+      regarding the claim.
   - name: contact_email
-    description: ''
+    description: Contains the email address of the contact person for sending updates
+      and documentation related to the claim.
   - name: territory
-    description: ''
+    description: Indicates the geographical area relevant to the warranty claim, aiding
+      in regional analysis.
     join_hint:
       table: tabTerritory
       'on': territory = tabTerritory.name
   - name: customer_group
-    description: ''
+    description: Categorizes customers into groups for targeted analysis and reporting
+      on warranty claims.
     join_hint:
       table: tabCustomer Group
       'on': customer_group = tabCustomer Group.name
   - name: customer_address
-    description: ''
+    description: Records the physical address of the customer for logistics and service
+      purposes.
     join_hint:
       table: tabAddress
       'on': customer_address = tabAddress.name
   - name: address_display
-    description: ''
+    description: Formats the customer address for clarity in communication and documentation.
   - name: service_address
     description: Location where warranty service was performed or product is installed,
       used to analyze claims by geographic region or service territory.
@@ -37372,69 +37564,93 @@ tables:
     join_hint:
       table: tabWarranty Claim
       'on': amended_from = tabWarranty Claim.name
-  desc_done: false
+  desc_done: true
 - table: tabWeb Form
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Used to identify the web form uniquely for reference in business
+      processes.
   - name: title
-    description: ''
+    description: Serves as the display name of the web form, crucial for user recognition.
   - name: route
-    description: ''
+    description: Defines the URL path for accessing the web form, important for navigation
+      and linking.
   - name: published
-    description: ''
+    description: Indicates whether the web form is live, impacting its availability
+      to users.
   - name: doc_type
-    description: ''
+    description: Specifies the type of document associated with the web form, guiding
+      content management.
     join_hint:
       table: tabDocType
       'on': doc_type = tabDocType.name
   - name: module
-    description: ''
+    description: Categorizes the web form within a specific functional area, aiding
+      in organization and retrieval.
     join_hint:
       table: tabModule Def
       'on': module = tabModule Def.name
   - name: is_standard
-    description: ''
+    description: Denotes if the web form is a standard template, influencing compliance
+      and consistency.
   - name: introduction_text
-    description: ''
+    description: Provides context or instructions for users, enhancing user experience
+      and clarity.
   - name: web_form_fields
-    description: ''
+    description: Lists the input fields included in the form, essential for understanding
+      data collection.
   - name: anonymous
-    description: ''
+    description: Indicates if submissions can be made without user identification,
+      affecting privacy policies.
   - name: login_required
-    description: ''
+    description: Specifies if user authentication is necessary to access the form,
+      impacting security protocols.
   - name: apply_document_permissions
-    description: ''
+    description: Controls access rights for the form's documents, crucial for data
+      protection and compliance.
   - name: allow_edit
-    description: ''
+    description: Determines if users can modify their submissions, influencing user
+      engagement and data accuracy.
   - name: allow_multiple
-    description: ''
+    description: Indicates if multiple submissions are permitted, relevant for data
+      collection strategies.
   - name: allow_delete
-    description: ''
+    description: Specifies if users can delete their submissions, affecting data management
+      and user control.
   - name: allow_incomplete
-    description: ''
+    description: Indicates whether incomplete submissions are permitted, useful for
+      capturing partial data in urgent situations.
   - name: allow_comments
-    description: ''
+    description: Enables users to add comments, facilitating feedback and clarification
+      on submitted forms.
   - name: allow_print
-    description: ''
+    description: Determines if the form can be printed, important for organizations
+      needing physical copies for records.
   - name: print_format
-    description: ''
+    description: Specifies the layout for printed forms, ensuring consistency and
+      clarity in physical documentation.
     join_hint:
       table: tabPrint Format
       'on': print_format = tabPrint Format.name
   - name: max_attachment_size
-    description: ''
+    description: Sets the maximum file size for attachments, crucial for managing
+      storage and ensuring efficient uploads.
   - name: show_attachments
-    description: ''
+    description: Controls the visibility of attachments, relevant for maintaining
+      transparency in shared documents.
   - name: allowed_embedding_domains
-    description: ''
+    description: Lists domains permitted for embedding, essential for security and
+      compliance in web integrations.
   - name: condition_json
-    description: ''
+    description: Defines conditions for form behavior, allowing dynamic adjustments
+      based on user input or context.
   - name: show_list
-    description: ''
+    description: Indicates whether to display a list of submissions, aiding in quick
+      access to previous entries for review.
   - name: list_title
-    description: ''
+    description: Sets the title for the submission list, providing clarity and context
+      for users reviewing past entries.
   - name: list_columns
     description: Defines which data columns appear in the web form's list view for
       users browsing submitted entries.
@@ -37474,7 +37690,7 @@ tables:
   - name: custom_css
     description: Applies custom styling rules to override default form appearance
       for brand consistency or visual requirements.
-  desc_done: false
+  desc_done: true
 - table: tabWeb Form Field
   description: ''
   fields:
@@ -37592,22 +37808,28 @@ tables:
   description: Page to show on the website
   fields:
   - name: name
-    description: ''
+    description: Identifies the web page for reference in analytics and reporting.
   - name: title
-    description: ''
+    description: Used as the display name of the web page in navigation and search
+      results.
   - name: route
-    description: ''
+    description: Defines the URL path for accessing the web page, crucial for SEO
+      and user navigation.
   - name: dynamic_route
-    description: ''
+    description: Enables dynamic URL generation for personalized content delivery
+      based on user data.
   - name: published
-    description: ''
+    description: Indicates whether the web page is live, impacting visibility and
+      access for users.
   - name: module
-    description: ''
+    description: Specifies the functional component of the web page, aiding in modular
+      design and content management.
     join_hint:
       table: tabModule Def
       'on': module = tabModule Def.name
   - name: content_type
-    description: ''
+    description: Categorizes the type of content on the page, essential for content
+      strategy and targeting.
     options:
     - Rich Text
     - Markdown
@@ -37615,48 +37837,66 @@ tables:
     - Page Builder
     - Slideshow
   - name: slideshow
-    description: ''
+    description: Indicates the presence of a slideshow feature, enhancing user engagement
+      through visual storytelling.
     join_hint:
       table: tabWebsite Slideshow
       'on': slideshow = tabWebsite Slideshow.name
   - name: dynamic_template
-    description: ''
+    description: Allows for the application of different templates based on conditions,
+      optimizing user experience.
   - name: main_section
-    description: ''
+    description: Houses the primary content of the page, critical for user retention
+      and information delivery.
   - name: main_section_md
-    description: ''
+    description: Stores the main content in markdown format, facilitating easy editing
+      and formatting.
   - name: page_blocks
-    description: ''
+    description: Defines reusable content sections, streamlining updates and maintaining
+      consistency across pages.
   - name: context_script
-    description: ''
+    description: Holds scripts that provide contextual functionality, enhancing interactivity
+      and user experience.
   - name: javascript
-    description: ''
+    description: Contains custom JavaScript for additional features, allowing for
+      tailored user interactions.
   - name: insert_style
-    description: ''
+    description: Holds CSS styles for specific page elements, ensuring visual consistency
+      and branding.
   - name: text_align
-    description: ''
+    description: Used to determine the alignment of text for optimal readability and
+      aesthetic appeal in web content.
     options:
     - Left
     - Center
     - Right
   - name: css
-    description: ''
+    description: Contains custom styles to enhance the visual presentation of the
+      web page, impacting user engagement.
   - name: full_width
-    description: ''
+    description: Indicates whether the page utilizes the full width of the screen,
+      affecting layout and user experience.
   - name: show_title
-    description: ''
+    description: Specifies if the page title is displayed, which is crucial for SEO
+      and user navigation.
   - name: start_date
-    description: ''
+    description: Marks the beginning of the content's relevance period, essential
+      for time-sensitive information.
   - name: end_date
-    description: ''
+    description: Indicates when the content is no longer relevant, helping to manage
+      outdated information.
   - name: meta_title
-    description: ''
+    description: Defines the title shown in search engine results, critical for attracting
+      clicks and improving SEO.
   - name: meta_description
-    description: ''
+    description: Provides a brief summary for search engines, influencing click-through
+      rates and user interest.
   - name: show_sidebar
-    description: ''
+    description: Determines the visibility of the sidebar, which can enhance or detract
+      from the main content focus.
   - name: idx
-    description: ''
+    description: Serves as a unique identifier for the page, facilitating data retrieval
+      and management in databases.
   - name: website_sidebar
     description: Indicates which sidebar template or configuration is displayed on
       the web page for navigation and supplementary content.
@@ -37669,7 +37909,7 @@ tables:
   - name: breadcrumbs
     description: Defines the hierarchical navigation path displayed on the page, used
       when analyzing site structure or user navigation patterns.
-  desc_done: false
+  desc_done: true
 - table: tabWeb Page Block
   description: ''
   fields:
@@ -37821,14 +38061,16 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Identifies the webhook for tracking and management purposes.
   - name: webhook_doctype
-    description: ''
+    description: Specifies the document type that triggers the webhook, essential
+      for understanding the context of the event.
     join_hint:
       table: tabDocType
       'on': webhook_doctype = tabDocType.name
   - name: webhook_docevent
-    description: ''
+    description: Indicates the specific event related to the document type, crucial
+      for determining when the webhook should be activated.
     options:
     - after_insert
     - on_update
@@ -37838,44 +38080,61 @@ tables:
     - on_update_after_submit
     - on_change
   - name: enabled
-    description: ''
+    description: Indicates whether the webhook is active, impacting its ability to
+      respond to events.
   - name: condition
-    description: ''
+    description: Defines any specific criteria that must be met for the webhook to
+      execute, allowing for targeted automation.
   - name: request_url
-    description: ''
+    description: Specifies the endpoint to which the webhook sends data, vital for
+      directing the output of the event.
   - name: is_dynamic_url
-    description: ''
+    description: Indicates if the request URL can change based on the event context,
+      enhancing flexibility in data handling.
   - name: timeout
-    description: ''
+    description: Sets the maximum time to wait for a response from the request URL,
+      important for ensuring timely processing.
   - name: background_jobs_queue
-    description: ''
+    description: Identifies the queue for processing webhook requests in the background,
+      optimizing system performance.
   - name: request_method
-    description: ''
+    description: Specifies the HTTP method used for the request, essential for proper
+      interaction with the receiving server.
     options:
     - POST
     - PUT
     - DELETE
   - name: request_structure
-    description: ''
+    description: Defines the format of the data sent in the request, crucial for compatibility
+      with the receiving system.
     options:
     - Form URL-Encoded
     - JSON
   - name: enable_security
-    description: ''
+    description: Indicates if security measures are in place for the webhook, important
+      for protecting sensitive data.
   - name: webhook_secret
-    description: ''
+    description: Provides a secret key for authenticating requests, enhancing security
+      against unauthorized access.
   - name: webhook_headers
-    description: ''
+    description: Specifies additional headers to include in the request, allowing
+      for customized communication with the endpoint.
   - name: webhook_data
-    description: ''
+    description: Contains the payload sent with the webhook, critical for delivering
+      the necessary information to the receiving system.
   - name: webhook_json
-    description: ''
+    description: Used to store the JSON payload received from the webhook, essential
+      for processing incoming data.
   - name: preview_document
-    description: ''
+    description: Provides a visual representation of the data structure, helping users
+      understand the content of the webhook.
   - name: meets_condition
-    description: ''
+    description: Indicates whether the incoming webhook data satisfies predefined
+      business conditions, crucial for triggering automated workflows.
   - name: preview_request_body
-    description: ''
+    description: Contains a sample of the request body sent to the webhook, aiding
+      in debugging and validation of incoming requests.
+  desc_done: true
 - table: tabWebhook Data
   description: ''
   fields:
@@ -37893,11 +38152,15 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Identifies the webhook's purpose or function, crucial for categorizing
+      and managing multiple webhooks.
   - name: key
-    description: ''
+    description: Serves as a unique identifier for the webhook, essential for tracking
+      and referencing specific events.
   - name: value
-    description: ''
+    description: Contains the data or payload sent by the webhook, important for processing
+      and responding to the event accurately.
+  desc_done: true
 - table: tabWebhook Request Log
   description: ''
   fields:
@@ -38190,65 +38453,87 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Used to identify the specific website theme for branding and design
+      consistency.
   - name: theme
-    description: ''
+    description: Indicates the overall design style applied to the website, crucial
+      for user experience.
   - name: module
-    description: ''
+    description: Specifies the functional components included in the theme, relevant
+      for feature assessment.
     join_hint:
       table: tabModule Def
       'on': module = tabModule Def.name
   - name: custom
-    description: ''
+    description: Denotes whether the theme has been tailored for specific business
+      needs, impacting customization options.
   - name: google_font
-    description: ''
+    description: Lists the Google font used, important for maintaining brand typography
+      across platforms.
   - name: font_size
-    description: ''
+    description: Defines the size of the text, essential for readability and user
+      engagement.
   - name: font_properties
-    description: ''
+    description: Describes additional font attributes, influencing the aesthetic and
+      legibility of content.
   - name: button_rounded_corners
-    description: ''
+    description: Indicates if buttons have rounded corners, affecting the visual appeal
+      and user interaction.
   - name: button_shadows
-    description: ''
+    description: Specifies the presence of shadows on buttons, enhancing depth and
+      usability in design.
   - name: button_gradients
-    description: ''
+    description: Identifies if buttons use gradient colors, which can impact visual
+      interest and user action.
   - name: primary_color
-    description: ''
+    description: Sets the main color theme, crucial for brand identity and emotional
+      response.
     join_hint:
       table: tabColor
       'on': primary_color = tabColor.name
   - name: text_color
-    description: ''
+    description: Defines the color of the text, important for contrast and readability
+      against backgrounds.
     join_hint:
       table: tabColor
       'on': text_color = tabColor.name
   - name: light_color
-    description: ''
+    description: Specifies a lighter color variant, useful for creating visual hierarchy
+      and emphasis.
     join_hint:
       table: tabColor
       'on': light_color = tabColor.name
   - name: dark_color
-    description: ''
+    description: Indicates a darker color variant, often used for contrast and to
+      enhance readability.
     join_hint:
       table: tabColor
       'on': dark_color = tabColor.name
   - name: background_color
-    description: ''
+    description: Sets the overall background color, critical for user experience and
+      aesthetic coherence.
     join_hint:
       table: tabColor
       'on': background_color = tabColor.name
   - name: custom_overrides
-    description: ''
+    description: Used to apply specific modifications to the default theme settings
+      for tailored user experiences.
   - name: custom_scss
-    description: ''
+    description: Enables the addition of custom styles to enhance the visual design
+      of the website theme.
   - name: ignored_apps
-    description: ''
+    description: Lists applications that should not be included in the theme's functionality,
+      streamlining user interface.
   - name: theme_scss
-    description: ''
+    description: Contains the core styling rules for the theme, essential for maintaining
+      consistent branding across the website.
   - name: theme_url
-    description: ''
+    description: Specifies the location of the theme, crucial for linking and accessing
+      the appropriate design assets.
   - name: js
-    description: ''
+    description: Holds custom JavaScript code to enhance interactivity and functionality
+      within the theme.
+  desc_done: true
 - table: tabWebsite Theme Ignore App
   description: ''
   fields:
@@ -38263,13 +38548,14 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Identifies the specific work order for tracking and reporting purposes.
   - name: naming_series
-    description: ''
+    description: Defines the format for generating unique identifiers for work orders.
     options:
     - MFG-WO-.YYYY.-
   - name: status
-    description: ''
+    description: Indicates the current state of the work order, essential for workflow
+      management.
     options:
     - Draft
     - Submitted
@@ -38280,144 +38566,196 @@ tables:
     - Closed
     - Cancelled
   - name: production_item
-    description: ''
+    description: Specifies the item being produced, crucial for inventory and production
+      planning.
     join_hint:
       table: tabItem
       'on': production_item = tabItem.name
   - name: item_name
-    description: ''
+    description: Provides a descriptive name for the production item, aiding in clarity
+      and communication.
   - name: bom_no
-    description: ''
+    description: Links to the Bill of Materials, necessary for understanding the components
+      required for production.
     join_hint:
       table: tabBOM
       'on': bom_no = tabBOM.name
   - name: sales_order
-    description: ''
+    description: Connects the work order to a specific sales order, important for
+      fulfilling customer demands.
     join_hint:
       table: tabSales Order
       'on': sales_order = tabSales Order.name
   - name: company
-    description: ''
+    description: Identifies the organization responsible for the work order, vital
+      for financial and operational reporting.
     join_hint:
       table: tabCompany
       'on': company = tabCompany.name
   - name: qty
-    description: ''
+    description: Represents the total quantity to be produced, essential for resource
+      allocation and scheduling.
   - name: material_transferred_for_manufacturing
-    description: ''
+    description: Tracks materials moved to production, important for inventory management
+      and cost control.
   - name: produced_qty
-    description: ''
+    description: Records the quantity successfully produced, key for performance evaluation
+      and reporting.
   - name: disassembled_qty
-    description: ''
+    description: Indicates the quantity of items disassembled, relevant for reverse
+      logistics and inventory accuracy.
   - name: process_loss_qty
-    description: ''
+    description: Measures the quantity lost during production, critical for efficiency
+      analysis and waste reduction.
   - name: project
-    description: ''
+    description: Associates the work order with a specific project, important for
+      project management and cost tracking.
     join_hint:
       table: tabProject
       'on': project = tabProject.name
   - name: required_items
-    description: ''
+    description: Lists items needed for production, essential for procurement and
+      inventory planning.
   - name: allow_alternative_item
-    description: ''
+    description: Indicates if alternative items can be used, crucial for flexibility
+      in inventory management.
   - name: use_multi_level_bom
-    description: ''
+    description: Specifies if a multi-level bill of materials is utilized, important
+      for complex product assembly tracking.
   - name: skip_transfer
-    description: ''
+    description: Determines if the transfer of materials can be bypassed, relevant
+      for streamlining operations in urgent scenarios.
   - name: from_wip_warehouse
-    description: ''
+    description: Identifies the work-in-progress warehouse, essential for tracking
+      material flow during production.
   - name: update_consumed_material_cost_in_project
-    description: ''
+    description: Indicates if the cost of consumed materials should be updated in
+      the project, vital for accurate budgeting.
   - name: source_warehouse
-    description: ''
+    description: Denotes the origin warehouse for materials, important for inventory
+      management and logistics.
     join_hint:
       table: tabWarehouse
       'on': source_warehouse = tabWarehouse.name
   - name: wip_warehouse
-    description: ''
+    description: Specifies the warehouse for work-in-progress items, critical for
+      monitoring production status.
     join_hint:
       table: tabWarehouse
       'on': wip_warehouse = tabWarehouse.name
   - name: fg_warehouse
-    description: ''
+    description: Indicates the finished goods warehouse, essential for managing inventory
+      of completed products.
     join_hint:
       table: tabWarehouse
       'on': fg_warehouse = tabWarehouse.name
   - name: scrap_warehouse
-    description: ''
+    description: Identifies the warehouse for scrap materials, important for waste
+      management and cost control.
     join_hint:
       table: tabWarehouse
       'on': scrap_warehouse = tabWarehouse.name
   - name: has_serial_no
-    description: ''
+    description: Indicates if items have a serial number, crucial for tracking and
+      warranty management.
   - name: has_batch_no
-    description: ''
+    description: Specifies if items are tracked by batch number, important for quality
+      control and traceability.
   - name: batch_size
-    description: ''
+    description: Defines the quantity of items in a batch, relevant for production
+      planning and efficiency.
   - name: transfer_material_against
-    description: ''
+    description: Indicates the reference for material transfer, important for accurate
+      record-keeping and accountability.
     options:
     - Work Order
     - Job Card
   - name: operations
-    description: ''
+    description: Lists the operations involved in the work order, essential for workflow
+      management and resource allocation.
   - name: planned_start_date
-    description: ''
+    description: Specifies the intended start date for the work order, critical for
+      scheduling and project timelines.
   - name: planned_end_date
-    description: ''
+    description: Used to determine the expected completion date of a work order for
+      scheduling and resource allocation.
   - name: expected_delivery_date
-    description: ''
+    description: Indicates when materials are anticipated to arrive, impacting project
+      timelines and inventory management.
   - name: actual_start_date
-    description: ''
+    description: Records the date when work on the order actually begins, essential
+      for tracking project progress.
   - name: actual_end_date
-    description: ''
+    description: Captures the date when the work order is completed, critical for
+      performance analysis and reporting.
   - name: lead_time
-    description: ''
+    description: Reflects the time required to complete a work order, aiding in planning
+      and efficiency assessments.
   - name: planned_operating_cost
-    description: ''
+    description: Estimates the budgeted costs associated with executing the work order,
+      important for financial forecasting.
   - name: actual_operating_cost
-    description: ''
+    description: Records the real costs incurred during the work order execution,
+      necessary for cost control and analysis.
   - name: additional_operating_cost
-    description: ''
+    description: Accounts for unexpected expenses that arise during the work order,
+      impacting overall budget management.
   - name: corrective_operation_cost
-    description: ''
+    description: Tracks costs associated with corrective actions taken during the
+      work order, important for quality control assessments.
   - name: total_operating_cost
-    description: ''
+    description: Summarizes all costs related to the work order, providing a comprehensive
+      view for financial evaluation.
   - name: description
-    description: ''
+    description: Offers a brief overview of the work order's purpose, aiding in clarity
+      and communication among stakeholders.
   - name: stock_uom
-    description: ''
+    description: Defines the unit of measure for stock items, crucial for inventory
+      management and procurement processes.
     join_hint:
       table: tabUOM
       'on': stock_uom = tabUOM.name
   - name: material_request
-    description: ''
+    description: Links to the request for materials needed for the work order, essential
+      for ensuring resource availability.
     join_hint:
       table: tabMaterial Request
       'on': material_request = tabMaterial Request.name
   - name: material_request_item
-    description: ''
+    description: Specifies individual items requested for the work order, important
+      for detailed inventory tracking.
   - name: sales_order_item
-    description: ''
+    description: Associates the work order with specific sales order items, facilitating
+      order fulfillment and customer satisfaction.
   - name: production_plan
-    description: ''
+    description: This field indicates the specific production plan associated with
+      a work order, essential for tracking manufacturing schedules and resource allocation.
     join_hint:
       table: tabProduction Plan
       'on': production_plan = tabProduction Plan.name
   - name: production_plan_item
-    description: ''
+    description: This field identifies the individual item within the production plan,
+      used to manage and monitor the progress of specific components in the production
+      process.
   - name: production_plan_sub_assembly_item
-    description: ''
+    description: This field denotes sub-assembly items linked to the production plan,
+      crucial for understanding the hierarchy and dependencies in the manufacturing
+      workflow.
   - name: product_bundle_item
-    description: ''
+    description: This field specifies items that are part of a product bundle, important
+      for sales and inventory management to ensure accurate fulfillment of bundled
+      orders.
     join_hint:
       table: tabItem
       'on': product_bundle_item = tabItem.name
   - name: amended_from
-    description: ''
+    description: This field indicates the original work order that has been amended,
+      vital for tracking changes and maintaining historical accuracy in production
+      records.
     join_hint:
       table: tabWork Order
       'on': amended_from = tabWork Order.name
+  desc_done: true
 - table: tabWork Order Item
   description: ''
   fields:
@@ -38478,190 +38816,252 @@ tables:
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Identifies the specific work order operation for tracking and reporting
+      purposes.
   - name: operation
-    description: ''
+    description: Defines the type of task being performed, essential for analyzing
+      workflow efficiency.
     join_hint:
       table: tabOperation
       'on': operation = tabOperation.name
   - name: status
-    description: ''
+    description: Indicates the current state of the operation, crucial for monitoring
+      progress and resource allocation.
     options:
     - Pending
     - Work in Progress
     - Completed
   - name: completed_qty
-    description: ''
+    description: Tracks the quantity of items completed, important for assessing productivity
+      and meeting targets.
   - name: process_loss_qty
-    description: ''
+    description: Records the quantity lost during processing, vital for identifying
+      inefficiencies and improving yield.
   - name: bom
-    description: ''
+    description: Links to the bill of materials, necessary for ensuring the correct
+      components are used in production.
     join_hint:
       table: tabBOM
       'on': bom = tabBOM.name
   - name: workstation_type
-    description: ''
+    description: Specifies the category of workstation, important for resource planning
+      and operational analysis.
     join_hint:
       table: tabWorkstation Type
       'on': workstation_type = tabWorkstation Type.name
   - name: workstation
-    description: ''
+    description: Identifies the specific workstation where the operation occurs, essential
+      for tracking performance and capacity.
     join_hint:
       table: tabWorkstation
       'on': workstation = tabWorkstation.name
   - name: sequence_id
-    description: ''
+    description: Determines the order of operations, critical for maintaining workflow
+      and scheduling.
   - name: description
-    description: ''
+    description: Provides additional context about the operation, useful for clarifying
+      tasks and responsibilities.
   - name: planned_start_time
-    description: ''
+    description: Indicates when the operation is scheduled to begin, important for
+      planning and resource allocation.
   - name: hour_rate
-    description: ''
+    description: Represents the labor cost per hour, essential for budgeting and cost
+      analysis.
   - name: time_in_mins
-    description: ''
+    description: Tracks the duration of the operation in minutes, crucial for efficiency
+      assessments and scheduling.
   - name: planned_end_time
-    description: ''
+    description: Specifies when the operation is expected to finish, important for
+      meeting deadlines and planning resources.
   - name: batch_size
-    description: ''
+    description: Defines the number of units to be processed in one batch, critical
+      for production planning and inventory management.
   - name: planned_operating_cost
-    description: ''
+    description: Used to estimate budget requirements for operations before execution.
   - name: actual_start_time
-    description: ''
+    description: Indicates when the operation commenced, crucial for tracking delays
+      and performance.
   - name: actual_operation_time
-    description: ''
+    description: Measures the duration of the operation, essential for efficiency
+      analysis.
   - name: actual_end_time
-    description: ''
+    description: Marks the completion time of the operation, important for scheduling
+      and reporting.
   - name: actual_operating_cost
-    description: ''
+    description: Reflects the real expenses incurred during the operation, vital for
+      financial assessments.
+  desc_done: true
 - table: tabWorkflow
   description: Defines workflow states and rules for a document.
   fields:
   - name: name
-    description: ''
+    description: Identifies the unique name of the workflow for reference in business
+      processes.
   - name: workflow_name
-    description: ''
+    description: Specifies the title of the workflow, aiding in its identification
+      and categorization.
   - name: document_type
-    description: ''
+    description: Indicates the type of document the workflow is associated with, crucial
+      for processing and compliance.
     join_hint:
       table: tabDocType
       'on': document_type = tabDocType.name
   - name: is_active
-    description: ''
+    description: Denotes whether the workflow is currently active, impacting its usability
+      in ongoing operations.
   - name: override_status
-    description: ''
+    description: Reflects any exceptions to standard workflow rules, essential for
+      managing special cases.
   - name: send_email_alert
-    description: ''
+    description: Indicates if email notifications are triggered during workflow events,
+      important for communication and updates.
   - name: states
-    description: ''
+    description: Lists the various states the workflow can be in, necessary for tracking
+      progress and decision points.
   - name: transitions
-    description: ''
+    description: Defines the possible transitions between states, critical for understanding
+      workflow dynamics and flow.
   - name: workflow_state_field
-    description: ''
+    description: Specifies the field that tracks the current state of the workflow,
+      vital for status reporting.
   - name: workflow_data
-    description: ''
+    description: Contains additional data relevant to the workflow, supporting detailed
+      analysis and decision-making.
+  desc_done: true
 - table: tabWorkflow Action
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Identifies the specific workflow action for tracking and reporting
+      purposes.
   - name: status
-    description: ''
+    description: Indicates the current state of the workflow action, essential for
+      process management.
     options:
     - Open
     - Completed
   - name: reference_name
-    description: ''
+    description: Links to the related record, providing context for the workflow action.
   - name: reference_doctype
-    description: ''
+    description: Specifies the type of document associated with the workflow action,
+      aiding in categorization.
     join_hint:
       table: tabDocType
       'on': reference_doctype = tabDocType.name
   - name: workflow_state
-    description: ''
+    description: Describes the phase of the workflow, crucial for understanding progress
+      and bottlenecks.
   - name: completed_by_role
-    description: ''
+    description: Denotes the role of the user who completed the action, important
+      for accountability.
     join_hint:
       table: tabRole
       'on': completed_by_role = tabRole.name
   - name: completed_by
-    description: ''
+    description: Records the individual who executed the action, necessary for auditing
+      and tracking.
     join_hint:
       table: tabUser
       'on': completed_by = tabUser.name
   - name: permitted_roles
-    description: ''
+    description: Lists roles authorized to interact with the workflow action, ensuring
+      security and compliance.
   - name: user
-    description: ''
+    description: Identifies the user initiating the workflow action, vital for user
+      activity monitoring.
     join_hint:
       table: tabUser
       'on': user = tabUser.name
+  desc_done: true
 - table: tabWorkflow Action Master
   description: Workflow Action Master
   fields:
   - name: name
-    description: ''
+    description: This field identifies the specific action within the workflow, crucial
+      for tracking and managing process efficiency.
   - name: workflow_action_name
-    description: ''
+    description: This field provides a descriptive label for the action, helping users
+      understand its purpose in the workflow context.
+  desc_done: true
 - table: tabWorkflow Action Permitted Role
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Identifies the specific action or task within the workflow that is
+      being referenced for permissions.
   - name: role
-    description: ''
+    description: Defines the user role that is granted permission to perform the specified
+      action in the workflow.
     join_hint:
       table: tabRole
       'on': role = tabRole.name
+  desc_done: true
 - table: tabWorkflow Document State
   description: Represents the states allowed in one document and role assigned to
     change the state.
   fields:
   - name: name
-    description: ''
+    description: Identifies the specific workflow document for tracking and management
+      purposes.
   - name: state
-    description: ''
+    description: Represents the current status of the document within the workflow,
+      crucial for understanding progress.
     join_hint:
       table: tabWorkflow State
       'on': state = tabWorkflow State.name
   - name: doc_status
-    description: ''
+    description: Indicates the overall status of the document, helping to assess its
+      readiness for review or action.
     options:
     - '0'
     - '1'
     - '2'
   - name: update_field
-    description: ''
+    description: Specifies which field is being modified, essential for auditing changes
+      in the workflow.
   - name: update_value
-    description: ''
+    description: Holds the new value for the updated field, necessary for maintaining
+      accurate records.
   - name: is_optional_state
-    description: ''
+    description: Determines if the state is optional, impacting the flexibility of
+      the workflow process.
   - name: avoid_status_override
-    description: ''
+    description: Indicates if status changes should be prevented, important for maintaining
+      workflow integrity.
   - name: next_action_email_template
-    description: ''
+    description: Defines the email template for the next action, facilitating communication
+      in the workflow.
     join_hint:
       table: tabEmail Template
       'on': next_action_email_template = tabEmail Template.name
   - name: allow_edit
-    description: ''
+    description: Specifies if the document can be edited, crucial for controlling
+      document integrity during the workflow.
     join_hint:
       table: tabRole
       'on': allow_edit = tabRole.name
   - name: send_email
-    description: ''
+    description: Indicates whether an email notification should be sent, important
+      for keeping stakeholders informed.
   - name: message
-    description: ''
+    description: Contains a message related to the workflow state, useful for providing
+      context or instructions.
   - name: workflow_builder_id
-    description: ''
+    description: Links to the specific workflow builder, essential for tracking the
+      origin of the workflow configuration.
+  desc_done: true
 - table: tabWorkflow State
   description: Workflow state represents the current state of a document.
   fields:
   - name: name
-    description: ''
+    description: Identifies the unique name of the workflow state for easy reference
+      in business processes.
   - name: workflow_state_name
-    description: ''
+    description: Describes the current status of the workflow, crucial for tracking
+      progress and decision-making.
   - name: icon
-    description: ''
+    description: Represents the visual symbol associated with the workflow state,
+      aiding in quick identification and user engagement.
     options:
     - glass
     - music
@@ -38804,7 +39204,8 @@ tables:
     - briefcase
     - fullscreen
   - name: style
-    description: ''
+    description: Defines the visual presentation of the workflow state, important
+      for maintaining consistency and clarity in user interfaces.
     options:
     - Primary
     - Info
@@ -38812,61 +39213,76 @@ tables:
     - Warning
     - Danger
     - Inverse
+  desc_done: true
 - table: tabWorkflow Transition
   description: Defines actions on states and the next step and allowed roles.
   fields:
   - name: name
-    description: ''
+    description: Identifies the unique name of the workflow transition for easy reference
+      in business processes.
   - name: state
-    description: ''
+    description: Represents the current status of the workflow, crucial for tracking
+      progress and decision-making.
     join_hint:
       table: tabWorkflow State
       'on': state = tabWorkflow State.name
   - name: action
-    description: ''
+    description: Defines the specific operation that triggers the transition, essential
+      for automating workflow steps.
     join_hint:
       table: tabWorkflow Action Master
       'on': action = tabWorkflow Action Master.name
   - name: next_state
-    description: ''
+    description: Indicates the subsequent state after the transition, important for
+      understanding workflow progression.
     join_hint:
       table: tabWorkflow State
       'on': next_state = tabWorkflow State.name
   - name: allowed
-    description: ''
+    description: Specifies whether the transition is permissible, key for enforcing
+      business rules and compliance.
     join_hint:
       table: tabRole
       'on': allowed = tabRole.name
   - name: allow_self_approval
-    description: ''
+    description: Determines if users can approve their own requests, impacting workflow
+      efficiency and governance.
   - name: send_email_to_creator
-    description: ''
+    description: Indicates if notifications are sent to the request originator, vital
+      for communication and transparency.
   - name: condition
-    description: ''
+    description: Outlines the criteria that must be met for the transition to occur,
+      critical for conditional workflows.
   - name: workflow_builder_id
-    description: ''
+    description: Links to the specific workflow builder, necessary for managing and
+      organizing multiple workflows.
+  desc_done: true
 - table: tabWorkspace
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Used to identify the workspace uniquely for reporting and analysis.
   - name: label
-    description: ''
+    description: Displays a user-friendly name for the workspace in interfaces.
   - name: title
-    description: ''
+    description: Provides a descriptive title for the workspace, enhancing clarity
+      in navigation.
   - name: sequence_id
-    description: ''
+    description: Determines the order of workspaces for prioritized access and visibility.
   - name: for_user
-    description: ''
+    description: Indicates the specific user or group the workspace is intended for,
+      guiding access control.
   - name: parent_page
-    description: ''
+    description: Links the workspace to its parent page, aiding in hierarchical organization.
   - name: module
-    description: ''
+    description: Specifies the functional module associated with the workspace, relevant
+      for module-specific queries.
     join_hint:
       table: tabModule Def
       'on': module = tabModule Def.name
   - name: indicator_color
-    description: ''
+    description: Sets a color code for visual differentiation of workspaces in dashboards
+      and reports.
     options:
     - green
     - cyan
@@ -38881,131 +39297,175 @@ tables:
     - purple
     - light-blue
   - name: restrict_to_domain
-    description: ''
+    description: Defines domain restrictions for the workspace, ensuring data relevance
+      and compliance.
     join_hint:
       table: tabDomain
       'on': restrict_to_domain = tabDomain.name
   - name: hide_custom
-    description: ''
+    description: Controls the visibility of custom fields, impacting user experience
+      and data presentation.
   - name: public
-    description: ''
+    description: Indicates whether the workspace is accessible to all users, influencing
+      collaboration and sharing.
   - name: is_hidden
-    description: ''
+    description: Marks the workspace as hidden, useful for managing visibility in
+      user interfaces.
   - name: content
-    description: ''
+    description: Contains the main information or data relevant to the workspace,
+      essential for user engagement.
   - name: number_cards
-    description: ''
+    description: Tracks the number of cards in the workspace, useful for assessing
+      content density and organization.
   - name: charts
-    description: ''
+    description: Holds chart data for visual representation, aiding in data analysis
+      and decision-making.
   - name: shortcuts
-    description: ''
+    description: Used to streamline access to frequently used features or documents
+      for improved efficiency.
   - name: links
-    description: ''
+    description: Facilitates quick navigation to relevant resources or external sites,
+      enhancing user productivity.
   - name: quick_lists
-    description: ''
+    description: Enables users to create and manage prioritized tasks or items for
+      better organization and focus.
   - name: custom_blocks
-    description: ''
+    description: Allows for personalized content arrangement, catering to specific
+      user needs and preferences.
   - name: roles
-    description: ''
+    description: Defines user permissions and access levels, ensuring appropriate
+      data security and collaboration.
+  desc_done: true
 - table: tabWorkspace Chart
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Identifies the unique workspace for organizing related charts and
+      data.
   - name: chart_name
-    description: ''
+    description: Specifies the title of the chart for easy reference in reports and
+      presentations.
     join_hint:
       table: tabDashboard Chart
       'on': chart_name = tabDashboard Chart.name
   - name: label
-    description: ''
+    description: Provides a descriptive tag for the chart, aiding in quick identification
+      and categorization.
+  desc_done: true
 - table: tabWorkspace Custom Block
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Used to identify the specific workspace for organizing and managing
+      related tasks and projects.
   - name: custom_block_name
-    description: ''
+    description: Indicates the name of the custom block, essential for customization
+      and user interface personalization.
     join_hint:
       table: tabCustom HTML Block
       'on': custom_block_name = tabCustom HTML Block.name
   - name: label
-    description: ''
+    description: Serves as a user-friendly identifier for the custom block, facilitating
+      easier navigation and understanding in reports.
+  desc_done: true
 - table: tabWorkspace Link
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Identifies the workspace's unique name for reference in business
+      processes.
   - name: type
-    description: ''
+    description: Specifies the data type of the workspace, crucial for data integrity
+      in queries.
     options:
     - Link
     - Card Break
   - name: label
-    description: ''
+    description: Provides a user-friendly name for the workspace, enhancing user experience
+      in navigation.
   - name: icon
-    description: ''
+    description: Represents the workspace visually, aiding in quick identification
+      within the application.
   - name: hidden
-    description: ''
+    description: Indicates if the workspace is concealed from users, relevant for
+      access control and security.
   - name: link_type
-    description: ''
+    description: Defines the nature of the connection to other records, important
+      for understanding relationships.
     options:
     - DocType
     - Page
     - Report
   - name: link_to
-    description: ''
+    description: Specifies the target of the link, essential for navigating related
+      data in reports.
   - name: report_ref_doctype
-    description: ''
+    description: References the document type for reports, critical for generating
+      accurate analytics.
     join_hint:
       table: tabDocType
       'on': report_ref_doctype = tabDocType.name
   - name: dependencies
-    description: ''
+    description: Lists other fields or records that this workspace relies on, important
+      for data consistency.
   - name: only_for
-    description: ''
+    description: Indicates specific user roles or conditions under which the workspace
+      is accessible, relevant for permissions.
     join_hint:
       table: tabCountry
       'on': only_for = tabCountry.name
   - name: onboard
-    description: ''
+    description: Denotes if the workspace is part of the onboarding process, significant
+      for new user training.
   - name: is_query_report
-    description: ''
+    description: Indicates if the workspace can generate query reports, essential
+      for data analysis.
   - name: link_count
-    description: ''
+    description: Tracks the number of links associated with the workspace, useful
+      for assessing connectivity.
+  desc_done: true
 - table: tabWorkspace Number Card
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Used to identify the workspace by its designated name for easy reference
+      in business operations.
   - name: number_card_name
-    description: ''
+    description: Represents the specific number card associated with the workspace,
+      crucial for tracking and management purposes.
     join_hint:
       table: tabNumber Card
       'on': number_card_name = tabNumber Card.name
   - name: label
-    description: ''
+    description: Serves as a descriptive tag for the workspace, aiding in categorization
+      and searchability in business queries.
+  desc_done: true
 - table: tabWorkspace Quick List
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Identifies the workspace's title for easy reference in business discussions.
   - name: document_type
-    description: ''
+    description: Specifies the category of documents associated with the workspace
+      for targeted retrieval.
     join_hint:
       table: tabDocType
       'on': document_type = tabDocType.name
   - name: label
-    description: ''
+    description: Provides a user-friendly tag for quick identification and sorting
+      of workspaces.
   - name: quick_list_filter
-    description: ''
+    description: Enables users to apply specific criteria to streamline workspace
+      selection in reports.
+  desc_done: true
 - table: tabWorkspace Shortcut
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Used to identify the workspace for quick reference in business operations.
   - name: type
-    description: ''
+    description: Defines the nature of the workspace, aiding in categorization for
+      reporting.
     options:
     - DocType
     - Report
@@ -39013,11 +39473,14 @@ tables:
     - Dashboard
     - URL
   - name: link_to
-    description: ''
+    description: Establishes connections to related documents, facilitating navigation
+      and context.
   - name: url
-    description: ''
+    description: Provides a direct web link for accessing external resources relevant
+      to the workspace.
   - name: doc_view
-    description: ''
+    description: Indicates the preferred document view, enhancing user experience
+      during data analysis.
     options:
     - List
     - Report Builder
@@ -39027,56 +39490,70 @@ tables:
     - Calendar
     - Kanban
   - name: kanban_board
-    description: ''
+    description: Enables visual task management, improving workflow efficiency and
+      tracking.
     join_hint:
       table: tabKanban Board
       'on': kanban_board = tabKanban Board.name
   - name: label
-    description: ''
+    description: Serves as a descriptive tag for easy identification and filtering
+      of workspaces.
   - name: icon
-    description: ''
+    description: Represents the workspace visually, aiding in quick recognition in
+      user interfaces.
   - name: restrict_to_domain
-    description: ''
+    description: Limits workspace access to specific domains, ensuring data security
+      and relevance.
     join_hint:
       table: tabDomain
       'on': restrict_to_domain = tabDomain.name
   - name: report_ref_doctype
-    description: ''
+    description: Links to the report's document type, streamlining data retrieval
+      for analysis.
     join_hint:
       table: tabDocType
       'on': report_ref_doctype = tabDocType.name
   - name: stats_filter
-    description: ''
+    description: Applies filters for statistical analysis, enhancing data-driven decision-making.
   - name: color
-    description: ''
+    description: Assigns a color code for visual organization, improving workspace
+      differentiation.
   - name: format
-    description: ''
+    description: Specifies the data format for consistency in reporting and data handling.
+  desc_done: true
 - table: tabWorkstation
   description: ''
   fields:
   - name: name
-    description: ''
+    description: The unique identifier for each workstation, essential for tracking
+      and reporting purposes.
   - name: workstation_name
-    description: ''
+    description: The designated name of the workstation, used for easy reference in
+      production planning.
   - name: workstation_type
-    description: ''
+    description: Indicates the category of the workstation, helping to determine its
+      specific function in the production process.
     join_hint:
       table: tabWorkstation Type
       'on': workstation_type = tabWorkstation Type.name
   - name: plant_floor
-    description: ''
+    description: Specifies the location of the workstation within the plant, crucial
+      for optimizing workflow and layout.
     join_hint:
       table: tabPlant Floor
       'on': plant_floor = tabPlant Floor.name
   - name: production_capacity
-    description: ''
+    description: Represents the maximum output of the workstation, vital for capacity
+      planning and resource allocation.
   - name: warehouse
-    description: ''
+    description: Identifies the associated warehouse for inventory management and
+      logistics coordination.
     join_hint:
       table: tabWarehouse
       'on': warehouse = tabWarehouse.name
   - name: status
-    description: ''
+    description: Indicates the operational status of the workstation, important for
+      maintenance scheduling and production continuity.
     options:
     - Production
     - 'Off'
@@ -39085,166 +39562,225 @@ tables:
     - Maintenance
     - Setup
   - name: hour_rate_electricity
-    description: ''
+    description: The cost of electricity per hour, used for calculating operational
+      expenses and budgeting.
   - name: hour_rate_consumable
-    description: ''
+    description: The hourly cost of consumables, necessary for accurate cost analysis
+      and pricing strategies.
   - name: hour_rate_rent
-    description: ''
+    description: The hourly rental cost of the workstation, important for financial
+      assessments and profitability calculations.
   - name: hour_rate_labour
-    description: ''
+    description: The hourly labor cost associated with the workstation, critical for
+      labor cost management and forecasting.
   - name: hour_rate
-    description: ''
+    description: The total hourly cost of operating the workstation, essential for
+      comprehensive cost analysis.
   - name: description
-    description: ''
+    description: A brief overview of the workstation's capabilities, useful for understanding
+      its role in production.
   - name: holiday_list
-    description: ''
+    description: A list of holidays affecting workstation operation, important for
+      scheduling and workforce planning.
     join_hint:
       table: tabHoliday List
       'on': holiday_list = tabHoliday List.name
   - name: working_hours
-    description: ''
+    description: Defines the operational hours of the workstation, crucial for planning
+      shifts and production timelines.
   - name: total_working_hours
-    description: ''
+    description: This field is used to assess employee productivity and operational
+      efficiency by tracking the total hours worked over a specific period.
+  desc_done: true
 - table: tabWorkstation Type
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Identifies the specific workstation for tracking and reporting purposes.
   - name: workstation_type
-    description: ''
+    description: Categorizes the workstation to analyze performance and cost efficiency.
   - name: hour_rate_electricity
-    description: ''
+    description: Represents the cost of electricity per hour, crucial for budgeting
+      operational expenses.
   - name: hour_rate_consumable
-    description: ''
+    description: Indicates the cost of consumables per hour, important for calculating
+      total production costs.
   - name: hour_rate_rent
-    description: ''
+    description: Reflects the hourly rental cost of the workstation, essential for
+      financial forecasting.
   - name: hour_rate_labour
-    description: ''
+    description: Denotes the labor cost per hour associated with the workstation,
+      vital for labor cost analysis.
   - name: hour_rate
-    description: ''
+    description: Summarizes the total hourly cost of operating the workstation, used
+      for profitability assessments.
   - name: description
-    description: ''
+    description: Provides additional context about the workstation, aiding in decision-making
+      and resource allocation.
+  desc_done: true
 - table: tabWorkstation Working Hour
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Identifies the specific workstation for tracking and reporting purposes.
   - name: start_time
-    description: ''
+    description: Indicates the beginning of the operational hours for scheduling and
+      resource allocation.
   - name: hours
-    description: ''
+    description: Represents the total duration of operation, essential for capacity
+      planning and efficiency analysis.
   - name: end_time
-    description: ''
+    description: Marks the conclusion of the operational hours, critical for shift
+      management and reporting.
   - name: enabled
-    description: ''
+    description: Indicates whether the workstation is active, important for operational
+      readiness and resource management.
+  desc_done: true
 - table: tabZATCA ERPGulf Success Log
   description: ''
   fields:
   - name: name
-    description: ''
+    description: The name of the individual or entity involved in the transaction,
+      used to identify stakeholders in business communications.
   - name: title
-    description: ''
+    description: The title associated with the individual or entity, providing context
+      for their role in the transaction.
   - name: message
-    description: ''
+    description: A brief communication detailing the nature of the transaction or
+      issue, essential for understanding the context of the log entry.
   - name: zatca_response
-    description: ''
+    description: The response received from ZATCA, crucial for assessing compliance
+      and addressing any discrepancies in the transaction.
   - name: invoice_number
-    description: ''
+    description: The unique identifier for the invoice, necessary for tracking and
+      referencing specific transactions in financial records.
   - name: time
-    description: ''
+    description: The timestamp of the log entry, important for auditing and analyzing
+      transaction timelines.
   - name: uuid
-    description: ''
+    description: A universally unique identifier for the log entry, ensuring distinct
+      tracking and retrieval of records in the system.
+  desc_done: true
 - table: tabZATCA Multiple Setting
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Used to identify the specific configuration setting for ZATCA compliance.
   - name: custom_otp
-    description: ''
+    description: Required for secure authentication during transactions with ZATCA.
   - name: custom_linked_doctype
-    description: ''
+    description: Defines the document type linked to the ZATCA settings for accurate
+      processing.
     join_hint:
       table: tabCompany
       'on': custom_linked_doctype = tabCompany.name
   - name: custom_send_pos_invoices_to_zatca_on_background
-    description: ''
+    description: Enables automatic background submission of POS invoices to ZATCA
+      for compliance.
   - name: custom_csr_config
-    description: ''
+    description: Holds the configuration for the Certificate Signing Request necessary
+      for secure communications.
   - name: custom_csr_data
-    description: ''
+    description: Contains the actual data for the Certificate Signing Request used
+      in secure transactions.
   - name: custom_pih
-    description: ''
+    description: Specifies the Public Identifier Hash for unique identification in
+      ZATCA submissions.
   - name: custom_certficate
-    description: ''
+    description: Stores the digital certificate used for authenticating transactions
+      with ZATCA.
   - name: custom_private_key
-    description: ''
+    description: Houses the private key necessary for decrypting messages and signing
+      requests to ZATCA.
   - name: custom_public_key
-    description: ''
+    description: Contains the public key used to encrypt messages sent to ZATCA for
+      security.
   - name: custom_compliance_request_id_
-    description: ''
+    description: Tracks the unique identifier for compliance requests submitted to
+      ZATCA.
   - name: custom_basic_auth_from_csid
-    description: ''
+    description: Facilitates basic authentication using the CSID for secure access
+      to ZATCA services.
   - name: custom_final_auth_csid
-    description: ''
+    description: Stores the final authentication CSID used to complete the ZATCA compliance
+      process.
+  desc_done: true
 - table: tabZatca ERPgulf Setting
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Used to identify the specific setting for Zatca ERP Gulf integration.
   - name: company
-    description: ''
+    description: Indicates the company associated with the Zatca ERP Gulf settings.
     join_hint:
       table: tabCompany
       'on': company = tabCompany.name
   - name: zatca_invoice_enabled
-    description: ''
+    description: Determines if Zatca invoicing features are activated for the business.
   - name: background
-    description: ''
+    description: Provides context or additional information relevant to the Zatca
+      settings.
   - name: send_invoice_to_zatca
-    description: ''
+    description: Specifies whether invoices should be automatically sent to Zatca
+      for compliance.
     options:
     - Live
     - Background
   - name: select
-    description: ''
+    description: Used to choose specific options or configurations within the Zatca
+      settings.
     options:
     - Simulation
     - Sandbox
     - Production
   - name: csr_config
-    description: ''
+    description: Contains configuration details for the Certificate Signing Request
+      related to Zatca.
   - name: csr_data
-    description: ''
+    description: Holds the actual data for the Certificate Signing Request needed
+      for Zatca integration.
   - name: attach_xml_with_invoice
-    description: ''
+    description: Indicates if XML files should be included with invoices for Zatca
+      submissions.
   - name: attach_xml_with_qr_code
-    description: ''
+    description: Specifies whether XML files should be attached alongside QR codes
+      in invoices.
   - name: attach_qr_code_doctype
-    description: ''
+    description: Defines the document type for the QR code attachment in the invoice.
   - name: attach_e_invoice_send_status_with_invoice
-    description: ''
+    description: Indicates if the status of e-invoice sending should be included with
+      the invoice.
   - name: pih
-    description: ''
+    description: Represents the Public Identifier Hash used for secure transactions
+      with Zatca.
   - name: private_key
-    description: ''
+    description: Stores the private key necessary for secure communications with Zatca.
   - name: public_key
-    description: ''
+    description: Contains the public key used for encryption and verification in Zatca
+      transactions.
   - name: certificate
-    description: ''
+    description: Used to verify the authenticity of transactions in compliance with
+      regulatory standards.
   - name: sandbox_url
-    description: ''
+    description: Provides a testing environment for developers to validate integrations
+      without affecting live data.
   - name: simulation_url
-    description: ''
+    description: Enables users to simulate transactions for training and troubleshooting
+      purposes.
   - name: production_url
-    description: ''
+    description: The live endpoint for processing real transactions in the ERP system.
   - name: otp
-    description: ''
+    description: One-time password used for secure authentication during sensitive
+      operations.
   - name: basic_auth
-    description: ''
+    description: Credentials for basic authentication, ensuring secure access to the
+      ERP system.
   - name: compliance_request_id
-    description: ''
+    description: Identifies specific compliance requests for tracking and reporting
+      purposes.
   - name: validation_type
-    description: ''
+    description: Specifies the method of validation applied to ensure data integrity
+      and compliance.
     options:
     - Simplified Invoice
     - Standard Invoice
@@ -39253,16 +39789,21 @@ tables:
     - Simplified Debit Note
     - Standard Debit Note
   - name: sample_invoice_to_test
-    description: ''
+    description: A template invoice used for testing the system's invoicing functionality.
   - name: basic_auth_production
-    description: ''
+    description: Credentials for basic authentication in the production environment
+      to secure access.
+  desc_done: true
 - table: tabZatca POS table
   description: ''
   fields:
   - name: name
-    description: ''
+    description: Used to identify the specific point of sale location for tracking
+      sales performance and inventory management.
   - name: zatca_multiple_setting
-    description: ''
+    description: Indicates whether multiple ZATCA settings are applied, crucial for
+      compliance with varying tax regulations across different regions.
     join_hint:
       table: tabZATCA Multiple Setting
       'on': zatca_multiple_setting = tabZATCA Multiple Setting.name
+  desc_done: true
