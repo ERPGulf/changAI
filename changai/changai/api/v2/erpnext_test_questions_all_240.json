@@ -1,0 +1,966 @@
+[
+  {
+    "question": "What is the total sales revenue for this month?",
+    "expected_top1": "tabSales Invoice"
+  },
+  {
+    "question": "How many sales invoices are still unpaid?",
+    "expected_top1": "tabSales Invoice"
+  },
+  {
+    "question": "Show me the top 5 customers by total purchase value",
+    "expected_top1": "tabCustomer"
+  },
+  {
+    "question": "List all overdue sales invoices with customer names",
+    "expected_top1": "tabSales Invoice"
+  },
+  {
+    "question": "What are the top 10 best-selling items this year?",
+    "expected_top1": "tabSales Invoice Item"
+  },
+  {
+    "question": "How many quotations were not converted to sales orders last month?",
+    "expected_top1": "tabQuotation"
+  },
+  {
+    "question": "Which customers have outstanding amounts greater than 50000?",
+    "expected_top1": "tabSales Invoice"
+  },
+  {
+    "question": "What is the total sales amount by territory this quarter?",
+    "expected_top1": "tabSales Invoice"
+  },
+  {
+    "question": "Show revenue breakdown by item category for last 6 months",
+    "expected_top1": "tabSales Invoice Item"
+  },
+  {
+    "question": "What is the total discount given on sales invoices this year?",
+    "expected_top1": "tabSales Invoice"
+  },
+  {
+    "question": "What is our total purchase spend this month?",
+    "expected_top1": "tabPurchase Invoice"
+  },
+  {
+    "question": "Who are our top 5 suppliers by purchase volume?",
+    "expected_top1": "tabSupplier"
+  },
+  {
+    "question": "Which suppliers have the most outstanding payables?",
+    "expected_top1": "tabPurchase Invoice"
+  },
+  {
+    "question": "How many purchase orders are still open?",
+    "expected_top1": "tabPurchase Order"
+  },
+  {
+    "question": "Which suppliers have delayed deliveries in the last 3 months?",
+    "expected_top1": "tabPurchase Receipt"
+  },
+  {
+    "question": "What is the total purchase amount by item category this year?",
+    "expected_top1": "tabPurchase Invoice Item"
+  },
+  {
+    "question": "List all overdue supplier invoices with amounts",
+    "expected_top1": "tabPurchase Invoice"
+  },
+  {
+    "question": "What is the average lead time for each supplier?",
+    "expected_top1": "tabPurchase Order"
+  },
+  {
+    "question": "Which items are below reorder level in the main warehouse?",
+    "expected_top1": "tabBin"
+  },
+  {
+    "question": "What is the total stock valuation across all warehouses?",
+    "expected_top1": "tabStock Ledger Entry"
+  },
+  {
+    "question": "What are the top 20 fast-moving items based on last 3 months?",
+    "expected_top1": "tabStock Ledger Entry"
+  },
+  {
+    "question": "Show me items with no stock movement in the last 90 days",
+    "expected_top1": "tabStock Ledger Entry"
+  },
+  {
+    "question": "What is the stock quantity for each item in Mumbai warehouse?",
+    "expected_top1": "tabBin"
+  },
+  {
+    "question": "Which items have negative stock in any warehouse?",
+    "expected_top1": "tabBin"
+  },
+  {
+    "question": "Show items with stock older than 6 months",
+    "expected_top1": "tabStock Ledger Entry"
+  },
+  {
+    "question": "How many stock entry transfers are pending between warehouses?",
+    "expected_top1": "tabStock Entry"
+  },
+  {
+    "question": "What is the stock value of each item in the finished goods warehouse?",
+    "expected_top1": "tabBin"
+  },
+  {
+    "question": "Which items have the highest inventory turnover ratio?",
+    "expected_top1": "tabStock Ledger Entry"
+  },
+  {
+    "question": "What is the total outstanding receivable amount?",
+    "expected_top1": "tabSales Invoice"
+  },
+  {
+    "question": "What is the total cash received and paid today?",
+    "expected_top1": "tabPayment Entry"
+  },
+  {
+    "question": "What is the total discount given this year?",
+    "expected_top1": "tabSales Invoice"
+  },
+  {
+    "question": "Which orders are pending delivery?",
+    "expected_top1": "tabSales Order"
+  },
+  {
+    "question": "List customers who haven't purchased anything in the last 90 days",
+    "expected_top1": "tabCustomer"
+  },
+  {
+    "question": "What is the average order value by customer group?",
+    "expected_top1": "tabSales Invoice"
+  },
+  {
+    "question": "Show monthly sales trend for the last year",
+    "expected_top1": "tabSales Invoice"
+  },
+  {
+    "question": "Which products have the highest profit margin?",
+    "expected_top1": "tabSales Invoice Item"
+  },
+  {
+    "question": "Find all returns processed this month",
+    "expected_top1": "tabSales Invoice"
+  },
+  {
+    "question": "Which vendors have delayed deliveries in the last 3 months?",
+    "expected_top1": "tabPurchase Receipt"
+  },
+  {
+    "question": "What is the total procurement cost by product category this year?",
+    "expected_top1": "tabPurchase Invoice Item"
+  },
+  {
+    "question": "What is the average lead time for each vendor?",
+    "expected_top1": "tabPurchase Order"
+  },
+  {
+    "question": "Show orders that exceeded the allocated budget",
+    "expected_top1": "tabPurchase Order"
+  },
+  {
+    "question": "Which products have the lowest buying price?",
+    "expected_top1": "tabPurchase Invoice Item"
+  },
+  {
+    "question": "List all requisitions pending approval",
+    "expected_top1": "tabMaterial Request"
+  },
+  {
+    "question": "Show products with inventory older than 6 months",
+    "expected_top1": "tabStock Ledger Entry"
+  },
+  {
+    "question": "How many transfers are pending between locations?",
+    "expected_top1": "tabStock Entry"
+  },
+  {
+    "question": "What is the inventory value in the finished goods location?",
+    "expected_top1": "tabBin"
+  },
+  {
+    "question": "Which products have the highest turnover ratio?",
+    "expected_top1": "tabStock Ledger Entry"
+  },
+  {
+    "question": "Show all reconciliation activities for last month",
+    "expected_top1": "tabStock Reconciliation"
+  },
+  {
+    "question": "Which storage locations are over capacity?",
+    "expected_top1": "tabWarehouse"
+  },
+  {
+    "question": "List all tracking numbers for a specific product",
+    "expected_top1": "tabSerial No"
+  },
+  {
+    "question": "What is the total material consumed in manufacturing this week?",
+    "expected_top1": "tabStock Entry"
+  },
+  {
+    "question": "What is the net profit for this financial year?",
+    "expected_top1": "tabGL Entry"
+  },
+  {
+    "question": "What are the top 5 expense categories by amount this month?",
+    "expected_top1": "tabGL Entry"
+  },
+  {
+    "question": "How many accounting transactions are pending approval?",
+    "expected_top1": "tabJournal Entry"
+  },
+  {
+    "question": "What is the current balance across all bank accounts?",
+    "expected_top1": "tabGL Entry"
+  },
+  {
+    "question": "Show monthly income vs expenses for the last year",
+    "expected_top1": "tabGL Entry"
+  },
+  {
+    "question": "Which bills have partial payments received?",
+    "expected_top1": "tabPayment Entry"
+  },
+  {
+    "question": "What is the aging analysis for all customers?",
+    "expected_top1": "tabSales Invoice"
+  },
+  {
+    "question": "Show all advance amounts received from customers",
+    "expected_top1": "tabPayment Entry"
+  },
+  {
+    "question": "Which customers have credit limit exceeded?",
+    "expected_top1": "tabCustomer"
+  },
+  {
+    "question": "What is the conversion rate from quotes to confirmed orders?",
+    "expected_top1": "tabQuotation"
+  },
+  {
+    "question": "Show the sales team performance by total revenue generated",
+    "expected_top1": "tabSales Invoice"
+  },
+  {
+    "question": "Which territories generated the most revenue last quarter?",
+    "expected_top1": "tabSales Invoice"
+  },
+  {
+    "question": "List all cancelled orders from this month",
+    "expected_top1": "tabSales Order"
+  },
+  {
+    "question": "What percentage of orders are delivered on time?",
+    "expected_top1": "tabDelivery Note"
+  },
+  {
+    "question": "Show customer-wise outstanding amounts greater than their credit period",
+    "expected_top1": "tabSales Invoice"
+  },
+  {
+    "question": "Which products are frequently returned by customers?",
+    "expected_top1": "tabSales Invoice"
+  },
+  {
+    "question": "What is the total landed cost of purchases this quarter?",
+    "expected_top1": "tabPurchase Receipt"
+  },
+  {
+    "question": "Which vendors consistently deliver before the promised date?",
+    "expected_top1": "tabPurchase Receipt"
+  },
+  {
+    "question": "Show items where actual quantity received is less than ordered",
+    "expected_top1": "tabPurchase Receipt"
+  },
+  {
+    "question": "What is the total value of rejected materials this month?",
+    "expected_top1": "tabPurchase Receipt"
+  },
+  {
+    "question": "List all blanket orders expiring in the next 30 days",
+    "expected_top1": "tabBlanket Order"
+  },
+  {
+    "question": "Which vendor quotations were rejected and why?",
+    "expected_top1": "tabSupplier Quotation"
+  },
+  {
+    "question": "What is the dead stock value across all locations?",
+    "expected_top1": "tabBin"
+  },
+  {
+    "question": "Show batch-wise expiry dates for all medicines",
+    "expected_top1": "tabBatch"
+  },
+  {
+    "question": "Which products have quality inspection pending?",
+    "expected_top1": "tabQuality Inspection"
+  },
+  {
+    "question": "What is the scrap value generated from production last month?",
+    "expected_top1": "tabStock Entry"
+  },
+  {
+    "question": "List all products with opening stock discrepancies",
+    "expected_top1": "tabStock Reconciliation"
+  },
+  {
+    "question": "Show locations with insufficient space for incoming shipments",
+    "expected_top1": "tabWarehouse"
+  },
+  {
+    "question": "What is the average storage cost per product category?",
+    "expected_top1": "tabBin"
+  },
+  {
+    "question": "Which batches are nearing expiry in the next 60 days?",
+    "expected_top1": "tabBatch"
+  },
+  {
+    "question": "What is the cash flow statement for this quarter?",
+    "expected_top1": "tabGL Entry"
+  },
+  {
+    "question": "Show all unreconciled bank transactions from last month",
+    "expected_top1": "tabBank Transaction"
+  },
+  {
+    "question": "Which cost centers are over budget this year?",
+    "expected_top1": "tabGL Entry"
+  },
+  {
+    "question": "What is the total uncollected revenue from completed projects?",
+    "expected_top1": "tabSales Invoice"
+  },
+  {
+    "question": "List all credit notes issued to customers this month",
+    "expected_top1": "tabSales Invoice"
+  },
+  {
+    "question": "What is the total withholding tax deducted this quarter?",
+    "expected_top1": "tabPurchase Invoice"
+  },
+  {
+    "question": "Which work orders are behind schedule?",
+    "expected_top1": "tabWork Order"
+  },
+  {
+    "question": "What is the production efficiency for each workstation?",
+    "expected_top1": "tabJob Card"
+  },
+  {
+    "question": "What is the profitability of each active project?",
+    "expected_top1": "tabProject"
+  },
+  {
+    "question": "Show all tasks that missed their deadline this month",
+    "expected_top1": "tabTask"
+  },
+  {
+    "question": "Which projects are running over budget?",
+    "expected_top1": "tabProject"
+  },
+  {
+    "question": "What is the total time spent on billable activities this week?",
+    "expected_top1": "tabTimesheet"
+  },
+  {
+    "question": "List all milestones due in the next 15 days",
+    "expected_top1": "tabTask"
+  },
+  {
+    "question": "Which team members are overallocated on projects?",
+    "expected_top1": "tabTimesheet"
+  },
+  {
+    "question": "Show project completion percentage for all ongoing work",
+    "expected_top1": "tabProject"
+  },
+  {
+    "question": "What is the variance between estimated and actual hours per project?",
+    "expected_top1": "tabTimesheet"
+  },
+  {
+    "question": "Which projects have unbilled timesheets?",
+    "expected_top1": "tabTimesheet"
+  },
+  {
+    "question": "How many opportunities were lost last quarter and why?",
+    "expected_top1": "tabOpportunity"
+  },
+  {
+    "question": "Which lead source has generated the most conversions?",
+    "expected_top1": "tabLead"
+  },
+  {
+    "question": "Show all contacts who haven't been contacted in 60 days",
+    "expected_top1": "tabContact"
+  },
+  {
+    "question": "What is the average deal closing time by sales representative?",
+    "expected_top1": "tabOpportunity"
+  },
+  {
+    "question": "List all prospects in the negotiation stage",
+    "expected_top1": "tabOpportunity"
+  },
+  {
+    "question": "Which campaigns generated the highest ROI?",
+    "expected_top1": "tabCampaign"
+  },
+  {
+    "question": "Show conversion funnel from lead to customer",
+    "expected_top1": "tabLead"
+  },
+  {
+    "question": "What is the win rate by sales territory?",
+    "expected_top1": "tabOpportunity"
+  },
+  {
+    "question": "Which employees have exceeded their leave quota?",
+    "expected_top1": "tabLeave Application"
+  },
+  {
+    "question": "Show headcount by department and employment type",
+    "expected_top1": "tabEmployee"
+  },
+  {
+    "question": "What is the total overtime pay for last month?",
+    "expected_top1": "tabSalary Slip"
+  },
+  {
+    "question": "List all pending leave approvals",
+    "expected_top1": "tabLeave Application"
+  },
+  {
+    "question": "Which positions have been open for more than 90 days?",
+    "expected_top1": "tabJob Opening"
+  },
+  {
+    "question": "Show employee turnover rate by department",
+    "expected_top1": "tabEmployee"
+  },
+  {
+    "question": "What is the average salary by designation?",
+    "expected_top1": "tabSalary Structure Assignment"
+  },
+  {
+    "question": "Which employees are due for performance review?",
+    "expected_top1": "tabAppraisal"
+  },
+  {
+    "question": "Which assets require maintenance this month?",
+    "expected_top1": "tabAsset Maintenance"
+  },
+  {
+    "question": "What is the total depreciation charged this fiscal year?",
+    "expected_top1": "tabAsset"
+  },
+  {
+    "question": "List all assets that have completed their useful life",
+    "expected_top1": "tabAsset"
+  },
+  {
+    "question": "How many tickets breached SLA last week?",
+    "expected_top1": "tabIssue"
+  },
+  {
+    "question": "What is the average first response time by support agent?",
+    "expected_top1": "tabIssue"
+  },
+  {
+    "question": "Show all high priority tickets still open",
+    "expected_top1": "tabIssue"
+  },
+  {
+    "question": "Show me all draft quotes that haven't been submitted",
+    "expected_top1": "tabQuotation"
+  },
+  {
+    "question": "Which customers placed orders but never received delivery?",
+    "expected_top1": "tabSales Order"
+  },
+  {
+    "question": "What is the total commission payable to sales partners this month?",
+    "expected_top1": "tabSales Invoice"
+  },
+  {
+    "question": "List all packing slips without corresponding deliveries",
+    "expected_top1": "tabPacking Slip"
+  },
+  {
+    "question": "Which products have zero sales in the last 6 months?",
+    "expected_top1": "tabItem"
+  },
+  {
+    "question": "Show customer payment terms and actual payment behavior",
+    "expected_top1": "tabCustomer"
+  },
+  {
+    "question": "Which requisitions were rejected and never resubmitted?",
+    "expected_top1": "tabMaterial Request"
+  },
+  {
+    "question": "Show all partial receipts pending completion",
+    "expected_top1": "tabPurchase Receipt"
+  },
+  {
+    "question": "What is the total value of goods in transit?",
+    "expected_top1": "tabPurchase Order"
+  },
+  {
+    "question": "List vendors with zero transactions in the last year",
+    "expected_top1": "tabSupplier"
+  },
+  {
+    "question": "Which products have only one supplier?",
+    "expected_top1": "tabItem"
+  },
+  {
+    "question": "Show all debit notes issued to vendors this quarter",
+    "expected_top1": "tabPurchase Invoice"
+  },
+  {
+    "question": "Which products have different rates in different locations?",
+    "expected_top1": "tabBin"
+  },
+  {
+    "question": "Show all stock movements with zero quantity",
+    "expected_top1": "tabStock Ledger Entry"
+  },
+  {
+    "question": "List products that exist in the system but never had any transactions",
+    "expected_top1": "tabItem"
+  },
+  {
+    "question": "What is the total value of reserved but not delivered stock?",
+    "expected_top1": "tabBin"
+  },
+  {
+    "question": "Which batches were split or merged this month?",
+    "expected_top1": "tabStock Entry"
+  },
+  {
+    "question": "Show all putaway activities pending in the warehouse",
+    "expected_top1": "tabPutaway Rule"
+  },
+  {
+    "question": "Which accounting periods are still open?",
+    "expected_top1": "tabPeriod Closing Voucher"
+  },
+  {
+    "question": "Show all transactions with manual posting dates",
+    "expected_top1": "tabGL Entry"
+  },
+  {
+    "question": "What is the total foreign exchange gain or loss this year?",
+    "expected_top1": "tabGL Entry"
+  },
+  {
+    "question": "List all inter-company transactions pending reconciliation",
+    "expected_top1": "tabJournal Entry"
+  },
+  {
+    "question": "Which expense claims are pending reimbursement?",
+    "expected_top1": "tabExpense Claim"
+  },
+  {
+    "question": "Show all party-wise account balances",
+    "expected_top1": "tabGL Entry"
+  },
+  {
+    "question": "Which projects have zero activity in the last 30 days?",
+    "expected_top1": "tabProject"
+  },
+  {
+    "question": "Show all tasks assigned but not started",
+    "expected_top1": "tabTask"
+  },
+  {
+    "question": "What is the idle time per resource this week?",
+    "expected_top1": "tabTimesheet"
+  },
+  {
+    "question": "Which leads were auto-closed due to inactivity?",
+    "expected_top1": "tabLead"
+  },
+  {
+    "question": "Show all duplicate contacts in the system",
+    "expected_top1": "tabContact"
+  },
+  {
+    "question": "Which employees haven't logged attendance for more than 5 days?",
+    "expected_top1": "tabAttendance"
+  },
+  {
+    "question": "Which production batches failed quality checks?",
+    "expected_top1": "tabQuality Inspection"
+  },
+  {
+    "question": "What is the total GST collected vs GST paid this quarter?",
+    "expected_top1": "tabSales Invoice"
+  },
+  {
+    "question": "Show all transactions requiring tax invoice amendments",
+    "expected_top1": "tabSales Invoice"
+  },
+  {
+    "question": "Which bills don't have valid tax identification numbers?",
+    "expected_top1": "tabPurchase Invoice"
+  },
+  {
+    "question": "List all export transactions with pending shipping bills",
+    "expected_top1": "tabSales Invoice"
+  },
+  {
+    "question": "What is the total reverse charge liability this month?",
+    "expected_top1": "tabPurchase Invoice"
+  },
+  {
+    "question": "Show all e-way bills expiring in the next 3 days",
+    "expected_top1": "tabDelivery Note"
+  },
+  {
+    "question": "Which transactions were modified after submission?",
+    "expected_top1": "tabVersion"
+  },
+  {
+    "question": "Show all documents created outside business hours",
+    "expected_top1": "tabSales Invoice"
+  },
+  {
+    "question": "List users who haven't changed passwords in 90 days",
+    "expected_top1": "tabUser"
+  },
+  {
+    "question": "What transactions exceed approval authority limits?",
+    "expected_top1": "tabPurchase Order"
+  },
+  {
+    "question": "Show all backdated transactions from last month",
+    "expected_top1": "tabGL Entry"
+  },
+  {
+    "question": "Which documents were submitted without required attachments?",
+    "expected_top1": "tabSales Invoice"
+  },
+  {
+    "question": "What is the working capital ratio trend for last 12 months?",
+    "expected_top1": "tabGL Entry"
+  },
+  {
+    "question": "Show debt-to-equity ratio by month",
+    "expected_top1": "tabGL Entry"
+  },
+  {
+    "question": "What is the accounts receivable aging bucket distribution?",
+    "expected_top1": "tabSales Invoice"
+  },
+  {
+    "question": "Calculate the burn rate for the last 6 months",
+    "expected_top1": "tabGL Entry"
+  },
+  {
+    "question": "What is the operating cash flow vs investing cash flow?",
+    "expected_top1": "tabGL Entry"
+  },
+  {
+    "question": "Show quarterly EBITDA trend",
+    "expected_top1": "tabGL Entry"
+  },
+  {
+    "question": "What is the ABC analysis classification for all items?",
+    "expected_top1": "tabBin"
+  },
+  {
+    "question": "Show stock-to-sales ratio by product category",
+    "expected_top1": "tabStock Ledger Entry"
+  },
+  {
+    "question": "Which items have stockout risk in the next 30 days?",
+    "expected_top1": "tabBin"
+  },
+  {
+    "question": "What is the carrying cost as percentage of inventory value?",
+    "expected_top1": "tabBin"
+  },
+  {
+    "question": "Show reorder point violations across all locations",
+    "expected_top1": "tabBin"
+  },
+  {
+    "question": "What is the customer lifetime value for top 100 customers?",
+    "expected_top1": "tabSales Invoice"
+  },
+  {
+    "question": "Show sales velocity by product line",
+    "expected_top1": "tabSales Invoice Item"
+  },
+  {
+    "question": "What is the quote-to-cash cycle time by territory?",
+    "expected_top1": "tabQuotation"
+  },
+  {
+    "question": "Calculate customer acquisition cost for this quarter",
+    "expected_top1": "tabCustomer"
+  },
+  {
+    "question": "What is the supplier concentration risk percentage?",
+    "expected_top1": "tabPurchase Invoice"
+  },
+  {
+    "question": "Show maverick spend outside approved vendors",
+    "expected_top1": "tabPurchase Invoice"
+  },
+  {
+    "question": "What is the purchase price variance by category?",
+    "expected_top1": "tabPurchase Invoice Item"
+  },
+  {
+    "question": "Which customers have decreased their order frequency this quarter?",
+    "expected_top1": "tabSales Order"
+  },
+  {
+    "question": "Show products bundled together in sales transactions",
+    "expected_top1": "tabSales Invoice Item"
+  },
+  {
+    "question": "What is the average days to convert quote to order by sales person?",
+    "expected_top1": "tabQuotation"
+  },
+  {
+    "question": "List all customers with seasonal buying patterns",
+    "expected_top1": "tabSales Invoice"
+  },
+  {
+    "question": "Which items are frequently ordered together?",
+    "expected_top1": "tabSales Invoice Item"
+  },
+  {
+    "question": "Show revenue lost due to out-of-stock situations",
+    "expected_top1": "tabSales Order"
+  },
+  {
+    "question": "What is the return rate by product and customer segment?",
+    "expected_top1": "tabSales Invoice"
+  },
+  {
+    "question": "Which sales orders were partially delivered and why?",
+    "expected_top1": "tabSales Order"
+  },
+  {
+    "question": "Show customer retention rate by acquisition year",
+    "expected_top1": "tabCustomer"
+  },
+  {
+    "question": "What is the average order size trend by customer type?",
+    "expected_top1": "tabSales Invoice"
+  },
+  {
+    "question": "List all promotional campaigns and their impact on sales",
+    "expected_top1": "tabPricing Rule"
+  },
+  {
+    "question": "Which products have declining sales despite promotions?",
+    "expected_top1": "tabSales Invoice Item"
+  },
+  {
+    "question": "Show supplier performance score based on quality and delivery",
+    "expected_top1": "tabPurchase Receipt"
+  },
+  {
+    "question": "Which items have unstable pricing from suppliers?",
+    "expected_top1": "tabPurchase Invoice Item"
+  },
+  {
+    "question": "What is the total savings from bulk purchase agreements?",
+    "expected_top1": "tabPurchase Order"
+  },
+  {
+    "question": "List suppliers offering early payment discounts not utilized",
+    "expected_top1": "tabSupplier"
+  },
+  {
+    "question": "Which products have increased in purchase price by more than 10%?",
+    "expected_top1": "tabPurchase Invoice Item"
+  },
+  {
+    "question": "Show the supplier switching frequency by product category",
+    "expected_top1": "tabPurchase Order"
+  },
+  {
+    "question": "What is the total value of emergency purchases vs planned purchases?",
+    "expected_top1": "tabPurchase Order"
+  },
+  {
+    "question": "Which requisitions took longest time for approval?",
+    "expected_top1": "tabMaterial Request"
+  },
+  {
+    "question": "Show all items sourced from multiple suppliers with price comparison",
+    "expected_top1": "tabItem Supplier"
+  },
+  {
+    "question": "What is the average payment delay to each supplier?",
+    "expected_top1": "tabPurchase Invoice"
+  },
+  {
+    "question": "Which items have high variance between physical and system stock?",
+    "expected_top1": "tabStock Reconciliation"
+  },
+  {
+    "question": "Show seasonal stock consumption patterns by product",
+    "expected_top1": "tabStock Ledger Entry"
+  },
+  {
+    "question": "What is the total value of obsolete inventory by aging category?",
+    "expected_top1": "tabBin"
+  },
+  {
+    "question": "List items with frequent stock adjustments indicating control issues",
+    "expected_top1": "tabStock Entry"
+  },
+  {
+    "question": "Which warehouses have the highest shrinkage percentage?",
+    "expected_top1": "tabStock Ledger Entry"
+  },
+  {
+    "question": "Show items that moved between warehouses most frequently",
+    "expected_top1": "tabStock Entry"
+  },
+  {
+    "question": "What is the fill rate percentage by warehouse and product?",
+    "expected_top1": "tabBin"
+  },
+  {
+    "question": "Which items cross reorder level most frequently in a month?",
+    "expected_top1": "tabBin"
+  },
+  {
+    "question": "Which orders are stuck in credit approval for more than 48 hours?",
+    "expected_top1": "tabSales Order"
+  },
+  {
+    "question": "Show all deliveries scheduled for today but not dispatched",
+    "expected_top1": "tabDelivery Note"
+  },
+  {
+    "question": "What is the average time between order confirmation and shipment?",
+    "expected_top1": "tabSales Order"
+  },
+  {
+    "question": "List all installations pending completion after delivery",
+    "expected_top1": "tabInstallation Note"
+  },
+  {
+    "question": "Which customer complaints are linked to delivery delays?",
+    "expected_top1": "tabIssue"
+  },
+  {
+    "question": "Show purchase orders awaiting vendor confirmation",
+    "expected_top1": "tabPurchase Order"
+  },
+  {
+    "question": "Which goods receipts are pending quality inspection?",
+    "expected_top1": "tabPurchase Receipt"
+  },
+  {
+    "question": "List all supplier quotations received but not responded to",
+    "expected_top1": "tabSupplier Quotation"
+  },
+  {
+    "question": "What is the average time from requisition to goods receipt?",
+    "expected_top1": "tabMaterial Request"
+  },
+  {
+    "question": "Show all landed cost vouchers pending allocation",
+    "expected_top1": "tabLanded Cost Voucher"
+  },
+  {
+    "question": "Which pick lists are generated but not completed?",
+    "expected_top1": "tabPick List"
+  },
+  {
+    "question": "Show all stock transfers in transit between warehouses",
+    "expected_top1": "tabStock Entry"
+  },
+  {
+    "question": "List items with pending physical verification",
+    "expected_top1": "tabStock Reconciliation"
+  },
+  {
+    "question": "What is the average time for putaway after goods receipt?",
+    "expected_top1": "tabStock Entry"
+  },
+  {
+    "question": "Which packing operations are delayed beyond standard time?",
+    "expected_top1": "tabPacking Slip"
+  },
+  {
+    "question": "Show all stock reposting requests pending execution",
+    "expected_top1": "tabRepost Item Valuation"
+  },
+  {
+    "question": "Which work orders are waiting for raw material availability?",
+    "expected_top1": "tabWork Order"
+  },
+  {
+    "question": "Show all production plans with unfulfilled material requirements",
+    "expected_top1": "tabProduction Plan"
+  },
+  {
+    "question": "What is the machine utilization rate by workstation this week?",
+    "expected_top1": "tabJob Card"
+  },
+  {
+    "question": "List all job cards with actual time exceeding planned time",
+    "expected_top1": "tabJob Card"
+  },
+  {
+    "question": "Which subcontracting orders are overdue for return?",
+    "expected_top1": "tabPurchase Order"
+  },
+  {
+    "question": "Show all bill of materials with missing or inactive components",
+    "expected_top1": "tabBOM"
+  },
+  {
+    "question": "What is the total rework cost incurred this month?",
+    "expected_top1": "tabStock Entry"
+  },
+  {
+    "question": "Which operations have the highest scrap percentage?",
+    "expected_top1": "tabJob Card"
+  },
+  {
+    "question": "Show all quality inspections that failed in the last 30 days",
+    "expected_top1": "tabQuality Inspection"
+  },
+  {
+    "question": "Which suppliers have the highest rejection rate?",
+    "expected_top1": "tabQuality Inspection"
+  },
+  {
+    "question": "List all items currently on quality hold",
+    "expected_top1": "tabQuality Inspection"
+  },
+  {
+    "question": "Which shipments are delayed beyond promised delivery date?",
+    "expected_top1": "tabDelivery Note"
+  },
+  {
+    "question": "Show all consignments without proof of delivery",
+    "expected_top1": "tabDelivery Note"
+  },
+  {
+    "question": "What is the average freight cost per kilogram by shipping route?",
+    "expected_top1": "tabDelivery Note"
+  }
+]

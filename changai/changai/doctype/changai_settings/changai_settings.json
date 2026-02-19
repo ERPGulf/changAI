@@ -58,7 +58,9 @@
   "choose_module",
   "choose_file_size",
   "create_train_data",
+  "train_model",
   "create_validation_data",
+  "test_model",
   "master_table_and_schema_updation_section",
   "update_masterdata_file",
   "update_schema_file"
@@ -322,7 +324,7 @@
    "fieldname": "choose_module",
    "fieldtype": "Select",
    "label": "Choose Module",
-   "options": "Accounts\nCRM\nBuying\nProjects\nSelling\nManufacturing\nStock\nSupport\nAssets"
+   "options": "Accounts\nCRM\nBuying\nHR\nProjects\nSelling\nManufacturing\nStock\nSupport\nAssets"
   },
   {
    "fieldname": "choose_file_size",
@@ -356,13 +358,23 @@
    "fieldname": "update_schema_file",
    "fieldtype": "Button",
    "label": "Update Schema file"
+  },
+  {
+   "fieldname": "train_model",
+   "fieldtype": "Button",
+   "label": "Train Model"
+  },
+  {
+   "fieldname": "test_model",
+   "fieldtype": "Button",
+   "label": "Test Model"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-02-11 12:29:31.176378",
+ "modified": "2026-02-18 09:32:55.949169",
  "modified_by": "Administrator",
  "module": "Changai",
  "name": "ChangAI Settings",

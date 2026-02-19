@@ -5,12 +5,19 @@ import gc
 import json
 import os
 import time
+import json
+import os
+from typing import List, Dict, Any, Optional
+from sentence_transformers import SentenceTransformer
+from langchain_community.vectorstores import FAISS
+from langchain_core.embeddings import Embeddings
 import yaml
 import frappe
 from frappe import _
 from frappe.utils import now_datetime, add_to_date
 from anthropic import Anthropic
 import openai
+from frappe.utils.file_manager import get_file
 from changai.changai.api.v2.text2sql_pipeline_v2 import call_gemini
 
 def safe_path_in_dir(base_dir: str, filename: str) -> str:
@@ -441,7 +448,7 @@ def fill_missing_field_descriptions(
         try:
             for i in range(0, len(pending_fields), batch_size):
                 batch = pending_fields[i:i + batch_size]
-                desc_map = _smart_desc_map_1(client, table, batch)
+                desc_map = _smart_desc_map(client, table, batch)
                 
                 if not desc_map:
                     consecutive_errors += 1
@@ -506,7 +513,7 @@ def sync_schema_and_enqueue_descriptions() -> Dict[str, Any]:
     return {"ok": True, "message": _("Schema updated ✅ Field descriptions running in background 🧠")}
 
 
-def _smart_desc_map_1(client, table_name: str, fields: List[Dict[str, Any]]) -> Dict[str, str]:
+def _smart_desc_map(client, table_name: str, fields: List[Dict[str, Any]]) -> Dict[str, str]:
     if not client:
         return {}
 
@@ -568,307 +575,593 @@ def _get_training_data_dir() -> str:
     os.makedirs(d, exist_ok=True)
     return d
 
+
 def _training_file_path(module_name: str) -> str:
     filename = f"{(module_name or '').lower()}_training_data.jsonl"
     return safe_path_in_dir(_get_training_data_dir(), filename)
 
 
-# @frappe.whitelist()
-# def generate_training_data(module_name: str, total_count: int):
-#     client = _get_openai_client()
-#     total_count = int(total_count)
-#     output_file = _training_file_path(module_name)
-#     existing_q = set()
-#     existing_triplets = set()
-#     if os.path.exists(output_file):
-#         with open(output_file, "r", encoding="utf-8") as rf:
-#             for ln in rf:
-#                 ln = ln.strip()
-#                 if not ln:
-#                     continue
-#                 try:
-#                     obj = json.loads(ln)
-#                 except Exception:
-#                     continue
-#                 q = (obj.get("sentence1") or "").strip()
-#                 s2 = (obj.get("sentence2") or "").strip()
-#                 label = float(obj.get("label") or 0)
+@frappe.whitelist(allow_guest=True)
+def build_schema_context_for_module(module_name: str) -> str:
+    """
+    Build minimal strict schema context:
+    Only table name + field names.
+    """
 
-#                 if q:
-#                     existing_q.add(q)
-#                 if q and s2:
-#                     existing_triplets.add((q, s2, label))
-#     prompt_template = """
-# You are generating ERPNext schema-retrieval training data to train an embedder that maps business questions to the correct ERPNext tables/fields.
-# MODULE: {module}
-# OUTPUT FORMAT (STRICT):
-# - Output MUST be JSONL.
-# - Each line = ONE JSON object.
-# - Do NOT wrap in an array.
-# - Do NOT add any extra text.
-# COUNT RULE (IMPORTANT — READ CAREFULLY):
-# - You must create EXACTLY 10 UNIQUE business questions (sentence1).
-# - sentence1 must be UNIQUE across the dataset (no duplicates).
-# - You MUST output MULTIPLE JSONL lines per question when needed:
-#   - one line per required positive candidate
-#   - plus up to 2 lines for negative candidates
-# - Therefore: TOTAL JSONL LINE COUNT MUST NOT BE 10.
-#   It MUST be dynamic and will be MORE than 10 in most cases.
-# QUESTION STYLE (CRITICAL — MUST FOLLOW):
+    payload = _load_yaml(SCHEMA_YAML)
+    tables_blocks = payload.get("tables") or []
 
-# Questions must reflect how real ERPNext business users ask in daily operations.
+    doctypes = frappe.get_all(
+        "DocType",
+        filters={"module": module_name},
+        pluck="name"
+    ) or []
 
-# Common Question Categories:
+    allowed_tables = {f"tab{dt}" for dt in doctypes}
 
-# - Totals: total sales, revenue, purchase, tax, outstanding
-# - Counts: number of invoices, orders, customers, items
-# - Rankings: top/bottom customers, items, suppliers
-# - Pending/Open/Overdue documents
-# - Date-based queries: today, this month, last quarter, YTD
-# - Stock & warehouse analysis
-# - Payment status & collections
-# - Profitability & margin
-# - Supplier/customer performance
-# - Trends & comparisons over time
-# - Item performance (most sold, highest revenue, best margin, slow/fast moving, returns, stock aging, valuation)
-# - Entity-specific queries (customer, supplier, item, warehouse mentioned by name)
-# - Project costing & profitability
-# - HR & payroll summaries
-# - Tax & compliance reports
-# - Cash flow & finance summaries
-# - Production & manufacturing status
-# - Customer support & SLA tracking
-# - Budget vs actual comparisons
-# - Multi-company consolidated reports
-# - Audit/control checks
-# - Logistics & shipping status
-# - Recurring revenue/subscriptions
-# - Discounts & promotion impact
-# - Approval/workflow status
+    lines = []
 
-# Style Rules:
+    for b in tables_blocks:
+        if not isinstance(b, dict):
+            continue
 
-# - Short to medium length
-# - Casual but professional
-# - Natural business language
-# - No spelling mistakes
-# - No technical/database wording
-# - No placeholder wording like "a specific item"
-# - Must sound like a manager, accountant, warehouse head, HR officer, or operations staff
-# For example:
+        table = b.get("table")
+        if table not in allowed_tables:
+            continue
 
-# If MODULE is Selling → generate only sales/customer/item revenue related questions such as totals (sales revenue, discounts, outstanding sales), counts (number of quotations, sales orders, invoices, customers), rankings (top customers, best‑selling items, highest revenue orders), pending/open/overdue (quotations not converted, overdue invoices, open sales orders), date‑based queries (sales today, this month, last quarter, year‑to‑date), customer performance (repeat orders, credit utilization, payment timeliness), and trends (sales growth, item demand trends, seasonal comparisons).
+        fields = b.get("fields") or []
+        field_names = [
+            f["name"]
+            for f in fields
+            if isinstance(f, dict) and f.get("name")
+        ]
 
-# If MODULE is Buying → generate supplier/purchase related questions such as totals (purchase spend, supplier credits, outstanding payables), counts (number of purchase orders, receipts, supplier invoices), rankings (top suppliers by spend, lowest cost suppliers, most reliable suppliers), pending/open/overdue (open purchase orders, overdue supplier invoices), date‑based queries (purchases today, this month, last quarter, year‑to‑date), supplier performance (on‑time delivery, quality issues, average lead time), and trends (purchase spend trends, supplier category comparisons).
+        lines.append(
+            f"{table}: {', '.join(field_names)}"
+        )
 
-# If MODULE is Stock → generate inventory/warehouse related questions such as totals (stock valuation, total items in warehouse, stock inflow/outflow), counts (number of items below reorder level, stock transfers, warehouses), rankings (fast‑moving items, slow‑moving items, top warehouses by stock value), pending/open/overdue (pending stock transfers, unfulfilled delivery notes), date‑based queries (stock movement today, this month, last quarter, year‑to‑date), warehouse analysis (stock aging, negative stock, capacity utilization), and trends (inventory turnover, stock consumption trends, seasonal demand).
+    return "\n".join(lines)
 
-# If MODULE is Accounts → generate finance/payment/tax related questions such as totals (revenue, expenses, outstanding receivables/payables, tax liability), counts (number of invoices, journal entries, payments received/made), rankings (top customers by payments, suppliers by outstanding balances), pending/open/overdue (overdue invoices, pending payments, unapproved entries), date‑based queries (cash flow today, this month, last quarter, year‑to‑date), payment status (paid vs. unpaid invoices, partial payments, collections), profitability/margin (gross margin, net profit, project profitability), and trends (revenue vs. expense trends, tax trends, cash flow comparisons).
+def _training_prompt(module_name: str,failed_questions:list) -> str:
+    return f"""
+Generate 10 JSONL for ERPNext module: {module_name}
 
+IMPORTANT FOCUS:
+The retrieval model is currently failing on certain types of questions.
+You MUST generate questions similar in intent, structure, wording style,
+and filtering patterns to the FAILED_QUESTIONS listed below.
 
-# FOR EACH of the 10 UNIQUE QUESTIONS:
-# - Add ALL required positives (label=1.0): the MINIMUM tables/fields needed to generate correct SQL.
-# - Add MAXIMUM 2 negatives (label=0.0): near-miss candidates not needed.
-# FORMAT PER LINE (STRICT):
-# {{"gid":"{module}","sentence1":"...","sentence2":"...","label":1.0}}
-# sentence2 format ONLY:
-# - Table:
-#   "[TABLE] tabDoctype | desc: <2-3 sentences, specific reasoning>"
-# - Field:
-#   "[FIELD] fieldname | [TABLE] tabDoctype | desc: <2-3 sentences, specific reasoning>"
-# DESCRIPTION REQUIREMENTS (VERY IMPORTANT):
-# - Required for BOTH positives and negatives.
-# - 2–3 sentences.
-# - Must be CLEAR and easy to understand:
-#   1) First sentence: explain WHAT this table/field represents in ERPNext (business meaning).
-#   2) Second sentence: explain WHY it is needed (or not needed) for THIS question (SQL logic: filter/group/sum/join/date/status).
-# - No generic phrases like "to get data" / "to retrieve details".
-# - For negatives (label=0.0): explain why it looks related but is not required (wrong document stage, wrong module, wrong metric, etc.).
-# OTHER RULES:
-# - Use real ERPNext names only (tabBin, tabStock Ledger Entry, tabSales Invoice, tabPurchase Invoice, tabCustomer, tabItem, tabWarehouse, etc.).
-# - Never fake names like tab1/tab2 or "Lead tab3".
-# - No duplicate sentence2 lines across the entire output.
-# Return ONLY JSONL.
-# """
-#     written_lines = 0
-#     new_unique_questions = 0
-#     with open(output_file, "a", encoding="utf-8") as f:
-#         while len(existing_q) < total_count:
-#             prompt = prompt_template.format(module=module_name)
-#             resp = client.chat.completions.create(
-#                 model="gpt-4",
-#                 messages=[
-#                     {"role": "system", "content": "Output ONLY JSONL. No extra text."},
-#                     {"role": "user", "content": prompt}
-#                 ],
-#                 temperature=0.3,
-#                 max_tokens=2000
-#             )
-#             text = (resp.choices[0].message.content or "").strip()
-#             lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
-#             for ln in lines:
-#                 try:
-#                     obj = json.loads(ln)
-#                 except Exception:
-#                     continue
-#                 q = (obj.get("sentence1") or "").strip()
-#                 s2 = (obj.get("sentence2") or "").strip()
-#                 label = float(obj.get("label") or 0)
-#                 if not q or not s2:
-#                     continue
-#                 triplet = (q, s2, label)
-#                 if triplet in existing_triplets:
-#                     continue
-#                 is_new_question = q not in existing_q
-#                 if is_new_question:
-#                     if len(existing_q) >= total_count:
-#                         continue
-#                     existing_q.add(q)
-#                     new_unique_questions += 1
-#                 f.write(json.dumps(obj, ensure_ascii=False) + "\n")
-#                 existing_triplets.add(triplet)
-#                 written_lines += 1
-#                 if len(existing_q) >= total_count:
-#                     break
-#     return {
-#         "ok": True,
-#         "file": output_file,
-#         "unique_questions_total": len(existing_q),
-#         "unique_questions_added_this_run": new_unique_questions,
-#         "lines_written_this_run": written_lines
-#     }
+FAILED_QUESTIONS (model predicted wrong table for these):
+{json.dumps(failed_questions, ensure_ascii=False, indent=2)}
 
-@frappe.whitelist()
-def generate_training_data_1(module_name: str, total_count: int):
-    client = _get_openai_client()
-    total_count = int(total_count)
-    output_file = _training_file_path(module_name)
-    existing_q = set()
-    existing_triplets = set()
-    if os.path.exists(output_file):
-        with open(output_file, "r", encoding="utf-8") as rf:
-            for ln in rf:
-                ln = ln.strip()
-                if not ln:
-                    continue
-                try:
-                    obj = json.loads(ln)
-                except Exception:
-                    continue
-                q = (obj.get("sentence1") or "").strip()
-                s2 = (obj.get("sentence2") or "").strip()
-                label = float(obj.get("label") or 0)
+INSTRUCTIONS FOR FOCUS:
+- At least 6 out of 10 questions MUST follow the same intent pattern
+  as the FAILED_QUESTIONS.
+- Keep similar business meaning but vary wording naturally.
+- Include messy/chat style variations.
+- Include time filters / grouping / ranking if relevant.
+- DO NOT mention table names in the anchor.
 
-                if q:
-                    existing_q.add(q)
-                if q and s2:
-                    existing_triplets.add((q, s2, label))
-    
-    # Module-specific examples
-    # Module-specific examples
-    module_examples = {
-    "Selling": "sales revenue/discounts/outstanding, quotation/order/invoice counts, top customers/best-selling items/highest revenue orders, quotations not converted/overdue invoices/open sales orders, sales today/this month/last quarter/YTD, customer performance (repeat orders, credit utilization, payment timeliness), trends (sales growth, item demand, seasonal comparisons)",
-    
-    "Accounts": "revenue/expenses/outstanding receivables-payables/tax liability, invoice/journal entry/payment counts, top customers by payments/suppliers by outstanding balances, overdue invoices/pending payments/unapproved entries, cash flow today/this month/last quarter/YTD, payment status (paid vs unpaid, partial payments, collections), profitability/margin (gross margin, net profit, project profitability), trends (revenue vs expense, tax trends, cash flow comparisons)",
-    
-    "CRM": "lead counts/conversion rates, opportunity pipeline value, lead sources performance, won/lost deals, sales funnel analysis, contact/lead activity tracking, follow-up pending/overdue, campaign effectiveness, lead response time, customer acquisition cost, deals by territory/sales person, lead aging, opportunity win probability",
-    
-    "Buying": "purchase spend/supplier credits/outstanding payables, PO/receipt/supplier invoice counts, top suppliers by spend/lowest cost/most reliable, open POs/overdue supplier invoices, purchases today/this month/last quarter/YTD, supplier performance (on-time delivery, quality issues, average lead time), trends (purchase spend, supplier category comparisons)",
-    
-    "Projects": "project profitability/costs/margins, task completion rates, project timeline/delays, resource allocation/utilization, billable vs non-billable hours, project budget vs actual, milestone tracking, overdue tasks/projects, timesheet summaries, project-wise revenue/expenses, team performance by project, project status (on-track/at-risk/delayed)",
-    
-    "Manufacturing": "production order status/completion, work order quantities/delays, BOM costs/material consumption, production efficiency/yield rates, machine/workstation utilization, job card completion/pending, manufacturing costs vs planned, scrap/wastage analysis, production capacity utilization, WIP (work in progress) valuation, operations completion tracking, downtime analysis",
-    
-    "Stock": "stock valuation/total items/stock inflow-outflow, items below reorder/stock transfers/warehouse counts, fast-moving/slow-moving items/top warehouses by stock value, pending stock transfers/unfulfilled delivery notes, stock movement today/this month/last quarter/YTD, warehouse analysis (stock aging, negative stock, capacity utilization), trends (inventory turnover, stock consumption, seasonal demand)",
-    
-    "Support": "ticket counts by status/priority, resolution time/SLA compliance, open/overdue tickets, customer satisfaction scores, first response time, ticket aging/backlog, support agent performance, escalated tickets, ticket trends by category/type, average handling time, ticket volume by channel, recurring issues/top complaints",
-    
-    "Assets": "asset valuation/depreciation, asset counts by category/location, maintenance schedules/overdue maintenance, asset utilization rates, capitalized vs expensed items, asset disposal/write-offs, depreciation expense this period, asset register by department, insurance renewals due, warranty expiry tracking, asset acquisition costs, asset condition tracking",
-    
-    "HR": "payroll summaries/salary disbursements, employee counts by department/designation, attendance/leave tracking, leave balances/pending approvals, benefit allocations/deductions, performance reviews/appraisal cycles, hiring status/open positions, department-wise costs, overtime/shift patterns, resignation/termination tracking, employee onboarding status, training completion rates"
-}
+USER QUESTIONS: Casual, messy, real chat ("how much stock for XYZ?", "who's our best supplier lately?")
+Mix: simple lookups + complex multi-hop (≥4 must use 2+ tables OR 2+ conditions)
 
-    module_example = module_examples.get(module_name, "relevant business queries for this module")
-    prompt_template = """
-Generate ERPNext schema-retrieval training data for MODULE: {module}
+FORMAT:
+{{"qid": "{module_name}_NNN", "anchor": "casual question", "positives": ["[TABLE] tabX | desc: ...", "[FIELD] f | [TABLE] tabX | desc: ...", ...]}}
 
-OUTPUT FORMAT (STRICT):
-- JSONL only (one JSON object per line, no array wrapper, no extra text)
-- Format: {{"gid":"{module}","sentence1":"...","sentence2":"...","label":1.0}}
+POSITIVES = ALL tables + ALL fields needed:
+- Filters: item_code, status, warehouse, posting_date
+- Joins: parent field + foreign key both sides
+- Aggregates: grouping field + sum/count field
+- Child tables: MUST include parent table + parent field
 
-COUNT RULE:
-- EXACTLY 10 UNIQUE business questions (sentence1)
-- Multiple JSONL lines per question: ALL required positives (label=1.0) + up to 2 negatives (label=0.0)
-- Positives = ALL tables/fields needed for correct SQL (varies per question)
-- Total output lines will be dynamic and significantly > 10
+Each positive string:
+"[TABLE] tabX | desc: What it stores. Why needed for THIS query."
+"[FIELD] name | [TABLE] tabX | desc: this should be a very clear and helpful description about the field and its relevancy here which helps model modernbert to understand why we used that field here."
 
-QUESTION STYLE (CRITICAL):
-Reflect real ERPNext user queries. Common categories: totals (sales, revenue, purchase, tax, outstanding), counts (invoices, orders, customers, items), rankings (top/bottom customers/items/suppliers), pending/open/overdue documents, date-based (today, this month, last quarter, YTD), stock/warehouse analysis, payment status/collections, profitability/margin, supplier/customer performance, trends/comparisons over time, item performance (most sold, highest revenue, best margin, slow/fast moving, returns, stock aging, valuation), entity-specific (customer/supplier/item/warehouse by name), project costing/profitability, HR/payroll summaries, tax/compliance reports, cash flow/finance summaries, production/manufacturing status, customer support/SLA tracking, budget vs actual, multi-company consolidated reports, audit/control checks, logistics/shipping status, recurring revenue/subscriptions, discounts/promotion impact, approval/workflow status.
+EXAMPLES:
 
-Style: short-medium length, casual professional, natural business language, no technical/database terms, no placeholders ("a specific item"), sound like manager/accountant/warehouse head/HR officer/ops staff.
+Simple:
+{{
+  "qid": "S_01",
+  "anchor": "stock for item XYZ?",
+  "positives": [
+    "[TABLE] tabBin | desc: Contains current available stock quantity for each item in each warehouse. Used to answer real-time inventory balance and on-hand stock questions.",
+    "[FIELD] item_code | [TABLE] tabBin | desc: Identifies the specific product being queried. Filtered to match the item mentioned in the question such as 'XYZ'.",
+    "[FIELD] actual_qty | [TABLE] tabBin | desc: Represents the live quantity available in stock. This field directly answers how much stock is currently available.",
+    "[FIELD] warehouse | [TABLE] tabBin | desc: Indicates the storage location of the stock. Used when users want stock by location or total across warehouses."
+  ]
+}}
 
-For MODULE {module}, generate questions like: {module_example}
+Multi-hop:
+{{
+  "qid": "S_02",
+  "anchor": "top supplier this quarter?",
+  "positives": [
+    "[TABLE] tabPurchase Order | desc: Records purchase transactions made to suppliers. Used to calculate how much has been ordered or spent per supplier.",
+    "[FIELD] supplier | [TABLE] tabPurchase Order | desc: Links each purchase order to a specific supplier. Grouped to compute total purchases per supplier.",
+    "[FIELD] grand_total | [TABLE] tabPurchase Order | desc: Stores the monetary value of each purchase order. Summed to determine total spend and rank suppliers by volume.",
+    "[FIELD] transaction_date | [TABLE] tabPurchase Order | desc: Represents the date of the purchase order. Filtered to match the current quarter time range.",
+    "[TABLE] tabSupplier | desc: Master data table containing supplier details such as name and contact information. Joined to display readable supplier names.",
+    "[FIELD] name | [TABLE] tabSupplier | desc: Primary supplier identifier used for display and ranking output."
+  ]
+}}
 
-sentence2 FORMAT:
-- Table: "[TABLE] tabDoctype | desc: <2-3 sentences>"
-- Field: "[FIELD] fieldname | [TABLE] tabDoctype | desc: <2-3 sentences>"
-
-DESCRIPTION (2-3 sentences, BOTH positives/negatives):
-1) WHAT: business meaning in ERPNext
-2) WHY: needed/not needed for this question (SQL logic: filter/group/sum/join/date/status)
-For negatives: explain why it seems related but isn't (wrong stage/module/metric)
+Child table (must have parent):
+{{
+  "qid": "S_03",
+  "anchor": "items sold this month?",
+  "positives": [
+    "[TABLE] tabSales Invoice | desc: Stores sales transaction headers including invoice date and customer information. Used to filter sales by time period such as this month.",
+    "[FIELD] posting_date | [TABLE] tabSales Invoice | desc: Represents the invoice date. Filtered to restrict results to the current month.",
+    "[TABLE] tabSales Invoice Item | desc: Contains individual line items for each sales invoice. Used to retrieve the actual products sold.",
+    "[FIELD] parent | [TABLE] tabSales Invoice Item | desc: Links each item row to its parent sales invoice. Required to apply date filtering from the invoice header.",
+    "[FIELD] item_code | [TABLE] tabSales Invoice Item | desc: Identifies the product sold. Used to list or aggregate items sold in the selected period.",
+    "[FIELD] qty | [TABLE] tabSales Invoice Item | desc: Represents the quantity sold per item. Summed to calculate total units sold."
+  ]
+}}
 
 RULES:
-- Use Only the Real ERPNext Tables and field names
-- No duplicates in sentence2 across output
-- ALL required positives + max 2 negatives per question
+- Do NOT rely on DocType names in the anchor. Users rarely say “Sales Invoice / Issue / Purchase Order”. Use real business wording + synonyms
+- Include docstatus field when query implies filtering by document state
 
 Return ONLY JSONL.
-"""
-    written_lines = 0
-    new_unique_questions = 0
-    with open(output_file, "a", encoding="utf-8") as f:
-        while len(existing_q) < total_count:
-            prompt = prompt_template.format(module=module_name, module_example=module_example)
-            resp = client.chat.completions.create(
-                model="gpt-4",
-                messages=[
-                    {"role": "system", "content": "Output ONLY JSONL. No extra text."},
-                    {"role": "user", "content": prompt}
-                ],
-                temperature=0.3,
-                max_tokens=2000
-            )
-            text = (resp.choices[0].message.content or "").strip()
-            lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
-            for ln in lines:
-                try:
-                    obj = json.loads(ln)
-                except Exception:
-                    continue
-                q = (obj.get("sentence1") or "").strip()
-                s2 = (obj.get("sentence2") or "").strip()
-                label = float(obj.get("label") or 0)
-                if not q or not s2:
-                    continue
-                triplet = (q, s2, label)
-                if triplet in existing_triplets:
-                    continue
-                is_new_question = q not in existing_q
-                if is_new_question:
-                    if len(existing_q) >= total_count:
-                        continue
-                    existing_q.add(q)
-                    new_unique_questions += 1
-                f.write(json.dumps(obj, ensure_ascii=False) + "\n")
-                existing_triplets.add(triplet)
-                written_lines += 1
-                if len(existing_q) >= total_count:
-                    break
+""".strip()
+
+
+@frappe.whitelist(allow_guest=False)
+def generate_training_data(module_name: str, total_count: int):
+    client = _get_openai_client()
+    total_count = int(total_count)
+    num_reqs = math.ceil(total_count / 10)
+    file_name, file_content = get_file(f"{module_name}_test.jsonl")
+    data = [json.loads(line) for line in f if line.strip()]
+    question_list = [item["question"] for item in data]
+    prompt = _training_prompt(module_name, question_list)
+    system_msg = (
+        "You're creating training data for an ERPNext chatbot that helps users query business data. "
+        "Users ask questions casually like they're chatting with a coworker, not writing SQL."
+    )
+    seen = set()
+    out_lines = []
+    req_used = 0
+
+    for _ in range(num_reqs):
+        if len(out_lines) >= total_count:
+            break
+
+        req_used += 1
+        resp = client.chat.completions.create(
+            model="gpt-4",
+            messages=[{"role": "system", "content": system_msg}, {"role": "user", "content": prompt}],
+            temperature=0.3,
+            max_tokens=6000,
+        )
+
+        for ln in (resp.choices[0].message.content or "").splitlines():
+            ln = ln.strip()
+            if not ln:
+                continue
+            try:
+                obj = json.loads(ln)
+            except Exception:
+                continue
+
+            q = (obj.get("anchor") or "").strip()
+            pos = obj.get("positives")
+
+            if not q or not isinstance(pos, list) or not pos or q in seen:
+                continue
+
+            seen.add(q)
+            out_lines.append(json.dumps(obj, ensure_ascii=False))
+    file_name = f"{module_name}.jsonl"
+    new_content = "\n".join(out_lines)
+    existing_file = frappe.db.get_value("File", {
+        "file_name": file_name,
+        "folder": "Home/Training Data/Batch 2"
+    }, "name")
+    if existing_file:
+        file_doc = frappe.get_doc("File", existing_file)
+        old_content = file_doc.get_content() or ""
+        combined_content = (old_content.rstrip() + "\n" + new_content).strip()
+        file_doc.content = combined_content
+        file_doc.save(ignore_permissions=True)
+    else:
+        file_doc = frappe.get_doc({
+            "doctype": "File",
+            "file_name": file_name,
+            "is_private": 0,
+            "content": new_content,
+            "folder": "Home/Training Data/Batch 2"
+        }).insert(ignore_permissions=True)
+
+        file_doc.save(ignore_permissions=True)
+    msg = f"Created {len(out_lines)} lines across {req_used} request(s). Unique questions: {len(seen)}."
+    if len(out_lines) < total_count:
+        msg += f" ⚠️ Expected {total_count}, but only got {len(out_lines)} unique."
+
     return {
         "ok": True,
-        "file": output_file,
-        "unique_questions_total": len(existing_q),
-        "unique_questions_added_this_run": new_unique_questions,
-        "lines_written_this_run": written_lines
+        "file_url": file_doc.file_url,
+        "file_name": file_doc.name,
+        "requests_sent": req_used,
+        "lines_written": len(out_lines),
+        "unique_questions_written": len(seen),
+        "message": msg,
     }
+
+def create_folder_if_not_exists(folder_name: str):
+    """
+    Create folder if it doesn't exist
+    
+    Args:
+        folder_name: Folder name (e.g., "Training Data")
+    
+    Returns:
+        Folder name
+    """
+    # Check if folder exists
+    existing = frappe.db.exists("File", {
+        "file_name": folder_name,
+        "is_folder": 1,
+        "folder": "Home"
+    })
+    
+    if existing:
+        return existing
+    
+    # Create folder
+    folder_doc = frappe.get_doc({
+        "doctype": "File",
+        "file_name": folder_name,
+        "is_folder": 1,
+        "folder": "Home"
+    })
+    folder_doc.insert()
+    
+    return folder_doc.name
+
+@frappe.whitelist(allow_guest=False)
+def generate_response(user_query):
+    return "Hi"
+
+import os
+import json
+import math
+import frappe
+from pathlib import Path
+from anthropic import Anthropic
+
+def _get_claude_client():
+    settings = frappe.get_single("ChangAI Settings")
+
+    api_key = None
+    try:
+        api_key = settings.get_password("claude_api_key")
+    except Exception:
+        api_key = None
+
+    if not api_key:
+        api_key = os.getenv("ANTHROPIC_API_KEY")
+
+    if not api_key:
+        frappe.throw("Claude API key is not configured")
+
+    return Anthropic(api_key=api_key)
+
+
+# ---------------------------------------------------------
+# Validation prompt (generalized, non-memorized)
+# ---------------------------------------------------------
+def _validation_prompt(module_name: str, schema_context: str) -> str:
+    return f"""
+You are generating VALIDATION data for an ERP schema-retrieval model.
+
+PURPOSE:
+This data is used ONLY to test generalization.
+The questions must feel natural, real-world, and non-repetitive.
+Do NOT mimic training data patterns.
+
+OUTPUT FORMAT (STRICT):
+- JSONL only
+- One JSON object per line
+- Format:
+  {{"gid":"{module_name}","sentence1":"...","sentence2":"...","label":1.0}}
+
+QUESTION RULES:
+- Business users only (no technical words)
+- Short to medium length
+- Paraphrased, generalized intent
+- Avoid exact metrics or rigid phrasing
+- Think how a DIFFERENT user might ask the same thing
+
+SCHEMA RULES (STRICT):
+- Use ONLY tables and fields listed below
+- Do NOT invent anything
+- If a question cannot be answered using schema, skip it
+
+SCHEMA CONTEXT:
+{schema_context}
+
+sentence2 FORMAT:
+- Table:
+  "[TABLE] tabDoctype | desc: 2–3 sentences (WHAT + WHY)"
+- Field:
+  "[FIELD] fieldname | [TABLE] tabDoctype | desc: 2–3 sentences (WHAT + WHY)"
+
+DESCRIPTION RULE:
+- Explain relevance lightly
+- Do NOT sound instructional
+- For negatives: explain why it looks relevant but is not required
+
+FINAL RULES:
+- Do NOT repeat question styles
+- Do NOT mention training, validation, or schema
+- Return ONLY JSONL
+""".strip()
+
+
+# ---------------------------------------------------------
+# Validation file path
+# ---------------------------------------------------------
+def _validation_file_path(module_name: str) -> str:
+    filename = f"{(module_name or '').lower()}_validation_data.jsonl"
+    return safe_path_in_dir(_get_training_data_dir(), filename)
+
+
+# ---------------------------------------------------------
+# Main validation generator
+# ---------------------------------------------------------
+@frappe.whitelist()
+def generate_validation_data(module_name: str):
+    settings = frappe.get_single("ChangAI Settings")
+
+    total_records = int(settings.no_of_records or 0)
+    if total_records <= 0:
+        frappe.throw("no_of_records must be greater than 0")
+
+    validation_count = max(1, math.ceil(total_records * 0.2))
+
+    schema_context = build_schema_context_for_module(module_name)
+    if not schema_context:
+        return {
+            "ok": False,
+            "message": f"No schema context found for module '{module_name}'"
+        }
+
+    prompt = _validation_prompt(module_name, schema_context)
+
+    client = _get_claude_client()
+    output_file = _validation_file_path(module_name)
+
+    resp = client.messages.create(
+        model="claude-3-5-sonnet-20241022",
+        max_tokens=6000,
+        temperature=0.6,
+        messages=[
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ]
+    )
+
+    text = (resp.content[0].text or "").strip()
+    lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
+
+    written = 0
+    unique_questions = set()
+
+    with open(output_file, "a", encoding="utf-8") as f:
+        for ln in lines:
+            try:
+                obj = json.loads(ln)
+            except Exception:
+                continue
+
+            q = (obj.get("sentence1") or "").strip()
+            s2 = (obj.get("sentence2") or "").strip()
+
+            if not q or not s2:
+                continue
+
+            if q in unique_questions:
+                continue
+
+            f.write(json.dumps(obj, ensure_ascii=False) + "\n")
+            unique_questions.add(q)
+            written += 1
+
+            if written >= validation_count:
+                break
+
+    frappe.db.commit()
+
+    return {
+        "ok": True,
+        "module": module_name,
+        "validation_target": validation_count,
+        "lines_written": written,
+        "file": output_file
+    }
+class STEmbeddings(Embeddings):
+    def __init__(self, model_id_or_path: str):
+        self.model = SentenceTransformer(model_id_or_path)
+
+    def embed_documents(self, texts: List[str]) -> List[List[float]]:
+        return self.model.encode(texts, normalize_embeddings=True).tolist()
+
+    def embed_query(self, text: str) -> List[float]:
+        return self.model.encode([text], normalize_embeddings=True)[0].tolist()
+
+def ensure_faiss_folder(path: str):
+    if not os.path.isdir(path):
+        raise FileNotFoundError(f"FVS folder not found: {path}")
+    files = set(os.listdir(path))
+    if "index.faiss" not in files or "index.pkl" not in files:
+        raise FileNotFoundError(
+            f"FAISS folder missing index.faiss/index.pkl: {path} (found: {sorted(list(files))[:30]})"
+        )
+
+def to_pos_int(x, default: int = 20, name: str = "value") -> int:
+    try:
+        v = int(x)
+    except (TypeError, ValueError):
+        v = default
+    if v <= 0:
+        raise ValueError(f"{name} must be > 0 (got {v})")
+    return v
+
+def extract_table(doc) -> Optional[str]:
+    md = doc.metadata or {}
+    for key in ("table", "doctype", "doc_type", "name"):
+        if md.get(key):
+            return md.get(key)
+
+    txt = (doc.page_content or "").strip()
+    if txt.startswith("[TABLE] "):
+        # "[TABLE] tabSales Invoice | desc: ..."
+        after = txt[len("[TABLE] "):]
+        return after.split("|")[0].strip()
+    if txt.startswith("TABLE "):
+        parts = txt.split()
+        return parts[1].strip() if len(parts) > 1 else None
+    if txt.startswith("tab"):
+        return txt.split("|")[0].strip()
+
+    return None
+
+def topk_tables(vs: FAISS, q: str, k: int = 20) -> List[str]:
+    k = to_pos_int(k, default=20, name="topk")
+    hits = vs.similarity_search(q, k=k)
+    out = []
+    for h in hits:
+        t = extract_table(h)
+        if t:
+            out.append(t)
+    return out
+
+@frappe.whitelist(allow_guest=True)
+def test_model(
+    module_name:str,
+) -> Dict[str, Any]:
+    topk = 20
+    topk = to_pos_int(topk, default=20, name="topk")
+    questions_file_path= f"/files/{module_name}_test.jsonl"
+    model_path= "hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned"
+    file_doc = frappe.get_doc("File", {"file_url": questions_file_path})
+    abs_path = file_doc.get_full_path()
+    with open(abs_path, "r", encoding="utf-8") as f:
+        data = [json.loads(line) for line in f if line.strip()]
+    faiss_doc = frappe.get_doc("File", {"file_name": "index.faiss"})
+    fvs_abs_path = os.path.dirname(faiss_doc.get_full_path())
+    emb = STEmbeddings(model_path)
+    vs = FAISS.load_local(fvs_abs_path, emb, allow_dangerous_deserialization=True)
+    total = correct = skipped = 0
+    wrong = []
+
+    for row in data:
+        q = (row.get("question") or "").strip()
+        exp = (row.get("expected_top1") or "").strip()
+        if not q or not exp:
+            skipped += 1
+            continue
+        total += 1
+        top_tables = topk_tables(vs, q, k=topk)
+        pred_top1 = top_tables[0] if top_tables else None
+        is_correct = exp in top_tables[:topk]
+        if is_correct:
+            correct += 1
+        else:
+            wrong.append({
+                "question": q,
+                "expected_top1": exp,
+                "pred_top1": pred_top1,
+                "top_tables": top_tables[:topk],
+            })
+
+    file_name = f"{module_name}_test.jsonl"
+    wrong_content = "\n".join(json.dumps(row) for row in wrong)
+
+    existing = frappe.db.get_value("File", {
+        "file_name": file_name,
+        "folder": "Home/Test Results"
+    }, "name")
+
+    if existing:
+        wrong_file_doc = frappe.get_doc("File", existing)
+        wrong_file_doc.content = wrong_content
+        wrong_file_doc.save(ignore_permissions=True)
+    else:
+        wrong_file_doc = frappe.get_doc({
+            "doctype": "File",
+            "file_name": file_name,
+            "is_private": 0,
+            "content": wrong_content,
+            "folder": "Home/Test Results"
+        }).insert(ignore_permissions=True)
+
+    return {
+        "total_evaluated": total,
+        "correct": correct,
+        "wrong": len(wrong),
+        "skipped_missing_fields": skipped,
+        "accuracy": round((correct / total) if total else 0.0, 4),
+        "wrong_predictions": {
+            "count": len(wrong),
+            "file_name": wrong_file_doc.name,
+            "file_url": wrong_file_doc.file_url,
+        },
+    }
+
+def load_json_from_frappe_file(file_path: str) -> dict:
+    """
+    Load JSON data from Frappe File DocType
+    
+    Args:
+        file_path: File path like "Validation Data/erpnext_test_questions_all_240.json"
+                   or just filename "erpnext_test_questions_all_240.json"
+    
+    Returns:
+        Parsed JSON data
+    """
+    # Extract filename from path
+    if "/" in file_path:
+        filename = file_path.split("/")[-1]
+        folder_hint = file_path.rsplit("/", 1)[0]
+    else:
+        filename = file_path
+        folder_hint = None
+    
+    # Try to find the file
+    filters = {
+        "file_name": filename,
+        "is_folder": 0
+    }
+    
+    # Add folder filter if provided
+    if folder_hint:
+        filters["folder"] = ["like", f"%{folder_hint}%"]
+    
+    file_name = frappe.db.exists("File", filters)
+    
+    if not file_name:
+        # Try without folder filter
+        file_name = frappe.db.exists("File", {
+            "file_name": filename,
+            "is_folder": 0
+        })
+    
+    if not file_name:
+        frappe.throw(f"File not found: {file_path}")
+    
+    # Load file
+    file_doc = frappe.get_doc("File", file_name)
+    content = file_doc.get_content()
+    
+    # Parse JSON
+    try:
+        data = json.loads(content.decode('utf-8'))
+        return data
+    except Exception as e:
+        frappe.throw(f"Failed to parse JSON from {filename}: {str(e)}")

@@ -343,13 +343,11 @@ async function generateBotResponse(userMsg, thinkingMsg, warmingTimeout) {
 
 frappe.ui.form.on("ChangAI Settings", {
   create_train_data(frm) {
-    console.log("Hey im being Called..");
-
     frappe.call({
-      method: "changai.changai.api.v2.auto_gen_api.generate_training_data_1",
+      method: "changai.changai.api.v2.auto_gen_api.generate_training_data",
       args: {
         module_name: frm.doc.choose_module,
-        total_count:5
+        total_count:10
       },
       freeze: true,
       freeze_message: "Creating Train Data...",
@@ -378,5 +376,21 @@ frappe.ui.form.on("ChangAI Settings", {
       }
 });
 
-  }
+  },
+  
+test_model(frm) {
+  frappe.call({
+    method: "changai.changai.api.v2.auto_gen_api.test_model",
+    args: {
+      module_name:frm.doc.choose_module,
+      topk: 20
+    },
+    freeze: true,
+    freeze_message: "Validating Model...",
+    callback(r) {
+      console.log(r.message);
+    }
+  });
+}
+
 });

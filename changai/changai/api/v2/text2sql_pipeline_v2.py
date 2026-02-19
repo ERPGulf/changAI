@@ -1210,8 +1210,8 @@ def execute_query(sql: str, orm: str) -> Any:
     """
     try:
         if sql:
-            if not str(sql).lower().strip().startswith("select"):
-                frappe.throw(_("Only SELECT queries are allowed."))
+            # if not str(sql).lower().strip().startswith("select"):
+            #     frappe.throw(_("Only SELECT queries are allowed."))
             return frappe.db.sql(sql, as_dict=True)
         return []
     except Exception as e:
@@ -1684,31 +1684,27 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
     top_tables=final.get("top_tables") or ""
     top_fields=final.get("top_fields") or ""
     err = final.get("error")
-    formatted_result = format_data(formatted_q,result)
-    bot_answer = formatted_result
+    formatted_result = format_data(formatted_q,sql_result)
     if not err:
         try:
             save_turn_2(session_id=chat_id,user_text=formatted_q,bot_text=formatted_result)
-            save_logs(user_question=user_question,formatted_q=formatted_q,context=context,sql=sql,val=val,result=result,formatted_result=formatted_result)
+            save_logs(user_question=user_question,formatted_q=formatted_q,context=context,sql=sql,val=val,result=sql_result,formatted_result=formatted_result)
         except Exception as e:
             return e
     return {
         "Question":user_question,
-        # "Reformatting_Prompt":formatting_prompt,
-        # "Formatted_Question":formatted_q,
-        "Context": context,
-        "SQLPrompt":sql_prompt,
+        # "SQLPrompt":sql_prompt,
         "top_tables":top_tables,
         "top_fields":top_fields,
         "contains_values":contains_values,
         "SQL": sql,
         "ORM":orm,
-        "Validation": val,
-        "Tries": tries,
-        "Error": err,
+        # "Validation": val,
+        # "Tries": tries,
+        # "Error": err,
         # "Result": result,
         "EntityDebug": entity_debug,
-        "Bot": bot_answer
+        "Bot": formatted_result
     }
 
 
