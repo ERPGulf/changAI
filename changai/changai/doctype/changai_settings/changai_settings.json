@@ -330,7 +330,7 @@
    "fieldname": "choose_file_size",
    "fieldtype": "Select",
    "label": "Choose Train Records Count",
-   "options": "100\n200\n300\n400\n500+"
+   "options": "100\n200\n300\n400\n500"
   },
   {
    "fieldname": "create_train_data",
@@ -374,7 +374,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-02-18 09:32:55.949169",
+ "modified": "2026-02-20 15:54:09.457126",
  "modified_by": "Administrator",
  "module": "Changai",
  "name": "ChangAI Settings",

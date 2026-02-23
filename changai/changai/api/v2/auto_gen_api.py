@@ -5,8 +5,6 @@ import gc
 import json
 import os
 import time
-import json
-import os
 from typing import List, Dict, Any, Optional
 from sentence_transformers import SentenceTransformer
 from langchain_community.vectorstores import FAISS
@@ -17,6 +15,8 @@ from frappe import _
 from frappe.utils import now_datetime, add_to_date
 from anthropic import Anthropic
 import openai
+import math
+from pathlib import Path
 from frappe.utils.file_manager import get_file
 from changai.changai.api.v2.text2sql_pipeline_v2 import call_gemini
 
@@ -119,7 +119,16 @@ def _strip_tab(t: str) -> str:
 
 @frappe.whitelist(allow_guest=False)
 def sync_master_data_smart() -> Dict[str, Any]:
-    payload = _load_yaml(META_SCHEMA_YAML)
+    file_name = "master_data.yaml"
+    existing = frappe.db.get_value("File", {
+        "file_name": file_name,
+        "folder": "Home/RAG Sources"
+    }, "name")
+    if existing:
+        file_doc = frappe.get_doc("File", existing)
+        payload = yaml.safe_load(file_doc.get_content()) or {}
+    else:
+        payload = {}
     meta = payload.get("_meta") or {}
     data = payload.get("data") or []
     if not isinstance(meta, dict):
@@ -133,29 +142,23 @@ def sync_master_data_smart() -> Dict[str, Any]:
             dt = row.get("entity_type")
             eid = row.get("entity_id")
             if dt and eid:
-                existing_keys.add((dt, eid))
-
+                existing_keys.add((dt, eid)) 
     modules = ["Customer", "Item", "Currency", "Supplier"]
-
     base_filters: Dict[str, Any] = {}
     if last_sync:
         base_filters = {"creation": [">", last_sync]}
-
     added_total = 0
     added_by_module: Dict[str, int] = {}
     fetched_by_module: Dict[str, int] = {}
-
     for mod in modules:
         entity_type = f"tab{mod}"
         records = frappe.get_all(mod, filters=base_filters, fields=["name"])
         fetched_by_module[mod] = len(records)
-
         added_count = 0
         for rec in records:
             key = (entity_type, rec.name)
             if key in existing_keys:
                 continue
-
             data.append({
                 "entity_type": entity_type,
                 "entity_id": rec.name,
@@ -166,17 +169,25 @@ def sync_master_data_smart() -> Dict[str, Any]:
             added_total += 1
 
         added_by_module[mod] = added_count
-
     meta["last_sync"] = str(now_datetime())
     payload_out = {"_meta": meta, "data": data}
-    _save_yaml(META_SCHEMA_YAML, payload_out)
-
+    yaml_content = yaml.dump(payload_out, allow_unicode=True, sort_keys=False).encode("utf-8")
+    if existing:
+        file_doc.content = yaml_content
+        file_doc.save(ignore_permissions=True)
+    else:
+        file_doc = frappe.get_doc({
+            "doctype": "File",
+            "file_name": file_name,
+            "is_private": 0,
+            "content": yaml_content,
+            "folder": "Home/RAG Sources"
+        }).insert(ignore_permissions=True)
     msg = (
         _("Sync complete ✅ Added {0} new records.").format(added_total)
         if added_total
         else _("Sync complete ✅ No new records to add.")
     )
-
     return {
         "ok": True,
         "message": msg,
@@ -185,8 +196,8 @@ def sync_master_data_smart() -> Dict[str, Any]:
         "fetched_by_module": fetched_by_module,
         "last_sync_used": last_sync or "FIRST_RUN(full_fetch)",
         "new_last_sync": meta["last_sync"],
+        "file_url": file_doc.file_url,
     }
-
 
 @frappe.whitelist(allow_guest=False)
 def get_doctypes_changed_since(last_sync: Optional[str]) -> List[str]:
@@ -210,30 +221,41 @@ def get_doctypes_changed_since(last_sync: Optional[str]) -> List[str]:
 
 @frappe.whitelist(allow_guest=False)
 def sync_tables_and_schema_smart() -> Dict[str, Any]:
-    payload = _load_yaml(SCHEMA_YAML)
+    schema_file_name = "schema.yaml"
+    tables_file_name = "tables.json"
+    schema_existing = frappe.db.get_value("File", {
+        "file_name": schema_file_name,
+        "folder": "Home/RAG Sources"
+    }, "name")
+    if schema_existing:
+        schema_file_doc = frappe.get_doc("File", schema_existing)
+        payload = yaml.safe_load(schema_file_doc.get_content()) or {}
+    else:
+        payload = {}
     meta = payload.get("_meta") or {}
     tables_blocks = payload.get("tables") or []
     if not isinstance(tables_blocks, list):
         tables_blocks = []
-
+    tables_existing = frappe.db.get_value("File", {
+        "file_name": tables_file_name,
+        "folder": "Home/RAG Sources"
+    }, "name")
+    if tables_existing:
+        tables_file_doc = frappe.get_doc("File", tables_existing)
+        existing_tables = json.loads(tables_file_doc.get_content() or "[]")
+    else:
+        existing_tables=[]
     last_sync_raw = meta.get("last_doctype_sync")
     changed_doctypes = get_doctypes_changed_since(last_sync_raw)
-
     if not changed_doctypes:
         return {"ok": True, "message": _("No changes detected")}
-
     changed_tables = sorted({_tab(dt) for dt in changed_doctypes})
-
-    existing_tables = _load_json_list(TABLES_JSON)
     merged_tables = sorted(set(existing_tables) | set(changed_tables))
-    _save_json_list(TABLES_JSON, merged_tables)
-
     by_table = {
         b.get("table"): b
         for b in tables_blocks
         if isinstance(b, dict) and b.get("table")
     }
-
     for table in changed_tables:
         dt = _strip_tab(table)
         if not frappe.db.exists("DocType", dt):
@@ -241,62 +263,8 @@ def sync_tables_and_schema_smart() -> Dict[str, Any]:
 
         frappe.clear_cache(doctype=dt)
         meta_dt = frappe.get_meta(dt)
-
-        current_fields: List[Dict[str, Any]] = [{"name": "name", "description": ""}]
-        for df in meta_dt.fields:
-            if not df.fieldname:
-                continue
-            if (df.fieldtype or "") in IGNORED_FIELDTYPES:
-                continue
-            if df.fieldname == "name":
-                continue
-            current_fields.append(_field_dict(df))
-
-        current_set = {f["name"] for f in current_fields}
-        block = by_table.get(table)
-
-        if not block:
-            block = {
-                "table": table,
-                "description": (meta_dt.description or "").strip(),
-                "fields": current_fields,
-            }
-            tables_blocks.append(block)
-        else:
-            existing_fields = block.get("fields") or []
-            filtered_existing = [f for f in existing_fields if isinstance(f, dict) and f.get("name") in current_set]
-
-            existing_names = {f.get("name") for f in filtered_existing}
-            for f in current_fields:
-                if f["name"] not in existing_names:
-                    filtered_existing.append(f)
-            block["fields"] = sorted(filtered_existing, key=lambda x: x.get("name") != "name")
-        frappe.local.meta_cache = {}
-        if len(changed_tables) > 10:
-            gc.collect()
-
-    meta["last_doctype_sync"] = str(now_datetime())
-    _save_yaml(SCHEMA_YAML, {"_meta": meta, "tables": tables_blocks})
-
-    return {"ok": True, "message": _("Synced {0} tables").format(len(changed_tables))}
-
-
-def _get_openai_client():
-    settings = frappe.get_single("ChangAI Settings")
-    api_key = None
-    try:
-        api_key = settings.get_password("openai_api_key")
-    except Exception:
-        api_key = None
-
-    if not api_key:
-        api_key = os.getenv("OPENAI_API_KEY")
-
-    if not api_key:
-        frappe.throw(_("OpenAI API key is not set in ChangAI Settings"))
-
-    return openai.OpenAI(api_key=api_key)
-
+    return "Hi"
+    
 
 def _get_claude_client() -> Optional[Anthropic]:
     settings = frappe.get_single("ChangAI Settings")
@@ -622,215 +590,6 @@ def build_schema_context_for_module(module_name: str) -> str:
 
     return "\n".join(lines)
 
-def _training_prompt(module_name: str,failed_questions:list) -> str:
-    return f"""
-Generate 10 JSONL for ERPNext module: {module_name}
-
-IMPORTANT FOCUS:
-The retrieval model is currently failing on certain types of questions.
-You MUST generate questions similar in intent, structure, wording style,
-and filtering patterns to the FAILED_QUESTIONS listed below.
-
-FAILED_QUESTIONS (model predicted wrong table for these):
-{json.dumps(failed_questions, ensure_ascii=False, indent=2)}
-
-INSTRUCTIONS FOR FOCUS:
-- At least 6 out of 10 questions MUST follow the same intent pattern
-  as the FAILED_QUESTIONS.
-- Keep similar business meaning but vary wording naturally.
-- Include messy/chat style variations.
-- Include time filters / grouping / ranking if relevant.
-- DO NOT mention table names in the anchor.
-
-USER QUESTIONS: Casual, messy, real chat ("how much stock for XYZ?", "who's our best supplier lately?")
-Mix: simple lookups + complex multi-hop (≥4 must use 2+ tables OR 2+ conditions)
-
-FORMAT:
-{{"qid": "{module_name}_NNN", "anchor": "casual question", "positives": ["[TABLE] tabX | desc: ...", "[FIELD] f | [TABLE] tabX | desc: ...", ...]}}
-
-POSITIVES = ALL tables + ALL fields needed:
-- Filters: item_code, status, warehouse, posting_date
-- Joins: parent field + foreign key both sides
-- Aggregates: grouping field + sum/count field
-- Child tables: MUST include parent table + parent field
-
-Each positive string:
-"[TABLE] tabX | desc: What it stores. Why needed for THIS query."
-"[FIELD] name | [TABLE] tabX | desc: this should be a very clear and helpful description about the field and its relevancy here which helps model modernbert to understand why we used that field here."
-
-EXAMPLES:
-
-Simple:
-{{
-  "qid": "S_01",
-  "anchor": "stock for item XYZ?",
-  "positives": [
-    "[TABLE] tabBin | desc: Contains current available stock quantity for each item in each warehouse. Used to answer real-time inventory balance and on-hand stock questions.",
-    "[FIELD] item_code | [TABLE] tabBin | desc: Identifies the specific product being queried. Filtered to match the item mentioned in the question such as 'XYZ'.",
-    "[FIELD] actual_qty | [TABLE] tabBin | desc: Represents the live quantity available in stock. This field directly answers how much stock is currently available.",
-    "[FIELD] warehouse | [TABLE] tabBin | desc: Indicates the storage location of the stock. Used when users want stock by location or total across warehouses."
-  ]
-}}
-
-Multi-hop:
-{{
-  "qid": "S_02",
-  "anchor": "top supplier this quarter?",
-  "positives": [
-    "[TABLE] tabPurchase Order | desc: Records purchase transactions made to suppliers. Used to calculate how much has been ordered or spent per supplier.",
-    "[FIELD] supplier | [TABLE] tabPurchase Order | desc: Links each purchase order to a specific supplier. Grouped to compute total purchases per supplier.",
-    "[FIELD] grand_total | [TABLE] tabPurchase Order | desc: Stores the monetary value of each purchase order. Summed to determine total spend and rank suppliers by volume.",
-    "[FIELD] transaction_date | [TABLE] tabPurchase Order | desc: Represents the date of the purchase order. Filtered to match the current quarter time range.",
-    "[TABLE] tabSupplier | desc: Master data table containing supplier details such as name and contact information. Joined to display readable supplier names.",
-    "[FIELD] name | [TABLE] tabSupplier | desc: Primary supplier identifier used for display and ranking output."
-  ]
-}}
-
-Child table (must have parent):
-{{
-  "qid": "S_03",
-  "anchor": "items sold this month?",
-  "positives": [
-    "[TABLE] tabSales Invoice | desc: Stores sales transaction headers including invoice date and customer information. Used to filter sales by time period such as this month.",
-    "[FIELD] posting_date | [TABLE] tabSales Invoice | desc: Represents the invoice date. Filtered to restrict results to the current month.",
-    "[TABLE] tabSales Invoice Item | desc: Contains individual line items for each sales invoice. Used to retrieve the actual products sold.",
-    "[FIELD] parent | [TABLE] tabSales Invoice Item | desc: Links each item row to its parent sales invoice. Required to apply date filtering from the invoice header.",
-    "[FIELD] item_code | [TABLE] tabSales Invoice Item | desc: Identifies the product sold. Used to list or aggregate items sold in the selected period.",
-    "[FIELD] qty | [TABLE] tabSales Invoice Item | desc: Represents the quantity sold per item. Summed to calculate total units sold."
-  ]
-}}
-
-RULES:
-- Do NOT rely on DocType names in the anchor. Users rarely say “Sales Invoice / Issue / Purchase Order”. Use real business wording + synonyms
-- Include docstatus field when query implies filtering by document state
-
-Return ONLY JSONL.
-""".strip()
-
-
-@frappe.whitelist(allow_guest=False)
-def generate_training_data(module_name: str, total_count: int):
-    client = _get_openai_client()
-    total_count = int(total_count)
-    num_reqs = math.ceil(total_count / 10)
-    file_name, file_content = get_file(f"{module_name}_test.jsonl")
-    data = [json.loads(line) for line in f if line.strip()]
-    question_list = [item["question"] for item in data]
-    prompt = _training_prompt(module_name, question_list)
-    system_msg = (
-        "You're creating training data for an ERPNext chatbot that helps users query business data. "
-        "Users ask questions casually like they're chatting with a coworker, not writing SQL."
-    )
-    seen = set()
-    out_lines = []
-    req_used = 0
-
-    for _ in range(num_reqs):
-        if len(out_lines) >= total_count:
-            break
-
-        req_used += 1
-        resp = client.chat.completions.create(
-            model="gpt-4",
-            messages=[{"role": "system", "content": system_msg}, {"role": "user", "content": prompt}],
-            temperature=0.3,
-            max_tokens=6000,
-        )
-
-        for ln in (resp.choices[0].message.content or "").splitlines():
-            ln = ln.strip()
-            if not ln:
-                continue
-            try:
-                obj = json.loads(ln)
-            except Exception:
-                continue
-
-            q = (obj.get("anchor") or "").strip()
-            pos = obj.get("positives")
-
-            if not q or not isinstance(pos, list) or not pos or q in seen:
-                continue
-
-            seen.add(q)
-            out_lines.append(json.dumps(obj, ensure_ascii=False))
-    file_name = f"{module_name}.jsonl"
-    new_content = "\n".join(out_lines)
-    existing_file = frappe.db.get_value("File", {
-        "file_name": file_name,
-        "folder": "Home/Training Data/Batch 2"
-    }, "name")
-    if existing_file:
-        file_doc = frappe.get_doc("File", existing_file)
-        old_content = file_doc.get_content() or ""
-        combined_content = (old_content.rstrip() + "\n" + new_content).strip()
-        file_doc.content = combined_content
-        file_doc.save(ignore_permissions=True)
-    else:
-        file_doc = frappe.get_doc({
-            "doctype": "File",
-            "file_name": file_name,
-            "is_private": 0,
-            "content": new_content,
-            "folder": "Home/Training Data/Batch 2"
-        }).insert(ignore_permissions=True)
-
-        file_doc.save(ignore_permissions=True)
-    msg = f"Created {len(out_lines)} lines across {req_used} request(s). Unique questions: {len(seen)}."
-    if len(out_lines) < total_count:
-        msg += f" ⚠️ Expected {total_count}, but only got {len(out_lines)} unique."
-
-    return {
-        "ok": True,
-        "file_url": file_doc.file_url,
-        "file_name": file_doc.name,
-        "requests_sent": req_used,
-        "lines_written": len(out_lines),
-        "unique_questions_written": len(seen),
-        "message": msg,
-    }
-
-def create_folder_if_not_exists(folder_name: str):
-    """
-    Create folder if it doesn't exist
-    
-    Args:
-        folder_name: Folder name (e.g., "Training Data")
-    
-    Returns:
-        Folder name
-    """
-    # Check if folder exists
-    existing = frappe.db.exists("File", {
-        "file_name": folder_name,
-        "is_folder": 1,
-        "folder": "Home"
-    })
-    
-    if existing:
-        return existing
-    
-    # Create folder
-    folder_doc = frappe.get_doc({
-        "doctype": "File",
-        "file_name": folder_name,
-        "is_folder": 1,
-        "folder": "Home"
-    })
-    folder_doc.insert()
-    
-    return folder_doc.name
-
-@frappe.whitelist(allow_guest=False)
-def generate_response(user_query):
-    return "Hi"
-
-import os
-import json
-import math
-import frappe
-from pathlib import Path
-from anthropic import Anthropic
 
 def _get_claude_client():
     settings = frappe.get_single("ChangAI Settings")
@@ -984,24 +743,7 @@ def generate_validation_data(module_name: str):
         "lines_written": written,
         "file": output_file
     }
-class STEmbeddings(Embeddings):
-    def __init__(self, model_id_or_path: str):
-        self.model = SentenceTransformer(model_id_or_path)
 
-    def embed_documents(self, texts: List[str]) -> List[List[float]]:
-        return self.model.encode(texts, normalize_embeddings=True).tolist()
-
-    def embed_query(self, text: str) -> List[float]:
-        return self.model.encode([text], normalize_embeddings=True)[0].tolist()
-
-def ensure_faiss_folder(path: str):
-    if not os.path.isdir(path):
-        raise FileNotFoundError(f"FVS folder not found: {path}")
-    files = set(os.listdir(path))
-    if "index.faiss" not in files or "index.pkl" not in files:
-        raise FileNotFoundError(
-            f"FAISS folder missing index.faiss/index.pkl: {path} (found: {sorted(list(files))[:30]})"
-        )
 
 def to_pos_int(x, default: int = 20, name: str = "value") -> int:
     try:
@@ -1059,7 +801,6 @@ def test_model(
     vs = FAISS.load_local(fvs_abs_path, emb, allow_dangerous_deserialization=True)
     total = correct = skipped = 0
     wrong = []
-
     for row in data:
         q = (row.get("question") or "").strip()
         exp = (row.get("expected_top1") or "").strip()
@@ -1079,21 +820,15 @@ def test_model(
                 "pred_top1": pred_top1,
                 "top_tables": top_tables[:topk],
             })
-
     file_name = f"{module_name}_test.jsonl"
     wrong_content = "\n".join(json.dumps(row) for row in wrong)
-
     existing = frappe.db.get_value("File", {
-        "file_name": file_name,
-        "folder": "Home/Test Results"
-    }, "name")
-
+    "file_name": ("like", f"{module_name}_test%.jsonl"),
+    "folder": "Home/Test Results"
+}, "name")
     if existing:
-        wrong_file_doc = frappe.get_doc("File", existing)
-        wrong_file_doc.content = wrong_content
-        wrong_file_doc.save(ignore_permissions=True)
-    else:
-        wrong_file_doc = frappe.get_doc({
+        frappe.delete_doc("File", existing, ignore_permissions=True)
+    wrong_file_doc = frappe.get_doc({
             "doctype": "File",
             "file_name": file_name,
             "is_private": 0,
@@ -1113,55 +848,3 @@ def test_model(
             "file_url": wrong_file_doc.file_url,
         },
     }
-
-def load_json_from_frappe_file(file_path: str) -> dict:
-    """
-    Load JSON data from Frappe File DocType
-    
-    Args:
-        file_path: File path like "Validation Data/erpnext_test_questions_all_240.json"
-                   or just filename "erpnext_test_questions_all_240.json"
-    
-    Returns:
-        Parsed JSON data
-    """
-    # Extract filename from path
-    if "/" in file_path:
-        filename = file_path.split("/")[-1]
-        folder_hint = file_path.rsplit("/", 1)[0]
-    else:
-        filename = file_path
-        folder_hint = None
-    
-    # Try to find the file
-    filters = {
-        "file_name": filename,
-        "is_folder": 0
-    }
-    
-    # Add folder filter if provided
-    if folder_hint:
-        filters["folder"] = ["like", f"%{folder_hint}%"]
-    
-    file_name = frappe.db.exists("File", filters)
-    
-    if not file_name:
-        # Try without folder filter
-        file_name = frappe.db.exists("File", {
-            "file_name": filename,
-            "is_folder": 0
-        })
-    
-    if not file_name:
-        frappe.throw(f"File not found: {file_path}")
-    
-    # Load file
-    file_doc = frappe.get_doc("File", file_name)
-    content = file_doc.get_content()
-    
-    # Parse JSON
-    try:
-        data = json.loads(content.decode('utf-8'))
-        return data
-    except Exception as e:
-        frappe.throw(f"Failed to parse JSON from {filename}: {str(e)}")
