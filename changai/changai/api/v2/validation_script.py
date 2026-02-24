@@ -3,11 +3,9 @@ import json
 import re
 import os
 
-# Cache
 _table_cache = {}
 _field_cache = {}
 
-# System fields valid on ALL Frappe doctypes
 SYSTEM_FIELDS = {
     "name", "owner", "creation", "modified", "modified_by",
     "docstatus", "idx", "doctype", "parent", "parenttype",
@@ -15,21 +13,17 @@ SYSTEM_FIELDS = {
 }
 
 def parse_positive(positive):
-    """Handles spaces in table names: tabSales Invoice, tabPurchase Order etc."""
     if positive.startswith("[TABLE]"):
         match = re.match(r'\[TABLE\]\s+([\w\s]+?)(?:\s*\||\s*$)', positive)
         if match:
             return {"type": "table", "table": match.group(1).strip(), "field": None}
-
     elif positive.startswith("[FIELD]"):
         match = re.match(r'\[FIELD\]\s+(\w+)\s+\|\s+\[TABLE\]\s+([\w\s]+?)(?:\s*\||\s*$)', positive)
         if match:
             return {"type": "field", "field": match.group(1).strip(), "table": match.group(2).strip()}
-
     return None
 
 def tab_to_doctype(table_name):
-    """tabSales Invoice → Sales Invoice"""
     if table_name.startswith("tab"):
         return table_name[3:]
     return table_name
@@ -40,10 +34,8 @@ def validate_table(doctype):
     return _table_cache[doctype]
 
 def validate_field(doctype, fieldname):
-    # Always valid system fields
     if fieldname in SYSTEM_FIELDS:
         return True
-
     cache_key = f"{doctype}.{fieldname}"
     if cache_key not in _field_cache:
         try:
@@ -56,7 +48,6 @@ def validate_field(doctype, fieldname):
 
 def is_positive_valid(positive):
     parsed = parse_positive(positive)
-
     if not parsed:
         return False, "Could not parse positive format"
 
@@ -78,12 +69,13 @@ def get_file_path(file_url):
         return frappe.get_site_path("public", "files", file_url.split("/files/")[-1])
     return None
 
+@frappe.whitelist(allow_guest=True)
 def run_validation():
     TRAINING_FOLDER = "Home/Training Data/Batch 2"
 
     files = frappe.get_all("File",
         filters={
-            "folder"   : TRAINING_FOLDER,
+            "folder": TRAINING_FOLDER,
             "file_name": ["like", "%.jsonl"]
         },
         fields=["file_name", "file_url"]
@@ -95,9 +87,10 @@ def run_validation():
 
     frappe.msgprint(f"📂 Found {len(files)} file(s) — starting validation & cleaning...")
 
-    total_records = 0
-    total_removed = 0
-    total_kept    = 0
+    total_records        = 0
+    total_removed_records = 0
+    total_removed_positives = 0
+    total_kept           = 0
 
     for file in files:
         file_path = get_file_path(file["file_url"])
@@ -115,9 +108,9 @@ def run_validation():
             frappe.msgprint(f"❌ Could not read {file['file_name']}: {str(e)}")
             continue
 
-        valid_records   = []
-        removed_records = []
-        file_total      = 0
+        valid_records    = []
+        removed_records  = []
+        file_total       = 0
 
         for line in lines:
             line = line.strip()
@@ -131,31 +124,45 @@ def run_validation():
             file_total    += 1
             total_records += 1
 
-            qid       = record.get("qid", "unknown")
-            positives = record.get("positives", [])
+            # ── 1. Check positives is actually a list ──────────────────────
+            positives = record.get("positives")
+            if not isinstance(positives, list):
+                removed_records.append({
+                    "qid"   : record.get("qid", "unknown"),
+                    "anchor": record.get("anchor", ""),
+                    "reason": "positives is not a list"
+                })
+                total_removed_records += 1
+                continue
 
-            record_valid    = True
-            invalid_reasons = []
+            # ── 2. Filter out invalid positives, keep valid ones ───────────
+            valid_positives   = []
+            invalid_positives = []
 
             for positive in positives:
                 is_valid, reason = is_positive_valid(positive)
-                if not is_valid:
-                    record_valid = False
-                    invalid_reasons.append(reason)
-                    break  # one invalid = remove whole record
+                if is_valid:
+                    valid_positives.append(positive)
+                else:
+                    invalid_positives.append((positive, reason))
+                    total_removed_positives += 1
 
-            if record_valid:
-                valid_records.append(record)
-                total_kept += 1
-            else:
+            # ── 3. Drop whole record only if NO valid positives remain ──────
+            if not valid_positives:
                 removed_records.append({
-                    "qid"    : qid,
-                    "anchor" : record.get("anchor", ""),
-                    "reasons": invalid_reasons
+                    "qid"   : record.get("qid", "unknown"),
+                    "anchor": record.get("anchor", ""),
+                    "reason": f"All positives were invalid: {[r for _, r in invalid_positives]}"
                 })
-                total_removed += 1
+                total_removed_records += 1
+                continue
 
-        # Overwrite original file
+            # ── 4. Keep record with only the valid positives ───────────────
+            record["positives"] = valid_positives
+            valid_records.append(record)
+            total_kept += 1
+
+        # Overwrite original file with cleaned records
         try:
             with open(file_path, "w", encoding="utf-8") as f:
                 for record in valid_records:
@@ -163,12 +170,13 @@ def run_validation():
 
             frappe.msgprint(
                 f"✅ {file['file_name']}\n"
-                f"   Total: {file_total} | Kept: {len(valid_records)} | Removed: {len(removed_records)}"
+                f"   Total: {file_total} | Kept: {len(valid_records)} | "
+                f"Removed records: {len(removed_records)} | Removed positives: {total_removed_positives}"
             )
 
             if removed_records:
                 preview = "\n".join([
-                    f"  ❌ [{r['qid']}] → {r['reasons'][0]}"
+                    f"  ❌ [{r['qid']}] → {r['reason']}"
                     for r in removed_records[:5]
                 ])
                 if len(removed_records) > 5:
@@ -177,3 +185,11 @@ def run_validation():
 
         except Exception as e:
             frappe.msgprint(f"❌ Could not overwrite {file['file_name']}: {str(e)}")
+
+    frappe.msgprint(
+        f"🏁 Done!\n"
+        f"   Total records: {total_records}\n"
+        f"   Records kept: {total_kept}\n"
+        f"   Records fully removed: {total_removed_records}\n"
+        f"   Individual positives removed: {total_removed_positives}"
+    )

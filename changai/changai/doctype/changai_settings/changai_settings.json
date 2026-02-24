@@ -49,6 +49,8 @@
   "entity_retriever",
   "openai_api_key",
   "claude_api_key",
+  "ngrok_auth_tok",
+  "colab_auth_token",
   "support_tab",
   "support_section",
   "support_url",
@@ -58,9 +60,6 @@
   "choose_module",
   "choose_file_size",
   "create_train_data",
-  "train_model",
-  "create_validation_data",
-  "test_model",
   "master_table_and_schema_updation_section",
   "update_masterdata_file",
   "update_schema_file"
@@ -327,20 +326,15 @@
    "options": "Accounts\nCRM\nBuying\nHR\nProjects\nSelling\nManufacturing\nStock\nSupport\nAssets"
   },
   {
+   "description": "Choose a record size between 1000 to 1500.",
    "fieldname": "choose_file_size",
-   "fieldtype": "Select",
-   "label": "Choose Train Records Count",
-   "options": "100\n200\n300\n400\n500"
+   "fieldtype": "Int",
+   "label": "Train Records"
   },
   {
    "fieldname": "create_train_data",
    "fieldtype": "Button",
    "label": "Create training data"
-  },
-  {
-   "fieldname": "create_validation_data",
-   "fieldtype": "Button",
-   "label": "Create validation data"
   },
   {
    "fieldname": "master_table_and_schema_updation_section",
@@ -360,21 +354,21 @@
    "label": "Update Schema file"
   },
   {
-   "fieldname": "train_model",
-   "fieldtype": "Button",
-   "label": "Train Model"
+   "fieldname": "ngrok_auth_tok",
+   "fieldtype": "Password",
+   "label": "Ngrok Auth Token"
   },
   {
-   "fieldname": "test_model",
-   "fieldtype": "Button",
-   "label": "Test Model"
+   "fieldname": "colab_auth_token",
+   "fieldtype": "Password",
+   "label": "Colab Auth Token"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-02-20 15:54:09.457126",
+ "modified": "2026-02-24 11:18:33.747894",
  "modified_by": "Administrator",
  "module": "Changai",
  "name": "ChangAI Settings",

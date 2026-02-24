@@ -377,21 +377,6 @@ frappe.ui.form.on("ChangAI Settings", {
       }
     });
 
-  },
-
-  test_model(frm) {
-    frappe.call({
-      method: "changai.changai.api.v2.test_model.test_model",
-      args: {
-        module_name: frm.doc.choose_module,
-        topk: 20
-      },
-      freeze: true,
-      freeze_message: "Validating Model...",
-      callback(r) {
-        console.log(r.message);
-      }
-    });
   }
 
 });
