@@ -362,5 +362,7 @@ frappe.ui.form.on("ChangAI Settings", {
       }
 });
 
-  }
+  },
+  
+  
 });

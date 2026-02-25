@@ -30,7 +30,8 @@ app_license = "mit"
 # Include JS globally on all pages
 # Include JS globally on all pages
 app_include_html = ["/assets/changai/html/changai.html"]
-app_include_js = ["/assets/changai/js/changai.js"]
+app_include_js = ["/assets/changai/js/changai.js",
+    "/assets/changai/js/changai_table.js",]
 app_include_css = ["/assets/changai/css/changai.css"]
 # In hooks.py
 # app_include_css = [

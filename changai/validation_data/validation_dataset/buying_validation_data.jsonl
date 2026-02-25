@@ -1,0 +1,3 @@
+
+{"qid": "Buying_001", "anchor": "which suppliers didnt deliver on time last month?", "positives": ["[TABLE] tabPurchase Order", "[FIELD] supplier | [TABLE] tabPurchase Order", "[FIELD] schedule_date | [TABLE] tabPurchase Order", "[FIELD] status | [TABLE] tabPurchase Order"]}
+{"qid": "Buying_002", "anchor": "how are my suppliers scored based on delivery performance?", "positives": ["[TABLE] tabSupplier Scorecard", "[FIELD] supplier | [TABLE] tabSupplier Scorecard", "[FIELD] supplier_score | [TABLE] tabSupplier Scorecard", "[FIELD] criteria | [TABLE] tabSupplier Scorecard", "[TABLE] tabSupplier Scorecard Criteria", "[FIELD] criteria_name | [TABLE] tabSupplier Scorecard Criteria", "[FIELD] formula | [TABLE] tabSupplier Scorecard Criteria"]}
