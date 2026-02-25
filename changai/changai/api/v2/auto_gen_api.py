@@ -265,7 +265,7 @@ def sync_tables_and_schema_smart() -> Dict[str, Any]:
         meta_dt = frappe.get_meta(dt)
     return "Hi"
     
-
+@frappe.whitelist(allow_guest=False)
 def _get_claude_client() -> Optional[Anthropic]:
     settings = frappe.get_single("ChangAI Settings")
     api_key = None
@@ -589,24 +589,6 @@ def build_schema_context_for_module(module_name: str) -> str:
         )
 
     return "\n".join(lines)
-
-
-def _get_claude_client():
-    settings = frappe.get_single("ChangAI Settings")
-
-    api_key = None
-    try:
-        api_key = settings.get_password("claude_api_key")
-    except Exception:
-        api_key = None
-
-    if not api_key:
-        api_key = os.getenv("ANTHROPIC_API_KEY")
-
-    if not api_key:
-        frappe.throw("Claude API key is not configured")
-
-    return Anthropic(api_key=api_key)
 
 
 # ---------------------------------------------------------

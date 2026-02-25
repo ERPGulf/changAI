@@ -1,240 +1,167 @@
 from __future__ import annotations
-from frappe.utils.file_manager import get_file
-from typing import Any, Dict
+
+import os, json, math, re, time, random, traceback
+from typing import Any, Dict, List, Tuple
+
 import frappe
 from frappe import _
-import os, json, math,re
-import anthropic
-from frappe.utils.file_manager import save_file
-from frappe.utils.file_manager import get_file_path
+import openai
 
-BATCH_SIZE=25
+MAX_RETRIES = 5
+BASE_BACKOFF = 2.0
+MAX_BACKOFF = 60.0
+REQUEST_DELAY = 0.4
+BATCH_SIZE = 25
+
 SYSTEM_FIELDS = {
     "name", "owner", "creation", "modified", "modified_by",
     "docstatus", "idx", "doctype", "parent", "parenttype",
     "parentfield", "amended_from"
 }
 
-_table_cache = {}
-_field_cache = {}
-
-
-@frappe.whitelist(allow_guest=False)
-def test():
-    file_name = frappe.db.get_value("File", {
-        "file_name": "HR.jsonl",
-        "folder": "Home/Training Data/Batch 2"
-    }, "name")
-    doc = frappe.get_doc("File", file_name)
-    return doc.get_content()
+_table_cache: Dict[str, bool] = {}
+_field_cache: Dict[str, set] = {}  # doctype -> set(fieldnames)
 
 
 def _get_openai_client():
-    import openai
     settings = frappe.get_single("ChangAI Settings")
     api_key = None
     try:
         api_key = settings.get_password("openai_api_key")
     except Exception:
         api_key = None
-    if not api_key:
-        api_key = os.getenv("OPENAI_API_KEY")
+
     if not api_key:
         frappe.throw(_("OpenAI API key is not set in ChangAI Settings"))
+
     return openai.OpenAI(api_key=api_key)
 
 
-def _load_existing_file(out_file_name, folder):
-    """Returns (existing_name, old_text, seen_anchors, existing_count)"""
-    existing_name = frappe.db.get_value("File", {
-        "file_name": out_file_name,
-        "folder": folder
-    }, "name")
+def _sleep_backoff(attempt: int, base: float = BASE_BACKOFF, cap: float = MAX_BACKOFF):
+    delay = min(cap, base * (2 ** attempt))
+    delay = delay * (0.7 + random.random() * 0.6)
+    time.sleep(delay)
 
-    old_text = ""
-    seen_anchors = set()
 
-    if existing_name:
-        file_doc = frappe.get_doc("File", existing_name)
-        old_text = (file_doc.content or "")
-        if isinstance(old_text, (bytes, bytearray)):
-            old_text = old_text.decode("utf-8", "ignore")
-        if not old_text:
-            old_text = (file_doc.get_content() or "").strip()
+def _get_abs_path(module_name: str) -> str:
+    """Real file path inside public/files so it becomes downloadable."""
+    site_path = frappe.get_site_path("public", "files")
+    target_dir = os.path.join(site_path, "Training Data", "Batch 2")
+    os.makedirs(target_dir, exist_ok=True)
+    return os.path.join(target_dir, f"{module_name}.jsonl")
 
-        for line in old_text.splitlines():
+
+def _seed_seen_from_disk(abs_path: str) -> Tuple[set, int]:
+    """Return (seen_anchors, existing_count_lines)."""
+    seen = set()
+    count = 0
+    if not os.path.exists(abs_path):
+        return seen, count
+
+    with open(abs_path, "r", encoding="utf-8") as f:
+        for line in f:
             line = line.strip()
             if not line:
                 continue
             try:
                 obj = json.loads(line)
-                a = (obj.get("anchor") or "").strip()
-                if a:
-                    seen_anchors.add(a)
+                if not isinstance(obj, dict):
+                    continue
+                anchor = (obj.get("anchor") or "").strip()
+                if anchor:
+                    seen.add(anchor)
+                    count += 1
             except Exception:
-                pass
+                # ignore malformed lines
+                continue
 
-    existing_count = len([l for l in old_text.splitlines() if l.strip()]) if old_text else 0
-    return existing_name, old_text, seen_anchors, existing_count
+    return seen, count
 
 
-def _call_openai_with_retry(client, module_name: str) -> str | None:
+def _append_to_disk(abs_path: str, records: List[dict]):
+    if not records:
+        return
+
+    # Ensure folder exists
+    os.makedirs(os.path.dirname(abs_path), exist_ok=True)
+
+    # Append JSONL safely
+    file_exists = os.path.exists(abs_path)
+    with open(abs_path, "a", encoding="utf-8") as f:
+        # If file exists and not empty, ensure newline separation
+        if file_exists and os.path.getsize(abs_path) > 0:
+            f.write("\n")
+        f.write("\n".join(json.dumps(r, ensure_ascii=False) for r in records))
+        f.write("\n")
+
+
+def _sync_frappe_file_doc(module_name: str, abs_path: str):
     """
-    Returns raw string content OR None if failed after retries.
+    Create/Update File doc that points to the on-disk file.
     """
-    last_err = None
-    for attempt in range(MAX_RETRIES):
-        try:
-            resp = client.chat.completions.create(
-                model="gpt-4o",
-                temperature=1.0,
-                messages=[
-                    {
-                        "role": "system",
-                        "content": (
-                            "You must output ONLY valid JSON. "
-                            "Output must start with '[' and end with ']'. "
-                            "Do NOT use markdown. Do NOT use code fences like ``` or ```json. "
-                            "Do NOT add any explanation text."
-                        )
-                    },
-                    {"role": "user", "content": _training_prompt(module_name)}
-                ]
-            )
-            raw = (resp.choices[0].message.content or "").strip()
-            # small delay after success to reduce 429 bursts
-            if REQUEST_DELAY:
-                time.sleep(REQUEST_DELAY)
-            return raw
+    out_file_name = f"{module_name}.jsonl"
+    file_url = f"/files/Training Data/Batch 2/{out_file_name}"
 
-        except Exception as e:
-            last_err = f"{type(e).__name__}: {e}"
-            # log short error
-            frappe.log_error(last_err, "OpenAI call failed (will retry)")
-            _sleep_backoff(attempt)
+    existing = frappe.db.get_value(
+        "File",
+        {"file_name": out_file_name, "folder": "Home/Training Data/Batch 2"},
+        "name",
+    )
 
-    frappe.log_error(last_err or "Unknown error", "OpenAI call failed after retries")
-    return None
+    size = os.path.getsize(abs_path) if os.path.exists(abs_path) else 0
 
-import time, random, math
+    if existing:
+        file_doc = frappe.get_doc("File", existing)
+        file_doc.file_url = file_url
+        file_doc.file_size = size
+        file_doc.is_private = 0
+        file_doc.folder = "Home/Training Data/Batch 2"
+        file_doc.save(ignore_permissions=True)
+    else:
+        file_doc = frappe.get_doc({
+            "doctype": "File",
+            "file_name": out_file_name,
+            "file_url": file_url,
+            "is_private": 0,
+            "file_size": size,
+            "folder": "Home/Training Data/Batch 2",
+        }).insert(ignore_permissions=True)
 
-MAX_RETRIES = 5          # retry per OpenAI request
-BASE_BACKOFF = 2.0       # seconds
-MAX_BACKOFF = 60.0       # cap
-REQUEST_DELAY = 0.8      # sleep after SUCCESS response to reduce 429 bursts
+    frappe.db.commit()
+    return file_doc
 
 
-def _generate_raw_records(client, module_name, total_count, seen_anchors):
-    """Calls OpenAI in batches, returns raw anchor+positives records (with retry + backoff)."""
-    num_reqs = math.ceil(total_count / BATCH_SIZE)
-    raw_records = []
-    for _ in range(num_reqs):
-        if len(raw_records) >= total_count:
-            break
-        raw = None
-        last_err = None
-        for attempt in range(MAX_RETRIES):
-            try:
-                resp = client.chat.completions.create(
-                    model="gpt-4o",
-                    temperature=1.0,
-                    messages=[
-                        {
-                            "role": "system",
-                            "content": (
-                                "You must output ONLY valid JSON. "
-                                "Output must start with '[' and end with ']'. "
-                                "Do NOT use markdown. Do NOT use code fences like ``` or ```json. "
-                                "Do NOT add any explanation text."
-                            )
-                        },
-                        {"role": "user", "content": _training_prompt(module_name)}
-                    ]
-                )
-                raw = (resp.choices[0].message.content or "").strip()
-                if REQUEST_DELAY:
-                    time.sleep(REQUEST_DELAY)
-
-                break  # success => exit retry loop
-
-            except Exception as e:
-                last_err = f"{type(e).__name__}: {e}"
-                frappe.log_error(last_err, "OpenAI call failed (retrying)")
-
-                # exponential backoff + jitter
-                delay = min(MAX_BACKOFF, BASE_BACKOFF * (2 ** attempt))
-                delay = delay * (0.7 + random.random() * 0.6)
-                time.sleep(delay)
-
-        # if still failed after retries, skip this batch
-        if not raw:
-            frappe.log_error(last_err or "Unknown error", "OpenAI call failed after retries")
-            continue
-
-        # ✅ KEEP your existing markdown cleanup EXACTLY
-        if raw.startswith("```"):
-            raw = raw.split("```", 1)[1]
-            raw = raw.rsplit("```", 1)[0]
-            raw = raw.strip()
-
-        frappe.log_error(raw[:1500], "OPENAI_RAW_OUTPUT")
-
-        try:
-            arr = json.loads(raw)
-        except Exception:
-            frappe.log_error(raw[:1500], "OpenAI output not JSON array")
-            continue
-
-        for obj in arr:
-            if not isinstance(obj, dict):
-                continue
-            anchor = (obj.get("anchor") or "").strip()
-            positives = obj.get("positives")
-
-            if not anchor or not isinstance(positives, list) or not positives:
-                continue
-            if anchor in seen_anchors:
-                continue
-
-            seen_anchors.add(anchor)
-            raw_records.append({
-                "anchor": anchor,
-                "positives": positives
-            })
-
-            if len(raw_records) >= total_count:
-                break
-
-    return raw_records
-
-
-def _validate_table(doctype):
+def _validate_table(doctype: str) -> bool:
     if doctype not in _table_cache:
         _table_cache[doctype] = bool(frappe.db.exists("DocType", doctype))
     return _table_cache[doctype]
 
 
-def _validate_field(doctype, fieldname):
-    # ✅ System fields are always valid on any doctype
+def _get_fieldnames_set(doctype: str) -> set:
+    if doctype in _field_cache:
+        return _field_cache[doctype]
+
+    try:
+        meta = frappe.get_meta(doctype)
+        field_names = {f.fieldname for f in meta.fields if f.fieldname}
+        # include system-ish implicit ones you might allow
+        field_names |= set(SYSTEM_FIELDS)
+        _field_cache[doctype] = field_names
+    except Exception:
+        _field_cache[doctype] = set()
+
+    return _field_cache[doctype]
+
+
+def _validate_field(doctype: str, fieldname: str) -> bool:
     if fieldname in SYSTEM_FIELDS:
         return True
-
-    cache_key = f"{doctype}.{fieldname}"
-    if cache_key not in _field_cache:
-        try:
-            meta = frappe.get_meta(doctype)
-            field_names = [f.fieldname for f in meta.fields]
-            _field_cache[cache_key] = fieldname in field_names
-        except Exception:
-            _field_cache[cache_key] = False
-
-    return _field_cache[cache_key]
+    return fieldname in _get_fieldnames_set(doctype)
 
 
-def _is_positive_valid(positive):
-    # ── TABLE check ──────────────────────────────────────────
+def _is_positive_valid(positive: str):
     if positive.startswith("[TABLE]"):
-        match = re.match(r'\[TABLE\]\s+([\w\s]+?)(?:\s*\||\s*$)', positive)
+        match = re.match(r"\[TABLE\]\s+([\w\s]+?)(?:\s*\||\s*$)", positive)
         if not match:
             return False, "Could not parse [TABLE] format"
         table = match.group(1).strip()
@@ -243,28 +170,23 @@ def _is_positive_valid(positive):
             return False, f"DocType '{doctype}' does not exist"
         return True, None
 
-    # ── FIELD check ──────────────────────────────────────────
-    elif positive.startswith("[FIELD]"):
-        match = re.match(r'\[FIELD\]\s+(\w+)\s+\|\s+\[TABLE\]\s+([\w\s]+?)(?:\s*\||\s*$)', positive)
+    if positive.startswith("[FIELD]"):
+        match = re.match(r"\[FIELD\]\s+(\w+)\s+\|\s+\[TABLE\]\s+([\w\s]+?)(?:\s*\||\s*$)", positive)
         if not match:
             return False, "Could not parse [FIELD] format"
         field = match.group(1).strip()
         table = match.group(2).strip()
         doctype = table[3:] if table.startswith("tab") else table
-
         if not _validate_table(doctype):
             return False, f"DocType '{doctype}' does not exist"
-
         if not _validate_field(doctype, field):
             return False, f"Field '{field}' does not exist in '{doctype}'"
-
         return True, None
 
     return False, "Positive does not start with [TABLE] or [FIELD]"
 
 
-def _validate_records(raw_records):
-    """Validates positives in each record, returns (validated_records, total_removed_positives)"""
+def _validate_records(raw_records: List[dict]):
     validated_records = []
     total_removed_positives = 0
 
@@ -272,7 +194,7 @@ def _validate_records(raw_records):
         valid_positives = []
         invalid_positives = []
 
-        for positive in record["positives"]:
+        for positive in record.get("positives", []):
             is_valid, reason = _is_positive_valid(positive)
             if is_valid:
                 valid_positives.append(positive)
@@ -282,7 +204,7 @@ def _validate_records(raw_records):
 
         if not valid_positives:
             frappe.log_error(
-                f"anchor: {record['anchor']}\nreasons: {[r for _, r in invalid_positives]}",
+                f"anchor: {record.get('anchor')}\nreasons: {[r for _, r in invalid_positives]}",
                 "Validation: Record dropped"
             )
             continue
@@ -295,77 +217,21 @@ def _validate_records(raw_records):
     return validated_records, total_removed_positives
 
 
-def _assign_qids(validated_records, module_name, existing_count):
-    """Assigns sequential QIDs based on existing record count"""
+def _assign_qids(validated_records: List[dict], module_name: str, existing_count: int):
     final_records = []
     for i, record in enumerate(validated_records):
         qid = f"{module_name}_{str(existing_count + i + 1).zfill(3)}"
-        new_record = {
+        final_records.append({
             "qid": qid,
             "anchor": record["anchor"],
             "positives": record["positives"]
-        }
-
-        final_records.append(new_record)
+        })
     return final_records
 
 
-# ──────────────────────────────────────────────
-# SUB API 9: Save to File doctype
-# ──────────────────────────────────────────────
-def _save_to_file(existing_name, out_file_name, folder, old_text, final_records):
-    """Combines old + new records and saves to Frappe File doctype"""
-    new_text = "\n".join(json.dumps(r, ensure_ascii=False) for r in final_records).strip()
-    combined = (old_text.rstrip() + "\n" + new_text).strip() if old_text else new_text
+def _generate_batch(client, module_name: str, seen_anchors: set) -> List[dict]:
+    raw = None
 
-    if existing_name:
-        file_doc = frappe.get_doc("File", existing_name)
-        file_doc.content = combined
-        file_doc.folder = folder
-        file_doc.is_private = 0
-        file_doc.save(ignore_permissions=True)
-    else:
-        try:
-            file_doc = frappe.get_doc({
-                "doctype": "File",
-                "file_name": out_file_name,
-                "content": combined,
-                "is_private": 0,
-                "folder": folder,
-            }).insert(ignore_permissions=True)
-        except Exception as e:
-            frappe.log_error(str(e), "Failed to create File document")
-            raise e
-
-    frappe.db.commit()
-    return file_doc
-import time
-import random
-import traceback
-
-# --- tune these safely ---
-MAX_RETRIES = 5          # how many retries per OpenAI call
-BASE_BACKOFF = 2.0       # seconds
-MAX_BACKOFF = 60.0       # seconds cap
-REQUEST_DELAY = 0.8      # seconds delay after a SUCCESS call (rate limit friendly)
-
-
-def _sleep_backoff(attempt: int, base: float = BASE_BACKOFF, cap: float = MAX_BACKOFF):
-    """
-    Exponential backoff with jitter.
-    attempt=0 -> ~base seconds, attempt=1 -> ~2*base, etc.
-    """
-    delay = min(cap, base * (2 ** attempt))
-    # jitter 0.7x..1.3x
-    delay = delay * (0.7 + random.random() * 0.6)
-    time.sleep(delay)
-
-
-def _call_openai_with_retry(client, module_name: str) -> str | None:
-    """
-    Returns raw string content OR None if failed after retries.
-    """
-    last_err = None
     for attempt in range(MAX_RETRIES):
         try:
             resp = client.chat.completions.create(
@@ -375,160 +241,143 @@ def _call_openai_with_retry(client, module_name: str) -> str | None:
                     {
                         "role": "system",
                         "content": (
-                            "You must output ONLY valid JSON. "
-                            "Output must start with '[' and end with ']'. "
-                            "Do NOT use markdown. Do NOT use code fences like ``` or ```json. "
-                            "Do NOT add any explanation text."
+                            "You must output ONLY a valid JSON array. "
+                            "Start with '[' and end with ']'. "
+                            "No markdown. No code fences. No explanation."
                         )
                     },
-                    {"role": "user", "content": _training_prompt(module_name)}
+                    {"role": "user", "content": _training_prompt(module_name)}  # <-- must exist in your module
                 ]
             )
+
             raw = (resp.choices[0].message.content or "").strip()
-            # small delay after success to reduce 429 bursts
+
             if REQUEST_DELAY:
                 time.sleep(REQUEST_DELAY)
-            return raw
+
+            break
 
         except Exception as e:
-            last_err = f"{type(e).__name__}: {e}"
-            # log short error
-            frappe.log_error(last_err, "OpenAI call failed (will retry)")
+            frappe.log_error(str(e)[:300], "OpenAI call failed (retrying)")
             _sleep_backoff(attempt)
 
-    frappe.log_error(last_err or "Unknown error", "OpenAI call failed after retries")
-    return None
+    if not raw:
+        frappe.log_error("All retries failed", "generate_batch failed")
+        return []
 
-
-def _strip_code_fences(raw: str) -> str:
-    raw = (raw or "").strip()
+    # Strip accidental fences
     if raw.startswith("```"):
         raw = raw.split("```", 1)[1]
-        raw = raw.rsplit("```", 1)[0]
-        raw = raw.strip()
-    return raw
+        raw = raw.rsplit("```", 1)[0].strip()
 
+    try:
+        arr = json.loads(raw)
+    except Exception:
+        frappe.log_error(raw[:1200], "OpenAI output not valid JSON array")
+        return []
 
+    if not isinstance(arr, list):
+        frappe.log_error(raw[:1200], "OpenAI output not a list")
+        return []
 
-def _append_records_to_file(existing_name, out_file_name, folder, new_records):
-    """
-    Appends records to an existing File doc OR creates if missing.
-    This prevents losing progress mid-run.
-    """
-    new_text = "\n".join(json.dumps(r, ensure_ascii=False) for r in new_records).strip()
-    if not new_text:
-        return None
+    records = []
+    for obj in arr:
+        if not isinstance(obj, dict):
+            continue
 
-    if existing_name:
-        file_doc = frappe.get_doc("File", existing_name)
-        old_text = (file_doc.content or "")
-        if isinstance(old_text, (bytes, bytearray)):
-            old_text = old_text.decode("utf-8", "ignore")
-        if not old_text:
-            old_text = (file_doc.get_content() or "").strip()
+        anchor = (obj.get("anchor") or "").strip()
+        positives = obj.get("positives")
 
-        combined = (old_text.rstrip() + "\n" + new_text).strip() if old_text else new_text
-        file_doc.content = combined
-        file_doc.folder = folder
-        file_doc.is_private = 0
-        file_doc.save(ignore_permissions=True)
-    else:
-        file_doc = frappe.get_doc({
-            "doctype": "File",
-            "file_name": out_file_name,
-            "content": new_text,
-            "is_private": 0,
-            "folder": folder,
-        }).insert(ignore_permissions=True)
+        if not anchor or not isinstance(positives, list) or not positives:
+            continue
 
-    frappe.db.commit()
-    return file_doc
+        if anchor in seen_anchors:
+            continue
+
+        seen_anchors.add(anchor)
+        records.append({"anchor": anchor, "positives": positives})
+
+    return records
 
 
 @frappe.whitelist(allow_guest=False)
 def generate_training_data(module_name: str, total_count: int):
     """
-    Updated version:
-    - Retry+backoff for 429/5xx
-    - Batch-by-batch incremental save (no progress loss)
-    - Correct batching (ceil)
+    Generates training records and APPENDS to disk JSONL.
+    Then syncs/updates a Frappe File doc pointing to that file.
     """
     total_count = int(total_count)
-    out_file_name = f"{module_name}.jsonl"
-    folder = "Home/Training Data/Batch 2"
-
-    # 1) Load existing
-    existing_name, old_text, seen_anchors, existing_count = _load_existing_file(out_file_name, folder)
-
     client = _get_openai_client()
+    abs_path = _get_abs_path(module_name)
 
-    # We will generate in loops until we reach requested total_count NEW records
+    # Seed from disk
+    seen_anchors, existing_count = _seed_seen_from_disk(abs_path)
+
     total_generated_raw = 0
     total_validated = 0
     total_removed_positives = 0
 
-    # how many new records do we still need?
     remaining = total_count
-    max_outer_loops = math.ceil(total_count / BATCH_SIZE) + 10
+    max_loops = math.ceil(total_count / BATCH_SIZE) + 10
 
     last_file_doc = None
 
-    for _outer in range(max_outer_loops):
+    for _ in range(max_loops):
         if remaining <= 0:
             break
 
-        # 2) Generate one "chunk" up to remaining (but OpenAI returns BATCH_SIZE)
-        chunk_target = min(remaining, BATCH_SIZE)
-        raw_records = _generate_raw_records(client, module_name, chunk_target, seen_anchors)
+        # 1) Generate batch
+        raw_records = _generate_batch(client, module_name, seen_anchors)
         if not raw_records:
             continue
 
         total_generated_raw += len(raw_records)
 
-        # 3) Validate
+        # 2) Validate
         validated_records, removed = _validate_records(raw_records)
         total_removed_positives += removed
-
         if not validated_records:
             continue
 
-        # 4) Assign QIDs for THIS batch based on current existing_count
+        # 3) Assign QIDs
         final_records = _assign_qids(validated_records, module_name, existing_count)
 
-        # 5) Append-save immediately (progress safe)
+        # 4) Append to disk immediately (so progress isn't lost)
         try:
-            last_file_doc = _append_records_to_file(existing_name, out_file_name, folder, final_records)
-            if last_file_doc and not existing_name:
-                # if file was created just now, capture its name for future appends
-                existing_name = last_file_doc.name
+            _append_to_disk(abs_path, final_records)
         except Exception as e:
-            frappe.log_error(traceback.format_exc(), "Append save failed")
+            frappe.log_error(traceback.format_exc(), "Append to disk failed")
             return {"ok": False, "message": str(e)}
 
-        # update counters
         existing_count += len(final_records)
         total_validated += len(final_records)
         remaining -= len(final_records)
 
+        # 5) Sync File doc frequently (optional but safer)
+        try:
+            last_file_doc = _sync_frappe_file_doc(module_name, abs_path)
+        except Exception:
+            frappe.log_error(traceback.format_exc(), "Sync File doc failed")
+
     if total_validated <= 0:
         return {"ok": False, "message": "No valid records generated. Check Error Log."}
 
-    start_qid = f"{module_name}_{str(existing_count - total_validated + 1).zfill(3)}"
-    end_qid = f"{module_name}_{str(existing_count).zfill(3)}"
+    # Final sync
+    file_doc = _sync_frappe_file_doc(module_name, abs_path)
 
     return {
         "ok": True,
-        "file_url": (last_file_doc.file_url if last_file_doc else None),
-        "file_docname": (last_file_doc.name if last_file_doc else existing_name),
-        "generated": total_generated_raw,
+        "file_url": file_doc.file_url,
+        "generated_raw": total_generated_raw,
         "after_validation": total_validated,
         "positives_removed": total_removed_positives,
         "message": (
-            f"Generated {total_generated_raw} → "
+            f"Generated {total_generated_raw} raw → "
             f"Validated {total_validated} → "
-            f"Saved with QIDs {start_qid} to {end_qid}"
-        )
+            f"Saved to {file_doc.file_url}"
+        ),
     }
+
 
 @frappe.whitelist(allow_guest=False)
 def start_train(module_name: str, total_count: int):
@@ -607,93 +456,3 @@ IMPORTANT:
 - Output MUST start with '[' and end with ']'
 - Do NOT include ``` or ```json anywhere
 """.strip()
-
-# to Audit all train files - if still any non Existing Meta after correction?
-@frappe.whitelist(allow_guest=False)
-def audit_file(file_name, folder="Home/Training Data/Batch 2"):
-    file_doc_name = frappe.db.get_value("File", {
-        "file_name": file_name,
-        "folder": folder
-    }, "name")
-    
-    file_doc = frappe.get_doc("File", file_doc_name)
-    content = file_doc.get_content()
-    
-    records_ok = []
-    records_removed = []  # whole record removed
-    positives_removed = []  # only specific positive removed
-
-    for line in content.splitlines():
-        line = line.strip()
-        if not line:
-            continue
-        
-        obj = json.loads(line)
-        positives = obj.get("positives", [])
-        qid = obj.get("qid", "unknown")
-        anchor = obj.get("anchor", "")
-
-        bad_positives = []
-        good_positives = []
-
-        for positive in positives:
-            reason = None
-
-            # ── Check TABLE ──────────────────────────────
-            table_match = re.search(r'\[TABLE\]\s+([\w\s]+?)(?:\s*\||\s*$)', positive)
-            if table_match:
-                table = table_match.group(1).strip()
-                doctype = table[3:] if table.startswith("tab") else table
-                if not frappe.db.exists("DocType", doctype):
-                    reason = f"DocType '{doctype}' does not exist"
-
-            # ── Check FIELD ──────────────────────────────
-            field_match = re.match(r'\[FIELD\]\s+(\w+)\s+\|\s+\[TABLE\]\s+([\w\s]+?)(?:\s*\||\s*$)', positive)
-            if field_match and not reason:
-                field = field_match.group(1).strip()
-                table = field_match.group(2).strip()
-                doctype = table[3:] if table.startswith("tab") else table
-
-                if field in SYSTEM_FIELDS:
-                    pass  # always valid
-                elif frappe.db.exists("DocType", doctype):
-                    meta = frappe.get_meta(doctype)
-                    field_names = [f.fieldname for f in meta.fields]
-                    if field not in field_names:
-                        reason = f"Field '{field}' does not exist in '{doctype}'"
-                else:
-                    reason = f"DocType '{doctype}' does not exist"
-
-            if reason:
-                bad_positives.append({"positive": positive, "reason": reason})
-            else:
-                good_positives.append(positive)
-
-        # ── Classify record ──────────────────────────────
-        if not bad_positives:
-            records_ok.append(qid)
-
-        elif not good_positives:
-            # whole record would be removed
-            records_removed.append({
-                "qid": qid,
-                "anchor": anchor,
-                "bad_positives": bad_positives
-            })
-
-        else:
-            # record kept but some positives stripped
-            positives_removed.append({
-                "qid": qid,
-                "anchor": anchor,
-                "bad_positives": bad_positives,
-                "good_positives": good_positives
-            })
-    return {
-        "summary": {
-            "total_records": len(records_ok) + len(records_removed) + len(positives_removed),
-            "clean": len(records_ok),
-            "fully_removed": len(records_removed),
-            "partial_removed": len(positives_removed),
-        }
-    }
