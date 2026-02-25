@@ -257,3 +257,12 @@ app_include_css = ["/assets/changai/css/changai.css"]
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
 
+fixtures = [
+    {
+        "dt": "DocType",
+        "filters": [
+            ["custom", "=", 1],
+            ["module", "=", "changai"]
+        ]
+    }
+]
