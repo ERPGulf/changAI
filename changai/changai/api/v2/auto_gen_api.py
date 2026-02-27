@@ -204,7 +204,7 @@ def get_doctypes_changed_since(last_sync: Optional[str]) -> List[str]:
     SKIP_MODULES = {"Core", "Custom", "Website", "Desk", "Email", "Integration", "Automation", "Workflow", ""}
 
     filters: Dict[str, Any] = {
-        "module": ["not in", list(SKIP_MODULES)],
+        "module": ["in", erpnext_modules],
         "issingle": 0,
         "is_virtual": 0,
     }
@@ -232,10 +232,13 @@ def sync_tables_and_schema_smart() -> Dict[str, Any]:
         payload = yaml.safe_load(schema_file_doc.get_content()) or {}
     else:
         payload = {}
+
     meta = payload.get("_meta") or {}
     tables_blocks = payload.get("tables") or []
     if not isinstance(tables_blocks, list):
         tables_blocks = []
+
+    # Load existing tables.json
     tables_existing = frappe.db.get_value("File", {
         "file_name": tables_file_name,
         "folder": "Home/RAG Sources"
@@ -244,27 +247,100 @@ def sync_tables_and_schema_smart() -> Dict[str, Any]:
         tables_file_doc = frappe.get_doc("File", tables_existing)
         existing_tables = json.loads(tables_file_doc.get_content() or "[]")
     else:
-        existing_tables=[]
-    last_sync_raw = meta.get("last_doctype_sync")
-    changed_doctypes = get_doctypes_changed_since(last_sync_raw)
-    if not changed_doctypes:
-        return {"ok": True, "message": _("No changes detected")}
-    changed_tables = sorted({_tab(dt) for dt in changed_doctypes})
-    merged_tables = sorted(set(existing_tables) | set(changed_tables))
+        existing_tables = []
+
     by_table = {
         b.get("table"): b
         for b in tables_blocks
         if isinstance(b, dict) and b.get("table")
     }
-    for table in changed_tables:
+    last_sync_raw = meta.get("last_doctype_sync")
+    changed_doctypes = get_doctypes_changed_since(last_sync_raw)
+    changed_tables = set(_tab(dt) for dt in changed_doctypes)
+    missing_from_schema = set(t for t in existing_tables if t not in by_table)
+
+    # Combine changed + missing — these are all tables to process
+    tables_to_process = sorted(changed_tables | missing_from_schema)
+
+    if not tables_to_process:
+        return {"ok": True, "message": _("No changes detected")}
+
+    merged_tables = sorted(set(existing_tables) | changed_tables)
+
+    # Loop over tables to process
+    for table in tables_to_process:
         dt = _strip_tab(table)
         if not frappe.db.exists("DocType", dt):
             continue
 
         frappe.clear_cache(doctype=dt)
         meta_dt = frappe.get_meta(dt)
-    return "Hi"
-    
+
+        # Build existing fields lookup ONCE per table
+        existing_fields = {}
+        if table in by_table:
+            existing_fields = {
+                ef.get("name"): ef
+                for ef in by_table[table].get("fields", [])
+                if isinstance(ef, dict)
+            }
+
+        # Build fields list from meta
+        fields = []
+        for f in meta_dt.fields:
+            if not f.fieldname:
+                continue
+            existing_desc = existing_fields.get(f.fieldname, {}).get("description", "")
+            fields.append({
+                "name": f.fieldname,
+                "fieldtype": f.fieldtype,
+                "label": f.label or "",
+                "description": existing_desc
+            })
+
+        # Update existing block or create new one
+        if table in by_table:
+            by_table[table]["fields"] = fields
+            by_table[table]["desc_done"] = False
+        else:
+            by_table[table] = {
+                "table": table,
+                "description": "",
+                "fields": fields,
+                "desc_done": False
+            }
+
+    # Rebuild tables_blocks from updated by_table
+    tables_blocks = list(by_table.values())
+
+    # Update meta and save schema.yaml
+    meta["last_doctype_sync"] = str(now_datetime())
+    _save_yaml(SCHEMA_YAML, {"_meta": meta, "tables": tables_blocks})
+
+    # Save tables.json
+    if tables_existing:
+        tables_file_doc.content = json.dumps(merged_tables, indent=2)
+        tables_file_doc.save(ignore_permissions=True)
+    else:
+        frappe.get_doc({
+            "doctype": "File",
+            "file_name": tables_file_name,
+            "folder": "Home/RAG Sources",
+            "content": json.dumps(merged_tables, indent=2),
+            "is_private": 0
+        }).insert(ignore_permissions=True)
+
+    frappe.db.commit()
+
+    return {
+        "ok": True,
+        "changed_tables": len(changed_tables),
+        "missing_added": len(missing_from_schema),
+        "total_tables": len(merged_tables),
+        "message": f"Synced {len(changed_tables)} changed + {len(missing_from_schema)} new tables"
+    }
+
+
 @frappe.whitelist(allow_guest=False)
 def _get_claude_client() -> Optional[Anthropic]:
     settings = frappe.get_single("ChangAI Settings")

@@ -70,8 +70,8 @@ def get_file_path(file_url):
     return None
 
 @frappe.whitelist(allow_guest=True)
-def run_validation():
-    TRAINING_FOLDER = "Home/Training Data/Batch 2"
+def run_validation(folder):
+    TRAINING_FOLDER = folder
 
     files = frappe.get_all("File",
         filters={
@@ -80,18 +80,14 @@ def run_validation():
         },
         fields=["file_name", "file_url"]
     )
-
     if not files:
         frappe.msgprint(f"❌ No .jsonl files found in {TRAINING_FOLDER}")
         return
-
     frappe.msgprint(f"📂 Found {len(files)} file(s) — starting validation & cleaning...")
-
     total_records        = 0
     total_removed_records = 0
     total_removed_positives = 0
     total_kept           = 0
-
     for file in files:
         file_path = get_file_path(file["file_url"])
 

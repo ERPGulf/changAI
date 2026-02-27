@@ -57,9 +57,9 @@
   "get_ticket_details_url",
   "training_tab",
   "training_section",
-  "choose_module",
   "choose_file_size",
   "create_train_data",
+  "module_and_description",
   "master_table_and_schema_updation_section",
   "update_masterdata_file",
   "update_schema_file"
@@ -320,12 +320,6 @@
    "label": "Training Data creation"
   },
   {
-   "fieldname": "choose_module",
-   "fieldtype": "Select",
-   "label": "Choose Module",
-   "options": "Accounts\nCRM\nBuying\nHR\nProjects\nSelling\nManufacturing\nStock\nSupport\nAssets"
-  },
-  {
    "description": "Choose a record size between 1000 to 1500.",
    "fieldname": "choose_file_size",
    "fieldtype": "Int",
@@ -362,13 +356,19 @@
    "fieldname": "colab_auth_token",
    "fieldtype": "Password",
    "label": "Colab Auth Token"
+  },
+  {
+   "fieldname": "module_and_description",
+   "fieldtype": "Table",
+   "label": "Module and Description",
+   "options": "Module Selection"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-02-24 11:18:33.747894",
+ "modified": "2026-02-25 11:24:17.102047",
  "modified_by": "Administrator",
  "module": "Changai",
  "name": "ChangAI Settings",

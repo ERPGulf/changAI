@@ -1607,7 +1607,7 @@ def debug_entity_retriever(q: str):
 
 
 # Run
-@frappe.whitelist(allow_guest=False)
+@frappe.whitelist(allow_guest=True)
 def run_text2sql_pipeline(user_question: str, chat_id: str):
     q = (user_question or "")
     config = {

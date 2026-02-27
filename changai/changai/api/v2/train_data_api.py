@@ -10,7 +10,7 @@ import openai
 MAX_RETRIES = 5
 BASE_BACKOFF = 2.0
 MAX_BACKOFF = 60.0
-REQUEST_DELAY = 0.4
+REQUEST_DELAY = 0.1
 BATCH_SIZE = 25
 
 SYSTEM_FIELDS = {
@@ -21,6 +21,20 @@ SYSTEM_FIELDS = {
 
 _table_cache: Dict[str, bool] = {}
 _field_cache: Dict[str, set] = {}  # doctype -> set(fieldnames)
+
+
+def _get_claude_client():
+    settings = frappe.get_single("ChangAI Settings")
+    try:
+        api_key = settings.get_password("claude_api_key")
+    except Exception:
+        api_key = None
+
+    if not api_key:
+        frappe.throw(_("Anthropic API key is not set in ChangAI Settings"))
+
+    import anthropic
+    return anthropic.Anthropic(api_key=api_key)
 
 
 def _get_openai_client():
@@ -43,12 +57,18 @@ def _sleep_backoff(attempt: int, base: float = BASE_BACKOFF, cap: float = MAX_BA
     time.sleep(delay)
 
 
-def _get_abs_path(module_name: str) -> str:
-    """Real file path inside public/files so it becomes downloadable."""
+# def _get_abs_path(module_name: str) -> str:
+#     """Real file path inside public/files so it becomes downloadable."""
+#     site_path = frappe.get_site_path("public", "files")
+#     target_dir = os.path.join(site_path, "Training Data", "Batch 2")
+#     os.makedirs(target_dir, exist_ok=True)
+#     return os.path.join(target_dir, f"{module_name}.jsonl")
+def _get_abs_path(module_name: str, folder_path: str,suffix: str = "") -> str:
+    relative = folder_path.replace("Home/", "", 1)
     site_path = frappe.get_site_path("public", "files")
-    target_dir = os.path.join(site_path, "Training Data", "Batch 2")
+    target_dir = os.path.join(site_path, relative)
     os.makedirs(target_dir, exist_ok=True)
-    return os.path.join(target_dir, f"{module_name}.jsonl")
+    return os.path.join(target_dir, f"{module_name}{suffix}.jsonl")
 
 
 def _seed_seen_from_disk(abs_path: str) -> Tuple[set, int]:
@@ -95,19 +115,18 @@ def _append_to_disk(abs_path: str, records: List[dict]):
         f.write("\n")
 
 
-def _sync_frappe_file_doc(module_name: str, abs_path: str):
+def _sync_frappe_file_doc(module_name: str, abs_path: str, folder_path: str, suffix: str = ""):
     """
     Create/Update File doc that points to the on-disk file.
     """
-    out_file_name = f"{module_name}.jsonl"
-    file_url = f"/files/Training Data/Batch 2/{out_file_name}"
-
+    relative = folder_path.replace("Home/", "", 1)
+    out_file_name = f"{module_name}{suffix}.jsonl"
+    file_url = f"/files/{relative}/{out_file_name}"
     existing = frappe.db.get_value(
         "File",
-        {"file_name": out_file_name, "folder": "Home/Training Data/Batch 2"},
+        {"file_name": out_file_name, "folder": folder_path},
         "name",
     )
-
     size = os.path.getsize(abs_path) if os.path.exists(abs_path) else 0
 
     if existing:
@@ -115,7 +134,7 @@ def _sync_frappe_file_doc(module_name: str, abs_path: str):
         file_doc.file_url = file_url
         file_doc.file_size = size
         file_doc.is_private = 0
-        file_doc.folder = "Home/Training Data/Batch 2"
+        file_doc.folder = folder_path
         file_doc.save(ignore_permissions=True)
     else:
         file_doc = frappe.get_doc({
@@ -124,7 +143,7 @@ def _sync_frappe_file_doc(module_name: str, abs_path: str):
             "file_url": file_url,
             "is_private": 0,
             "file_size": size,
-            "folder": "Home/Training Data/Batch 2",
+            "folder": folder_path,
         }).insert(ignore_permissions=True)
 
     frappe.db.commit()
@@ -228,10 +247,88 @@ def _assign_qids(validated_records: List[dict], module_name: str, existing_count
         })
     return final_records
 
+# @frappe.whitelist(allow_guest=True)
+# def test_claude():
+#     client = _get_claude_client()
+#     resp = client.messages.create(
+#         model="claude-sonnet-4-6",   # ✅ Cheapest model
+#         max_tokens=100,                 # keep small for testing
+#         temperature=0.7,
+#         messages=[
+#             {"role": "user", "content": "Say hello in one short sentence."}
+#         ]
+#     )
 
-def _generate_batch(client, module_name: str, seen_anchors: set) -> List[dict]:
+#     return (resp.content[0].text or "").strip()
+
+def _generate_batch_claude(client, module_name: str, seen_anchors: set, module_description,total_count) -> List[dict]:
     raw = None
+    # schema_context = build_schema_context_for_module(module_name)
+    for attempt in range(MAX_RETRIES):
+        try:
+            import anthropic
+            resp = client.messages.create(
+                model="claude-sonnet-4-6",
+                max_tokens=4096,
+                temperature=1.0,
+                system=(
+                    "You must output ONLY a valid JSON array. "
+                    "Start with '[' and end with ']'. "
+                    "No markdown. No code fences. No explanation."
+                ),
+                messages=[
+                    {"role": "user", "content": _val_prompt(module_name,module_description,BATCH_SIZE)}
+                ]
+            )
 
+            raw = (resp.content[0].text or "").strip()
+
+            if REQUEST_DELAY:
+                time.sleep(REQUEST_DELAY)
+
+            break
+
+        except Exception as e:
+            frappe.log_error(str(e)[:100], "Claude call failed (retrying)")
+            _sleep_backoff(attempt)
+
+    if not raw:
+        frappe.log_error("All retries failed", "generate_batch_claude failed")
+        return []
+
+    if raw.startswith("```"):
+        raw = raw.split("```", 1)[1]
+        raw = raw.rsplit("```", 1)[0].strip()
+
+    try:
+        arr = json.loads(raw)
+    except Exception:
+        frappe.log_error(raw[:100], "Claude output not valid JSON array")
+        return []
+
+    if not isinstance(arr, list):
+        frappe.log_error(raw[:100], "Claude output not a list")
+        return []
+
+    records = []
+    for obj in arr:
+        if not isinstance(obj, dict):
+            continue
+        anchor = (obj.get("anchor") or "").strip()
+        positives = obj.get("positives")
+        if not anchor or not isinstance(positives, list) or not positives:
+            continue
+        if anchor in seen_anchors:
+            continue
+        seen_anchors.add(anchor)
+        records.append({"anchor": anchor, "positives": positives})
+
+    return records
+
+
+def _generate_batch(client, module_name: str, seen_anchors: set,module_description,total_count) -> List[dict]:
+    raw = None
+    # schema_context = build_schema_context_for_module(module_name)
     for attempt in range(MAX_RETRIES):
         try:
             resp = client.chat.completions.create(
@@ -246,7 +343,7 @@ def _generate_batch(client, module_name: str, seen_anchors: set) -> List[dict]:
                             "No markdown. No code fences. No explanation."
                         )
                     },
-                    {"role": "user", "content": _training_prompt(module_name)}  # <-- must exist in your module
+                    {"role": "user", "content": _training_prompt(module_name,module_description,BATCH_SIZE)}  # <-- must exist in your module
                 ]
             )
 
@@ -273,11 +370,17 @@ def _generate_batch(client, module_name: str, seen_anchors: set) -> List[dict]:
     try:
         arr = json.loads(raw)
     except Exception:
-        frappe.log_error(raw[:1200], "OpenAI output not valid JSON array")
+        frappe.log_error(
+    title="OpenAI output not valid JSON array",
+    message=raw[:100],
+)
         return []
 
     if not isinstance(arr, list):
-        frappe.log_error(raw[:1200], "OpenAI output not a list")
+        frappe.log_error(
+    title="OpenAI output not a list",
+    message=raw[:100],
+)
         return []
 
     records = []
@@ -301,104 +404,110 @@ def _generate_batch(client, module_name: str, seen_anchors: set) -> List[dict]:
 
 
 @frappe.whitelist(allow_guest=False)
-def generate_training_data(module_name: str, total_count: int):
+def generate_data(modules, total_count: int, path: str, use_claude: bool = False):
     """
     Generates training records and APPENDS to disk JSONL.
     Then syncs/updates a Frappe File doc pointing to that file.
     """
+    if use_claude:
+        client = _get_claude_client()
+        generate_fn = _generate_batch_claude
+    else:
+        client = _get_openai_client()
+        generate_fn = _generate_batch
+    
+    modules = json.loads(modules) if isinstance(modules, str) else modules
     total_count = int(total_count)
-    client = _get_openai_client()
-    abs_path = _get_abs_path(module_name)
+    # total_count=25
+    suffix = "_val" if "Validation" in path else "_train"
+    for module_rec in modules:
+        module_name=module_rec["module"]
+        module_description=module_rec["description"]
+        total_count = int(total_count)
+        abs_path = _get_abs_path(module_name, path, suffix)
+        # Seed from disk
+        seen_anchors, existing_count = _seed_seen_from_disk(abs_path)
+        total_generated_raw = 0
+        total_validated = 0
+        total_removed_positives = 0
+        remaining = total_count
+        max_loops = math.ceil(total_count / BATCH_SIZE) * 2
+        for _ in range(max_loops):
+            if remaining <= 0:
+                break
+ 
+            raw_records = generate_fn(client, module_name, seen_anchors, module_description,remaining)
+            if not raw_records:
 
-    # Seed from disk
-    seen_anchors, existing_count = _seed_seen_from_disk(abs_path)
+                continue
 
-    total_generated_raw = 0
-    total_validated = 0
-    total_removed_positives = 0
+            total_generated_raw += len(raw_records)
 
-    remaining = total_count
-    max_loops = math.ceil(total_count / BATCH_SIZE) + 10
+            # 2) Validate
+            validated_records, removed = _validate_records(raw_records)
+            total_removed_positives += removed
+            if not validated_records:
+                continue
 
-    last_file_doc = None
+            # 3) Assign QIDs
+            final_records = _assign_qids(validated_records, module_name, existing_count)
 
-    for _ in range(max_loops):
-        if remaining <= 0:
-            break
+            # 4) Append to disk immediately (so progress isn't lost)
+            try:
+                _append_to_disk(abs_path, final_records)
+                _sync_frappe_file_doc(module_name, abs_path, path, suffix)
+            except Exception as e:
+                frappe.log_error(traceback.format_exc(), "Append to disk failed")
+                return {"ok": False, "message": str(e)}
 
-        # 1) Generate batch
-        raw_records = _generate_batch(client, module_name, seen_anchors)
-        if not raw_records:
+            existing_count += len(final_records)
+            total_validated += len(final_records)
+            remaining -= len(final_records)
+        if total_validated <= 0:
+            frappe.log_error(f"No valid records for {module_name}", "generate_data")
             continue
-
-        total_generated_raw += len(raw_records)
-
-        # 2) Validate
-        validated_records, removed = _validate_records(raw_records)
-        total_removed_positives += removed
-        if not validated_records:
-            continue
-
-        # 3) Assign QIDs
-        final_records = _assign_qids(validated_records, module_name, existing_count)
-
-        # 4) Append to disk immediately (so progress isn't lost)
-        try:
-            _append_to_disk(abs_path, final_records)
-        except Exception as e:
-            frappe.log_error(traceback.format_exc(), "Append to disk failed")
-            return {"ok": False, "message": str(e)}
-
-        existing_count += len(final_records)
-        total_validated += len(final_records)
-        remaining -= len(final_records)
-
-        # 5) Sync File doc frequently (optional but safer)
-        try:
-            last_file_doc = _sync_frappe_file_doc(module_name, abs_path)
-        except Exception:
-            frappe.log_error(traceback.format_exc(), "Sync File doc failed")
-
-    if total_validated <= 0:
-        return {"ok": False, "message": "No valid records generated. Check Error Log."}
-
-    # Final sync
-    file_doc = _sync_frappe_file_doc(module_name, abs_path)
+        # Final sync
+        file_doc = _sync_frappe_file_doc(module_name, abs_path, path, suffix)
 
     return {
         "ok": True,
-        "file_url": file_doc.file_url,
-        "generated_raw": total_generated_raw,
-        "after_validation": total_validated,
-        "positives_removed": total_removed_positives,
-        "message": (
-            f"Generated {total_generated_raw} raw → "
-            f"Validated {total_validated} → "
-            f"Saved to {file_doc.file_url}"
-        ),
+        "message": f"Generated training data for {module_name}"
     }
 
 
 @frappe.whitelist(allow_guest=False)
-def start_train(module_name: str, total_count: int):
+def start_train(modules, total_count: int):
+    val_count = max(1, int(int(total_count) * 0.25))
+
+    # frappe.enqueue(
+    #     "changai.changai.api.v2.train_data_api.generate_data",
+    #     queue="long",
+    #     timeout=14400,
+    #     modules=modules,
+    #     total_count=total_count,
+    #     path="Home/Training Data/Batch 2",
+    #     use_claude=False,                    # <-- OpenAI
+    # )
     frappe.enqueue(
-        "changai.changai.api.v2.train_data_api.generate_training_data",
+        "changai.changai.api.v2.train_data_api.generate_data",
         queue="long",
         timeout=14400,
-        module_name=module_name,
-        total_count=total_count,
+        modules=modules,
+        total_count=val_count,
+        path="Home/Validation Data/Batch 2",
+        use_claude=True,                     # <-- Claude
     )
+    return {"ok": True, "message": "Training and validation jobs queued."}
 
-    return {"ok": True, "message": "Training job queued."}
 
-
-def _training_prompt(module_name: str) -> str:
+def _training_prompt(module_name: str,module_description,BATCH_SIZE) -> str:
     return f"""
 You are generating training data for an ERPNext assistant.
-
 TASK:
-Generate EXACTLY {BATCH_SIZE} training records for the {module_name} module in Frappe/ERPNext.
-
+Generate EXACTLY {BATCH_SIZE} training records for the {module_name} module in Frappe/ERPNexts.
+You can read the descirption given below about the module and generate realistic questions.
+{module_name}
+{module_description}
 OUTPUT FORMAT (STRICT):
 - Return ONLY a valid JSON ARRAY.
 - The array must contain EXACTLY {BATCH_SIZE} objects.
@@ -406,53 +515,86 @@ OUTPUT FORMAT (STRICT):
 - Do NOT output markdown.
 - Do NOT output code fences.
 - Do NOT output explanations.
-- Start directly with "[" and end with "]".
-
-SCHEMA (keys must match exactly):
-{{
-  "anchor": "...",
-  "positives": ["...", "..."]
-}}
-
-ANCHOR RULES:
-- Casual, messy, real chat style.
-- Do NOT mention DocType or table names in anchor.
+Anchor style rules:
+- Questions must be data fetch/lookup intent only
+- User is always asking to SEE, FIND, LIST, CHECK, or COUNT data
+- Think: someone querying a dashboard or asking a report question in a hurry, not writing SQL or technical queries.
+- Mix styles: ultra-short ("helmet stock dubai"), casual ("how many cement bags in sharjah?"), urgency ("need diesel qty in muscat asap"), doubt ("any PVC fittings left in doha or not?")
 - Use business wording and synonyms.
-- Include time filters, grouping, ranking where relevant.
-
-POSITIVES RULES:
-- positives is a LIST OF STRINGS.
-- Each string should be short and single-line.
-- Include ALL required tables and fields needed to answer the question:
-  - Filters: item_code, status, warehouse, posting_date
-  - Joins: include join keys on both sides (e.g., child.parent + parent.name)
-  - Aggregates: include group-by field + sum/count field
-  - Child tables: MUST include parent table AND join field
-  - Include docstatus if query implies document state
-
-POSITIVES FORMAT EXAMPLES:
-- "[TABLE] tabBin | desc: stock balance per item per warehouse"
-- "[FIELD] item_code | [TABLE] tabBin | desc: item filter"
-- "[FIELD] actual_qty | [TABLE] tabBin | desc: available quantity"
-- "[FIELD] parent | [TABLE] tabSales Invoice Item | desc: join to invoice"
-- "[FIELD] name | [TABLE] tabSales Invoice | desc: invoice id"
-
-EXAMPLE OUTPUT STRUCTURE:
+- Occasionally include typos or incomplete phrasing
+- Avoid SQL-like or technical phrasing
+- Do NOT mention DocType or table names in anchor.
+EXAMPLE:
 [
   {{
-    "qid": "{module_name}_01",
-    "anchor": "stock left for item xyz in kochi warehouse?",
+    "anchor": "stock left for item havels Cable in dammam warehouse?",
     "positives": [
-      "[TABLE] tabBin | desc: stock per item/warehouse",
-      "[FIELD] item_code | [TABLE] tabBin | desc: filter item",
-      "[FIELD] warehouse | [TABLE] tabBin | desc: filter warehouse",
-      "[FIELD] actual_qty | [TABLE] tabBin | desc: available quantity"
+      "[TABLE] tabBin | desc: Stores real-time inventory levels for each item-warehouse combination in ERPNext",
+      "[FIELD] item_code | [TABLE] tabBin | desc: Unique identifier of the product/item to filter stock records",
+      "[FIELD] warehouse | [TABLE] tabBin | desc: Name or location of the warehouse (e.g., dammam) to scope the stock query",
+      "[FIELD] actual_qty | [TABLE] tabBin | desc: Current physically available stock quantity for the item in the given warehouse"
     ]
   }}
 ]
+CRITICAL:
+- "positives" MUST be a JSON ARRAY (list).
+- Each item inside "positives" MUST be a STRING.
+- NEVER return objects or dictionaries inside "positives".
 
-Now generate the JSON array with exactly {BATCH_SIZE} objects:
 IMPORTANT:
 - Output MUST start with '[' and end with ']'
 - Do NOT include ``` or ```json anywhere
 """.strip()
+
+
+def _val_prompt(module_name, description, BATCH_SIZE):
+    return f"""
+You are generating ERPNext schema-retrieval training data.
+This is for production testing of a trained retrieval model, so focus on variety and real-world business questions.
+CRITICAL OUTPUT RULE:
+Return ONLY a valid JSON array. Start with '[' and end with ']'. No markdown. No code fences. No explanation.
+ANCHOR RULES:
+- Questions must be data fetch/lookup intent only
+- Casual, messy, real chat style.
+- Mix styles: ultra-short ("helmet stock dubai"), casual ("how many cement bags in sharjah?"), urgency ("need diesel qty in muscat asap"), doubt ("any PVC fittings left in doha or not?") et..
+- cover all styles of queriy types in the output, with no specific ratio. The more variety the better.
+- Do NOT mention DocType or table names in anchor.
+- Use business wording and synonyms.
+[
+  {{
+    "anchor": "which suppliers didnt deliver on time last month?",
+    "positives": [
+      "[TABLE] tabPurchase Order",
+      "[FIELD] supplier | [TABLE] tabPurchase Order",
+      "[FIELD] schedule_date | [TABLE] tabPurchase Order",
+      "[FIELD] status | [TABLE] tabPurchase Order"
+    ]
+  }}
+]
+REQUIREMENTS:
+- Generate EXACTLY {BATCH_SIZE} UNIQUE objects
+- NEVER include Doctype names in questions
+- Casual business language
+- Grammar mistakes allowed
+- This is for testing a trained Model in retrieval, so focus on covering all varieties and production oriented questions.
+- {module_name}: {description}
+""".strip()
+
+
+
+def build_schema_context_for_module(module_name: str) -> str:
+    doctypes = frappe.get_all(
+        "DocType",
+        filters={"module": module_name, "custom": 0},
+        pluck="name"
+    )
+    blocks = []
+    for dt in doctypes:
+        meta = frappe.get_meta(dt)
+        fields = [f"- {f.fieldname}" for f in meta.fields if f.fieldname]
+
+        if fields:
+            blocks.append(
+                f"TABLE: tab{meta.name}\nFIELDS:\n" + "\n".join(fields)
+            )
+    return "\n\n".join(blocks)
