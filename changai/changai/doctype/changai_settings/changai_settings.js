@@ -1,47 +1,59 @@
 // Copyright (c) 2026, ERpGulf and contributors
 // For license information, please see license.txt
-
 frappe.ui.form.on("ChangAI Settings", {
     refresh(frm) {
+
+        frm.add_custom_button(__('Download Embedding Model'), () => {
+            frappe.call({
+                method: "changai.changai.api.v2.text2sql_pipeline_v2.download_model_from_ui",
+                freeze: true,
+                freeze_message: __("Re-downloading embedding model..."),
+                callback(r) {
+                    if (!r.message) return;
+
+                    if (r.message.status === "success") {
+                        frappe.msgprint({
+                            title: __("Success"),
+                            message: __("Embedding model downloaded successfully."),
+                            indicator: "green"
+                        });
+                    } else {
+                        frappe.msgprint({
+                            title: __("Error"),
+                            message: __(r.message.message || "Unknown error occurred."),
+                            indicator: "red"
+                        });
+                    }
+                }
+            });
+        });
+
     },
+
     create_train_data(frm) {
         create_data_from_selected_rows(frm);
     },
+
     update_masterdata_file(frm) {
         frappe.call({
             method: "changai.changai.api.v2.auto_gen_api.sync_master_data_smart",
             freeze: true,
             freeze_message: "Updating Master Data...",
             callback(r) {
-                console.log(r.message)
+                console.log(r.message);
             }
         });
     },
+
     update_schema_file(frm) {
         frappe.call({
             method: "changai.changai.api.v2.auto_gen_api.sync_schema_and_enqueue_descriptions",
             freeze: true,
             freeze_message: "Syncing schema...",
             callback(r) {
-                console.log(r.message)
+                console.log(r.message);
             }
         });
-
-    },
-
-    choose_file_size(frm) {
-        const v = frm.doc.choose_file_size;
-
-        if (v == null) return;
-
-        if (v < 1000 || v > 1500) {
-            frappe.msgprint({
-                title: "Invalid Train Size",
-                message: "Please enter a value between 1000 and 1500 for Train Records Size.",
-                indicator: "blue"
-            });
-            frm.set_value("choose_file_size", null);
-        }
     }
 });
 
@@ -65,6 +77,7 @@ function create_data_from_selected_rows(frm) {
         module: row.module,
         description: row.description || ""
     }));
+
     frappe.call({
         method: "changai.changai.api.v2.train_data_api.start_train",
         args: {
@@ -73,7 +86,7 @@ function create_data_from_selected_rows(frm) {
             total_count: frm.doc.choose_file_size
         },
         freeze: true,
-        freeze_message: "Creating Train Data...",
+        freeze_message: "Creating Data...",
         callback(r) {
             console.log("Response:", r.message);
         }

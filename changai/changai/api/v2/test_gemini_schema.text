@@ -1,0 +1,20 @@
+MODULE: STOCK
+TABLE: tabItem
+- item_code (Primary Key)
+- item_name
+- stock_uom
+- custom_storage_temperature  <-- [Note: Unique field]
+- description
+TABLE: tabBin
+- item_code (Link tabItem)
+- warehouse (Link tabWarehouse)
+- actual_qty
+- reserved_qty
+TABLE: tabWarehouse
+- warehouse_name
+- city
+MODULE: ZATCA_GULF (Custom App)
+TABLE: tabZatca Settings
+- name
+- custom_zatca_status (Values- Cleared, Reported, Rejected)
+- custom_xml_hash

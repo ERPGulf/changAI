@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-import os
 from typing import Any, Dict, List
 
 import frappe
@@ -10,6 +9,112 @@ from frappe import _
 # LangChain + FAISS
 from langchain_community.vectorstores import FAISS
 from langchain_core.embeddings import Embeddings
+
+
+import cv2
+from frappe.utils.data import add_to_date, get_time, getdate
+from erpnext import get_region
+from pyqrcode import create as qr_create
+import base64
+from base64 import b64encode
+import io
+import os
+
+
+import frappe
+from frappe.desk.reportview import build_match_conditions
+
+
+@frappe.whitelist(allow_guest=False)
+def create_qr_code(doc,method):
+    """Create QR Code after inserting Employee"""
+    if not hasattr(doc, 'custom_qr_code'):
+    	return
+
+    fields = frappe.get_meta("Employee").fields
+    auth_client_name = frappe.db.get_value("OAuth Client", {}, "name")
+    if auth_client_name:
+        auth_client = frappe.get_doc("OAuth Client", auth_client_name)
+    else:
+        frappe.throw("No OAuth Client found")
+    app_name = auth_client.app_name
+    if not app_name:
+        frappe.throw(_('App name missing in OAuth Client'))
+
+    app_key = base64.b64encode(app_name.encode()).decode("utf-8")
+
+    for field in fields:
+        if field.fieldname == 'custom_qr_code' and field.fieldtype == 'Attach Image':
+
+            company_name = frappe.db.get_value('Company', doc.company, 'company_name')
+            if not company_name:
+                frappe.throw(_('Company name missing for {} in the company document'.format(doc.company)))
+
+            if not doc.name:
+                frappe.throw(_('Employee code missing in the document'))
+
+            if not doc.first_name:
+                frappe.throw(_('First name missing for {} in the document'.format(doc.name)))
+
+            last_name = doc.last_name if doc.last_name else ""
+
+            # if not doc.custom_photo_:
+            # 	frappe.throw(_('Photo missing for {} in the document'.format(doc.name)))
+
+            if not doc.custom_restrict_location and doc.custom_restrict_location != 0:
+                frappe.throw(_('Restrict Location missing for {} in the document'.format(doc.name)))
+
+            if not doc.user_id:
+                frappe.throw(_('User ID missing for {} in the document'.format(doc.name)))
+
+            if not frappe.local.conf.host_name:
+                frappe.throw(_('API URL (host_name) is missing in site config'))
+
+            if not app_key:
+                frappe.throw(_('App key could not be generated'))
+
+            cleaned = (
+                f"Company: {company_name}"
+                f" Employee_Code: {doc.name}"
+                f" Full_Name: {doc.first_name}  {last_name}"
+                f" Photo: {doc.image}"
+                f" Restrict Location: {doc.custom_restrict_location}"
+                f" User_id: {doc.user_id}"
+                f" API: {frappe.local.conf.host_name}"
+                f" App_key: {app_key}"
+            )
+
+            base64_string = b64encode(cleaned.encode()).decode()
+
+            qr_image = io.BytesIO()
+            url = qr_create(base64_string, error='L')
+            url.png(qr_image, scale=2, quiet_zone=1)
+
+            filename = f"QR-CODE-{doc.name}.png".replace(os.path.sep, "__")
+            _file = frappe.get_doc({
+                "doctype": "File",
+                "file_name": filename,
+                "content": qr_image.getvalue(),
+                "is_private": 0
+            })
+
+            _file.save()
+
+            doc.db_set('custom_qr_code', _file.file_url)
+            doc.notify_update()
+
+            break
+
+
+@frappe.whitelist(allow_guest=False)
+def test_create_qr_code(employee_id: str):
+    doc = frappe.get_doc("Employee", employee_id)
+    try:
+        create_qr_code(doc, None)
+        return "QR Code created"
+    except Exception as e:
+        return {"ok":False,"error":str(e)}
+
 
 
 def to_pos_int(x, default: int = 20, name: str = "value") -> int:
@@ -114,10 +219,6 @@ def test_model() -> Dict[str, Any]:
     fvs_abs_path = os.path.dirname(faiss_doc.get_full_path())
     emb          = STEmbeddings(model_path)
     vs           = FAISS.load_local(fvs_abs_path, emb, allow_dangerous_deserialization=True)
-
-    # ============================================
-    # Get ALL validation files
-    # ============================================
     val_files = frappe.get_all("File",
         filters={
             "folder"   : "Home/Validation Data",
@@ -248,3 +349,61 @@ def test_model() -> Dict[str, Any]:
         },
         "modules": overall_results
     }
+
+
+import json
+import time
+from google import genai
+from google.genai import types
+from google.oauth2 import service_account
+from changai.changai.api.v2.train_data_api import _get_gemini_client
+@frappe.whitelist(allow_guest=True)
+def run_hallucination_test():
+    # 3. Upload the Schema File
+    client=_get_gemini_client()
+    uploaded_file = client.files.upload(file="/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/v2/test_gemini_schema.text")
+    
+    # Wait for the file to be processed
+    while uploaded_file.state.name == "PROCESSING":
+        print("Waiting for file processing...")
+        time.sleep(2)
+        uploaded_file = client.files.get(name=uploaded_file.name)
+
+    print(f"File ready: {uploaded_file.uri}")
+
+    # 4. Generate Content with Strict Instructions
+    prompt = """
+    TASK: Generate exactly 2 training records in JSON format based ONLY on the provided schema file.
+    STRICT CONSTRAINTS:
+    1. USE ONLY tables and fields explicitly defined in the attached schema file.
+    2. If a user query asks for a concept (like 'Price' or 'Cost') that is NOT in the schema file, you MUST NOT invent a field. Use 'NOT_FOUND' or skip that specific field in the 'positives' list.
+    3. Do not use generic ERPNext knowledge. Only use the provided 'custom_...' fields if they exist in the file.
+    4. ANCHOR STYLE: Use messy, business-casual human language (e.g., 'where is the stuff', 'who did this').
+    REQUIRED JSON FORMAT:
+    [
+      {
+        "anchor": "The messy human question here",
+        "positives": [
+          "[TABLE] tabName | desc: purpose",
+          "[FIELD] fieldname | [TABLE] tabName | desc: purpose",
+          "[LINK] tabA -> tabB ON field | desc: connection"
+        ]
+      }
+    ]
+    OUTPUT ONLY THE RAW JSON ARRAY. NO MARKDOWN. NO EXPLANATION.
+    """
+
+    print("\n--- Sending Prompt to Gemini ---")
+    response = client.models.generate_content(
+        model="gemini-2.0-flash-lite",
+        contents=[
+            uploaded_file,
+            types.Content(role="user", parts=[types.Part.from_text(prompt)])
+        ],
+        config=types.GenerateContentConfig(
+            system_instruction="Strictly adhere to the attached file. No hallucinations.",
+            temperature=0.0,
+            response_mime_type="application/json"
+        )
+    )
+    return response.text
