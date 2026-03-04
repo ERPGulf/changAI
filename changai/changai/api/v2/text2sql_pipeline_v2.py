@@ -1,37 +1,33 @@
 from langgraph.graph import StateGraph, END
 from collections import OrderedDict
 from typing_extensions import TypedDict
-from typing import Any, Dict, Iterable, List, Tuple, Union, Optional
+from typing import Any, Dict, List, Tuple, Union, Optional, Set
 import requests
 import json
 import re
 import os
 import time
 import base64
-import yaml
 import sqlglot
 from sqlglot import exp
 from langsmith.run_helpers import traceable
 from langgraph.checkpoint.memory import MemorySaver
-from sentence_transformers import SentenceTransformer
-from langchain_ollama import OllamaEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_core.documents import Document
 from google import genai
 from google.genai import types
 from google.oauth2 import service_account
 from werkzeug.wrappers import Response
-from pathlib import Path
 import jinja2
 import frappe
-from frappe.utils.file_manager import get_file
 from changai.changai.api.v2.store_chats import (
     save_turn_2,
-    save_message_doc,
     inject_prompt,
 )
 import subprocess
+from frappe.desk.reportview import build_match_conditions
+import shutil
+from frappe import _
 
 
 def read_asset(file_name: str, folder: str = "Home/ChangAI Assets") -> Any:
@@ -52,7 +48,7 @@ def read_asset(file_name: str, folder: str = "Home/ChangAI Assets") -> Any:
     if file_name.lower().endswith(".json"):
         try:
             return json.loads(content)
-        except Exception as e:
+        except json.JSONDecodeError as e:
             frappe.throw(f"Invalid JSON in {folder}/{file_name}: {e}")
 
     return content
@@ -61,13 +57,14 @@ def read_asset(file_name: str, folder: str = "Home/ChangAI Assets") -> Any:
 _VS_TABLE = None
 _EMBEDDER_INSTANCE = None
 __vector_store = None
-_SCHEMA_VS = None
-non_erp_res = ""
+_FULL_FIELDS_VS = None
+STATUS_200 = 200
+_SUB_VS_CACHE = {}
 MODEL_ID = "gemini-2.5-flash-lite"
-RETRY_LIMIT=2
+RETRY_LIMIT = 2
 BACKEND_SERVER_SETTINGS = "Backend Server Settings"
 bk = read_asset("business_keywords_v1.json")
-BUSINESS_KEYWORDS = bk.get("business_keywords",bk)
+BUSINESS_KEYWORDS = bk.get("business_keywords", bk)
 mapping_data = read_asset("metaschema_clean_v2.json")
 CONVERSATION_TEMPLATE = read_asset("conversation_template_v2.j2")
 SQL_PROMPT = read_asset("sql_prompt.txt")
@@ -75,10 +72,10 @@ FORMAT_PROMPT = read_asset("user_friendly_prompt.txt")
 NON_ERP_PROMPT = read_asset("non_erp_prompt.txt")
 FILTER_TABLES = read_asset("filter_tables.txt")
 filter_fields = read_asset("filter_fields.txt")
-TABLE_VS_PATH = "/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/v2/table_only_fvs"
+TABLE_VS_PATH = "/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/v2/fvs_stores/erpnext/table_fvs"
 
 
-@frappe.whitelist()
+@frappe.whitelist(allow_guest=False)
 def download_model_from_ui():
     """
     Force re-download embedding model
@@ -87,38 +84,37 @@ def download_model_from_ui():
     - Resets RAM singleton
     """
     global _EMBEDDER_INSTANCE
-
     model_url = "https://huggingface.co/hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned"
-
-    # apps/changai/changai/models/nomic-embed
     model_path = frappe.get_app_path(
-        "changai", "changai", "models", "nomic-embed"
+        "changai", "changai", "model"
     )
-
+    app_base = frappe.get_app_path("changai")
+    resolved = os.path.realpath(model_path)
+    if not resolved.startswith(os.path.realpath(app_base)):
+        frappe.throw("Invalid model path: outside app directory.")
     try:
         if os.path.exists(model_path):
             shutil.rmtree(model_path)
-
         os.makedirs(os.path.dirname(model_path), exist_ok=True)
-
         subprocess.run(
             ["git", "clone", model_url, model_path],
-            check=True
+            check=True,
+            shell=False
         )
-
         _EMBEDDER_INSTANCE = None
+        return {"status": "success", "message": "Embedding model downloaded successfully."}
 
-        return {
-            "status": "success",
-            "message": "Embedding model downloaded successfully."
-        }
+    except subprocess.CalledProcessError as e:
+        frappe.log_error(frappe.get_traceback(), "Embedding Model Download Failed")
+        frappe.throw(f"Git clone failed: {str(e)}")
 
-    except Exception as e:
-        frappe.log_error(
-            frappe.get_traceback(),
-            "Embedding Model Download Failed"
-        )
-        frappe.throw(f"Download failed: {str(e)}")
+    except FileNotFoundError as e:
+        frappe.log_error(frappe.get_traceback(), "Embedding Model Download Failed")
+        frappe.throw(f"Git not found. Is git installed on this server? {str(e)}")
+
+    except OSError as e:
+        frappe.log_error(frappe.get_traceback(), "Embedding Model Download Failed")
+        frappe.throw(f"File system error: {str(e)}")
 
 
 def get_embedding_engine():
@@ -126,58 +122,56 @@ def get_embedding_engine():
     Disk → RAM loader (Lazy Singleton)
     """
     global _EMBEDDER_INSTANCE
-
     if _EMBEDDER_INSTANCE is None:
         model_path = frappe.get_app_path(
-            "changai", "changai", "models", "nomic-embed"
+            "changai", "changai", "model"
         )
-
         if not os.path.exists(model_path):
             frappe.throw(
                 "Embedding model not found. "
                 "Go to ChangAI Settings and click 'Download Embedding Model'."
             )
-
         # Heavy load — happens ONCE per worker
         _EMBEDDER_INSTANCE = HuggingFaceEmbeddings(
             model_name=model_path,
             model_kwargs={"device": "cpu"}
         )
-
     return _EMBEDDER_INSTANCE
 
 
 def get_settings() -> Dict[str, Any]:
-    settings=frappe.get_single("ChangAI Settings")
+    settings = frappe.get_single("ChangAI Settings")
     langsmith_tracing = "true" if settings.langsmith_tracing else "false"
-    config={
-        "LANGSMITH_TRACING" : langsmith_tracing,
-        "LANGSMITH_ENDPOINT" : settings.langsmith_endpoint,
-        "LANGSMITH_API_KEY" : settings.langsmith_api_key,
-        "LANGSMITH_PROJECT" : settings.langsmith_project,
-        "ROOT_PATH":settings.root_path,
-        "URL":settings.prediction_url if settings.remote else settings.ollama_url,
-        "LOCAL_LLM":settings.local_llm,
-        "LOCAL_SCHEMA_RETRIEVER":settings.local_schema_retriever,
-        "RETAIN_MEM":settings.retain_memory,
-        "LLM_VERSION_ID":settings.llm_version_id,
-        "EMBED_VERSION_ID":settings.embedder_version_id,
-        "API_TOKEN":settings.api_token,
+    config = {
+        "LANGSMITH_TRACING": langsmith_tracing,
+        "LANGSMITH_ENDPOINT": settings.langsmith_endpoint,
+        "LANGSMITH_API_KEY": settings.langsmith_api_key,
+        "LANGSMITH_PROJECT": settings.langsmith_project,
+        "ROOT_PATH": settings.root_path,
+        "URL": settings.prediction_url if settings.remote else settings.ollama_url,
+        "LOCAL_LLM": settings.local_llm,
+        "LOCAL_SCHEMA_RETRIEVER": settings.local_schema_retriever,
+        "RETAIN_MEM": settings.retain_memory,
+        "LLM_VERSION_ID": settings.llm_version_id,
+        "EMBED_VERSION_ID": settings.embedder_version_id,
+        "API_TOKEN": settings.api_token,
         "REMOTE": bool(settings.remote),
-        "deploy_url":settings.deploy_url,
-        "entity_retriever":settings.entity_retriever,
-        "support_api_url":settings.support_url,
-        "get_ticket_details_url":settings.get_ticket_details_url,
-        "llm":settings.llm,
-        "location":settings.gemini_location,
-        "retriever_structure":settings.retriever_structure,
-        "gemini_file_path":settings.gemini_file_path,
-        "gemini_project_id":settings.gemini_project_id
+        "deploy_url": settings.deploy_url,
+        "entity_retriever": settings.entity_retriever,
+        "support_api_url": settings.support_url,
+        "get_ticket_details_url": settings.get_ticket_details_url,
+        "llm": settings.llm,
+        "location": settings.gemini_location,
+        "retriever_structure": settings.retriever_structure,
+        "gemini_file_path": settings.gemini_file_path,
+        "gemini_project_id": settings.gemini_project_id,
     }
     return config
 
+
 class ChangAIConfig:
-    _cached=None
+    _cached = None
+
     @classmethod
     def get(cls):
         if cls._cached:
@@ -186,21 +180,12 @@ class ChangAIConfig:
         return cls._cached
 
 
-# def _assert_file_inside_base(file_path: str, base_dir: str) -> str:
-#     base = Path(base_dir).resolve()
-#     p = Path(file_path).resolve()
-#     if base != p and base not in p.parents:
-#         raise ValueError(f"Unsafe path: {p}")
-#     return str(p)
-
-
 @frappe.whitelist(allow_guest=True)
 def generate_token_secure(api_key: str, api_secret: str, app_key: str):
-
     try:
         try:
             app_key = base64.b64decode(app_key).decode("utf-8")
-        except Exception as e:
+        except Exception:
             return Response(
                 json.dumps(
                     {"message": "Security Parameters are not valid", "user_count": 0}
@@ -208,25 +193,17 @@ def generate_token_secure(api_key: str, api_secret: str, app_key: str):
                 status=401,
                 mimetype="application/json",
             )
-
-        clientID, clientSecret, clientUser = frappe.db.get_value(
-            "OAuth Client",
-            {"app_name": app_key},
-            ["client_id", "client_secret", "user"],
-        )
 
         doc = frappe.db.get_value(
             "OAuth Client",
             {"app_name": app_key},
             ["name", "client_id", "client_secret", "user"],
-             as_dict=True
+            as_dict=True
         )
-
         if not doc:
             frappe.local.response["http_status_code"] = 401
             return {"ok": False, "error": "OAuth client not found / invalid app_key"}
-
-        if clientID is None:
+        if doc.client_id is None:
             return Response(
                 json.dumps(
                     {"message": "Security Parameters are not valid", "user_count": 0}
@@ -234,107 +211,34 @@ def generate_token_secure(api_key: str, api_secret: str, app_key: str):
                 status=401,
                 mimetype="application/json",
             )
-
-        client_id = clientID  # Replace with your OAuth client ID
-        client_secret = clientSecret
-
         url = (
             frappe.local.conf.host_name
             + "/api/method/frappe.integrations.oauth2.get_token"
         )
-
         payload = {
             "username": api_key,
             "password": api_secret,
             "grant_type": "password",
-            "client_id": client_id,
-            "client_secret": client_secret,
+            "client_id": doc.client_id,
+            "client_secret": doc.client_secret,
         }
-        files = []
-        headers = {"Content-Type": "application/json"}
-
-        response = requests.request("POST", url, data=payload, files=files)
-
-        if response.status_code == 200:
-
+        response = requests.request("POST", url, data=payload)
+        if response.status_code == STATUS_200:
             result_data = json.loads(response.text)
-
             return Response(
                 json.dumps({"data": result_data}),
-                status=200,
+                status=STATUS_200,
                 mimetype="application/json",
             )
-
         else:
-
             frappe.local.response.http_status_code = 401
             return json.loads(response.text)
-
     except Exception as e:
-
         return Response(
             json.dumps({"message":str(e), "user_count": 0}),
             status=500,
             mimetype="application/json",
         )
-
-
-#api for user token
-@frappe.whitelist(allow_guest=True)
-def generate_token_secure_for_users(username: str, password: str, app_key: str) -> Dict[str, Any]:
-    """
-    Generate a secure token for user authentication.
-    """
-    try:
-        try:
-            app_key = base64.b64decode(app_key).decode("utf-8")
-        except ValueError as ve:
-            return generate_error_response(
-                INVALID_SECURITY_PARAMETERS, error=str(ve), status = STATUS_401
-            )
-        client_id_value, client_secret_value = get_oauth_client(app_key)
-        if client_id_value is None:
-            return generate_error_response(
-                INVALID_SECURITY_PARAMETERS, None, status = STATUS_401
-            )
-        client_id = client_id_value  # Replace with your OAuth client ID
-        client_secret = client_secret_value  # Replace with your OAuth client secret
-        url = frappe.local.conf.host_name + OAUTH_TOKEN_URL
-        payload = {
-            "username": username,
-            "password": password,
-            "grant_type": "password",
-            "client_id": client_id,
-            "client_secret": client_secret,
-        }
-        files = []
-        response = requests.request("POST", url, data=payload, files=files, timeout=10)
-        qid = frappe.get_all(
-            "User",
-            fields=[
-                FIELD_NAME_AS_ID,
-                FULL_NAME_ALIAS,
-                MOBILE_NO_ALIAS,
-            ],
-            filters={"email": ["like", username]},
-        )
-        if response.status_code == STATUS_200:
-            result_data = response.json()
-            result_data["refresh_token"] = "XXXXXXX"
-            result = {
-                "token": result_data,
-                "user": qid[0] if qid else {},
-            }
-            frappe.local.response = {
-                "data": result_data,
-                "http_status_code": STATUS_200,
-            }
-            return generate_success_response(result, status=STATUS_200)
-        else:
-            frappe.local.response.http_status_code = STATUS_401
-            return json.loads(response.text)
-    except ValueError as ve:
-        return generate_error_response(ERROR, error=str(ve), status=STATUS_500)
 
 
 # Api for  checking user name  using token
@@ -343,28 +247,42 @@ def whoami() -> Dict[str, Any]:
     """This function returns the current session user"""
     try:
         response_content = {
-                "user": frappe.session.user,
-            }
+            "user": frappe.session.user,
+        }
         frappe.local.response = {
             "data": response_content,
             "http_status_code": STATUS_200,
         }
-        return generate_success_response(response_content, STATUS_200)
+        return Response(
+            json.dumps({"data": response_content}),
+            status=STATUS_200,
+            mimetype="application/json",
+        )
     except ValueError as ve:
         frappe.throw(ve)
 
 
-@frappe.whitelist(allow_guest=False)
+def extract_tables_from_sql(sql: str) -> List[str]:
+    """Extract all table names from a SQL query."""
+    if not sql:
+        return []
+    matches = re.findall(r'`(tab[^`]+)`', sql, re.IGNORECASE)
+    seen = set()
+    tables = []
+    for t in matches:
+        if t not in seen:
+            seen.add(t)
+            tables.append(t)
+    return tables
+
+
 def call_model(prompt: str, task: str = "llm") -> Any:
-    if config["REMOTE"] and config["llm"]=="QWEN3":
+    config = ChangAIConfig.get()
+    if config["REMOTE"] and config["llm"] == "QWEN3":
         return remote_llm_request_deploy_test(prompt=prompt, task=task)
-    elif config["llm"]=="Gemini":
+    elif config["llm"] == "Gemini":
         return call_gemini(prompt)
     return local_llm_request(prompt)
-
-
-def call_embedder(question: str) -> Any:
-    return remote_embedder_request(question) if config["REMOTE"]  else local_embedder_request(question)
 
 
 def _post_json(url: str, headers: Dict[str, str], payload: Dict[str, Any], timeout: int = 120):
@@ -375,7 +293,7 @@ def _post_json(url: str, headers: Dict[str, str], payload: Dict[str, Any], timeo
             body = res.json() if "application/json" in ct else {"raw_text": res.text}
         except Exception:
             body = {"raw_text": res.text}
-        if res.status_code not in (200, 201,202):
+        if res.status_code not in (STATUS_200, 201, 202):
             return {"ok": False, "status_code": res.status_code, "body": body}
         return {"ok": True, "status_code": res.status_code, "body": body}
     except requests.exceptions.Timeout:
@@ -385,6 +303,7 @@ def _post_json(url: str, headers: Dict[str, str], payload: Dict[str, Any], timeo
 
 
 def local_llm_request(prompt: str) -> str:
+    config = ChangAIConfig.get()
     url = f"{config['URL'].rstrip('/')}/api/generate"
     payload = {"model": config["LOCAL_LLM"], "prompt": prompt, "stream": False}
     resp = _post_json(url, headers={}, payload=payload, timeout=120)
@@ -392,13 +311,6 @@ def local_llm_request(prompt: str) -> str:
         return f"Error: local LLM call failed ({resp.get('status_code')}): {resp.get('body')}"
     text = (resp.get("body") or {}).get("response")
     return (text or "").strip() or "Error: Empty response from local LLM."
-
-
-def return_headers() -> Dict[str, str]:
-    return {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {config['API_TOKEN']}",
-        }
 
 
 def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
@@ -409,17 +321,16 @@ def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
         LOC = config["location"]
         creds = service_account.Credentials.from_service_account_file(
             KEY_PATH, 
-            scopes=['https://www.googleapis.com/auth/cloud-platform']
+            scopes = ['https://www.googleapis.com/auth/cloud-platform']
         )
-        
         client = genai.Client(
             vertexai=True,
             project=PROJECT_ID,
             location=LOC,
             credentials=creds
         )
-        config = types.GenerateContentConfig(
-            system_instruction="You are an ERPNext assistant.Follow the task instructions exactly.",
+        gemini_config = types.GenerateContentConfig(
+            system_instruction="You are an ERPNext assistant. Follow the task instructions exactly."
         )
         contents = [
             {
@@ -427,18 +338,15 @@ def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
                 "parts": [{"text": str(prompt)}]
             }
         ]
-
         response = client.models.generate_content(
             model=MODEL_ID,
-            config=config,
+            config=gemini_config,
             contents=contents
         )
         text = (response.text or "").strip()
         if text.startswith("```"):
             text = text.replace("```json", "").replace("```", "").strip()
-
         return text
-
 
     except Exception as e:
         return {
@@ -481,7 +389,6 @@ def remote_llm_request_deploy_test(
         "Prefer": "wait",
         "Authorization": f"Bearer {api_key}",
     }
-    config = ChangAIConfig.get()
     deploy_url = config["deploy_url"]
     create = _post_json(deploy_url, headers=headers, payload=payload, timeout=120)
     if not create.get("ok"):
@@ -532,37 +439,12 @@ def remote_embedder_request(formatted_q: str) -> Union[List[Any], str]:
         "Prefer": "wait",
         "Authorization": f"Bearer {config['API_TOKEN']}",
     }
-    result = None
     response = _post_json(config["URL"], headers, payload)
     try:
         if response:
-            result = response["body"]["output"]
-            return result
+            return response["body"]["output"]
     except Exception as e:
         return "Error: " + str(e)
-
-
-# def local_embedder_request(question: str) -> List[Any]:
-#     global __vector_store
-    #   config = ChangAIConfig.get()
-#     if not os.path.exists(INDEX_PATH):
-#         return []
-#     if __vector_store is None:
-#         _emb = OllamaEmbeddings(base_url=config["URL"], model=config["LOCAL_SCHEMA_RETRIEVER"])
-#         __vector_store = FAISS.load_local(INDEX_PATH, embeddings=_emb, allow_dangerous_deserialization=True)
-#     return __vector_store.similarity_search(question, k=15)
-    
-
-# def read_json(path: str) -> Dict[str, Any]:
-#     safe_path = _assert_file_inside_base(path, ALLOWED_BASE)
-#     with open(safe_path, "r", encoding="utf-8") as f:
-#         return json.load(f)
-
-
-# def read_text(path: str) -> str:
-#     safe_path = _assert_file_inside_base(path, ALLOWED_BASE)
-#     with open(safe_path, "r", encoding="utf-8") as f:
-#         return f.read()
 
 
 def _safe_strip(v):
@@ -573,23 +455,23 @@ def _safe_strip(v):
     return str(v).strip()
 
 
-# # Shared State
-class SQLState(TypedDict,total=False):
-    session_id:str
+# Shared State
+class SQLState(TypedDict, total=False):
+    session_id: str
     question: str
-    contains_values:bool
-    formatted_q:str
+    contains_values: bool
+    formatted_q: str
     hits: List[Any]
-    context :str
-    sql:str
-    orm:str
-    validation:Dict[str,Any]
-    error:Optional[str]
-    tries:int
-    query_type:str
-    sql_prompt:str
-    formatting_prompt:str
-    non_erp_res:str
+    context: str
+    sql: str
+    orm: str
+    validation: Dict[str, Any]
+    error: Optional[str]
+    tries: int
+    query_type: str
+    sql_prompt: str
+    formatting_prompt: str
+    non_erp_res: str
     entity_cards: List[str]
     entity_raw: Any
     retrieval_mode: str
@@ -598,7 +480,7 @@ class SQLState(TypedDict,total=False):
     top_fields: Dict[str, Any]
     selected_fields: str
 
-@frappe.whitelist(allow_guest=False)
+
 def fill_sql_prompt(question: str, context: str) -> str:
     return SQL_PROMPT.format(question=question, context=context)
 
@@ -618,14 +500,14 @@ def guardrail_router(state: SQLState) -> SQLState:
     return {**state, "query_type": "ERP" if is_erp else "NON_ERP"}
 
 
-def send_non_erp_request(state:SQLState) -> SQLState:
-    qstn=state.get("formatted_q") or state.get("question")
-    prompt=NON_ERP_PROMPT.format(question=qstn)
+def send_non_erp_request(state: SQLState) -> SQLState:
+    qstn = state.get("formatted_q") or state.get("question")
+    prompt = NON_ERP_PROMPT.format(question=qstn)
     try:
-        response=call_model(prompt,"llm") 
-        return {**state,"prompt":prompt,"non_erp_res":response,"error":None}
+        response = call_model(prompt, "llm")
+        return {**state, "prompt": prompt, "non_erp_res": response, "error": None}
     except Exception as e:
-        return {**state,"non_erp_res": "", "error": f"NON-ERP call failed: {e}"}
+        return {**state, "non_erp_res": "", "error": f"NON-ERP call failed: {e}"}
 
 
 @traceable(name="rewrite_question", run_type="tool")
@@ -678,13 +560,13 @@ def rewrite_question(state: SQLState) -> SQLState:
 
 def get_table_vs():
     global _VS_TABLE
-    
     if _VS_TABLE is None:
         emb = get_embedding_engine()
         if emb is None:
             frappe.throw("Embedding engine is None. Model not loaded.")
         _VS_TABLE = FAISS.load_local(TABLE_VS_PATH, emb, allow_dangerous_deserialization=True)
     return _VS_TABLE
+
 
 def call_fvs_table_search(q: str) -> List[str]:
     hits = get_table_vs().similarity_search(q, k=15)
@@ -696,6 +578,7 @@ def call_fvs_table_search(q: str) -> List[str]:
             out.append(t)
     return out
 
+
 def _parse_json_list(raw: str) -> List[Any]:
     try:
         data = json.loads(raw)
@@ -704,8 +587,7 @@ def _parse_json_list(raw: str) -> List[Any]:
         return []
 
 
-@frappe.whitelist(allow_guest=False)
-def call_retriev_multi_line(user_question: str) -> Dict[str, Any]:
+def call_retrieve_multi_line(user_question: str) -> Dict[str, Any]:
     top_tables = call_fvs_table_search(user_question)
     table_prompt = FILTER_TABLES.replace("{user_question}", user_question)
     table_prompt = table_prompt.replace("{table_list}", json.dumps(top_tables, ensure_ascii=False))
@@ -734,31 +616,19 @@ def call_retriev_multi_line(user_question: str) -> Dict[str, Any]:
         "selected_fields": json.dumps(selected_map, ensure_ascii=False),
         "selected_tables": selected_tables,
         "top_tables": top_tables,
-        "top_fields": fields_candidates
+        "top_fields": fields_candidates,
     }
 
 
-_FIELDS_EMB = None
-_FULL_FIELDS_VS = None
-_SUB_VS_CACHE = {}
-
-FULL_FIELDS_VS_PATH = "/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/v2/business_only_schema_fvs"
-
-
-# def get_fields_embedder():
-#     global _FIELDS_EMB
-#     if _FIELDS_EMB is None:
-#         emb = get_embedding_engine()
-#         # _FIELDS_EMB = HuggingFaceEmbeddings(
-#         #     model_name="hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned"
-#         # )
-#     return emb
+FULL_FIELDS_VS_PATH = "/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/v2/fvs_stores/erpnext/schema_fvs"
 
 
 def get_full_fields_vs():
     global _FULL_FIELDS_VS
     if _FULL_FIELDS_VS is None:
         emb = get_embedding_engine()
+        if not os.path.exists(FULL_FIELDS_VS_PATH):
+            frappe.throw(f"Vector store path not found: {FULL_FIELDS_VS_PATH}")
         _FULL_FIELDS_VS = FAISS.load_local(
             FULL_FIELDS_VS_PATH,
             emb,
@@ -790,38 +660,32 @@ def get_sub_vs(selected_tables: List[str]) -> Optional[FAISS]:
     sub = FAISS.from_documents(docs, emb)
     _SUB_VS_CACHE[key] = sub
     return sub
+
+
 def call_fvs_field_search(
     user_question: str,
     table_name: str,
     selected_tables: List[str],
     k: int = 40,
 ) -> List[Dict[str, Any]]:
-
     if not user_question or not table_name:
         return []
-
     sub_vs = get_sub_vs(selected_tables)
     if sub_vs is None:
         return []
-
-    # Reduce k from 200 -> ~60 (you only need 40)
     hits = sub_vs.similarity_search(user_question, k=min(60, max(40, k)))
-
     results: List[Dict[str, Any]] = []
     seen = set()
-
     for d in hits:
         meta = getattr(d, "metadata", {}) or {}
         tbl = meta.get("table")
         fld = meta.get("field")
         if tbl != table_name:
             continue
-
         key = (tbl, fld)
         if key in seen:
             continue
         seen.add(key)
-
         row = {
             "field": fld,
         }
@@ -833,19 +697,18 @@ def call_fvs_field_search(
         results.append(row)
         if len(results) >= k:
             break
-
     return results
 
 
-# # Node 1: Retrive with Fiass Vector Store.
+# Node 1: Retrive with Fiass Vector Store.
 @traceable(name="schema_retriever", run_type="tool")
 def schema_retriever(state: SQLState) -> SQLState:
     config = ChangAIConfig.get()
-    if config["retriever_structure"]=="single line":
-        hits = call_embedder(state.get("formatted_q", "") or state.get("question", ""))
+    if config["REMOTE"]:
+        hits = remote_embedder_request(state.get("formatted_q", "") or state.get("question", ""))
         return {**state, "hits": hits}
     else:
-        out = call_retriev_multi_line(state.get("formatted_q") or state.get("question") or "")
+        out = call_retrieve_multi_line(state.get("formatted_q") or state.get("question") or "")
         return {
             **state,
             "retrieval_mode": "multi",
@@ -888,7 +751,6 @@ def generate_sql(state:SQLState) -> SQLState:
     else:
         prompt=fill_sql_prompt(state["formatted_q"],state["context"])
     try:
-        # response=call_model(prompt, "llm")
         response=call_model(prompt)
         if isinstance(response, str):
             response = json.loads(response)
@@ -1040,15 +902,6 @@ def router(state:SQLState) -> str:
         return "repair"
     return "end"
 
-from sqlglot import exp
-import sqlglot
-from typing import Dict, List
-from typing import Dict, List, Any, Set, Tuple
-import sqlglot
-from sqlglot import exp
-from typing import Any, Dict, List, Tuple, Set
-import sqlglot
-from sqlglot import exp
 
 def validate_sql_against_mapping(
     sql_text: str,
@@ -1194,8 +1047,6 @@ workflow.add_edge("repair_sql","validate_sql")
 checkpointer=MemorySaver()
 app=workflow.compile(checkpointer=checkpointer)
 
-from frappe.desk.reportview import build_match_conditions
-@frappe.whitelist(allow_guest=False)
 def execute_query_1(sql: str, doctypes: List[str]) -> Any:
     try:
         if sql:
@@ -1241,6 +1092,7 @@ def send_support_message(message: str) -> Any:
 
 @frappe.whitelist(allow_guest=False)
 def get_ticket_details(tid: Union[int, str]) -> Any:
+    config = ChangAIConfig.get()
     url = config["get_ticket_details_url"]
     res = requests.post(url, json={"ticket_id": tid}, timeout=15)
     return res.json()
@@ -1319,7 +1171,6 @@ def save_logs(
     doc.result = to_json_if_needed(result)
     doc.formatted_result = to_json_if_needed(formatted_result)
     doc.insert(ignore_permissions=True)
-    # frappe.db.commit() removed
     return doc.name
 
 
@@ -1686,132 +1537,13 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
             save_turn_2(session_id=chat_id,user_text=formatted_q,bot_text=formatted_result)
             save_logs(user_question=user_question,formatted_q=formatted_q,context=context,sql=sql,val=val,result=sql_result,formatted_result=formatted_result)
         except Exception as e:
-            return e
+            return {"error": str(e)}
     return {
         "Question":user_question,
-        # "SQLPrompt":sql_prompt,
-        "top_tables":top_tables,
-        "top_fields":top_fields,
-        # "contains_values":contains_values,
         "SQL": sql,
         "ORM":orm,
-        # "Validation": val,
-        # "Tries": tries,
-        # "Error": err,
-        # "Result": result,
+        "Validation": val,
+        "Error": err,
         "EntityDebug": entity_debug,
-        "Bot": formatted_result
-    }
-
-
-def extract_tables_from_sql(sql: str) -> List[str]:
-    """Extract all table names from a SQL query."""
-    if not sql:
-        return []
-    matches = re.findall(r'`(tab[^`]+)`', sql,re.IGNORECASE)
-    seen = set()
-    tables = []
-    for t in matches:
-        if t not in seen:
-            seen.add(t)
-            tables.append(t)
-    
-    return tables
-
-
-@frappe.whitelist(allow_guest=False)
-def run_text2sql_pipeline_1(user_question: str, chat_id: str):
-    q = (user_question or "")
-    config = {
-        "configurable": {"thread_id": chat_id},
-        "run_name": "changai_text2sql_graph",
-        "run_type": "graph",
-        "tags": ["changai", "rag", "sql"],
-        "metadata": {"tenant": "demo"},
-    }
-    initial_state: SQLState = {
-        "question": q,
-        "session_id":chat_id
-    }
-    final: SQLState = app.invoke(initial_state, config=config)
-    entity_debug = {
-    "contains_values": final.get("contains_values"),
-    "entity_cards": final.get("entity_cards") or [],
-}
-    type_ = final.get("query_type") or "NON_ERP"
-    if type_ == "NON_ERP":
-        non_erp_res = _safe_strip(final.get("non_erp_res"))
-        formatted_q = _safe_strip(final.get("formatted_q"))
-        err = final.get("error")
-
-        if not err and non_erp_res:
-            try:
-                save_turn_2(
-                    session_id=chat_id,
-                    user_text=formatted_q,
-                    bot_text=non_erp_res
-                )
-                save_logs(
-                    user_question=user_question,
-                    formatted_q=formatted_q,
-                    result=non_erp_res
-                )
-            except Exception as e:
-                frappe.log_error(f"Failed to save NON_ERP logs: {e}", "ChangAI Logs")
-
-        return {
-            "Question": user_question,
-            "Formatted-Question": formatted_q,
-            "Bot": non_erp_res,
-        }
-
-    sql  = clean_sql(final.get("sql"))or ""
-    selected_tables = final.get("selected_tables") or []
-    orm  = clean_sql(final.get("orm"))or ""
-    fields=_safe_strip(final.get("selected_fields") or "")
-    formatted_q = _safe_strip(final.get("formatted_q") or "")
-    formatting_prompt = (final.get("formatting_prompt") or "")
-    sql_prompt = (final.get("sql_prompt") or "")
-    val = final.get("validation") or {}
-    ok = bool(val.get("ok"))
-    if not ok or not sql.upper().startswith("SELECT"):
-        context = (final.get("context") or final.get("selected_fields") or "")[:800]
-        tries = int(final.get("tries") or 0)
-        err = final.get("error")
-        return {
-            "Question":user_question,
-            "Formatted_Question":formatted_q,
-            "Context": context,
-            "SQL": sql,
-            "Validation": val,
-            "EntityDebug": entity_debug,
-            "Tries": tries,
-            "Error": err or "SQL not valid or missing",
-            "Result": [],
-            "Bot": "I couldn’t produce a valid SQL yet. Please try rephrasing.",
-        }
-    try:
-        extracted_tables=extract_tables_from_sql(sql)
-        # selected_tables=list(set(selected_tables) | set(extracted_tables))
-        sql_result = execute_query_1(sql,extracted_tables)
-    except Exception as e:
-        return {
-            "ok":False,
-            "error": f"SQL Execution Failed: {e}"
-        }
-    context = (final.get("context") or final.get("selected_fields") or "")[:800]
-    contains_values=final.get("contains_values") or ""
-    tries = int(final.get("tries") or 0)
-    top_tables=final.get("top_tables") or ""
-    top_fields=final.get("top_fields") or ""
-    err = final.get("error")
-    formatted_result = format_data(formatted_q,sql_result)
-    if not err:
-        try:
-            save_turn_2(session_id=chat_id,user_text=formatted_q,bot_text=formatted_result)
-            save_logs(user_question=user_question,formatted_q=formatted_q,context=context,sql=sql,val=val,result=sql_result,formatted_result=formatted_result)
-        except Exception as e:
-            return e
-    return {
         "Bot": formatted_result
     }

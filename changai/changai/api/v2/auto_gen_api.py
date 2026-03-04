@@ -19,6 +19,23 @@ import math
 from pathlib import Path
 from frappe.utils.file_manager import get_file
 from changai.changai.api.v2.text2sql_pipeline_v2 import call_gemini
+from changai.changai.api.v2.train_data_api import _get_openai_client
+
+erpnext_modules = [
+    "Selling",
+    "Stock",
+    "Buying",
+    "Assets",
+    "Accounts",
+    "CRM",
+    "Projects",
+    "Manufacturing",
+    "Support",
+    "Subcontracting",
+    "Quality Management",
+    "Regional",
+    "Maintenance",
+]
 
 def safe_path_in_dir(base_dir: str, filename: str) -> str:
     """
