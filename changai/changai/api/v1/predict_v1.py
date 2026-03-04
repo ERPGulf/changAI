@@ -8,15 +8,19 @@ from transformers import (
 import torch
 import frappe
 torch._dynamo.config.suppress_errors = True
+from cog import BasePredictor, Input
+from sentence_transformers import SentenceTransformer, util
 
-meta_path = frappe.get_app_path(
-    "changai", "changai", "api", "v1", "meta.json"
-)
+def _load_json_from_app(app: str, *parts: str):
+    raw = frappe.read_file(frappe.get_app_path(app, *parts))
+    return json.loads(raw)
 
-id2label_path = frappe.get_app_path(
-    "changai", "changai", "api", "v1", "id2label.json"
-)
+# Example:
+PLEASANTRY = _load_json_from_app("changai", "changai", "api", "v1", "pleasantries.json")
+BUSINESS_KEYWORDS = _load_json_from_app("changai", "changai", "api", "v1", "business_keywords_v1.json")
 
+META  = _load_json_from_app("changai", "changai", "api", "v1", "meta.json")
+ID2LABEL  = _load_json_from_app("changai", "changai", "api", "v1", "id2label.json")
 
 # Load the HF_Models Repo IDs.
 ROBERTO_REPO = "hyrinmansoor/text2frappe-s1-roberta"
@@ -38,10 +42,8 @@ class Predictor(BasePredictor):
 
         self.tokenizer_s3 = T5Tokenizer.from_pretrained(FLANS3_REPO)
         self.model_s3 = T5ForConditionalGeneration.from_pretrained(FLANS3_REPO)
-        with open(meta_path, "r", encoding="utf-8") as f:
-            self.meta = json.load(f)
-        with open(id2label_path, "r", encoding="utf-8") as f:
-            self.id2label = json.load(f)
+        self.meta = META
+        self.id2label = ID2LABEL
 
     def predict_doctype(self, question):
         try:

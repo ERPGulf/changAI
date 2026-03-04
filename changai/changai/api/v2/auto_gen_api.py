@@ -5,7 +5,6 @@ import gc
 import json
 import os
 import time
-from typing import List, Dict, Any, Optional
 from sentence_transformers import SentenceTransformer
 from langchain_community.vectorstores import FAISS
 from langchain_core.embeddings import Embeddings
@@ -21,6 +20,7 @@ from frappe.utils.file_manager import get_file
 from changai.changai.api.v2.text2sql_pipeline_v2 import call_gemini
 from changai.changai.api.v2.train_data_api import _get_openai_client
 
+RAG_FOLDER = "Home/RAG Sources"
 erpnext_modules = [
     "Selling",
     "Stock",
@@ -37,33 +37,6 @@ erpnext_modules = [
     "Maintenance",
 ]
 
-def safe_path_in_dir(base_dir: str, filename: str) -> str:
-    """
-    Build a safe path inside base_dir using only a filename (no folders).
-    Prevents ../ traversal.
-    """
-    base_dir_abs = os.path.abspath(base_dir)
-    filename_only = os.path.basename(filename)
-    full = os.path.abspath(os.path.join(base_dir_abs, filename_only))
-    if not full.startswith(base_dir_abs + os.sep):
-        raise frappe.ValidationError(_("Invalid file path"))
-    return full
-
-
-def _get_data_dir() -> str:
-    d = frappe.get_app_path("changai", "changai", "api", "v2", "data")
-    os.makedirs(d, exist_ok=True)
-    return d
-
-
-def _path(name: str) -> str:
-    return safe_path_in_dir(_get_data_dir(), name)
-
-
-TABLES_JSON = "tables.json"
-SCHEMA_YAML = "schema.yaml"
-TRAIN_JOSNL="training_data.jsonl"
-META_SCHEMA_YAML = "meta_schema.yaml"
 
 IGNORED_FIELDTYPES: Set[str] = {
     "Section Break", "Column Break", "Tab Break", "Page Break", "Table Break",
@@ -72,56 +45,68 @@ IGNORED_FIELDTYPES: Set[str] = {
 }
 
 
-def _load_yaml(filename: str) -> Dict[str, Any]:
-    path = _path(filename)
-    try:
-        with open(path, "r", encoding="utf-8") as f:
-            obj = yaml.safe_load(f) or {}
+def _get_file_doc_by_name(file_name: str, folder: str = RAG_FOLDER) -> Optional["frappe.model.document.Document"]:
+    file_id = frappe.db.get_value("File", {"file_name": file_name, "folder": folder}, "name")
+    if not file_id:
+        return None
+    return frappe.get_doc("File", file_id)
+
+
+def _read_filedoctype(file_name: str, folder: str = RAG_FOLDER):
+    doc = _get_file_doc_by_name(file_name, folder)
+    if not doc:
+        if file_name.endswith(".json"):
+            return []
+        if file_name.endswith((".yaml", ".yml")):
+            return {}
+        return ""
+    raw = doc.get_content() or ""
+    if isinstance(raw, bytes):
+        raw = raw.decode("utf-8", errors="replace")
+    if file_name.endswith(".json"):
+        return json.loads(raw or "[]")
+    if file_name.endswith((".yaml", ".yml")):
+        obj = yaml.safe_load(raw) or {}
         return obj if isinstance(obj, dict) else {}
-    except FileNotFoundError:
-        return {}
-    except Exception:
-        return {}
+    return raw
 
 
-def _save_yaml(filename: str, obj: Dict[str, Any]) -> None:
-    """
-    Atomic write to prevent corruption.
-    """
-    path = _path(filename)
-    tmp = f"{path}.tmp"
-    with open(tmp, "w", encoding="utf-8") as f:
-        yaml.safe_dump(obj, f, sort_keys=False, allow_unicode=True)
-    os.replace(tmp, path)
+def write_filedoctype(
+    file_name: str,
+    payload,
+    folder: str = "Home/RAG Sources",
+    is_private: int = 0
+):
+    if file_name.endswith(".json"):
+        text = json.dumps(payload, ensure_ascii=False, indent=2)
 
+    elif file_name.endswith((".yaml", ".yml")):
+        text = yaml.safe_dump(payload, allow_unicode=True, sort_keys=False)
 
-def _load_json_list(filename: str) -> List[str]:
-    path = _path(filename)
-    try:
-        with open(path, "r", encoding="utf-8") as f:
-            data = json.load(f)
-        return data if isinstance(data, list) else []
-    except FileNotFoundError:
-        return []
-    except Exception:
-        return []
+    else:
+        text = str(payload)
 
+    content = text.encode("utf-8")
 
-def _save_json_list(filename: str, items: List[str]) -> None:
-    path = _path(filename)
-    tmp = f"{path}.tmp"
-    with open(tmp, "w", encoding="utf-8") as f:
-        json.dump(items, f, ensure_ascii=False, indent=2)
-    os.replace(tmp, path)
+    existing = frappe.db.get_value(
+        "File",
+        {"file_name": file_name, "folder": folder},
+        "name"
+    )
 
+    if existing:
+        doc = frappe.get_doc("File", existing)
+        doc.content = content
+        doc.save(ignore_permissions=True)
+        return doc
 
-def _field_dict(df) -> Dict[str, Any]:
-    return {
-        "name": df.fieldname,
-        "description": (df.description or "").strip(),
-        "type": df.fieldtype,
-        "options": df.options,
-    }
+    return frappe.get_doc({
+        "doctype": "File",
+        "file_name": file_name,
+        "folder": folder,
+        "is_private": is_private,
+        "content": content,
+    }).insert(ignore_permissions=True)
 
 
 def _tab(dt: str) -> str:
@@ -137,15 +122,7 @@ def _strip_tab(t: str) -> str:
 @frappe.whitelist(allow_guest=False)
 def sync_master_data_smart() -> Dict[str, Any]:
     file_name = "master_data.yaml"
-    existing = frappe.db.get_value("File", {
-        "file_name": file_name,
-        "folder": "Home/RAG Sources"
-    }, "name")
-    if existing:
-        file_doc = frappe.get_doc("File", existing)
-        payload = yaml.safe_load(file_doc.get_content()) or {}
-    else:
-        payload = {}
+    payload = _read_filedoctype(file_name,RAG_FOLDER)
     meta = payload.get("_meta") or {}
     data = payload.get("data") or []
     if not isinstance(meta, dict):
@@ -188,18 +165,8 @@ def sync_master_data_smart() -> Dict[str, Any]:
         added_by_module[mod] = added_count
     meta["last_sync"] = str(now_datetime())
     payload_out = {"_meta": meta, "data": data}
-    yaml_content = yaml.dump(payload_out, allow_unicode=True, sort_keys=False).encode("utf-8")
-    if existing:
-        file_doc.content = yaml_content
-        file_doc.save(ignore_permissions=True)
-    else:
-        file_doc = frappe.get_doc({
-            "doctype": "File",
-            "file_name": file_name,
-            "is_private": 0,
-            "content": yaml_content,
-            "folder": "Home/RAG Sources"
-        }).insert(ignore_permissions=True)
+    file_doc = write_filedoctype(file_name, payload_out, folder=RAG_FOLDER)
+    frappe.db.commit()
     msg = (
         _("Sync complete ✅ Added {0} new records.").format(added_total)
         if added_total
@@ -218,14 +185,11 @@ def sync_master_data_smart() -> Dict[str, Any]:
 
 @frappe.whitelist(allow_guest=False)
 def get_doctypes_changed_since(last_sync: Optional[str]) -> List[str]:
-    SKIP_MODULES = {"Core", "Custom", "Website", "Desk", "Email", "Integration", "Automation", "Workflow", ""}
-
     filters: Dict[str, Any] = {
         "module": ["in", erpnext_modules],
         "issingle": 0,
         "is_virtual": 0,
     }
-
     if last_sync:
         try:
             since = add_to_date(last_sync, minutes=-2)
@@ -240,32 +204,14 @@ def get_doctypes_changed_since(last_sync: Optional[str]) -> List[str]:
 def sync_tables_and_schema_smart() -> Dict[str, Any]:
     schema_file_name = "schema.yaml"
     tables_file_name = "tables.json"
-    schema_existing = frappe.db.get_value("File", {
-        "file_name": schema_file_name,
-        "folder": "Home/RAG Sources"
-    }, "name")
-    if schema_existing:
-        schema_file_doc = frappe.get_doc("File", schema_existing)
-        payload = yaml.safe_load(schema_file_doc.get_content()) or {}
-    else:
-        payload = {}
-
+    payload = _read_filedoctype(schema_file_name,RAG_FOLDER)
     meta = payload.get("_meta") or {}
     tables_blocks = payload.get("tables") or []
     if not isinstance(tables_blocks, list):
         tables_blocks = []
-
-    # Load existing tables.json
-    tables_existing = frappe.db.get_value("File", {
-        "file_name": tables_file_name,
-        "folder": "Home/RAG Sources"
-    }, "name")
-    if tables_existing:
-        tables_file_doc = frappe.get_doc("File", tables_existing)
-        existing_tables = json.loads(tables_file_doc.get_content() or "[]")
-    else:
+    existing_tables = _read_filedoctype(tables_file_name,RAG_FOLDER)
+    if not isinstance(existing_tables, list):
         existing_tables = []
-
     by_table = {
         b.get("table"): b
         for b in tables_blocks
@@ -275,10 +221,7 @@ def sync_tables_and_schema_smart() -> Dict[str, Any]:
     changed_doctypes = get_doctypes_changed_since(last_sync_raw)
     changed_tables = set(_tab(dt) for dt in changed_doctypes)
     missing_from_schema = set(t for t in existing_tables if t not in by_table)
-
-    # Combine changed + missing — these are all tables to process
     tables_to_process = sorted(changed_tables | missing_from_schema)
-
     if not tables_to_process:
         return {"ok": True, "message": _("No changes detected")}
 
@@ -326,29 +269,11 @@ def sync_tables_and_schema_smart() -> Dict[str, Any]:
                 "fields": fields,
                 "desc_done": False
             }
-
-    # Rebuild tables_blocks from updated by_table
     tables_blocks = list(by_table.values())
-
-    # Update meta and save schema.yaml
     meta["last_doctype_sync"] = str(now_datetime())
-    _save_yaml(SCHEMA_YAML, {"_meta": meta, "tables": tables_blocks})
-
-    # Save tables.json
-    if tables_existing:
-        tables_file_doc.content = json.dumps(merged_tables, indent=2)
-        tables_file_doc.save(ignore_permissions=True)
-    else:
-        frappe.get_doc({
-            "doctype": "File",
-            "file_name": tables_file_name,
-            "folder": "Home/RAG Sources",
-            "content": json.dumps(merged_tables, indent=2),
-            "is_private": 0
-        }).insert(ignore_permissions=True)
-
+    write_filedoctype("schema.yaml", {"_meta": meta, "tables": tables_blocks}, folder=RAG_FOLDER)
+    write_filedoctype("tables.json", merged_tables, folder=RAG_FOLDER)
     frappe.db.commit()
-
     return {
         "ok": True,
         "changed_tables": len(changed_tables),
@@ -467,7 +392,7 @@ def fill_missing_field_descriptions(
     max_tables: int = 0,
     checkpoint_every_table: int = 10,
 ) -> Dict[str, Any]:
-    payload = _load_yaml(SCHEMA_YAML)
+    payload = read_filedoctype("schema.yaml")
     meta = payload.get("_meta") or {}
     tables_blocks = payload.get("tables") or []
 
@@ -539,7 +464,7 @@ def fill_missing_field_descriptions(
 
         # Checkpoint: Save to disk every X tables
         if tables_since_last_save >= checkpoint_every_table:
-            _save_yaml(SCHEMA_YAML, {"_meta": meta, "tables": tables_blocks})
+            write_filedoctype("schema.yaml", payload)
             tables_since_last_save = 0
             gc.collect() # Garbage collection
 
@@ -553,7 +478,7 @@ def fill_missing_field_descriptions(
 
     # Final Save and cleanup
     meta["last_desc_sync"] = str(now_datetime())
-    _save_yaml(SCHEMA_YAML, {"_meta": meta, "tables": tables_blocks})
+    write_filedoctype("schema.yaml", {"_meta": meta, "tables": tables_blocks}, folder=RAG_FOLDER)
     frappe.db.commit()
 
     return {
@@ -574,7 +499,7 @@ def sync_schema_and_enqueue_descriptions() -> Dict[str, Any]:
     return {"ok": True, "message": _("Schema updated ✅ Field descriptions running in background 🧠")}
 
 
-def _smart_desc_map(client, table_name: str, fields: List[Dict[str, Any]]) -> Dict[str, str]:
+def _smart_desc_map_openai(client, table_name: str, fields: List[Dict[str, Any]]) -> Dict[str, str]:
     if not client:
         return {}
 
@@ -596,7 +521,6 @@ Rules:
 Fields:
 {json.dumps(field_names, ensure_ascii=False)}
 """.strip()
-
     for attempt in range(3):
         try:
             response = client.chat.completions.create(
@@ -631,295 +555,5 @@ Fields:
             time.sleep(2 * (attempt + 1))
 
     return {}
-def _get_training_data_dir() -> str:
-    d = frappe.get_app_path("changai", "changai", "api", "v2", "data", "training_data")
-    os.makedirs(d, exist_ok=True)
-    return d
 
 
-def _training_file_path(module_name: str) -> str:
-    filename = f"{(module_name or '').lower()}_training_data.jsonl"
-    return safe_path_in_dir(_get_training_data_dir(), filename)
-
-
-@frappe.whitelist(allow_guest=True)
-def build_schema_context_for_module(module_name: str) -> str:
-    """
-    Build minimal strict schema context:
-    Only table name + field names.
-    """
-
-    payload = _load_yaml(SCHEMA_YAML)
-    tables_blocks = payload.get("tables") or []
-
-    doctypes = frappe.get_all(
-        "DocType",
-        filters={"module": module_name},
-        pluck="name"
-    ) or []
-
-    allowed_tables = {f"tab{dt}" for dt in doctypes}
-
-    lines = []
-
-    for b in tables_blocks:
-        if not isinstance(b, dict):
-            continue
-
-        table = b.get("table")
-        if table not in allowed_tables:
-            continue
-
-        fields = b.get("fields") or []
-        field_names = [
-            f["name"]
-            for f in fields
-            if isinstance(f, dict) and f.get("name")
-        ]
-
-        lines.append(
-            f"{table}: {', '.join(field_names)}"
-        )
-
-    return "\n".join(lines)
-
-
-# ---------------------------------------------------------
-# Validation prompt (generalized, non-memorized)
-# ---------------------------------------------------------
-def _validation_prompt(module_name: str, schema_context: str) -> str:
-    return f"""
-You are generating VALIDATION data for an ERP schema-retrieval model.
-
-PURPOSE:
-This data is used ONLY to test generalization.
-The questions must feel natural, real-world, and non-repetitive.
-Do NOT mimic training data patterns.
-
-OUTPUT FORMAT (STRICT):
-- JSONL only
-- One JSON object per line
-- Format:
-  {{"gid":"{module_name}","sentence1":"...","sentence2":"...","label":1.0}}
-
-QUESTION RULES:
-- Business users only (no technical words)
-- Short to medium length
-- Paraphrased, generalized intent
-- Avoid exact metrics or rigid phrasing
-- Think how a DIFFERENT user might ask the same thing
-
-SCHEMA RULES (STRICT):
-- Use ONLY tables and fields listed below
-- Do NOT invent anything
-- If a question cannot be answered using schema, skip it
-
-SCHEMA CONTEXT:
-{schema_context}
-
-sentence2 FORMAT:
-- Table:
-  "[TABLE] tabDoctype | desc: 2–3 sentences (WHAT + WHY)"
-- Field:
-  "[FIELD] fieldname | [TABLE] tabDoctype | desc: 2–3 sentences (WHAT + WHY)"
-
-DESCRIPTION RULE:
-- Explain relevance lightly
-- Do NOT sound instructional
-- For negatives: explain why it looks relevant but is not required
-
-FINAL RULES:
-- Do NOT repeat question styles
-- Do NOT mention training, validation, or schema
-- Return ONLY JSONL
-""".strip()
-
-
-# ---------------------------------------------------------
-# Validation file path
-# ---------------------------------------------------------
-def _validation_file_path(module_name: str) -> str:
-    filename = f"{(module_name or '').lower()}_validation_data.jsonl"
-    return safe_path_in_dir(_get_training_data_dir(), filename)
-
-
-# ---------------------------------------------------------
-# Main validation generator
-# ---------------------------------------------------------
-@frappe.whitelist()
-def generate_validation_data(module_name: str):
-    settings = frappe.get_single("ChangAI Settings")
-
-    total_records = int(settings.no_of_records or 0)
-    if total_records <= 0:
-        frappe.throw("no_of_records must be greater than 0")
-
-    validation_count = max(1, math.ceil(total_records * 0.2))
-
-    schema_context = build_schema_context_for_module(module_name)
-    if not schema_context:
-        return {
-            "ok": False,
-            "message": f"No schema context found for module '{module_name}'"
-        }
-
-    prompt = _validation_prompt(module_name, schema_context)
-
-    client = _get_claude_client()
-    output_file = _validation_file_path(module_name)
-
-    resp = client.messages.create(
-        model="claude-3-5-sonnet-20241022",
-        max_tokens=6000,
-        temperature=0.6,
-        messages=[
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ]
-    )
-
-    text = (resp.content[0].text or "").strip()
-    lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
-
-    written = 0
-    unique_questions = set()
-
-    with open(output_file, "a", encoding="utf-8") as f:
-        for ln in lines:
-            try:
-                obj = json.loads(ln)
-            except Exception:
-                continue
-
-            q = (obj.get("sentence1") or "").strip()
-            s2 = (obj.get("sentence2") or "").strip()
-
-            if not q or not s2:
-                continue
-
-            if q in unique_questions:
-                continue
-
-            f.write(json.dumps(obj, ensure_ascii=False) + "\n")
-            unique_questions.add(q)
-            written += 1
-
-            if written >= validation_count:
-                break
-
-    frappe.db.commit()
-
-    return {
-        "ok": True,
-        "module": module_name,
-        "validation_target": validation_count,
-        "lines_written": written,
-        "file": output_file
-    }
-
-
-def to_pos_int(x, default: int = 20, name: str = "value") -> int:
-    try:
-        v = int(x)
-    except (TypeError, ValueError):
-        v = default
-    if v <= 0:
-        raise ValueError(f"{name} must be > 0 (got {v})")
-    return v
-
-def extract_table(doc) -> Optional[str]:
-    md = doc.metadata or {}
-    for key in ("table", "doctype", "doc_type", "name"):
-        if md.get(key):
-            return md.get(key)
-
-    txt = (doc.page_content or "").strip()
-    if txt.startswith("[TABLE] "):
-        # "[TABLE] tabSales Invoice | desc: ..."
-        after = txt[len("[TABLE] "):]
-        return after.split("|")[0].strip()
-    if txt.startswith("TABLE "):
-        parts = txt.split()
-        return parts[1].strip() if len(parts) > 1 else None
-    if txt.startswith("tab"):
-        return txt.split("|")[0].strip()
-
-    return None
-
-def topk_tables(vs: FAISS, q: str, k: int = 20) -> List[str]:
-    k = to_pos_int(k, default=20, name="topk")
-    hits = vs.similarity_search(q, k=k)
-    out = []
-    for h in hits:
-        t = extract_table(h)
-        if t:
-            out.append(t)
-    return out
-
-@frappe.whitelist(allow_guest=True)
-def test_model(
-    module_name:str,
-) -> Dict[str, Any]:
-    topk = 20
-    topk = to_pos_int(topk, default=20, name="topk")
-    questions_file_path= f"/files/{module_name}_test.jsonl"
-    model_path= "hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned"
-    file_doc = frappe.get_doc("File", {"file_url": questions_file_path})
-    abs_path = file_doc.get_full_path()
-    with open(abs_path, "r", encoding="utf-8") as f:
-        data = [json.loads(line) for line in f if line.strip()]
-    faiss_doc = frappe.get_doc("File", {"file_name": "index.faiss"})
-    fvs_abs_path = os.path.dirname(faiss_doc.get_full_path())
-    emb = STEmbeddings(model_path)
-    vs = FAISS.load_local(fvs_abs_path, emb, allow_dangerous_deserialization=True)
-    total = correct = skipped = 0
-    wrong = []
-    for row in data:
-        q = (row.get("question") or "").strip()
-        exp = (row.get("expected_top1") or "").strip()
-        if not q or not exp:
-            skipped += 1
-            continue
-        total += 1
-        top_tables = topk_tables(vs, q, k=topk)
-        pred_top1 = top_tables[0] if top_tables else None
-        is_correct = exp in top_tables[:topk]
-        if is_correct:
-            correct += 1
-        else:
-            wrong.append({
-                "question": q,
-                "expected_top1": exp,
-                "pred_top1": pred_top1,
-                "top_tables": top_tables[:topk],
-            })
-    file_name = f"{module_name}_test.jsonl"
-    wrong_content = "\n".join(json.dumps(row) for row in wrong)
-    existing = frappe.db.get_value("File", {
-    "file_name": ("like", f"{module_name}_test%.jsonl"),
-    "folder": "Home/Test Results"
-}, "name")
-    if existing:
-        frappe.delete_doc("File", existing, ignore_permissions=True)
-    wrong_file_doc = frappe.get_doc({
-            "doctype": "File",
-            "file_name": file_name,
-            "is_private": 0,
-            "content": wrong_content,
-            "folder": "Home/Test Results"
-        }).insert(ignore_permissions=True)
-
-    return {
-        "total_evaluated": total,
-        "correct": correct,
-        "wrong": len(wrong),
-        "skipped_missing_fields": skipped,
-        "accuracy": round((correct / total) if total else 0.0, 4),
-        "wrong_predictions": {
-            "count": len(wrong),
-            "file_name": wrong_file_doc.name,
-            "file_url": wrong_file_doc.file_url,
-        },
-    }
