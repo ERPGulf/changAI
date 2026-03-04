@@ -166,7 +166,7 @@ def sync_master_data_smart() -> Dict[str, Any]:
     meta["last_sync"] = str(now_datetime())
     payload_out = {"_meta": meta, "data": data}
     file_doc = write_filedoctype(file_name, payload_out, folder=RAG_FOLDER)
-    frappe.db.commit()
+    frappe.db.commit() # nosemgrep: ensure File DocType write is persisted immediately during Master data sync
     msg = (
         _("Sync complete ✅ Added {0} new records.").format(added_total)
         if added_total
@@ -273,7 +273,7 @@ def sync_tables_and_schema_smart() -> Dict[str, Any]:
     meta["last_doctype_sync"] = str(now_datetime())
     write_filedoctype("schema.yaml", {"_meta": meta, "tables": tables_blocks}, folder=RAG_FOLDER)
     write_filedoctype("tables.json", merged_tables, folder=RAG_FOLDER)
-    frappe.db.commit()
+    frappe.db.commit()  # nosemgrep: explicit commit required to persist schema/table sync changes to File DocType
     return {
         "ok": True,
         "changed_tables": len(changed_tables),
@@ -392,7 +392,7 @@ def fill_missing_field_descriptions(
     max_tables: int = 0,
     checkpoint_every_table: int = 10,
 ) -> Dict[str, Any]:
-    payload = read_filedoctype("schema.yaml")
+    payload = _read_filedoctype("schema.yaml")
     meta = payload.get("_meta") or {}
     tables_blocks = payload.get("tables") or []
 
@@ -449,7 +449,7 @@ def fill_missing_field_descriptions(
                         updated_in_table += 1
                 
                 # DB Heartbeat: keep the SQL connection alive
-                frappe.db.commit()
+                frappe.db.commit()  # nosemgrep: periodic commit to persist progress during long-running schema sync
 
         except Exception as e:
             frappe.logger().error(f"Critical error in table {table}: {e}")
@@ -479,7 +479,7 @@ def fill_missing_field_descriptions(
     # Final Save and cleanup
     meta["last_desc_sync"] = str(now_datetime())
     write_filedoctype("schema.yaml", {"_meta": meta, "tables": tables_blocks}, folder=RAG_FOLDER)
-    frappe.db.commit()
+    frappe.db.commit()  # nosemgrep: persist schema/table updates written to File DocType during sync
 
     return {
         "ok": True,

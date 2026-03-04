@@ -226,21 +226,21 @@ def _build_and_save_faiss(
 # ──────────────────────────────────────────────
 # Main Entry Point
 # ──────────────────────────────────────────────
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=False)
 def build_all_fvs() -> Dict[str, Any]:
     """
     Enqueues 3 separate background jobs to build FAISS vector stores.
     """
-    # frappe.enqueue(
-    #     "changai.changai.api.v2.build_cards_faiss_index_v2.build_table_fvs_job",
-    #     queue="long",
-    #     timeout=1800,
-    # )
-    # frappe.enqueue(
-    #     "changai.changai.api.v2.build_cards_faiss_index_v2.build_schema_fvs_job",
-    #     queue="long",
-    #     timeout=1800,
-    # )
+    frappe.enqueue(
+        "changai.changai.api.v2.build_cards_faiss_index_v2.build_table_fvs_job",
+        queue="long",
+        timeout=1800,
+    )
+    frappe.enqueue(
+        "changai.changai.api.v2.build_cards_faiss_index_v2.build_schema_fvs_job",
+        queue="long",
+        timeout=1800,
+    )
     frappe.enqueue(
         "changai.changai.api.v2.build_cards_faiss_index_v2.build_master_data_fvs_job",
         queue="long",
