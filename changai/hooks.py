@@ -151,13 +151,17 @@ app_include_css = ["/assets/changai/css/changai.css"]
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
+doc_events = {
+"Employee": {
+        "on_update": "changai.changai.api.v2.test_model.create_qr_code",
+
+    },
 # 	"*": {
 # 		"on_update": "method",
 # 		"on_cancel": "method",
 # 		"on_trash": "method"
 # 	}
-# }
+}
 
 # Scheduled Tasks
 # ---------------
