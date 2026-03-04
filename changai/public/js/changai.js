@@ -10,14 +10,14 @@ function getOrCreateChatId() {
 }
 
 function normalizeBotText(bot) {
-            if (typeof bot === "string") return bot;
-            if (bot && typeof bot === "object") {
-                return bot.answer || bot.text || "";
-            }
-            return "";
-    }
+  if (typeof bot === "string") return bot;
+  if (bot && typeof bot === "object") {
+    return bot.answer || bot.text || "";
+  }
+  return "";
+}
 document.addEventListener('DOMContentLoaded', () => {
-    const chatbotHTML = `
+  const chatbotHTML = `
   <button id="chatbot-toggler" class="chatbot-toggler">
     <svg class="icon icon-chat" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
         <path
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 1024 1024">
           <path d="M738.3 287.6H285.7c-59 0-106.8 47.8-106.8 106.8v303.1c0 59 47.8 106.8 106.8 106.8h81.5v111.1c0 .7.8 1.1 1.4.7l166.9-110.6 41.8-.8h117.4l43.6-.4c59 0 106.8-47.8 106.8-106.8V394.5c0-59-47.8-106.9-106.8-106.9zM351.7 448.2c0-29.5 23.9-53.5 53.5-53.5s53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5-53.5-23.9-53.5-53.5zm157.9 267.1c-67.8 0-123.8-47.5-132.3-109h264.6c-8.6 61.5-64.5 109-132.3 109zm110-213.7c-29.5 0-53.5-23.9-53.5-53.5s23.9-53.5 53.5-53.5 53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5zM867.2 644.5V453.1h26.5c19.4 0 35.1 15.7 35.1 35.1v121.1c0 19.4-15.7 35.1-35.1 35.1h-26.5zM95.2 609.4V488.2c0-19.4 15.7-35.1 35.1-35.1h26.5v191.3h-26.5c-19.4 0-35.1-15.7-35.1-35.1zM561.5 149.6c0 23.4-15.6 43.3-36.9 49.7v44.9h-30v-44.9c-21.4-6.5-36.9-26.3-36.9-49.7 0-28.6 23.3-51.9 51.9-51.9s51.9 23.3 51.9 51.9z"/>
         </svg>
-        <h2 class="logo-text">ChangAI</h2>
+        <h2 class="logo-text">ChangAI from ERPGulf</h2>
       </div>
       <button id="chatbot-arrowdown-btn">
   <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -71,296 +71,273 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
   </div>
   `;
-    document.body.insertAdjacentHTML('beforeend', chatbotHTML);
-    let activeTab = 'chat';
-    const chatHistory = [];
-    const debugLogs = [];
-    const supportHistory = [];
-    const chatbotPopup = document.getElementById('chatbot-popup');
-    const chatbotToggler = document.getElementById('chatbot-toggler');
-    const tabChatBtn = document.getElementById('tab-chat');
-    const closeBtn = document.getElementById('chatbot-arrowdown-btn');
-    const tabDebugBtn = document.getElementById('tab-debug');
-    const tabSupportBtn = document.getElementById('tab-support');
-    const chatMessagesContainer = document.getElementById('chat-body');
-    const chatForm = document.getElementById('chat-form');
-    const chatInput = document.getElementById('chat-input');
-    function renderMessages() {
-        const container = document.getElementById('chat-messages');
-        container.innerHTML = '';
-        if (activeTab === 'chat') {
-            const welcome = document.createElement('div');
-            welcome.className = 'messageCon bot-message';
-            welcome.innerHTML = `<div class="messageCon bot-message">
+  document.body.insertAdjacentHTML('beforeend', chatbotHTML);
+  let activeTab = 'chat';
+  const chatHistory = [];
+  const debugLogs = [];
+  const supportHistory = [];
+  const chatbotPopup = document.getElementById('chatbot-popup');
+  const chatbotToggler = document.getElementById('chatbot-toggler');
+  const tabChatBtn = document.getElementById('tab-chat');
+  const closeBtn = document.getElementById('chatbot-arrowdown-btn');
+  const tabDebugBtn = document.getElementById('tab-debug');
+  const tabSupportBtn = document.getElementById('tab-support');
+  const chatMessagesContainer = document.getElementById('chat-body');
+  const chatForm = document.getElementById('chat-form');
+  const chatInput = document.getElementById('chat-input');
+  function renderMessages() {
+    const container = document.getElementById('chat-messages');
+    container.innerHTML = '';
+    if (activeTab === 'chat') {
+      const welcome = document.createElement('div');
+      welcome.className = 'messageCon bot-message';
+      welcome.innerHTML = `<div class="messageCon bot-message">
     <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 1024 1024">
       <path d="M738.3 287.6H285.7c-59 0-106.8 47.8-106.8 106.8v303.1c0 59 47.8 106.8 106.8 106.8h81.5v111.1c0 .7.8 1.1 1.4.7l166.9-110.6 41.8-.8h117.4l43.6-.4c59 0 106.8-47.8 106.8-106.8V394.5c0-59-47.8-106.9-106.8-106.9zM351.7 448.2c0-29.5 23.9-53.5 53.5-53.5s53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5-53.5-23.9-53.5-53.5zm157.9 267.1c-67.8 0-123.8-47.5-132.3-109h264.6c-8.6 61.5-64.5 109-132.3 109zm110-213.7c-29.5 0-53.5-23.9-53.5-53.5s23.9-53.5 53.5-53.5 53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5zM867.2 644.5V453.1h26.5c19.4 0 35.1 15.7 35.1 35.1v121.1c0 19.4-15.7 35.1-35.1 35.1h-26.5zM95.2 609.4V488.2c0-19.4 15.7-35.1 35.1-35.1h26.5v191.3h-26.5c-19.4 0-35.1-15.7-35.1-35.1zM561.5 149.6c0 23.4-15.6 43.3-36.9 49.7v44.9h-30v-44.9c-21.4-6.5-36.9-26.3-36.9-49.7 0-28.6 23.3-51.9 51.9-51.9s51.9 23.3 51.9 51.9z" />
     </svg>
     <p class="message-text">Hello there 👋 I am ChangAI, your ERP assistant</p>
   </div>`;
-            container.appendChild(welcome);
-            chatHistory.forEach(msg => {
-                const div = document.createElement('div');
-                div.className = `messageCon ${msg.role === 'user' ? 'user-message' : 'bot-message'}`;
-                if (msg.role === 'model') {
-                    div.innerHTML = `
+      container.appendChild(welcome);
+      chatHistory.forEach(msg => {
+        const div = document.createElement('div');
+        div.className = `messageCon ${msg.role === 'user' ? 'user-message' : 'bot-message'}`;
+        if (msg.role === 'model') {
+          div.innerHTML = `
     <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 1024 1024">
       <path d="M738.3 287.6H285.7c-59 0-106.8 47.8-106.8 106.8v303.1c0 59 47.8 106.8 106.8 106.8h81.5v111.1c0 .7.8 1.1 1.4.7l166.9-110.6 41.8-.8h117.4l43.6-.4c59 0 106.8-47.8 106.8-106.8V394.5c0-59-47.8-106.9-106.8-106.9zM351.7 448.2c0-29.5 23.9-53.5 53.5-53.5s53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5-53.5-23.9-53.5-53.5zm157.9 267.1c-67.8 0-123.8-47.5-132.3-109h264.6c-8.6 61.5-64.5 109-132.3 109zm110-213.7c-29.5 0-53.5-23.9-53.5-53.5s23.9-53.5 53.5-53.5 53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5zM867.2 644.5V453.1h26.5c19.4 0 35.1 15.7 35.1 35.1v121.1c0 19.4-15.7 35.1-35.1 35.1h-26.5zM95.2 609.4V488.2c0-19.4 15.7-35.1 35.1-35.1h26.5v191.3h-26.5c-19.4 0-35.1-15.7-35.1-35.1zM561.5 149.6c0 23.4-15.6 43.3-36.9 49.7v44.9h-30v-44.9c-21.4-6.5-36.9-26.3-36.9-49.7 0-28.6 23.3-51.9 51.9-51.9s51.9 23.3 51.9 51.9z" />
     </svg>
     <p class="message-text">${msg.text}</p>`;
-                } else {
-                    div.innerHTML = `<p class="message-text">${msg.text}</p>`;
-                }
-                container.appendChild(div);
-            });
-        }
-
-        else if (activeTab === 'debug') {
-            if (debugLogs.length === 0) {
-                const p = document.createElement('p');
-                p.className = 'message-text';
-                p.textContent = 'No debug data yet.';
-                container.appendChild(p);
-            } else {
-                debugLogs.forEach(log => {
-                    const wrapper = document.createElement('div');
-                    wrapper.className = 'debug-query';
-
-                    const pre = document.createElement('pre');
-                    pre.className = 'message-text';
-                    pre.textContent = JSON.stringify(log, null, 2);
-
-                    wrapper.appendChild(pre);
-                    container.appendChild(wrapper);
-                });
-            }
-        }
-        else if (activeTab === 'support') {
-            if (supportHistory.length === 0) {
-              const p = document.createElement('p');
-              p.className = 'message-text';
-              p.textContent = 'Send a message to Support.';
-              container.appendChild(p);
-            } else {
-              supportHistory.forEach(msg => {
-                const div = document.createElement('div');
-                div.className = `messageCon ${msg.role === 'user' ? 'user-message' : 'bot-message'}`;
-
-                // Support agent message styling (use same bot style)
-                div.innerHTML = `<p class="message-text">${msg.text}</p>`;
-                container.appendChild(div);
-              });
-            }
-}
-
-
-    }
-    async function sendSupportMessage(message) {
-  supportHistory.push({ role: 'user', text: message });
-  renderMessages();
-  scrollToBottom();
-
-  const thinkingMsg = { role: 'support', text: 'Sending to support...' };
-  supportHistory.push(thinkingMsg);
-  renderMessages();
-  scrollToBottom();
-
-  try {
-    const res = await fetch("/api/method/changai.changai.api.v2.text2sql_pipeline_v2.support_bot", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Frappe-CSRF-Token": frappe.csrf_token
-      },
-      body: JSON.stringify({
-        message      }),
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      throw new Error(data.message?.error || "Support request failed");
-    }
-    const ticket = data;
-    thinkingMsg.text = JSON.stringify(ticket, null, 2);
-    renderMessages();
-    scrollToBottom();
-
-  } catch (err) {
-    thinkingMsg.text = err.message || "Support request failed.";
-    renderMessages();
-    scrollToBottom();
-  }
-}
-
-
-    async function setChatHistory(message) {
-        chatHistory.push({ role: 'user', text: message });
-        renderMessages();
-        scrollToBottom();
-
-        const thinkingMsg = { role: 'model', text: 'Thinking...' };
-        chatHistory.push(thinkingMsg);
-        renderMessages();
-        scrollToBottom();
-
-        const warmingTimeout = setTimeout(() => {
-            if (thinkingMsg.text === 'Thinking...') {
-                thinkingMsg.text = 'Model is warming up, please wait...⌛';
-                renderMessages();
-                scrollToBottom();
-            }
-        }, 12000);
-
-        generateBotResponse(message, thinkingMsg, warmingTimeout);
-    }
-async function generateBotResponse(userMsg, thinkingMsg, warmingTimeout) {
-  try {
-    const API_URL = await frappe.db.get_single_value(
-      "ChangAI Settings",
-      "vite_api_url"
-    );
-
-    const reqOpts = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Frappe-CSRF-Token": frappe.csrf_token
-      },
-      body: JSON.stringify({
-        user_question: userMsg,
-        chat_id: getOrCreateChatId()
-      }),
-    };
-
-    const res = await fetch(API_URL, reqOpts);
-    const data = await res.json();
-
-    if (!res.ok) {
-      throw new Error(data.message?.error || "Something went wrong!");
-    }
-
-    clearTimeout(warmingTimeout);
-
-    if (data.message) {
-      thinkingMsg.text =
-        normalizeBotText(data.message.Bot)?.trim() || "No response.";
-    }
-
-    debugLogs.push({ user: userMsg, response: data.message });
-    renderMessages();
-    scrollToBottom();
-
-  } catch (error) {
-    console.error("API Error:", error);
-    clearTimeout(warmingTimeout);
-    thinkingMsg.text = error.message;
-    debugLogs.push({ user: userMsg, error: error.message });
-    renderMessages();
-    scrollToBottom();
-  }
-}
-
-    function scrollToBottom() {
-        chatMessagesContainer.scrollTo({
-            top: chatMessagesContainer.scrollHeight,
-            behavior: 'smooth',
-        });
-    }
-
-    function toggleChatbot(forceShow) {
-        const shouldShow = typeof forceShow === 'boolean' ? forceShow : !chatbotPopup.classList.contains('show');
-
-        if (shouldShow) {
-            chatbotToggler.setAttribute('aria-pressed', 'true');
-            chatbotPopup.classList.add('show');
-            chatbotToggler.classList.add('show');
-
-            // ✅ Call renderMessages here
-            renderMessages();
-            scrollToBottom();
-
         } else {
-            chatbotToggler.setAttribute('aria-pressed', 'false');
-            chatbotPopup.classList.remove('show');
-            chatbotToggler.classList.remove('show');
+          div.innerHTML = `<p class="message-text">${msg.text}</p>`;
         }
+        container.appendChild(div);
+      });
     }
 
-    if (closeBtn) closeBtn.addEventListener('click', () => toggleChatbot(false));
-    chatbotToggler.addEventListener('click', () => toggleChatbot());
-
-    chatForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const message = chatInput.value.trim();
-      if (!message) return;
-      chatInput.value = '';
-
-      if (activeTab === 'support') {
-        sendSupportMessage(message);
+    else if (activeTab === 'debug') {
+      if (debugLogs.length === 0) {
+        const p = document.createElement('p');
+        p.className = 'message-text';
+        p.textContent = 'No debug data yet.';
+        container.appendChild(p);
       } else {
-        setChatHistory(message);
+        debugLogs.forEach(log => {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'debug-query';
+
+          const pre = document.createElement('pre');
+          pre.className = 'message-text';
+          pre.textContent = JSON.stringify(log, null, 2);
+
+          wrapper.appendChild(pre);
+          container.appendChild(wrapper);
+        });
       }
-    });
+    }
+    else if (activeTab === 'support') {
+      if (supportHistory.length === 0) {
+        const p = document.createElement('p');
+        p.className = 'message-text';
+        p.textContent = 'Send a message to Support.';
+        container.appendChild(p);
+      } else {
+        supportHistory.forEach(msg => {
+          const div = document.createElement('div');
+          div.className = `messageCon ${msg.role === 'user' ? 'user-message' : 'bot-message'}`;
 
-
-
-    tabChatBtn.addEventListener('click', () => {
-      activeTab = 'chat';
-      tabChatBtn.classList.add('active');
-      tabDebugBtn.classList.remove('active');
-      tabSupportBtn.classList.remove('active');
-
-      chatInput.placeholder = "Message...";
-      renderMessages();
-      scrollToBottom();
-    });
-
-    tabDebugBtn.addEventListener('click', () => {
-        activeTab = 'debug';
-        tabDebugBtn.classList.add('active');
-        tabChatBtn.classList.remove('active');
-        tabSupportBtn.classList.remove('active');
-        renderMessages();
-        scrollToBottom();
-
-    });
-    tabSupportBtn.addEventListener('click', () => {
-      activeTab = 'support';
-
-      tabSupportBtn.classList.add('active');
-      tabChatBtn.classList.remove('active');
-      tabDebugBtn.classList.remove('active');
-
-      chatInput.placeholder = "Message Support...";
-      renderMessages();
-      scrollToBottom();
-    });
-
-
-    // Initially hide chatbot popup
-    toggleChatbot(false);
-});
-
-frappe.ui.form.on("ChangAI Settings", {
-  update_masterdata_file(frm) {
-    frappe.call({
-      method: "changai.changai.api.v2.auto_gen_api.sync_master_data_smart",
-      freeze: true,
-      freeze_message: "Updating Master Data...",
-      callback(r) {
-        console.log(r.message)
+          // Support agent message styling (use same bot style)
+          div.innerHTML = `<p class="message-text">${msg.text}</p>`;
+          container.appendChild(div);
+        });
       }
-    });
-  },
-  update_schema_file(frm) {
-  frappe.call({
-  method: "changai.changai.api.v2.auto_gen_api.sync_schema_and_enqueue_descriptions",
-  freeze: true,
-  freeze_message: "Syncing schema...",
-  callback(r) {
-    console.log(r.message)
-      }
-});
+    }
+
 
   }
+  async function sendSupportMessage(message) {
+    supportHistory.push({ role: 'user', text: message });
+    renderMessages();
+    scrollToBottom();
+
+    const thinkingMsg = { role: 'support', text: 'Sending to support...' };
+    supportHistory.push(thinkingMsg);
+    renderMessages();
+    scrollToBottom();
+
+    try {
+      const res = await fetch("/api/method/changai.changai.api.v2.text2sql_pipeline_v2.support_bot", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Frappe-CSRF-Token": frappe.csrf_token
+        },
+        body: JSON.stringify({
+          message
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message?.error || "Support request failed");
+      }
+      const ticket = data;
+      thinkingMsg.text = JSON.stringify(ticket, null, 2);
+      renderMessages();
+      scrollToBottom();
+
+    } catch (err) {
+      thinkingMsg.text = err.message || "Support request failed.";
+      renderMessages();
+      scrollToBottom();
+    }
+  }
+
+
+  async function setChatHistory(message) {
+    chatHistory.push({ role: 'user', text: message });
+    renderMessages();
+    scrollToBottom();
+
+    const thinkingMsg = { role: 'model', text: 'Thinking...' };
+    chatHistory.push(thinkingMsg);
+    renderMessages();
+    scrollToBottom();
+
+    const warmingTimeout = setTimeout(() => {
+      if (thinkingMsg.text === 'Thinking...') {
+        thinkingMsg.text = 'Model is warming up, please wait...⌛';
+        renderMessages();
+        scrollToBottom();
+      }
+    }, 12000);
+
+    generateBotResponse(message, thinkingMsg, warmingTimeout);
+  }
+  async function generateBotResponse(userMsg, thinkingMsg, warmingTimeout) {
+    try {
+      const API_URL = await frappe.db.get_single_value(
+        "ChangAI Settings",
+        "vite_api_url"
+      );
+
+      const reqOpts = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Frappe-CSRF-Token": frappe.csrf_token
+        },
+        body: JSON.stringify({
+          user_question: userMsg,
+          chat_id: getOrCreateChatId()
+        }),
+      };
+
+      const res = await fetch(API_URL, reqOpts);
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message?.error || "Something went wrong!");
+      }
+
+      clearTimeout(warmingTimeout);
+
+      if (data.message) {
+        thinkingMsg.text =
+          normalizeBotText(data.message.Bot)?.trim() || "No response.";
+      }
+
+      debugLogs.push({ user: userMsg, response: data.message });
+      renderMessages();
+      scrollToBottom();
+
+    } catch (error) {
+      console.error("API Error:", error);
+      clearTimeout(warmingTimeout);
+      thinkingMsg.text = error.message;
+      debugLogs.push({ user: userMsg, error: error.message });
+      renderMessages();
+      scrollToBottom();
+    }
+  }
+
+  function scrollToBottom() {
+    chatMessagesContainer.scrollTo({
+      top: chatMessagesContainer.scrollHeight,
+      behavior: 'smooth',
+    });
+  }
+
+  function toggleChatbot(forceShow) {
+    const shouldShow = typeof forceShow === 'boolean' ? forceShow : !chatbotPopup.classList.contains('show');
+
+    if (shouldShow) {
+      chatbotToggler.setAttribute('aria-pressed', 'true');
+      chatbotPopup.classList.add('show');
+      chatbotToggler.classList.add('show');
+
+      // ✅ Call renderMessages here
+      renderMessages();
+      scrollToBottom();
+
+    } else {
+      chatbotToggler.setAttribute('aria-pressed', 'false');
+      chatbotPopup.classList.remove('show');
+      chatbotToggler.classList.remove('show');
+    }
+  }
+
+  if (closeBtn) closeBtn.addEventListener('click', () => toggleChatbot(false));
+  chatbotToggler.addEventListener('click', () => toggleChatbot());
+
+  chatForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const message = chatInput.value.trim();
+    if (!message) return;
+    chatInput.value = '';
+
+    if (activeTab === 'support') {
+      sendSupportMessage(message);
+    } else {
+      setChatHistory(message);
+    }
+  });
+
+
+
+  tabChatBtn.addEventListener('click', () => {
+    activeTab = 'chat';
+    tabChatBtn.classList.add('active');
+    tabDebugBtn.classList.remove('active');
+    tabSupportBtn.classList.remove('active');
+
+    chatInput.placeholder = "Message...";
+    renderMessages();
+    scrollToBottom();
+  });
+
+  tabDebugBtn.addEventListener('click', () => {
+    activeTab = 'debug';
+    tabDebugBtn.classList.add('active');
+    tabChatBtn.classList.remove('active');
+    tabSupportBtn.classList.remove('active');
+    renderMessages();
+    scrollToBottom();
+
+  });
+  tabSupportBtn.addEventListener('click', () => {
+    activeTab = 'support';
+
+    tabSupportBtn.classList.add('active');
+    tabChatBtn.classList.remove('active');
+    tabDebugBtn.classList.remove('active');
+
+    chatInput.placeholder = "Message Support...";
+    renderMessages();
+    scrollToBottom();
+  });
+
+
+  // Initially hide chatbot popup
+  toggleChatbot(false);
 });

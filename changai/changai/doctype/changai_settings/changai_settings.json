@@ -20,11 +20,13 @@
   "column_break_irkb",
   "dataset_repo",
   "qwen25_15b",
+  "download_embedding_model",
   "gemini_authentication_section",
   "auth_json",
   "gemini_location",
   "gemini_file_path",
   "gemini_project_id",
+  "gemini_api_key",
   "section_break_gnue",
   "root_path",
   "retain_memory",
@@ -49,16 +51,17 @@
   "entity_retriever",
   "openai_api_key",
   "claude_api_key",
+  "ngrok_auth_tok",
+  "colab_auth_token",
   "support_tab",
   "support_section",
   "support_url",
   "get_ticket_details_url",
   "training_tab",
   "training_section",
-  "choose_module",
   "choose_file_size",
   "create_train_data",
-  "create_validation_data",
+  "module_and_description",
   "master_table_and_schema_updation_section",
   "update_masterdata_file",
   "update_schema_file"
@@ -319,26 +322,15 @@
    "label": "Training Data creation"
   },
   {
-   "fieldname": "choose_module",
-   "fieldtype": "Select",
-   "label": "Choose Module",
-   "options": "Accounts\nCRM\nBuying\nProjects\nSelling\nManufacturing\nStock\nSupport\nAssets"
-  },
-  {
+   "description": "Choose a record size between 1000 to 1500.",
    "fieldname": "choose_file_size",
-   "fieldtype": "Select",
-   "label": "Choose Train Records Count",
-   "options": "100\n200\n300\n400\n500+"
+   "fieldtype": "Int",
+   "label": "Train Records"
   },
   {
    "fieldname": "create_train_data",
    "fieldtype": "Button",
    "label": "Create training data"
-  },
-  {
-   "fieldname": "create_validation_data",
-   "fieldtype": "Button",
-   "label": "Create validation data"
   },
   {
    "fieldname": "master_table_and_schema_updation_section",
@@ -356,13 +348,39 @@
    "fieldname": "update_schema_file",
    "fieldtype": "Button",
    "label": "Update Schema file"
+  },
+  {
+   "fieldname": "ngrok_auth_tok",
+   "fieldtype": "Password",
+   "label": "Ngrok Auth Token"
+  },
+  {
+   "fieldname": "colab_auth_token",
+   "fieldtype": "Password",
+   "label": "Colab Auth Token"
+  },
+  {
+   "fieldname": "module_and_description",
+   "fieldtype": "Table",
+   "label": "Module and Description",
+   "options": "Module Selection"
+  },
+  {
+   "fieldname": "gemini_api_key",
+   "fieldtype": "Password",
+   "label": "Gemini API key"
+  },
+  {
+   "fieldname": "download_embedding_model",
+   "fieldtype": "Button",
+   "label": "Download Embedding Model"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-02-11 12:29:31.176378",
+ "modified": "2026-03-03 08:25:41.690330",
  "modified_by": "Administrator",
  "module": "Changai",
  "name": "ChangAI Settings",
