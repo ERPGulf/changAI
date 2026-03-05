@@ -17,8 +17,8 @@ def get_base_fvs_dir() -> str:
     base_path = Path(base).resolve()
     base_path.mkdir(parents=True, exist_ok=True)
     return str(base_path)
-BASE_FVS = get_base_fvs_dir()
 
+BASE_FVS = get_base_fvs_dir()
 TABLE_FVS_PATH  = os.path.join(BASE_FVS, "table_fvs")
 SCHEMA_FVS_PATH = os.path.join(BASE_FVS, "schema_fvs")
 ENTITY_FVS_PATH = os.path.join(BASE_FVS, "masterdata_fvs")
