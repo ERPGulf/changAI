@@ -7,7 +7,7 @@ frappe.ui.form.on("ChangAI Settings", {
             frappe.call({
                 method: "changai.changai.api.v2.text2sql_pipeline_v2.download_model_from_ui",
                 freeze: true,
-                freeze_message: __("Re-downloading embedding model..."),
+                freeze_message: __("Downloading embedding model..."),
                 callback(r) {
                     if (!r.message) return;
 
