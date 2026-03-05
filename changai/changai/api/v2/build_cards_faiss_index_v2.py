@@ -12,31 +12,73 @@ from langchain_community.vectorstores import FAISS
 from changai.changai.api.v2.text2sql_pipeline_v2 import get_embedding_engine
 import os
 
+
 def get_base_fvs_dir() -> str:
     base = frappe.get_site_path("private", "changai", "fvs_stores", "erpnext")
     base_path = Path(base).resolve()
     base_path.mkdir(parents=True, exist_ok=True)
     return str(base_path)
 
-BASE_FVS = get_base_fvs_dir()
-TABLE_FVS_PATH  = os.path.join(BASE_FVS, "table_fvs")
-SCHEMA_FVS_PATH = os.path.join(BASE_FVS, "schema_fvs")
-ENTITY_FVS_PATH = os.path.join(BASE_FVS, "masterdata_fvs")
+def _get_paths() -> tuple:
+    """Lazily resolve all paths — called only at runtime, never at import."""
+    base = get_base_fvs_dir()
+    return (
+        base,
+        os.path.join(base, "table_fvs"),
+        os.path.join(base, "schema_fvs"),
+        os.path.join(base, "masterdata_fvs"),
+    )
+
+
 RAG_FOLDER = "Home/RAG Sources"
 HNSW_M           = 32
 EF_CONSTRUCTION  = 256
 EF_SEARCH        = 64
 
 
+def _ensure_folder_exists(folder: str) -> None:
+    """
+    Ensure all segments of a Frappe folder path exist.
+    Creates any missing folders. Safe to call before reads or writes.
+    """
+    parts = folder.strip("/").split("/")
+    current = parts[0]
+
+    for p in parts[1:]:
+        exists = frappe.db.exists("File", {
+            "file_name": p,
+            "folder": current,
+            "is_folder": 1,
+        })
+        if not exists:
+            frappe.logger().info(f"Creating missing folder '{p}' inside '{current}'")
+            frappe.get_doc({
+                "doctype": "File",
+                "file_name": p,
+                "is_folder": 1,
+                "folder": current,
+            }).insert(ignore_permissions=True)
+
+        current = f"{current}/{p}"
+
+
 def _read_file_doc(file_name: str, folder: str = RAG_FOLDER) -> str:
-    """Read a file from Frappe File DocType and return its content as string."""
+    """
+    Read a file from Frappe File DocType.
+    Ensures folder exists first (creates if missing), then looks up the file.
+    Raises a clear error if the file itself is not found.
+    """
+    _ensure_folder_exists(folder)
     file_id = frappe.db.get_value(
         "File",
         {"file_name": file_name, "folder": folder},
         "name",
     )
     if not file_id:
-        frappe.throw(f"File not found in {folder}: {file_name}")
+        frappe.throw(
+            f"File '{file_name}' not found in folder '{folder}'. "
+            f"Please upload it before building the index."
+        )
 
     doc = frappe.get_doc("File", file_id)
     content = doc.get_content() or ""
@@ -47,6 +89,7 @@ def _read_file_doc(file_name: str, folder: str = RAG_FOLDER) -> str:
 
 def _load_yaml_from_file_doc(file_name: str) -> Any:
     """Load a YAML file from Frappe File DocType."""
+    
     content = _read_file_doc(file_name)
     return yaml.safe_load(content)
 
@@ -87,7 +130,7 @@ def build_table_docs(table_list: List[str]) -> List[Document]:
     return docs
 
 
-def build_schema_docs(schema: List[Dict[str, Any]]) -> List[Document]:
+def build_schema_docs(schema: Dict[str, Any]) -> List[Document]:
     """
     Build field-level Documents from schema.yaml.
     One Document per field — same method as the notebook.
@@ -143,7 +186,7 @@ def build_entity_docs(master_data: List[Dict[str, Any]]) -> List[Document]:
     Uses embedding_text if present, else builds from canonical_name + aliases.
     """
     docs = []
-    for md in master_data["data"]:
+    for md in master_data.get("data", []):
         if not isinstance(md, dict):
             continue
 
@@ -184,25 +227,18 @@ def build_entity_docs(master_data: List[Dict[str, Any]]) -> List[Document]:
     return docs
 
 
-# ──────────────────────────────────────────────
-# FAISS Store Builder
-# ──────────────────────────────────────────────
 def _build_and_save_faiss(
     docs: List[Document],
     out_path: str,
     label: str,
 ) -> None:
     """Build a FAISS HNSW index from docs and save to disk."""
-
     if not docs:
         frappe.throw(f"No documents to index for: {label}")
-
-    safe_path = _assert_dir_inside_base(out_path, BASE_FVS)
+    base_fvs, _, _, _ = _get_paths()
+    safe_path = _assert_dir_inside_base(out_path, base_fvs)
     safe_path.mkdir(parents=True, exist_ok=True)
-
     emb = get_embedding_engine()
-
-    frappe.publish_progress(0, title=label, description=f"Embedding {len(docs)} documents...")
 
     doc_texts = [d.page_content for d in docs]
     vectors   = emb.embed_documents(doc_texts)
@@ -212,21 +248,17 @@ def _build_and_save_faiss(
     index.hnsw.efConstruction = EF_CONSTRUCTION
     index.hnsw.efSearch       = EF_SEARCH
     index.add(np.array(vectors, dtype="float32"))
-
     store = FAISS(
         embedding_function=emb,
         index=index,
-        docstore=InMemoryDocstore({i: docs[i] for i in range(len(docs))}),
-        index_to_docstore_id={i: i for i in range(len(docs))},
+        docstore=InMemoryDocstore({str(i): docs[i] for i in range(len(docs))}),
+        index_to_docstore_id={i: str(i) for i in range(len(docs))},
         normalize_L2=True,
     )
     store.save_local(str(safe_path))
     frappe.logger().info(f"[FVS] {label} — {len(docs)} docs | dim={dim} | path={safe_path}")
 
 
-# ──────────────────────────────────────────────
-# Main Entry Point
-# ──────────────────────────────────────────────
 @frappe.whitelist(allow_guest=False)
 def build_all_fvs() -> Dict[str, Any]:
     """
@@ -255,29 +287,35 @@ def build_all_fvs() -> Dict[str, Any]:
 
 def build_table_fvs_job():
     try:
+        _, table_path, _, _ = _get_paths()
         tables_list = _load_json_from_file_doc("tables.json")
         table_docs = build_table_docs(tables_list)
-        _build_and_save_faiss(table_docs, TABLE_FVS_PATH, "ERPNext Table FVS")
+        _build_and_save_faiss(table_docs, table_path, "ERPNext Table FVS")
         frappe.logger().info(f"ERPNext Table FVS built: {len(table_docs)} docs")
-    except Exception as e:
+    except Exception :
         frappe.log_error(frappe.get_traceback(), "Build Table FVS Failed")
+        raise
 
 
 def build_schema_fvs_job():
     try:
         schema = _load_yaml_from_file_doc("schema.yaml")
         schema_docs = build_schema_docs(schema)
-        _build_and_save_faiss(schema_docs, SCHEMA_FVS_PATH, "ERPNext Schema FVS")
+        _, _, schema_path, _ = _get_paths()
+        _build_and_save_faiss(schema_docs, schema_path, "ERPNext Schema FVS")
         frappe.logger().info(f"ERPNext Schema FVS built: {len(schema_docs)} docs")
-    except Exception as e:
+    except Exception :
         frappe.log_error(frappe.get_traceback(), "Build Schema FVS Failed")
+        raise
 
 
 def build_master_data_fvs_job():
     try:
         master_data = _load_yaml_from_file_doc("master_data.yaml")
         entity_docs = build_entity_docs(master_data)
-        _build_and_save_faiss(entity_docs, ENTITY_FVS_PATH, "ERPNext Master Data FVS")
+        _, _, _, entity_path = _get_paths()
+        _build_and_save_faiss(entity_docs, entity_path, "ERPNext Master Data FVS")
         frappe.logger().info(f"ERPNext Master Data FVS built: {len(entity_docs)} docs")
-    except Exception as e:
+    except Exception :
         frappe.log_error(frappe.get_traceback(), "Build Master Data FVS Failed")
+        raise

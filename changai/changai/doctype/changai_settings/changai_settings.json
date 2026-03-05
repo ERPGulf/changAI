@@ -22,7 +22,6 @@
   "qwen25_15b",
   "download_embedding_model",
   "gemini_authentication_section",
-  "auth_json",
   "gemini_location",
   "gemini_file_path",
   "gemini_project_id",
@@ -119,6 +118,7 @@
    "label": "QWEN3-4b Instruct"
   },
   {
+   "default": "Gemini",
    "fieldname": "llm",
    "fieldtype": "Select",
    "label": "LLM",
@@ -143,11 +143,6 @@
    "fieldname": "gemini_authentication_section",
    "fieldtype": "Section Break",
    "label": "Gemini Authentication"
-  },
-  {
-   "fieldname": "auth_json",
-   "fieldtype": "Attach",
-   "label": "Authentication JSON"
   },
   {
    "depends_on": "eval:doc.llm == \"Gemini\"",
@@ -181,6 +176,7 @@
    "label": "Testing"
   },
   {
+   "default": "multi line",
    "fieldname": "retriever_structure",
    "fieldtype": "Select",
    "label": "Retriever_structure",
@@ -350,7 +346,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-03-05 09:02:51.176672",
+ "modified": "2026-03-05 10:08:59.076618",
  "modified_by": "Administrator",
  "module": "Changai",
  "name": "ChangAI Settings",

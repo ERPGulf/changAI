@@ -7,7 +7,7 @@ from google.oauth2 import service_account
 from frappe import _
 from google.genai import types
 from google import genai
-
+from changai.changai.api.v2.build_cards_faiss_index_v2 import _ensure_folder_exists
 import openai
 from vertexai.generative_models import GenerativeModel, GenerationConfig
 from google.cloud import aiplatform
@@ -265,7 +265,7 @@ def _assign_qids(validated_records: List[dict], module_name: str, existing_count
     return final_records
 
 
-def _generate_batch_claude(client, module_name: str, seen_anchors: set, module_description,total_count) -> List[dict]:
+def _generate_batch_claude(client, module_name, seen_anchors, module_description, total_count, wrong_examples=None) -> List[dict] :
     raw = None
     for attempt in range(MAX_RETRIES):
         try:
@@ -334,7 +334,7 @@ def _generate_batch_claude(client, module_name: str, seen_anchors: set, module_d
     return records
 
 
-def _generate_batch(client, module_name: str, seen_anchors: set,module_description,total_count) -> List[dict]:
+def _generate_batch(client, module_name, seen_anchors, module_description, total_count, wrong_examples=None) -> List[dict]:
     raw = None
     for attempt in range(MAX_RETRIES):
         try:
@@ -350,7 +350,7 @@ def _generate_batch(client, module_name: str, seen_anchors: set,module_descripti
                             "No markdown. No code fences. No explanation."
                         )
                     },
-                    {"role": "user", "content": _training_prompt(module_name,module_description,BATCH_SIZE)}  # <-- must exist in your module
+                    {"role": "user", "content": _training_prompt(module_name,module_description,BATCH_SIZE,wrong_examples)}  # <-- must exist in your module
                 ]
             )
 
@@ -486,10 +486,16 @@ def build_schema_context_for_module(module_name: str) -> str:
 
 
 def testing_file(module_name):
+    results = []
     wrong_examples = frappe.get_all("File", filters={"file_name": f"{module_name}.json","folder":"Home/Test Results"}, fields=["name", "file_url"])
     for file in wrong_examples:
         file_doc=frappe.get_doc("File",file.name)
-        file.content = file_doc.get_content()
+        results.append({
+            "name": file.name,
+            "file_url": file.file_url,
+            "content": file_doc.get_content()
+        })
+    return results
 
 
 @frappe.whitelist(allow_guest=False)
@@ -498,6 +504,7 @@ def generate_data(modules, total_count: int, path: str, use_claude: bool = False
     Generates training records and APPENDS to disk JSONL.
     Then syncs/updates a Frappe File doc pointing to that file.
     """
+    _ensure_folder_exists(path)
     if use_claude:
         client = _get_claude_client()
         generate_fn = _generate_batch_claude
@@ -514,6 +521,7 @@ def generate_data(modules, total_count: int, path: str, use_claude: bool = False
         module_name=module_rec["module"]
         module_description=module_rec["description"]
         wrong_file_name = f"{module_name.lower().replace(' ', '_')}.json"
+
         wrong_file_path = frappe.db.get_value("File", {
             "file_name": wrong_file_name,
             "folder": "Home/Test Results"
@@ -526,7 +534,7 @@ def generate_data(modules, total_count: int, path: str, use_claude: bool = False
             if not isinstance(wrong_examples, list):
                 wrong_examples = []
         else:
-            wrong_examples = []  # no wrong file yet for this module, skip error injection
+            wrong_examples = []
         total_count = int(total_count)
         abs_path = _get_abs_path(module_name, path, suffix)
         seen_anchors, existing_count = _seed_seen_from_disk(abs_path)
@@ -622,8 +630,8 @@ def _generate_batch_gemini(client,module_name: str, seen_anchors: set, module_de
                     module_name, module_description, BATCH_SIZE, wrong_examples
                 )}]}]
             except Exception as e:
-                frappe.log_error(title="Empty prompt", message="Prompt generation returned empty")
-                return {"ok":False,"message":f"Error building prompt: {str(e)}"}
+                frappe.log_error(title="Empty prompt", message=f"Error building prompt: {str(e)}")
+                return []
             try:
                 response = client.models.generate_content(
                     model=MODEL_ID,
@@ -658,11 +666,12 @@ def _generate_batch_gemini(client,module_name: str, seen_anchors: set, module_de
     try:
         arr = json.loads(raw)
     except json.JSONDecodeError:
-        json_str = re.sub(r',\s*([\]}])', r'\1', json_str)
+        cleaned = re.sub(r',\s*([\]}])', r'\1', raw)
         try:
-            return json.loads(json_str)
+            arr = json.loads(cleaned)
         except Exception:
-            return None
+            frappe.log_error(title="Gemini JSON parse failed", message=raw[:3000])
+            return []
     except Exception:
         frappe.log_error(title="Gemini JSON parse failed", message=raw[:3000])
         return []
@@ -683,19 +692,33 @@ def _generate_batch_gemini(client,module_name: str, seen_anchors: set, module_de
     return records
 
 
-@frappe.whitelist(allow_guest=True)
 def _training_prompt(module_name: str, module_description: str, BATCH_SIZE: int, wrong_examples: list = None) -> str:
     hard_n = (BATCH_SIZE * 3) // 10
     std_n = BATCH_SIZE - hard_n 
+
     err_data = ""
     if wrong_examples:
         wrong_examples = json.loads(wrong_examples) if isinstance(wrong_examples, str) else wrong_examples
-        err_list = "\n".join([f"Fail: {e['anchor']} | Wrong: {e.get('top5',['?'])[0]}" for e in wrong_examples[:4]])
-        err_data = f"FIX FAILED PATTERNS:\n{err_list}\n"
+        err_list = "\n".join(
+            [f"Fail: {e['anchor']} | Wrong: {e.get('top5',['?'])[0]}" for e in wrong_examples[:4]]
+        )
+        err_data = f"""
+        FIX FAILED PATTERNS:
+        {err_list}
+        RULE:
+        - If failed patterns are provided above, generate targeted corrected anchors or similar anchors that retrieve the correct tables/fields.
+        """
+    else:
+        err_data = """
+        NOTE:
+        - No failed patterns are provided.
+        - Generate normal high-quality training examples for this module.
+        """
     return f"""
 Act: ERP Architect. Task: Generate {BATCH_SIZE} training records (JSON).
 Module: {module_name} ({module_description})
 {err_data}
+if the Error 
 ANCHOR RULES:
 - Queries for: SEE, FIND, LIST, CHECK, COUNT.
 - Style: Fast/Urgent, Casual, Typos. No SQL/Technical phrasing.
