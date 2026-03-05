@@ -559,11 +559,34 @@ def rewrite_question(state: SQLState) -> SQLState:
 
 def get_table_vs():
     global _VS_TABLE
+
     if _VS_TABLE is None:
         emb = get_embedding_engine()
         if emb is None:
             frappe.throw(_("Embedding engine is None. Model not loaded."))
-        _VS_TABLE = FAISS.load_local(TABLE_VS_PATH, emb, allow_dangerous_deserialization=True)
+
+        # get app root dynamically
+        app_path = frappe.get_app_path("changai")
+
+        table_vs_path = os.path.join(
+            app_path,
+            "changai",
+            "api",
+            "v2",
+            "fvs_stores",
+            "erpnext",
+            "table_fvs"
+        )
+
+        if not os.path.exists(table_vs_path):
+            frappe.throw(_("FAISS table store not found at {0}").format(table_vs_path))
+
+        _VS_TABLE = FAISS.load_local(
+            table_vs_path,
+            emb,
+            allow_dangerous_deserialization=True
+        )
+
     return _VS_TABLE
 
 
@@ -619,20 +642,31 @@ def call_retrieve_multi_line(user_question: str) -> Dict[str, Any]:
     }
 
 
-FULL_FIELDS_VS_PATH = "changai/changai/api/v2/fvs_stores/erpnext/schema_fvs"
+FULL_FIELDS_VS_PATH = "/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/v2/fvs_stores/erpnext/schema_fvs"
 
 
 def get_full_fields_vs():
     global _FULL_FIELDS_VS
+
     if _FULL_FIELDS_VS is None:
         emb = get_embedding_engine()
-        if not os.path.exists(FULL_FIELDS_VS_PATH):
-            frappe.throw(_("Vector store path not found: {0}").format(FULL_FIELDS_VS_PATH))
+        if emb is None:
+            frappe.throw(_("Embedding engine is None. Model not loaded."))
+        app_root = frappe.get_app_path("changai")
+        full_fields_vs_path = os.path.join(
+            app_root,
+            "changai", "api", "v2", "fvs_stores", "erpnext", "schema_fvs"
+        )
+
+        if not os.path.isdir(full_fields_vs_path):
+            frappe.throw(_("Vector store path not found: {0}").format(full_fields_vs_path))
+
         _FULL_FIELDS_VS = FAISS.load_local(
-            FULL_FIELDS_VS_PATH,
+            full_fields_vs_path,
             emb,
             allow_dangerous_deserialization=True
         )
+
     return _FULL_FIELDS_VS
 
 
