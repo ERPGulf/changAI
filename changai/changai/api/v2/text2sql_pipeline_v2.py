@@ -91,7 +91,7 @@ def download_model_from_ui():
     app_base = frappe.get_app_path("changai")
     resolved = os.path.realpath(model_path)
     if not resolved.startswith(os.path.realpath(app_base)):
-        frappe.throw("Invalid model path: outside app directory.")
+        frappe.throw(_("Invalid model path: outside app directory."))
     try:
         if os.path.exists(model_path):
             shutil.rmtree(model_path)
@@ -127,10 +127,10 @@ def get_embedding_engine():
             "changai", "changai", "model"
         )
         if not os.path.exists(model_path):
-            frappe.throw(
+            frappe.throw(_(
                 "Embedding model not found. "
                 "Go to ChangAI Settings and click 'Download Embedding Model'."
-            )
+            ))
         # Heavy load — happens ONCE per worker
         _EMBEDDER_INSTANCE = HuggingFaceEmbeddings(
             model_name=model_path,
@@ -563,7 +563,7 @@ def get_table_vs():
     if _VS_TABLE is None:
         emb = get_embedding_engine()
         if emb is None:
-            frappe.throw("Embedding engine is None. Model not loaded.")
+            frappe.throw(_("Embedding engine is None. Model not loaded."))
         _VS_TABLE = FAISS.load_local(TABLE_VS_PATH, emb, allow_dangerous_deserialization=True)
     return _VS_TABLE
 
@@ -628,7 +628,7 @@ def get_full_fields_vs():
     if _FULL_FIELDS_VS is None:
         emb = get_embedding_engine()
         if not os.path.exists(FULL_FIELDS_VS_PATH):
-            frappe.throw(f"Vector store path not found: {FULL_FIELDS_VS_PATH}")
+            frappe.throw(_("Vector store path not found: {0}").format(FULL_FIELDS_VS_PATH))
         _FULL_FIELDS_VS = FAISS.load_local(
             FULL_FIELDS_VS_PATH,
             emb,
@@ -744,7 +744,7 @@ def generate_sql(state:SQLState) -> SQLState:
     entity_block = ""
     config = ChangAIConfig.get()
     if entity_cards:
-        entity_block = "\n\nENTITY_CARDS:\n" + "\n".join(map(str, entity_cards))
+        entity_block = "\n\nENTITY_CARDS:\n" + "\n".join(str(c) for c in entity_cards)
     if config["retriever_structure"]=="multi line":
         context = (selected_fields or "") + (entity_block or "")
         prompt = fill_sql_prompt(state["formatted_q"], context)
@@ -1047,7 +1047,7 @@ workflow.add_edge("repair_sql","validate_sql")
 checkpointer=MemorySaver()
 app=workflow.compile(checkpointer=checkpointer)
 
-def execute_query_1(sql: str, doctypes: List[str]) -> Any:
+def execute_query(sql: str, doctypes: List[str]) -> Any:
     try:
         if sql:
             if not str(sql).lower().strip().startswith("select"):
@@ -1070,16 +1070,6 @@ def execute_query_1(sql: str, doctypes: List[str]) -> Any:
         return []
     except Exception as e:
         return {"error": f"SQL Execution Failed: {e}"}
-
-@frappe.whitelist(allow_guest=False)
-def execute_query(sql) -> Any:
-    try:
-        if not (sql or "").lower().strip().startswith("select"):
-            frappe.throw(_("Only SELECT queries are allowed."))
-        return frappe.db.sql(sql, as_dict=True)
-    except Exception as e:
-        frappe.log_error(frappe.get_traceback(), "Query Execution Failed")
-        return {"error": str(e)}
 
 
 @frappe.whitelist(allow_guest=False)
@@ -1445,7 +1435,7 @@ def debug_entity_retriever(q: str):
 
 
 # Run
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=False)
 def run_text2sql_pipeline(user_question: str, chat_id: str):
     q = (user_question or "")
     config = {
@@ -1519,7 +1509,7 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
     try:
         extracted_tables=extract_tables_from_sql(sql)
         # selected_tables=list(set(selected_tables) | set(extracted_tables))
-        sql_result = execute_query_1(sql,extracted_tables)
+        sql_result = execute_query(sql,extracted_tables)
     except Exception as e:
         return {
             "ok":False,

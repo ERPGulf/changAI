@@ -186,7 +186,7 @@ non_erp_responses = [
 ]
 
 @frappe.whitelist(allow_guest=False)
-def correct_sentence(text):
+def correct_sentence(text: str):
     doc = nlp(text)
     entities = [(ent.text, ent.start_char, ent.end_char) for ent in doc.ents]
     text_to_correct = text
@@ -221,12 +221,12 @@ def correct_sentence(text):
 
 
 @frappe.whitelist(allow_guest=False)
-def run_query(query):
+def run_query(query:str):
     """Run a query."""
     try:
         if not query:
             return {"error": "Query not provided."}
-        result = eval(query)
+        result = json.loads(query)
         return {"success": True, "response": result}
 
     except Exception as e:
@@ -235,7 +235,7 @@ def run_query(query):
 
 # To convert the Python Date Objects into an ISO format.
 @frappe.whitelist(allow_guest=False)
-def sanitize_dates(obj):
+def sanitize_dates(obj: Any) -> Any:
     if isinstance(obj, list):
         return [sanitize_dates(i) for i in obj]
     elif isinstance(obj, dict):
