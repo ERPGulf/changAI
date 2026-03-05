@@ -20,7 +20,6 @@
   "column_break_irkb",
   "dataset_repo",
   "qwen25_15b",
-  "download_embedding_model",
   "gemini_authentication_section",
   "gemini_location",
   "gemini_file_path",
@@ -335,18 +334,13 @@
    "fieldtype": "Table",
    "label": "Module and Description",
    "options": "Module Selection"
-  },
-  {
-   "fieldname": "download_embedding_model",
-   "fieldtype": "Button",
-   "label": "Download Embedding Model"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-03-05 10:08:59.076618",
+ "modified": "2026-03-05 13:50:30.715338",
  "modified_by": "Administrator",
  "module": "Changai",
  "name": "ChangAI Settings",
