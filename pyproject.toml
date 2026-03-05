@@ -3,18 +3,42 @@ name = "changai"
 authors = [
     { name = "ERpGulf", email = "support@erpgulf.com"}
 ]
-description = "Changai"
+description = "ChangAI"
 requires-python = ">=3.10"
 readme = "README.md"
 dynamic = ["version"]
+
 dependencies = [
-    # "frappe~=15.0.0" # Installed and managed by bench.
+    "openai==1.64.0",
+    "anthropic==0.79.0",
+    "google-genai==1.60.0",
+    "google-auth==2.49.0.dev0",
+    "google-cloud-aiplatform==1.135.0",
+
+    "langchain",
+    "langchain-core",
+    "langchain-community",
+    "langchain-huggingface",
+    "langchain-ollama",
+    "langgraph",
+    "langsmith",
+
+    "sentence-transformers==5.1.2",
+    "faiss-cpu==1.12.0",
+    "numpy==1.26.4",
+    "sqlglot==27.29.0",
+    "PyYAML==6.0.2",
+    "requests==2.32.5",
+    "Jinja2==3.1.4",
+    "typing_extensions==4.15.0",
+
+    "PyQRCode==1.2.1",
+    "pypng==0.20220715.0",
+    "opencv-python==4.11.0.86"
 ]
 
 [build-system]
 requires = ["flit_core >=3.4,<4"]
 build-backend = "flit_core.buildapi"
 
-# These dependencies are only installed when developer mode is enabled
 [tool.bench.dev-dependencies]
-# package_name = "~=1.1.0"
