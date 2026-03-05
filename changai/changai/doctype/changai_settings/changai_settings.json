@@ -24,7 +24,7 @@
   "gemini_location",
   "gemini_file_path",
   "gemini_project_id",
-  "gemini_auth_file_upload",
+  "gemini_json_content",
   "section_break_gnue",
   "retain_memory",
   "testing_section",
@@ -337,16 +337,16 @@
    "options": "Module Selection"
   },
   {
-   "fieldname": "gemini_auth_file_upload",
-   "fieldtype": "Attach",
-   "label": "Gemini Auth file Upload"
+   "fieldname": "gemini_json_content",
+   "fieldtype": "Text",
+   "label": "Gemini Json content"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-03-05 15:08:48.080524",
+ "modified": "2026-03-05 15:37:54.572151",
  "modified_by": "Administrator",
  "module": "Changai",
  "name": "ChangAI Settings",

@@ -191,6 +191,7 @@ def get_settings() -> Dict[str, Any]:
         "retriever_structure": settings.retriever_structure,
         "gemini_file_path": settings.gemini_file_path,
         "gemini_project_id": settings.gemini_project_id,
+        "gemini_json_content": settings.gemini_json_content
     }
     return config
 
@@ -343,10 +344,10 @@ def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
     try:
         config = ChangAIConfig.get()
         PROJECT_ID = config["gemini_project_id"]
-        KEY_PATH = config["gemini_file_path"]
+        json_content = config["gemini_json_content"]
         LOC = config["location"]
         creds = service_account.Credentials.from_service_account_file(
-            KEY_PATH, 
+            json.loads(json_content), 
             scopes = ['https://www.googleapis.com/auth/cloud-platform']
         )
         client = genai.Client(
