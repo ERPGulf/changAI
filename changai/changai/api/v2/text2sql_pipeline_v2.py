@@ -28,7 +28,7 @@ import subprocess
 from frappe.desk.reportview import build_match_conditions
 import shutil
 from frappe import _
-
+TABLE_VS_PATH = "changai/changai/api/v2/fvs_stores/erpnext/table_fvs"
 
 def read_asset(file_name: str, folder: str = "Home/ChangAI Assets") -> Any:
     """
@@ -72,7 +72,6 @@ FORMAT_PROMPT = read_asset("user_friendly_prompt.txt")
 NON_ERP_PROMPT = read_asset("non_erp_prompt.txt")
 FILTER_TABLES = read_asset("filter_tables.txt")
 filter_fields = read_asset("filter_fields.txt")
-TABLE_VS_PATH = "/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/v2/fvs_stores/erpnext/table_fvs"
 
 
 @frappe.whitelist(allow_guest=False)
@@ -620,7 +619,7 @@ def call_retrieve_multi_line(user_question: str) -> Dict[str, Any]:
     }
 
 
-FULL_FIELDS_VS_PATH = "/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/v2/fvs_stores/erpnext/schema_fvs"
+FULL_FIELDS_VS_PATH = "changai/changai/api/v2/fvs_stores/erpnext/schema_fvs"
 
 
 def get_full_fields_vs():
