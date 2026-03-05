@@ -642,9 +642,6 @@ def call_retrieve_multi_line(user_question: str) -> Dict[str, Any]:
     }
 
 
-FULL_FIELDS_VS_PATH = "/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/v2/fvs_stores/erpnext/schema_fvs"
-
-
 def get_full_fields_vs():
     global _FULL_FIELDS_VS
 
