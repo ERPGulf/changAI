@@ -10,18 +10,19 @@ from langchain_core.documents import Document
 from langchain_community.docstore.in_memory import InMemoryDocstore
 from langchain_community.vectorstores import FAISS
 from changai.changai.api.v2.text2sql_pipeline_v2 import get_embedding_engine
+import os
 
+def get_base_fvs_dir() -> str:
+    base = frappe.get_site_path("private", "changai", "fvs_stores", "erpnext")
+    base_path = Path(base).resolve()
+    base_path.mkdir(parents=True, exist_ok=True)
+    return str(base_path)
+BASE_FVS = get_base_fvs_dir()
 
-BASE_FVS = "/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/v2/fvs_stores/erpnext"
-
-TABLE_FVS_PATH   = f"{BASE_FVS}/table_fvs"
-SCHEMA_FVS_PATH  = f"{BASE_FVS}/schema_fvs"
-ENTITY_FVS_PATH  = f"{BASE_FVS}/masterdata_fvs"
-
-# Frappe File DocType folder
+TABLE_FVS_PATH  = os.path.join(BASE_FVS, "table_fvs")
+SCHEMA_FVS_PATH = os.path.join(BASE_FVS, "schema_fvs")
+ENTITY_FVS_PATH = os.path.join(BASE_FVS, "masterdata_fvs")
 RAG_FOLDER = "Home/RAG Sources"
-
-# HNSW index settings
 HNSW_M           = 32
 EF_CONSTRUCTION  = 256
 EF_SEARCH        = 64
