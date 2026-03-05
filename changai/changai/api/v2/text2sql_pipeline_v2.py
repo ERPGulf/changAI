@@ -28,31 +28,56 @@ import subprocess
 from frappe.desk.reportview import build_match_conditions
 import shutil
 from frappe import _
+from pathlib import Path
+
+_ASSETS_DIR = Path(frappe.get_app_path("changai", "changai", "api", "v2", "assets")).resolve()
+_PROMPTS_DIR = Path(frappe.get_app_path("changai", "changai", "prompts")).resolve()
+
+_ALLOWED_EXT = {".json", ".txt", ".j2"}
 
 
-def read_asset(file_name: str, folder: str = "Home/ChangAI Assets") -> Any:
+def _safe_join(base: Path, rel: str) -> Path:
     """
-    Reads a file from File DocType.
+    Prevent path traversal. Only allow reading inside base directory.
     """
-    file_id = frappe.db.get_value(
-        "File",
-        {"file_name": file_name, "folder": folder},
-        "name",
-    )
-    if not file_id:
-        frappe.throw(f"File not found in {folder}: {file_name}")
-    doc = frappe.get_doc("File", file_id)
-    content = doc.get_content() or ""
-    if isinstance(content, bytes):
-        content = content.decode("utf-8", errors="replace")
-    if file_name.lower().endswith(".json"):
+    p = (base / rel).resolve()
+    if base != p and base not in p.parents:
+        frappe.throw(_("Unsafe path: {0}").format(rel))
+    return p
+
+
+def read_asset(file_name: str, base: str = "assets") -> Any:
+    """
+    base:
+      - "assets"  -> changai/changai/api/v2/assets
+      - "prompts" -> changai/changai/prompts
+    """
+    file_name = (file_name or "").strip()
+    if not file_name:
+        frappe.throw(_("file_name is required"))
+
+    ext = Path(file_name).suffix.lower()
+    if ext not in _ALLOWED_EXT:
+        frappe.throw(_("Unsupported file type: {0}").format(ext))
+
+    root = _ASSETS_DIR if base == "assets" else _PROMPTS_DIR if base == "prompts" else None
+    if root is None:
+        frappe.throw(_("Invalid base: {0}").format(base))
+
+    path = _safe_join(root, file_name)
+
+    if not path.is_file():
+        frappe.throw(_("File not found: {0}").format(str(path)))
+
+    content = path.read_text(encoding="utf-8", errors="replace")
+
+    if ext == ".json":
         try:
             return json.loads(content)
         except json.JSONDecodeError as e:
-            frappe.throw(f"Invalid JSON in {folder}/{file_name}: {e}")
+            frappe.throw(_("Invalid JSON in {0}: {1}").format(str(path), str(e)))
 
     return content
-
 
 _VS_TABLE = None
 _EMBEDDER_INSTANCE = None
@@ -63,15 +88,18 @@ _SUB_VS_CACHE = {}
 MODEL_ID = "gemini-2.5-flash-lite"
 RETRY_LIMIT = 2
 BACKEND_SERVER_SETTINGS = "Backend Server Settings"
-bk = read_asset("business_keywords_v1.json")
+bk = read_asset("business_keywords_v1.json", base="assets")
 BUSINESS_KEYWORDS = bk.get("business_keywords", bk)
-mapping_data = read_asset("metaschema_clean_v2.json")
-CONVERSATION_TEMPLATE = read_asset("conversation_template_v2.j2")
-SQL_PROMPT = read_asset("sql_prompt.txt")
-FORMAT_PROMPT = read_asset("user_friendly_prompt.txt")
-NON_ERP_PROMPT = read_asset("non_erp_prompt.txt")
-FILTER_TABLES = read_asset("filter_tables.txt")
-filter_fields = read_asset("filter_fields.txt")
+
+mapping_data = read_asset("metaschema_clean_v2.json", base="assets")
+CONVERSATION_TEMPLATE = read_asset("conversation_template_v2.j2", base="assets")
+
+SQL_PROMPT = read_asset("sql_prompt.txt", base="prompts")
+FORMAT_PROMPT = read_asset("user_friendly_prompt.txt", base="prompts")
+NON_ERP_PROMPT = read_asset("non_erp_prompt.txt", base="prompts")
+
+FILTER_TABLES = read_asset("filter_tables.txt", base="prompts")
+filter_fields = read_asset("filter_fields.txt", base="prompts")
 
 
 @frappe.whitelist(allow_guest=False)
@@ -146,7 +174,6 @@ def get_settings() -> Dict[str, Any]:
         "LANGSMITH_ENDPOINT": settings.langsmith_endpoint,
         "LANGSMITH_API_KEY": settings.langsmith_api_key,
         "LANGSMITH_PROJECT": settings.langsmith_project,
-        "ROOT_PATH": settings.root_path,
         "URL": settings.prediction_url if settings.remote else settings.ollama_url,
         "LOCAL_LLM": settings.local_llm,
         "LOCAL_SCHEMA_RETRIEVER": settings.local_schema_retriever,
