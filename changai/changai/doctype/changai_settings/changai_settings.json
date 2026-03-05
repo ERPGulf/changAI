@@ -26,11 +26,8 @@
   "gemini_location",
   "gemini_file_path",
   "gemini_project_id",
-  "gemini_api_key",
   "section_break_gnue",
-  "root_path",
   "retain_memory",
-  "vite_api_url",
   "testing_section",
   "retriever_structure",
   "local_server_tab",
@@ -51,8 +48,6 @@
   "entity_retriever",
   "openai_api_key",
   "claude_api_key",
-  "ngrok_auth_tok",
-  "colab_auth_token",
   "support_tab",
   "support_section",
   "support_url",
@@ -175,20 +170,10 @@
    "fieldtype": "Section Break"
   },
   {
-   "fieldname": "root_path",
-   "fieldtype": "Data",
-   "label": "Root Path"
-  },
-  {
    "default": "0",
    "fieldname": "retain_memory",
    "fieldtype": "Check",
    "label": "Retain Memory"
-  },
-  {
-   "fieldname": "vite_api_url",
-   "fieldtype": "Data",
-   "label": "Vite API Url"
   },
   {
    "fieldname": "testing_section",
@@ -350,25 +335,10 @@
    "label": "Update Schema file"
   },
   {
-   "fieldname": "ngrok_auth_tok",
-   "fieldtype": "Password",
-   "label": "Ngrok Auth Token"
-  },
-  {
-   "fieldname": "colab_auth_token",
-   "fieldtype": "Password",
-   "label": "Colab Auth Token"
-  },
-  {
    "fieldname": "module_and_description",
    "fieldtype": "Table",
    "label": "Module and Description",
    "options": "Module Selection"
-  },
-  {
-   "fieldname": "gemini_api_key",
-   "fieldtype": "Password",
-   "label": "Gemini API key"
   },
   {
    "fieldname": "download_embedding_model",
@@ -380,7 +350,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-03-03 08:25:41.690330",
+ "modified": "2026-03-05 09:02:51.176672",
  "modified_by": "Administrator",
  "module": "Changai",
  "name": "ChangAI Settings",

@@ -216,13 +216,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   async function generateBotResponse(userMsg, thinkingMsg, warmingTimeout) {
     try {
-      const API_URL = await frappe.db.get_single_value(
-        "ChangAI Settings",
-        "vite_api_url"
-      );
-
       const reqOpts = {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
           "X-Frappe-CSRF-Token": frappe.csrf_token
@@ -232,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
           chat_id: getOrCreateChatId()
         }),
       };
-
+      const API_URL = "/api/method/changai.changai.api.v2.text2sql_pipeline_v2.run_text2sql_pipeline";
       const res = await fetch(API_URL, reqOpts);
       const data = await res.json();
 
