@@ -339,7 +339,6 @@ def local_llm_request(prompt: str) -> str:
     text = (resp.get("body") or {}).get("response")
     return (text or "").strip() or "Error: Empty response from local LLM."
 
-
 def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
     try:
         config = ChangAIConfig.get()
