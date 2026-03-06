@@ -339,15 +339,18 @@ def local_llm_request(prompt: str) -> str:
     text = (resp.get("body") or {}).get("response")
     return (text or "").strip() or "Error: Empty response from local LLM."
 
+@frappe.whitelist(allow_guest=True)
 def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
     try:
         config = ChangAIConfig.get()
         PROJECT_ID = config["gemini_project_id"]
         json_content = config["gemini_json_content"]
+        service_account_info = json.loads(json_content)
+
         LOC = config["location"]
-        creds = service_account.Credentials.from_service_account_file(
-            json.loads(json_content), 
-            scopes = ['https://www.googleapis.com/auth/cloud-platform']
+        creds = service_account.Credentials.from_service_account_info(
+            service_account_info,
+            scopes=['https://www.googleapis.com/auth/cloud-platform']
         )
         client = genai.Client(
             vertexai=True,

@@ -415,14 +415,15 @@ def _get_gemini_client():
     Returns an authenticated Gemini client using service account credentials from ChangAI Settings.
     """
     settings = frappe.get_single("ChangAI Settings")
-    gemini_json_content = settings.get("gemini_json_content")
+    json_content = settings.get("gemini_json_content")
+    service_account_info = json.loads(json_content)
     project_id    = settings.get("gemini_project_id")
     location      = settings.get("location") or "us-central1"
     if not gemini_json_content :
         frappe.throw("Gemini service account JSON file path is missing or invalid")
-    creds = service_account.Credentials.from_service_account_file(
-        gemini_json_content,
-        scopes=["https://www.googleapis.com/auth/cloud-platform"],
+    creds = service_account.Credentials.from_service_account_info(
+        service_account_info,
+        scopes=['https://www.googleapis.com/auth/cloud-platform']
     )
     client = genai.Client(
         vertexai=True,

@@ -338,7 +338,7 @@
   },
   {
    "fieldname": "gemini_json_content",
-   "fieldtype": "Text",
+   "fieldtype": "Code",
    "label": "Gemini Json content"
   }
  ],
@@ -346,7 +346,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-03-05 15:37:54.572151",
+ "modified": "2026-03-06 05:21:18.692847",
  "modified_by": "Administrator",
  "module": "Changai",
  "name": "ChangAI Settings",
