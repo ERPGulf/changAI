@@ -113,7 +113,7 @@ def download_model_from_ui():
     global _EMBEDDER_INSTANCE
     model_url = "https://huggingface.co/hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned"
     model_path = frappe.get_app_path(
-        "changai", "changai","changai", "model"
+        "changai", "changai", "model"
     )
     app_base = frappe.get_app_path("changai")
     resolved = os.path.realpath(model_path)
@@ -151,7 +151,7 @@ def get_embedding_engine():
     global _EMBEDDER_INSTANCE
     if _EMBEDDER_INSTANCE is None:
         model_path = frappe.get_app_path(
-            "changai", "changai","changai", "model"
+            "changai", "changai", "model"
         )
         if not os.path.exists(model_path):
             frappe.throw(_(
