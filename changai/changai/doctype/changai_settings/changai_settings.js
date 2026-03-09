@@ -4,7 +4,7 @@ frappe.ui.form.on("ChangAI Settings", {
     refresh(frm) {
         frm.add_custom_button(__('Download Embedding Model'), () => {
             frappe.call({
-                method: "changai.changai.api.v2.text2sql_pipeline_v2.download_model_from_ui",
+                method: "changai.changai.api.v2.text2sql_pipeline_v2.download_model",
                 freeze: true,
                 freeze_message: "Downloading Model",
                 callback(r) {
