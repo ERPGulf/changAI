@@ -190,7 +190,7 @@ def get_settings() -> Dict[str, Any]:
         "LANGSMITH_PROJECT": settings.langsmith_project,
         "URL": settings.prediction_url if settings.remote else settings.ollama_url,
         "LOCAL_LLM": settings.local_llm,
-        "LOCAL_SCHEMA_RETRIEVER": settings.local_schema_retriever,
+        # "LOCAL_SCHEMA_RETRIEVER": settings.local_schema_retriever,
         "RETAIN_MEM": settings.retain_memory,
         "LLM_VERSION_ID": settings.llm_version_id,
         "EMBED_VERSION_ID": settings.embedder_version_id,
