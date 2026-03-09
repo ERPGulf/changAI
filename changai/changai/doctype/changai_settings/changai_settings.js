@@ -2,34 +2,28 @@
 // For license information, please see license.txt
 frappe.ui.form.on("ChangAI Settings", {
     refresh(frm) {
-
         frm.add_custom_button(__('Download Embedding Model'), () => {
             frappe.call({
                 method: "changai.changai.api.v2.text2sql_pipeline_v2.download_model_from_ui",
                 freeze: true,
-                freeze_message: __("Downloading embedding model..."),
+                freeze_message: "Downloading Model",
                 callback(r) {
                     if (!r.message) return;
-
-                    if (r.message.status === "success") {
-                        frappe.msgprint({
-                            title: __("Success"),
-                            message: __("Embedding model downloaded successfully."),
-                            indicator: "green"
-                        });
-                    } else {
-                        frappe.msgprint({
-                            title: __("Error"),
-                            message: __(r.message.message || "Unknown error occurred."),
-                            indicator: "red"
-                        });
-                    }
+                    frappe.show_alert({
+                        message: __("Model download started in the background. This may take a few minutes."),
+                        indicator: "blue"
+                    }, 8);
+                },
+                error(r) {
+                    frappe.msgprint({
+                        title: __("Error"),
+                        message: __("Failed to start model download. Please try again."),
+                        indicator: "red"
+                    });
                 }
             });
         });
-
     },
-
     create_train_data(frm) {
         create_data_from_selected_rows(frm);
     },

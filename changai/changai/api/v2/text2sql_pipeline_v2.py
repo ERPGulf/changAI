@@ -103,6 +103,20 @@ filter_fields = read_asset("filter_fields.txt", base="prompts")
 
 
 @frappe.whitelist(allow_guest=False)
+def download_model():
+    frappe.enqueue(
+        "changai.changai.api.v2.text2sql_pipeline_v2.download_model_from_ui",  # dot-path to the function
+        queue="long",           # use "long" queue for heavy tasks
+        timeout=3600,           # 1 hour timeout (in seconds)
+        is_async=True,          # run in background (default True)
+        job_name="download_model",  # optional: helps track/deduplicate jobs
+    )
+    return {
+        "ok":True,"message":"Model Downloading.."
+    }
+
+
+@frappe.whitelist(allow_guest=False)
 def download_model_from_ui():
     """
     Force re-download embedding model
