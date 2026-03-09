@@ -22,7 +22,7 @@ dependencies = [
     "langchain-ollama",
     "langgraph",
     "langsmith",
-
+    "transformers>=4.48.0",
     "sentence-transformers==5.1.2",
     "faiss-cpu==1.12.0",
     "numpy==1.26.4",
