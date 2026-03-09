@@ -1611,3 +1611,31 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
         "EntityDebug": entity_debug,
         "Bot": formatted_result
     }
+
+@frappe.whitelist()
+def debug_model_config():
+    import os
+    import json
+    
+    base = frappe.get_app_path("changai")
+    model_path = os.path.join(base, "changai", "model")
+    
+    result = {}
+    result["model_path"] = model_path
+    result["files"] = os.listdir(model_path) if os.path.exists(model_path) else "FOLDER NOT FOUND"
+    
+    config_path = os.path.join(model_path, "config.json")
+    if os.path.exists(config_path):
+        with open(config_path, "r") as f:
+            config = json.load(f)
+        # Only grab key fields
+        result["config"] = {
+            "model_type": config.get("model_type"),
+            "architectures": config.get("architectures"),
+            "model_name": config.get("model_name") or config.get("_name_or_path"),
+        }
+    else:
+        result["config"] = "config.json NOT FOUND"
+    
+    frappe.log_error(str(result), "Model Debug")
+    return result
