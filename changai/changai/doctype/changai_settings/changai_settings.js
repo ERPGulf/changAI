@@ -23,6 +23,27 @@ frappe.ui.form.on("ChangAI Settings", {
                 }
             });
         });
+        frm.add_custom_button(__('test'), () => {
+            frappe.call({
+                method: "changai.changai.api.v2.text2sql_pipeline_v2.download_model",
+                freeze: true,
+                freeze_message: "test",
+                callback(r) {
+                    if (!r.message) return;
+                    frappe.show_alert({
+                        message: __("testing."),
+                        indicator: "blue"
+                    }, 8);
+                },
+                error(r) {
+                    frappe.msgprint({
+                        title: __("Error"),
+                        message: __("Failed to start model download. Please try again."),
+                        indicator: "red"
+                    });
+                }
+            });
+        });
     },
     create_train_data(frm) {
         create_data_from_selected_rows(frm);
