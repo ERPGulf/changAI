@@ -1,5 +1,6 @@
 import json
 import frappe
+from typing import Any
  
 def save_message_doc(session_id:str,message_type:str,content:str):
 
@@ -14,7 +15,7 @@ def save_message_doc(session_id:str,message_type:str,content:str):
 
 
 @frappe.whitelist(allow_guest=False)
-def save_turn_2(session_id: str, user_text: str=None, bot_text: None):
+def save_turn_2(session_id: str, user_text: str=None, bot_text: Any = None):
     # find existing document
     doc_name = frappe.db.exists("ChangAI Chat History", {"session_id": session_id})
 

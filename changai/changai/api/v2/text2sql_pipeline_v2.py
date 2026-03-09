@@ -1539,7 +1539,7 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
                 save_turn_2(
                     session_id=chat_id,
                     user_text=formatted_q,
-                    bot_text={"text": non_erp_res}
+                    bot_text=non_erp_res
                 )
                 save_logs(
                     user_question=user_question,
@@ -1598,7 +1598,7 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
     formatted_result = format_data(formatted_q,sql_result)
     if not err:
         try:
-            save_turn_2(session_id=chat_id,user_text=formatted_q,bot_text={"text": formatted_result})
+            save_turn_2(session_id=chat_id,user_text=formatted_q,bot_text= formatted_result)
             save_logs(user_question=user_question,formatted_q=formatted_q,context=context,sql=sql,val=val,result=sql_result,formatted_result=formatted_result)
         except Exception as e:
             return {"error": str(e)}
