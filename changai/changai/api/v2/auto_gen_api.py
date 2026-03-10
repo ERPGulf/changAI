@@ -479,8 +479,7 @@ def fill_missing_field_descriptions(
     # Final Save and cleanup
     meta["last_desc_sync"] = str(now_datetime())
     write_filedoctype("schema.yaml", {"_meta": meta, "tables": tables_blocks}, folder=RAG_FOLDER)
-    frappe.db.commit()  # nosemgrep: persist schema/table updates written to File DocType during sync
-
+    frappe.db.commit()  # nosemgrep: frappe-semgrep-rules.rules.frappe-manual-commit
     return {
         "ok": True,
         "tables_updated": updated_tables,
