@@ -30,7 +30,7 @@ app_license = "mit"
 # Include JS globally on all pages
 # Include JS globally on all pages
 app_include_html = ["/assets/changai/html/changai.html"]
-app_include_js = ["/assets/changai/js/changai.js","/assets/changai/js/ai_translate.js" ]
+app_include_js = ["/assets/changai/js/changai.js"]
 app_include_css = ["/assets/changai/css/changai.css"]
 # In hooks.py
 # app_include_css = [
@@ -58,6 +58,9 @@ app_include_css = ["/assets/changai/css/changai.css"]
 
 # include js in doctype views
 # doctype_js = {"doctype" : "public/js/doctype.js"}
+doctype_js = {
+    "Item": "public/js/ai_translate.js"
+}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}

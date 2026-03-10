@@ -1,33 +1,38 @@
 frappe.ui.form.on("Item", {
     refresh(frm) {
-        // Add menu option under "Menu"
-        frm.add_custom_button(
-            __("AI Translate"),
-            () => {
-                open_ai_translate_dialog(frm);
-            },
-            __("Menu")
-        );
+        // Prevent duplicate menu items
+        if (frm.ai_translate_added) return;
+        frm.ai_translate_added = true;
+
+        frm.page.add_menu_item(__("AI Translate"), () => {
+            open_ai_translate_dialog(frm);
+        });
     }
 });
 
 function open_ai_translate_dialog(frm) {
+    const fields = get_item_text_fields(frm);
+
+    if (!fields.length) {
+        frappe.msgprint(__("No translatable fields found."));
+        return;
+    }
+
     const dialog = new frappe.ui.Dialog({
         title: __("AI Translate"),
-        size: "small",
         fields: [
             {
-                label: __("From Field"),
                 fieldname: "from_field",
+                label: __("From Field"),
                 fieldtype: "Select",
-                options: get_item_fields(),
+                options: fields,
                 reqd: 1
             },
             {
-                label: __("To Field"),
                 fieldname: "to_field",
+                label: __("To Field"),
                 fieldtype: "Select",
-                options: get_item_fields(),
+                options: fields,
                 reqd: 1
             }
         ],
@@ -35,27 +40,28 @@ function open_ai_translate_dialog(frm) {
         primary_action(values) {
             dialog.hide();
 
-            // Placeholder action
-            frappe.msgprint(
-                __(`Translate from <b>${values.from_field}</b> to <b>${values.to_field}</b>`)
-            );
+            frappe.msgprint({
+                title: __("AI Translate"),
+                message: __(
+                    `From <b>${values.from_field}</b> → To <b>${values.to_field}</b>`
+                ),
+                indicator: "green"
+            });
 
-            // Later you can call backend AI method here
-            // frappe.call({ ... })
+            // AI call will go here later
         }
     });
 
     dialog.show();
 }
 
-function get_item_fields() {
-    // Fields commonly translated in Item
-    return [
-        "",
-        "item_name",
-        "item_code",
-        "description",
-        "custom_arabic_name",
-        "custom_arabic_description"
-    ].join("\n");
+function get_item_text_fields(frm) {
+    return frm.meta.fields
+        .filter(df =>
+            ["Data", "Small Text", "Text", "Long Text"].includes(df.fieldtype)
+        )
+        .map(df => ({
+            label: df.label,
+            value: df.fieldname
+        }));
 }
