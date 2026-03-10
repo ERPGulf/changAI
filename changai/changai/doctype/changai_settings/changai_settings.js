@@ -23,21 +23,6 @@ frappe.ui.form.on("ChangAI Settings", {
                 }
             });
         });
-
-        frm.add_custom_button(__('Test Model Config'), () => {
-            frappe.call({
-                method: "changai.changai.api.v2.text2sql_pipeline_v2.debug_model_config",
-                callback(r) {
-                    console.log(r.message);
-                    frappe.msgprint({
-                        title: __("Model Debug"),
-                        message: `<pre>${JSON.stringify(r.message, null, 2)}</pre>`,
-                        indicator: "blue"
-                    });
-                }
-            });
-        });
-
     },
     update_masterdata_file(frm) {
         frappe.call({
