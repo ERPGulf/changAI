@@ -38,26 +38,26 @@ frappe.ui.form.on("ChangAI Settings", {
             });
         });
 
-        frm.add_custom_button(__('Update Master Data'), () => {
-            frappe.call({
-                method: "changai.changai.api.v2.auto_gen_api.sync_master_data_smart",
-                freeze: true,
-                freeze_message: "Updating Master Data...",
-                callback(r) {
-                    console.log(r.message);
-                }
-            });
+    },
+    update_masterdata_file(frm) {
+        frappe.call({
+            method: "changai.changai.api.v2.auto_gen_api.sync_master_data_smart",
+            freeze: true,
+            freeze_message: "Updating Master Data...",
+            callback(r) {
+                console.log(r.message);
+            }
         });
+    },
 
-        frm.add_custom_button(__('Update Schema'), () => {
-            frappe.call({
-                method: "changai.changai.api.v2.auto_gen_api.sync_schema_and_enqueue_descriptions",
-                freeze: true,
-                freeze_message: "Syncing schema...",
-                callback(r) {
-                    console.log(r.message);
-                }
-            });
+    update_schema_file(frm) {
+        frappe.call({
+            method: "changai.changai.api.v2.auto_gen_api.sync_schema_and_enqueue_descriptions",
+            freeze: true,
+            freeze_message: "Syncing schema...",
+            callback(r) {
+                console.log(r.message);
+            }
         });
     },
 

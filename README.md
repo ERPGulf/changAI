@@ -4,28 +4,21 @@
 
 Built with RAG, LLM-powered SQL generation, LangGraph orchestration, and strict SQL validation for safe and reliable ERP querying.
 
-## Key Features
+## 🚀 Features
 
-- **Accurate Text-to-SQL** — Generates valid, read-only MySQL `SELECT` queries
-- **Dual RAG Retrieval** — Separate FAISS indexes for:
-  - ERPNext schema (tables, fields, joins, metrics)
-  - Master entities (customers, items, suppliers)
-- **Entity-Aware Queries** — Exact matching for customer/item names (no guessing)
-- **Business Guardrail** — Non-ERP questions are safely handled outside the SQL flow
-- **Self-Repairing SQL** — SQLGlot-based validation with guided retries (up to 2)
-- **Flexible Deployment** — Run fully local (Ollama) or remote (Replicate/Docker)
-- **Stateful Conversations** — Multi-turn chat with memory
-- **Secure & Private** — No writes, no schema hallucination, no uncontrolled execution
-
----
+✅ **Chat Tab** – Ask queries about ERPNext directly  
+✅ **Support Tab** – Support interface *(Work in Progress – not yet in working mode)*  
+✅ **Debug Tab** – For developers to inspect outcomes at different pipeline stages  
+✅ **Train Data Automation** – Button in changAI Settings to automate training data setup  
+✅ **Master Data Schema Button** – Create and update master data records and schema  
+✅ **Download Embedding Model** – One-click button in Settings to download the embedding model to disk  
 
 ## How It Works
 
-ChangAI clarifies user intent using recent chat history, rewrites the query only when needed, and detects entity or value-based inputs.
+we pass the schema and master data to a local model trained on erpnext modules so when a user typesa query we pass that to this model RAG model retreieves the releavnt tables fields and master records from the schema and amster datat fiel to write acuurate sql queries once we get this fields and tables we generate sql with a help of a llm mdel and execute this sql query by checking the user permissions with the help of batch match condtion butin api
 
-A guardrail routes the request to either the ERP SQL pipeline or a non-ERP conversational response.
-
-For ERP queries, it retrieves the required schema and entity context (via RAG), uses this context for LLM-based SQL generation, validates and repairs the SQL, executes read-only `SELECT` queries, and returns results in a clear, human-friendly format.
+Training Data creaetion :
+we provided a button in the training tab in changai setting doctype where we a have button to clcik to create train data u can choose modules from the modules table and generate by proving size also we have shcema button which updates and genrate schema and also we have a master datat button to update master datat last mdoifed 
 
 ---
 
@@ -33,10 +26,8 @@ For ERP queries, it retrieves the required schema and entity context (via RAG), 
 
 | Component              | Model Used                             | Deployment      |
 |------------------------|----------------------------------------|-----------------|
-| Embeddings (Schema)    | nomic-ai/modernbert-embed-base         | Local or Remote |
-| Embeddings (Entity)    | nomic-ai/modernbert-embed-base         | Local or Remote |
-| SQL Generation         | Qwen/Qwen3-4B-Instruct-2507             | Local or Remote |
-| DB Result Formatting   | Qwen/Qwen2.5-1.5B-Instruct              | Local or Remote |
+| Embeddings  | hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned        | Local or Remote |
+| SQL Generation         | Qwen/Qwen    or Gemini       | Local or Remote |
 
 ---
 
@@ -44,8 +35,7 @@ For ERP queries, it retrieves the required schema and entity context (via RAG), 
 
 ### Local Mode (Ollama)
 
-- Runs entirely on your local server
-- No external API calls
+- Runs entirely on your local server  for schema retreiveal and genaret sql qiwth the help fo the gemini
 - Best for privacy and on-prem deployments
 
 ### Remote Mode (Replicate)
@@ -83,28 +73,6 @@ If enabled in **ChangAI Settings**, all RAG retrieval, SQL generation, validatio
 
 ---
 
-## Architecture Overview
-
-### Full Pipeline Workflow
-
-<p align="center">
-  <img src="changai/images/ChangAI_v2.png" width="800">
-</p>
-
-### RAG Retrieval Layer
-
-<p align="center">
-  <img src="changai/images/RAG Structure.png" width="750">
-</p>
-
-<!-- ### Data Retrieval Process Flow
-
-<p align="center">
-  <img src="changai/images/data_retrieval_flow_chart.png" width="600">
-</p> -->
-
----
-
 ## Installation & Setup
 
 ### 1. Install ChangAI in Frappe
@@ -112,7 +80,7 @@ If enabled in **ChangAI Settings**, all RAG retrieval, SQL generation, validatio
 ```bash
 bench get-app changai https://github.com/erpgulf/changai
 bench --site your-site.local install-app changai
-bench migrate
+bench --site yoursite.example.com migrate
 bench restart
 ```
 
