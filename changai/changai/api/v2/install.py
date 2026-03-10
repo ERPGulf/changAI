@@ -23,25 +23,15 @@ def after_migrate():
         frappe.log_error(frappe.get_traceback(), "ChangAI: Model Download Failed on Migrate")
 
 
-def _download_embedding_model(model_path):
-    app_base = frappe.get_app_path("changai")
-    resolved = os.path.realpath(model_path)
-
-    frappe.log_error(f"model_path: {model_path}\nresolved: {resolved}\napp_base: {app_base}", "ChangAI Model Debug")
-
-    if not resolved.startswith(os.path.realpath(app_base)):
-        frappe.throw(_("Invalid model path: outside app directory."))
-
+def _download_embedding_model():
+    model_path = frappe.get_site_path("private", "files", "changai_model")
+    
     if os.path.exists(model_path):
         shutil.rmtree(model_path)
-        frappe.log_error(f"Existing model removed: {model_path}", "ChangAI Model Debug")
 
     os.makedirs(model_path, exist_ok=True)
-    frappe.log_error("Starting snapshot_download...", "ChangAI Model Debug")
 
     snapshot_download(
         repo_id="hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned",
         local_dir=model_path
     )
-
-    frappe.log_error(f"Download complete. Files: {os.listdir(model_path)}", "ChangAI Model Debug")

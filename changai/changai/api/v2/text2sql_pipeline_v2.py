@@ -144,17 +144,16 @@ def download_model():
         "ok":True,"message":"Model Downloading.."
     }
 
+def _get_model_path():
+    site_path = frappe.get_site_path("private", "files", "changai_model")
+    return site_path
+
 
 @frappe.whitelist(allow_guest=False)
 def download_model_from_ui():
     global _EMBEDDER_INSTANCE
 
-    app_base = frappe.get_app_path("changai")
-    model_path = frappe.get_app_path("changai", "changai", "model")
-    resolved = os.path.realpath(model_path)  # ✅ moved above the check
-
-    if not resolved.startswith(os.path.realpath(app_base)):
-        frappe.throw(_("Invalid model path: outside app directory."))
+    model_path = _get_model_path()
 
     try:
         if os.path.exists(model_path):
@@ -174,21 +173,16 @@ def download_model_from_ui():
         frappe.log_error(frappe.get_traceback(), "Embedding Model Download Failed")
         frappe.throw(f"Model download failed: {str(e)}")
 
+
 def get_embedding_engine():
-    """
-    Disk → RAM loader (Lazy Singleton)
-    """
     global _EMBEDDER_INSTANCE
     if _EMBEDDER_INSTANCE is None:
-        model_path = frappe.get_app_path(
-            "changai", "changai", "model"
-        )
+        model_path = _get_model_path()
         if not os.path.exists(model_path):
             frappe.throw(_(
                 "Embedding model not found. "
                 "Go to ChangAI Settings and click 'Download Embedding Model'."
             ))
-        # Heavy load — happens ONCE per worker
         _EMBEDDER_INSTANCE = HuggingFaceEmbeddings(
             model_name=model_path,
             model_kwargs={"device": "cpu"}

@@ -97,8 +97,8 @@ app_include_css = ["/assets/changai/css/changai.css"]
 # ------------
 
 # before_install = "changai.install.before_install"
-after_install = "changai.changai.api.v2.install.after_install"
-after_migrate = "changai.changai.api.v2.install.after_migrate"
+# after_install = "changai.changai.api.v2.install.after_install"
+# after_migrate = "changai.changai.api.v2.install.after_migrate"
 # Uninstallation
 # ------------
 
