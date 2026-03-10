@@ -20,6 +20,21 @@ def after_install():
             indicator="orange"
         )
 
+def after_migrate():
+    """Run after every deploy/update"""
+    model_path = frappe.get_app_path("changai", "changai", "model")
+    
+    try:
+        # Always remove and re-download to get latest model
+        if os.path.exists(model_path):
+            shutil.rmtree(model_path)
+            frappe.log_error("Existing model removed", "ChangAI Model")
+        
+        _download_embedding_model()
+        frappe.log_error("Model downloaded successfully", "ChangAI Model")
+    except Exception:
+        frappe.log_error(frappe.get_traceback(), "ChangAI: Model Download Failed on Migrate")
+
 
 def _download_embedding_model():
     """
