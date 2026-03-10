@@ -1,5 +1,6 @@
 import frappe
 import os
+from frappe import _
 import shutil
 from huggingface_hub import snapshot_download
 
@@ -24,12 +25,8 @@ def _download_embedding_model():
     app_base = frappe.get_app_path("changai")
     model_path = frappe.get_app_path("changai", "changai", "model")
     resolved = os.path.realpath(model_path)
-
-    # Security check
     if not resolved.startswith(os.path.realpath(app_base)):
         frappe.throw(_("Invalid model path: outside app directory."))
-
-    # Always replace
     if os.path.exists(model_path):
         shutil.rmtree(model_path)
 
