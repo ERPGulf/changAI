@@ -24,7 +24,7 @@ from changai.changai.api.v2.store_chats import (
     save_turn_2,
     inject_prompt,
 )
-import subprocess
+from huggingface_hub import snapshot_download
 from frappe.desk.reportview import build_match_conditions
 import shutil
 from frappe import _
@@ -141,7 +141,7 @@ def download_model_from_ui():
         _EMBEDDER_INSTANCE = None
         return {"status": "success", "message": "Embedding model downloaded successfully."}
 
-    except Exception as e:  # ✅ single catch — subprocess errors no longer relevant
+    except Exception as e:
         frappe.log_error(frappe.get_traceback(), "Embedding Model Download Failed")
         frappe.throw(f"Model download failed: {str(e)}")
 

@@ -17,6 +17,9 @@ BASE_BACKOFF = 2.0
 MAX_BACKOFF = 60.0
 REQUEST_DELAY = 30
 BATCH_SIZE = 25
+TABLE_TAG = "[TABLE]"
+FIELD_TAG = "[FIELD]"
+LINK_TAG = "[LINK]"
 
 SYSTEM_FIELDS = {
     "name", "owner", "creation", "modified", "modified_by",
@@ -177,7 +180,7 @@ def _validate_field(doctype: str, fieldname: str) -> bool:
 
 
 def _is_positive_valid(positive: str):
-    if positive.startswith("[TABLE]"):
+    if positive.startswith(TABLE_TAG):
         match = re.match(r"\[TABLE\]\s+(\w[\w ]*?)(?:\s*\||\s*$)", positive)
         if not match:
             return False, "Could not parse [TABLE] format"
@@ -187,7 +190,7 @@ def _is_positive_valid(positive: str):
             return False, f"DocType '{doctype}' does not exist"
         return True, None
 
-    if positive.startswith("[FIELD]"):
+    if positive.startswith(FIELD_TAG):
         match = re.match(r"\[FIELD\]\s+(\w+)\s+\|\s+\[TABLE\]\s+(\w[\w ]*?)(?:\s*\||\s*$)", positive)
         if not match:
             return False, "Could not parse [FIELD] format"
@@ -200,7 +203,7 @@ def _is_positive_valid(positive: str):
             return False, f"Field '{field}' does not exist in '{doctype}'"
         return True, None
 
-    if positive.startswith("[LINK]"):
+    if positive.startswith(LINK_TAG):
         match = re.match(r"\[LINK\]\s+(\w[\w ]*?)\s+->\s+(\w[\w ]*?)\s+ON\s+(\w+)(?:\s*\||\s*$)", positive)
         if not match:
             return False, "Could not parse [LINK] format"
