@@ -27,7 +27,7 @@ def _download_embedding_model():
 
     # Security check
     if not resolved.startswith(os.path.realpath(app_base)):
-        frappe.throw("Invalid model path: outside app directory.")
+        frappe.throw(_("Invalid model path: outside app directory."))
 
     # Always replace
     if os.path.exists(model_path):

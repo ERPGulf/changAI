@@ -208,7 +208,7 @@ class ChangAIConfig:
         return cls._cached
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=True)  # nosemgrep: security.guest-whitelisted-method - intentional, validates credentials via OAuth client lookup and Frappe password grant before returning a token
 def generate_token_secure(api_key: str, api_secret: str, app_key: str):
     try:
         try:
@@ -340,7 +340,7 @@ def local_llm_request(prompt: str) -> str:
     text = (resp.get("body") or {}).get("response")
     return (text or "").strip() or "Error: Empty response from local LLM."
 
-@frappe.whitelist(allow_guest=True)
+
 def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
     try:
         config = ChangAIConfig.get()
@@ -939,7 +939,7 @@ def clean_sql(s: Any) -> str:
     if isinstance(s, dict):
         s = s.get("output") or s.get("sql") or s.get("text") or json.dumps(s, ensure_ascii=False, default=str)
     elif isinstance(s, list):
-        s = "\n".join([str(x) for x in s])  # no map()
+        s = "\n".join([str(x) for x in s])
     else:
         s = str(s) if s is not None else ""
 
@@ -1388,7 +1388,7 @@ def hits_to_schema_context(
                 if vals is None:
                     vals = _parse_tag(txt, "VALUES")
                 if isinstance(vals, (list, tuple)):
-                    vals = ", ".join(map(str, vals))
+                    vals = ", ".join([str(v) for v in vals])
                 if key not in enums:
                     enums[key] = vals or ""
                 _add_field(tbl, fld)
@@ -1475,7 +1475,7 @@ def hits_to_schema_context(
                 lines.append(f"  - Entity: {ent}")
                 lines.append("    Filters:")
                 for k, v in filt.items():
-                    vv = ", ".join(map(str, v)) if isinstance(v, (list, tuple)) else str(v)
+                    vv = ", ".join([str(i) for i in v]) if isinstance(v, (list, tuple)) else str(v)
                     lines.append(f"      {k}: {vv}")
             else:
                 lines.append(f"  - Entity: {ent}, Filters: {filt if filt else '{}'}")
@@ -1598,31 +1598,3 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
         "EntityDebug": entity_debug,
         "Bot": formatted_result
     }
-
-@frappe.whitelist()
-def debug_model_config():
-    import os
-    import json
-    
-    base = frappe.get_app_path("changai")
-    model_path = os.path.join(base, "changai", "model")
-    
-    result = {}
-    result["model_path"] = model_path
-    result["files"] = os.listdir(model_path) if os.path.exists(model_path) else "FOLDER NOT FOUND"
-    
-    config_path = os.path.join(model_path, "config.json")
-    if os.path.exists(config_path):
-        with open(config_path, "r") as f:
-            config = json.load(f)
-        # Only grab key fields
-        result["config"] = {
-            "model_type": config.get("model_type"),
-            "architectures": config.get("architectures"),
-            "model_name": config.get("model_name") or config.get("_name_or_path"),
-        }
-    else:
-        result["config"] = "config.json NOT FOUND"
-    
-    frappe.log_error(str(result), "Model Debug")
-    return result

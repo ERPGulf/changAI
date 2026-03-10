@@ -41,7 +41,7 @@ def create_qr_code(doc,method):
                 frappe.throw(_('Employee code missing in the document'))
 
             if not doc.first_name:
-                frappe.throw(_('First name missing for {} in the document'.format(doc.name)))
+                frappe.throw(_('First name missing for {} in the document').format(doc.name))
 
             last_name = doc.last_name if doc.last_name else ""
 

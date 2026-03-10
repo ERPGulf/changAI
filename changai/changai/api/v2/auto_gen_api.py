@@ -166,7 +166,7 @@ def sync_master_data_smart() -> Dict[str, Any]:
     meta["last_sync"] = str(now_datetime())
     payload_out = {"_meta": meta, "data": data}
     file_doc = write_filedoctype(file_name, payload_out, folder=RAG_FOLDER)
-    frappe.db.commit() # nosemgrep: ensure File DocType write is persisted immediately during Master data sync
+    frappe.db.commit()  # nosemgrep: frappe-manual-commit - explicit commit required to persist File DocType write immediately after master data sync
     msg = (
         _("Sync complete ✅ Added {0} new records.").format(added_total)
         if added_total
@@ -273,7 +273,7 @@ def sync_tables_and_schema_smart() -> Dict[str, Any]:
     meta["last_doctype_sync"] = str(now_datetime())
     write_filedoctype("schema.yaml", {"_meta": meta, "tables": tables_blocks}, folder=RAG_FOLDER)
     write_filedoctype("tables.json", merged_tables, folder=RAG_FOLDER)
-    frappe.db.commit()  # nosemgrep: explicit commit required to persist schema/table sync changes to File DocType
+    frappe.db.commit()  # nosemgrep: frappe-manual-commit - explicit commit required to persist schema/table sync changes to File DocType
     return {
         "ok": True,
         "changed_tables": len(changed_tables),

@@ -22,7 +22,7 @@ custom_dictionary = frappe.get_app_path("changai", "changai", "api", "erp_dictio
 nlp = spacy.load("en_core_web_sm", disable=["tagger", "parser"])
 sym_spell = SymSpell(max_dictionary_edit_distance=2, prefix_length=7)
 sym_spell.load_dictionary(custom_dictionary, term_index=0, count_index=1)
-with open(pleasantry_file_path, "r", encoding="utf-8") as f:
+with open(pleasantry_file_path, "r", encoding="utf-8") as f:  # nosemgrep: frappe-security-file-traversal - path is constructed via frappe.get_app_path, guaranteed to be within the app directory
     PLEASANTRIES = sorted(json.load(f).items(), key=lambda x: len(x[0]), reverse=True)
 COMPILED_PLEASANTRIES = [
     (re.compile(pattern, re.IGNORECASE), response)
@@ -174,7 +174,7 @@ I couldn’t find any records for {{ doctype or 'your query' }}.
 
 
 # Load business keywords once
-with open(business_keywords_file, "r", encoding="utf-8") as f:
+with open(business_keywords_file, "r", encoding="utf-8") as f:  # nosemgrep: frappe-security-file-traversal - path is constructed via frappe.get_app_path, guaranteed to be within the app directory
     BUSINESS_KEYWORDS = {kw.lower() for kw in json.load(f)["business_keywords"]}
 
 non_erp_responses = [

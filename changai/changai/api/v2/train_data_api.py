@@ -77,7 +77,7 @@ def _seed_seen_from_disk(abs_path: str) -> Tuple[set, int]:
     if not os.path.exists(abs_path):
         return seen, count
 
-    with open(abs_path, "r", encoding="utf-8") as f:
+    with open(abs_path, "r", encoding="utf-8") as f:  # nosemgrep: security.frappe-security-file-traversal - abs_path is constructed via frappe.get_site_path with a sanitized module name, not directly user-controlled
         for line in f:
             line = line.strip()
             if not line:
@@ -106,8 +106,7 @@ def _append_to_disk(abs_path: str, records: List[dict]):
 
     # Append JSONL safely
     file_exists = os.path.exists(abs_path)
-    with open(abs_path, "a", encoding="utf-8") as f:
-        # If file exists and not empty, ensure newline separation
+    with open(abs_path, "a", encoding="utf-8") as f:  # nosemgrep: security.frappe-security-file-traversal - abs_path is constructed via frappe.get_site_path with a sanitized module name, not directly user-controlled
         if file_exists and os.path.getsize(abs_path) > 0:
             f.write("\n")
         f.write("\n".join(json.dumps(r, ensure_ascii=False) for r in records))
@@ -145,7 +144,7 @@ def _sync_frappe_file_doc(module_name: str, abs_path: str, folder_path: str, suf
             "folder": folder_path,
         }).insert(ignore_permissions=True)
 
-    frappe.db.commit()
+    frappe.db.commit()  # nosemgrep: frappe-manual-commit - explicit commit required to persist File DocType record immediately after disk write during training data sync
     return file_doc
 
 
@@ -420,7 +419,7 @@ def _get_gemini_client():
     project_id    = settings.get("gemini_project_id")
     location      = settings.get("location") or "us-central1"
     if not gemini_json_content :
-        frappe.throw("Gemini service account JSON file path is missing or invalid")
+        frappe.throw(_("Gemini service account JSON file path is missing or invalid"))
     creds = service_account.Credentials.from_service_account_info(
         service_account_info,
         scopes=['https://www.googleapis.com/auth/cloud-platform']
@@ -500,7 +499,7 @@ def testing_file(module_name):
 
 
 @frappe.whitelist(allow_guest=False)
-def generate_data(modules, total_count: int, path: str, use_claude: bool = False,use_gemini: bool = False):
+def generate_data(modules: str, total_count: int, path: str, use_claude: bool = False,use_gemini: bool = False):
     """
     Generates training records and APPENDS to disk JSONL.
     Then syncs/updates a Frappe File doc pointing to that file.
@@ -583,7 +582,7 @@ def generate_data(modules, total_count: int, path: str, use_claude: bool = False
 
 
 @frappe.whitelist(allow_guest=False)
-def start_train(modules, total_count: int):
+def start_train(modules: str, total_count: int):
     total_count=int(total_count)
     val_count = max(1, int(int(total_count) * 0.25))
 
