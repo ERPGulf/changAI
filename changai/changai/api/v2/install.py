@@ -7,7 +7,7 @@ from huggingface_hub import snapshot_download
 
 def after_install():
     try:
-        model_path = frappe.get_app_path("changai","changai" "model")
+        model_path = frappe.get_app_path("changai","changai","model")
         _download_embedding_model(model_path)
         frappe.log_error("Model downloaded successfully after install", "ChangAI Model")
     except Exception:
@@ -16,7 +16,7 @@ def after_install():
 
 def after_migrate():
     try:
-        model_path = frappe.get_app_path("changai","changai" "model")
+        model_path = frappe.get_app_path("changai","changai","model")
         _download_embedding_model(model_path)
         frappe.log_error("Model downloaded successfully after migrate", "ChangAI Model")
     except Exception:
