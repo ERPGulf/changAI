@@ -42,7 +42,8 @@ def debug_model_config():
     import json
     
     base = frappe.get_app_path("changai")
-    model_path = os.path.join(base, "changai", "model")
+    model_path = frappe.get_app_path("changai", "changai", "model")
+
     
     result = {}
     result["model_path"] = model_path
