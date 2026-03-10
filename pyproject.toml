@@ -14,6 +14,7 @@ dependencies = [
     "google-genai==1.60.0",
     "google-auth==2.49.0.dev0",
     "google-cloud-aiplatform==1.135.0",
+    "huggingface_hub",
 
     "langchain",
     "langchain-core",

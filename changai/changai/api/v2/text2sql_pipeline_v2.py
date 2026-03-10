@@ -118,45 +118,32 @@ def download_model():
 
 @frappe.whitelist(allow_guest=False)
 def download_model_from_ui():
-    """
-    Force re-download embedding model
-    - Deletes existing model folder
-    - Clones fresh copy
-    - Resets RAM singleton
-    """
     global _EMBEDDER_INSTANCE
-    model_url = "https://huggingface.co/hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned"
-    model_path = frappe.get_app_path(
-        "changai", "changai", "model"
-    )
+
     app_base = frappe.get_app_path("changai")
-    resolved = os.path.realpath(model_path)
+    model_path = frappe.get_app_path("changai", "changai", "model")
+    resolved = os.path.realpath(model_path)  # ✅ moved above the check
+
     if not resolved.startswith(os.path.realpath(app_base)):
         frappe.throw(_("Invalid model path: outside app directory."))
+
     try:
         if os.path.exists(model_path):
             shutil.rmtree(model_path)
-        os.makedirs(os.path.dirname(model_path), exist_ok=True)
-        subprocess.run(
-            ["git", "clone", model_url, model_path],
-            check=True,
-            shell=False
+
+        os.makedirs(model_path, exist_ok=True)
+
+        snapshot_download(
+            repo_id="hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned",
+            local_dir=model_path
         )
+
         _EMBEDDER_INSTANCE = None
         return {"status": "success", "message": "Embedding model downloaded successfully."}
 
-    except subprocess.CalledProcessError as e:
+    except Exception as e:  # ✅ single catch — subprocess errors no longer relevant
         frappe.log_error(frappe.get_traceback(), "Embedding Model Download Failed")
-        frappe.throw(f"Git clone failed: {str(e)}")
-
-    except FileNotFoundError as e:
-        frappe.log_error(frappe.get_traceback(), "Embedding Model Download Failed")
-        frappe.throw(f"Git not found. Is git installed on this server? {str(e)}")
-
-    except OSError as e:
-        frappe.log_error(frappe.get_traceback(), "Embedding Model Download Failed")
-        frappe.throw(f"File system error: {str(e)}")
-
+        frappe.throw(f"Model download failed: {str(e)}")
 
 def get_embedding_engine():
     """
