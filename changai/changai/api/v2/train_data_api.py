@@ -178,7 +178,7 @@ def _validate_field(doctype: str, fieldname: str) -> bool:
 
 def _is_positive_valid(positive: str):
     if positive.startswith("[TABLE]"):
-        match = re.match(r"\[TABLE\]\s+([\w\s]+?)(?:\s*\||\s*$)", positive)
+        match = re.match(r"\[TABLE\]\s+(\w[\w ]*?)(?:\s*\||\s*$)", positive)
         if not match:
             return False, "Could not parse [TABLE] format"
         table = match.group(1).strip()
@@ -188,7 +188,7 @@ def _is_positive_valid(positive: str):
         return True, None
 
     if positive.startswith("[FIELD]"):
-        match = re.match(r"\[FIELD\]\s+(\w+)\s+\|\s+\[TABLE\]\s+([\w\s]+?)(?:\s*\||\s*$)", positive)
+        match = re.match(r"\[FIELD\]\s+(\w+)\s+\|\s+\[TABLE\]\s+(\w[\w ]*?)(?:\s*\||\s*$)", positive)
         if not match:
             return False, "Could not parse [FIELD] format"
         field = match.group(1).strip()
@@ -201,7 +201,7 @@ def _is_positive_valid(positive: str):
         return True, None
 
     if positive.startswith("[LINK]"):
-        match = re.match(r"\[LINK\]\s+([\w\s]+?)\s+->\s+([\w\s]+?)\s+ON\s+(\w+)(?:\s*\||\s*$)", positive)
+        match = re.match(r"\[LINK\]\s+(\w[\w ]*?)\s+->\s+(\w[\w ]*?)\s+ON\s+(\w+)(?:\s*\||\s*$)", positive)
         if not match:
             return False, "Could not parse [LINK] format"
         table_a = match.group(1).strip()
