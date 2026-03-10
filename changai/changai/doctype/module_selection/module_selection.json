@@ -13,12 +13,16 @@
   {
    "fieldname": "module",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Module",
    "options": "Module Def"
   },
   {
    "fieldname": "description",
    "fieldtype": "Text",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Description"
   }
  ],
@@ -26,7 +30,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-03-04 12:42:26.093134",
+ "modified": "2026-03-10 04:56:21.801633",
  "modified_by": "Administrator",
  "module": "Changai",
  "name": "Module Selection",
