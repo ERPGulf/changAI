@@ -1569,13 +1569,14 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
         non_erp_res = _safe_strip(final.get("non_erp_res", ""))
         formatted_q = _safe_strip(final.get("formatted_q", ""))
         err = final.get("error")
-        if err:
-            frappe.log_error(err, "ChangAI NON_ERP Error")
-        return {
-            "Question": user_question,
-            "Formatted-Question": formatted_q,
-            "Bot": err if err else "⚠️ Could not get a response. Please try again.",
-        }
+        if not non_erp_res:
+            if err:
+                frappe.log_error(err, "ChangAI NON_ERP Error")
+            return {
+                    "Question": user_question,
+                    "Formatted-Question": formatted_q,
+                    "Bot":"⚠️ Could not get a response. Please try again.",
+                }
 
         if not err and non_erp_res and non_erp_res!="":
             try:
