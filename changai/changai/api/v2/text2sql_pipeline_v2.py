@@ -360,6 +360,15 @@ def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
         else:
             settings = frappe.get_single("ChangAI Settings")
             api_key = settings.get_password("gemini_api_key")
+            if not api_key:
+                frappe.throw(
+                    _(
+                        "Gemini API key is not configured.<br><br>"
+                        "Please go to <b>ChangAI Settings</b> and enter your <b>Gemini API Key</b>."
+                    ),
+                    title=_("Missing Gemini API Key")
+                )
+
             client = genai.Client(
                 api_key=api_key
             )
@@ -538,6 +547,8 @@ def send_non_erp_request(state: SQLState) -> SQLState:
     prompt = NON_ERP_PROMPT.format(question=qstn)
     try:
         response = call_model(prompt, "llm")
+        if not response or isinstance(response, dict):
+            return {**state, "prompt": prompt, "non_erp_res": "", "error": str(response)}
         return {**state, "prompt": prompt, "non_erp_res": response, "error": None}
     except Exception as e:
         return {**state, "non_erp_res": "", "error": f"NON-ERP call failed: {e}"}
@@ -902,9 +913,16 @@ def repair_sqlquery(state: SQLState) -> SQLState:
     try:
         response = call_model(patched_prompt,"llm")
         if isinstance(response, str):
-            response = json.loads(response)
-            sql = response.get("sql", "")
-            orm = response.get("orm", "")
+            try:
+                response = json.loads(response)
+            except json.JSONDecodeError:
+                return {**state, "tries": tries, "error": f"{response[:200]}"}
+
+        if not response or not isinstance(response, dict):
+            return {**state, "tries": tries, "error": "Repair: empty or invalid response from LLM"}
+
+        sql = response.get("sql", "")
+        orm = response.get("orm", "")
         return {**state, "sql": sql, "tries": tries, "error": None}
     except Exception as e:
         return {**state, "tries": tries, "error": f"Repair call failed {e}"}
@@ -1556,9 +1574,14 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
     sql_prompt = (final.get("sql_prompt") or "")
     val = final.get("validation") or {}
     ok = bool(val.get("ok"))
+    err = final.get("error")
     if not ok or not sql.upper().startswith("SELECT"):
         parse_error = val.get("details", {}).get("parse_error", "")
-        if parse_error == "Empty SQL from LLM":
+
+        if err:
+            frappe.log_error(err, "ChangAI SQL Pipeline Error")
+            bot_msg = "⚠️ The model encountered an error generating your query. Please try again."
+        elif parse_error == "Empty SQL from LLM":
             bot_msg = "⚠️ The model could not generate a SQL query for your question. Please try rephrasing."
         elif val.get("unknown_tables") or val.get("unknown_columns"):
             bot_msg = "⚠️ The model generated an invalid query. Please try rephrasing."
@@ -1566,7 +1589,6 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
             bot_msg = "⚠️ Could not process your request. Please try rephrasing."
         context = (final.get("context") or final.get("selected_fields") or "")[:800]
         tries = int(final.get("tries") or 0)
-        err = final.get("error")
         return {
             "Question":user_question,
             "Formatted_Question":formatted_q,
@@ -1577,7 +1599,7 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
             "Tries": tries,
             "Error": err or "SQL not valid or missing",
             "Result": [],
-            "Bot": "I couldn’t produce a valid SQL yet. Please try rephrasing.",
+            "Bot": bot_msg,
         }
     try:
         extracted_tables=extract_tables_from_sql(sql)
