@@ -358,8 +358,9 @@ def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
                 credentials=creds
             )
         else:
+            api_key = settings.get_password("gemini_api_key")
             client = genai.Client(
-                api_key=config["gemini_api_key"]
+                api_key=api_key
             )
 
         gemini_config = types.GenerateContentConfig(

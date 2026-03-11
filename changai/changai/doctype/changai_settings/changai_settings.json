@@ -25,6 +25,7 @@
   "gemini_file_path",
   "gemini_project_id",
   "gemini_json_content",
+  "gemini_api_key",
   "section_break_gnue",
   "retain_memory",
   "testing_section",
@@ -344,13 +345,19 @@
    "fieldname": "gemini_json_content",
    "fieldtype": "Code",
    "label": "Gemini Json content"
+  },
+  {
+   "default": "AIzaSyA9g74Jvqx30Iyh19Kv-xc4l1a3RPmPS4M",
+   "fieldname": "gemini_api_key",
+   "fieldtype": "Password",
+   "label": "Gemini api key"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-03-11 07:13:13.702105",
+ "modified": "2026-03-11 07:58:38.071827",
  "modified_by": "Administrator",
  "module": "Changai",
  "name": "ChangAI Settings",
