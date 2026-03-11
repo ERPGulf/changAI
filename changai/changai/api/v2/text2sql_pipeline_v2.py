@@ -546,6 +546,8 @@ def guardrail_router(state: SQLState) -> SQLState:
 
 def send_non_erp_request(state: SQLState) -> SQLState:
     qstn = state.get("formatted_q") or state.get("question")
+    if not qstn:
+        return {**state, "non_erp_res": "", "error": "No question provided"}
     prompt = NON_ERP_PROMPT.format(question=qstn)
     try:
         response = call_model(prompt, "llm")
@@ -833,13 +835,16 @@ def generate_sql(state:SQLState) -> SQLState:
     entity_cards = state.get("entity_cards") or []
     entity_block = ""
     config = ChangAIConfig.get()
+    formatted_q = state.get("formatted_q")
+    if not formatted_q:
+        return {**state, "sql": "", "orm": "", "error": "No question to generate SQL for", "sql_prompt": ""}
     if entity_cards:
         entity_block = "\n\nENTITY_CARDS:\n" + "\n".join(str(c) for c in entity_cards)
     if config["retriever_structure"]=="multi line":
         context = (selected_fields or "") + (entity_block or "")
-        prompt = fill_sql_prompt(state["formatted_q"], context)
+        prompt = fill_sql_prompt(formatted_q, context)
     else:
-        prompt=fill_sql_prompt(state["formatted_q"],state["context"])
+        prompt=fill_sql_prompt(formatted_q,state["context"])
     try:
         response=call_model(prompt)
         if not response:
@@ -924,8 +929,10 @@ def repair_sqlquery(state: SQLState) -> SQLState:
         hints.append(f"Unknown Columns:{unknown_cols}.Use only fields listed for each tables from the context")
     if ambiguous:
         hints.append(f"Ambiguous columns(qualify them):{ambiguous}")
-
-    patched_prompt = state["sql_prompt"] + "\n\n#VALIDATION HINTS\n" + "\n".join(f"-{h}" for h in hints)
+    sql_prompt = state.get("sql_prompt")
+    if not sql_prompt:
+        return {**state, "tries": tries, "error": "No SQL prompt to repair from"}
+    patched_prompt = sql_prompt + "\n\n#VALIDATION HINTS\n" + "\n".join(f"-{h}" for h in hints)
 
     try:
         response = call_model(patched_prompt,"llm")
@@ -1575,7 +1582,7 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
             return {
                     "Question": user_question,
                     "Formatted-Question": formatted_q,
-                    "Bot":"⚠️ Could not get a response. Please try again.",
+                    "Bot": err if err else "⚠️ Could not get a response. Please try again.",
                 }
 
         if not err and non_erp_res and non_erp_res!="":
