@@ -660,36 +660,41 @@ def _parse_json_list(raw: str) -> List[Any]:
 
 
 def call_retrieve_multi_line(user_question: str) -> Dict[str, Any]:
-    top_tables = call_fvs_table_search(user_question)
-    table_prompt = FILTER_TABLES.replace("{user_question}", user_question)
-    table_prompt = table_prompt.replace("{table_list}", json.dumps(top_tables, ensure_ascii=False))
-    selected_raw = call_gemini(table_prompt)
-    selected_tables = _parse_json_list(selected_raw)
-    top_set = set(top_tables)
-    selected_tables = [t for t in selected_tables if t in top_set]
-    if not selected_tables:
-        return {"selected_fields": {}, "selected_tables": [], "top_tables": top_tables}
-    fields_candidates = {}
-    for table in selected_tables:
-        fields_candidates[table] = call_fvs_field_search(
-            user_question,
-            table_name=table,
-            selected_tables=selected_tables,
-            k=40
-        )
-    field_prompt = filter_fields.replace("{user_question}", user_question)
-    field_prompt = field_prompt.replace("{fields_tables}", json.dumps(fields_candidates, ensure_ascii=False))
-    selected_raw = call_gemini(field_prompt)
     try:
-        selected_map = json.loads(selected_raw) if isinstance(selected_raw, str) else {}
-    except Exception:
-        selected_map = {}
-    return {
-        "selected_fields": json.dumps(selected_map, ensure_ascii=False),
-        "selected_tables": selected_tables,
-        "top_tables": top_tables,
-        "top_fields": fields_candidates,
-    }
+        top_tables = call_fvs_table_search(user_question)
+        table_prompt = FILTER_TABLES.replace("{user_question}", user_question)
+        table_prompt = table_prompt.replace("{table_list}", json.dumps(top_tables, ensure_ascii=False))
+        selected_raw = call_gemini(table_prompt)
+        selected_tables = _parse_json_list(selected_raw)
+        top_set = set(top_tables)
+        selected_tables = [t for t in selected_tables if t in top_set]
+        if not selected_tables:
+            return {"selected_fields": {}, "selected_tables": [], "top_tables": top_tables}
+        fields_candidates = {}
+        for table in selected_tables:
+            fields_candidates[table] = call_fvs_field_search(
+                user_question,
+                table_name=table,
+                selected_tables=selected_tables,
+                k=40
+            )
+        field_prompt = filter_fields.replace("{user_question}", user_question)
+        field_prompt = field_prompt.replace("{fields_tables}", json.dumps(fields_candidates, ensure_ascii=False))
+        selected_raw = call_gemini(field_prompt)
+        try:
+            selected_map = json.loads(selected_raw) if isinstance(selected_raw, str) else {}
+        except Exception:
+            selected_map = {}
+        return {
+            "selected_fields": json.dumps(selected_map, ensure_ascii=False),
+            "selected_tables": selected_tables,
+            "top_tables": top_tables,
+            "top_fields": fields_candidates,
+        }
+    except frappe.exceptions.ValidationError:
+        raise
+    except Exception as e:
+        return {"selected_fields": {}, "selected_tables": [], "top_tables": [], "error": str(e)}
 
 
 def get_full_fields_vs():
@@ -784,19 +789,24 @@ def call_fvs_field_search(
 @traceable(name="schema_retriever", run_type="tool")
 def schema_retriever(state: SQLState) -> SQLState:
     config = ChangAIConfig.get()
-    if config["REMOTE"]:
-        hits = remote_embedder_request(state.get("formatted_q", "") or state.get("question", ""))
-        return {**state, "hits": hits}
-    else:
-        out = call_retrieve_multi_line(state.get("formatted_q") or state.get("question") or "")
-        return {
-            **state,
-            "retrieval_mode": "multi",
-            "top_tables": out.get("top_tables", []),
-            "top_fields": out.get("top_fields", {}),
-            "selected_fields": out.get("selected_fields", ""),
-            "selected_tables": out.get("selected_tables", []),
-        }
+    try:
+        if config["REMOTE"]:
+            hits = remote_embedder_request(state.get("formatted_q", "") or state.get("question", ""))
+            return {**state, "hits": hits}
+        else:
+            out = call_retrieve_multi_line(state.get("formatted_q") or state.get("question") or "")
+            return {
+                **state,
+                "retrieval_mode": "multi",
+                "top_tables": out.get("top_tables", []),
+                "top_fields": out.get("top_fields", {}),
+                "selected_fields": out.get("selected_fields", ""),
+                "selected_tables": out.get("selected_tables", []),
+            }
+    except frappe.exceptions.ValidationError:
+        raise
+    except Exception as e:
+        return {**state, "error": f"Schema retrieval failed: {e}"}
 
 
 # # Node 2: Build schema context from hits - for SQL Prompt
