@@ -359,7 +359,11 @@ def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
             )
         else:
             settings = frappe.get_single("ChangAI Settings")
-            api_key = settings.get_password("gemini_api_key")
+            try:
+                api_key = settings.get_password("gemini_api_key")
+            except Exception:
+                api_key = None
+
             if not api_key:
                 frappe.throw(
                     _(
@@ -369,9 +373,7 @@ def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
                     title=_("Missing Gemini API Key")
                 )
 
-            client = genai.Client(
-                api_key=api_key
-            )
+            client = genai.Client(api_key=api_key)
 
         gemini_config = types.GenerateContentConfig(
             system_instruction="You are an ERPNext assistant. Follow the task instructions exactly."
