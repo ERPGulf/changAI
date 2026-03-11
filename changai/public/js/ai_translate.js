@@ -1,6 +1,5 @@
 frappe.ui.form.on("Item", {
     refresh(frm) {
-        // Prevent duplicate menu items
         if (frm.ai_translate_added) return;
         frm.ai_translate_added = true;
 
@@ -10,13 +9,16 @@ frappe.ui.form.on("Item", {
     }
 });
 
-function open_ai_translate_dialog(frm) {
-    const fields = get_item_text_fields(frm);
+async function open_ai_translate_dialog(frm) {
+    const fields = get_all_item_fields(frm);
 
     if (!fields.length) {
-        frappe.msgprint(__("No translatable fields found."));
+        frappe.msgprint(__("No fields found in Item."));
         return;
     }
+
+    const settings = await frappe.db.get_doc("ChangAI Settings");
+    const to_language = settings.to_language || __("Unknown Language");
 
     const dialog = new frappe.ui.Dialog({
         title: __("AI Translate"),
@@ -26,42 +28,90 @@ function open_ai_translate_dialog(frm) {
                 label: __("From Field"),
                 fieldtype: "Select",
                 options: fields,
-                reqd: 1
+                reqd: 1,
+                onchange() {
+                    update_pseudo_to_field(dialog, to_language);
+                }
             },
             {
                 fieldname: "to_field",
-                label: __("To Field"),
-                fieldtype: "Select",
-                options: fields,
-                reqd: 1
+                label: __("To Field (Auto Generated)"),
+                fieldtype: "Data",
+                read_only: 1
             }
         ],
         primary_action_label: __("Go"),
         primary_action(values) {
+            const from_field = values.from_field;
+            const source_text = frm.doc[from_field];
+
+            if (!source_text) {
+                frappe.msgprint(__("Source field is empty."));
+                return;
+            }
+
             dialog.hide();
 
-            frappe.msgprint({
-                title: __("AI Translate"),
-                message: __(
-                    `From <b>${values.from_field}</b> → To <b>${values.to_field}</b>`
-                ),
-                indicator: "green"
-            });
+            frappe.call({
+                method: "changai.changai.api.v2.ai_translate.translate_and_store",
+                args: {
+                    docname: frm.doc.name,
+                    from_field: from_field,
+                    text: source_text,
+                    to_language: to_language
+                },
+                freeze: true,
+                freeze_message: __("Translating and saving..."),
+                callback(r) {
+                    if (r.message) {
+                        frappe.show_alert({
+                            message: __("Translation saved in field: ") + r.message,
+                            indicator: "green"
+                        });
 
-            // AI call will go here later
+                        frm.reload_doc();
+                    }
+                }
+            });
         }
+
+
     });
 
     dialog.show();
 }
 
-function get_item_text_fields(frm) {
+function update_pseudo_to_field(dialog, to_language) {
+    const from_fieldname = dialog.get_value("from_field");
+    if (!from_fieldname) return;
+
+    const df = frappe.get_meta("Item").fields.find(
+        f => f.fieldname === from_fieldname
+    );
+
+    const label = df?.label || from_fieldname;
+
+    const pseudo_name = `${label} in ${to_language}`;
+
+    dialog.set_value("to_field", pseudo_name);
+}
+
+function get_all_item_fields(frm) {
     return frm.meta.fields
         .filter(df =>
-            ["Data", "Small Text", "Text", "Long Text"].includes(df.fieldtype)
+            df.fieldname &&
+            ![
+                "Section Break",
+                "Column Break",
+                "Tab Break",
+                "HTML",
+                "Button"
+            ].includes(df.fieldtype)
         )
         .map(df => ({
             label: df.label,
             value: df.fieldname
         }));
 }
+
+

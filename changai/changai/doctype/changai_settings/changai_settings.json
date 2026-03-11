@@ -7,6 +7,8 @@
  "field_order": [
   "server_section",
   "remote",
+  "from_language",
+  "to_language",
   "langchain_tracing_details_section",
   "langsmith_api_key",
   "langsmith_endpoint",
@@ -347,17 +349,28 @@
    "label": "Gemini Json content"
   },
   {
-   "default": "AIzaSyA9g74Jvqx30Iyh19Kv-xc4l1a3RPmPS4M",
    "fieldname": "gemini_api_key",
    "fieldtype": "Password",
    "label": "Gemini api key"
+  },
+  {
+   "fieldname": "from_language",
+   "fieldtype": "Link",
+   "label": "From Language",
+   "options": "Language"
+  },
+  {
+   "fieldname": "to_language",
+   "fieldtype": "Link",
+   "label": "To Language",
+   "options": "Language"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-03-11 07:58:38.071827",
+ "modified": "2026-03-11 09:23:37.471136",
  "modified_by": "Administrator",
  "module": "Changai",
  "name": "ChangAI Settings",

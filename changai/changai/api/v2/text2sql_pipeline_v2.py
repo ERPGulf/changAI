@@ -358,6 +358,7 @@ def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
                 credentials=creds
             )
         else:
+            settings = frappe.get_single("ChangAI Settings")
             api_key = settings.get_password("gemini_api_key")
             client = genai.Client(
                 api_key=api_key
@@ -815,6 +816,8 @@ def generate_sql(state:SQLState) -> SQLState:
         prompt=fill_sql_prompt(state["formatted_q"],state["context"])
     try:
         response=call_model(prompt)
+        if not response:
+            return {**state, "error": "Empty response from LLM", "sql_prompt": prompt}
         if isinstance(response, str):
             response = json.loads(response)
         sql = response.get("sql", "")
@@ -1554,6 +1557,13 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
     val = final.get("validation") or {}
     ok = bool(val.get("ok"))
     if not ok or not sql.upper().startswith("SELECT"):
+        parse_error = val.get("details", {}).get("parse_error", "")
+        if parse_error == "Empty SQL from LLM":
+            bot_msg = "⚠️ The model could not generate a SQL query for your question. Please try rephrasing."
+        elif val.get("unknown_tables") or val.get("unknown_columns"):
+            bot_msg = "⚠️ The model generated an invalid query. Please try rephrasing."
+        else:
+            bot_msg = "⚠️ Could not process your request. Please try rephrasing."
         context = (final.get("context") or final.get("selected_fields") or "")[:800]
         tries = int(final.get("tries") or 0)
         err = final.get("error")
