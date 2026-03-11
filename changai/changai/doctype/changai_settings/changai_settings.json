@@ -350,7 +350,7 @@
   },
   {
    "fieldname": "gemini_api_key",
-   "fieldtype": "Password",
+   "fieldtype": "Data",
    "label": "Gemini api key"
   },
   {
@@ -370,7 +370,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-03-11 09:23:37.471136",
+ "modified": "2026-03-11 10:55:30.977793",
  "modified_by": "Administrator",
  "module": "Changai",
  "name": "ChangAI Settings",

@@ -149,15 +149,14 @@ def get_embedding_engine():
     if _EMBEDDER_INSTANCE is None:
         model_path = _get_model_path()
         if not os.path.exists(model_path):
-            frappe.msgprint(
-                _(
-                    "Go to <b>ChangAI Settings</b> and click <b>'Download Embedding Model'</b>.<br><br>"
-                    "Watch this documentation tutorial for more detail: "
-                    "<a href='{0}' target='_blank'>Click here to watch</a>"
-                ).format("https://your-docs-url-here.com"),
-                title="Embedding Model Required",
-                indicator="blue"
-            )
+            frappe.throw(
+            _(
+                "Go to <b>ChangAI Settings</b> and click <b>'Download Embedding Model'</b>.<br><br>"
+                "Watch this documentation tutorial for more detail: "
+                "<a href='{0}' target='_blank'>Click here to watch</a>"
+            ).format("https://your-docs-url-here.com"),
+            title=_("Embedding Model Required")
+        )
         _EMBEDDER_INSTANCE = HuggingFaceEmbeddings(
             model_name=model_path,
             model_kwargs={"device": "cpu"}
@@ -360,7 +359,7 @@ def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
         else:
             settings = frappe.get_single("ChangAI Settings")
             try:
-                api_key = settings.get_password("gemini_api_key")
+                api_key = settings.gemini_api_key
             except Exception:
                 api_key = None
 
@@ -393,7 +392,8 @@ def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
         if text.startswith("```"):
             text = text.replace("```json", "").replace("```", "").strip()
         return text
-
+    except frappe.exceptions.ValidationError:
+        raise
     except Exception as e:
         return {"error": str(e)}
 
@@ -552,6 +552,8 @@ def send_non_erp_request(state: SQLState) -> SQLState:
         if not response or isinstance(response, dict):
             return {**state, "prompt": prompt, "non_erp_res": "", "error": str(response)}
         return {**state, "prompt": prompt, "non_erp_res": response, "error": None}
+    except frappe.exceptions.ValidationError:
+        raise
     except Exception as e:
         return {**state, "non_erp_res": "", "error": f"NON-ERP call failed: {e}"}
 
@@ -593,7 +595,8 @@ def rewrite_question(state: SQLState) -> SQLState:
             "formatting_prompt": prompt,
             "error": None,
         }
-
+    except frappe.exceptions.ValidationError:
+        raise
     except Exception as e:
         return {
             **state,
@@ -836,6 +839,8 @@ def generate_sql(state:SQLState) -> SQLState:
         sql = response.get("sql", "")
         orm = response.get("orm", "")
         return {**state,"sql_prompt":prompt,"sql":sql,"orm":orm,"error":None}
+    except frappe.exceptions.ValidationError:
+        raise
     except Exception as e:
         return {**state,"error": f"LLM call failed: {e}","sql_prompt":prompt}
 
@@ -926,6 +931,8 @@ def repair_sqlquery(state: SQLState) -> SQLState:
         sql = response.get("sql", "")
         orm = response.get("orm", "")
         return {**state, "sql": sql, "tries": tries, "error": None}
+    except frappe.exceptions.ValidationError:
+        raise
     except Exception as e:
         return {**state, "tries": tries, "error": f"Repair call failed {e}"}
 
@@ -1535,7 +1542,14 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
         "question": q,
         "session_id":chat_id
     }
-    final: SQLState = app.invoke(initial_state, config=config)
+    try:
+        final: SQLState = app.invoke(initial_state, config=config)
+    except frappe.exceptions.ValidationError as e:
+        return {"Bot": str(e), "error": str(e)}
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), "ChangAI Pipeline Invoke Error")
+        return {"Bot": "⚠️ An unexpected error occurred. Please try again.", "error": str(e)}
+
     entity_debug = {
     "contains_values": final.get("contains_values"),
     "entity_cards": final.get("entity_cards") or [],
