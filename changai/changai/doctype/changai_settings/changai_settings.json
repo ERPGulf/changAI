@@ -108,11 +108,13 @@
    "label": "HUGGING FACE Models & Datasets Repo"
   },
   {
+   "default": "hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned",
    "fieldname": "embedder",
    "fieldtype": "Data",
    "label": "Embedder Repo"
   },
   {
+   "default": "hyrinmansoor/qwen3-4b-instruct-2507",
    "fieldname": "qwen3_4b_instruct",
    "fieldtype": "Data",
    "label": "QWEN3-4b Instruct"
@@ -129,11 +131,13 @@
    "fieldtype": "Column Break"
   },
   {
+   "default": "hyrinmansoor/ERP-retrieval-data-modernbert",
    "fieldname": "dataset_repo",
    "fieldtype": "Data",
    "label": "Dataset Repo"
   },
   {
+   "default": "hyrinmansoor/qwen2.5-1.5b-instruct",
    "fieldname": "qwen25_15b",
    "fieldtype": "Data",
    "label": "QWEN2.5-1.5b Instruct"
@@ -165,7 +169,7 @@
    "fieldtype": "Section Break"
   },
   {
-   "default": "0",
+   "default": "1",
    "fieldname": "retain_memory",
    "fieldtype": "Check",
    "label": "Retain Memory"
@@ -346,7 +350,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-03-06 05:21:18.692847",
+ "modified": "2026-03-11 07:13:13.702105",
  "modified_by": "Administrator",
  "module": "Changai",
  "name": "ChangAI Settings",

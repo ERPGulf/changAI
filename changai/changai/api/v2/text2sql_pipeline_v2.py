@@ -149,10 +149,15 @@ def get_embedding_engine():
     if _EMBEDDER_INSTANCE is None:
         model_path = _get_model_path()
         if not os.path.exists(model_path):
-            frappe.throw(_(
-                "Embedding model not found. "
-                "Go to ChangAI Settings and click 'Download Embedding Model'."
-            ))
+            frappe.msgprint(
+                _(
+                    "Go to <b>ChangAI Settings</b> and click <b>'Download Embedding Model'</b>.<br><br>"
+                    "Watch this documentation tutorial for more detail: "
+                    "<a href='{0}' target='_blank'>Click here to watch</a>"
+                ).format("https://your-docs-url-here.com"),
+                title="Embedding Model Required",
+                indicator="blue"
+            )
         _EMBEDDER_INSTANCE = HuggingFaceEmbeddings(
             model_name=model_path,
             model_kwargs={"device": "cpu"}
@@ -337,21 +342,26 @@ def local_llm_request(prompt: str) -> str:
 def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
     try:
         config = ChangAIConfig.get()
-        PROJECT_ID = config["gemini_project_id"]
-        json_content = config["gemini_json_content"]
-        service_account_info = json.loads(json_content)
+        if config.get("gemini_json_content", "").strip():
+            PROJECT_ID = config["gemini_project_id"]
+            json_content = config["gemini_json_content"]
+            service_account_info = json.loads(json_content)
+            LOC = config["location"]
+            creds = service_account.Credentials.from_service_account_info(
+                service_account_info,
+                scopes=['https://www.googleapis.com/auth/cloud-platform']
+            )
+            client = genai.Client(
+                vertexai=True,
+                project=PROJECT_ID,
+                location=LOC,
+                credentials=creds
+            )
+        else:
+            client = genai.Client(
+                api_key=config["gemini_api_key"]
+            )
 
-        LOC = config["location"]
-        creds = service_account.Credentials.from_service_account_info(
-            service_account_info,
-            scopes=['https://www.googleapis.com/auth/cloud-platform']
-        )
-        client = genai.Client(
-            vertexai=True,
-            project=PROJECT_ID,
-            location=LOC,
-            credentials=creds
-        )
         gemini_config = types.GenerateContentConfig(
             system_instruction="You are an ERPNext assistant. Follow the task instructions exactly."
         )
@@ -372,9 +382,7 @@ def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
         return text
 
     except Exception as e:
-        return {
-            "error": str(e)
-        }
+        return {"error": str(e)}
 
 
 def remote_llm_request_deploy_test(
