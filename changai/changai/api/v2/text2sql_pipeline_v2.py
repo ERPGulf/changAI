@@ -187,7 +187,6 @@ def get_settings() -> Dict[str, Any]:
         "llm": settings.llm,
         "location": settings.gemini_location,
         "retriever_structure": settings.retriever_structure,
-        "gemini_file_path": settings.gemini_file_path,
         "gemini_project_id": settings.gemini_project_id,
         "gemini_json_content": settings.gemini_json_content
     }
@@ -341,20 +340,26 @@ def local_llm_request(prompt: str) -> str:
 def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
     try:
         config = ChangAIConfig.get()
-        if (config.get("gemini_json_content") or "").strip():
-            PROJECT_ID = config["gemini_project_id"]
-            json_content = config["gemini_json_content"]
-            LOC = config["location"]
-            if not json_content or not PROJECT_ID or not LOC:
+        PROJECT_ID = (config.get("gemini_project_id") or "").strip()
+        credentials_json = (config.get("gemini_json_content") or "").strip()  # rename to credentials_json
+        LOC = (config.get("location") or "").strip()
+        if PROJECT_ID or credentials_json or LOC:  # user intends to use Vertex AI
+            if not PROJECT_ID:
                 frappe.throw(
-            _(
-                "Vertex AI configuration is incomplete.<br><br>"
-                "Please go to <b>ChangAI Settings</b> and ensure "
-                "<b>Gemini Project ID</b>, <b>Location</b>, and <b>Gemini JSON Content</b> are all filled."
-            ),
-            title=_("Missing Vertex AI Configuration")
-        )
-            service_account_info = json.loads(json_content)
+                _("Gemini Project ID is missing.<br><br>Please go to <b>ChangAI Settings</b> and enter your <b>Gemini Project ID</b>."),
+                title=_("Missing Gemini Project ID")
+            )
+            if not LOC:
+                frappe.throw(
+                    _("Gemini Location is missing.<br><br>Please go to <b>ChangAI Settings</b> and enter your <b>Gemini Location</b>."),
+                    title=_("Missing Gemini Location")
+                )
+            if not credentials_json:
+                frappe.throw(
+                    _("Service Account Credentials are missing.<br><br>Please go to <b>ChangAI Settings</b> and enter your <b>Service Account Credential</b>."),
+                    title=_("Missing Service Account Credentials")
+                )
+            service_account_info = json.loads(credentials_json)
             creds = service_account.Credentials.from_service_account_info(
                 service_account_info,
                 scopes=['https://www.googleapis.com/auth/cloud-platform']
@@ -1571,7 +1576,8 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
     try:
         final: SQLState = app.invoke(initial_state, config=config)
     except frappe.exceptions.ValidationError as e:
-        return {"Bot": str(e), "error": str(e)}
+        clean_msg = re.sub(r'<[^>]+>', '', str(e))
+        return {"Bot": clean_msg, "error": clean_msg}
     except Exception as e:
         frappe.log_error(frappe.get_traceback(), "ChangAI Pipeline Invoke Error")
         return {"Bot": "⚠️ An unexpected error occurred. Please try again.", "error": str(e)}

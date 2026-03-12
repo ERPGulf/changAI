@@ -24,9 +24,9 @@
   "qwen25_15b",
   "gemini_authentication_section",
   "gemini_location",
-  "gemini_file_path",
   "gemini_project_id",
   "gemini_json_content",
+  "gemini_authentication_free_tier_section",
   "gemini_api_key",
   "section_break_gnue",
   "retain_memory",
@@ -149,18 +149,13 @@
    "depends_on": "eval:doc.llm == \"Gemini\"",
    "fieldname": "gemini_authentication_section",
    "fieldtype": "Section Break",
-   "label": "Gemini Authentication"
+   "label": "Gemini Authentication (Paid Tier)"
   },
   {
    "depends_on": "eval:doc.llm == \"Gemini\"",
    "fieldname": "gemini_location",
    "fieldtype": "Data",
    "label": "Gemini_location"
-  },
-  {
-   "fieldname": "gemini_file_path",
-   "fieldtype": "Data",
-   "label": "Gemini file path"
   },
   {
    "fieldname": "gemini_project_id",
@@ -346,7 +341,7 @@
   {
    "fieldname": "gemini_json_content",
    "fieldtype": "Code",
-   "label": "Gemini Json content"
+   "label": "Service Account Credentials"
   },
   {
    "fieldname": "gemini_api_key",
@@ -364,13 +359,18 @@
    "fieldtype": "Link",
    "label": "To Language",
    "options": "Language"
+  },
+  {
+   "fieldname": "gemini_authentication_free_tier_section",
+   "fieldtype": "Section Break",
+   "label": "Gemini Authentication (Free Tier)"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-03-11 10:55:30.977793",
+ "modified": "2026-03-12 08:57:28.732700",
  "modified_by": "Administrator",
  "module": "Changai",
  "name": "ChangAI Settings",
