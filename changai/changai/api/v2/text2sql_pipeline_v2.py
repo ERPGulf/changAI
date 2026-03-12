@@ -341,11 +341,20 @@ def local_llm_request(prompt: str) -> str:
 def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
     try:
         config = ChangAIConfig.get()
-        if config.get("gemini_json_content", "").strip():
+        if (config.get("gemini_json_content") or "").strip():
             PROJECT_ID = config["gemini_project_id"]
             json_content = config["gemini_json_content"]
-            service_account_info = json.loads(json_content)
             LOC = config["location"]
+            if not json_content or not PROJECT_ID or not LOC:
+                frappe.throw(
+            _(
+                "Vertex AI configuration is incomplete.<br><br>"
+                "Please go to <b>ChangAI Settings</b> and ensure "
+                "<b>Gemini Project ID</b>, <b>Location</b>, and <b>Gemini JSON Content</b> are all filled."
+            ),
+            title=_("Missing Vertex AI Configuration")
+        )
+            service_account_info = json.loads(json_content)
             creds = service_account.Credentials.from_service_account_info(
                 service_account_info,
                 scopes=['https://www.googleapis.com/auth/cloud-platform']
@@ -356,6 +365,7 @@ def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
                 location=LOC,
                 credentials=creds
             )
+
         else:
             settings = frappe.get_single("ChangAI Settings")
             try:
@@ -570,7 +580,6 @@ def rewrite_question(state: SQLState) -> SQLState:
         standalone = ""
         contains_values = False
         obj = None
-
         if isinstance(raw, dict):
             obj = raw
         elif isinstance(raw, str):
