@@ -20,6 +20,7 @@ from google.oauth2 import service_account
 from werkzeug.wrappers import Response
 import jinja2
 import frappe
+from google.api_core import exceptions as google_exceptions
 from changai.changai.api.v2.store_chats import (
     save_turn_2,
     inject_prompt,
@@ -341,7 +342,7 @@ def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
     try:
         config = ChangAIConfig.get()
         PROJECT_ID = (config.get("gemini_project_id") or "").strip()
-        credentials_json = (config.get("gemini_json_content") or "").strip()  # rename to credentials_json
+        credentials_json = (config.get("gemini_json_content") or "").strip()
         LOC = (config.get("location") or "").strip()
         if PROJECT_ID or credentials_json or LOC:  # user intends to use Vertex AI
             if not PROJECT_ID:
@@ -380,13 +381,19 @@ def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
 
             if not api_key:
                 frappe.throw(
-                    _(
-                        "Gemini API key is not configured.<br><br>"
-                        "Please go to <b>ChangAI Settings</b> and enter your <b>Gemini API Key</b>."
-                    ),
-                    title=_("Missing Gemini API Key")
-                )
-
+    _(
+        "Gemini API key is not configured.<br><br>"
+        "You have two options to authenticate with Gemini:<br><br>"
+        "<b>Option 1 (Free / API Key):</b><br>"
+        "Go to <b>ChangAI Settings</b> and enter your <b>Gemini API Key</b>.<br>"
+        "Get your free API key from "
+        "<a href='https://aistudio.google.com/app/apikey' target='_blank'>Google AI Studio</a>.<br><br>"
+        "<b>Option 2 (Vertex AI / Service Account):</b><br>"
+        "Fill in <b>Gemini Project ID</b>, <b>Gemini Location</b>, "
+        "and <b>Service Account Credentials</b> in <b>ChangAI Settings</b>."
+    ),
+    title=_("Gemini Authentication Not Configured")
+)
             client = genai.Client(api_key=api_key)
 
         gemini_config = types.GenerateContentConfig(
@@ -409,9 +416,38 @@ def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
         return text
     except frappe.exceptions.ValidationError:
         raise
+    except google_exceptions.ResourceExhausted as e:
+        # 429 - quota/rate limit
+        frappe.throw(
+            _("Gemini API quota exceeded.<br><br>Please wait and try again or upgrade your plan."),
+            title=_("Gemini Quota Exceeded")
+        )
+    except google_exceptions.Unauthenticated as e:
+        # 401 - invalid api key
+        frappe.throw(
+            _("Gemini API key is invalid.<br><br>Please go to <b>ChangAI Settings</b> and enter a valid <b>Gemini API Key</b>."),
+            title=_("Invalid Gemini API Key")
+        )
+    except google_exceptions.PermissionDenied as e:
+        # 403
+        frappe.throw(
+            _("Gemini API permission denied.<br><br>Please check your API key permissions."),
+            title=_("Gemini Permission Denied")
+        )
+    except google_exceptions.InvalidArgument as e:
+        # 400 - bad request
+        frappe.throw(
+            _("Invalid request to Gemini API: {0}").format(str(e)),
+            title=_("Gemini Invalid Request")
+        )
     except Exception as e:
+        # catch all other unexpected errors
+        frappe.log_error(frappe.get_traceback(), "Gemini API Unexpected Error")
+        frappe.throw(
+            _("Gemini API error: {0}").format(str(e)),
+            title=_("Gemini API Error")
+        )
         return {"error": str(e)}
-
 
 def remote_llm_request_deploy_test(
     prompt: str = "",

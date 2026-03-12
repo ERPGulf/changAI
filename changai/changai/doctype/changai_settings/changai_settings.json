@@ -266,12 +266,12 @@
   },
   {
    "fieldname": "openai_api_key",
-   "fieldtype": "Password",
+   "fieldtype": "Data",
    "label": "OpenAI API key"
   },
   {
    "fieldname": "claude_api_key",
-   "fieldtype": "Password",
+   "fieldtype": "Data",
    "label": "Claude API Key"
   },
   {
@@ -370,7 +370,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-03-12 08:57:28.732700",
+ "modified": "2026-03-12 13:17:32.364241",
  "modified_by": "Administrator",
  "module": "Changai",
  "name": "ChangAI Settings",

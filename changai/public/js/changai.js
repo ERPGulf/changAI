@@ -28,6 +28,7 @@ function getOrCreateChatId() {
 function normalizeBotText(bot) {
   if (typeof bot === "string") return bot;
   if (bot && typeof bot === "object") {
+    if (bot.error) return `⚠️ ${bot.error}`;
     return bot.answer || bot.text || "";
   }
   return "";
@@ -136,9 +137,9 @@ function initChangAIChatbot() {
         const safeText = escapeHTML(msg.text);
 
         if (msg.role === "model") {
-          div.innerHTML = `${BOT_SVG}<p class="message-text">${safeText}</p>`;
+          div.innerHTML = `${BOT_SVG}<p class="message-text">${msg.text}</p>`;  // ← no escape
         } else {
-          div.innerHTML = `<p class="message-text">${safeText}</p>`;
+          div.innerHTML = `<p class="message-text">${escapeHTML(msg.text)}</p>`; // ← escape only user
         }
         container.appendChild(div);
       });
@@ -220,18 +221,11 @@ function initChangAIChatbot() {
     renderMessages();
     scrollToBottom();
 
-    const warmingTimeout = setTimeout(() => {
-      if (thinkingMsg.text === "Thinking...") {
-        thinkingMsg.text = "Model is warming up, please wait...⌛";
-        renderMessages();
-        scrollToBottom();
-      }
-    }, 12000);
 
-    generateBotResponse(message, thinkingMsg, warmingTimeout);
+    generateBotResponse(message, thinkingMsg);
   }
 
-  function generateBotResponse(userMsg, thinkingMsg, warmingTimeout) {
+  function generateBotResponse(userMsg, thinkingMsg) {
     try {
       frappe.call({
         method: "changai.changai.api.v2.text2sql_pipeline_v2.run_text2sql_pipeline",
@@ -240,7 +234,6 @@ function initChangAIChatbot() {
           chat_id: getOrCreateChatId(),
         },
         callback: function (r) {
-          clearTimeout(warmingTimeout);
           console.log("API SUCCESS:", r);
           thinkingMsg.text = r.message
             ? normalizeBotText(r.message.Bot)?.trim() || "No response."
@@ -250,7 +243,6 @@ function initChangAIChatbot() {
           scrollToBottom();
         },
         error: function (err) {
-          clearTimeout(warmingTimeout);
           const errorText = getErrorText(err);
           console.error("ChangAI API ERROR:", err);
           thinkingMsg.text = "⚠️ Something went wrong. Please try again.";
@@ -263,7 +255,6 @@ function initChangAIChatbot() {
         },
       });
     } catch (error) {
-      clearTimeout(warmingTimeout);
       const errorText = getErrorText(error);
       console.error("Unexpected JS Error:", error);
       thinkingMsg.text = error.message || "Unexpected error occurred.";

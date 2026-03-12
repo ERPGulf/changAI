@@ -11,6 +11,8 @@ from changai.changai.api.v2.build_cards_faiss_index_v2 import _ensure_folder_exi
 import openai
 from vertexai.generative_models import GenerativeModel, GenerationConfig
 from google.cloud import aiplatform
+from google.api_core import exceptions as google_exceptions
+import anthropic
 
 MAX_RETRIES = 5
 BASE_BACKOFF = 2.0
@@ -34,27 +36,41 @@ _field_cache: Dict[str, set] = {}
 def _get_claude_client():
     settings = frappe.get_single("ChangAI Settings")
     try:
-        api_key = settings.get_password("claude_api_key")
+        api_key = settings.claude_api_key
     except Exception:
         api_key = None
 
     if not api_key:
-        frappe.throw(_("Anthropic API key is not set in ChangAI Settings"))
+        frappe.throw(
+            _(
+                "Claude API key is not configured.<br><br>"
+                "Please go to <b>ChangAI Settings</b> and enter your <b>Claude API Key</b>.<br><br>"
+                "Get your API key from "
+                "<a href='https://console.anthropic.com/account/keys' target='_blank'>Anthropic Console</a>."
+            ),
+            title=_("Missing Claude API Key")
+        )
 
-    import anthropic
     return anthropic.Anthropic(api_key=api_key)
 
 
 def _get_openai_client():
     settings = frappe.get_single("ChangAI Settings")
-    api_key = None
     try:
-        api_key = settings.get_password("openai_api_key")
+        api_key = settings.openai_api_key
     except Exception:
         api_key = None
 
     if not api_key:
-        frappe.throw(_("OpenAI API key is not set in ChangAI Settings"))
+        frappe.throw(
+            _(
+                "OpenAI API key is not configured.<br><br>"
+                "Please go to <b>Remote Tab in ChangAI Settings</b> and enter your <b>OpenAI API Key</b>.<br><br>"
+                "Get your API key from "
+                "<a href='https://platform.openai.com/api-keys' target='_blank'>OpenAI Platform</a>."
+            ),
+            title=_("Missing OpenAI API Key")
+        )
 
     return openai.OpenAI(api_key=api_key)
 
@@ -267,11 +283,10 @@ def _assign_qids(validated_records: List[dict], module_name: str, existing_count
     return final_records
 
 
-def _generate_batch_claude(client, module_name, seen_anchors, module_description, total_count, wrong_examples=None) -> List[dict] :
+def _generate_batch_claude(client, module_name, seen_anchors, module_description, total_count, wrong_examples=None) -> List[dict]:
     raw = None
     for attempt in range(MAX_RETRIES):
         try:
-            import anthropic
             try:
                 resp = client.messages.create(
                     model="claude-sonnet-4-6",
@@ -283,27 +298,49 @@ def _generate_batch_claude(client, module_name, seen_anchors, module_description
                         "No markdown. No code fences. No explanation."
                     ),
                     messages=[
-                        {"role": "user", "content": _val_prompt(module_name,module_description,BATCH_SIZE)}
+                        {"role": "user", "content": _val_prompt(module_name, module_description, BATCH_SIZE)}
                     ]
                 )
-
                 raw = (resp.content[0].text or "").strip()
-            except Exception as e:
-                frappe.log_error(f"Error: {e}","429 error")
-                if "429" in str(e):
-                    time.sleep(10)
+
+            except anthropic.RateLimitError as e:
+                # 429 - rate limit
+                frappe.log_error(str(e), "Claude Rate Limit (429) - sleeping 10s")
+                time.sleep(10)
                 raise
+
+            except anthropic.AuthenticationError as e:
+                # 401 - invalid api key, no point retrying
+                frappe.log_error(str(e), "Claude Authentication Error")
+                return []
+
+            except anthropic.APIConnectionError as e:
+                # network issue, worth retrying
+                frappe.log_error(str(e), "Claude Connection Error")
+                raise
+
+            except anthropic.APIStatusError as e:
+                # catches all other HTTP errors (500, 503 etc)
+                frappe.log_error(f"Status {e.status_code}: {str(e)}", "Claude API Status Error")
+                raise
+
+            except Exception as e:
+                frappe.log_error(str(e), "Claude Unexpected Error")
+                raise
+
             if REQUEST_DELAY:
                 time.sleep(REQUEST_DELAY)
 
             break
 
+        except anthropic.AuthenticationError:
+            # no point retrying auth errors
+            return []
         except Exception as e:
             frappe.log_error(str(e)[:100], "Claude call failed (retrying)")
             _sleep_backoff(attempt)
 
     if not raw:
-        # frappe.log_error("All retries failed", "generate_batch_claude failed")
         return []
 
     if raw.startswith("```"):
@@ -313,7 +350,6 @@ def _generate_batch_claude(client, module_name, seen_anchors, module_description
     try:
         arr = json.loads(raw)
     except Exception:
-        # frappe.log_error(raw[:100], "Claude output not valid JSON array")
         return []
 
     if not isinstance(arr, list):
@@ -340,38 +376,65 @@ def _generate_batch(client, module_name, seen_anchors, module_description, total
     raw = None
     for attempt in range(MAX_RETRIES):
         try:
-            resp = client.chat.completions.create(
-                model="gpt-4o",
-                temperature=1.0,
-                messages=[
-                    {
-                        "role": "system",
-                        "content": (
-                            "You must output ONLY a valid JSON array. "
-                            "Start with '[' and end with ']'. "
-                            "No markdown. No code fences. No explanation."
-                        )
-                    },
-                    {"role": "user", "content": _training_prompt(module_name,module_description,BATCH_SIZE,wrong_examples)}  # <-- must exist in your module
-                ]
-            )
+            try:
+                resp = client.chat.completions.create(
+                    model="gpt-4o",
+                    temperature=1.0,
+                    messages=[
+                        {
+                            "role": "system",
+                            "content": (
+                                "You must output ONLY a valid JSON array. "
+                                "Start with '[' and end with ']'. "
+                                "No markdown. No code fences. No explanation."
+                            )
+                        },
+                        {"role": "user", "content": _training_prompt(module_name, module_description, BATCH_SIZE, wrong_examples)}
+                    ]
+                )
+                raw = (resp.choices[0].message.content or "").strip()
 
-            raw = (resp.choices[0].message.content or "").strip()
+            except openai.RateLimitError as e:
+                # 429 - rate limit
+                frappe.log_error(str(e), "OpenAI Rate Limit (429) - sleeping 10s")
+                time.sleep(10)
+                raise
+
+            except openai.AuthenticationError as e:
+                # 401 - invalid api key, no point retrying
+                frappe.log_error(str(e), "OpenAI Authentication Error")
+                return []
+
+            except openai.APIConnectionError as e:
+                # network issue, worth retrying
+                frappe.log_error(str(e), "OpenAI Connection Error")
+                raise
+
+            except openai.APIStatusError as e:
+                # all other HTTP errors (500, 503 etc)
+                frappe.log_error(f"Status {e.status_code}: {str(e)}", "OpenAI API Status Error")
+                raise
+
+            except Exception as e:
+                frappe.log_error(str(e), "OpenAI Unexpected Error")
+                raise
 
             if REQUEST_DELAY:
                 time.sleep(REQUEST_DELAY)
 
             break
 
+        except openai.AuthenticationError:
+            # no point retrying auth errors
+            return []
         except Exception as e:
-            # frappe.log_error(str(e)[:300], "OpenAI call failed (retrying)")
+            frappe.log_error(str(e)[:300], "OpenAI call failed (retrying)")
             _sleep_backoff(attempt)
 
     if not raw:
-        # frappe.log_error("All retries failed", "generate_batch failed")
+        frappe.log_error("All retries failed", "OpenAI generate_batch failed")
         return []
 
-    # Strip accidental fences
     if raw.startswith("```"):
         raw = raw.split("```", 1)[1]
         raw = raw.rsplit("```", 1)[0].strip()
@@ -379,61 +442,54 @@ def _generate_batch(client, module_name, seen_anchors, module_description, total
     try:
         arr = json.loads(raw)
     except Exception:
-#         frappe.log_error(
-#     title="OpenAI output not valid JSON array",
-#     message=raw[:100],
-# )
+        frappe.log_error(raw[:100], "OpenAI output not valid JSON array")
         return []
 
     if not isinstance(arr, list):
-#         frappe.log_error(
-#     title="OpenAI output not a list",
-#     message=raw[:100],
-# )
+        frappe.log_error(raw[:100], "OpenAI output not a list")
         return []
 
     records = []
     for obj in arr:
         if not isinstance(obj, dict):
             continue
-
         anchor = (obj.get("anchor") or "").strip()
         positives = obj.get("positives")
-
         if not anchor or not isinstance(positives, list) or not positives:
             continue
-
         if anchor in seen_anchors:
             continue
-
         seen_anchors.add(anchor)
         records.append({"anchor": anchor, "positives": positives})
 
     return records
 
-
 def _get_gemini_client():
-    """
-    Returns an authenticated Gemini client using service account credentials from ChangAI Settings.
-    """
     settings = frappe.get_single("ChangAI Settings")
-    json_content = settings.get("gemini_json_content")
-    service_account_info = json.loads(json_content)
-    project_id    = settings.get("gemini_project_id")
-    location      = settings.get("location") or "us-central1"
-    if not gemini_json_content :
-        frappe.throw(_("Gemini service account JSON file path is missing or invalid"))
+    json_content = (settings.get("gemini_json_content") or "").strip()
+    project_id = (settings.get("gemini_project_id") or "").strip()
+    location = (settings.get("location") or "us-central1").strip()
+
+    if not json_content:
+        frappe.throw(_("Gemini Service Account JSON is missing."), title=_("Missing Gemini Configuration"))
+    if not project_id:
+        frappe.throw(_("Gemini Project ID is missing."), title=_("Missing Gemini Configuration"))
+
+    try:
+        service_account_info = json.loads(json_content)
+    except json.JSONDecodeError as e:
+        frappe.throw(_("Gemini Service Account JSON is invalid: {0}").format(str(e)), title=_("Invalid Gemini JSON"))
+
     creds = service_account.Credentials.from_service_account_info(
         service_account_info,
         scopes=['https://www.googleapis.com/auth/cloud-platform']
     )
-    client = genai.Client(
+    return genai.Client(
         vertexai=True,
         project=project_id,
         location=location,
         credentials=creds,
     )
-    return client
 
 def _val_prompt(module_name, description, BATCH_SIZE):
     return f"""
@@ -604,7 +660,7 @@ def start_train(modules: str, total_count: int):
         queue="long",
         timeout=14400,
         modules=modules,
-        total_count=25,
+        total_count=val_count,
         path="Home/Validation Data/Batch 3",
         use_claude=True,                     # <-- Claude
     )
@@ -642,10 +698,15 @@ def _generate_batch_gemini(client,module_name: str, seen_anchors: set, module_de
                     config=cfg,
                 )
                 raw = (response.text or "").strip()
-            except Exception as e:
-                frappe.log_error(f"Error: {e}","429 error")
-                if "429" in str(e):
-                    time.sleep(30)
+            except google_exceptions.ResourceExhausted:
+                frappe.log_error("Gemini quota exceeded", "Gemini Rate Limit (429) - sleeping 30s")
+                time.sleep(30)
+                raise
+            except google_exceptions.Unauthenticated:
+                frappe.log_error("Gemini auth failed", "Gemini Authentication Error")
+                return []
+            except google_exceptions.GoogleAPIError as e:
+                frappe.log_error(str(e), "Gemini API Error")
                 raise
 
             if REQUEST_DELAY:
