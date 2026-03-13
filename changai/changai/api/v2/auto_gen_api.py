@@ -97,8 +97,8 @@ def write_filedoctype(
         doc = frappe.get_doc("File", existing)
         frappe.logger().info(f"Overwriting {file_name} → file_url={doc.file_url}")
         doc.save_file(content=content, overwrite=True)
+        doc.save(ignore_permissions=True)
         doc.reload()
-        frappe.logger().info(f"Done overwriting {file_name}")
         return doc
     else:
         doc = frappe.get_doc({

@@ -64,7 +64,7 @@ DATE FILTERING (WHITELIST ONLY — MUST FOLLOW):
 
 VALIDATION STEP (MANDATORY BEFORE OUTPUT):
 Before returning the result, internally verify:
-1. Every table and field used exists in SCHEMA CONTEXT.
+1. Every table and all field used 100% exists in SCHEMA CONTEXT nothing from outside.
 2. No extra or assumed fields are used.
 3. JOINs use only explicit join keys from SCHEMA CONTEXT.
 4. 🔒 SQL and ORM use IDENTICAL filters, literals, grouping, ordering, and limits.

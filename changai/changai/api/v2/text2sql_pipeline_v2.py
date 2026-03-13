@@ -340,11 +340,12 @@ def local_llm_request(prompt: str) -> str:
 
 def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
     try:
+        frappe.clear_cache()  # or frappe.clear_document_cache("ChangAI Settings")
         config = ChangAIConfig.get()
         PROJECT_ID = (config.get("gemini_project_id") or "").strip()
         credentials_json = (config.get("gemini_json_content") or "").strip()
         LOC = (config.get("location") or "").strip()
-        if PROJECT_ID or credentials_json or LOC:  # user intends to use Vertex AI
+        if PROJECT_ID or credentials_json or LOC:
             if not PROJECT_ID:
                 frappe.throw(
                 _("Gemini Project ID is missing.<br><br>Please go to <b>ChangAI Settings</b> and enter your <b>Gemini Project ID</b>."),
@@ -1141,9 +1142,12 @@ def validate_sql_against_mapping(
         qual = col.table  # qualifier (alias or table), may be None
         if not col_name:
             continue
-
         if qual:
             q = str(qual)
+            
+            # ✅ Skip wildcards immediately — T1.*, *.*, etc.
+            if col_name == "*":
+                continue
 
             # If referencing a derived table alias, skip schema validation here
             if q in derived_aliases:
@@ -1159,6 +1163,7 @@ def validate_sql_against_mapping(
                 if real_table in mapping and col_name not in mapping[real_table]:
                     unknown_cols.append((f"{q}.{col_name}", real_table))
                 continue
+
 
             unknown_cols.append((f"{q}.{col_name}", None))
 
