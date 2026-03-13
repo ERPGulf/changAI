@@ -414,21 +414,24 @@ def fill_missing_field_descriptions(
         # Prevent Memory Bloat: Clear Frappe caches every iteration
         frappe.local.meta_cache = {}
         if hasattr(frappe.local, 'docs'): frappe.local.docs = {}
-        
-        if not isinstance(block, dict) or block.get("desc_done"):
+
+        # ✅ FIX: don't blindly trust desc_done — re-check actual pending fields
+        if not isinstance(block, dict):
             continue
 
         table = block.get("table")
         fields = block.get("fields") or []
-        
+
         pending_fields = [
             f for f in fields
             if isinstance(f, dict) and f.get("name") and not (f.get("description") or "").strip()
         ]
-        
+
         if not pending_fields:
-            block["desc_done"] = True
+            block["desc_done"] = True  # mark done only if truly nothing pending
             continue
+
+        block["desc_done"] = False  # reset — new fields found, need processing
 
         updated_in_table = 0
         try:
@@ -440,7 +443,7 @@ def fill_missing_field_descriptions(
                     consecutive_errors += 1
                     continue
                 
-                consecutive_errors = 0 # Reset on success
+                consecutive_errors = 0  # Reset on success
                 for f in batch:
                     fn = f.get("name")
                     if fn in desc_map:
@@ -460,13 +463,16 @@ def fill_missing_field_descriptions(
             processed_updated_tables += 1
             tables_since_last_save += 1
             # Mark table as done if no empty descriptions remain
-            block["desc_done"] = not any(isinstance(x, dict) and not (x.get("description") or "").strip() for x in block.get("fields", []))
+            block["desc_done"] = not any(
+                isinstance(x, dict) and not (x.get("description") or "").strip()
+                for x in block.get("fields", [])
+            )
 
         # Checkpoint: Save to disk every X tables
         if tables_since_last_save >= checkpoint_every_table:
             write_filedoctype("schema.yaml", payload)
             tables_since_last_save = 0
-            gc.collect() # Garbage collection
+            gc.collect()  # Garbage collection
 
         # Safety: If API fails 5 times in a row, stop to save credits/time
         if consecutive_errors > 5:
