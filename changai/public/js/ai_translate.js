@@ -1,19 +1,21 @@
-frappe.ui.form.on("Item", {
-    refresh(frm) {
-        if (frm.ai_translate_added) return;
-        frm.ai_translate_added = true;
-
-        frm.page.add_menu_item(__("AI Translate"), () => {
-            open_ai_translate_dialog(frm);
-        });
-    }
+$(document).on("form-refresh", function (e, frm) {
+    add_translate_button(frm);
 });
+$(document).on("form-load", function (e, frm) {
+    add_translate_button(frm);
+});
+function add_translate_button(frm) {
+    if (frm.page.menu.find('a:contains("AI Translate")').length) return;
+    frm.page.add_menu_item(__("AI Translate"), () => {
+        open_ai_translate_dialog(frm);
+    });
+}
 
 async function open_ai_translate_dialog(frm) {
-    const fields = get_all_item_fields(frm);
+    const fields = get_all_fields(frm);
 
     if (!fields.length) {
-        frappe.msgprint(__("No fields found in Item."));
+        frappe.msgprint(__("No fields found."));
         return;
     }
 
@@ -30,7 +32,7 @@ async function open_ai_translate_dialog(frm) {
                 options: fields,
                 reqd: 1,
                 onchange() {
-                    update_pseudo_to_field(dialog, to_language);
+                    update_pseudo_to_field(dialog, to_language, frm);
                 }
             },
             {
@@ -56,6 +58,7 @@ async function open_ai_translate_dialog(frm) {
                 method: "changai.changai.api.v2.ai_translate.translate_and_store",
                 args: {
                     docname: frm.doc.name,
+                    doctype: frm.doc.doctype,
                     from_field: from_field,
                     text: source_text,
                     to_language: to_language
@@ -68,35 +71,30 @@ async function open_ai_translate_dialog(frm) {
                             message: __("Translation saved in field: ") + r.message,
                             indicator: "green"
                         });
-
                         frm.reload_doc();
                     }
                 }
             });
         }
-
-
     });
 
     dialog.show();
 }
 
-function update_pseudo_to_field(dialog, to_language) {
+function update_pseudo_to_field(dialog, to_language, frm) {
     const from_fieldname = dialog.get_value("from_field");
     if (!from_fieldname) return;
 
-    const df = frappe.get_meta("Item").fields.find(
+    const df = frm.meta.fields.find(
         f => f.fieldname === from_fieldname
     );
 
     const label = df?.label || from_fieldname;
-
     const pseudo_name = `${label} in ${to_language}`;
-
     dialog.set_value("to_field", pseudo_name);
 }
 
-function get_all_item_fields(frm) {
+function get_all_fields(frm) {
     return frm.meta.fields
         .filter(df =>
             df.fieldname &&
@@ -113,5 +111,3 @@ function get_all_item_fields(frm) {
             value: df.fieldname
         }));
 }
-
-

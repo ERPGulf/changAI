@@ -70,7 +70,6 @@ def _read_filedoctype(file_name: str, folder: str = RAG_FOLDER):
         return obj if isinstance(obj, dict) else {}
     return raw
 
-
 def write_filedoctype(
     file_name: str,
     payload,
@@ -96,19 +95,20 @@ def write_filedoctype(
 
     if existing:
         doc = frappe.get_doc("File", existing)
-        doc.content = content
-        doc.save(ignore_permissions=True)
+        frappe.logger().info(f"Overwriting {file_name} → file_url={doc.file_url}")
+        doc.save_file(content=content, overwrite=True)
+        doc.reload()
+        frappe.logger().info(f"Done overwriting {file_name}")
         return doc
-
-    return frappe.get_doc({
-        "doctype": "File",
-        "file_name": file_name,
-        "folder": folder,
-        "is_private": is_private,
-        "content": content,
-    }).insert(ignore_permissions=True)
-
-
+    else:
+        doc = frappe.get_doc({
+            "doctype": "File",
+            "file_name": file_name,
+            "folder": folder,
+            "is_private": is_private,
+            "content": content,
+        }).insert(ignore_permissions=True)
+        return doc
 def _tab(dt: str) -> str:
     dt = (dt or "").strip()
     return f"tab{dt}"
@@ -182,7 +182,6 @@ def sync_master_data_smart() -> Dict[str, Any]:
         "new_last_sync": meta["last_sync"],
         "file_url": file_doc.file_url,
     }
-
 @frappe.whitelist(allow_guest=False)
 def get_doctypes_changed_since(last_sync: Optional[str]) -> List[str]:
     filters: Dict[str, Any] = {
@@ -193,12 +192,31 @@ def get_doctypes_changed_since(last_sync: Optional[str]) -> List[str]:
     if last_sync:
         try:
             since = add_to_date(last_sync, minutes=-2)
-            filters["modified"] = [">=", since]
+            filters["modified"] = [">=", since]  # catches updated tables
         except Exception:
             pass
 
-    return frappe.get_all("DocType", filters=filters, pluck="name")
+    results = frappe.get_all("DocType", filters=filters, pluck="name")
 
+    # Also catch newly created DocTypes since last sync
+    if last_sync:
+        try:
+            since = add_to_date(last_sync, minutes=-2)
+            new_doctypes = frappe.get_all(
+                "DocType",
+                filters={
+                    "module": ["in", erpnext_modules],
+                    "issingle": 0,
+                    "is_virtual": 0,
+                    "creation": [">=", since],
+                },
+                pluck="name",
+            )
+            results = list(set(results) | set(new_doctypes))
+        except Exception:
+            pass
+
+    return results
 
 @frappe.whitelist(allow_guest=False)
 def sync_tables_and_schema_smart() -> Dict[str, Any]:
@@ -221,7 +239,8 @@ def sync_tables_and_schema_smart() -> Dict[str, Any]:
     changed_doctypes = get_doctypes_changed_since(last_sync_raw)
     changed_tables = set(_tab(dt) for dt in changed_doctypes)
     missing_from_schema = set(t for t in existing_tables if t not in by_table)
-    tables_to_process = sorted(changed_tables | missing_from_schema)
+    new_from_changed = set(t for t in changed_tables if t not in by_table and t not in set(existing_tables))
+    tables_to_process = sorted(changed_tables | missing_from_schema | new_from_changed)
     if not tables_to_process:
         return {"ok": True, "message": _("No changes detected")}
 
@@ -271,8 +290,13 @@ def sync_tables_and_schema_smart() -> Dict[str, Any]:
             }
     tables_blocks = list(by_table.values())
     meta["last_doctype_sync"] = str(now_datetime())
-    write_filedoctype("schema.yaml", {"_meta": meta, "tables": tables_blocks}, folder=RAG_FOLDER)
-    write_filedoctype("tables.json", merged_tables, folder=RAG_FOLDER)
+    try:
+        write_filedoctype("schema.yaml", {"_meta": meta, "tables": tables_blocks}, folder=RAG_FOLDER)
+        write_filedoctype("tables.json", merged_tables, folder=RAG_FOLDER)
+    except Exception as e:
+        return {
+            "error":str(e)
+        }
     frappe.db.commit()  # nosemgrep: frappe-manual-commit - explicit commit required to persist schema/table sync changes to File DocType
     return {
         "ok": True,
@@ -386,6 +410,7 @@ Fields:
 
     return {}
 
+
 @frappe.whitelist(allow_guest=False)
 def fill_missing_field_descriptions(
     batch_size: int = 15,         
@@ -470,9 +495,9 @@ def fill_missing_field_descriptions(
 
         # Checkpoint: Save to disk every X tables
         if tables_since_last_save >= checkpoint_every_table:
-            write_filedoctype("schema.yaml", payload)
+            write_filedoctype("schema.yaml", {"_meta": meta, "tables": tables_blocks}, folder=RAG_FOLDER)
             tables_since_last_save = 0
-            gc.collect()  # Garbage collection
+            gc.collect()
 
         # Safety: If API fails 5 times in a row, stop to save credits/time
         if consecutive_errors > 5:
