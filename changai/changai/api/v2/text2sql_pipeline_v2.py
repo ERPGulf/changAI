@@ -197,16 +197,13 @@ def get_settings() -> Dict[str, Any]:
     }
     return config
 
-
 class ChangAIConfig:
-    _cached = None
-
     @classmethod
     def get(cls):
-        if cls._cached:
-            return cls._cached
-        cls._cached = get_settings()
-        return cls._cached
+        if not hasattr(frappe.local, "_changai_config"):
+            frappe.clear_document_cache("ChangAI Settings")
+            frappe.local._changai_config = get_settings()
+        return frappe.local._changai_config
 
 
 @frappe.whitelist(allow_guest=True)  # nosemgrep: security.guest-whitelisted-method - intentional, validates credentials via OAuth client lookup and Frappe password grant before returning a token
@@ -348,7 +345,7 @@ def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
         config = frappe.get_single("ChangAI Settings") 
         PROJECT_ID = (config.get("gemini_project_id") or "").strip()
         credentials_json = (config.get("gemini_json_content") or "").strip()
-        LOC = (config.get("location") or "").strip()
+        LOC = (config.get("gemini_location") or "").strip()
         if PROJECT_ID or credentials_json or LOC:
             if not PROJECT_ID:
                 frappe.throw(
