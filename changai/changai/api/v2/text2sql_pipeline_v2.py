@@ -147,10 +147,12 @@ def download_model_from_ui():
 
 def get_embedding_engine():
     global _EMBEDDER_INSTANCE
-    if _EMBEDDER_INSTANCE is None:
-        model_path = _get_model_path()
-        if not os.path.exists(model_path):
-            frappe.throw(
+    
+    model_path = _get_model_path()  # check path first, always
+    
+    if not os.path.exists(model_path):
+        _EMBEDDER_INSTANCE = None  # reset if model missing
+        frappe.throw(
             _(
                 "Go to <b>ChangAI Settings</b> and click <b>'Download Embedding Model'</b>.<br><br>"
                 "Watch this documentation tutorial for more detail: "
@@ -158,10 +160,13 @@ def get_embedding_engine():
             ).format("https://your-docs-url-here.com"),
             title=_("Embedding Model Required")
         )
+    
+    if _EMBEDDER_INSTANCE is None:
         _EMBEDDER_INSTANCE = HuggingFaceEmbeddings(
             model_name=model_path,
             model_kwargs={"device": "cpu"}
         )
+    
     return _EMBEDDER_INSTANCE
 
 
@@ -339,8 +344,8 @@ def local_llm_request(prompt: str) -> str:
 
 def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
     try:
-        frappe.clear_cache()  # or frappe.clear_document_cache("ChangAI Settings")
-        config = ChangAIConfig.get()
+        frappe.clear_document_cache("ChangAI Settings")
+        config = frappe.get_single("ChangAI Settings") 
         PROJECT_ID = (config.get("gemini_project_id") or "").strip()
         credentials_json = (config.get("gemini_json_content") or "").strip()
         LOC = (config.get("location") or "").strip()
@@ -373,9 +378,8 @@ def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
             )
 
         else:
-            settings = frappe.get_single("ChangAI Settings")
             try:
-                api_key = settings.gemini_api_key
+                api_key = config.get("gemini_api_key")
             except Exception:
                 api_key = None
 
