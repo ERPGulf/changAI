@@ -30,21 +30,21 @@ async function open_ai_translate_dialog(frm) {
                 label: __("From Field"),
                 fieldtype: "Select",
                 options: fields,
-                reqd: 1,
-                onchange() {
-                    update_pseudo_to_field(dialog, to_language, frm);
-                }
+                reqd: 1
             },
             {
                 fieldname: "to_field",
-                label: __("To Field (Auto Generated)"),
-                fieldtype: "Data",
-                read_only: 1
+                label: __("To Field"),
+                fieldtype: "Select",
+                options: fields,
+                reqd: 1,
+                description: __("Translated text will be saved here")
             }
         ],
-        primary_action_label: __("Go"),
+        primary_action_label: __("Translate"),
         primary_action(values) {
             const from_field = values.from_field;
+            const to_field = values.to_field;
             const source_text = frm.doc[from_field];
 
             if (!source_text) {
@@ -60,6 +60,7 @@ async function open_ai_translate_dialog(frm) {
                     docname: frm.doc.name,
                     doctype: frm.doc.doctype,
                     from_field: from_field,
+                    to_field: to_field,
                     text: source_text,
                     to_language: to_language
                 },
@@ -80,30 +81,15 @@ async function open_ai_translate_dialog(frm) {
 
     dialog.show();
 }
-
-function update_pseudo_to_field(dialog, to_language, frm) {
-    const from_fieldname = dialog.get_value("from_field");
-    if (!from_fieldname) return;
-
-    const df = frm.meta.fields.find(
-        f => f.fieldname === from_fieldname
-    );
-
-    const label = df?.label || from_fieldname;
-    const pseudo_name = `${label} in ${to_language}`;
-    dialog.set_value("to_field", pseudo_name);
-}
-
 function get_all_fields(frm) {
     return frm.meta.fields
         .filter(df =>
             df.fieldname &&
-            ![
-                "Section Break",
-                "Column Break",
-                "Tab Break",
-                "HTML",
-                "Button"
+            [
+                "Data",
+                "Text",
+                "Long Text",
+                "Small Text"
             ].includes(df.fieldtype)
         )
         .map(df => ({

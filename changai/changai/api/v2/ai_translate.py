@@ -4,10 +4,17 @@ from frappe import _
 from anthropic import Anthropic
 
 @frappe.whitelist()
-def translate_and_store(docname, doctype, from_field, text, to_language):  # ← add doctype param
+def translate_and_store(docname, doctype, from_field,to_field, text, to_language):  # ← add doctype param
     """
     Translates text and stores it in a dynamically created field
     """
+    meta = frappe.get_meta(doctype)
+    field_meta = meta.get_field(to_field)
+
+    if field_meta and field_meta.fieldtype == "Link":
+        frappe.throw(
+            f"Field '{to_field}' is a Link field and cannot be translated in place."
+        )
     if not text:
         frappe.throw(_("No text to translate"))
     settings = frappe.get_single("ChangAI Settings")
@@ -79,26 +86,10 @@ Text:
             _("Translation failed: {0}").format(str(e)),
             title=_("Translation Error")
         )
-    lang_code = to_language.lower().replace(" ", "_")
-    target_fieldname = f"{from_field}_{lang_code}"
-    if not frappe.db.exists(
-        "Custom Field",
-        {
-            "dt": doctype,
-            "fieldname": target_fieldname
-        }
-    ):
-        frappe.get_doc({
-            "doctype": "Custom Field",
-            "dt": doctype,
-            "label": f"{from_field.replace('_', ' ').title()} ({to_language})",
-            "fieldname": target_fieldname,
-            "fieldtype": "Data",
-            "insert_after": from_field,
-            "read_only": 1
-        }).insert(ignore_permissions=True)
-        frappe.clear_cache(doctype=doctype)
+    frappe.clear_cache(doctype=doctype)
     doc = frappe.get_doc(doctype, docname)
-    doc.set(target_fieldname, translated_text)
+    if not hasattr(doc, to_field):
+        frappe.throw(f"Field '{to_field}' does not exist on Item")
+    doc.set(to_field, translated_text)
     doc.save(ignore_permissions=True)
-    return target_fieldname
+    return to_field

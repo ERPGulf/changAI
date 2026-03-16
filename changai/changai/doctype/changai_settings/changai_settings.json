@@ -32,12 +32,6 @@
   "retain_memory",
   "testing_section",
   "retriever_structure",
-  "local_server_tab",
-  "ollama_section",
-  "ollama_url",
-  "local_llm",
-  "local_schema_retriever",
-  "local_entity_retriever",
   "remote_server_tab",
   "replicate_section",
   "prediction_url",
@@ -185,36 +179,6 @@
    "options": "single line\nmulti line"
   },
   {
-   "fieldname": "local_server_tab",
-   "fieldtype": "Tab Break",
-   "label": "Local Server"
-  },
-  {
-   "fieldname": "ollama_section",
-   "fieldtype": "Section Break",
-   "label": "Local - Ollama"
-  },
-  {
-   "fieldname": "ollama_url",
-   "fieldtype": "Data",
-   "label": "Ollama URL"
-  },
-  {
-   "fieldname": "local_llm",
-   "fieldtype": "Data",
-   "label": "Local LLM"
-  },
-  {
-   "fieldname": "local_schema_retriever",
-   "fieldtype": "Data",
-   "label": "Local Schema Retriever"
-  },
-  {
-   "fieldname": "local_entity_retriever",
-   "fieldtype": "Data",
-   "label": "Local Entity Retriever"
-  },
-  {
    "fieldname": "remote_server_tab",
    "fieldtype": "Tab Break",
    "label": "Remote Server"
@@ -225,6 +189,7 @@
    "label": "Remote - Replicate"
   },
   {
+   "default": "https://api.replicate.com/v1/predictions",
    "fieldname": "prediction_url",
    "fieldtype": "Data",
    "label": "Replicate Prediction Url"
@@ -370,7 +335,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-03-12 13:17:32.364241",
+ "modified": "2026-03-16 09:48:15.427764",
  "modified_by": "Administrator",
  "module": "Changai",
  "name": "ChangAI Settings",

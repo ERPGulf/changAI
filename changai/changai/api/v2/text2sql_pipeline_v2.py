@@ -173,8 +173,7 @@ def get_settings() -> Dict[str, Any]:
         "LANGSMITH_ENDPOINT": settings.langsmith_endpoint,
         "LANGSMITH_API_KEY": settings.langsmith_api_key,
         "LANGSMITH_PROJECT": settings.langsmith_project,
-        "URL": settings.prediction_url if settings.remote else settings.ollama_url,
-        "LOCAL_LLM": settings.local_llm,
+        # "URL": settings.prediction_url if settings.remote else settings.ollama_url,
         # "LOCAL_SCHEMA_RETRIEVER": settings.local_schema_retriever,
         "RETAIN_MEM": settings.retain_memory,
         "LLM_VERSION_ID": settings.llm_version_id,
@@ -305,9 +304,9 @@ def call_model(prompt: str, task: str = "llm") -> Any:
     config = ChangAIConfig.get()
     if config["REMOTE"] and config["llm"] == "QWEN3":
         return remote_llm_request_deploy_test(prompt=prompt, task=task)
-    elif config["llm"] == "Gemini":
-        return call_gemini(prompt)
-    return local_llm_request(prompt)
+    else:
+        if config["llm"] == "Gemini":
+            return call_gemini(prompt)
 
 
 def _post_json(url: str, headers: Dict[str, str], payload: Dict[str, Any], timeout: int = 120):
