@@ -9,6 +9,7 @@ readme = "README.md"
 dynamic = ["version"]
 
 dependencies = [
+    "frappe>=14.0.0,<17.0.0",
     "openai==1.64.0",
     "anthropic==0.79.0",
     "google-genai==1.60.0",
@@ -43,3 +44,6 @@ requires = ["flit_core >=3.4,<4"]
 build-backend = "flit_core.buildapi"
 
 [tool.bench.dev-dependencies]
+
+[tool.bench.frappe-dependencies]
+frappe = ">=14.0.0,<17.0.0"
