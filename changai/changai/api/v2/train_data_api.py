@@ -24,6 +24,7 @@ BATCH_SIZE = 25
 TABLE_TAG = "[TABLE]"
 FIELD_TAG = "[FIELD]"
 LINK_TAG = "[LINK]"
+CHANGAI_SETTINGS = "ChangAI Settings"
 
 SYSTEM_FIELDS = {
     "name", "owner", "creation", "modified", "modified_by",
@@ -36,7 +37,7 @@ _field_cache: Dict[str, set] = {}
 
 
 def _get_claude_client():
-    settings = frappe.get_single("ChangAI Settings")
+    settings = frappe.get_single(CHANGAI_SETTINGS)
     try:
         api_key = settings.claude_api_key
     except Exception:
@@ -57,7 +58,7 @@ def _get_claude_client():
 
 
 def _get_openai_client():
-    settings = frappe.get_single("ChangAI Settings")
+    settings = frappe.get_single(CHANGAI_SETTINGS)
     try:
         api_key = settings.openai_api_key
     except Exception:
@@ -197,47 +198,60 @@ def _validate_field(doctype: str, fieldname: str) -> bool:
     return fieldname in _get_fieldnames_set(doctype)
 
 
+def _parse_table_tag(positive: str):
+    match = re.match(r"\[TABLE\]\s+([^\]>]+?)(?:\s*\||\s*$)", positive)
+    if not match:
+        return False, "Could not parse [TABLE] format"
+    table = match.group(1).strip()
+    doctype = table[3:] if table.startswith("tab") else table
+    if not _validate_table(doctype):
+        return False, f"DocType '{doctype}' does not exist"
+    return True, None
+
+
+def _parse_field_tag(positive: str):
+    match = re.match(r"\[FIELD\]\s+(\w+)\s+\|\s+\[TABLE\]\s+([^\]>]+?)(?:\s*\||\s*$)", positive)
+    if not match:
+        return False, "Could not parse [FIELD] format"
+    field = match.group(1).strip()
+    table = match.group(2).strip()
+    doctype = table[3:] if table.startswith("tab") else table
+    if not _validate_table(doctype):
+        return False, f"DocType '{doctype}' does not exist"
+    if not _validate_field(doctype, field):
+        return False, f"Field '{field}' does not exist in '{doctype}'"
+    return True, None
+
+
+def _parse_link_tag(positive: str):
+    match = re.match(r"\[LINK\]\s+([^\]>]+?)\s+-->\s+([^\]>]+?)\s+ON\s+(\w+)(?:\s*\||\s*$)", positive)
+    if not match:
+        return False, "Could not parse [LINK] format"
+    table_a = match.group(1).strip()
+    table_b = match.group(2).strip()
+    field   = match.group(3).strip()
+    doctype_a = table_a[3:] if table_a.startswith("tab") else table_a
+    doctype_b = table_b[3:] if table_b.startswith("tab") else table_b
+    if not _validate_table(doctype_a):
+        return False, f"[LINK] DocType '{doctype_a}' does not exist"
+    if not _validate_table(doctype_b):
+        return False, f"[LINK] DocType '{doctype_b}' does not exist"
+    if not _validate_field(doctype_a, field):
+        return False, f"[LINK] Field '{field}' does not exist in '{doctype_a}'"
+    return True, None
+
+
+_TAG_PARSERS = {
+    TABLE_TAG: _parse_table_tag,
+    FIELD_TAG: _parse_field_tag,
+    LINK_TAG:  _parse_link_tag,
+}
+
+
 def _is_positive_valid(positive: str):
-    if positive.startswith(TABLE_TAG):
-        match = re.match(r"\[TABLE\]\s+(\w[\w ]*?)(?:(?:\s*\|)|(?:\s*$))", positive)
-        if not match:
-            return False, "Could not parse [TABLE] format"
-        table = match.group(1).strip()
-        doctype = table[3:] if table.startswith("tab") else table
-        if not _validate_table(doctype):
-            return False, f"DocType '{doctype}' does not exist"
-        return True, None
-
-    if positive.startswith(FIELD_TAG):
-        match = re.match(r"\[FIELD\]\s+(\w+)\s+\|\s+\[TABLE\]\s+(\w[\w ]*?)(?:(?:\s*\|)|(?:\s*$))", positive)
-        if not match:
-            return False, "Could not parse [FIELD] format"
-        field = match.group(1).strip()
-        table = match.group(2).strip()
-        doctype = table[3:] if table.startswith("tab") else table
-        if not _validate_table(doctype):
-            return False, f"DocType '{doctype}' does not exist"
-        if not _validate_field(doctype, field):
-            return False, f"Field '{field}' does not exist in '{doctype}'"
-        return True, None
-
-    if positive.startswith(LINK_TAG):
-        match = re.match(r"\[LINK\]\s+([^\]>]+?)\s+-->\s+([^\]>]+?)\s+ON\s+(\w+)(?:\s*\||\s*$)", positive)
-        if not match:
-            return False, "Could not parse [LINK] format"
-        table_a = match.group(1).strip()
-        table_b = match.group(2).strip()
-        field  = match.group(3).strip()
-        doctype_a = table_a[3:] if table_a.startswith("tab") else table_a
-        doctype_b = table_b[3:] if table_b.startswith("tab") else table_b
-        if not _validate_table(doctype_a):
-            return False, f"[LINK] DocType '{doctype_a}' does not exist"
-        if not _validate_table(doctype_b):
-            return False, f"[LINK] DocType '{doctype_b}' does not exist"
-        if not _validate_field(doctype_a, field):
-            return False, f"[LINK] Field '{field}' does not exist in '{doctype_a}'"
-        return True, None
-
+    for tag, parser in _TAG_PARSERS.items():
+        if positive.startswith(tag):
+            return parser(positive)
     return False, "Positive must start with [TABLE], [FIELD], or [LINK]"
 
 
@@ -467,7 +481,7 @@ def _generate_batch(client, module_name, seen_anchors, module_description, total
     return records
 
 def _get_gemini_client():
-    settings = frappe.get_single("ChangAI Settings")
+    settings = frappe.get_single(CHANGAI_SETTINGS)
     json_content = (settings.get("gemini_json_content") or "").strip()
     project_id = (settings.get("gemini_project_id") or "").strip()
     location = (settings.get("location") or "us-central1").strip()

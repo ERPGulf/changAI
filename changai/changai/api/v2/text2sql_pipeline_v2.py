@@ -33,7 +33,7 @@ from pathlib import Path
 
 _ASSETS_DIR = Path(frappe.get_app_path("changai", "changai", "api", "v2", "assets")).resolve()
 _PROMPTS_DIR = Path(frappe.get_app_path("changai", "changai", "prompts")).resolve()
-
+CHANGAI_SETTINGS = "ChangAI Settings"
 _ALLOWED_EXT = {".json", ".txt", ".j2"}
 
 def _safe_join(base: Path, rel: str) -> Path:
@@ -80,6 +80,7 @@ def read_asset(file_name: str, base: str = "assets") -> Any:
     return content
 
 _VS_TABLE = None
+_VS_MASTER = None
 _EMBEDDER_INSTANCE = None
 __vector_store = None
 _FULL_FIELDS_VS = None
@@ -171,7 +172,7 @@ def get_embedding_engine():
 
 
 def get_settings() -> Dict[str, Any]:
-    settings = frappe.get_single("ChangAI Settings")
+    settings = frappe.get_single(CHANGAI_SETTINGS)
     langsmith_tracing = "true" if settings.langsmith_tracing else "false"
     config = {
         "LANGSMITH_TRACING": langsmith_tracing,
@@ -201,7 +202,7 @@ class ChangAIConfig:
     @classmethod
     def get(cls):
         if not hasattr(frappe.local, "_changai_config"):
-            frappe.clear_document_cache("ChangAI Settings")
+            frappe.clear_document_cache(CHANGAI_SETTINGS)
             frappe.local._changai_config = get_settings()
         return frappe.local._changai_config
 
@@ -341,8 +342,8 @@ def local_llm_request(prompt: str) -> str:
 
 def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
     try:
-        frappe.clear_document_cache("ChangAI Settings")
-        config = frappe.get_single("ChangAI Settings") 
+        frappe.clear_document_cache(CHANGAI_SETTINGS)
+        config = frappe.get_single(CHANGAI_SETTINGS) 
         PROJECT_ID = (config.get("gemini_project_id") or "").strip()
         credentials_json = (config.get("gemini_json_content") or "").strip()
         LOC = (config.get("gemini_location") or "").strip()
@@ -449,6 +450,33 @@ def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
             title=_("Gemini API Error")
         )
         return {"error": str(e)}
+def _build_input_payload(task: str, prompt: str, question: Optional[str],
+                          db_result_json: Optional[str], user_message: Optional[str]) -> Dict[str, Any]:
+    if task == "format_db":
+        return {"task": "format_db", "question": question or "", "db_result_json": db_result_json or "{}"}
+    if task == "helpdesk_task":
+        return {"task": "helpdesk_task", "user_message": user_message or prompt or ""}
+    return {"task": "llm", "user_input": prompt}
+
+
+def _poll_until_done(get_url: str, headers: Dict) -> Any:
+    terminal = {"succeeded", "failed", "canceled"}
+    deadline = time.time() + 300
+    last = None
+    while time.time() < deadline:
+        try:
+            poll = requests.get(get_url, headers=headers, timeout=120).json()
+        except Exception as e:
+            poll = {"raw_text": str(e)}
+        last = poll
+        status = poll.get("status")
+        if status in terminal:
+            if status == "succeeded":
+                return poll.get("output")
+            return {"Error": f"Model ended with status {status}", "details": poll}
+        time.sleep(2)
+    return {"Error": "Polling timed out", "details": last}
+
 
 def remote_llm_request_deploy_test(
     prompt: str = "",
@@ -458,73 +486,22 @@ def remote_llm_request_deploy_test(
     user_message: Optional[str] = None,
 ) -> Any:
     config = ChangAIConfig.get()
-    api_key = config["API_TOKEN"]
-    if task == "format_db":
-        input_payload: Dict[str, Any] = {
-            "task": "format_db",
-            "question": question or "",
-            "db_result_json": db_result_json or "{}",
-        }
-
-    elif task == "helpdesk_task":
-        input_payload = {
-            "task": "helpdesk_task",
-            "user_message": user_message or prompt or "",
-        }
-
-    else:
-        input_payload = {
-            "task": "llm",
-            "user_input": prompt,
-        }
-
-    payload = {"input": input_payload}
-
     headers = {
         "Content-Type": "application/json",
         "Prefer": "wait",
-        "Authorization": f"Bearer {api_key}",
+        "Authorization": f"Bearer {config['API_TOKEN']}",
     }
-    deploy_url = config["deploy_url"]
-    create = _post_json(deploy_url, headers=headers, payload=payload, timeout=120)
+    input_payload = _build_input_payload(task, prompt, question, db_result_json, user_message)
+    create = _post_json(config["deploy_url"], headers=headers, payload={"input": input_payload}, timeout=120)
+
     if not create.get("ok"):
-        return {
-            "Error": "Create prediction failed",
-            "status_code": create.get("status_code"),
-            "details": create.get("body"),
-        }
+        return {"Error": "Create prediction failed", "status_code": create.get("status_code"), "details": create.get("body")}
 
-    data = create.get("body") or {}
-    urls = data.get("urls") or {}
-    get_url = urls.get("get")
+    get_url = ((create.get("body") or {}).get("urls") or {}).get("get")
     if not get_url:
-        return {
-            "Error": "Missing get URL from deploy response",
-            "details": data,
-        }
+        return {"Error": "Missing get URL from deploy response", "details": create.get("body")}
 
-    terminal = {"succeeded", "failed", "canceled"}
-    deadline = time.time() + 300
-    last = None
-
-    while time.time() < deadline:
-        poll_res = requests.get(get_url, headers=headers, timeout=120)
-        try:
-            poll = poll_res.json()
-        except Exception:
-            poll = {"raw_text": poll_res.text}
-
-        status = poll.get("status")
-        last = poll
-
-        if status in terminal:
-            if status == "succeeded":
-                return poll.get("output")
-            return {"Error": f"Model ended with status {status}", "details": poll}
-
-        time.sleep(2)
-
-    return {"Error": "Polling timed out", "details": last}
+    return _poll_until_done(get_url, headers)
 
 
 def remote_embedder_request(formatted_q: str) -> Union[List[Any], str]:
@@ -612,6 +589,30 @@ def send_non_erp_request(state: SQLState) -> SQLState:
         return {**state, "non_erp_res": "", "error": f"NON-ERP call failed: {e}"}
 
 
+def _parse_rewrite_response(raw: Any, user_qstn: str) -> Tuple[str, bool]:
+    standalone = ""
+    contains_values = False
+    obj = None
+
+    if isinstance(raw, dict):
+        obj = raw
+    elif isinstance(raw, str):
+        try:
+            obj = json.loads(raw.strip())
+        except Exception:
+            standalone = raw.strip()
+    else:
+        standalone = str(raw).strip()
+
+    if isinstance(obj, dict):
+        standalone = (obj.get("standalone_question") or "").strip() or standalone
+        contains_values = bool(obj.get("contains_values"))
+    elif isinstance(obj, list) and not standalone:
+        standalone = json.dumps(obj)
+
+    return standalone or user_qstn.strip(), contains_values
+
+
 @traceable(name="rewrite_question", run_type="tool")
 def rewrite_question(state: SQLState) -> SQLState:
     user_qstn = state.get("question") or ""
@@ -619,28 +620,7 @@ def rewrite_question(state: SQLState) -> SQLState:
     prompt = inject_prompt(user_qstn, session_id)
     try:
         raw = call_model(prompt, "llm")
-        standalone = ""
-        contains_values = False
-        obj = None
-        if isinstance(raw, dict):
-            obj = raw
-        elif isinstance(raw, str):
-            s = raw.strip()
-            try:
-                obj = json.loads(s)
-            except Exception:
-                obj = None
-                standalone = s
-        else:
-            standalone = str(raw).strip()
-
-        if isinstance(obj, dict):
-            standalone = (obj.get("standalone_question") or "").strip() or standalone
-            contains_values = bool(obj.get("contains_values"))
-        else:
-            if isinstance(obj, list) and not standalone:
-                standalone = json.dumps(obj)
-        standalone = standalone or user_qstn.strip()
+        standalone, contains_values = _parse_rewrite_response(raw, user_qstn)
         return {
             **state,
             "formatted_q": standalone,
@@ -658,7 +638,6 @@ def rewrite_question(state: SQLState) -> SQLState:
             "contains_values": False,
             "formatting_prompt": prompt,
         }
-
 
 def get_table_vs():
     global _VS_TABLE
@@ -942,26 +921,59 @@ def remote_entity_embedder(q: str) -> Union[list, str]:
         "Prefer": "wait",
         "Authorization": f"Bearer {config['API_TOKEN']}",
     }
-    result = None
     response = _post_json(config["URL"], headers, payload)
     return response
 
 
 @frappe.whitelist(allow_guest=False)
+def get_master_vs():
+    global _VS_MASTER
+    if _VS_MASTER is None:
+        emb = get_embedding_engine()
+        if emb is None:
+            frappe.throw(_("Embedding engine is None. Model not loaded."))
+        app_path = frappe.get_app_path("changai")
+        master_vs_path = os.path.join(app_path, "changai", "api", "v2", "fvs_stores", "erpnext", "masterdata_fvs")
+        if not os.path.exists(master_vs_path):
+            frappe.throw(_("FAISS MASTER store not found at {0}").format(master_vs_path))
+        _VS_MASTER = FAISS.load_local(master_vs_path, emb, allow_dangerous_deserialization=True)
+    return _VS_MASTER
+
+@frappe.whitelist()
+def local_entity_embedder(q: str) -> List[Dict[str, Any]]:
+    hits = get_master_vs().similarity_search(q, k=4)
+    out, seen = [], set()
+    for h in hits:
+        entity_type = h.metadata.get("entity_type")
+        entity_id = h.metadata.get("entity_id")
+        key = (entity_type, entity_id)
+        if entity_type and key not in seen:
+            seen.add(key)
+            out.append({"entity_type": entity_type, "entity_id": entity_id})
+    return out
+
+@frappe.whitelist(allow_guest=False)
 def call_entity_retriever(qstn: str) -> Dict[str, Any]:
-    response = remote_entity_embedder(qstn)
+    config = ChangAIConfig.get()
+    if config["REMOTE"] and config["llm"] == "QWEN3":
 
-    if not response.get("ok"):
-        frappe.log_error(f"Entity retriever failed: {response.get('body')}", "ChangAI Entity Retriever")
-        return {"raw": response, "cards": []}
+        response = remote_entity_embedder(qstn)
 
-    body = response.get("body") or {}
-    output = body.get("output") or {}
-    results = output.get("results") or []
+        if not response.get("ok"):
+            frappe.log_error(f"Entity retriever failed: {response.get('body')}", "ChangAI Entity Retriever")
+            return {"raw": response, "cards": []}
 
-    cards = [r.get("entity_label") for r in results if r.get("entity_label")]
+        body = response.get("body") or {}
+        output = body.get("output") or {}
+        results = output.get("results") or []
 
-    return {"raw": body, "cards": cards}
+        cards = [r.get("entity_label") for r in results if r.get("entity_label")]
+
+        return {"raw": body, "cards": cards}
+    else:
+        results = local_entity_embedder(qstn)
+        cards = [f"{r['entity_type']}:{r['entity_id']}" for r in results if r.get("entity_type")]
+        return {"raw": results, "cards": cards}
 
 
 # # Node 5:Repair Loop :Simple prompt for one more try.
@@ -997,7 +1009,6 @@ def repair_sqlquery(state: SQLState) -> SQLState:
             return {**state, "tries": tries, "error": "Repair: empty or invalid response from LLM"}
 
         sql = response.get("sql", "")
-        orm = response.get("orm", "")
         return {**state, "sql": sql, "tries": tries, "error": None}
     except frappe.exceptions.ValidationError:
         raise
@@ -1044,7 +1055,7 @@ def clean_sql(s: Any) -> str:
         s = str(s) if s is not None else ""
 
     s = s.strip()
-    s = re.sub(r"^\s*```(?:sql)?\s*", "", s, flags=re.I)
+    s = re.sub(r"^\s*```sql?\s*", "", s, flags=re.I | re.M)
     s = re.sub(r"\s*`{3}\s*$", "", s)
     s = re.sub(r"^\s*sql\s*\n", "", s, flags=re.I)
     return s.strip()
@@ -1064,6 +1075,97 @@ def router(state:SQLState) -> str:
     return "end"
 
 
+def _parse_sql_ast(sql_text: str, dialect: str):
+    try:
+        return sqlglot.parse_one(sql_text, read=dialect), None
+    except Exception as e:
+        return None, str(e)
+
+
+def _extract_tables(ast) -> Tuple[List[str], Dict[str, str]]:
+    base_tables = []
+    alias_to_table = {}
+    for t in ast.find_all(exp.Table):
+        if not t.name:
+            continue
+        base_tables.append(t.name)
+        a = t.args.get("alias")
+        if a and a.name:
+            alias_to_table[a.name] = t.name
+    return list(dict.fromkeys(base_tables)), alias_to_table
+
+
+def _extract_derived_aliases(ast) -> Set[str]:
+    derived = set()
+    for sq in ast.find_all(exp.Subquery):
+        a = sq.args.get("alias")
+        if a and a.name:
+            derived.add(a.name)
+    for cte in ast.find_all(exp.CTE):
+        a = cte.args.get("alias")
+        if a and a.name:
+            derived.add(a.name)
+    return derived
+
+
+def _extract_select_aliases(ast) -> Set[str]:
+    aliases = set()
+    for sel in ast.find_all(exp.Select):
+        for proj in sel.expressions:
+            if isinstance(proj, exp.Alias) and proj.alias:
+                aliases.add(proj.alias)
+    return aliases
+
+
+def _validate_qualified_col(col_name: str, qual: str, mapping: Dict,
+                              alias_to_table: Dict, derived_aliases: Set) -> Optional[Tuple]:
+    if col_name == "*" or qual in derived_aliases:
+        return None
+    if qual in mapping:
+        if col_name not in mapping[qual]:
+            return (f"{qual}.{col_name}", qual)
+        return None
+    if qual in alias_to_table:
+        real = alias_to_table[qual]
+        if real in mapping and col_name not in mapping[real]:
+            return (f"{qual}.{col_name}", real)
+        return None
+    return (f"{qual}.{col_name}", None)
+
+
+def _validate_unqualified_col(col_name: str, base_tables_set: Set,
+                               mapping: Dict, select_aliases: Set,
+                               unknown_cols: List, ambiguous: Set):
+    if col_name in select_aliases:
+        return
+    candidates = [t for t in base_tables_set if col_name in mapping.get(t, [])]
+    if len(candidates) == 0:
+        unknown_cols.append((col_name, None))
+    elif len(candidates) > 1:
+        ambiguous.add(col_name)
+
+
+def _validate_columns(ast, mapping: Dict, alias_to_table: Dict,
+                       derived_aliases: Set, select_aliases: Set,
+                       base_tables_set: Set) -> Tuple[List, Set]:
+    unknown_cols: List[Tuple[str, str]] = []
+    ambiguous: Set[str] = set()
+    for col in ast.find_all(exp.Column):
+        if not col.name:
+            continue
+        if col.table:
+            result = _validate_qualified_col(
+                col.name, str(col.table), mapping, alias_to_table, derived_aliases
+            )
+            if result:
+                unknown_cols.append(result)
+        else:
+            _validate_unqualified_col(
+                col.name, base_tables_set, mapping, select_aliases, unknown_cols, ambiguous
+            )
+    return unknown_cols, ambiguous
+
+
 def validate_sql_against_mapping(
     sql_text: str,
     mapping: Dict[str, List[str]],
@@ -1074,111 +1176,32 @@ def validate_sql_against_mapping(
         "unknown_tables": [],
         "unknown_columns": [],
         "ambiguous_columns": [],
-        "details": {
-            "from_tables": [],
-            "alias_to_table": {},
-            "derived_aliases": [],
-            "select_aliases": [],  # ✅ added (optional, but useful for debugging)
-        },
+        "details": {"from_tables": [], "alias_to_table": {}, "derived_aliases": [], "select_aliases": []},
     }
 
-    try:
-        ast = sqlglot.parse_one(sql_text, read=dialect)
-    except Exception as e:
+    ast, parse_error = _parse_sql_ast(sql_text, dialect)
+    if parse_error:
         result["ok"] = False
-        result["details"]["parse_error"] = str(e)
+        result["details"]["parse_error"] = parse_error
         return result
 
-    base_tables: List[str] = []
-    alias_to_table: Dict[str, str] = {}
+    base_tables, alias_to_table = _extract_tables(ast)
+    derived_aliases = _extract_derived_aliases(ast)
+    select_aliases = _extract_select_aliases(ast)
 
-    for t in ast.find_all(exp.Table):
-        name = t.name
-        if not name:
-            continue
-        base_tables.append(name)
-
-        a = t.args.get("alias")
-        if a and a.name:
-            alias_to_table[a.name] = name
-
-    base_tables = list(dict.fromkeys(base_tables))
     result["details"]["from_tables"] = base_tables
     result["details"]["alias_to_table"] = alias_to_table
+    result["details"]["derived_aliases"] = sorted(derived_aliases)
+    result["details"]["select_aliases"] = sorted(select_aliases)
 
     unknown_tables = [t for t in base_tables if t not in mapping]
     if unknown_tables:
         result["ok"] = False
         result["unknown_tables"] = unknown_tables
 
-    derived_aliases: Set[str] = set()
-    for sq in ast.find_all(exp.Subquery):
-        a = sq.args.get("alias")
-        if a and a.name:
-            derived_aliases.add(a.name)
-    for cte in ast.find_all(exp.CTE):
-        a = cte.args.get("alias")
-        if a and a.name:
-            derived_aliases.add(a.name)
-
-    result["details"]["derived_aliases"] = sorted(derived_aliases)
-
-    # ✅ NEW: collect SELECT projection aliases (e.g. COUNT(*) AS invoice_count)
-    select_aliases: Set[str] = set()
-    for sel in ast.find_all(exp.Select):
-        for proj in sel.expressions:
-            if isinstance(proj, exp.Alias):
-                if proj.alias:  # alias is a string
-                    select_aliases.add(proj.alias)
-
-    result["details"]["select_aliases"] = sorted(select_aliases)
-
-    unknown_cols: List[Tuple[str, str]] = []
-    ambiguous: Set[str] = set()
-    base_tables_set = set(base_tables)
-
-    for col in ast.find_all(exp.Column):
-        col_name = col.name
-        qual = col.table  # qualifier (alias or table), may be None
-        if not col_name:
-            continue
-        if qual:
-            q = str(qual)
-            
-            # ✅ Skip wildcards immediately — T1.*, *.*, etc.
-            if col_name == "*":
-                continue
-
-            # If referencing a derived table alias, skip schema validation here
-            if q in derived_aliases:
-                continue
-
-            if q in mapping:
-                if col_name not in mapping[q]:
-                    unknown_cols.append((f"{q}.{col_name}", q))
-                continue
-
-            if q in alias_to_table:
-                real_table = alias_to_table[q]
-                if real_table in mapping and col_name not in mapping[real_table]:
-                    unknown_cols.append((f"{q}.{col_name}", real_table))
-                continue
-
-
-            unknown_cols.append((f"{q}.{col_name}", None))
-
-        else:
-            # ✅ NEW: if unqualified identifier matches a SELECT alias, allow it
-            # This fixes ORDER BY invoice_count / HAVING invoice_count, etc.
-            if col_name in select_aliases:
-                continue
-
-            candidates = [t for t in base_tables_set if col_name in mapping.get(t, [])]
-            if len(candidates) == 0:
-                unknown_cols.append((col_name, None))
-            elif len(candidates) > 1:
-                ambiguous.add(col_name)
-
+    unknown_cols, ambiguous = _validate_columns(
+        ast, mapping, alias_to_table, derived_aliases, select_aliases, set(base_tables)
+    )
     if unknown_cols or ambiguous:
         result["ok"] = False
         result["unknown_columns"] = unknown_cols
@@ -1212,27 +1235,32 @@ workflow.add_edge("repair_sql","validate_sql")
 checkpointer=MemorySaver()
 app=workflow.compile(checkpointer=checkpointer)
 
+def _build_match_conditions(doctypes: List[str]) -> str:
+    conditions = []
+    for t in doctypes:
+        doctype = t[3:] if t.startswith("tab") else t
+        cond = build_match_conditions(doctype)
+        if cond:
+            conditions.append(cond)
+    return " AND ".join(conditions) if conditions else ""
+
+
+def _append_conditions(sql: str, combined: str) -> str:
+    if "where" in sql.lower():
+        return sql + f" AND {combined}"
+    return sql + f" WHERE {combined}"
+
+
 def execute_query(sql: str, doctypes: List[str]) -> Any:
     try:
-        if sql:
-            if not str(sql).lower().strip().startswith("select"):
-                frappe.throw(_("Only SELECT queries are allowed."))
-            all_conditions = []
-            for t in doctypes:
-                doctype = t[3:] if t.startswith("tab") else t
-                cond = build_match_conditions(doctype)
-                if cond:
-                    all_conditions.append(cond)
-
-            if all_conditions:
-                combined = " AND ".join(all_conditions)
-                if "where" in sql.lower():
-                    sql += f" AND {combined}"
-                else:
-                    sql += f" WHERE {combined}"
-
-            return frappe.db.sql(sql, as_dict=True)
-        return []
+        if not sql:
+            return []
+        if not str(sql).lower().strip().startswith("select"):
+            frappe.throw(_("Only SELECT queries are allowed."))
+        combined = _build_match_conditions(doctypes)
+        if combined:
+            sql = _append_conditions(sql, combined)
+        return frappe.db.sql(sql, as_dict=True)
     except Exception as e:
         return {"error": f"SQL Execution Failed: {e}"}
 
@@ -1369,212 +1397,218 @@ Write a clear final answer for the user based strictly on the JSON above.
     answer = str(output)
     return {"answer": answer}
 
-
-def hits_to_schema_context(
-    hits: Union[List[Any], Dict, str],
-    title: str = "SCHEMA CONTEXT",
-    max_fields_per_table: int = 20,
-    sort_sections: bool = True,
-    show_entity_filters_yaml: bool = True
-) -> str:
-    if isinstance(hits, dict) and "message" in hits and isinstance(hits["message"], list):
-        hits = hits["message"]
-
+def _collect_docs(hits: Union[List[Any], Dict, str]) -> List[Tuple[str, Dict]]:
     def _to_txt_md(doc: Any) -> Tuple[str, Dict]:
         if isinstance(doc, dict):
             return doc.get("text", "") or "", doc.get("metadata", {}) or {}
-        # plain string
         if isinstance(doc, str):
             return doc, {}
         return "", {}
 
-    docs: List[Tuple[str, Dict]] = []
+    if isinstance(hits, dict) and "message" in hits and isinstance(hits["message"], list):
+        hits = hits["message"]
+
     if isinstance(hits, (dict, str)) or hasattr(hits, "page_content"):
-        docs.append(_to_txt_md(hits))
-    else:
-        # list of docs
-        for d in (hits or []):
-            docs.append(_to_txt_md(d))
+        return [_to_txt_md(hits)]
+    return [_to_txt_md(d) for d in (hits or [])]
 
-    # --- helpers ---
-    def _parse_tag(txt: str, tag: str) -> str:
-        m = re.search(rf"\[{re.escape(tag)}\]\s*(.+?)(?:\s*\||\s*$)", txt or "")
-        return m.group(1).strip() if m else ""
 
-    def _infer_type(txt: str) -> str:
-        if not (txt or "").startswith("["):
-            return ""
-        order = [
-            ("TABLE", "table"), ("FIELD", "field"), ("JOIN", "join"),
-            ("METRIC", "metric"), ("ENUM", "enum"), ("PERIOD", "period"),
-            ("CURRENCY", "currency"), ("ENTITY", "entity")
-        ]
-        for tg, tp in order:
-            if txt.startswith(f"[{tg}]"):
-                return tp
+def _parse_tag(txt: str, tag: str) -> str:
+    m = re.search(rf"\[{re.escape(tag)}\]\s*(.+?)(?:\s*\||\s*$)", txt or "")
+    return m.group(1).strip() if m else ""
+
+
+def _infer_type(txt: str) -> str:
+    if not (txt or "").startswith("["):
         return ""
+    order = [
+        ("TABLE", "table"), ("FIELD", "field"), ("JOIN", "join"),
+        ("METRIC", "metric"), ("ENUM", "enum"), ("PERIOD", "period"),
+        ("CURRENCY", "currency"), ("ENTITY", "entity")
+    ]
+    for tg, tp in order:
+        if txt.startswith(f"[{tg}]"):
+            return tp
+    return ""
 
-    # --- accumulators ---
-    tables: List[str] = []
-    fields_by_table: Dict[str, List[str]] = OrderedDict()
-    joins: List[str] = []
-    metrics: List[Tuple[str, str, str]] = []  # (metric_name, expression, table)
-    periods: List[str] = []
-    currencies: List[str] = []
-    enums: "OrderedDict[str, str]" = OrderedDict()
-    entities: List[Tuple[str, Dict]] = []
 
-    def _add_table(t: str):
-        if t and t not in tables:
-            tables.append(t)
-            if t not in fields_by_table:
-                fields_by_table[t] = []
+class _SchemaAccumulator:
+    def __init__(self):
+        self.tables: List[str] = []
+        self.fields_by_table: Dict[str, List[str]] = OrderedDict()
+        self.joins: List[str] = []
+        self.metrics: List[Tuple[str, str, str]] = []
+        self.periods: List[str] = []
+        self.currencies: List[str] = []
+        self.enums: OrderedDict = OrderedDict()
+        self.entities: List[Tuple[str, Dict]] = []
 
-    def _add_field(tbl: str, fld: str):
+    def add_table(self, t: str):
+        if t and t not in self.tables:
+            self.tables.append(t)
+            if t not in self.fields_by_table:
+                self.fields_by_table[t] = []
+
+    def add_field(self, tbl: str, fld: str):
         if tbl and fld:
-            _add_table(tbl)
+            self.add_table(tbl)
             fq = f"{tbl}.{fld}"
-            if fq not in fields_by_table[tbl]:
-                fields_by_table[tbl].append(fq)
+            if fq not in self.fields_by_table[tbl]:
+                self.fields_by_table[tbl].append(fq)
 
-    # --- parse each doc ---
-    for txt, md in docs:
-        dtype = md.get("type") or _infer_type(txt)
+    def add_join(self, on: str):
+        if on and on not in self.joins:
+            self.joins.append(on)
 
-        if dtype == "table":
-            tbl = md.get("table") or _parse_tag(txt, "TABLE")
-            _add_table(tbl)
+    def add_metric(self, mname: str, mexpr: str, mtbl: str):
+        if mtbl:
+            self.add_table(mtbl)
+        if mname:
+            tup = (mname, mexpr or "", mtbl or "")
+            if tup not in self.metrics:
+                self.metrics.append(tup)
 
-        elif dtype == "field":
-            tbl = md.get("table") or _parse_tag(txt, "TABLE")
-            fld = md.get("field") or _parse_tag(txt, "FIELD").split(" (", 1)[0]
-            _add_field(tbl, fld)
+    def add_period(self, pname: str):
+        if pname and pname not in self.periods:
+            self.periods.append(pname)
 
-        elif dtype == "join":
-            on = md.get("on") or _parse_tag(txt, "ON")
-            if on and on not in joins:
-                joins.append(on)
+    def add_currency(self, code: str):
+        if code and code not in self.currencies:
+            self.currencies.append(code)
 
-        elif dtype == "metric":
-            mname = md.get("name") or _parse_tag(txt, "METRIC")
-            mexpr = md.get("expression") or _parse_tag(txt, "EXPR")
-            mtbl  = md.get("table") or _parse_tag(txt, "TABLE")
-            if mtbl:
-                _add_table(mtbl)
-            if mname:
-                tup = (mname, mexpr or "", mtbl or "")
-                if tup not in metrics:
-                    metrics.append(tup)
+    def add_enum(self, tbl: str, fld: str, vals: Any):
+        if tbl:
+            self.add_table(tbl)
+        if tbl and fld:
+            key = f"{tbl}.{fld}"
+            if isinstance(vals, (list, tuple)):
+                vals = ", ".join([str(v) for v in vals])
+            if key not in self.enums:
+                self.enums[key] = vals or ""
+            self.add_field(tbl, fld)
 
-        elif dtype == "period":
-            pname = md.get("name") or _parse_tag(txt, "PERIOD")
-            if pname and pname not in periods:
-                periods.append(pname)
+    def add_entity(self, ent_name: str, filt: Dict):
+        self.entities.append((ent_name, filt or {}))
 
-        elif dtype == "currency":
-            code = md.get("code") or _parse_tag(txt, "CURRENCY")
-            if code and code not in currencies:
-                currencies.append(code)
+    def sort(self):
+        self.tables.sort()
+        for t in self.fields_by_table:
+            if t not in self.tables:
+                self.tables.append(t)
+        for t in self.fields_by_table:
+            self.fields_by_table[t] = sorted(
+                self.fields_by_table[t], key=lambda s: s.split(".", 1)[1]
+            )
+        self.joins.sort()
+        self.metrics.sort(key=lambda x: x[0])
+        self.periods.sort()
+        self.currencies.sort()
+        self.enums = OrderedDict(sorted(self.enums.items(), key=lambda kv: kv[0]))
 
-        elif dtype == "enum":
-            tbl = md.get("table") or _parse_tag(txt, "TABLE")
-            fld = md.get("field")
-            if not fld:
-                ef = _parse_tag(txt, "ENUM")
-                if "." in ef:
-                    tbl = tbl or ef.split(".", 1)[0].strip()
-                    fld = ef.split(".", 1)[1].strip()
-            if tbl:
-                _add_table(tbl)
-            if tbl and fld:
-                key = f"{tbl}.{fld}"
-                vals = md.get("values")
-                if vals is None:
-                    vals = _parse_tag(txt, "VALUES")
-                if isinstance(vals, (list, tuple)):
-                    vals = ", ".join([str(v) for v in vals])
-                if key not in enums:
-                    enums[key] = vals or ""
-                _add_field(tbl, fld)
 
-        elif dtype == "entity":
-            ent_name = md.get("entity") or _parse_tag(txt, "ENTITY") or "Entity"
-            filt = md.get("filters")
-            if filt is None:
-                filt_txt = _parse_tag(txt, "FILTERS")
-                filt = {}
-                if filt_txt:
-                    for part in [p.strip() for p in filt_txt.split(";") if p.strip()]:
-                        if "=" in part:
-                            k, v = part.split("=", 1)
-                            vals = [x.strip() for x in v.split(",") if x.strip()]
-                            filt[k.strip()] = vals
-            entities.append((ent_name, filt or {}))
+def _process_enum(txt: str, md: Dict, acc: _SchemaAccumulator):
+    tbl = md.get("table") or _parse_tag(txt, "TABLE")
+    fld = md.get("field")
+    if not fld:
+        ef = _parse_tag(txt, "ENUM")
+        if "." in ef:
+            tbl = tbl or ef.split(".", 1)[0].strip()
+            fld = ef.split(".", 1)[1].strip()
+    vals = md.get("values")
+    if vals is None:
+        vals = _parse_tag(txt, "VALUES")
+    acc.add_enum(tbl, fld, vals)
 
-    # --- deterministic ordering ---
-    if sort_sections:
-        tables.sort()
-        for t in list(fields_by_table.keys()):
-            if t not in tables:
-                tables.append(t)
-        for t in fields_by_table:
-            fields_by_table[t] = sorted(fields_by_table[t], key=lambda s: s.split(".", 1)[1])
-        joins.sort()
-        metrics.sort(key=lambda x: x[0])
-        periods.sort()
-        currencies.sort()
-        enums = OrderedDict(sorted(enums.items(), key=lambda kv: kv[0]))
 
-    # --- build context lines ---
+def _process_entity(txt: str, md: Dict, acc: _SchemaAccumulator):
+    ent_name = md.get("entity") or _parse_tag(txt, "ENTITY") or "Entity"
+    filt = md.get("filters")
+    if filt is None:
+        filt_txt = _parse_tag(txt, "FILTERS")
+        filt = {}
+        if filt_txt:
+            for part in [p.strip() for p in filt_txt.split(";") if p.strip()]:
+                if "=" in part:
+                    k, v = part.split("=", 1)
+                    filt[k.strip()] = [x.strip() for x in v.split(",") if x.strip()]
+    acc.add_entity(ent_name, filt)
+
+
+def _process_doc(txt: str, md: Dict, acc: _SchemaAccumulator):
+    dtype = md.get("type") or _infer_type(txt)
+    if dtype == "table":
+        acc.add_table(md.get("table") or _parse_tag(txt, "TABLE"))
+    elif dtype == "field":
+        acc.add_field(
+            md.get("table") or _parse_tag(txt, "TABLE"),
+            md.get("field") or _parse_tag(txt, "FIELD").split(" (", 1)[0]
+        )
+    elif dtype == "join":
+        acc.add_join(md.get("on") or _parse_tag(txt, "ON"))
+    elif dtype == "metric":
+        acc.add_metric(
+            md.get("name") or _parse_tag(txt, "METRIC"),
+            md.get("expression") or _parse_tag(txt, "EXPR"),
+            md.get("table") or _parse_tag(txt, "TABLE")
+        )
+    elif dtype == "period":
+        acc.add_period(md.get("name") or _parse_tag(txt, "PERIOD"))
+    elif dtype == "currency":
+        acc.add_currency(md.get("code") or _parse_tag(txt, "CURRENCY"))
+    elif dtype == "enum":
+        _process_enum(txt, md, acc)
+    elif dtype == "entity":
+        _process_entity(txt, md, acc)
+
+
+def _build_context_lines(acc: _SchemaAccumulator, title: str,
+                          max_fields_per_table: int,
+                          show_entity_filters_yaml: bool) -> List[str]:
     lines: List[str] = [title]
 
-    for tbl in tables:
+    for tbl in acc.tables:
         lines.append(f"Table: {tbl}")
         lines.append("Fields:")
-        flds = fields_by_table.get(tbl, [])
+        flds = acc.fields_by_table.get(tbl, [])
         if flds:
-            cap = flds[:max_fields_per_table]
-            lines.extend([f"  - {f}" for f in cap])
+            lines.extend([f"  - {f}" for f in flds[:max_fields_per_table]])
             if len(flds) > max_fields_per_table:
                 lines.append(f"  # +{len(flds) - max_fields_per_table} more")
         else:
             lines.append("  -")
         lines.append("")
 
-    if joins:
+    if acc.joins:
         lines.append("Join:")
-        lines.extend([f"  {j}" for j in joins])
+        lines.extend([f"  {j}" for j in acc.joins])
         lines.append("")
 
-    if metrics:
+    if acc.metrics:
         lines.append("Metrics:")
-        for mname, mexpr, mtbl in metrics:
+        for mname, mexpr, mtbl in acc.metrics:
             suffix = f"  # table: {mtbl}" if mtbl else ""
-            if mexpr:
-                lines.append(f"  - {mname}: {mexpr}{suffix}")
-            else:
-                lines.append(f"  - {mname}{suffix}")
+            lines.append(f"  - {mname}: {mexpr}{suffix}" if mexpr else f"  - {mname}{suffix}")
         lines.append("")
 
-    if periods:
+    if acc.periods:
         lines.append("Periods:")
-        lines.extend([f"  - {p}" for p in periods])
+        lines.extend([f"  - {p}" for p in acc.periods])
         lines.append("")
 
-    if currencies:
+    if acc.currencies:
         lines.append("Currencies:")
-        lines.extend([f"  - {c}" for c in currencies])
+        lines.extend([f"  - {c}" for c in acc.currencies])
         lines.append("")
 
-    if enums:
+    if acc.enums:
         lines.append("Enums:")
-        for key, vals in enums.items():
+        for key, vals in acc.enums.items():
             lines.append(f"  - {key}: {vals}" if vals else f"  - {key}")
         lines.append("")
 
-    if entities:
+    if acc.entities:
         lines.append("Entities:")
-        for ent, filt in entities:
+        for ent, filt in acc.entities:
             if show_entity_filters_yaml and isinstance(filt, dict) and filt:
                 lines.append(f"  - Entity: {ent}")
                 lines.append("    Filters:")
@@ -1586,6 +1620,22 @@ def hits_to_schema_context(
 
     while lines and not lines[-1].strip():
         lines.pop()
+    return lines
+
+
+def hits_to_schema_context(
+    hits: Union[List[Any], Dict, str],
+    title: str = "SCHEMA CONTEXT",
+    max_fields_per_table: int = 20,
+    sort_sections: bool = True,
+    show_entity_filters_yaml: bool = True
+) -> str:
+    acc = _SchemaAccumulator()
+    for txt, md in _collect_docs(hits):
+        _process_doc(txt, md, acc)
+    if sort_sections:
+        acc.sort()
+    lines = _build_context_lines(acc, title, max_fields_per_table, show_entity_filters_yaml)
     return "\n".join(lines)
 
 
@@ -1599,10 +1649,8 @@ def debug_entity_retriever(q: str):
     }
 
 
-# Run
-@frappe.whitelist(allow_guest=False)
-def run_text2sql_pipeline(user_question: str, chat_id: str):
-    q = (user_question or "")
+def _invoke_pipeline(user_question: str, chat_id: str):
+    initial_state: SQLState = {"question": user_question or "", "session_id": chat_id}
     config = {
         "configurable": {"thread_id": chat_id},
         "run_name": "changai_text2sql_graph",
@@ -1610,122 +1658,126 @@ def run_text2sql_pipeline(user_question: str, chat_id: str):
         "tags": ["changai", "rag", "sql"],
         "metadata": {"tenant": "demo"},
     }
-    initial_state: SQLState = {
-        "question": q,
-        "session_id":chat_id
-    }
     try:
-        final: SQLState = app.invoke(initial_state, config=config)
+        return app.invoke(initial_state, config=config), None
     except frappe.exceptions.ValidationError as e:
         clean_msg = re.sub(r'<[^>]+>', '', str(e))
-        return {"Bot": clean_msg, "error": clean_msg}
+        return None, {"Bot": clean_msg, "error": clean_msg}
     except Exception as e:
         frappe.log_error(frappe.get_traceback(), "ChangAI Pipeline Invoke Error")
-        return {"Bot": "⚠️ An unexpected error occurred. Please try again.", "error": str(e)}
+        return None, {"Bot": "⚠️ An unexpected error occurred. Please try again.", "error": str(e)}
 
-    entity_debug = {
-    "contains_values": final.get("contains_values"),
-    "entity_cards": final.get("entity_cards") or [],
-}
-    type_ = final.get("query_type") or "NON_ERP"
-    if type_ == "NON_ERP":
-        non_erp_res = _safe_strip(final.get("non_erp_res", ""))
-        formatted_q = _safe_strip(final.get("formatted_q", ""))
-        err = final.get("error")
-        if not non_erp_res:
-            if err:
-                frappe.log_error(err, "ChangAI NON_ERP Error")
-            return {
-                    "Question": user_question,
-                    "Formatted-Question": formatted_q,
-                    "Bot": err if err else "⚠️ Could not get a response. Please try again.",
-                }
 
-        if not err and non_erp_res and non_erp_res!="":
-            try:
-                save_turn_2(
-                    session_id=chat_id,
-                    user_text=formatted_q,
-                    bot_text=non_erp_res
-                )
-                save_logs(
-                    user_question=user_question,
-                    formatted_q=formatted_q,
-                    result=non_erp_res
-                )
-            except Exception as e:
-                frappe.log_error(f"Failed to save NON_ERP logs: {e}", "ChangAI Logs")
+def _handle_non_erp(final: SQLState, user_question: str, chat_id: str) -> Dict:
+    non_erp_res = _safe_strip(final.get("non_erp_res", ""))
+    formatted_q = _safe_strip(final.get("formatted_q", ""))
+    err = final.get("error")
 
+    if not non_erp_res:
+        if err:
+            frappe.log_error(err, "ChangAI NON_ERP Error")
         return {
             "Question": user_question,
             "Formatted-Question": formatted_q,
-            "Bot": non_erp_res,
+            "Bot": err if err else "⚠️ Could not get a response. Please try again.",
         }
 
-    sql  = clean_sql(final.get("sql"))or ""
-    selected_tables = final.get("selected_tables") or []
-    orm  = clean_sql(final.get("orm"))or ""
-    fields=_safe_strip(final.get("selected_fields") or "")
-    formatted_q = _safe_strip(final.get("formatted_q") or "")
-    formatting_prompt = (final.get("formatting_prompt") or "")
-    sql_prompt = (final.get("sql_prompt") or "")
-    val = final.get("validation") or {}
-    ok = bool(val.get("ok"))
-    err = final.get("error")
-    if not ok or not sql.upper().startswith("SELECT"):
-        parse_error = val.get("details", {}).get("parse_error", "")
+    if not err and non_erp_res:
+        try:
+            save_turn_2(session_id=chat_id, user_text=formatted_q, bot_text=non_erp_res)
+            save_logs(user_question=user_question, formatted_q=formatted_q, result=non_erp_res)
+        except Exception as e:
+            frappe.log_error(f"Failed to save NON_ERP logs: {e}", "ChangAI Logs")
 
-        if err:
-            frappe.log_error(err, "ChangAI SQL Pipeline Error")
-            bot_msg = "⚠️ The model encountered an error generating your query. Please try again."
-        elif parse_error == "Empty SQL from LLM":
-            bot_msg = "⚠️ The model could not generate a SQL query for your question. Please try rephrasing."
-        elif val.get("unknown_tables") or val.get("unknown_columns"):
-            bot_msg = "⚠️ The model generated an invalid query. Please try rephrasing."
-        else:
-            bot_msg = "⚠️ Could not process your request. Please try rephrasing."
-        context = (final.get("context") or final.get("selected_fields") or "")[:800]
-        tries = int(final.get("tries") or 0)
-        return {
-            "Question":user_question,
-            "Formatted_Question":formatted_q,
-            "Context": context,
-            "SQL": sql,
-            "Validation": val,
-            "EntityDebug": entity_debug,
-            "Tries": tries,
-            "Error": err or "SQL not valid or missing",
-            "Result": [],
-            "Bot": bot_msg,
-        }
+    return {"Question": user_question, "Formatted-Question": formatted_q, "Bot": non_erp_res}
+
+
+def _get_sql_error_message(err: Any, val: Dict) -> str:
+    if err:
+        frappe.log_error(err, "ChangAI SQL Pipeline Error")
+        return "⚠️ The model encountered an error generating your query. Please try again."
+    parse_error = val.get("details", {}).get("parse_error", "")
+    if parse_error == "Empty SQL from LLM":
+        return "⚠️ The model could not generate a SQL query for your question. Please try rephrasing."
+    if val.get("unknown_tables") or val.get("unknown_columns"):
+        return "⚠️ The model generated an invalid query. Please try rephrasing."
+    return "⚠️ Could not process your request. Please try rephrasing."
+
+
+def _handle_sql_result(final: SQLState, sql: str, orm: str, formatted_q: str, fields: str,
+                       selected_tables: List, val: Dict, entity_debug: Dict,
+                       user_question: str, chat_id: str) -> Dict:
     try:
-        extracted_tables=extract_tables_from_sql(sql)
-        # selected_tables=list(set(selected_tables) | set(extracted_tables))
-        sql_result = execute_query(sql,extracted_tables)
+        extracted_tables = extract_tables_from_sql(sql)
+        sql_result = execute_query(sql, extracted_tables)
     except Exception as e:
-        return {
-            "ok":False,
-            "error": f"SQL Execution Failed: {e}"
-        }
+        return {"ok": False, "error": f"SQL Execution Failed: {e}"}
+
     context = (final.get("context") or final.get("selected_fields") or "")[:800]
-    contains_values=final.get("contains_values") or ""
-    tries = int(final.get("tries") or 0)
-    top_tables=final.get("top_tables") or ""
-    top_fields=final.get("top_fields") or ""
+    contains_values = final.get("contains_values") or ""
     err = final.get("error")
-    formatted_result = format_data(formatted_q,sql_result)
+    formatted_result = format_data(formatted_q, sql_result)
+
     if not err:
         try:
-            save_turn_2(session_id=chat_id,user_text=formatted_q,bot_text= formatted_result)
-            save_logs(user_question=user_question,formatted_q=formatted_q,context=context,sql=sql,val=val,result=sql_result,formatted_result=formatted_result)
+            save_turn_2(session_id=chat_id, user_text=formatted_q, bot_text=formatted_result)
+            save_logs(user_question=user_question, formatted_q=formatted_q, context=context,
+                      sql=sql, val=val, result=sql_result, formatted_result=formatted_result)
         except Exception as e:
             return {"error": str(e)}
+
     return {
-        "Question":user_question,
+        "Question": user_question,
         "SQL": sql,
-        "ORM":orm,
+        "ORM": orm,
+        "Tables": selected_tables,
+        "Fields": fields,
+        "Entity Values present ?": contains_values,
         "Validation": val,
         "Error": err,
         "EntityDebug": entity_debug,
-        "Bot": formatted_result
+        "Bot": formatted_result,
     }
+
+
+@frappe.whitelist(allow_guest=False)
+def run_text2sql_pipeline(user_question: str, chat_id: str) -> Dict:
+    final, err_response = _invoke_pipeline(user_question, chat_id)
+    if err_response:
+        return err_response
+
+    entity_debug = {
+        "contains_values": final.get("contains_values"),
+        "entity_cards": final.get("entity_cards") or [],
+    }
+
+    if (final.get("query_type") or "NON_ERP") == "NON_ERP":
+        return _handle_non_erp(final, user_question, chat_id)
+
+    sql = clean_sql(final.get("sql")) or ""
+    orm = clean_sql(final.get("orm")) or ""
+    formatted_q = _safe_strip(final.get("formatted_q") or "")
+    selected_tables = final.get("selected_tables") or []
+    fields = _safe_strip(final.get("selected_fields") or "")
+    val = final.get("validation") or {}
+    err = final.get("error")
+
+    if not val.get("ok") or not sql.upper().startswith("SELECT"):
+        context = (final.get("context") or final.get("selected_fields") or "")[:800]
+        return {
+            "Question": user_question,
+            "Formatted_Question": formatted_q,
+            "Context": context,
+            "Tables": selected_tables,
+            "Fields": fields,
+            "SQL": sql,
+            "Validation": val,
+            "EntityDebug": entity_debug,
+            "Tries": int(final.get("tries") or 0),
+            "Error": err or "SQL not valid or missing",
+            "Result": [],
+            "Bot": _get_sql_error_message(err, val),
+        }
+
+    return _handle_sql_result(final, sql, orm, formatted_q, fields,
+                               selected_tables, val, entity_debug, user_question, chat_id)
