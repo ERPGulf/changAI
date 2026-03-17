@@ -3,9 +3,8 @@ import frappe
 from frappe import _
 from anthropic import Anthropic
 
-@frappe.whitelist()
-def translate_and_store(docname, doctype, from_field,to_field, text, to_language):  # ← add doctype param
-    """
+@frappe.whitelist(allow_guest=False)
+def translate_and_store(docname: str, doctype: str, from_field: str, to_field: str, text: str, to_language: str):    """
     Translates text and stores it in a dynamically created field
     """
     meta = frappe.get_meta(doctype)

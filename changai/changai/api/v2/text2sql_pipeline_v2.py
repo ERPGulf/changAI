@@ -1045,7 +1045,7 @@ def clean_sql(s: Any) -> str:
 
     s = s.strip()
     s = re.sub(r"^\s*```(?:sql)?\s*", "", s, flags=re.I)
-    s = re.sub(r"\s*```\s*$", "", s)
+    s = re.sub(r"\s*`{3}\s*$", "", s)
     s = re.sub(r"^\s*sql\s*\n", "", s, flags=re.I)
     return s.strip()
 

@@ -69,7 +69,7 @@ async function open_ai_translate_dialog(frm) {
                 callback(r) {
                     if (r.message) {
                         frappe.show_alert({
-                            message: __("Translation saved in field: ") + r.message,
+                            message: __("Translation saved in field:") + " " + r.message,
                             indicator: "green"
                         });
                         frm.reload_doc();

@@ -13,6 +13,8 @@ from vertexai.generative_models import GenerativeModel, GenerationConfig
 from google.cloud import aiplatform
 from google.api_core import exceptions as google_exceptions
 import anthropic
+import secrets
+
 
 MAX_RETRIES = 5
 BASE_BACKOFF = 2.0
@@ -77,7 +79,7 @@ def _get_openai_client():
 
 def _sleep_backoff(attempt: int, base: float = BASE_BACKOFF, cap: float = MAX_BACKOFF):
     delay = min(cap, base * (2 ** attempt))
-    delay = delay * (0.7 + random.random() * 0.6)
+    delay = delay * (0.7 + secrets.randbelow(1000) / 1000 * 0.6)
     time.sleep(delay)
 
 
@@ -220,7 +222,7 @@ def _is_positive_valid(positive: str):
         return True, None
 
     if positive.startswith(LINK_TAG):
-        match = re.match(r"\[LINK\]\s+(\w[\w ]*?)\s+->\s+(\w[\w ]*?)\s+ON\s+(\w+)(?:(?:\s*\|)|(?:\s*$))", positive)
+        match = re.match(r"\[LINK\]\s+([^\]>]+?)\s+-->\s+([^\]>]+?)\s+ON\s+(\w+)(?:\s*\||\s*$)", positive)
         if not match:
             return False, "Could not parse [LINK] format"
         table_a = match.group(1).strip()
