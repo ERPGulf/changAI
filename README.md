@@ -4,7 +4,7 @@ An open-source AI assistant for ERPNext built on Frappe. Ask business questions 
 
 > ⚠️ **Current version is trained on ERPNext modules only.** Like any AI model, it is still learning — it handles a good range of ERPNext queries well but will not get everything right. Accuracy improves over time with more training data and feedback.
 
-**Compatibility:** ERPNext v14 & v15 · Ubuntu · Python 3.10+
+**Compatibility:** ERPNext v14 & v15 & v16 · Ubuntu · Python 3.10+
 
 ---
 
