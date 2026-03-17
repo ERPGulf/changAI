@@ -236,7 +236,10 @@ def sync_tables_and_schema_smart() -> Dict[str, Any]:
         if isinstance(b, dict) and b.get("table")
     }
     last_sync_raw = meta.get("last_doctype_sync")
-    changed_doctypes = get_doctypes_changed_since(last_sync_raw)
+    if not last_sync_raw:
+        changed_doctypes = []
+    else:
+        changed_doctypes = get_doctypes_changed_since(last_sync_raw)
     changed_tables = set(_tab(dt) for dt in changed_doctypes)
     missing_from_schema = set(t for t in existing_tables if t not in by_table)
     new_from_changed = set(t for t in changed_tables if t not in by_table and t not in set(existing_tables))
@@ -245,8 +248,6 @@ def sync_tables_and_schema_smart() -> Dict[str, Any]:
         return {"ok": True, "message": _("No changes detected")}
 
     merged_tables = sorted(set(existing_tables) | changed_tables)
-
-    # Loop over tables to process
     for table in tables_to_process:
         dt = _strip_tab(table)
         if not frappe.db.exists("DocType", dt):
@@ -270,23 +271,43 @@ def sync_tables_and_schema_smart() -> Dict[str, Any]:
             if not f.fieldname:
                 continue
             existing_desc = existing_fields.get(f.fieldname, {}).get("description", "")
-            fields.append({
+            
+            field_entry = {
                 "name": f.fieldname,
                 "fieldtype": f.fieldtype,
                 "label": f.label or "",
-                "description": existing_desc
-            })
+                "description": existing_desc,
+            }
+            
+            if f.fieldtype == "Select" and f.options:
+                live_options = [o.strip() for o in f.options.split("\n") if o.strip()]
+                existing_options = existing_fields.get(f.fieldname, {}).get("options", [])
+                if isinstance(existing_options, str):
+                    existing_options = [o.strip() for o in existing_options.split("\n") if o.strip()]                
+                merged_options = list(dict.fromkeys(live_options + existing_options))
+                field_entry["options"] = merged_options
 
-        # Update existing block or create new one
+            elif f.fieldtype == "Link" and f.options:
+                field_entry["join_hint"] = f.options  # e.g. "Customer", "Item"
+
+            fields.append(field_entry)
+
         if table in by_table:
             by_table[table]["fields"] = fields
-            by_table[table]["desc_done"] = False
+            
+            # ✅ PERMANENT FIX: only reset desc_done if genuinely new empty fields exist
+            has_pending = any(
+                not (f.get("description") or "").strip()
+                for f in fields
+                if isinstance(f, dict) and f.get("name")
+            )
+            by_table[table]["desc_done"] = not has_pending
         else:
             by_table[table] = {
                 "table": table,
                 "description": "",
                 "fields": fields,
-                "desc_done": False
+                "desc_done": False  # new table, always needs descriptions
             }
     tables_blocks = list(by_table.values())
     meta["last_doctype_sync"] = str(now_datetime())
@@ -309,6 +330,7 @@ def sync_tables_and_schema_smart() -> Dict[str, Any]:
 
 @frappe.whitelist(allow_guest=False)
 def _get_claude_client() -> Optional[Anthropic]:
+    
     settings = frappe.get_single("ChangAI Settings")
     api_key = None
     try:
