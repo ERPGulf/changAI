@@ -27,7 +27,8 @@ Then search for **changAI Settings** in ERPNext and configure your deployment mo
 - **Local Mode** — schema retrieval runs locally; SQL is generated via Gemini. Uncheck *Remote* and fill in your Gemini credentials.
 - **Remote Mode** — schema retrieval and SQL generation both run on Replicate using Qwen3. Check *Remote* and fill in your Replicate API token, prediction URL, and version IDs in the Remote tab.
 
-> 📺 Full setup walkthrough: [YouTube – coming soon](https://www.youtube.com)
+> 📺 Full setup walkthrough: [YouTube – coming soon](https://youtu.be/twD-4scH-EM)
+> Documentation here https://docs.claudion.com/Claudion-Docs/changaisetup
 
 ---
 
@@ -65,7 +66,8 @@ Report bugs via [GitHub Issues](https://github.com/ERPGulf/changAI/issues) — i
 ---
 
 ## Links
-
+-     How to setup and configure guide here https://youtu.be/twD-4scH-EM
+-     Documentation here https://docs.claudion.com/Claudion-Docs/changaisetup
 - 🤗 [Embedding Model](https://huggingface.co/hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned)
 - 🤗 [Dataset](https://huggingface.co/datasets/hyrinmansoor/ERP-retrieval-data-modernbert)
 - 📧 support@erpgulf.com
