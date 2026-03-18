@@ -1,10 +1,34 @@
-# changAI — Open-Source AI Assistant for ERPNext
+<div align="center">
 
-An open-source AI assistant for ERPNext built on Frappe. Ask business questions in plain English and get instant answers — no SQL needed.
+<h1>chang<b>AI</b></h1>
 
-> ⚠️ **Current version is trained on ERPNext modules only.** Like any AI model, it is still learning — it handles a good range of ERPNext queries well but will not get everything right. Accuracy improves over time with more training data and feedback.
+**Open-source AI assistant for ERPNext — ask business questions in plain English, get instant answers. No SQL needed.**
 
-**Compatibility:** ERPNext v14 & v15 & v16 · Ubuntu · Python 3.10+
+[![MIT License](https://img.shields.io/badge/license-MIT-orange.svg)](LICENSE)
+[![ERPNext v14+](https://img.shields.io/badge/ERPNext-v14%20%7C%20v15%20%7C%20v16-blue.svg)](https://erpnext.com)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://python.org)
+[![Platform](https://img.shields.io/badge/platform-Ubuntu-lightgrey.svg)](https://ubuntu.com)
+[![Maintained](https://img.shields.io/badge/status-actively%20maintained-brightgreen.svg)]()
+
+[Setup Guide](https://youtu.be/twD-4scH-EM) · [Documentation](https://docs.claudion.com/Claudion-Docs/changaisetup) · [Report a Bug](https://github.com/ERPGulf/changAI/issues) · [Embedding Model 🤗](https://huggingface.co/hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned)
+
+</div>
+
+---
+
+> **⚠️ Note:** Current version is trained on ERPNext modules only. Like any AI model, it is still learning — it handles a good range of ERPNext queries well but will not get everything right. Accuracy improves over time with more training data and feedback.
+
+---
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Features](#features)
+- [How It Works](#how-it-works)
+- [Model & Architecture](#model--architecture)
+- [Contributing](#contributing)
+- [Links](#links)
 
 ---
 
@@ -22,57 +46,106 @@ bench --site your-site.local migrate
 bench restart
 ```
 
-Then search for **changAI Settings** in ERPNext and configure your deployment mode:
+Then search for **changAI Settings** in ERPNext to configure your deployment mode.
 
-- **Local Mode** — schema retrieval runs locally; SQL is generated via Gemini. Uncheck *Remote* and fill in your Gemini credentials.
-- **Remote Mode** — schema retrieval and SQL generation both run on Replicate using Qwen3. Check *Remote* and fill in your Replicate API token, prediction URL, and version IDs in the Remote tab.
+---
 
-> 📺 Full setup walkthrough: [YouTube – coming soon](https://youtu.be/twD-4scH-EM)
-> Documentation here https://docs.claudion.com/Claudion-Docs/changaisetup
+## Configuration
+
+changAI supports two deployment modes:
+
+### Local Mode
+Schema retrieval runs locally; SQL is generated via **Gemini**.
+
+1. Uncheck **Remote** in changAI Settings
+2. Enter your Gemini API credentials
+
+### Remote Mode
+Both schema retrieval and SQL generation run on **Replicate** using Qwen3.
+
+1. Check **Remote** in changAI Settings
+2. Fill in your Replicate API token, prediction URL, and version IDs under the Remote tab
+
+> 📺 **Full walkthrough:** [YouTube Setup Guide](https://youtu.be/twD-4scH-EM)  
+> 📖 **Full docs:** [docs.claudion.com](https://docs.claudion.com/Claudion-Docs/changaisetup)
 
 ---
 
 ## Features
 
-| | |
+| Feature | Description |
 |---|---|
-| **Chat Tab** | Ask ERPNext questions in plain English |
-| **Debug Tab** | Inspect pipeline outputs at each stage |
-| **Support Tab** | Support interface *(work in progress)* |
-| **Train Data Automation** | Auto-generate training data by module |
+| **Chat Tab** | Ask ERPNext questions in plain English and get instant answers |
+| **Debug Tab** | Inspect pipeline outputs at each stage of the query |
+| **Support Tab** | Built-in support interface *(work in progress)* |
+| **Train Data Automation** | Auto-generate training data by ERPNext module |
 | **Master Data Schema** | Create and sync schema + master records |
-| **Download Embedding Model** | Download updated model to disk — only needed when a model update is released; the model downloads automatically on first install |
+| **Download Embedding Model** | Download updated model to disk — auto-downloads on first install; only needed again on model updates |
 
 ---
 
 ## How It Works
 
-User query → RAG retrieves relevant tables, fields, and master records → LLM generates SQL → SQL is validated against user permissions via Frappe's `match_conditions` API → result returned in natural language.
+```
+User Query
+    │
+    ▼
+RAG Retrieval ──── Retrieves relevant tables, fields & master records
+    │
+    ▼
+SQL Generation ─── LLM generates SQL from retrieved schema context
+    │
+    ▼
+Permission Check ── Validated via Frappe's match_conditions API
+    │
+    ▼
+Natural Language ── Result returned as a human-readable answer
+```
 
-| Component | Local | Remote |
+---
+
+## Model & Architecture
+
+| Component | Local Mode | Remote Mode |
 |---|---|---|
-| Embeddings | `hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned` | `hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned` |
-| Schema Retrieval | Local | Replicate |
-| SQL Generation | Gemini | Qwen3 (Replicate) |
+| **Embeddings** | `hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned` | `hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned` |
+| **Schema Retrieval** | Local | Replicate |
+| **SQL Generation** | Gemini | Qwen3 (Replicate) |
 
 ---
 
 ## Contributing
 
-PRs are welcome. Fork → branch from `main` → submit a PR.
+PRs are welcome.
 
-Report bugs via [GitHub Issues](https://github.com/ERPGulf/changAI/issues) — include your query, output, any errors, and the Debug tab output.
+1. Fork the repository
+2. Branch from `main`
+3. Submit a pull request
+
+**Reporting bugs:** Open a [GitHub Issue](https://github.com/ERPGulf/changAI/issues) and include:
+- Your query
+- The output received
+- Any error messages
+- Debug tab output
 
 ---
 
 ## Links
--     How to setup and configure guide here https://youtu.be/twD-4scH-EM
--     Documentation here https://docs.claudion.com/Claudion-Docs/changaisetup
-- 🤗 [Embedding Model](https://huggingface.co/hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned)
-- 🤗 [Dataset](https://huggingface.co/datasets/hyrinmansoor/ERP-retrieval-data-modernbert)
-- 📧 support@erpgulf.com
-- 🌍 [erpgulf.com](https://erpgulf.com)
+
+| | |
+|---|---|
+| 📺 Setup Walkthrough | [youtu.be/twD-4scH-EM](https://youtu.be/twD-4scH-EM) |
+| 📖 Documentation | [docs.claudion.com](https://docs.claudion.com/Claudion-Docs/changaisetup) |
+| 🤗 Embedding Model | [huggingface.co/hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned](https://huggingface.co/hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned) |
+| 🤗 Dataset | [huggingface.co/datasets/hyrinmansoor/ERP-retrieval-data-modernbert](https://huggingface.co/datasets/hyrinmansoor/ERP-retrieval-data-modernbert) |
+| 🐛 Issues | [github.com/ERPGulf/changAI/issues](https://github.com/ERPGulf/changAI/issues) |
+| 📧 Support | [support@erpgulf.com](mailto:support@erpgulf.com) |
+| 🌍 Website | [erpgulf.com](https://erpgulf.com) |
 
 ---
 
-MIT License · Actively maintained · [ERPGulf](https://erpgulf.com)
+<div align="center">
+
+MIT License · Actively maintained · Built by [ERPGulf](https://erpgulf.com)
+
+</div>
