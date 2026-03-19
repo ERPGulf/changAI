@@ -10,7 +10,7 @@
 [![Platform](https://img.shields.io/badge/platform-Ubuntu-lightgrey.svg)](https://ubuntu.com)
 [![Maintained](https://img.shields.io/badge/status-actively%20maintained-brightgreen.svg)]()
 
-[Setup Guide](https://youtu.be/twD-4scH-EM) · [Documentation](https://docs.claudion.com/Claudion-Docs/changaisetup) · [Report a Bug](https://github.com/ERPGulf/changAI/issues) · [Embedding Model 🤗](https://huggingface.co/hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned)
+[Setup Guide](https://youtu.be/fFxyAY_sVNs) · [Documentation](https://docs.claudion.com/Claudion-Docs/changaisetup) · [Report a Bug](https://github.com/ERPGulf/changAI/issues) · [Embedding Model 🤗](https://huggingface.co/hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned)
 
 </div>
 
@@ -66,7 +66,7 @@ Both schema retrieval and SQL generation run on **Replicate** using Qwen3.
 1. Check **Remote** in changAI Settings
 2. Fill in your Replicate API token, prediction URL, and version IDs under the Remote tab
 
-> 📺 **Full walkthrough:** [YouTube Setup Guide](https://youtu.be/twD-4scH-EM)  
+> 📺 **Full walkthrough:** [YouTube Setup Guide](https://youtu.be/fFxyAY_sVNs)  
 > 📖 **Full docs:** [docs.claudion.com](https://docs.claudion.com/Claudion-Docs/changaisetup)
 
 ---
