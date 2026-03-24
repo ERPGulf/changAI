@@ -182,8 +182,6 @@ def get_settings() -> Dict[str, Any]:
         "LANGSMITH_ENDPOINT": settings.langsmith_endpoint,
         "LANGSMITH_API_KEY": settings.langsmith_api_key,
         "LANGSMITH_PROJECT": settings.langsmith_project,
-        # "URL": settings.prediction_url if settings.remote else settings.ollama_url,
-        # "LOCAL_SCHEMA_RETRIEVER": settings.local_schema_retriever,
         "RETAIN_MEM": settings.retain_memory,
         "LLM_VERSION_ID": settings.llm_version_id,
         "EMBED_VERSION_ID": settings.embedder_version_id,
@@ -1286,17 +1284,9 @@ def get_ticket_details(tid: Union[int, str]) -> Any:
 
 @frappe.whitelist(allow_guest=False)
 def support_bot(message: str) -> Dict[str, Any]:
-    # output = remote_llm_request_deploy_test(
-    #     task="helpdesk_task",
-    #     prompt="",
-    #     question=None,
-    #     db_result_json=None,
-    #     user_message=message
-    # )
     prompt = SUPPORT_PROMPT.format(user_message=message)
-    raw= call_gemini(SUPPORT_PROMPT)
+    raw = call_gemini(prompt)
     output = json.loads(raw)
-    # return output.task_flag
     task_flag = (output.get("task_flag") or "UNKNOWN").strip()
     ticket_id = output.get("ticket_id")
 
@@ -1568,65 +1558,114 @@ def _process_doc(txt: str, md: Dict, acc: _SchemaAccumulator):
         _process_entity(txt, md, acc)
 
 
-def _build_context_lines(acc: _SchemaAccumulator, title: str,
-                          max_fields_per_table: int,
-                          show_entity_filters_yaml: bool) -> List[str]:
-    lines: List[str] = [title]
-
+def _append_table_lines(
+    lines: List[str],
+    acc: _SchemaAccumulator,
+    max_fields_per_table: int,
+) -> None:
     for tbl in acc.tables:
         lines.append(f"Table: {tbl}")
         lines.append("Fields:")
-        flds = acc.fields_by_table.get(tbl, [])
-        if flds:
-            lines.extend([f"  - {f}" for f in flds[:max_fields_per_table]])
-            if len(flds) > max_fields_per_table:
-                lines.append(f"  # +{len(flds) - max_fields_per_table} more")
-        else:
+        fields = acc.fields_by_table.get(tbl, [])
+
+        if not fields:
             lines.append("  -")
+            lines.append("")
+            continue
+
+        lines.extend(f"  - {field}" for field in fields[:max_fields_per_table])
+
+        extra_count = len(fields) - max_fields_per_table
+        if extra_count > 0:
+            lines.append(f"  # +{extra_count} more")
+
         lines.append("")
+
+
+def _append_simple_section(lines: List[str], title: str, items: List[str]) -> None:
+    if not items:
+        return
+
+    lines.append(f"{title}:")
+    lines.extend(f"  - {item}" for item in items)
+    lines.append("")
+
+
+def _append_metric_lines(lines: List[str], acc: _SchemaAccumulator) -> None:
+    if not acc.metrics:
+        return
+
+    lines.append("Metrics:")
+    for metric_name, metric_expr, metric_table in acc.metrics:
+        suffix = f"  # table: {metric_table}" if metric_table else ""
+        line = f"  - {metric_name}: {metric_expr}{suffix}" if metric_expr else f"  - {metric_name}{suffix}"
+        lines.append(line)
+    lines.append("")
+
+
+def _append_enum_lines(lines: List[str], acc: _SchemaAccumulator) -> None:
+    if not acc.enums:
+        return
+
+    lines.append("Enums:")
+    for key, values in acc.enums.items():
+        lines.append(f"  - {key}: {values}" if values else f"  - {key}")
+    lines.append("")
+
+
+def _format_filter_value(value: Any) -> str:
+    if isinstance(value, (list, tuple)):
+        return ", ".join(str(item) for item in value)
+    return str(value)
+
+
+def _append_entity_lines(
+    lines: List[str],
+    acc: _SchemaAccumulator,
+    show_entity_filters_yaml: bool,
+) -> None:
+    if not acc.entities:
+        return
+
+    lines.append("Entities:")
+    for entity, filters in acc.entities:
+        if show_entity_filters_yaml and isinstance(filters, dict) and filters:
+            lines.append(f"  - Entity: {entity}")
+            lines.append("    Filters:")
+            for key, value in filters.items():
+                lines.append(f"      {key}: {_format_filter_value(value)}")
+            continue
+
+        lines.append(f"  - Entity: {entity}, Filters: {filters if filters else '{}'}")
+
+
+def _trim_trailing_blank_lines(lines: List[str]) -> None:
+    while lines and not lines[-1].strip():
+        lines.pop()
+
+
+def _build_context_lines(
+    acc: _SchemaAccumulator,
+    title: str,
+    max_fields_per_table: int,
+    show_entity_filters_yaml: bool,
+) -> List[str]:
+    lines: List[str] = [title]
+
+    _append_table_lines(lines, acc, max_fields_per_table)
 
     if acc.joins:
         lines.append("Join:")
-        lines.extend([f"  {j}" for j in acc.joins])
+        lines.extend(f"  {join}" for join in acc.joins)
         lines.append("")
 
-    if acc.metrics:
-        lines.append("Metrics:")
-        for mname, mexpr, mtbl in acc.metrics:
-            suffix = f"  # table: {mtbl}" if mtbl else ""
-            lines.append(f"  - {mname}: {mexpr}{suffix}" if mexpr else f"  - {mname}{suffix}")
-        lines.append("")
+    _append_metric_lines(lines, acc)
+    _append_simple_section(lines, "Periods", acc.periods)
+    _append_simple_section(lines, "Currencies", acc.currencies)
+    _append_enum_lines(lines, acc)
+    _append_entity_lines(lines, acc, show_entity_filters_yaml)
 
-    if acc.periods:
-        lines.append("Periods:")
-        lines.extend([f"  - {p}" for p in acc.periods])
-        lines.append("")
-
-    if acc.currencies:
-        lines.append("Currencies:")
-        lines.extend([f"  - {c}" for c in acc.currencies])
-        lines.append("")
-
-    if acc.enums:
-        lines.append("Enums:")
-        for key, vals in acc.enums.items():
-            lines.append(f"  - {key}: {vals}" if vals else f"  - {key}")
-        lines.append("")
-
-    if acc.entities:
-        lines.append("Entities:")
-        for ent, filt in acc.entities:
-            if show_entity_filters_yaml and isinstance(filt, dict) and filt:
-                lines.append(f"  - Entity: {ent}")
-                lines.append("    Filters:")
-                for k, v in filt.items():
-                    vv = ", ".join([str(i) for i in v]) if isinstance(v, (list, tuple)) else str(v)
-                    lines.append(f"      {k}: {vv}")
-            else:
-                lines.append(f"  - Entity: {ent}, Filters: {filt if filt else '{}'}")
-
-    while lines and not lines[-1].strip():
-        lines.pop()
+    _trim_trailing_blank_lines(lines)
     return lines
 
 

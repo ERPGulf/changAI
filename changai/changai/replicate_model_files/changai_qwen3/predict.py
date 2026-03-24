@@ -166,105 +166,149 @@ Write a clear final answer for the user based strictly on the JSON above.
 
     # ---------------- Predict ----------------
 
-    def predict(
-        self,
-        task: str = Input(
-            description="Operation: 'llm' (rewrite/SQL), 'format_db' (friendly answer), 'helpdesk_task' (ticket intent)",
-            default="llm",
-            choices=["llm", "format_db", "helpdesk_task"],
-        ),
-        user_input: str = Input(
-            description="Prompt for rewrite / SQL generation (task='llm')",
-            default="",
-        ),
-        question: str = Input(
-            description="Original user question (task='format_db')",
-            default="",
-        ),
-        db_result_json: str = Input(
-            description="Database result as JSON string (task='format_db')",
-            default="{}",
-        ),
-        user_message: str = Input(
-            description="User message to classify (task='helpdesk_task')",
-            default="",
-        ),
-    ) -> Any:
-
-        # 1) Rewrite/SQL (main model)
-        if task == "llm":
-            if not user_input:
-                return "Error: user_input is required when task='llm'."
-            return self._run_main_llm(user_input=user_input)
-
-        # 2) DB formatting (small model)
-        if task == "format_db":
-            try:
-                db_result = json.loads(db_result_json) if db_result_json else {}
-            except Exception as e:
-                return {
-                    "answer": "Invalid database result format. Unable to parse JSON.",
-                    "error": str(e),
-                }
-
-            if db_result is None or db_result == {} or (isinstance(db_result, list) and len(db_result) == 0):
-                return {"answer": "No results found."}
-
-            prompt = self._db_formatter_prompt(question=question, db_result=db_result)
-            answer = self._run_formatter_llm(prompt=prompt, max_new_tokens=MAX_NEW_TOKENS_FORMATTER)
-            return {"answer": answer}
-
-        # 3) Helpdesk task classification (small model)
-        if task == "helpdesk_task":
-            if not user_message or not user_message.strip():
-                return {
-                    "task_flag": "UNKNOWN",
-                    "ticket_id": None,
-                    "confidence": 0.0,
-                    "reason": "Empty message.",
-                }
-
-            prompt = self._helpdesk_task_prompt(user_message=user_message.strip())
-            raw = self._run_formatter_llm(prompt=prompt, max_new_tokens=MAX_NEW_TOKENS_HELPDESK)
-
-            obj = self._extract_first_json(raw)
-            if not obj:
-                return {
-                    "task_flag": "UNKNOWN",
-                    "ticket_id": None,
-                    "confidence": 0.2,
-                    "reason": "Model returned non-JSON.",
-                    "raw": raw[:300],
-                }
-
-            # ---- harden fields ----
-            flag = obj.get("task_flag")
-            if flag not in ("CREATE_TICKET", "TICKET_DETAILS", "GET_USER_TICKETS", "UNKNOWN"):
-                flag = "UNKNOWN"
-
-            tid = obj.get("ticket_id")
-            if isinstance(tid, bool):
-                tid = None
-            if isinstance(tid, str) and tid.strip().isdigit():
-                tid = int(tid.strip())
-            if not isinstance(tid, int):
-                tid = None
-
-            # enforce rule: only TICKET_DETAILS can have an id
-            if flag != "TICKET_DETAILS":
-                tid = None
-
-            conf = obj.get("confidence")
-            try:
-                conf = float(conf)
-            except Exception:
-                conf = 0.5
-            conf = max(0.0, min(1.0, conf))
+   def _handle_llm_task(self, user_input: str) -> Any:
+    if not user_input:
+        return "Error: user_input is required when task='llm'."
+    return self._run_main_llm(user_input=user_input)
 
 
-            return {
-                "task_flag": flag,
-                "ticket_id": tid
-            }
+def _parse_db_result_json(self, db_result_json: str) -> Any:
+    return json.loads(db_result_json) if db_result_json else {}
 
-        return {"error": f"Unknown task '{task}'"}
+
+def _is_empty_db_result(self, db_result: Any) -> bool:
+    return (
+        db_result is None
+        or db_result == {}
+        or (isinstance(db_result, list) and len(db_result) == 0)
+    )
+
+
+def _handle_format_db_task(self, question: str, db_result_json: str) -> Dict[str, Any]:
+    try:
+        db_result = self._parse_db_result_json(db_result_json)
+    except Exception as e:
+        return {
+            "answer": "Invalid database result format. Unable to parse JSON.",
+            "error": str(e),
+        }
+
+    if self._is_empty_db_result(db_result):
+        return {"answer": "No results found."}
+
+    prompt = self._db_formatter_prompt(question=question, db_result=db_result)
+    answer = self._run_formatter_llm(
+        prompt=prompt,
+        max_new_tokens=MAX_NEW_TOKENS_FORMATTER,
+    )
+    return {"answer": answer}
+
+
+def _normalize_helpdesk_flag(self, flag: Any) -> str:
+    allowed = {"CREATE_TICKET", "TICKET_DETAILS", "GET_USER_TICKETS", "UNKNOWN"}
+    return flag if flag in allowed else "UNKNOWN"
+
+
+def _normalize_helpdesk_ticket_id(self, flag: str, ticket_id: Any) -> Optional[int]:
+    if isinstance(ticket_id, bool):
+        ticket_id = None
+
+    if isinstance(ticket_id, str) and ticket_id.strip().isdigit():
+        ticket_id = int(ticket_id.strip())
+
+    if not isinstance(ticket_id, int):
+        ticket_id = None
+
+    if flag != "TICKET_DETAILS":
+        return None
+
+    return ticket_id
+
+
+def _normalize_helpdesk_confidence(self, confidence: Any) -> float:
+    try:
+        confidence = float(confidence)
+    except Exception:
+        confidence = 0.5
+
+    return max(0.0, min(1.0, confidence))
+
+
+def _handle_empty_helpdesk_message(self) -> Dict[str, Any]:
+    return {
+        "task_flag": "UNKNOWN",
+        "ticket_id": None,
+        "confidence": 0.0,
+        "reason": "Empty message.",
+    }
+
+
+def _handle_invalid_helpdesk_response(self, raw: str) -> Dict[str, Any]:
+    return {
+        "task_flag": "UNKNOWN",
+        "ticket_id": None,
+        "confidence": 0.2,
+        "reason": "Model returned non-JSON.",
+        "raw": raw[:300],
+    }
+
+
+def _handle_helpdesk_task(self, user_message: str) -> Dict[str, Any]:
+    if not user_message or not user_message.strip():
+        return self._handle_empty_helpdesk_message()
+
+    prompt = self._helpdesk_task_prompt(user_message=user_message.strip())
+    raw = self._run_formatter_llm(
+        prompt=prompt,
+        max_new_tokens=MAX_NEW_TOKENS_HELPDESK,
+    )
+
+    obj = self._extract_first_json(raw)
+    if not obj:
+        return self._handle_invalid_helpdesk_response(raw)
+
+    flag = self._normalize_helpdesk_flag(obj.get("task_flag"))
+    ticket_id = self._normalize_helpdesk_ticket_id(flag, obj.get("ticket_id"))
+    confidence = self._normalize_helpdesk_confidence(obj.get("confidence"))
+
+    return {
+        "task_flag": flag,
+        "ticket_id": ticket_id,
+        "confidence": confidence,
+    }
+
+
+def predict(
+    self,
+    task: str = Input(
+        description="Operation: 'llm' (rewrite/SQL), 'format_db' (friendly answer), 'helpdesk_task' (ticket intent)",
+        default="llm",
+        choices=["llm", "format_db", "helpdesk_task"],
+    ),
+    user_input: str = Input(
+        description="Prompt for rewrite / SQL generation (task='llm')",
+        default="",
+    ),
+    question: str = Input(
+        description="Original user question (task='format_db')",
+        default="",
+    ),
+    db_result_json: str = Input(
+        description="Database result as JSON string (task='format_db')",
+        default="{}",
+    ),
+    user_message: str = Input(
+        description="User message to classify (task='helpdesk_task')",
+        default="",
+    ),
+) -> Any:
+    if task == "llm":
+        return self._handle_llm_task(user_input)
+
+    if task == "format_db":
+        return self._handle_format_db_task(question, db_result_json)
+
+    if task == "helpdesk_task":
+        return self._handle_helpdesk_task(user_message)
+
+    return {"error": f"Unknown task '{task}'"}
