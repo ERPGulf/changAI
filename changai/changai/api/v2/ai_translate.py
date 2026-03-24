@@ -3,11 +3,18 @@ import frappe
 from frappe import _
 from anthropic import Anthropic
 
+def get_meta(doc:str):
+    return frappe.get_meta(doc) 
+def get_doctype(doc:str,docname: str):
+    return frappe.get_doc(doc, docname)
+def get_settings(doc:str):
+    return frappe.get_single("ChangAI Settings")
+
 @frappe.whitelist(allow_guest=False)
 def translate_and_store(docname: str, doctype: str, from_field: str, to_field: str, text: str, to_language: str):    """
     Translates text and stores it in a dynamically created field
     """
-    meta = frappe.get_meta(doctype)
+    meta = get_meta(doctype)
     field_meta = meta.get_field(to_field)
 
     if field_meta and field_meta.fieldtype == "Link":
@@ -16,7 +23,7 @@ def translate_and_store(docname: str, doctype: str, from_field: str, to_field: s
         )
     if not text:
         frappe.throw(_("No text to translate"))
-    settings = frappe.get_single("ChangAI Settings")
+    settings = get_settings(doctype)
     try:
         api_key = settings.claude_api_key
     except Exception:
@@ -86,7 +93,7 @@ Text:
             title=_("Translation Error")
         )
     frappe.clear_cache(doctype=doctype)
-    doc = frappe.get_doc(doctype, docname)
+    doc = get_doctype(doctype,docname)
     if not hasattr(doc, to_field):
         frappe.throw(f"Field '{to_field}' does not exist on Item")
     doc.set(to_field, translated_text)
