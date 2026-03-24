@@ -1,9 +1,8 @@
 import frappe
-import frappe
 from frappe import _
 
-@frappe.whitelist(allow_guest = False)
-def create_helpdesk_ticket(subject,priority="Low", ticket_type="Bug"):
+@frappe.whitelist()
+def create_helpdesk_ticket(subject:str,priority:str ="Low", ticket_type: str ="Bug"):
     try:
         session_user = frappe.session.user
 
@@ -49,8 +48,8 @@ def create_helpdesk_ticket(subject,priority="Low", ticket_type="Bug"):
             }
         }
 
-@frappe.whitelist(allow_guest = False)
-def get_user_tickets(ticket_id=None):
+@frappe.whitelist()
+def get_user_tickets(ticket_id: int =None):
     try:
         session_user = frappe.session.user
 

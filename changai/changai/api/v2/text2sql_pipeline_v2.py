@@ -18,6 +18,10 @@ from google import genai
 from google.genai import types
 from google.oauth2 import service_account
 from werkzeug.wrappers import Response
+from changai.changai.api.v2.helpdesk_api import(
+    create_helpdesk_ticket,
+    get_user_tickets
+)
 import jinja2
 import frappe
 from google.api_core import exceptions as google_exceptions
@@ -60,7 +64,12 @@ def read_asset(file_name: str, base: str = "assets") -> Any:
     if ext not in _ALLOWED_EXT:
         frappe.throw(_("Unsupported file type: {0}").format(ext))
 
-    root = _ASSETS_DIR if base == "assets" else _PROMPTS_DIR if base == "prompts" else None
+    if base == "assets":
+        root = _ASSETS_DIR
+    elif base == "prompts":
+        root = _PROMPTS_DIR
+    else:
+        root = None
     if root is None:
         frappe.throw(_("Invalid base: {0}").format(base))
 
@@ -341,116 +350,149 @@ def local_llm_request(prompt: str) -> str:
     return (text or "").strip() or "Error: Empty response from local LLM."
 
 
+def _get_gemini_vertex_config(config):
+    project_id = (config.get("gemini_project_id") or "").strip()
+    credentials_json = (config.get("gemini_json_content") or "").strip()
+    location = (config.get("gemini_location") or "").strip()
+    return project_id, credentials_json, location
+
+
+def _throw_missing_vertex_field(project_id: str, location: str, credentials_json: str) -> None:
+    if not project_id:
+        frappe.throw(
+            _("Gemini Project ID is missing.<br><br>Please go to <b>ChangAI Settings</b> and enter your <b>Gemini Project ID</b>."),
+            title=_("Missing Gemini Project ID"),
+        )
+    if not location:
+        frappe.throw(
+            _("Gemini Location is missing.<br><br>Please go to <b>ChangAI Settings</b> and enter your <b>Gemini Location</b>."),
+            title=_("Missing Gemini Location"),
+        )
+    if not credentials_json:
+        frappe.throw(
+            _("Service Account Credentials are missing.<br><br>Please go to <b>ChangAI Settings</b> and enter your <b>Service Account Credential</b>."),
+            title=_("Missing Service Account Credentials"),
+        )
+
+
+def _build_vertex_gemini_client(project_id: str, location: str, credentials_json: str):
+    _throw_missing_vertex_field(project_id, location, credentials_json)
+
+    service_account_info = json.loads(credentials_json)
+    creds = service_account.Credentials.from_service_account_info(
+        service_account_info,
+        scopes=["https://www.googleapis.com/auth/cloud-platform"],
+    )
+    return genai.Client(
+        vertexai=True,
+        project=project_id,
+        location=location,
+        credentials=creds,
+    )
+
+
+def _get_api_key_client(config):
+    try:
+        api_key = config.get("gemini_api_key")
+    except Exception:
+        api_key = None
+
+    if not api_key:
+        frappe.throw(
+            _(
+                "Gemini API key is not configured.<br><br>"
+                "You have two options to authenticate with Gemini:<br><br>"
+                "<b>Option 1 (Free / API Key):</b><br>"
+                "Go to <b>ChangAI Settings</b> and enter your <b>Gemini API Key</b>.<br>"
+                "Get your free API key from "
+                "<a href='https://aistudio.google.com/app/apikey' target='_blank'>Google AI Studio</a>.<br><br>"
+                "<b>Option 2 (Vertex AI / Service Account):</b><br>"
+                "Fill in <b>Gemini Project ID</b>, <b>Gemini Location</b>, "
+                "and <b>Service Account Credentials</b> in <b>ChangAI Settings</b>."
+            ),
+            title=_("Gemini Authentication Not Configured"),
+        )
+
+    return genai.Client(api_key=api_key)
+
+
+def _build_gemini_client(config):
+    project_id, credentials_json, location = _get_gemini_vertex_config(config)
+
+    if project_id or credentials_json or location:
+        return _build_vertex_gemini_client(project_id, location, credentials_json)
+
+    return _get_api_key_client(config)
+
+
+def _build_gemini_contents(prompt: str):
+    return [
+        {
+            "role": "user",
+            "parts": [{"text": str(prompt)}],
+        }
+    ]
+
+
+def _clean_gemini_response_text(text: str) -> str:
+    text = (text or "").strip()
+    if text.startswith("```"):
+        text = text.replace("```json", "").replace("```", "").strip()
+    return text
+
+
+def _handle_gemini_api_exception(e: Exception) -> None:
+    if isinstance(e, google_exceptions.ResourceExhausted):
+        frappe.throw(
+            _("Gemini API quota exceeded.<br><br>Please wait and try again or upgrade your plan."),
+            title=_("Gemini Quota Exceeded"),
+        )
+    if isinstance(e, google_exceptions.Unauthenticated):
+        frappe.throw(
+            _("Gemini API key is invalid.<br><br>Please go to <b>ChangAI Settings</b> and enter a valid <b>Gemini API Key</b>."),
+            title=_("Invalid Gemini API Key"),
+        )
+    if isinstance(e, google_exceptions.PermissionDenied):
+        frappe.throw(
+            _("Gemini API permission denied.<br><br>Please check your API key permissions."),
+            title=_("Gemini Permission Denied"),
+        )
+    if isinstance(e, google_exceptions.InvalidArgument):
+        frappe.throw(
+            _("Invalid request to Gemini API: {0}").format(str(e)),
+            title=_("Gemini Invalid Request"),
+        )
+
+    frappe.log_error(frappe.get_traceback(), "Gemini API Unexpected Error")
+    frappe.throw(
+        _("Gemini API error: {0}").format(str(e)),
+        title=_("Gemini API Error"),
+    )
+
+
 def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
     try:
         frappe.clear_document_cache(CHANGAI_SETTINGS)
-        config = frappe.get_single(CHANGAI_SETTINGS) 
-        PROJECT_ID = (config.get("gemini_project_id") or "").strip()
-        credentials_json = (config.get("gemini_json_content") or "").strip()
-        LOC = (config.get("gemini_location") or "").strip()
-        if PROJECT_ID or credentials_json or LOC:
-            if not PROJECT_ID:
-                frappe.throw(
-                _("Gemini Project ID is missing.<br><br>Please go to <b>ChangAI Settings</b> and enter your <b>Gemini Project ID</b>."),
-                title=_("Missing Gemini Project ID")
-            )
-            if not LOC:
-                frappe.throw(
-                    _("Gemini Location is missing.<br><br>Please go to <b>ChangAI Settings</b> and enter your <b>Gemini Location</b>."),
-                    title=_("Missing Gemini Location")
-                )
-            if not credentials_json:
-                frappe.throw(
-                    _("Service Account Credentials are missing.<br><br>Please go to <b>ChangAI Settings</b> and enter your <b>Service Account Credential</b>."),
-                    title=_("Missing Service Account Credentials")
-                )
-            service_account_info = json.loads(credentials_json)
-            creds = service_account.Credentials.from_service_account_info(
-                service_account_info,
-                scopes=['https://www.googleapis.com/auth/cloud-platform']
-            )
-            client = genai.Client(
-                vertexai=True,
-                project=PROJECT_ID,
-                location=LOC,
-                credentials=creds
-            )
+        config = frappe.get_single(CHANGAI_SETTINGS)
 
-        else:
-            try:
-                api_key = config.get("gemini_api_key")
-            except Exception:
-                api_key = None
-
-            if not api_key:
-                frappe.throw(
-    _(
-        "Gemini API key is not configured.<br><br>"
-        "You have two options to authenticate with Gemini:<br><br>"
-        "<b>Option 1 (Free / API Key):</b><br>"
-        "Go to <b>ChangAI Settings</b> and enter your <b>Gemini API Key</b>.<br>"
-        "Get your free API key from "
-        "<a href='https://aistudio.google.com/app/apikey' target='_blank'>Google AI Studio</a>.<br><br>"
-        "<b>Option 2 (Vertex AI / Service Account):</b><br>"
-        "Fill in <b>Gemini Project ID</b>, <b>Gemini Location</b>, "
-        "and <b>Service Account Credentials</b> in <b>ChangAI Settings</b>."
-    ),
-    title=_("Gemini Authentication Not Configured")
-)
-            client = genai.Client(api_key=api_key)
+        client = _build_gemini_client(config)
 
         gemini_config = types.GenerateContentConfig(
             system_instruction="You are an ERPNext assistant. Follow the task instructions exactly."
         )
-        contents = [
-            {
-                "role": "user",
-                "parts": [{"text": str(prompt)}]
-            }
-        ]
         response = client.models.generate_content(
             model=MODEL_ID,
             config=gemini_config,
-            contents=contents
+            contents=_build_gemini_contents(prompt),
         )
-        text = (response.text or "").strip()
-        if text.startswith("```"):
-            text = text.replace("```json", "").replace("```", "").strip()
-        return text
+        return _clean_gemini_response_text(response.text)
+
     except frappe.exceptions.ValidationError:
         raise
-    except google_exceptions.ResourceExhausted as e:
-        # 429 - quota/rate limit
-        frappe.throw(
-            _("Gemini API quota exceeded.<br><br>Please wait and try again or upgrade your plan."),
-            title=_("Gemini Quota Exceeded")
-        )
-    except google_exceptions.Unauthenticated as e:
-        # 401 - invalid api key
-        frappe.throw(
-            _("Gemini API key is invalid.<br><br>Please go to <b>ChangAI Settings</b> and enter a valid <b>Gemini API Key</b>."),
-            title=_("Invalid Gemini API Key")
-        )
-    except google_exceptions.PermissionDenied as e:
-        # 403
-        frappe.throw(
-            _("Gemini API permission denied.<br><br>Please check your API key permissions."),
-            title=_("Gemini Permission Denied")
-        )
-    except google_exceptions.InvalidArgument as e:
-        # 400 - bad request
-        frappe.throw(
-            _("Invalid request to Gemini API: {0}").format(str(e)),
-            title=_("Gemini Invalid Request")
-        )
     except Exception as e:
-        # catch all other unexpected errors
-        frappe.log_error(frappe.get_traceback(), "Gemini API Unexpected Error")
-        frappe.throw(
-            _("Gemini API error: {0}").format(str(e)),
-            title=_("Gemini API Error")
-        )
-        return {"error": str(e)}
+        _handle_gemini_api_exception(e)
+
+
 def _build_input_payload(task: str, prompt: str, question: Optional[str],
                           db_result_json: Optional[str], user_message: Optional[str]) -> Dict[str, Any]:
     if task == "format_db":
@@ -1267,22 +1309,6 @@ def execute_query(sql: str, doctypes: List[str]) -> Any:
 
 
 @frappe.whitelist(allow_guest=False)
-def send_support_message(message: str) -> Any:
-    config = ChangAIConfig.get()
-    url = config["support_api_url"]
-    res = requests.post(url, json={"message": message}, timeout=15)
-    return res.json()
-
-
-@frappe.whitelist(allow_guest=False)
-def get_ticket_details(tid: Union[int, str]) -> Any:
-    config = ChangAIConfig.get()
-    url = config["get_ticket_details_url"]
-    res = requests.post(url, json={"ticket_id": tid}, timeout=15)
-    return res.json()
-
-
-@frappe.whitelist(allow_guest=False)
 def support_bot(message: str) -> Dict[str, Any]:
     prompt = SUPPORT_PROMPT.format(user_message=message)
     raw = call_gemini(prompt)
@@ -1300,7 +1326,7 @@ def support_bot(message: str) -> Dict[str, Any]:
     # 2) route by task
     if task_flag == "CREATE_TICKET":
         try:
-            created = send_support_message(message)
+            created = create_helpdesk_ticket(message)
             return {"kind": "CREATE_TICKET", "data": created}
 
         except Exception as e:
@@ -1312,13 +1338,13 @@ def support_bot(message: str) -> Dict[str, Any]:
                 "error": "Ticket id missing. Please say like: ticket 29"
             }
         try:
-            details = get_ticket_details(ticket_id)
+            details = get_user_tickets(ticket_id)
             return {"kind": "TICKET_DETAILS", "data": details}
         except Exception as e:
             return {"Error":str(e)}
 
     if task_flag == "GET_USER_TICKETS":
-        tickets = get_ticket_details()
+        tickets = get_user_tickets()
         return {"kind": "GET_USER_TICKETS", "data": tickets}
 
     return {"kind": "UNKNOWN", "message": "Please describe the issue or provide a ticket number."}
@@ -1531,31 +1557,59 @@ def _process_entity(txt: str, md: Dict, acc: _SchemaAccumulator):
     acc.add_entity(ent_name, filt)
 
 
-def _process_doc(txt: str, md: Dict, acc: _SchemaAccumulator):
+def _get_table_name(txt: str, md: Dict) -> str:
+    return md.get("table") or _parse_tag(txt, "TABLE")
+
+
+def _get_field_name(txt: str, md: Dict) -> str:
+    return md.get("field") or _parse_tag(txt, "FIELD").split(" (", 1)[0]
+
+
+def _process_table_doc(txt: str, md: Dict, acc: _SchemaAccumulator) -> None:
+    acc.add_table(_get_table_name(txt, md))
+
+
+def _process_field_doc(txt: str, md: Dict, acc: _SchemaAccumulator) -> None:
+    acc.add_field(_get_table_name(txt, md), _get_field_name(txt, md))
+
+
+def _process_join_doc(txt: str, md: Dict, acc: _SchemaAccumulator) -> None:
+    acc.add_join(md.get("on") or _parse_tag(txt, "ON"))
+
+
+def _process_metric_doc(txt: str, md: Dict, acc: _SchemaAccumulator) -> None:
+    acc.add_metric(
+        md.get("name") or _parse_tag(txt, "METRIC"),
+        md.get("expression") or _parse_tag(txt, "EXPR"),
+        _get_table_name(txt, md),
+    )
+
+
+def _process_period_doc(txt: str, md: Dict, acc: _SchemaAccumulator) -> None:
+    acc.add_period(md.get("name") or _parse_tag(txt, "PERIOD"))
+
+
+def _process_currency_doc(txt: str, md: Dict, acc: _SchemaAccumulator) -> None:
+    acc.add_currency(md.get("code") or _parse_tag(txt, "CURRENCY"))
+
+
+_DOC_PROCESSORS = {
+    "table": _process_table_doc,
+    "field": _process_field_doc,
+    "join": _process_join_doc,
+    "metric": _process_metric_doc,
+    "period": _process_period_doc,
+    "currency": _process_currency_doc,
+    "enum": _process_enum,
+    "entity": _process_entity,
+}
+
+
+def _process_doc(txt: str, md: Dict, acc: _SchemaAccumulator) -> None:
     dtype = md.get("type") or _infer_type(txt)
-    if dtype == "table":
-        acc.add_table(md.get("table") or _parse_tag(txt, "TABLE"))
-    elif dtype == "field":
-        acc.add_field(
-            md.get("table") or _parse_tag(txt, "TABLE"),
-            md.get("field") or _parse_tag(txt, "FIELD").split(" (", 1)[0]
-        )
-    elif dtype == "join":
-        acc.add_join(md.get("on") or _parse_tag(txt, "ON"))
-    elif dtype == "metric":
-        acc.add_metric(
-            md.get("name") or _parse_tag(txt, "METRIC"),
-            md.get("expression") or _parse_tag(txt, "EXPR"),
-            md.get("table") or _parse_tag(txt, "TABLE")
-        )
-    elif dtype == "period":
-        acc.add_period(md.get("name") or _parse_tag(txt, "PERIOD"))
-    elif dtype == "currency":
-        acc.add_currency(md.get("code") or _parse_tag(txt, "CURRENCY"))
-    elif dtype == "enum":
-        _process_enum(txt, md, acc)
-    elif dtype == "entity":
-        _process_entity(txt, md, acc)
+    processor = _DOC_PROCESSORS.get(dtype)
+    if processor:
+        processor(txt, md, acc)
 
 
 def _append_table_lines(
