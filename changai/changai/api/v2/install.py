@@ -8,7 +8,7 @@ from huggingface_hub import snapshot_download
 def after_install():
     try:
         model_path = frappe.get_app_path("changai","changai","model")
-        _download_embedding_model(model_path)
+        _download_embedding_model()
         frappe.log_error("Model downloaded successfully after install", "ChangAI Model")
     except Exception:
         frappe.log_error(frappe.get_traceback(), "ChangAI: Embedding Model Auto-Download Failed")
