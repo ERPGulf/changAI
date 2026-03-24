@@ -98,6 +98,7 @@ CONVERSATION_TEMPLATE = read_asset("conversation_template_v2.j2", base="assets")
 SQL_PROMPT = read_asset("sql_prompt.txt", base="prompts")
 FORMAT_PROMPT = read_asset("user_friendly_prompt.txt", base="prompts")
 NON_ERP_PROMPT = read_asset("non_erp_prompt.txt", base="prompts")
+SUPPORT_PROMPT = read_asset("support.txt", base="prompts")
 
 FILTER_TABLES = read_asset("filter_tables.txt", base="prompts")
 filter_fields = read_asset("filter_fields.txt", base="prompts")
@@ -1283,20 +1284,24 @@ def get_ticket_details(tid: Union[int, str]) -> Any:
 
 @frappe.whitelist(allow_guest=False)
 def support_bot(message: str) -> Dict[str, Any]:
-    output = remote_llm_request_deploy_test(
-        task="helpdesk_task",
-        prompt="",
-        question=None,
-        db_result_json=None,
-        user_message=message
-    )
-
+    # output = remote_llm_request_deploy_test(
+    #     task="helpdesk_task",
+    #     prompt="",
+    #     question=None,
+    #     db_result_json=None,
+    #     user_message=message
+    # )
+    prompt = SUPPORT_PROMPT.format(user_message=message)
+    raw= call_gemini(SUPPORT_PROMPT)
+    output = json.loads(raw)
+    # return output.task_flag
     task_flag = (output.get("task_flag") or "UNKNOWN").strip()
     ticket_id = output.get("ticket_id")
 
     # normalize ticket_id
     if isinstance(ticket_id, str) and ticket_id.isdigit():
         ticket_id = int(ticket_id)
+        return ticket_id
     if not isinstance(ticket_id, int):
         ticket_id = None
 
