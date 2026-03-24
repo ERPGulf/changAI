@@ -1088,19 +1088,31 @@ def route_after_entities(state: SQLState) -> str:
 def route_guardrail(state: SQLState) -> str:
     return "ERP" if state.get("query_type") == "ERP" else "NON_ERP"
 
-
 def clean_sql(s: Any) -> str:
     if isinstance(s, dict):
         s = s.get("output") or s.get("sql") or s.get("text") or json.dumps(s, ensure_ascii=False, default=str)
     elif isinstance(s, list):
-        s = "\n".join([str(x) for x in s])
+        s = "\n".join(str(x) for x in s)
     else:
-        s = str(s) if s is not None else ""
+        s = "" if s is None else str(s)
 
     s = s.strip()
-    s = re.sub(r"^\s*```sql?\s*", "", s, flags=re.I | re.M)
-    s = re.sub(r"\s*`{3}\s*$", "", s)
-    s = re.sub(r"^\s*sql\s*\n", "", s, flags=re.I)
+
+    if s.startswith("```"):
+        first_newline = s.find("\n")
+        if first_newline != -1:
+            header = s[:first_newline].strip().lower()
+            if header in {"```", "```sql"}:
+                s = s[first_newline + 1 :].lstrip()
+
+    stripped = s.rstrip()
+    if stripped.endswith("```"):
+        stripped = stripped[:-3].rstrip()
+    s = stripped
+
+    if s[:3].lower() == "sql" and (len(s) == 3 or s[3].isspace()):
+        s = s[3:].lstrip()
+
     return s.strip()
 
 
