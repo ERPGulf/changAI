@@ -86,6 +86,8 @@ __vector_store = None
 _FULL_FIELDS_VS = None
 STATUS_200 = 200
 _SUB_VS_CACHE = {}
+APPLICATION_JSON = "application/json"
+EMBEDDING_ENGINE_NONE_MESSG = "Embedding engine is None. Model not loaded."
 MODEL_ID = "gemini-2.5-flash-lite"
 RETRY_LIMIT = 2
 BACKEND_SERVER_SETTINGS = "Backend Server Settings"
@@ -219,7 +221,7 @@ def generate_token_secure(api_key: str, api_secret: str, app_key: str):
                     {"message": "Security Parameters are not valid", "user_count": 0}
                 ),
                 status=401,
-                mimetype="application/json",
+                mimetype=APPLICATION_JSON,
             )
 
         doc = frappe.db.get_value(
@@ -237,7 +239,7 @@ def generate_token_secure(api_key: str, api_secret: str, app_key: str):
                     {"message": "Security Parameters are not valid", "user_count": 0}
                 ),
                 status=401,
-                mimetype="application/json",
+                mimetype=APPLICATION_JSON,
             )
         url = (
             frappe.local.conf.host_name
@@ -256,7 +258,7 @@ def generate_token_secure(api_key: str, api_secret: str, app_key: str):
             return Response(
                 json.dumps({"data": result_data}),
                 status=STATUS_200,
-                mimetype="application/json",
+                mimetype=APPLICATION_JSON,
             )
         else:
             frappe.local.response.http_status_code = 401
@@ -265,7 +267,7 @@ def generate_token_secure(api_key: str, api_secret: str, app_key: str):
         return Response(
             json.dumps({"message":str(e), "user_count": 0}),
             status=500,
-            mimetype="application/json",
+            mimetype=APPLICATION_JSON,
         )
 
 
@@ -284,7 +286,7 @@ def whoami() -> Dict[str, Any]:
         return Response(
             json.dumps({"data": response_content}),
             status=STATUS_200,
-            mimetype="application/json",
+            mimetype=APPLICATION_JSON,
         )
     except ValueError as ve:
         frappe.throw(ve)
@@ -318,7 +320,7 @@ def _post_json(url: str, headers: Dict[str, str], payload: Dict[str, Any], timeo
         res = requests.post(url, headers=headers, json=payload, timeout=timeout)
         ct = (res.headers.get("Content-Type") or "").lower()
         try:
-            body = res.json() if "application/json" in ct else {"raw_text": res.text}
+            body = res.json() if APPLICATION_JSON in ct else {"raw_text": res.text}
         except Exception:
             body = {"raw_text": res.text}
         if res.status_code not in (STATUS_200, 201, 202):
@@ -488,7 +490,7 @@ def remote_llm_request_deploy_test(
 ) -> Any:
     config = ChangAIConfig.get()
     headers = {
-        "Content-Type": "application/json",
+        "Content-Type": APPLICATION_JSON,
         "Prefer": "wait",
         "Authorization": f"Bearer {config['API_TOKEN']}",
     }
@@ -509,7 +511,7 @@ def remote_embedder_request(formatted_q: str) -> Union[List[Any], str]:
     config = ChangAIConfig.get()
     payload = {"version": config["EMBED_VERSION_ID"], "input": {"user_input": formatted_q}}
     headers = {
-        "Content-Type": "application/json",
+        "Content-Type": APPLICATION_JSON,
         "Prefer": "wait",
         "Authorization": f"Bearer {config['API_TOKEN']}",
     }
@@ -646,7 +648,7 @@ def get_table_vs():
     if _VS_TABLE is None:
         emb = get_embedding_engine()
         if emb is None:
-            frappe.throw(_("Embedding engine is None. Model not loaded."))
+            frappe.throw(_(EMBEDDING_ENGINE_NONE_MESSG))
 
         # get app root dynamically
         app_path = frappe.get_app_path("changai")
@@ -736,7 +738,7 @@ def get_full_fields_vs():
     if _FULL_FIELDS_VS is None:
         emb = get_embedding_engine()
         if emb is None:
-            frappe.throw(_("Embedding engine is None. Model not loaded."))
+            frappe.throw(_(EMBEDDING_ENGINE_NONE_MESSG))
         app_root = frappe.get_app_path("changai")
         full_fields_vs_path = os.path.join(
             app_root,
@@ -918,7 +920,7 @@ def remote_entity_embedder(q: str) -> Union[list, str]:
     config = ChangAIConfig.get()
     payload = {"version": config["entity_retriever"], "input": {"query": q}}
     headers = {
-        "Content-Type": "application/json",
+        "Content-Type": APPLICATION_JSON,
         "Prefer": "wait",
         "Authorization": f"Bearer {config['API_TOKEN']}",
     }
@@ -932,7 +934,7 @@ def get_master_vs():
     if _VS_MASTER is None:
         emb = get_embedding_engine()
         if emb is None:
-            frappe.throw(_("Embedding engine is None. Model not loaded."))
+            frappe.throw(_(EMBEDDING_ENGINE_NONE_MESSG))
         app_path = frappe.get_app_path("changai")
         master_vs_path = os.path.join(app_path, "changai", "api", "v2", "fvs_stores", "erpnext", "masterdata_fvs")
         if not os.path.exists(master_vs_path):
