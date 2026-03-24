@@ -3,6 +3,7 @@ function safeStringify(value) {
   try {
     return JSON.stringify(value, null, 2);
   } catch (e) {
+    console.warn("safeStringify failed:", e);
     return String(value);
   }
 }
@@ -139,7 +140,7 @@ function initChangAIChatbot() {
         if (msg.role === "model") {
           div.innerHTML = `${BOT_SVG}<p class="message-text">${msg.text}</p>`;  // ← no escape
         } else {
-          div.innerHTML = `<p class="message-text">${escapeHTML(msg.text)}</p>`; // ← escape only user
+          div.innerHTML = `<p class="message-text">${safeText}</p>`; // ← escape only user
         }
         container.appendChild(div);
       });

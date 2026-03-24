@@ -13,13 +13,25 @@
     justify-content: center;
     transition: all .2s ease;
     z-index: 9999;
-    color:#fff;
+    color: #fff;
     line-height: 0;
 }
-#chatbot-toggler .icon-close { display:none; }
-#chatbot-toggler .icon-chat { display:block; }
-#chatbot-toggler.show .icon-chat { display:none; }
-#chatbot-toggler.show .icon-close { display:block; }
+
+#chatbot-toggler .icon-close {
+    display: none;
+}
+
+#chatbot-toggler .icon-chat {
+    display: block;
+}
+
+#chatbot-toggler.show .icon-chat {
+    display: none;
+}
+
+#chatbot-toggler.show .icon-close {
+    display: block;
+}
 
 #chatbot-toggler.show {
     transform: rotate(90deg);
@@ -81,33 +93,33 @@
 }
 
 .chat-form #chatbot-send-btn {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border: none;
-  border-radius: 50%;
-  background: #6d4fc2;
-  cursor: pointer;
-  color: #fff;
-  line-height: 0;
-  flex-shrink: 0;
-  transition: 0.2s ease;
-  font-size: 0.9rem;
-  outline: none;
-  margin-right: 6px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 50%;
+    background: #6d4fc2;
+    cursor: pointer;
+    color: #fff;
+    line-height: 0;
+    flex-shrink: 0;
+    transition: 0.2s ease;
+    font-size: 0.9rem;
+    outline: none;
+    margin-right: 6px;
 }
 
 #chatbot-send-btn:hover {
-  background: #747bff;
+    background: #747bff;
 }
 
 #chatbot-send-btn svg {
-  display: block;
-  width: 15px;
-  height: 15px;
-  fill: currentColor;
+    display: block;
+    width: 15px;
+    height: 15px;
+    fill: currentColor;
 }
 
 
@@ -130,22 +142,23 @@
 }
 
 #chatbot-arrowdown-btn {
-  display: flex;
-  font-size: 1.2rem;
-  align-items: center;
-  justify-content: center;
-  margin-right: -10px;
-  width: 30px;
-  height: 30px;
-  border: none;
-  border-radius: 50%;
-  background: none;
-  color: #fff;
-  cursor: pointer;
-  line-height: 0; 
-  flex-shrink:0;     /* keeps SVG perfectly centered */
-  outline: none;
-  transition: 0.2s ease;
+    display: flex;
+    font-size: 1.2rem;
+    align-items: center;
+    justify-content: center;
+    margin-right: -10px;
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 50%;
+    background: none;
+    color: #fff;
+    cursor: pointer;
+    line-height: 0;
+    flex-shrink: 0;
+    /* keeps SVG perfectly centered */
+    outline: none;
+    transition: 0.2s ease;
 }
 
 #chatbot-arrowdown-btn:hover {
@@ -232,13 +245,14 @@
 .chat-body .messageCon .message-text {
     padding: 12px 16px;
     max-width: 75%;
-    background: #b39ddb;;
+    background: #b39ddb;
     color: black;
     word-wrap: break-word;
     white-space: pre-line;
     font-size: 0.75rem;
     line-height: 1.4;
 }
+
 .more-btn {
     float: right;
     margin-top: 6px;
@@ -252,8 +266,10 @@
 
 #full-modal {
     position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -263,8 +279,9 @@
 
 .full-modal-backdrop {
     position: absolute;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.4);
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
 }
 
 .full-modal-content {
@@ -280,7 +297,8 @@
 
 #full-modal-close {
     position: absolute;
-    top: 10px; right: 10px;
+    top: 10px;
+    right: 10px;
     background: none;
     border: none;
     font-size: 18px;
@@ -289,14 +307,15 @@
 
 
 .chat-body .bot-message {
-    align-items: flex-start;   /* override center for bot rows */
+    align-items: flex-start;
+    /* override center for bot rows */
 }
 
 .chat-body .bot-message .message-text {
     border-radius: 10px 10px 10px 3px;
     background: #f6f2ff;
     margin: 0;
-    
+
 }
 
 .chat-body .user-message .message-text {
@@ -342,64 +361,65 @@
     width: 100%;
 }
 
-.chat-form .message-input:valid ~ #chatbot-send-btn {
+.chat-form .message-input:valid~#chatbot-send-btn {
     display: flex;
 }
 
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 @media(max-width:380px) {
-  #chatbot-toggler {
-    right: 20px;
-    bottom: 20px;
-  }
-
-   .chatbot-popup {
-    width: 100vw !important;
-    height: 100vh !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    top: 0 !important;
-    left: 0 !important;
-    border-radius: 0 !important;
-    position: fixed !important;
-    max-width: 100vw !important;
-    max-height: 100vh !important;
-    min-width: 100vw !important;
-    min-height: 100vh !important;
-    display: flex !important;
-    flex-direction: column;
-    z-index: 9999;
-  }
-
-  .chatbot-popup.chat-header {
-    padding: 12px 15px;
-  }
-    
-   #chatbot-arrowdown-btn {
-        margin-right:2px;
+    #chatbot-toggler {
+        right: 20px;
+        bottom: 20px;
     }
 
-   .chat-body {
-    flex: 1;
-    overflow-y: auto;
-    padding: 25px 25px 15px 20px;
-  }
+    .chatbot-popup {
+        width: 100vw !important;
+        height: 100vh !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        top: 0 !important;
+        left: 0 !important;
+        border-radius: 0 !important;
+        position: fixed !important;
+        max-width: 100vw !important;
+        max-height: 100vh !important;
+        min-width: 100vw !important;
+        min-height: 100vh !important;
+        display: flex !important;
+        flex-direction: column;
+        z-index: 9999;
+    }
 
-  .chat-footer {
-    position: relative;
-    width: 100%;
-    padding: 15px 25px 20px 20px !important;
-    background: #fff;
-  }
+    .chatbot-popup.chat-header {
+        padding: 12px 15px;
+    }
+
+    #chatbot-arrowdown-btn {
+        margin-right: 2px;
+    }
+
+    .chat-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 25px 25px 15px 20px;
+    }
+
+    .chat-footer {
+        position: relative;
+        width: 100%;
+        padding: 15px 25px 20px 20px !important;
+        background: #fff;
+    }
 }
 
 .message-text-container {
-  display: flex;
-  flex-direction: column;
-  max-width: 75%;
+    display: flex;
+    flex-direction: column;
+    max-width: 75%;
 }
