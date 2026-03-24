@@ -670,7 +670,7 @@ def _process_pending_field_batches(
                 updated_fields += 1
                 updated_in_table += 1
 
-        frappe.db.commit()  # nosemgrep: periodic commit to persist progress during long-running schema sync
+        frappe.db.commit()  # nosemgrep: required to persist progress in long-running background job (schema sync may run for hours)
 
     return {
         "updated_in_table": updated_in_table,
