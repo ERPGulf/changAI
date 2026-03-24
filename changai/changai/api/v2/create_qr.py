@@ -13,7 +13,7 @@ import io
 import os
 
 
-def create_qr_code(doc,method):
+def create_qr_code(doc):
     """Create QR Code after inserting Employee"""
     if not hasattr(doc, 'custom_qr_code'):
     	return
@@ -44,10 +44,6 @@ def create_qr_code(doc,method):
                 frappe.throw(_('First name missing for {} in the document').format(doc.name))
 
             last_name = doc.last_name if doc.last_name else ""
-
-            # if not doc.custom_photo_:
-            # 	frappe.throw(_('Photo missing for {} in the document'.format(doc.name)))
-
             if not doc.custom_restrict_location and doc.custom_restrict_location != 0:
                 frappe.throw(_("Restrict Location missing for {0} in the document").format(doc.name))
 

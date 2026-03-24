@@ -129,100 +129,147 @@ def build_table_docs(table_list: List[str]) -> List[Document]:
         ))
     return docs
 
+def _is_valid_schema_table(table_block: Any) -> bool:
+    return isinstance(table_block, dict) and "table" in table_block
+
+
+def _build_field_metadata(table_name: str, field_name: str, module: str, join_hint: str, options: Any) -> Dict[str, Any]:
+    metadata = {
+        "type": "field",
+        "table": table_name,
+        "field": field_name,
+        "module": module,
+    }
+    if options:
+        metadata["options"] = options
+    if join_hint:
+        metadata["join_hint"] = join_hint
+    return metadata
+
+
+def _build_field_page_content(table_name: str, field_name: str, field_desc: str, join_hint: str, options: Any) -> str:
+    page_content = f"[FIELD] {field_name} | [TABLE] {table_name}\n{field_desc}"
+    if join_hint:
+        page_content += f"\n{join_hint}"
+    if options:
+        page_content += f"\n{options}"
+    return page_content
+
+
+def _build_field_document(table_name: str, module: str, field_row: Dict[str, Any]) -> Optional[Document]:
+    if not isinstance(field_row, dict):
+        return None
+
+    field_name = field_row.get("name")
+    if not field_name:
+        return None
+
+    field_desc = field_row.get("description", "") or ""
+    join_hint = field_row.get("join_hint") or ""
+    options = field_row.get("options") or ""
+
+    return Document(
+        page_content=_build_field_page_content(
+            table_name=table_name,
+            field_name=field_name,
+            field_desc=field_desc,
+            join_hint=join_hint,
+            options=options,
+        ),
+        metadata=_build_field_metadata(
+            table_name=table_name,
+            field_name=field_name,
+            module=module,
+            join_hint=join_hint,
+            options=options,
+        ),
+    )
+
 
 def build_schema_docs(schema: Dict[str, Any]) -> List[Document]:
     """
     Build field-level Documents from schema.yaml.
     One Document per field — same method as the notebook.
     """
-    docs = []
-    for t in schema.get("tables", []):
-        if not isinstance(t, dict) or "table" not in t:
+    docs: List[Document] = []
+    tables = schema.get("tables", [])
+
+    if not isinstance(tables, list):
+        return docs
+
+    for table_block in tables:
+        if not _is_valid_schema_table(table_block):
             continue
 
-        table_name = t.get("table")
-        module     = t.get("module", "")
-        fields     = t.get("fields") or []
+        table_name = table_block.get("table")
+        module = table_block.get("module", "")
+        fields = table_block.get("fields") or []
 
-        for f in fields:
-            field_name = f.get("name")
-            field_desc = f.get("description", "") or ""
-            join_hint  = f.get("join_hint") or ""
-            options    = f.get("options") or ""
+        if not isinstance(fields, list):
+            continue
 
-            if not field_name:
-                continue
-
-            metadata = {
-                "type": "field",
-                "table": table_name,
-                "field": field_name,
-                "module": module,
-            }
-            if options:
-                metadata["options"] = options
-            if join_hint:
-                metadata["join_hint"] = join_hint
-
-            page_content = (
-                f"[FIELD] {field_name} | [TABLE] {table_name}\n{field_desc}"
-            )
-            if join_hint:
-                page_content += f"\n{join_hint}"
-            if options:
-                page_content += f"\n{options}"
-
-            docs.append(Document(
-                page_content=page_content,
-                metadata=metadata,
-            ))
+        for field_row in fields:
+            doc = _build_field_document(table_name, module, field_row)
+            if doc:
+                docs.append(doc)
 
     return docs
 
 
-def build_entity_docs(master_data: List[Dict[str, Any]]) -> List[Document]:
+def _build_entity_text(md: Dict[str, Any]) -> str:
+    text = (md.get("embedding_text") or "").strip()
+    if text:
+        return text
+
+    entity_type = (md.get("entity_type") or "entity").strip()
+    canonical = (md.get("canonical_name") or md.get("entity_id") or "").strip()
+    aliases = md.get("aliases") or []
+    misspellings = md.get("misspellings") or []
+
+    parts = []
+
+    if canonical:
+        parts.append(f"{entity_type.title()}: {canonical}")
+    if aliases:
+        parts.append(f"Also known as {', '.join(aliases)}")
+    if misspellings:
+        parts.append(f"Common misspellings: {', '.join(misspellings)}")
+
+    return ". ".join(parts)
+
+
+def _build_entity_metadata(md: Dict[str, Any]) -> Dict[str, Any]:
+    return {
+        "type": "entity",
+        "entity_type": md.get("entity_type"),
+        "entity_id": md.get("entity_id"),
+        "canonical_name": md.get("canonical_name"),
+        "aliases": md.get("aliases", []),
+        "description": md.get("description", ""),
+    }
+
+
+def build_entity_docs(master_data: Dict[str, Any]) -> List[Document]:
     """
     Build entity Documents from master_data.yaml.
     Uses embedding_text if present, else builds from canonical_name + aliases.
     """
     docs = []
+
     for md in master_data.get("data", []):
         if not isinstance(md, dict):
             continue
 
-        # Use embedding_text if provided
-        text = (md.get("embedding_text") or "").strip()
-
-        if not text:
-            entity_type  = (md.get("entity_type") or "entity").strip()
-            canonical    = (md.get("canonical_name") or md.get("entity_id") or "").strip()
-            aliases      = md.get("aliases") or []
-            misspellings = md.get("misspellings") or []
-
-            parts = []
-            if canonical:
-                parts.append(f"{entity_type.title()}: {canonical}")
-            if aliases:
-                parts.append(f"Also known as {', '.join(aliases)}")
-            if misspellings:
-                parts.append(f"Common misspellings: {', '.join(misspellings)}")
-
-            text = ". ".join(parts)
-
+        text = _build_entity_text(md)
         if not text:
             continue
 
-        docs.append(Document(
-            page_content=f"search_document: {text}",
-            metadata={
-                "type": "entity",
-                "entity_type": md.get("entity_type"),
-                "entity_id": md.get("entity_id"),
-                "canonical_name": md.get("canonical_name"),
-                "aliases": md.get("aliases", []),
-                "description": md.get("description", ""),
-            }
-        ))
+        docs.append(
+            Document(
+                page_content=f"search_document: {text}",
+                metadata=_build_entity_metadata(md),
+            )
+        )
 
     return docs
 

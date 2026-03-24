@@ -1,11 +1,12 @@
 import json
 import frappe
 from typing import Any
+CHANGAI_CHAT_HIST_DOC = "ChangAI Chat History"
  
 def save_message_doc(session_id:str,message_type:str,content:str):
 
     doc=frappe.get_doc({
-        "doctype":"ChangAI Chat History",
+        "doctype":CHANGAI_CHAT_HIST_DOC,
         "session_id": session_id,
         "message_type": message_type,
         "content": content or ""
@@ -17,11 +18,11 @@ def save_message_doc(session_id:str,message_type:str,content:str):
 @frappe.whitelist(allow_guest=False)
 def save_turn_2(session_id: str, user_text: str=None, bot_text: Any = None):
     # find existing document
-    doc_name = frappe.db.exists("ChangAI Chat History", {"session_id": session_id})
+    doc_name = frappe.db.exists(CHANGAI_CHAT_HIST_DOC, {"session_id": session_id})
 
     history = []
     if doc_name:
-        raw = frappe.db.get_value("ChangAI Chat History", doc_name, "content")
+        raw = frappe.db.get_value(CHANGAI_CHAT_HIST_DOC, doc_name, "content")
         if raw:
             try:
                 history = json.loads(raw)
@@ -36,7 +37,7 @@ def save_turn_2(session_id: str, user_text: str=None, bot_text: Any = None):
 
     if doc_name:
         frappe.db.set_value(
-            "ChangAI Chat History",
+            CHANGAI_CHAT_HIST_DOC,
             doc_name,
             "content",
             new_content,
@@ -46,7 +47,7 @@ def save_turn_2(session_id: str, user_text: str=None, bot_text: Any = None):
 
     else:
         doc = frappe.get_doc({
-            "doctype": "ChangAI Chat History",
+            "doctype": CHANGAI_CHAT_HIST_DOC,
             "session_id": session_id,
             "content": new_content
         })
@@ -56,12 +57,12 @@ def save_turn_2(session_id: str, user_text: str=None, bot_text: Any = None):
 
 @frappe.whitelist(allow_guest=False)
 def get_chat_history(session_id: str) -> list:
-    doc_name = frappe.db.exists("ChangAI Chat History", {"session_id": session_id})
+    doc_name = frappe.db.exists(CHANGAI_CHAT_HIST_DOC, {"session_id": session_id})
     if not doc_name:
         return []
 
     raw = frappe.db.get_value(
-        "ChangAI Chat History",
+        CHANGAI_CHAT_HIST_DOC,
         doc_name,
         "content"
     )
@@ -135,8 +136,8 @@ def normalize(value):
     if isinstance(value, str):
         try:
             value = json.loads(value)
-        except:
-            pass
+        except Exception:
+            return value
     if isinstance(value, (list, dict)):
-        value = json.dumps(value)
+        return json.dumps(value)
     return value

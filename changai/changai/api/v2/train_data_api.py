@@ -25,6 +25,7 @@ TABLE_TAG = "[TABLE]"
 FIELD_TAG = "[FIELD]"
 LINK_TAG = "[LINK]"
 CHANGAI_SETTINGS = "ChangAI Settings"
+VALID_OUTPUT_MESSAGE = "You must output ONLY a valid JSON array."
 
 SYSTEM_FIELDS = {
     "name", "owner", "creation", "modified", "modified_by",
@@ -199,7 +200,7 @@ def _validate_field(doctype: str, fieldname: str) -> bool:
 
 
 def _parse_table_tag(positive: str):
-    match = re.match(r"\[TABLE\]\s+([^\]>]+?)(?:\s*\||\s*$)", positive)
+    match = re.match(r"\[TABLE\]\s+([^\]>]+)(?:\s*\||\s*$)", positive)
     if not match:
         return False, "Could not parse [TABLE] format"
     table = match.group(1).strip()
@@ -210,7 +211,7 @@ def _parse_table_tag(positive: str):
 
 
 def _parse_field_tag(positive: str):
-    match = re.match(r"\[FIELD\]\s+(\w+)\s+\|\s+\[TABLE\]\s+([^\]>]+?)(?:\s*\||\s*$)", positive)
+    match = re.match(r"\[FIELD\]\s+(\w+)\s+\|\s+\[TABLE\]\s+([^\]>]+)(?:\s*\||\s*$)", positive)
     if not match:
         return False, "Could not parse [FIELD] format"
     field = match.group(1).strip()
@@ -224,12 +225,12 @@ def _parse_field_tag(positive: str):
 
 
 def _parse_link_tag(positive: str):
-    match = re.match(r"\[LINK\]\s+([^\]>]+?)\s+-->\s+([^\]>]+?)\s+ON\s+(\w+)(?:\s*\||\s*$)", positive)
+    match = re.match(r"\[LINK\]\s+([^\]>]+)\s+-->\s+([^\]>]+)\s+ON\s+(\w+)(?:\s*\||\s*$)", positive)
     if not match:
         return False, "Could not parse [LINK] format"
     table_a = match.group(1).strip()
     table_b = match.group(2).strip()
-    field   = match.group(3).strip()
+    field = match.group(3).strip()
     doctype_a = table_a[3:] if table_a.startswith("tab") else table_a
     doctype_b = table_b[3:] if table_b.startswith("tab") else table_b
     if not _validate_table(doctype_a):
@@ -298,51 +299,62 @@ def _assign_qids(validated_records: List[dict], module_name: str, existing_count
         })
     return final_records
 
+def _build_claude_messages(module_name, module_description) -> List[dict]:
+    return [
+        {
+            "role": "user",
+            "content": _val_prompt(module_name, module_description, BATCH_SIZE),
+        }
+    ]
 
-def _generate_batch_claude(client, module_name, seen_anchors, module_description, total_count, wrong_examples=None) -> List[dict]:
+
+def _call_claude_batch_once(client, messages: List[dict]) -> str:
+    try:
+        resp = client.messages.create(
+            model="claude-sonnet-4-6",
+            max_tokens=4096,
+            temperature=1.0,
+            system=(
+                VALID_OUTPUT_MESSAGE
+                "Start with '[' and end with ']'. "
+                "No markdown. No code fences. No explanation."
+            ),
+            messages=messages,
+        )
+        return (resp.content[0].text or "").strip()
+
+    except anthropic.RateLimitError as e:
+        frappe.log_error(str(e), "Claude Rate Limit (429) - sleeping 10s")
+        time.sleep(10)
+        raise
+
+    except anthropic.AuthenticationError as e:
+        frappe.log_error(str(e), "Claude Authentication Error")
+        raise
+
+    except anthropic.APIConnectionError as e:
+        frappe.log_error(str(e), "Claude Connection Error")
+        raise
+
+    except anthropic.APIStatusError as e:
+        frappe.log_error(
+            f"Status {e.status_code}: {str(e)}",
+            "Claude API Status Error",
+        )
+        raise
+
+    except Exception as e:
+        frappe.log_error(str(e), "Claude Unexpected Error")
+        raise
+
+
+def _call_claude_batch_with_retry(client, module_name, module_description) -> str:
     raw = None
+    messages = _build_claude_messages(module_name, module_description)
+
     for attempt in range(MAX_RETRIES):
         try:
-            try:
-                resp = client.messages.create(
-                    model="claude-sonnet-4-6",
-                    max_tokens=4096,
-                    temperature=1.0,
-                    system=(
-                        "You must output ONLY a valid JSON array. "
-                        "Start with '[' and end with ']'. "
-                        "No markdown. No code fences. No explanation."
-                    ),
-                    messages=[
-                        {"role": "user", "content": _val_prompt(module_name, module_description, BATCH_SIZE)}
-                    ]
-                )
-                raw = (resp.content[0].text or "").strip()
-
-            except anthropic.RateLimitError as e:
-                # 429 - rate limit
-                frappe.log_error(str(e), "Claude Rate Limit (429) - sleeping 10s")
-                time.sleep(10)
-                raise
-
-            except anthropic.AuthenticationError as e:
-                # 401 - invalid api key, no point retrying
-                frappe.log_error(str(e), "Claude Authentication Error")
-                return []
-
-            except anthropic.APIConnectionError as e:
-                # network issue, worth retrying
-                frappe.log_error(str(e), "Claude Connection Error")
-                raise
-
-            except anthropic.APIStatusError as e:
-                # catches all other HTTP errors (500, 503 etc)
-                frappe.log_error(f"Status {e.status_code}: {str(e)}", "Claude API Status Error")
-                raise
-
-            except Exception as e:
-                frappe.log_error(str(e), "Claude Unexpected Error")
-                raise
+            raw = _call_claude_batch_once(client, messages)
 
             if REQUEST_DELAY:
                 time.sleep(REQUEST_DELAY)
@@ -350,90 +362,146 @@ def _generate_batch_claude(client, module_name, seen_anchors, module_description
             break
 
         except anthropic.AuthenticationError:
-            # no point retrying auth errors
-            return []
+            return ""
+
         except Exception as e:
             frappe.log_error(str(e)[:100], "Claude call failed (retrying)")
             _sleep_backoff(attempt)
 
-    if not raw:
-        return []
+    return raw or ""
 
+
+def _strip_code_fence(raw: str) -> str:
     if raw.startswith("```"):
         raw = raw.split("```", 1)[1]
         raw = raw.rsplit("```", 1)[0].strip()
+    return raw
+
+
+def _parse_json_array(raw: str, provider_name: str) -> List[dict]:
+    if not raw:
+        return []
+
+    cleaned = _strip_code_fence(raw)
 
     try:
-        arr = json.loads(raw)
+        arr = json.loads(cleaned)
     except Exception:
+        frappe.log_error(cleaned[:100], f"{provider_name} output not valid JSON array")
         return []
 
     if not isinstance(arr, list):
-        frappe.log_error(raw[:100], "Claude output not a list")
+        frappe.log_error(cleaned[:100], f"{provider_name} output not a list")
         return []
 
+    return arr
+
+
+def _extract_unique_records(arr: List[dict], seen_anchors) -> List[dict]:
     records = []
+
     for obj in arr:
         if not isinstance(obj, dict):
             continue
+
         anchor = (obj.get("anchor") or "").strip()
         positives = obj.get("positives")
+
         if not anchor or not isinstance(positives, list) or not positives:
             continue
+
         if anchor in seen_anchors:
             continue
+
         seen_anchors.add(anchor)
         records.append({"anchor": anchor, "positives": positives})
 
     return records
 
 
-def _generate_batch(client, module_name, seen_anchors, module_description, total_count, wrong_examples=None) -> List[dict]:
+def _generate_batch_claude(
+    client,
+    module_name,
+    seen_anchors,
+    module_description,
+    total_count,
+    wrong_examples=None,
+) -> List[dict]:
+    raw = _call_claude_batch_with_retry(
+        client=client,
+        module_name=module_name,
+        module_description=module_description,
+    )
+
+    if not raw:
+        return []
+
+    arr = _parse_json_array(raw, "Claude")
+    return _extract_unique_records(arr, seen_anchors)
+
+def _build_openai_messages(module_name, module_description, wrong_examples=None) -> List[dict]:
+    return [
+        {
+            "role": "system",
+            "content": (
+                VALID_OUTPUT_MESSAGE
+                "Start with '[' and end with ']'. "
+                "No markdown. No code fences. No explanation."
+            ),
+        },
+        {
+            "role": "user",
+            "content": _training_prompt(
+                module_name,
+                module_description,
+                BATCH_SIZE,
+                wrong_examples,
+            ),
+        },
+    ]
+
+
+def _call_openai_batch_once(client, messages: List[dict]) -> str:
+    try:
+        resp = client.chat.completions.create(
+            model="gpt-4o",
+            temperature=1.0,
+            messages=messages,
+        )
+        return (resp.choices[0].message.content or "").strip()
+
+    except openai.RateLimitError as e:
+        frappe.log_error(str(e), "OpenAI Rate Limit (429) - sleeping 10s")
+        time.sleep(10)
+        raise
+
+    except openai.AuthenticationError as e:
+        frappe.log_error(str(e), "OpenAI Authentication Error")
+        raise
+
+    except openai.APIConnectionError as e:
+        frappe.log_error(str(e), "OpenAI Connection Error")
+        raise
+
+    except openai.APIStatusError as e:
+        frappe.log_error(
+            f"Status {e.status_code}: {str(e)}",
+            "OpenAI API Status Error",
+        )
+        raise
+
+    except Exception as e:
+        frappe.log_error(str(e), "OpenAI Unexpected Error")
+        raise
+
+
+def _call_openai_batch_with_retry(client, module_name, module_description, wrong_examples=None) -> str:
     raw = None
+    messages = _build_openai_messages(module_name, module_description, wrong_examples)
+
     for attempt in range(MAX_RETRIES):
         try:
-            try:
-                resp = client.chat.completions.create(
-                    model="gpt-4o",
-                    temperature=1.0,
-                    messages=[
-                        {
-                            "role": "system",
-                            "content": (
-                                "You must output ONLY a valid JSON array. "
-                                "Start with '[' and end with ']'. "
-                                "No markdown. No code fences. No explanation."
-                            )
-                        },
-                        {"role": "user", "content": _training_prompt(module_name, module_description, BATCH_SIZE, wrong_examples)}
-                    ]
-                )
-                raw = (resp.choices[0].message.content or "").strip()
-
-            except openai.RateLimitError as e:
-                # 429 - rate limit
-                frappe.log_error(str(e), "OpenAI Rate Limit (429) - sleeping 10s")
-                time.sleep(10)
-                raise
-
-            except openai.AuthenticationError as e:
-                # 401 - invalid api key, no point retrying
-                frappe.log_error(str(e), "OpenAI Authentication Error")
-                return []
-
-            except openai.APIConnectionError as e:
-                # network issue, worth retrying
-                frappe.log_error(str(e), "OpenAI Connection Error")
-                raise
-
-            except openai.APIStatusError as e:
-                # all other HTTP errors (500, 503 etc)
-                frappe.log_error(f"Status {e.status_code}: {str(e)}", "OpenAI API Status Error")
-                raise
-
-            except Exception as e:
-                frappe.log_error(str(e), "OpenAI Unexpected Error")
-                raise
+            raw = _call_openai_batch_once(client, messages)
 
             if REQUEST_DELAY:
                 time.sleep(REQUEST_DELAY)
@@ -441,44 +509,84 @@ def _generate_batch(client, module_name, seen_anchors, module_description, total
             break
 
         except openai.AuthenticationError:
-            # no point retrying auth errors
-            return []
+            return ""
+
         except Exception as e:
             frappe.log_error(str(e)[:300], "OpenAI call failed (retrying)")
             _sleep_backoff(attempt)
+
+    return raw or ""
+
+
+def _strip_code_fence(raw: str) -> str:
+    if raw.startswith("```"):
+        raw = raw.split("```", 1)[1]
+        raw = raw.rsplit("```", 1)[0].strip()
+    return raw
+
+
+def _parse_openai_json_array(raw: str) -> List[dict]:
+    if not raw:
+        return []
+
+    cleaned = _strip_code_fence(raw)
+
+    try:
+        arr = json.loads(cleaned)
+    except Exception:
+        frappe.log_error(cleaned[:100], "OpenAI output not valid JSON array")
+        return []
+
+    if not isinstance(arr, list):
+        frappe.log_error(cleaned[:100], "OpenAI output not a list")
+        return []
+
+    return arr
+
+
+def _extract_unique_training_records(arr: List[dict], seen_anchors) -> List[dict]:
+    records = []
+
+    for obj in arr:
+        if not isinstance(obj, dict):
+            continue
+
+        anchor = (obj.get("anchor") or "").strip()
+        positives = obj.get("positives")
+
+        if not anchor or not isinstance(positives, list) or not positives:
+            continue
+
+        if anchor in seen_anchors:
+            continue
+
+        seen_anchors.add(anchor)
+        records.append({"anchor": anchor, "positives": positives})
+
+    return records
+
+
+def _generate_batch(
+    client,
+    module_name,
+    seen_anchors,
+    module_description,
+    total_count,
+    wrong_examples=None,
+) -> List[dict]:
+    raw = _call_openai_batch_with_retry(
+        client=client,
+        module_name=module_name,
+        module_description=module_description,
+        wrong_examples=wrong_examples,
+    )
 
     if not raw:
         frappe.log_error("All retries failed", "OpenAI generate_batch failed")
         return []
 
-    if raw.startswith("```"):
-        raw = raw.split("```", 1)[1]
-        raw = raw.rsplit("```", 1)[0].strip()
-
-    try:
-        arr = json.loads(raw)
-    except Exception:
-        frappe.log_error(raw[:100], "OpenAI output not valid JSON array")
-        return []
-
-    if not isinstance(arr, list):
-        frappe.log_error(raw[:100], "OpenAI output not a list")
-        return []
-
-    records = []
-    for obj in arr:
-        if not isinstance(obj, dict):
-            continue
-        anchor = (obj.get("anchor") or "").strip()
-        positives = obj.get("positives")
-        if not anchor or not isinstance(positives, list) or not positives:
-            continue
-        if anchor in seen_anchors:
-            continue
-        seen_anchors.add(anchor)
-        records.append({"anchor": anchor, "positives": positives})
-
-    return records
+    arr = _parse_openai_json_array(raw)
+    return _extract_unique_training_records(arr, seen_anchors)
 
 def _get_gemini_client():
     settings = frappe.get_single(CHANGAI_SETTINGS)
@@ -507,7 +615,7 @@ def _get_gemini_client():
         credentials=creds,
     )
 
-def _val_prompt(module_name, description, BATCH_SIZE):
+def _val_prompt(module_name, description, batch_size):
     return f"""
 You are generating ERPNext schema-retrieval training data.
 This is for production testing of a trained retrieval model, so focus on variety and real-world business questions.
@@ -532,7 +640,7 @@ ANCHOR RULES:
   }}
 ]
 REQUIREMENTS:
-- Generate EXACTLY {BATCH_SIZE} UNIQUE objects
+- Generate EXACTLY {batch_size} UNIQUE objects
 - NEVER include Doctype names in questions
 - Casual business language
 - Grammar mistakes allowed
@@ -572,87 +680,153 @@ def testing_file(module_name):
         })
     return results
 
+def _get_generation_backend(use_claude: bool, use_gemini: bool):
+    if use_claude:
+        return _get_claude_client(), _generate_batch_claude
+    if use_gemini:
+        return _get_gemini_client(), _generate_batch_gemini
+    return _get_openai_client(), _generate_batch
+
+
+def _normalize_modules(modules):
+    if isinstance(modules, str):
+        return json.loads(modules)
+    return modules or []
+
+
+def _load_wrong_examples(module_name: str) -> List[dict]:
+    wrong_file_name = f"{module_name.lower().replace(' ', '_')}.json"
+    file_id = frappe.db.get_value(
+        "File",
+        {"file_name": wrong_file_name, "folder": "Home/Test Results"},
+        "name",
+    )
+
+    if not file_id:
+        return []
+
+    wrong_file_doc = frappe.get_doc("File", file_id)
+    raw_content = wrong_file_doc.get_content()
+    wrong_examples = json.loads(raw_content) if raw_content else []
+
+    return wrong_examples if isinstance(wrong_examples, list) else []
+
+
+def _generate_and_store_module_records(
+    client,
+    generate_fn,
+    module_name: str,
+    module_description: str,
+    total_count: int,
+    abs_path: str,
+    wrong_examples: List[dict],
+) -> Dict[str, Any]:
+    seen_anchors, existing_count = _seed_seen_from_disk(abs_path)
+
+    total_validated = 0
+    remaining = total_count
+    max_loops = math.ceil(total_count / BATCH_SIZE) * 2
+
+    for _ in range(max_loops):
+        if remaining <= 0:
+            break
+
+        raw_records = generate_fn(
+            client,
+            module_name,
+            seen_anchors,
+            module_description,
+            remaining,
+            wrong_examples,
+        )
+        if not raw_records:
+            continue
+
+        validated_records, removed = _validate_records(raw_records)
+        if not validated_records:
+            continue
+
+        try:
+            final_records = _assign_qids(validated_records, module_name, existing_count)
+        except Exception as e:
+            return {"ok": False, "message": f"Error assigning QIDs: {str(e)}"}
+
+        try:
+            _append_to_disk(abs_path, final_records)
+        except Exception as e:
+            frappe.log_error(str(e), "Error appending to disk")
+            return {"ok": False, "message": str(e)}
+
+        existing_count += len(final_records)
+        total_validated += len(final_records)
+        remaining -= len(final_records)
+
+    return {
+        "ok": True,
+        "total_validated": total_validated,
+    }
+
+
+def _sync_module_output(module_name: str, abs_path: str, path: str, suffix: str) -> Dict[str, Any]:
+    try:
+        _sync_frappe_file_doc(module_name, abs_path, path, suffix)
+        return {"ok": True}
+    except Exception as e:
+        frappe.log_error(str(e), "Error syncing frappe file doc")
+        return {"ok": False, "message": f"Error {str(e)}"}
+
 
 @frappe.whitelist(allow_guest=False)
-def generate_data(modules: str, total_count: int, path: str, use_claude: bool = False,use_gemini: bool = False):
+def generate_data(
+    modules: str,
+    total_count: int,
+    path: str,
+    use_claude: bool = False,
+    use_gemini: bool = False,
+):
     """
     Generates training records and APPENDS to disk JSONL.
     Then syncs/updates a Frappe File doc pointing to that file.
     """
     _ensure_folder_exists(path)
-    if use_claude:
-        client = _get_claude_client()
-        generate_fn = _generate_batch_claude
-    elif use_gemini:
-        client = _get_gemini_client()
-        generate_fn = _generate_batch_gemini
-    else:
-        client = _get_openai_client()
-        generate_fn = _generate_batch
-    
-    modules = json.loads(modules) if isinstance(modules, str) else modules
+
+    client, generate_fn = _get_generation_backend(use_claude, use_gemini)
+    module_list = _normalize_modules(modules)
+    total_count = int(total_count)
     suffix = "_val" if "Validation" in path else "_train"
-    for module_rec in modules:
-        module_name=module_rec["module"]
-        module_description=module_rec["description"]
-        wrong_file_name = f"{module_name.lower().replace(' ', '_')}.json"
 
-        wrong_file_path = frappe.db.get_value("File", {
-            "file_name": wrong_file_name,
-            "folder": "Home/Test Results"
-        }, "name")
+    last_module_name = None
 
-        if wrong_file_path:
-            wrong_file_doc = frappe.get_doc("File", wrong_file_path)
-            raw_content = wrong_file_doc.get_content()
-            wrong_examples = json.loads(raw_content) if raw_content else []
-            if not isinstance(wrong_examples, list):
-                wrong_examples = []
-        else:
-            wrong_examples = []
-        total_count = int(total_count)
+    for module_rec in module_list:
+        module_name = module_rec["module"]
+        module_description = module_rec["description"]
+        last_module_name = module_name
+
+        wrong_examples = _load_wrong_examples(module_name)
         abs_path = _get_abs_path(module_name, path, suffix)
-        seen_anchors, existing_count = _seed_seen_from_disk(abs_path)
-        total_generated_raw = 0
-        total_validated = 0
-        total_removed_positives = 0
-        remaining = total_count
-        max_loops = math.ceil(total_count / BATCH_SIZE) * 2
-        for _ in range(max_loops):
-            if remaining <= 0:
-                break
-            raw_records = generate_fn(client, module_name, seen_anchors, module_description,remaining,wrong_examples)
-            if not raw_records:
-                continue
-            total_generated_raw += len(raw_records)
-            validated_records, removed = _validate_records(raw_records)
-            total_removed_positives += removed
-            if not validated_records:
-                continue
-            try:
-                final_records = _assign_qids(validated_records, module_name, existing_count)
-            except Exception as e:
-                return {"ok":False,"message":f"Error assigning QIDs: {str(e)}"}
-            try:
-                _append_to_disk(abs_path, final_records)
-                # _sync_frappe_file_doc(module_name, abs_path, path, suffix)
-            except Exception as e:
-                frappe.log_error(str(e),"Error appending to disk")
-                return {"ok": False, "message": str(e)}
 
-            existing_count += len(final_records)
-            total_validated += len(final_records)
-            remaining -= len(final_records)
-        if total_validated <= 0:
+        result = _generate_and_store_module_records(
+            client=client,
+            generate_fn=generate_fn,
+            module_name=module_name,
+            module_description=module_description,
+            total_count=total_count,
+            abs_path=abs_path,
+            wrong_examples=wrong_examples,
+        )
+        if not result.get("ok"):
+            return result
+
+        if result.get("total_validated", 0) <= 0:
             continue
-        try:
-            file_doc = _sync_frappe_file_doc(module_name, abs_path, path, suffix)
-        except Exception as e:
-            frappe.log_error(str(e),"Error syncing frappe file doc")
-            return {"ok":False,"message":f"Error {str(e)}"}
+
+        sync_result = _sync_module_output(module_name, abs_path, path, suffix)
+        if not sync_result.get("ok"):
+            return sync_result
+
     return {
         "ok": True,
-        "message": f"Generated training data for {module_name}"
+        "message": f"Generated training data for {last_module_name}" if last_module_name else "No modules processed",
     }
 
 
@@ -682,61 +856,82 @@ def start_train(modules: str, total_count: int):
     )
     return {"ok": True, "message": "Training and validation jobs queued."}
 
-
-def _generate_batch_gemini(client,module_name: str, seen_anchors: set, module_description, total_count,wrong_examples) -> List[dict]:
-    raw = None
-    MODEL_ID = "gemini-2.5-flash-lite"
-    system_instruction = (
-        "You must output ONLY a valid JSON array. "
+def _build_gemini_system_instruction() -> str:
+    return (
+        VALID_OUTPUT_MESSAGE
         "Start with '[' and end with ']'. "
         "No markdown. No code fences. No explanation."
     )
 
+
+def _build_gemini_contents(module_name: str, module_description, wrong_examples) -> List[dict]:
+    try:
+        prompt = _training_prompt(
+            module_name,
+            module_description,
+            BATCH_SIZE,
+            wrong_examples,
+        )
+    except Exception as e:
+        frappe.log_error(
+            title="Empty prompt",
+            message=f"Error building prompt: {str(e)}",
+        )
+        return []
+
+    return [{"role": "user", "parts": [{"text": prompt}]}]
+
+
+def _call_gemini_with_retry(client, model_id: str, contents: List[dict], system_instruction: str) -> str:
+    raw = None
+
     for attempt in range(MAX_RETRIES):
-        contents = None
         try:
             cfg = types.GenerateContentConfig(
                 temperature=0.9,
                 max_output_tokens=4096,
                 system_instruction=system_instruction,
             )
-            try:
-                contents = [{"role": "user", "parts": [{"text": _training_prompt(
-                    module_name, module_description, BATCH_SIZE, wrong_examples
-                )}]}]
-            except Exception as e:
-                frappe.log_error(title="Empty prompt", message=f"Error building prompt: {str(e)}")
-                return []
-            try:
-                response = client.models.generate_content(
-                    model=MODEL_ID,
-                    contents=contents,
-                    config=cfg,
-                )
-                raw = (response.text or "").strip()
-            except google_exceptions.ResourceExhausted:
-                frappe.log_error("Gemini quota exceeded", "Gemini Rate Limit (429) - sleeping 30s")
-                time.sleep(30)
-                raise
-            except google_exceptions.Unauthenticated:
-                frappe.log_error("Gemini auth failed", "Gemini Authentication Error")
-                return []
-            except google_exceptions.GoogleAPIError as e:
-                frappe.log_error(str(e), "Gemini API Error")
-                raise
+
+            response = client.models.generate_content(
+                model=model_id,
+                contents=contents,
+                config=cfg,
+            )
+            raw = (response.text or "").strip()
 
             if REQUEST_DELAY:
                 time.sleep(REQUEST_DELAY)
 
             break
 
+        except google_exceptions.ResourceExhausted:
+            frappe.log_error(
+                "Gemini quota exceeded",
+                "Gemini Rate Limit (429) - sleeping 30s",
+            )
+            time.sleep(30)
+            _sleep_backoff(attempt)
+
+        except google_exceptions.Unauthenticated:
+            frappe.log_error("Gemini auth failed", "Gemini Authentication Error")
+            return ""
+
+        except google_exceptions.GoogleAPIError as e:
+            frappe.log_error(str(e), "Gemini API Error")
+            _sleep_backoff(attempt)
+
         except Exception as e:
             frappe.log_error(
                 title="Gemini generate_content.test failed",
-                message=f"{str(e)}\n\nContents: {json.dumps(contents)[:8000] if contents else 'N/A'}"
+                message=f"{str(e)}\n\nContents: {json.dumps(contents)[:8000] if contents else 'N/A'}",
             )
             _sleep_backoff(attempt)
 
+    return raw or ""
+
+
+def _parse_gemini_json_array(raw: str) -> List[dict]:
     if not raw:
         return []
 
@@ -746,7 +941,7 @@ def _generate_batch_gemini(client,module_name: str, seen_anchors: set, module_de
     try:
         arr = json.loads(raw)
     except json.JSONDecodeError:
-        cleaned = re.sub(r',\s*([\]}])', r'\1', raw)
+        cleaned = re.sub(r",\s*([\]}])", r"\1", raw)
         try:
             arr = json.loads(cleaned)
         except Exception:
@@ -756,25 +951,66 @@ def _generate_batch_gemini(client,module_name: str, seen_anchors: set, module_de
         frappe.log_error(title="Gemini JSON parse failed", message=raw[:3000])
         return []
 
+    return arr if isinstance(arr, list) else []
+
+
+def _extract_valid_records(arr: List[dict], seen_anchors: set) -> List[dict]:
     records = []
+
     for obj in arr:
         if not isinstance(obj, dict):
             continue
+
         anchor = (obj.get("anchor") or "").strip()
         positives = obj.get("positives")
+
         if not anchor or not isinstance(positives, list) or not positives:
             continue
+
         if anchor in seen_anchors:
             continue
+
         seen_anchors.add(anchor)
         records.append({"anchor": anchor, "positives": positives})
 
     return records
 
 
-def _training_prompt(module_name: str, module_description: str, BATCH_SIZE: int, wrong_examples: list = None) -> str:
-    hard_n = (BATCH_SIZE * 3) // 10
-    std_n = BATCH_SIZE - hard_n 
+def _generate_batch_gemini(
+    client,
+    module_name: str,
+    seen_anchors: set,
+    module_description,
+    total_count,
+    wrong_examples,
+) -> List[dict]:
+    model_id = "gemini-2.5-flash-lite"
+    system_instruction = _build_gemini_system_instruction()
+
+    contents = _build_gemini_contents(
+        module_name=module_name,
+        module_description=module_description,
+        wrong_examples=wrong_examples,
+    )
+    if not contents:
+        return []
+
+    raw = _call_gemini_with_retry(
+        client=client,
+        model_id=model_id,
+        contents=contents,
+        system_instruction=system_instruction,
+    )
+    if not raw:
+        return []
+
+    arr = _parse_gemini_json_array(raw)
+    return _extract_valid_records(arr, seen_anchors)
+
+
+def _training_prompt(module_name: str, module_description: str, batch_size: int, wrong_examples: list = None) -> str:
+    hard_n = (batch_size * 3) // 10
+    std_n = batch_size - hard_n 
 
     err_data = ""
     if wrong_examples:
@@ -795,7 +1031,7 @@ def _training_prompt(module_name: str, module_description: str, BATCH_SIZE: int,
         - Generate normal high-quality training examples for this module.
         """
     return f"""
-Act: ERP Architect. Task: Generate {BATCH_SIZE} training records (JSON).
+Act: ERP Architect. Task: Generate {batch_size} training records (JSON).
 Module: {module_name} ({module_description})
 {err_data}
 if the Error 
@@ -818,5 +1054,5 @@ EXAMPLE:
     ]
 }}]
 Make sure positives' must be a SINGLE-LEVEL list of strings.DO NOT use objects, nested lists, or dictionaries inside 'positives'.
-OUTPUT: RAW JSON ARRAY [{BATCH_SIZE} records]. Start '[' end ']'.
+OUTPUT: RAW JSON ARRAY [{batch_size} records]. Start '[' end ']'.
 """.strip()
