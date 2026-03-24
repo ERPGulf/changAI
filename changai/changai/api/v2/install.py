@@ -16,8 +16,7 @@ def after_install():
 
 def after_migrate():
     try:
-        model_path = frappe.get_app_path("changai","changai","model")
-        _download_embedding_model(model_path)
+        _download_embedding_model()
         frappe.log_error("Model downloaded successfully after migrate", "ChangAI Model")
     except Exception:
         frappe.log_error(frappe.get_traceback(), "ChangAI: Model Download Failed on Migrate")

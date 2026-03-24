@@ -450,7 +450,7 @@ def sync_tables_and_schema_smart() -> Dict[str, Any]:
     last_sync_raw = meta.get("last_doctype_sync")
     changed_doctypes = _get_changed_doctypes(last_sync_raw)
 
-    changed_tables, missing_from_schema, new_from_changed, tables_to_process, merged_tables = _get_tables_to_process(
+    changed_tables, missing_from_schema, _, tables_to_process, merged_tables = _get_tables_to_process(
         by_table=by_table,
         existing_tables=existing_tables,
         changed_doctypes=changed_doctypes,
@@ -523,16 +523,16 @@ def _extract_json_object(text: str) -> Optional[Dict[str, Any]]:
 
     return None
 
+def _get_field_names(fields: List[Dict[str, Any]]) -> List[str]:
+    return [
+        field.get("name")
+        for field in fields
+        if isinstance(field, dict) and field.get("name")
+    ]
 
-def _smart_desc_map(client: Optional[Anthropic], table_name: str, fields: List[Dict[str, Any]]) -> Dict[str, str]:
-    if not client:
-        return {}
 
-    field_names = [f.get("name") for f in fields if isinstance(f, dict) and f.get("name")]
-    if not field_names:
-        return {}
-
-    prompt = f"""
+def _build_desc_prompt(table_name: str, field_names: List[str]) -> str:
+    return f"""
 Generate SHORT, HIGH-SIGNAL ERP field descriptions for embedding retrieval.
 
 Table: {table_name}
@@ -547,47 +547,191 @@ Fields:
 {json.dumps(field_names, ensure_ascii=False)}
 """.strip()
 
+
+def _extract_claude_text(msg: Any) -> str:
+    text_parts: List[str] = []
+
+    for block in getattr(msg, "content", []) or []:
+        if getattr(block, "type", None) == "text" and getattr(block, "text", None):
+            text_parts.append(block.text)
+
+    return "\n".join(text_parts).strip()
+
+
+def _normalize_desc_map(parsed: Any) -> Dict[str, str]:
+    if not isinstance(parsed, dict):
+        return {}
+
+    out: Dict[str, str] = {}
+    for key, value in parsed.items():
+        if isinstance(key, str) and isinstance(value, str) and key.strip() and value.strip():
+            out[key.strip()] = value.strip()
+    return out
+
+
+def _call_claude_desc_map_once(client: Anthropic, prompt: str) -> Any:
+    return client.messages.create(
+        model="claude-sonnet-4-5",
+        max_tokens=500,
+        temperature=0.2,
+        system="Return ONLY a JSON object. No markdown. No extra text.",
+        messages=[{"role": "user", "content": prompt}],
+        timeout=180,
+    )
+
+
+def _smart_desc_map(client: Optional[Anthropic], table_name: str, fields: List[Dict[str, Any]]) -> Dict[str, str]:
+    if not client:
+        return {}
+
+    field_names = _get_field_names(fields)
+    if not field_names:
+        return {}
+
+    prompt = _build_desc_prompt(table_name, field_names)
+
     for attempt in range(3):
         try:
-            msg = client.messages.create(
-                model="claude-sonnet-4-5",
-                max_tokens=500,
-                temperature=0.2,
-                system="Return ONLY a JSON object. No markdown. No extra text.",
-                messages=[{"role": "user", "content": prompt}],
-                timeout=180,
-            )
+            msg = _call_claude_desc_map_once(client, prompt)
+            text = _extract_claude_text(msg)
 
-            text_parts: List[str] = []
-            for b in getattr(msg, "content", []) or []:
-                if getattr(b, "type", None) == "text" and getattr(b, "text", None):
-                    text_parts.append(b.text)
-
-            text = "\n".join(text_parts).strip()
             parsed = _extract_json_object(text)
-
-            if isinstance(parsed, dict):
-                out: Dict[str, str] = {}
-                for k, v in parsed.items():
-                    if isinstance(k, str) and isinstance(v, str) and k.strip() and v.strip():
-                        out[k.strip()] = v.strip()
-                return out
+            normalized = _normalize_desc_map(parsed)
+            if normalized:
+                return normalized
 
             frappe.logger().warning(
                 f"Claude returned non-JSON table={table_name} attempt={attempt+1} preview={text[:200]!r}"
             )
-            time.sleep(2 * (attempt + 1))
-
         except Exception as e:
             frappe.logger().error(f"Claude error table={table_name} attempt={attempt+1}: {e}")
-            time.sleep(2 * (attempt + 1))
+
+        time.sleep(2 * (attempt + 1))
 
     return {}
 
 
+def _reset_frappe_local_cache() -> None:
+    frappe.local.meta_cache = {}
+    if hasattr(frappe.local, "docs"):
+        frappe.local.docs = {}
+
+
+def _get_pending_fields(block: Dict[str, Any]) -> List[Dict[str, Any]]:
+    fields = block.get("fields") or []
+    return [
+        field
+        for field in fields
+        if isinstance(field, dict)
+        and field.get("name")
+        and not (field.get("description") or "").strip()
+    ]
+
+
+def _mark_table_desc_done(block: Dict[str, Any]) -> None:
+    block["desc_done"] = not any(
+        isinstance(field, dict) and not (field.get("description") or "").strip()
+        for field in block.get("fields", [])
+    )
+
+
+def _save_schema_checkpoint(meta: Dict[str, Any], tables_blocks: List[Dict[str, Any]]) -> None:
+    write_filedoctype(
+        SCHEMA_YAML,
+        {"_meta": meta, "tables": tables_blocks},
+        folder=RAG_FOLDER,
+    )
+
+
+def _process_pending_field_batches(
+    client,
+    table: str,
+    pending_fields: List[Dict[str, Any]],
+    batch_size: int,
+) -> Dict[str, int]:
+    updated_in_table = 0
+    updated_fields = 0
+    consecutive_errors = 0
+
+    for i in range(0, len(pending_fields), batch_size):
+        batch = pending_fields[i:i + batch_size]
+        desc_map = _smart_desc_map(client, table, batch)
+
+        if not desc_map:
+            consecutive_errors += 1
+            continue
+
+        consecutive_errors = 0
+
+        for field in batch:
+            field_name = field.get("name")
+            if field_name in desc_map:
+                field["description"] = desc_map[field_name].strip()
+                updated_fields += 1
+                updated_in_table += 1
+
+        frappe.db.commit()  # nosemgrep: periodic commit to persist progress during long-running schema sync
+
+    return {
+        "updated_in_table": updated_in_table,
+        "updated_fields": updated_fields,
+        "consecutive_errors": consecutive_errors,
+    }
+
+
+def _process_table_for_missing_descriptions(
+    client,
+    block: Dict[str, Any],
+    batch_size: int,
+) -> Dict[str, int]:
+    if not isinstance(block, dict):
+        return {
+            "updated_in_table": 0,
+            "updated_fields": 0,
+            "consecutive_errors": 0,
+            "skipped": 1,
+        }
+
+    table = block.get("table")
+    pending_fields = _get_pending_fields(block)
+
+    if not pending_fields:
+        block["desc_done"] = True
+        return {
+            "updated_in_table": 0,
+            "updated_fields": 0,
+            "consecutive_errors": 0,
+            "skipped": 0,
+        }
+
+    block["desc_done"] = False
+
+    try:
+        result = _process_pending_field_batches(
+            client=client,
+            table=table,
+            pending_fields=pending_fields,
+            batch_size=batch_size,
+        )
+    except Exception as e:
+        frappe.logger().error(f"Critical error in table {table}: {e}")
+        return {
+            "updated_in_table": 0,
+            "updated_fields": 0,
+            "consecutive_errors": 1,
+            "skipped": 0,
+        }
+
+    if result["updated_in_table"]:
+        _mark_table_desc_done(block)
+
+    result["skipped"] = 0
+    return result
+
+
 @frappe.whitelist(allow_guest=False)
 def fill_missing_field_descriptions(
-    batch_size: int = 15,         
+    batch_size: int = 15,
     max_tables: int = 0,
     checkpoint_every_table: int = 10,
 ) -> Dict[str, Any]:
@@ -602,78 +746,35 @@ def fill_missing_field_descriptions(
     if not client:
         return {"ok": False, "message": _("OpenAI API key missing")}
 
-    # Stats tracking
     updated_tables = 0
     updated_fields = 0
     processed_updated_tables = 0
     tables_since_last_save = 0
-    consecutive_errors = 0 
+    consecutive_errors = 0
 
     for block in tables_blocks:
-        # Prevent Memory Bloat: Clear Frappe caches every iteration
-        frappe.local.meta_cache = {}
-        if hasattr(frappe.local, 'docs'): frappe.local.docs = {}
+        _reset_frappe_local_cache()
 
-        # ✅ FIX: don't blindly trust desc_done — re-check actual pending fields
-        if not isinstance(block, dict):
-            continue
+        result = _process_table_for_missing_descriptions(
+            client=client,
+            block=block,
+            batch_size=batch_size,
+        )
 
-        table = block.get("table")
-        fields = block.get("fields") or []
-
-        pending_fields = [
-            f for f in fields
-            if isinstance(f, dict) and f.get("name") and not (f.get("description") or "").strip()
-        ]
-
-        if not pending_fields:
-            block["desc_done"] = True  # mark done only if truly nothing pending
-            continue
-
-        block["desc_done"] = False  # reset — new fields found, need processing
-
-        updated_in_table = 0
-        try:
-            for i in range(0, len(pending_fields), batch_size):
-                batch = pending_fields[i:i + batch_size]
-                desc_map = _smart_desc_map(client, table, batch)
-                
-                if not desc_map:
-                    consecutive_errors += 1
-                    continue
-                
-                consecutive_errors = 0  # Reset on success
-                for f in batch:
-                    fn = f.get("name")
-                    if fn in desc_map:
-                        f["description"] = desc_map[fn].strip()
-                        updated_fields += 1
-                        updated_in_table += 1
-                
-                # DB Heartbeat: keep the SQL connection alive
-                frappe.db.commit()  # nosemgrep: periodic commit to persist progress during long-running schema sync
-
-        except Exception as e:
-            frappe.logger().error(f"Critical error in table {table}: {e}")
-            consecutive_errors += 1
+        updated_in_table = result["updated_in_table"]
+        updated_fields += result["updated_fields"]
+        consecutive_errors = result["consecutive_errors"]
 
         if updated_in_table:
             updated_tables += 1
             processed_updated_tables += 1
             tables_since_last_save += 1
-            # Mark table as done if no empty descriptions remain
-            block["desc_done"] = not any(
-                isinstance(x, dict) and not (x.get("description") or "").strip()
-                for x in block.get("fields", [])
-            )
 
-        # Checkpoint: Save to disk every X tables
         if tables_since_last_save >= checkpoint_every_table:
-            write_filedoctype(SCHEMA_YAML, {"_meta": meta, "tables": tables_blocks}, folder=RAG_FOLDER)
+            _save_schema_checkpoint(meta, tables_blocks)
             tables_since_last_save = 0
             gc.collect()
 
-        # Safety: If API fails 5 times in a row, stop to save credits/time
         if consecutive_errors > 5:
             frappe.logger().error("Stopping job: Too many consecutive API errors.")
             break
@@ -681,16 +782,17 @@ def fill_missing_field_descriptions(
         if max_tables and processed_updated_tables >= max_tables:
             break
 
-    # Final Save and cleanup
     meta["last_desc_sync"] = str(now_datetime())
-    write_filedoctype(SCHEMA_YAML, {"_meta": meta, "tables": tables_blocks}, folder=RAG_FOLDER)
+    _save_schema_checkpoint(meta, tables_blocks)
     frappe.db.commit()  # nosemgrep: frappe-semgrep-rules.rules.frappe-manual-commit
+
     return {
         "ok": True,
         "tables_updated": updated_tables,
         "fields_updated": updated_fields,
-        "status": "Complete" if consecutive_errors <= 5 else "Partial Failure"
+        "status": "Complete" if consecutive_errors <= 5 else "Partial Failure",
     }
+
 
 @frappe.whitelist()
 def sync_schema_and_enqueue_descriptions() -> Dict[str, Any]:
@@ -702,16 +804,16 @@ def sync_schema_and_enqueue_descriptions() -> Dict[str, Any]:
     )
     return {"ok": True, "message": _("Schema updated ✅ Field descriptions running in background 🧠")}
 
+def _get_field_names(fields: List[Dict[str, Any]]) -> List[str]:
+    return [
+        field.get("name")
+        for field in fields
+        if isinstance(field, dict) and field.get("name")
+    ]
 
-def _smart_desc_map_openai(client, table_name: str, fields: List[Dict[str, Any]]) -> Dict[str, str]:
-    if not client:
-        return {}
 
-    field_names = [f.get("name") for f in fields if isinstance(f, dict) and f.get("name")]
-    if not field_names:
-        return {}
-
-    prompt = f"""
+def _build_desc_prompt(table_name: str, field_names: List[str]) -> str:
+    return f"""
 Generate SHORT, HIGH-SIGNAL ERP field descriptions for embedding retrieval.
 
 Table: {table_name}
@@ -725,39 +827,58 @@ Rules:
 Fields:
 {json.dumps(field_names, ensure_ascii=False)}
 """.strip()
+
+
+def _normalize_desc_map(parsed: Any) -> Dict[str, str]:
+    if not isinstance(parsed, dict):
+        return {}
+
+    out: Dict[str, str] = {}
+    for key, value in parsed.items():
+        if isinstance(key, str) and isinstance(value, str) and key.strip() and value.strip():
+            out[key.strip()] = value.strip()
+    return out
+
+
+def _call_openai_desc_map_once(client, prompt: str):
+    return client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": "Return ONLY a valid JSON object. No markdown. No extra text."},
+            {"role": "user", "content": prompt},
+        ],
+        temperature=0.2,
+        max_tokens=800,
+        timeout=180,
+    )
+
+
+def _smart_desc_map_openai(client, table_name: str, fields: List[Dict[str, Any]]) -> Dict[str, str]:
+    if not client:
+        return {}
+
+    field_names = _get_field_names(fields)
+    if not field_names:
+        return {}
+
+    prompt = _build_desc_prompt(table_name, field_names)
+
     for attempt in range(3):
         try:
-            response = client.chat.completions.create(
-                model="gpt-4o-mini",   # fast + cheap + stable
-                messages=[
-                    {"role": "system", "content": "Return ONLY a valid JSON object. No markdown. No extra text."},
-                    {"role": "user", "content": prompt}
-                ],
-                temperature=0.2,
-                max_tokens=800,
-                timeout=180,
-            )
-
-            text = response.choices[0].message.content.strip()
+            response = _call_openai_desc_map_once(client, prompt)
+            text = (response.choices[0].message.content or "").strip()
 
             parsed = _extract_json_object(text)
-
-            if isinstance(parsed, dict):
-                out: Dict[str, str] = {}
-                for k, v in parsed.items():
-                    if isinstance(k, str) and isinstance(v, str) and k.strip() and v.strip():
-                        out[k.strip()] = v.strip()
-                return out
+            normalized = _normalize_desc_map(parsed)
+            if normalized:
+                return normalized
 
             frappe.logger().warning(
                 f"OpenAI returned non-JSON table={table_name} attempt={attempt+1} preview={text[:200]!r}"
             )
-            time.sleep(2 * (attempt + 1))
-
         except Exception as e:
             frappe.logger().error(f"OpenAI error table={table_name} attempt={attempt+1}: {e}")
-            time.sleep(2 * (attempt + 1))
+
+        time.sleep(2 * (attempt + 1))
 
     return {}
-
-
