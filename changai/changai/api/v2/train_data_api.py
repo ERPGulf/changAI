@@ -314,11 +314,7 @@ def _call_claude_batch_once(client, messages: List[dict]) -> str:
             model="claude-sonnet-4-6",
             max_tokens=4096,
             temperature=1.0,
-            system=(
-                VALID_OUTPUT_MESSAGE
-                "Start with '[' and end with ']'. "
-                "No markdown. No code fences. No explanation."
-            ),
+            system=f"{VALID_OUTPUT_MESSAGE}\nStart with '[' and end with ']'. No markdown. No code fences. No explanation.",
             messages=messages,
         )
         return (resp.content[0].text or "").strip()
@@ -444,7 +440,7 @@ def _build_openai_messages(module_name, module_description, wrong_examples=None)
         {
             "role": "system",
             "content": (
-                VALID_OUTPUT_MESSAGE
+                VALID_OUTPUT_MESSAGE +
                 "Start with '[' and end with ']'. "
                 "No markdown. No code fences. No explanation."
             ),
@@ -858,7 +854,7 @@ def start_train(modules: str, total_count: int):
 
 def _build_gemini_system_instruction() -> str:
     return (
-        VALID_OUTPUT_MESSAGE
+        VALID_OUTPUT_MESSAGE +
         "Start with '[' and end with ']'. "
         "No markdown. No code fences. No explanation."
     )
