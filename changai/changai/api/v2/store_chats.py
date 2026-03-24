@@ -75,24 +75,64 @@ def get_chat_history(session_id: str) -> list:
     except Exception:
         return []
 
-    return history[-10:]
-PROMPT_FOLLOWUP ="""You are ChangAI, an ERP entity-value detector + query rewriter.
+    return history[-5:]
+PROMPT_FOLLOWUP = """You are ChangAI, an ERP entity-value detector + query rewriter.
 
 Return ONLY valid JSON with EXACTLY these keys:
 {{"standalone_question":"...","contains_values":true/false}}
 
+### TASK 1 — SPELL CORRECTION:
+- Fix any typos or spelling mistakes in the latest message before doing anything else
+- Examples:
+  - "slaes order of lst mnoth" → "sales order of last month"
+  - "whcih custoemr has pendign" → "which customer has pending"
+  - "stok of chiar item" → "stock of chair item"
+
+### TASK 2 — CONTINUITY DETECTION:
+- Check if the latest message is a follow-up or refers to previous conversation
+- Look at the last 3-4 human messages in chat history for context
+- If it IS a follow-up, rewrite as a fully self-contained standalone question
+- Always put the final rewritten (and corrected) question in "standalone_question"
+
+Follow-up indicators:
+- Pronouns with no clear referent: "it", "they", "that", "those", "him", "her", "his"
+- Incomplete references: "same customer", "that item", "the one", "same period"
+- Continuation words: "also", "and what about", "what else", "show more"
+- Short vague messages: "and today?", "what about last month?", "how many?"
+
+Examples:
+  History: "show sales of ahmed"
+  Latest: "what about his pending invoices"
+  → standalone_question: "show pending invoices of ahmed"
+
+  History: "stock of office chair in main warehouse"
+  Latest: "what about side tabel?"
+  → standalone_question: "stock of side table in main warehouse"
+
+  History: "top 5 customers this month"
+  Latest: "show lst month also"
+  → standalone_question: "top 5 customers last month"
+
+  History: "employees in accounts department"
+  Latest: "hw many are absent today?"
+  → standalone_question: "how many employees in accounts department are absent today"
+
+### TASK 3 — ENTITY DETECTION (contains_values):
 Meaning of contains_values (STRICT):
-- true = the latest message contains ANY explicit or implied ENTITY IDENTIFIER that should be matched to master data
-  (customer/supplier/item/warehouse/employee/etc.)
+
+TRUE = standalone_question contains ANY explicit or implied ENTITY IDENTIFIER
+that should be matched to master data
+(customer/supplier/item/warehouse/employee/category etc.)
 
 Examples (TRUE):
-- "invoice of ayan" (implied name)
-- "who bought laptop last month"
-- "sales of pens today"
-- "top items in electronics category"
+- "invoice of ayan" (name)
+- "who bought laptop last month" (product)
+- "sales of pens today" (product)
+- "top items in electronics category" (category)
+- "stock of office chair in main warehouse" (item + warehouse)
 
-- false = NO entity identifier is mentioned.
-  This includes queries that only contain filters, time ranges, counts, ranking words, or statuses.
+FALSE = NO entity identifier mentioned.
+Only filters, time ranges, counts, ranking words, or statuses.
 
 Examples (FALSE):
 - "show all customers"
@@ -101,16 +141,14 @@ Examples (FALSE):
 - "payment received this month"
 - "top vendor dues list"
 - "today sales"
-- "last 3 customers"
 
 Rules:
-- Any reference to a product or product category (even if generic, e.g., laptop, pen, printer, phone, chair, electronics)
-  MUST be treated as an entity and set contains_values = true.
-- Only entity names/codes or product/category references make contains_values=true.
-- Rewrite only if needed; otherwise keep it unchanged.
-- When unsure between item vs non-item, prefer contains_values=true.
-- true also when the message contains a PRODUCT CATEGORY or ITEM GROUP or any similar entity filters like emntioned before,
-  that must be resolved to master data records.
+- Any product/item/category reference → contains_values = true
+- Only entity names/codes or product/category references → contains_values = true
+- When unsure between item vs non-item → prefer contains_values = true
+
+### OUTPUT FORMAT (STRICT — no extra keys, no markdown):
+{{"standalone_question":"...","contains_values":true/false}}
 
 Chat history (use ONLY human lines):
 {rows}

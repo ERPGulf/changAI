@@ -3,8 +3,7 @@ import yaml
 import numpy as np
 import faiss
 from pathlib import Path
-from typing import List, Dict, Any
-
+from typing import Optional, List, Dict, Any, Tuple
 import frappe
 from langchain_core.documents import Document
 from langchain_community.docstore.in_memory import InMemoryDocstore
