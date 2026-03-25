@@ -4,6 +4,7 @@ from typing_extensions import TypedDict
 from typing import Any, Dict, List, Tuple, Union, Optional, Set
 import requests
 import json
+import yaml
 import re
 import os
 import time
@@ -16,6 +17,7 @@ from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 from google import genai
 from google.genai import types
+from changai.changai.api.v2.schema_utils import validate_sql_schema,_load_mapping_data
 from google.oauth2 import service_account
 from werkzeug.wrappers import Response
 from changai.changai.api.v2.helpdesk_api import(
@@ -38,7 +40,7 @@ from pathlib import Path
 _ASSETS_DIR = Path(frappe.get_app_path("changai", "changai", "api", "v2", "assets")).resolve()
 _PROMPTS_DIR = Path(frappe.get_app_path("changai", "changai", "prompts")).resolve()
 CHANGAI_SETTINGS = "ChangAI Settings"
-_ALLOWED_EXT = {".json", ".txt", ".j2"}
+_ALLOWED_EXT = {".json", ".yaml",".j2", ".yml", ".txt", ".md"}
 
 def _safe_join(base: Path, rel: str) -> Path:
     """
@@ -85,7 +87,11 @@ def read_asset(file_name: str, base: str = "assets") -> Any:
             return json.loads(content)
         except json.JSONDecodeError as e:
             frappe.throw(_("Invalid JSON in {0}: {1}").format(str(path), str(e)))
-
+    if ext == ".yaml" or ext == ".yml":
+        try:
+            return yaml.safe_load(content)
+        except yaml.YAMLError as e:
+            frappe.throw(_("Invalid YAML in {0}: {1}").format(str(path), str(e)))
     return content
 
 _VS_TABLE = None
@@ -715,6 +721,30 @@ def get_table_vs():
     return _VS_TABLE
 
 
+def get_table_vs_test():
+    global _VS_TABLE
+
+    if _VS_TABLE is None:
+        emb = get_embedding_engine()
+        if emb is None:
+            frappe.throw(_(EMBEDDING_ENGINE_NONE_MESSG))
+
+        table_vs_path = frappe.get_site_path(
+            "private", "changai", "fvs_stores", "erpnext", "table_fvs"
+        )
+
+        if not os.path.exists(table_vs_path):
+            frappe.throw(_("FAISS table store not found at {0}").format(table_vs_path))
+
+        _VS_TABLE = FAISS.load_local(
+            table_vs_path,
+            emb,
+            allow_dangerous_deserialization=True
+        )
+
+    return _VS_TABLE
+
+
 def call_fvs_table_search(q: str) -> List[str]:
     hits = get_table_vs().similarity_search(q, k=15)
     out, seen = [], set()
@@ -783,6 +813,30 @@ def get_full_fields_vs():
         full_fields_vs_path = os.path.join(
             app_root,
             "changai", "api", "v2", "fvs_stores", "erpnext", "schema_fvs"
+        )
+
+        if not os.path.isdir(full_fields_vs_path):
+            frappe.throw(_("Vector store path not found: {0}").format(full_fields_vs_path))
+
+        _FULL_FIELDS_VS = FAISS.load_local(
+            full_fields_vs_path,
+            emb,
+            allow_dangerous_deserialization=True
+        )
+
+    return _FULL_FIELDS_VS
+
+
+def get_full_fields_vs_test():
+    global _FULL_FIELDS_VS
+
+    if _FULL_FIELDS_VS is None:
+        emb = get_embedding_engine()
+        if emb is None:
+            frappe.throw(_(EMBEDDING_ENGINE_NONE_MESSG))
+
+        full_fields_vs_path = frappe.get_site_path(
+            "private", "changai", "fvs_stores", "erpnext", "schema_fvs"
         )
 
         if not os.path.isdir(full_fields_vs_path):
@@ -980,6 +1034,31 @@ def get_master_vs():
         if not os.path.exists(master_vs_path):
             frappe.throw(_("FAISS MASTER store not found at {0}").format(master_vs_path))
         _VS_MASTER = FAISS.load_local(master_vs_path, emb, allow_dangerous_deserialization=True)
+    return _VS_MASTER
+
+
+@frappe.whitelist(allow_guest=False)
+def get_master_vs_test():
+    global _VS_MASTER
+
+    if _VS_MASTER is None:
+        emb = get_embedding_engine()
+        if emb is None:
+            frappe.throw(_(EMBEDDING_ENGINE_NONE_MESSG))
+
+        master_vs_path = frappe.get_site_path(
+            "private", "changai", "fvs_stores", "erpnext", "masterdata_fvs"
+        )
+
+        if not os.path.exists(master_vs_path):
+            frappe.throw(_("FAISS MASTER store not found at {0}").format(master_vs_path))
+
+        _VS_MASTER = FAISS.load_local(
+            master_vs_path,
+            emb,
+            allow_dangerous_deserialization=True
+        )
+
     return _VS_MASTER
 
 @frappe.whitelist()
@@ -1893,3 +1972,45 @@ def run_text2sql_pipeline(user_question: str, chat_id: str) -> Dict:
 
     return _handle_sql_result(final, sql, orm, formatted_q, fields,selected_tables, val, entity_debug, user_question, chat_id)
 
+
+@frappe.whitelist(allow_guest=False)
+def run_text2sql_pipeline_testing(user_question: str, chat_id: str) -> Dict:
+    final, err_response = _invoke_pipeline(user_question, chat_id)
+    if err_response:
+        return err_response
+
+    entity_debug = {
+        "contains_values": final.get("contains_values"),
+        "entity_cards": final.get("entity_cards") or [],
+    }
+
+    if (final.get("query_type") or "NON_ERP") == "NON_ERP":
+        return _handle_non_erp(final, user_question, chat_id)
+
+    sql = clean_sql(final.get("sql")) or ""
+    res=validate_sql_schema(sql)
+    orm = clean_sql(final.get("orm")) or ""
+    formatted_q = _safe_strip(final.get("formatted_q") or "")
+    selected_tables = final.get("selected_tables") or []
+    fields = _safe_strip(final.get("selected_fields") or "")
+    # val = final.get("validation") or {}
+    err = final.get("error")
+
+    if not res.get("ok") or not sql.upper().startswith("SELECT"):
+        context = (final.get("context") or final.get("selected_fields") or "")[:800]
+        return {
+            "Question": user_question,
+            "Formatted_Question": formatted_q,
+            "Context": context,
+            "Tables": selected_tables,
+            "Fields": fields,
+            "SQL": sql,
+            "Validation": res,
+            "EntityDebug": entity_debug,
+            "Tries": int(final.get("tries") or 0),
+            "Error": err or "SQL not valid or missing",
+            "Result": [],
+            "Bot": _get_sql_error_message(err, val),
+        }
+
+    return _handle_sql_result(final, sql, orm, formatted_q, fields,selected_tables, res, entity_debug, user_question, chat_id)

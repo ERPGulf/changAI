@@ -87,7 +87,7 @@ def _sleep_backoff(attempt: int, base: float = BASE_BACKOFF, cap: float = MAX_BA
 
 def _get_abs_path(module_name: str, folder_path: str,suffix: str = "") -> str:
     relative = folder_path.replace("Home/", "", 1)
-    site_path = frappe.get_site_path("public", "files")
+    site_path = frappe.get_site_path("private", "files")
     target_dir = os.path.join(site_path, relative)
     os.makedirs(target_dir, exist_ok=True)
     return os.path.join(target_dir, f"{module_name}{suffix}.jsonl")
@@ -142,7 +142,7 @@ def _sync_frappe_file_doc(module_name: str, abs_path: str, folder_path: str, suf
     """
     relative = folder_path.replace("Home/", "", 1)
     out_file_name = f"{module_name}{suffix}.jsonl"
-    file_url = f"/files/{relative}/{out_file_name}"
+    file_url = f"/private/files/{relative}/{out_file_name}"
     existing = frappe.db.get_value(
         "File",
         {"file_name": out_file_name, "folder": folder_path},
@@ -154,7 +154,7 @@ def _sync_frappe_file_doc(module_name: str, abs_path: str, folder_path: str, suf
         file_doc = frappe.get_doc("File", existing)
         file_doc.file_url = file_url
         file_doc.file_size = size
-        file_doc.is_private = 0
+        file_doc.is_private = 1
         file_doc.folder = folder_path
         file_doc.save(ignore_permissions=True)
     else:
@@ -162,9 +162,10 @@ def _sync_frappe_file_doc(module_name: str, abs_path: str, folder_path: str, suf
             "doctype": "File",
             "file_name": out_file_name,
             "file_url": file_url,
-            "is_private": 0,
+            "is_private": 1,
             "file_size": size,
             "folder": folder_path,
+            "file_type": "JSONL"
         }).insert(ignore_permissions=True)
 
     frappe.db.commit()  # nosemgrep: frappe-manual-commit - explicit commit required to persist File DocType record immediately after disk write during training data sync
@@ -200,7 +201,10 @@ def _validate_field(doctype: str, fieldname: str) -> bool:
 
 
 def _parse_table_tag(positive: str):
-    match = re.match(r"\[TABLE\]\s+([^\]>]{1,200})(?:(\s*\|)|(\s*$))", positive)
+    match = re.match(
+        r"^\[TABLE\]\s+([^|\]>]{1,200})(?:\s*\|.*)?$",
+        positive
+    )
     if not match:
         return False, "Could not parse [TABLE] format"
     table = match.group(1).strip()
@@ -211,7 +215,10 @@ def _parse_table_tag(positive: str):
 
 
 def _parse_field_tag(positive: str):
-    match = re.match(r"\[FIELD\]\s+(\w{1,100})\s+\|\s+\[TABLE\]\s+([^\]>]{1,200})(\s*\|\s*|\s*$)", positive)
+    match = re.match(
+        r"^\[FIELD\]\s+(\w{1,100})\s+\|\s+\[TABLE\]\s+([^|\]>]{1,200})(?:\s*\|.*)?$",
+        positive
+    )
     if not match:
         return False, "Could not parse [FIELD] format"
     field = match.group(1).strip()
@@ -225,7 +232,10 @@ def _parse_field_tag(positive: str):
 
 
 def _parse_link_tag(positive: str):
-    match = re.match(r"\[LINK\]\s+([^\]>]{1,200})\s+-->\s+([^\]>]{1,200})\s+ON\s+(\w{1,100})(\s*\|\s*|\s*$)", positive)
+    match = re.match(
+        r"^\[LINK\]\s+([^|\]>]{1,200})\s+-->\s+([^|\]>]{1,200})\s+ON\s+(\w{1,100})(?:\s*\|.*)?$",
+        positive
+    )
     if not match:
         return False, "Could not parse [LINK] format"
     table_a = match.group(1).strip()
@@ -365,13 +375,6 @@ def _call_claude_batch_with_retry(client, module_name, module_description) -> st
             _sleep_backoff(attempt)
 
     return raw or ""
-
-
-def _strip_code_fence(raw: str) -> str:
-    if raw.startswith("```"):
-        raw = raw.split("```", 1)[1]
-        raw = raw.rsplit("```", 1)[0].strip()
-    return raw
 
 
 def _parse_json_array(raw: str, provider_name: str) -> List[dict]:
@@ -774,7 +777,7 @@ def _sync_module_output(module_name: str, abs_path: str, path: str, suffix: str)
 
 @frappe.whitelist(allow_guest=False)
 def generate_data(
-    modules: str,
+    modules: Union[str, List[Dict[str, Any]]],
     total_count: int,
     path: str,
     use_claude: bool = False,
@@ -789,13 +792,18 @@ def generate_data(
     client, generate_fn = _get_generation_backend(use_claude, use_gemini)
     module_list = _normalize_modules(modules)
     total_count = int(total_count)
+    if total_count <= 0:
+        return {"ok": False, "message": "total_count must be greater than 0"}
     suffix = "_val" if "Validation" in path else "_train"
 
     last_module_name = None
 
     for module_rec in module_list:
-        module_name = module_rec["module"]
-        module_description = module_rec["description"]
+        module_name = (module_rec.get("module") or "").strip()
+        module_description = (module_rec.get("description") or "").strip()
+
+        if not module_name:
+            return {"ok": False, "message": "Each module record must include 'module'."}
         last_module_name = module_name
 
         wrong_examples = _load_wrong_examples(module_name)
@@ -837,7 +845,7 @@ def start_train(modules: str, total_count: int):
         timeout=14400,
         modules=modules,
         total_count=total_count,
-        path="Home/Training Data/Batch 4",
+        path="Home/Training Data/Batch 5",
         use_claude=False,
         use_gemini=True
     )
@@ -847,7 +855,7 @@ def start_train(modules: str, total_count: int):
         timeout=14400,
         modules=modules,
         total_count=val_count,
-        path="Home/Validation Data/Batch 3",
+        path="Home/Validation Data/Batch 4",
         use_claude=True,                     # <-- Claude
     )
     return {"ok": True, "message": "Training and validation jobs queued."}

@@ -11,11 +11,13 @@ from langchain_core.embeddings import Embeddings
 import yaml
 import frappe
 from frappe import _
+from changai.changai.api.v2.build_cards_faiss_index_v2 import build_schema_fvs_job,build_master_data_fvs_job,build_table_fvs_job
 from frappe.utils import now_datetime, add_to_date
 from anthropic import Anthropic
 import openai
 import math
 from pathlib import Path
+from changai.changai.api.v2.schema_utils import convert_yaml_schema_to_sqlglot_meta
 from frappe.utils.file_manager import get_file
 from changai.changai.api.v2.text2sql_pipeline_v2 import call_gemini
 from changai.changai.api.v2.train_data_api import _get_openai_client
@@ -76,7 +78,7 @@ def write_filedoctype(
     file_name: str,
     payload,
     folder: str = "Home/RAG Sources",
-    is_private: int = 0
+    is_private: int = 1
 ):
     if file_name.endswith(JSON_EXT):
         text = json.dumps(payload, ensure_ascii=False, indent=2)
@@ -190,6 +192,23 @@ def _sync_module_master_data(
 
 
 @frappe.whitelist(allow_guest=False)
+def update_masterdata():
+    frappe.enqueue(
+        "changai.changai.api.v2.auto_gen_api.sync_master_data_smart",
+        queue="long",
+        timeout=1800,
+    )
+    frappe.enqueue(
+        "changai.changai.api.v2.build_cards_faiss_index_v2.build_master_data_fvs_job",
+        queue="long",
+        timeout=1800,
+    )
+    return {
+        "ok":True,
+        "message":"Master Data update running in RQ Job"
+    }
+
+
 def sync_master_data_smart() -> Dict[str, Any]:
     file_name = "master_data.yaml"
     payload = _read_filedoctype(file_name, RAG_FOLDER)
@@ -225,7 +244,7 @@ def sync_master_data_smart() -> Dict[str, Any]:
         if added_total
         else _("Sync complete ✅ No new records to add.")
     )
-
+    fvs_error = None
     return {
         "ok": True,
         "message": msg,
@@ -235,6 +254,7 @@ def sync_master_data_smart() -> Dict[str, Any]:
         "last_sync_used": last_sync or "FIRST_RUN(full_fetch)",
         "new_last_sync": meta["last_sync"],
         "file_url": file_doc.file_url,
+        "fvs_error": fvs_error,
     }
 
 
@@ -439,10 +459,73 @@ def _write_schema_outputs(meta: Dict[str, Any], by_table: Dict[str, Dict[str, An
 
 
 @frappe.whitelist(allow_guest=False)
+def fill_missing_field_descriptions(
+    batch_size: int = 15,
+    max_tables: int = 0,
+    checkpoint_every_table: int = 10,
+) -> Dict[str, Any]:
+    payload = _read_filedoctype(SCHEMA_YAML)
+    meta = payload.get("_meta") or {}
+    tables_blocks = payload.get("tables") or []
+
+    if not isinstance(tables_blocks, list):
+        return {"ok": False, "message": _("schema.yaml invalid")}
+
+    client = _get_claude_client()
+    if not client:
+        return {"ok": False, "message": _("Claude API key missing")}
+    updated_tables = 0
+    updated_fields = 0
+    processed_updated_tables = 0
+    tables_since_last_save = 0
+    consecutive_errors = 0
+
+    for block in tables_blocks:
+        _reset_frappe_local_cache()
+
+        result = _process_table_for_missing_descriptions(
+            client=client,
+            block=block,
+            batch_size=batch_size,
+        )
+
+        updated_in_table = result["updated_in_table"]
+        updated_fields += result["updated_fields"]
+        consecutive_errors = result["consecutive_errors"]
+
+        if updated_in_table:
+            updated_tables += 1
+            processed_updated_tables += 1
+            tables_since_last_save += 1
+
+        if tables_since_last_save >= checkpoint_every_table:
+            _save_schema_checkpoint(meta, tables_blocks)
+            tables_since_last_save = 0
+            gc.collect()
+
+        if consecutive_errors > 5:
+            frappe.logger().error("Stopping job: Too many consecutive API errors.")
+            break
+
+        if max_tables and processed_updated_tables >= max_tables:
+            break
+
+    meta["last_desc_sync"] = str(now_datetime())
+    _save_schema_checkpoint(meta, tables_blocks)
+    frappe.db.commit()  # nosemgrep: frappe-semgrep-rules.rules.frappe-manual-commit
+
+    return {
+        "ok": True,
+        "tables_updated": updated_tables,
+        "fields_updated": updated_fields,
+        "status": "Complete" if consecutive_errors <= 5 else "Partial Failure",
+    }
+
+
+@frappe.whitelist(allow_guest=False)
 def sync_tables_and_schema_smart() -> Dict[str, Any]:
     payload = _read_filedoctype(SCHEMA_YAML, RAG_FOLDER)
     meta, tables_blocks = _normalize_schema_payload(payload)
-
     existing_tables_raw = _read_filedoctype(TABLES_JSON, RAG_FOLDER)
     existing_tables = _normalize_existing_tables(existing_tables_raw)
 
@@ -450,7 +533,7 @@ def sync_tables_and_schema_smart() -> Dict[str, Any]:
     last_sync_raw = meta.get("last_doctype_sync")
     changed_doctypes = _get_changed_doctypes(last_sync_raw)
 
-    changed_tables, missing_from_schema, _, tables_to_process, merged_tables = _get_tables_to_process(
+    changed_tables, missing_from_schema, _unused, tables_to_process, merged_tables = _get_tables_to_process(
         by_table=by_table,
         existing_tables=existing_tables,
         changed_doctypes=changed_doctypes,
@@ -729,71 +812,6 @@ def _process_table_for_missing_descriptions(
     return result
 
 
-@frappe.whitelist(allow_guest=False)
-def fill_missing_field_descriptions(
-    batch_size: int = 15,
-    max_tables: int = 0,
-    checkpoint_every_table: int = 10,
-) -> Dict[str, Any]:
-    payload = _read_filedoctype(SCHEMA_YAML)
-    meta = payload.get("_meta") or {}
-    tables_blocks = payload.get("tables") or []
-
-    if not isinstance(tables_blocks, list):
-        return {"ok": False, "message": _("schema.yaml invalid")}
-
-    client = _get_openai_client()
-    if not client:
-        return {"ok": False, "message": _("OpenAI API key missing")}
-
-    updated_tables = 0
-    updated_fields = 0
-    processed_updated_tables = 0
-    tables_since_last_save = 0
-    consecutive_errors = 0
-
-    for block in tables_blocks:
-        _reset_frappe_local_cache()
-
-        result = _process_table_for_missing_descriptions(
-            client=client,
-            block=block,
-            batch_size=batch_size,
-        )
-
-        updated_in_table = result["updated_in_table"]
-        updated_fields += result["updated_fields"]
-        consecutive_errors = result["consecutive_errors"]
-
-        if updated_in_table:
-            updated_tables += 1
-            processed_updated_tables += 1
-            tables_since_last_save += 1
-
-        if tables_since_last_save >= checkpoint_every_table:
-            _save_schema_checkpoint(meta, tables_blocks)
-            tables_since_last_save = 0
-            gc.collect()
-
-        if consecutive_errors > 5:
-            frappe.logger().error("Stopping job: Too many consecutive API errors.")
-            break
-
-        if max_tables and processed_updated_tables >= max_tables:
-            break
-
-    meta["last_desc_sync"] = str(now_datetime())
-    _save_schema_checkpoint(meta, tables_blocks)
-    frappe.db.commit()  # nosemgrep: frappe-semgrep-rules.rules.frappe-manual-commit
-
-    return {
-        "ok": True,
-        "tables_updated": updated_tables,
-        "fields_updated": updated_fields,
-        "status": "Complete" if consecutive_errors <= 5 else "Partial Failure",
-    }
-
-
 @frappe.whitelist()
 def sync_schema_and_enqueue_descriptions() -> Dict[str, Any]:
     sync_tables_and_schema_smart()
@@ -802,7 +820,19 @@ def sync_schema_and_enqueue_descriptions() -> Dict[str, Any]:
         queue="long",
         timeout=14400,
     )
+    convert_yaml_schema_to_sqlglot_meta()
+    frappe.enqueue(
+        "changai.changai.api.v2.build_cards_faiss_index_v2.build_table_fvs_job",
+        queue="long",
+        timeout=1800,
+    )
+    frappe.enqueue(
+        "changai.changai.api.v2.build_cards_faiss_index_v2.build_schema_fvs_job",
+        queue="long",
+        timeout=1800,
+    )
     return {"ok": True, "message": _("Schema updated ✅ Field descriptions running in background 🧠")}
+
 
 def _get_field_names(fields: List[Dict[str, Any]]) -> List[str]:
     return [
