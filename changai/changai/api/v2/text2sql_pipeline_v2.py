@@ -1022,23 +1022,23 @@ def remote_entity_embedder(q: str) -> Union[list, str]:
     return response
 
 
+# @frappe.whitelist(allow_guest=False)
+# def get_master_vs():
+#     global _VS_MASTER
+#     if _VS_MASTER is None:
+#         emb = get_embedding_engine()
+#         if emb is None:
+#             frappe.throw(_(EMBEDDING_ENGINE_NONE_MESSG))
+#         app_path = frappe.get_app_path("changai")
+#         master_vs_path = os.path.join(app_path, "changai", "api", "v2", "fvs_stores", "erpnext", "masterdata_fvs")
+#         if not os.path.exists(master_vs_path):
+#             frappe.throw(_("FAISS MASTER store not found at {0}").format(master_vs_path))
+#         _VS_MASTER = FAISS.load_local(master_vs_path, emb, allow_dangerous_deserialization=True)
+#     return _VS_MASTER
+
+
 @frappe.whitelist(allow_guest=False)
 def get_master_vs():
-    global _VS_MASTER
-    if _VS_MASTER is None:
-        emb = get_embedding_engine()
-        if emb is None:
-            frappe.throw(_(EMBEDDING_ENGINE_NONE_MESSG))
-        app_path = frappe.get_app_path("changai")
-        master_vs_path = os.path.join(app_path, "changai", "api", "v2", "fvs_stores", "erpnext", "masterdata_fvs")
-        if not os.path.exists(master_vs_path):
-            frappe.throw(_("FAISS MASTER store not found at {0}").format(master_vs_path))
-        _VS_MASTER = FAISS.load_local(master_vs_path, emb, allow_dangerous_deserialization=True)
-    return _VS_MASTER
-
-
-@frappe.whitelist(allow_guest=False)
-def get_master_vs_test():
     global _VS_MASTER
 
     if _VS_MASTER is None:
@@ -1051,7 +1051,7 @@ def get_master_vs_test():
         )
 
         if not os.path.exists(master_vs_path):
-            frappe.throw(_("FAISS MASTER store not found at {0}").format(master_vs_path))
+            frappe.throw(_("FAISS MASTER store not found at {0}.Please click on Update Master Data button in Training tab in ChangAI Settings").format(master_vs_path))
 
         _VS_MASTER = FAISS.load_local(
             master_vs_path,
