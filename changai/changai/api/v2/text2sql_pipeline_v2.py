@@ -1891,5 +1891,5 @@ def run_text2sql_pipeline(user_question: str, chat_id: str) -> Dict:
             "Bot": _get_sql_error_message(err, val),
         }
 
-    return _handle_sql_result(final, sql, orm, formatted_q, fields,
-                               selected_tables, val, entity_debug, user_question, chat_id)
+    return _handle_sql_result(final, sql, orm, formatted_q, fields,selected_tables, val, entity_debug, user_question, chat_id)
+

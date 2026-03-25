@@ -200,7 +200,7 @@ def _validate_field(doctype: str, fieldname: str) -> bool:
 
 
 def _parse_table_tag(positive: str):
-    match = re.match(r"\[TABLE\]\s+([^\]>]+)(?:\s*\||\s*$)", positive)
+    match = re.match(r"\[TABLE\]\s+([^\]>]{1,200})(?:\s*\||\s*$)", positive)
     if not match:
         return False, "Could not parse [TABLE] format"
     table = match.group(1).strip()
@@ -211,7 +211,7 @@ def _parse_table_tag(positive: str):
 
 
 def _parse_field_tag(positive: str):
-    match = re.match(r"\[FIELD\]\s+(\w+)\s+\|\s+\[TABLE\]\s+([^\]>]+)(?:\s*\||\s*$)", positive)
+    match = re.match(r"\[FIELD\]\s+(\w{1,100})\s+\|\s+\[TABLE\]\s+([^\]>]{1,200})(?:\s*\||\s*$)", positive)
     if not match:
         return False, "Could not parse [FIELD] format"
     field = match.group(1).strip()
@@ -225,7 +225,7 @@ def _parse_field_tag(positive: str):
 
 
 def _parse_link_tag(positive: str):
-    match = re.match(r"\[LINK\]\s+([^\]>]+)\s+-->\s+([^\]>]+)\s+ON\s+(\w+)(?:\s*\||\s*$)", positive)
+    match = re.match(r"\[LINK\]\s+([^\]>]{1,200})\s+-->\s+([^\]>]{1,200})\s+ON\s+(\w{1,100})(?:\s*\||\s*$)", positive)
     if not match:
         return False, "Could not parse [LINK] format"
     table_a = match.group(1).strip()

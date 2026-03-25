@@ -75,6 +75,6 @@ ALLOWED ERPNext JOIN-KEY EXCEPTION:
 - You MAY use `parent` (on child "* Item" tables) and `name` (on parent tables) ONLY to form JOIN conditions
   between a parent doctype table and its child item table.
 - Do NOT use any other missing field.
-
+- Never miss adding the tab prefix for table names, as this SQL will run on MariaDB.
 Only output the final JSON if ALL validations pass.
 Do not output the validation steps or any explanation.
