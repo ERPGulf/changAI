@@ -26,7 +26,7 @@ frappe.ui.form.on("ChangAI Settings", {
     },
     update_masterdata_file(frm) {
         frappe.call({
-            method: "changai.changai.api.v2.auto_gen_api.sync_master_data_smart",
+            method: "changai.changai.api.v2.auto_gen_api.update_masterdata",
             freeze: true,
             freeze_message: "Updating Master Data...",
             callback(r) {
