@@ -1419,7 +1419,7 @@ def support_bot(message: str) -> Dict[str, Any]:
     if task_flag == "CREATE_TICKET":
         try:
             created = create_helpdesk_ticket(message,full_name,user_email)
-            return {"kind": "CREATE_TICKET", "data": created}
+            return created
 
         except Exception as e:
             return {"Error":str(e)}
@@ -1431,13 +1431,13 @@ def support_bot(message: str) -> Dict[str, Any]:
             }
         try:
             details = get_user_tickets(ticket_id)
-            return {"kind": "TICKET_DETAILS", "data": details}
+            return details
         except Exception as e:
             return {"Error":str(e)}
 
     if task_flag == "GET_USER_TICKETS":
         tickets = get_user_tickets()
-        return {"kind": "GET_USER_TICKETS", "data": tickets}
+        return tickets
 
     return {"kind": "UNKNOWN", "message": "Please describe the issue or provide a ticket number."}
 
