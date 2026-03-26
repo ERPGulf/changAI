@@ -1363,9 +1363,9 @@ workflow.add_edge("send_non_erp_request", END)
 workflow.add_edge("retrieve","detect_entities")
 workflow.add_conditional_edges("detect_entities", route_after_entities, {"CONTEXT":"build_context","DIRECT":"generate_sql"})
 workflow.add_edge("build_context", "generate_sql")
-workflow.add_edge("generate_sql","validate_sql")
-workflow.add_conditional_edges("validate_sql",router,{"repair":"repair_sql","end":END})
-workflow.add_edge("repair_sql","validate_sql")
+workflow.add_edge("generate_sql",END)
+# workflow.add_conditional_edges("validate_sql",router,{"repair":"repair_sql","end":END})
+# workflow.add_edge("repair_sql","validate_sql")
 checkpointer=MemorySaver()
 app=workflow.compile(checkpointer=checkpointer)
 
@@ -1401,6 +1401,8 @@ def execute_query(sql: str, doctypes: List[str]) -> Any:
 
 @frappe.whitelist(allow_guest=False)
 def support_bot(message: str) -> Dict[str, Any]:
+    user_email = frappe.session.user
+    full_name = frappe.get_value("User", frappe.session.user, "full_name")
     prompt = SUPPORT_PROMPT.format(user_message=message)
     raw = call_gemini(prompt)
     output = json.loads(raw)
@@ -1410,14 +1412,13 @@ def support_bot(message: str) -> Dict[str, Any]:
     # normalize ticket_id
     if isinstance(ticket_id, str) and ticket_id.isdigit():
         ticket_id = int(ticket_id)
-        return ticket_id
     if not isinstance(ticket_id, int):
         ticket_id = None
 
     # 2) route by task
     if task_flag == "CREATE_TICKET":
         try:
-            created = create_helpdesk_ticket(message)
+            created = create_helpdesk_ticket(message,full_name,user_email)
             return {"kind": "CREATE_TICKET", "data": created}
 
         except Exception as e:
@@ -1887,12 +1888,25 @@ def _get_sql_error_message(err: Any, val: Dict) -> str:
     if err:
         frappe.log_error(err, "ChangAI SQL Pipeline Error")
         return "⚠️ The model encountered an error generating your query. Please try again."
-    parse_error = val.get("details", {}).get("parse_error", "")
-    if parse_error == "Empty SQL from LLM":
+
+    error_text = (val.get("error") or "").strip()
+
+    if not error_text:
+        return "⚠️ Could not process your request. Please try rephrasing."
+
+    if "Empty SQL from LLM" in error_text:
         return "⚠️ The model could not generate a SQL query for your question. Please try rephrasing."
-    if val.get("unknown_tables") or val.get("unknown_columns"):
-        return "⚠️ The model generated an invalid query. Please try rephrasing."
-    return "⚠️ Could not process your request. Please try rephrasing."
+
+    if "does not exist in schema" in error_text:
+        return f"⚠️ The model generated an invalid table reference. {error_text}"
+
+    if "could not be resolved" in error_text:
+        return f"⚠️ The model generated an invalid field reference. {error_text}"
+
+    if "parse" in error_text.lower() or "syntax" in error_text.lower() or "expected" in error_text.lower():
+        return "⚠️ The model generated invalid SQL syntax. Please try rephrasing."
+
+    return f"⚠️ The model generated an invalid query. {error_text}"
 
 
 def _handle_sql_result(final: SQLState, sql: str, orm: str, formatted_q: str, fields: str,
@@ -1926,6 +1940,7 @@ def _handle_sql_result(final: SQLState, sql: str, orm: str, formatted_q: str, fi
         "Entity Values present ?": contains_values,
         "Validation": val,
         "Error": err,
+        "result":sql_result,
         "EntityDebug": entity_debug,
         "Bot": formatted_result,
     }
@@ -1933,48 +1948,6 @@ def _handle_sql_result(final: SQLState, sql: str, orm: str, formatted_q: str, fi
 
 @frappe.whitelist(allow_guest=False)
 def run_text2sql_pipeline(user_question: str, chat_id: str) -> Dict:
-    final, err_response = _invoke_pipeline(user_question, chat_id)
-    if err_response:
-        return err_response
-
-    entity_debug = {
-        "contains_values": final.get("contains_values"),
-        "entity_cards": final.get("entity_cards") or [],
-    }
-
-    if (final.get("query_type") or "NON_ERP") == "NON_ERP":
-        return _handle_non_erp(final, user_question, chat_id)
-
-    sql = clean_sql(final.get("sql")) or ""
-    orm = clean_sql(final.get("orm")) or ""
-    formatted_q = _safe_strip(final.get("formatted_q") or "")
-    selected_tables = final.get("selected_tables") or []
-    fields = _safe_strip(final.get("selected_fields") or "")
-    val = final.get("validation") or {}
-    err = final.get("error")
-
-    if not val.get("ok") or not sql.upper().startswith("SELECT"):
-        context = (final.get("context") or final.get("selected_fields") or "")[:800]
-        return {
-            "Question": user_question,
-            "Formatted_Question": formatted_q,
-            "Context": context,
-            "Tables": selected_tables,
-            "Fields": fields,
-            "SQL": sql,
-            "Validation": val,
-            "EntityDebug": entity_debug,
-            "Tries": int(final.get("tries") or 0),
-            "Error": err or "SQL not valid or missing",
-            "Result": [],
-            "Bot": _get_sql_error_message(err, val),
-        }
-
-    return _handle_sql_result(final, sql, orm, formatted_q, fields,selected_tables, val, entity_debug, user_question, chat_id)
-
-
-@frappe.whitelist(allow_guest=False)
-def run_text2sql_pipeline_testing(user_question: str, chat_id: str) -> Dict:
     final, err_response = _invoke_pipeline(user_question, chat_id)
     if err_response:
         return err_response
@@ -2010,7 +1983,7 @@ def run_text2sql_pipeline_testing(user_question: str, chat_id: str) -> Dict:
             "Tries": int(final.get("tries") or 0),
             "Error": err or "SQL not valid or missing",
             "Result": [],
-            "Bot": _get_sql_error_message(err, val),
+            "Bot": _get_sql_error_message(err, res),
         }
 
     return _handle_sql_result(final, sql, orm, formatted_q, fields,selected_tables, res, entity_debug, user_question, chat_id)

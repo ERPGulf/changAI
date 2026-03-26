@@ -74,7 +74,7 @@ function initChangAIChatbot() {
     </div>
 
     <div class="tab_box">
-      <button id="tab-chat" class="tab_btn active">Chat</button>
+      <button id="tab-chat" class="tab_btn active">Chats</button>
       <button id="tab-debug" class="tab_btn">Debug</button>
       <button id="tab-support" class="tab_btn">Support</button>
     </div>

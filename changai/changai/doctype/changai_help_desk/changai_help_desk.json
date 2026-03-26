@@ -26,9 +26,8 @@
   },
   {
    "fieldname": "customer",
-   "fieldtype": "Link",
-   "label": "Customer",
-   "options": "Customer"
+   "fieldtype": "Data",
+   "label": "User"
   },
   {
    "fieldname": "email",
@@ -57,7 +56,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-25 14:18:15.487336",
+ "modified": "2026-03-26 08:48:35.673850",
  "modified_by": "Administrator",
  "module": "Changai",
  "name": "ChangAI Help Desk",
