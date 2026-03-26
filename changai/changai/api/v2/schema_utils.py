@@ -3,11 +3,24 @@ from sqlglot import exp
 from sqlglot import optimizer
 from sqlglot.schema import MappingSchema
 import frappe
+from sqlglot.errors import ParseError, OptimizeError
+from sqlglot.optimizer.qualify import qualify
 import json
 from typing import Any, Dict, List, Tuple, Union, Optional, Set
 import yaml
 from pathlib import Path
 
+
+def _safe_join(base: Path, rel: str) -> Path:
+    """
+    Prevent path traversal. Only allow reading inside base directory.
+    """
+    p = (base / rel).resolve()
+    if base != p and base not in p.parents:
+        frappe.throw(_("Unsafe path: {0}").format(rel))
+    return p
+
+_ALLOWED_EXT = {".json", ".yaml",".j2", ".yml", ".txt", ".md"}
 _ASSETS_DIR = Path(frappe.get_app_path("changai", "changai", "api", "v2", "assets")).resolve()
 RAG_FOLDER = "Home/RAG Sources"
 JSON_EXT = ".json"

@@ -110,7 +110,7 @@ Examples:
   → standalone_question: "stock of side table in main warehouse"
 
   History: "top 5 customers this month"
-  Latest: "show lst month also"
+  Latest: "show lst month"
   → standalone_question: "top 5 customers last month"
 
   History: "employees in accounts department"

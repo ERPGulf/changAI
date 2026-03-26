@@ -855,7 +855,7 @@ def start_train(modules: str, total_count: int):
         timeout=14400,
         modules=modules,
         total_count=val_count,
-        path="Home/Validation Data/Batch 4",
+        path="Home/Validation Data/Batch 5",
         use_claude=True,                     # <-- Claude
     )
     return {"ok": True, "message": "Training and validation jobs queued."}
