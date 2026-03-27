@@ -58,12 +58,10 @@ Open-source AI assistant for ERPNext. Ask business questions in plain English an
 
 - [Frappe Framework](https://frappeframework.com) — Full-stack Python web framework that powers ERPNext. Handles authentication, permissions, database queries, and API routing.
 - Python 3.10+ — Core language for all backend logic, model serving, and pipeline orchestration.
-- MariaDB — Primary database used by ERPNext, queried via generated SQL.
 
 **AI and Machine Learning**
 
 - **[Hugging Face](https://huggingface.co/)** — Central hub for model hosting, versioning, and distribution. Utilized for managing custom fine-tuned weights and leveraging the `transformers` library.
-- [nomic-embed-text-v1.5 (fine-tuned)](https://huggingface.co/hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned) — Custom embedding model fine-tuned on ERPNext schema and retrieval datasets for semantic search.
 - [nomic-embed-text-v1.5 (fine-tuned)](https://huggingface.co/hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned) — Custom embedding model fine-tuned on ERPNext schema and retrieval datasets for semantic search.
 - Google Gemini — Core query engine used for SQL generation. Available on a free tier via Google AI Studio and on an enterprise tier via Vertex AI for high-volume production environments.
 - Qwen3 via Replicate (Remote Mode) — Used for both schema retrieval and SQL generation in the fully hosted pipeline.
@@ -158,16 +156,16 @@ To do this, enter an [Anthropic Claude API key](https://console.anthropic.com/) 
 
 Once setup is complete, open the **changAI** interface from the ERPNext menu. The interface has three tabs.
 
-### Chat Tab
+**Chat Tab**
 
 Type your business question in plain English and press Send. changAI will identify the relevant tables and fields in your schema, generate a SQL query, check it against your permissions, and return a plain English answer.
 You do not need to know the underlying table structure or field names. changAI handles the schema lookup automatically.
 
-### Debug Tab
+**Debug Tab**
 
 If a response looks unexpected or incorrect, switch to the Debug Tab to inspect each stage of the query pipeline. You can see which tables and fields were retrieved during the RAG step, the exact SQL query that was generated, and the raw result before it was converted to natural language. This is useful for understanding how a query was interpreted and for identifying where an issue may have occurred.
 
-### Support Tab
+**Support Tab**
 
 A built-in support interface is included for raising queries or feedback directly from within the app. This feature is currently a work in progress and will be expanded in future releases.
 
