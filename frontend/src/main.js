@@ -1,5 +1,19 @@
-import { createApp } from 'vue';
-import App from './App.vue';
-import './style.css';
+import { createApp } from 'vue'
+import App from './App.vue'
+import './styles/changai.css'
 
-createApp(App).mount('#app');
+function initChangAIChatbot() {
+  if (document.getElementById('changai-chatbot-root')) return
+
+  const mountEl = document.createElement('div')
+  mountEl.id = 'changai-chatbot-root'
+  document.body.appendChild(mountEl)
+
+  createApp(App).mount(mountEl)
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initChangAIChatbot)
+} else {
+  initChangAIChatbot()
+}

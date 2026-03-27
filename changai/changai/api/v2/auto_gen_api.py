@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional, Set, Tuple
 import datetime
 import gc
 import json
@@ -41,11 +41,17 @@ erpnext_modules = [
     "Maintenance",
 ]
 
+SYSTEM_FIELDS = [
+    {"fieldname": "name", "fieldtype": "Data", "label": "ID"},
+    {"fieldname": "docstatus", "fieldtype": "Int", "label": "Document Status"},
+    {"fieldname": "owner", "fieldtype": "Link", "label": "Owner", "options": "User"},
+    {"fieldname": "creation", "fieldtype": "Datetime", "label": "Created On"},
+    {"fieldname": "modified", "fieldtype": "Datetime", "label": "Last Modified"},
+]
 
-IGNORED_FIELDTYPES: Set[str] = {
+EXCLUDED_FIELDTYPES: Set[str] = {
     "Section Break", "Column Break", "Tab Break", "Page Break", "Table Break",
-    "Fold", "Heading", "HTML", "HTML Editor", "Text Editor", "Markdown Editor",
-    "Code", "Button", "Attach", "Attach Image", "Image", "Signature", "Icon", "Barcode",
+    "Fold", "Heading", "HTML", "Button", "Attach Image", "Image", "Signature", "Icon",
 }
 
 
@@ -208,63 +214,155 @@ def update_masterdata():
         "message":"Master Data update running in RQ Job"
     }
 
-
 def sync_master_data_smart() -> Dict[str, Any]:
     file_name = "master_data.yaml"
     payload = _read_filedoctype(file_name, RAG_FOLDER)
 
     meta, data = _normalize_master_data_payload(payload)
-    last_sync = meta.get("last_sync")
-    existing_keys = _extract_existing_keys(data)
-    base_filters = _get_master_data_filters(last_sync)
 
     added_total = 0
+    removed_total = 0
     added_by_module: Dict[str, int] = {}
+    removed_by_module: Dict[str, int] = {}
     fetched_by_module: Dict[str, int] = {}
 
+    rebuilt_rows: List[Dict[str, Any]] = []
+
     for mod in MODULES_TO_SYNC:
-        fetched_count, added_count = _sync_module_master_data(
-            mod=mod,
-            data=data,
-            existing_keys=existing_keys,
-            base_filters=base_filters,
-        )
-        fetched_by_module[mod] = fetched_count
-        added_by_module[mod] = added_count
-        added_total += added_count
+        entity_type = f"tab{mod}"
+
+        existing_rows = [
+            row for row in data
+            if isinstance(row, dict) and row.get("entity_type") == entity_type
+        ]
+        existing_ids = {
+            row.get("entity_id")
+            for row in existing_rows
+            if row.get("entity_id")
+        }
+
+        live_records = frappe.get_all(mod, fields=["name"])
+        live_ids = {rec.name for rec in live_records if rec.get("name")}
+
+        fetched_by_module[mod] = len(live_ids)
+
+        added_ids = live_ids - existing_ids
+        removed_ids = existing_ids - live_ids
+
+        added_by_module[mod] = len(added_ids)
+        removed_by_module[mod] = len(removed_ids)
+
+        added_total += len(added_ids)
+        removed_total += len(removed_ids)
+
+        for entity_id in sorted(live_ids):
+            rebuilt_rows.append(_build_master_data_row(entity_type, entity_id))
+
+    final_data = rebuilt_rows
 
     meta["last_sync"] = str(now_datetime())
-    payload_out = {"_meta": meta, "data": data}
+    payload_out = {"_meta": meta, "data": final_data}
     file_doc = write_filedoctype(file_name, payload_out, folder=RAG_FOLDER)
 
-    frappe.db.commit()  # nosemgrep: frappe-manual-commit
+    frappe.db.commit()
 
-    msg = (
-        _("Sync complete ✅ Added {0} new records.").format(added_total)
-        if added_total
-        else _("Sync complete ✅ No new records to add.")
-    )
-    fvs_error = None
     return {
         "ok": True,
-        "message": msg,
+        "message": _("Master data sync complete."),
         "added_total": added_total,
+        "removed_total": removed_total,
         "added_by_module": added_by_module,
+        "removed_by_module": removed_by_module,
         "fetched_by_module": fetched_by_module,
-        "last_sync_used": last_sync or "FIRST_RUN(full_fetch)",
+        "last_sync_used": meta.get("last_sync"),
         "new_last_sync": meta["last_sync"],
         "file_url": file_doc.file_url,
-        "fvs_error": fvs_error,
+        "fvs_error": None,
     }
 
+
+def _clean_schema_fields(by_table: Dict[str, Dict[str, Any]]) -> None:
+    for block in by_table.values():
+        for field in block.get("fields", []) or []:
+            if not isinstance(field, dict):
+                continue
+
+            if field.get("fieldtype") != "Select":
+                field.pop("options", None)
+
+            if field.get("fieldtype") != "Link":
+                field.pop("join_hint", None)
+            return "ok"
+@frappe.whitelist(allow_guest=True)
+def test():
+    payload = _read_filedoctype("schema.yaml", "Home/RAG Sources")
+    tables = [
+        table.get("table")
+        for table in payload.get("tables", [])
+        if isinstance(table, dict) and table.get("table")
+    ]
+
+    write_filedoctype(
+        "tables.json",
+        tables,
+        folder="Home/RAG Sources"
+    )
+
+    print("Tables count:", len(tables))
+    return len(tables)
+    # payload = _read_filedoctype("schema.yaml", "Home/RAG Sources")
+
+    # valid_modules = set(erpnext_modules)
+
+    # clean_tables = []
+
+    # for block in payload.get("tables", []):
+    #     table = block.get("table")
+    #     if not table:
+    #         continue
+
+    #     dt = _strip_tab(table)
+
+    #     doc = frappe.get_value("DocType", dt, ["module", "custom"], as_dict=True)
+
+    #     if not doc:
+    #         continue
+
+    #     # keep only standard ERPNext doctypes (not custom)
+    #     if doc.custom:
+    #         continue
+
+    #     # keep only ERPNext modules
+    #     if doc.get("module") not in erpnext_modules:
+    #         continue
+
+    #     clean_tables.append(block)
+
+    # payload["tables"] = clean_tables
+
+    # write_filedoctype(
+    #     "schema.yaml",
+    #     payload,
+    #     folder="Home/RAG Sources"
+    # )
+
+    # print("Cleaned tables:", len(clean_tables))
+    # tables = [t["table"] for t in payload["tables"]]
+
+    # write_filedoctype(
+    #     "tables.json",
+    #     tables,
+    #     folder="Home/RAG Sources"
+    # )
+    # return len(clean_tables)
 
 @frappe.whitelist(allow_guest=False)
 def get_doctypes_changed_since(last_sync: Optional[str]) -> List[str]:
-    filters: Dict[str, Any] = {
-        "module": ["in", erpnext_modules],
-        "issingle": 0,
-        "is_virtual": 0,
-    }
+    filters = {
+    "module": ["in", erpnext_modules],
+    "issingle": 0,
+    "is_virtual": 0,
+}
     if last_sync:
         try:
             since = add_to_date(last_sync, minutes=-2)
@@ -370,46 +468,40 @@ def _merge_select_options(live_options_raw: str, existing_options: Any) -> List[
     return list(dict.fromkeys(live_options + existing_options))
 
 
-def _build_field_entry(field_meta: Any, existing_fields: Dict[str, Dict[str, Any]]) -> Optional[Dict[str, Any]]:
-    if not field_meta.fieldname:
-        return None
-
-    existing_field = existing_fields.get(field_meta.fieldname, {})
-    entry = {
-        "name": field_meta.fieldname,
-        "fieldtype": field_meta.fieldtype,
-        "label": field_meta.label or "",
-        "description": existing_field.get("description", ""),
-    }
-
-    if field_meta.fieldtype == "Select" and field_meta.options:
-        entry["options"] = _merge_select_options(
-            field_meta.options,
-            existing_field.get("options", []),
-        )
-    elif field_meta.fieldtype == "Link" and field_meta.options:
-        entry["join_hint"] = field_meta.options
-
-    return entry
-
-
-def _build_fields_from_meta(meta_dt: Any, existing_fields: Dict[str, Dict[str, Any]]) -> List[Dict[str, Any]]:
+def _build_fields_from_meta(
+    meta_dt: Any,
+    existing_fields: Dict[str, Dict[str, Any]],
+) -> List[Dict[str, Any]]:
     fields: List[Dict[str, Any]] = []
+    added_fieldnames = set()
 
-    for field_meta in meta_dt.fields:
-        field_entry = _build_field_entry(field_meta, existing_fields)
+    # always add system fields first
+    for sys_field in SYSTEM_FIELDS:
+        field_entry = _build_field_entry(sys_field, existing_fields, meta_dt.name)
         if field_entry:
             fields.append(field_entry)
+            added_fieldnames.add(field_entry["name"])
+
+    # then add real doctype fields
+    for field_meta in meta_dt.fields:
+        fieldname = (getattr(field_meta, "fieldname", None) or "").strip()
+        fieldtype = (getattr(field_meta, "fieldtype", None) or "").strip()
+
+        if not fieldname:
+            continue
+
+        if fieldname in added_fieldnames:
+            continue
+
+        if fieldtype in EXCLUDED_FIELDTYPES:
+            continue
+
+        field_entry = _build_field_entry(field_meta, existing_fields, meta_dt.name)
+        if field_entry:
+            fields.append(field_entry)
+            added_fieldnames.add(field_entry["name"])
 
     return fields
-
-
-def _has_pending_descriptions(fields: List[Dict[str, Any]]) -> bool:
-    return any(
-        not (field.get("description") or "").strip()
-        for field in fields
-        if isinstance(field, dict) and field.get("name")
-    )
 
 
 def _update_or_create_table_block(
@@ -429,6 +521,85 @@ def _update_or_create_table_block(
         "desc_done": False,
     }
 
+def _build_field_entry(
+    field_meta: Any,
+    existing_fields: Dict[str, Dict[str, Any]],
+    source_doctype: str,
+) -> Optional[Dict[str, Any]]:
+
+    if isinstance(field_meta, dict):
+        fieldname = field_meta.get("fieldname")
+        fieldtype = field_meta.get("fieldtype", "Data")
+        label = field_meta.get("label") or fieldname
+        options = field_meta.get("options")
+    else:
+        fieldname = getattr(field_meta, "fieldname", None)
+        fieldtype = getattr(field_meta, "fieldtype", "Data")
+        label = getattr(field_meta, "label", None) or fieldname
+        options = getattr(field_meta, "options", None)
+
+    if not fieldname:
+        return None
+
+    existing = existing_fields.get(fieldname) or {}
+    description = existing.get("description") or ""
+
+    entry = {
+        "name": fieldname,
+        "fieldtype": fieldtype,
+        "label": label,
+        "description": description,
+    }
+
+    if fieldtype == "Select" and options:
+        entry["options"] = _merge_select_options(
+            options,
+            existing.get("options", []),
+        )
+
+    elif fieldtype == "Link" and options:
+        entry["join_hint"] = {
+            "table": f"tab{options}",
+            "on": f"{fieldname} = tab{options}.name"
+        }
+
+    if fieldtype != "Select":
+        entry.pop("options", None)
+
+    if fieldtype != "Link":
+        entry.pop("join_hint", None)
+
+    return entry
+
+
+def _write_schema_outputs(
+    meta: Dict[str, Any],
+    by_table: Dict[str, Dict[str, Any]],
+    current_tables: List[str],
+) -> None:
+    ordered_blocks = [by_table[t] for t in current_tables if t in by_table]
+    final_tables = [block["table"] for block in ordered_blocks]
+
+    write_filedoctype(
+        SCHEMA_YAML,
+        {"_meta": meta, "tables": ordered_blocks},
+        folder=RAG_FOLDER,
+    )
+    write_filedoctype(
+        TABLES_JSON,
+        final_tables,
+        folder=RAG_FOLDER,
+    )
+
+
+
+def _has_pending_descriptions(fields: List[Dict[str, Any]]) -> bool:
+    return any(
+        not (field.get("description") or "").strip()
+        for field in fields
+        if isinstance(field, dict) and field.get("name")
+    )
+
 
 def _process_schema_table(table: str, by_table: Dict[str, Dict[str, Any]]) -> bool:
     dt = _strip_tab(table)
@@ -444,18 +615,6 @@ def _process_schema_table(table: str, by_table: Dict[str, Dict[str, Any]]) -> bo
 
     return True
 
-
-def _write_schema_outputs(meta: Dict[str, Any], by_table: Dict[str, Dict[str, Any]], merged_tables: List[str]) -> None:
-    write_filedoctype(
-        SCHEMA_YAML,
-        {"_meta": meta, "tables": list(by_table.values())},
-        folder=RAG_FOLDER,
-    )
-    write_filedoctype(
-        TABLES_JSON,
-        merged_tables,
-        folder=RAG_FOLDER,
-    )
 
 
 @frappe.whitelist(allow_guest=False)
@@ -522,44 +681,57 @@ def fill_missing_field_descriptions(
     }
 
 
+
 @frappe.whitelist(allow_guest=False)
 def sync_tables_and_schema_smart() -> Dict[str, Any]:
     payload = _read_filedoctype(SCHEMA_YAML, RAG_FOLDER)
     meta, tables_blocks = _normalize_schema_payload(payload)
-    existing_tables_raw = _read_filedoctype(TABLES_JSON, RAG_FOLDER)
-    existing_tables = _normalize_existing_tables(existing_tables_raw)
 
     by_table = _build_table_map(tables_blocks)
     last_sync_raw = meta.get("last_doctype_sync")
     changed_doctypes = _get_changed_doctypes(last_sync_raw)
 
-    changed_tables, missing_from_schema, _unused, tables_to_process, merged_tables = _get_tables_to_process(
-        by_table=by_table,
-        existing_tables=existing_tables,
-        changed_doctypes=changed_doctypes,
-    )
+    current_doctypes = frappe.get_all(
+    "DocType",
+    filters={
+        "module": ["in", erpnext_modules],
+        "issingle": 0,
+        "is_virtual": 0,
+    },
+    pluck="name",
+)
+    current_tables = sorted(_tab(dt) for dt in current_doctypes)
 
-    if not tables_to_process:
-        return {"ok": True, "message": _("No changes detected")}
+    changed_tables = {_tab(dt) for dt in changed_doctypes}
+    missing_from_schema = {t for t in current_tables if t not in by_table}
+
+    tables_to_process = sorted(changed_tables | missing_from_schema)
 
     for table in tables_to_process:
         _process_schema_table(table, by_table)
 
+    valid_doctypes = set(current_doctypes)
+
+    by_table = {
+        table: block
+        for table, block in by_table.items()
+        if _strip_tab(table) in valid_doctypes
+    }
+    _clean_schema_fields(by_table)
     meta["last_doctype_sync"] = str(now_datetime())
-
     try:
-        _write_schema_outputs(meta, by_table, merged_tables)
+        _write_schema_outputs(meta, by_table, current_tables)
     except Exception as e:
-        return {"error": str(e)}
+        return {"ok": False, "error": str(e)}
 
-    frappe.db.commit()  # nosemgrep: frappe-manual-commit - explicit commit required to persist schema/table sync changes to File DocType
+    frappe.db.commit()  # nosemgrep: frappe-manual-commit
 
     return {
         "ok": True,
         "changed_tables": len(changed_tables),
         "missing_added": len(missing_from_schema),
-        "total_tables": len(merged_tables),
-        "message": f"Synced {len(changed_tables)} changed + {len(missing_from_schema)} new tables",
+        "total_tables": len(current_tables),
+        "message": f"Synced {len(changed_tables)} changed + {len(missing_from_schema)} missing tables",
     }
 
 
@@ -814,7 +986,9 @@ def _process_table_for_missing_descriptions(
 
 @frappe.whitelist()
 def sync_schema_and_enqueue_descriptions() -> Dict[str, Any]:
-    sync_tables_and_schema_smart()
+    res = sync_tables_and_schema_smart()
+    if not res.get("ok"):
+        return res
     frappe.enqueue(
         "changai.changai.api.v2.auto_gen_api.fill_missing_field_descriptions",
         queue="long",
@@ -857,17 +1031,6 @@ Rules:
 Fields:
 {json.dumps(field_names, ensure_ascii=False)}
 """.strip()
-
-
-def _normalize_desc_map(parsed: Any) -> Dict[str, str]:
-    if not isinstance(parsed, dict):
-        return {}
-
-    out: Dict[str, str] = {}
-    for key, value in parsed.items():
-        if isinstance(key, str) and isinstance(value, str) and key.strip() and value.strip():
-            out[key.strip()] = value.strip()
-    return out
 
 
 def _call_openai_desc_map_once(client, prompt: str):
