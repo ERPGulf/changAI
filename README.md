@@ -14,11 +14,9 @@ Open-source AI assistant for ERPNext. Ask business questions in plain English an
 
 </div>
 
----
 
 > **Note:** The current version is trained on ERPNext modules only. Like any AI model, it is still learning and handles a good range of ERPNext queries well, but will not get everything right. Accuracy improves over time with more training data and feedback.
 
----
 
 ## Table of Contents
 
@@ -30,7 +28,6 @@ Open-source AI assistant for ERPNext. Ask business questions in plain English an
 - [FAQs](#faqs)
 - [Links](#links)
 
----
 
 ## Key Features
 
@@ -54,7 +51,6 @@ Open-source AI assistant for ERPNext. Ask business questions in plain English an
 
 10. **Fine-Tuned Embedding Model** — changAI uses a custom fine-tuned embedding model built on nomic-embed-text-v1.5, specifically trained on ERPNext schema and retrieval data for better semantic matching.
 
----
 
 ## Tech Stack
 
@@ -84,17 +80,16 @@ Open-source AI assistant for ERPNext. Ask business questions in plain English an
 
 - [ERP Retrieval Dataset on Hugging Face](https://huggingface.co/datasets/hyrinmansoor/ERP-retrieval-data-modernbert) — Custom dataset used for fine-tuning the embedding model on ERPNext-specific retrieval tasks.
 
----
 
 ## Setup Instructions
 
 After installing changAI on your ERPNext site through Frappe Cloud or your bench, complete the following steps to configure and activate it.
 
-### Step 1 — Open changAI Settings
+**Step 1 — Open changAI Settings**
 
 Search for **changAI Settings** in the ERPNext search bar and open the settings page. This is the central place where all engines, credentials, and options for changAI are configured.
 
-### Step 2 — Configure the Query Engine (Google Gemini)
+**Step 2 — Configure the Query Engine (Google Gemini)**
 
 changAI uses Google Gemini as its  engine for generating SQL from your natural language queries. Two tiers are available depending on your usage requirements.
 
@@ -106,7 +101,7 @@ The free tier is the fastest way to get started. Generate your API key at [aistu
 
 For high-volume or production deployments, Vertex AI provides a more scalable and reliable backend. Set up your Google Cloud environment following the [Vertex AI getting started guide](https://cloud.google.com/vertex-ai/docs/start/cloud-environment), then enter the corresponding credentials in changAI Settings.
 
-### Step 3 — Choose a Deployment Mode
+**Step 3 — Choose a Deployment Mode**
 
 In addition to the Gemini configuration, changAI supports a Remote Mode that offloads the full pipeline to Replicate .
 
@@ -130,26 +125,26 @@ Both schema retrieval and SQL generation are handled by remote Replicate server 
    - Version IDs for the deployed models
 3. Save the settings
 
-### Step 4 — Enable Voice Assistant (Optional)
+**Step 4 — Enable Voice Assistant (Optional)**
 
 changAI includes an optional voice output feature powered by Amazon Polly that reads query results aloud.
 
 To enable it, open the **Details** tab in changAI Settings and check **Enable Voice Chat**. Then enter your AWS credentials — AWS Access Key ID and AWS Secret Access Key. If you have not set up AWS credentials before, follow the [Amazon Polly getting started guide](https://docs.aws.amazon.com/polly/latest/dg/getting-started.html).
 
-### Step 5 — Download the Embedding Model
+**Step 5 — Download the Embedding Model**
 
 changAI uses a fine-tuned embedding model for semantic retrieval. This model downloads automatically the first time the app is installed. If a model update is released in a future version, you will need to re-download it manually.
 
 To do this, open changAI Settings and click **Download Embedding Model**. Make sure your server has outbound internet access during this step. This keeps the embedding model local to your server, which also means your schema data does not leave your environment during the retrieval phase.
 
-### Step 6 — Sync Master Data (Required)
+**Step 6 — Sync Master Data (Required)**
 
 This step is mandatory. changAI needs to index your master tables before it can recognise specific names, records, and values in your queries. Without this sync, questions about specific customers, items, suppliers, or accounts will not return accurate results.
 
 1. Navigate to **Training Tab** in ChangAI Settings.
 2. Click **Update Master Data** to sync your master tables into the changAI index
 
-### Step 7 — Sync Schema (Optional)
+**Step 7 — Sync Schema (Optional)**
 
 changAI ships pre-configured with the standard ERPNext schema, so core modules work immediately after installation without any additional mapping. If your ERPNext instance has custom doctypes, custom fields, or significant workflow customisations, you can enrich the AI's understanding of your specific environment.
 
@@ -158,7 +153,6 @@ To do this, enter an [Anthropic Claude API key](https://console.anthropic.com/) 
 > Full video walkthrough: [youtu.be/twD-4scH-EM](https://youtu.be/twD-4scH-EM)  
 > Full documentation: [docs.claudion.com](https://docs.claudion.com/Claudion-Docs/changaisetup)
 
----
 
 ## Usage
 
@@ -177,7 +171,6 @@ If a response looks unexpected or incorrect, switch to the Debug Tab to inspect 
 
 A built-in support interface is included for raising queries or feedback directly from within the app. This feature is currently a work in progress and will be expanded in future releases.
 
----
 
 ## How It Works
 
@@ -198,7 +191,6 @@ Natural Language    Result is returned as a human-readable answer
     |               (optionally read aloud via Amazon Polly if voice is enabled)
 ```
 
----
 
 ## FAQs
 
@@ -238,12 +230,10 @@ In Local Mode, schema retrieval runs on your server and only the SQL query conte
 **How do I improve accuracy over time?**  
 Run the Train Data Automation feature to generate additional training data from your ERPNext modules. You can also re-sync the Master Data Schema after adding new doctypes or fields, and use the schema update feature to keep changAI aligned with any ERPNext customisations.
 
----
 
 ## Links
 
 | | |
-|---|---|
 | Setup Walkthrough | [youtu.be/twD-4scH-EM](https://youtu.be/twD-4scH-EM) |
 | Documentation | [docs.claudion.com](https://docs.claudion.com/Claudion-Docs/changaisetup) |
 | Embedding Model | [huggingface.co/hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned](https://huggingface.co/hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned) |
@@ -252,7 +242,9 @@ Run the Train Data Automation feature to generate additional training data from 
 | Support | [support@erpgulf.com](mailto:support@erpgulf.com) |
 | Website | [erpgulf.com](https://erpgulf.com) |
 
----
+
+## Report Bugs
+If you encounter any bugs, please report them on GitHub Issues https://github.com/ERPGulf/changAI/issues. Please include detailed information such as app screenshots, browser console logs to help the project maintainers reproduce and address the issue effectively.
 
 <div align="center">
 
