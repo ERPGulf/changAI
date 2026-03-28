@@ -6,6 +6,23 @@
     --changai-gap: 20px;
 }
 
+#changai-chatbot-root,
+#changai-chatbot-root * {
+    box-sizing: border-box;
+}
+
+#changai-chatbot-root .chatbot-popup .chat-header {
+    height: auto;
+    min-height: 56px;
+    padding: 12px 16px;
+    line-height: 1.2;
+}
+
+#changai-chatbot-root .chatbot-popup {
+    right: var(--changai-gap);
+    bottom: calc(var(--changai-gap) + 54px);
+}
+
 #chatbot-toggler {
     position: fixed;
     bottom: var(--changai-gap);
@@ -107,8 +124,9 @@
     background: var(--changai-primary);
     justify-content: space-between;
     align-items: center;
-    height: 50px;
-    padding: 25px 20px;
+    height: auto;
+    min-height: 56px;
+    padding: 12px 16px;
 }
 
 .chat-header .header-info {

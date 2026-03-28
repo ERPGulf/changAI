@@ -59,7 +59,7 @@ const emit = defineEmits(['close', 'submit', 'update:activeTab', 'toggleResponse
 
 const chatBodyRef = ref(null)
 const localTab = ref(props.activeTab)
-const windowMode = ref('half')
+const windowMode = ref('default')
 
 watch(() => props.activeTab, (val) => { localTab.value = val })
 watch(localTab, (val) => { emit('update:activeTab', val) })

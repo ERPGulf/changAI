@@ -1,7 +1,7 @@
 <template>
   <div class="relative w-full">
     <form
-      class="flex min-h-11 items-center gap-2 rounded-full border border-violet-200 bg-white px-3 shadow-sm transition-all focus-within:ring-2 focus-within:ring-brand-500/35"
+      class="flex min-h-11 items-center gap-2 rounded-full border border-violet-200 bg-white px-3 shadow-sm transition-all focus-within:ring-2 focus-within:ring-[rgba(109,79,194,0.35)]"
       autocomplete="off"
       @submit.prevent="handleSubmit"
     >
@@ -37,7 +37,7 @@
       <button
         type="submit"
         title="Send"
-        class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-brand-500 text-white transition-all hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-40"
+        class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#6d4fc2] text-white transition-all hover:bg-[#5f44ad] disabled:cursor-not-allowed disabled:opacity-40"
         :disabled="!messageText.trim()"
       >
         <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
