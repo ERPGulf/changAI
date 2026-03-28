@@ -1,17 +1,35 @@
 <template>
-  <div class="messageCon" :class="message.role === 'user' ? 'user-message' : 'bot-message'">
+  <div
+    class="flex gap-1.5"
+    :class="message.role === 'user' ? 'flex-col items-end' : 'items-start'"
+  >
     <BotIcon v-if="message.role !== 'user'" />
 
-    <div v-if="message.role !== 'user'" class="message-text-container">
-      <div v-if="isLoadingStatus" class="typing-loader" role="status" aria-live="polite" :aria-label="loaderLabel">
-        <span class="typing-dot"></span>
-        <span class="typing-dot"></span>
-        <span class="typing-dot"></span>
+    <div v-if="message.role !== 'user'" class="flex max-w-[75%] flex-col">
+      <div
+        v-if="isLoadingStatus"
+        class="inline-flex min-h-9.5 min-w-14.5 items-center justify-center gap-1.5 rounded-2xl bg-violet-200 px-3.5 py-2.5"
+        role="status"
+        aria-live="polite"
+        :aria-label="loaderLabel"
+      >
+        <span class="h-2 w-2 animate-bounce rounded-full bg-slate-900/75 [animation-delay:0ms]"></span>
+        <span class="h-2 w-2 animate-bounce rounded-full bg-slate-900/75 [animation-delay:160ms]"></span>
+        <span class="h-2 w-2 animate-bounce rounded-full bg-slate-900/75 [animation-delay:320ms]"></span>
       </div>
-      <p v-else class="message-text" v-html="message.text"></p>
+      <p
+        v-else
+        class="max-w-[75%] whitespace-pre-line rounded-[10px_10px_10px_3px] bg-brand-50 px-4 py-3 text-xs leading-relaxed text-black"
+        v-html="message.text"
+      ></p>
     </div>
 
-    <p v-else class="message-text">{{ message.text }}</p>
+    <p
+      v-else
+      class="max-w-[75%] whitespace-pre-line rounded-[13px_13px_3px_13px] bg-brand-500 px-4 py-3 text-[11px] leading-relaxed text-white"
+    >
+      {{ message.text }}
+    </p>
   </div>
 </template>
 

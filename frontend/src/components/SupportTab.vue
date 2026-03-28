@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p v-if="messages.length === 0" class="message-text">Send a message to Support.</p>
+    <p v-if="messages.length === 0" class="rounded-lg bg-brand-50 px-4 py-3 text-xs text-black">Send a message to Support.</p>
     <ChatMessage v-for="(msg, i) in messages" :key="i" :message="msg" :autoReadEnabled="autoReadEnabled" />
   </div>
 </template>

@@ -40,7 +40,6 @@ ASSET_VERSION = f"?v={app_version}-{asset_build_stamp}"
 # app_include_js = "/assets/changai/js/changai.js"
 # Include JS globally on all pages
 # Include JS globally on all pages
-app_include_html = ["/assets/changai/html/changai.html"]
 app_include_js = [
     f"/assets/changai/dist/changai-chatbot.js{ASSET_VERSION}",
     "/assets/changai/js/ai_translate.js"

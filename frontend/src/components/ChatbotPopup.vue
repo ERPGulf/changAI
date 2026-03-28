@@ -1,11 +1,6 @@
 <template>
   <div
-    class="chatbot-popup flex flex-col overflow-hidden"
-    :class="{
-      show: isOpen,
-      'mode-half': windowMode === 'half',
-      'mode-full': windowMode === 'full',
-    }"
+    :class="popupClasses"
   >
     <ChatHeader
       :windowMode="windowMode"
@@ -19,7 +14,7 @@
     />
     <TabBar v-model="localTab" />
 
-    <div class="chat-body min-h-0 flex-1 overflow-y-auto p-3 sm:p-4" ref="chatBodyRef">
+    <div class="min-h-0 flex-1 overflow-y-auto bg-white p-4 max-[900px]:p-3.5 max-[600px]:p-3" ref="chatBodyRef">
       <div>
         <ChatTab v-if="localTab === 'chat'" :messages="chatHistory" :autoReadEnabled="autoReadEnabled" />
         <DebugTab v-else-if="localTab === 'debug'" :logs="debugLogs" />
@@ -37,7 +32,7 @@
 </template>
 
 <script setup>
-import { ref, watch, nextTick } from 'vue'
+import { computed, ref, watch, nextTick } from 'vue'
 import ChatHeader from './ChatHeader.vue'
 import TabBar from './TabBar.vue'
 import ChatTab from './ChatTab.vue'
@@ -60,6 +55,39 @@ const emit = defineEmits(['close', 'submit', 'update:activeTab', 'toggleResponse
 const chatBodyRef = ref(null)
 const localTab = ref(props.activeTab)
 const windowMode = ref('default')
+
+const popupClasses = computed(() => {
+  const base = 'fixed z-[9999] flex flex-col overflow-hidden bg-white shadow-[0_0_128px_rgba(0,0,0,0.1),0_32px_64px_-48px_rgba(0,0,0,0.5)] transition-all duration-150 ease-out origin-bottom-right'
+  const state = props.isOpen
+    ? 'pointer-events-auto opacity-100 translate-x-0 translate-y-0 scale-100'
+    : 'pointer-events-none opacity-0 translate-x-1/2 translate-y-full scale-0'
+
+  if (windowMode.value === 'full') {
+    return [
+      base,
+      state,
+      'inset-0 h-screen w-screen max-h-screen max-w-screen rounded-none origin-center',
+    ]
+  }
+
+  if (windowMode.value === 'half') {
+    return [
+      base,
+      state,
+      'bottom-[74px] right-5 h-[min(86vh,860px)] w-[min(50vw,860px)] rounded-2xl',
+      'max-[900px]:bottom-[78px] max-[900px]:right-3 max-[900px]:h-[min(86vh,760px)] max-[900px]:w-[min(70vw,760px)] max-[900px]:rounded-[14px]',
+      'max-[600px]:inset-0 max-[600px]:h-screen max-[600px]:w-screen max-[600px]:max-h-screen max-[600px]:max-w-screen max-[600px]:rounded-none max-[600px]:pb-[env(safe-area-inset-bottom)]',
+    ]
+  }
+
+  return [
+    base,
+    state,
+    'bottom-[74px] right-5 h-[min(640px,78vh)] w-[min(420px,calc(100vw-40px))] rounded-2xl',
+    'max-[900px]:bottom-[78px] max-[900px]:right-3 max-[900px]:h-[min(78vh,620px)] max-[900px]:w-[min(420px,calc(100vw-24px))] max-[900px]:rounded-[14px]',
+    'max-[600px]:inset-0 max-[600px]:h-screen max-[600px]:w-screen max-[600px]:max-h-screen max-[600px]:max-w-screen max-[600px]:rounded-none max-[600px]:pb-[env(safe-area-inset-bottom)]',
+  ]
+})
 
 watch(() => props.activeTab, (val) => { localTab.value = val })
 watch(localTab, (val) => { emit('update:activeTab', val) })

@@ -1,7 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import './tailwind.css'
-import './styles/changai.css'
 
 function initChangAIChatbot() {
   if (document.getElementById('changai-chatbot-root')) return
