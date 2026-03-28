@@ -5,6 +5,17 @@ app_description = "Changai"
 app_email = "support@erpgulf.com"
 app_license = "mit"
 
+from changai import __version__ as app_version
+from pathlib import Path
+
+dist_js_path = Path(__file__).resolve().parent / "public" / "dist" / "changai-chatbot.js"
+try:
+    asset_build_stamp = str(int(dist_js_path.stat().st_mtime))
+except FileNotFoundError:
+    asset_build_stamp = app_version
+
+ASSET_VERSION = f"?v={app_version}-{asset_build_stamp}"
+
 # Apps
 # ------------------
 
@@ -31,10 +42,10 @@ app_license = "mit"
 # Include JS globally on all pages
 app_include_html = ["/assets/changai/html/changai.html"]
 app_include_js = [
-    "/assets/changai/dist/changai-chatbot.js",
+    f"/assets/changai/dist/changai-chatbot.js{ASSET_VERSION}",
     "/assets/changai/js/ai_translate.js"
 ]
-app_include_css = ["/assets/changai/dist/changai-chatbot.css"]
+app_include_css = [f"/assets/changai/dist/changai-chatbot.css{ASSET_VERSION}"]
 # In hooks.py
 # app_include_css = [
 #     "https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css"
