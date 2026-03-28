@@ -12,6 +12,8 @@ const chatHistory = ref([])
 const debugLogs = ref([])
 const supportHistory = ref([])
 const popupRef = ref(null)
+const responseMode = ref('actual')
+const autoReadEnabled = ref(true)
 
 function toggleChatbot() {
   showChatbot.value = !showChatbot.value
@@ -19,6 +21,10 @@ function toggleChatbot() {
 
 function scrollToBottom() {
   popupRef.value?.scrollToBottom()
+}
+
+function toggleAutoRead() {
+  autoReadEnabled.value = !autoReadEnabled.value
 }
 
 async function handleSubmit(message) {
@@ -40,7 +46,7 @@ async function handleChatSubmit(message) {
   scrollToBottom()
 
   try {
-    const response = await runPipeline(message, getOrCreateChatId())
+    const response = await runPipeline(message, getOrCreateChatId(), responseMode.value)
     thinkingMsg.text = normalizeBotText(response?.Bot)?.trim() || 'No response.'
     debugLogs.value.push({ user: message, response })
   } catch (err) {
@@ -65,7 +71,7 @@ async function handleSupportSubmit(message) {
   scrollToBottom()
 
   try {
-    const response = await callSupportBot(message)
+    const response = await callSupportBot(message, responseMode.value)
     thinkingMsg.text = response ? safeStringify(response) : 'Support request sent successfully.'
   } catch (err) {
     console.error('Support API Error:', err)
@@ -86,7 +92,9 @@ async function handleSupportSubmit(message) {
     :chatHistory="chatHistory"
     :debugLogs="debugLogs"
     :supportHistory="supportHistory"
+    :autoReadEnabled="autoReadEnabled"
     @close="showChatbot = false"
     @submit="handleSubmit"
+    @toggleAutoRead="toggleAutoRead"
   />
 </template>

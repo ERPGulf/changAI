@@ -5,11 +5,18 @@ export const API = {
   SUPPORT: 'changai.changai.api.v2.text2sql_pipeline_v2.support_bot',
 }
 
-export function frappeCall(method, args = {}) {
-  if (IS_DEV && (!window.frappe || !window.frappe.call)) {
-    console.warn('[DEV] frappe.call not available, returning mock response')
-    return Promise.resolve({ Bot: `[DEV MOCK] Response to: ${JSON.stringify(args)}` })
+export function frappeCall(method, args = {}, mode = 'actual') {
+  if (mode === 'test') {
+    return Promise.resolve({ Bot: `[TEST MODE] ${JSON.stringify(args)}` })
   }
+
+  if (!window.frappe || !window.frappe.call) {
+    if (IS_DEV) {
+      console.warn('[DEV] frappe.call not available in actual mode')
+    }
+    return Promise.reject(new Error('Frappe API is unavailable in actual mode.'))
+  }
+
   return new Promise((resolve, reject) => {
     window.frappe.call({
       method,
@@ -24,13 +31,13 @@ export function frappeCall(method, args = {}) {
   })
 }
 
-export function runPipeline(userQuestion, chatId) {
+export function runPipeline(userQuestion, chatId, mode = 'actual') {
   return frappeCall(API.PIPELINE, {
     user_question: userQuestion,
     chat_id: chatId,
-  })
+  }, mode)
 }
 
-export function callSupportBot(message) {
-  return frappeCall(API.SUPPORT, { message })
+export function callSupportBot(message, mode = 'actual') {
+  return frappeCall(API.SUPPORT, { message }, mode)
 }
