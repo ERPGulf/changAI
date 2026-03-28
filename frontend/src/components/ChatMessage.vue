@@ -3,7 +3,12 @@
     <BotIcon v-if="message.role !== 'user'" />
 
     <div v-if="message.role !== 'user'" class="message-text-container">
-      <p class="message-text" v-html="message.text"></p>
+      <div v-if="isLoadingStatus" class="typing-loader" role="status" aria-live="polite" :aria-label="loaderLabel">
+        <span class="typing-dot"></span>
+        <span class="typing-dot"></span>
+        <span class="typing-dot"></span>
+      </div>
+      <p v-else class="message-text" v-html="message.text"></p>
     </div>
 
     <p v-else class="message-text">{{ message.text }}</p>
@@ -75,6 +80,16 @@ function handleGlobalStop() {
 function isPlaceholderStatus(text) {
   return text === 'Thinking...' || text === 'Sending to support...'
 }
+
+const normalizedMessageText = computed(() => getSpeakableText(props.message?.text || ''))
+
+const isLoadingStatus = computed(() => (
+  props.message?.role !== 'user' && isPlaceholderStatus(normalizedMessageText.value)
+))
+
+const loaderLabel = computed(() => (
+  normalizedMessageText.value === 'Sending to support...' ? 'Sending to support' : 'Thinking'
+))
 
 watch(
   () => props.message.text,
