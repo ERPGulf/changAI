@@ -4,6 +4,18 @@
   --color-brand-500: #6d4fc2;
   --color-brand-600: #5f44ad;
   --color-brand-50: #f6f2ff;
+  --animate-dot-wave: dot-wave 1.4s ease-in-out infinite;
+}
+
+@keyframes dot-wave {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.35;
+  }
+  30% {
+    transform: translateY(-5px);
+    opacity: 1;
+  }
 }
 
 @layer base {

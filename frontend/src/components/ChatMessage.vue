@@ -8,14 +8,14 @@
     <div v-if="message.role !== 'user'" class="flex min-w-0 max-w-[calc(100%-2.5rem)] flex-1 flex-col max-[600px]:max-w-[calc(100%-2.25rem)]">
       <div
         v-if="isLoadingStatus"
-        class="inline-flex min-h-9.5 min-w-14.5 items-center justify-center gap-1.5 rounded-2xl bg-violet-200 px-3.5 py-2.5"
+        class="inline-flex min-h-9.5 min-w-16 items-center justify-center gap-2 rounded-[10px_10px_10px_3px] bg-brand-50 px-4 py-3"
         role="status"
         aria-live="polite"
         :aria-label="loaderLabel"
       >
-        <span class="h-2 w-2 animate-bounce rounded-full bg-slate-900/75 [animation-delay:0ms]"></span>
-        <span class="h-2 w-2 animate-bounce rounded-full bg-slate-900/75 [animation-delay:160ms]"></span>
-        <span class="h-2 w-2 animate-bounce rounded-full bg-slate-900/75 [animation-delay:320ms]"></span>
+        <span class="h-2 w-2 animate-dot-wave rounded-full bg-brand-500 [animation-delay:0ms]"></span>
+        <span class="h-2 w-2 animate-dot-wave rounded-full bg-brand-500 [animation-delay:200ms]"></span>
+        <span class="h-2 w-2 animate-dot-wave rounded-full bg-brand-500 [animation-delay:400ms]"></span>
       </div>
       <div
         v-else

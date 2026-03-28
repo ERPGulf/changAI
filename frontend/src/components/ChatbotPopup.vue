@@ -4,12 +4,11 @@
   >
     <ChatHeader
       :windowMode="windowMode"
-      :responseMode="responseMode"
       :autoReadEnabled="autoReadEnabled"
       @close="$emit('close')"
+      @resizeDefault="windowMode = 'default'"
       @resizeHalf="windowMode = 'half'"
       @resizeFull="windowMode = 'full'"
-      @toggleResponseMode="$emit('toggleResponseMode')"
       @toggleAutoRead="$emit('toggleAutoRead')"
     />
     <TabBar v-model="localTab" />
@@ -22,7 +21,7 @@
       </div>
     </div>
 
-    <div class="mt-auto border-t border-violet-100 bg-white p-3 pb-[calc(12px+env(safe-area-inset-bottom))] sm:p-4">
+    <div class="border-t border-violet-100 bg-white p-3 pb-[calc(12px+env(safe-area-inset-bottom))] sm:p-4">
       <ChatForm
         :placeholder="localTab === 'support' ? 'Message Support...' : 'Message...'"
         @submit="(text) => $emit('submit', text)"
@@ -46,18 +45,17 @@ const props = defineProps({
   chatHistory: { type: Array, required: true },
   debugLogs: { type: Array, required: true },
   supportHistory: { type: Array, required: true },
-  responseMode: { type: String, required: true },
   autoReadEnabled: { type: Boolean, required: true },
 })
 
-const emit = defineEmits(['close', 'submit', 'update:activeTab', 'toggleResponseMode', 'toggleAutoRead'])
+const emit = defineEmits(['close', 'submit', 'update:activeTab', 'toggleAutoRead'])
 
 const chatBodyRef = ref(null)
 const localTab = ref(props.activeTab)
 const windowMode = ref('default')
 
 const popupClasses = computed(() => {
-  const base = 'fixed z-[9999] flex flex-col overflow-hidden bg-white shadow-[0_0_128px_rgba(0,0,0,0.1),0_32px_64px_-48px_rgba(0,0,0,0.5)] transition-all duration-150 ease-out origin-bottom-right'
+  const base = 'fixed z-[9999] flex min-h-0 flex-col overflow-hidden bg-white shadow-[0_0_128px_rgba(0,0,0,0.1),0_32px_64px_-48px_rgba(0,0,0,0.5)] transition-all duration-150 ease-out origin-bottom-right'
   const state = props.isOpen
     ? 'pointer-events-auto opacity-100 translate-x-0 translate-y-0 scale-100'
     : 'pointer-events-none opacity-0 translate-x-1/2 translate-y-full scale-0'
@@ -83,8 +81,8 @@ const popupClasses = computed(() => {
   return [
     base,
     state,
-    'bottom-[74px] right-5 h-[min(640px,78vh)] w-[min(420px,calc(100vw-40px))] rounded-2xl',
-    'max-[900px]:bottom-[78px] max-[900px]:right-3 max-[900px]:h-[min(78vh,620px)] max-[900px]:w-[min(420px,calc(100vw-24px))] max-[900px]:rounded-[14px]',
+    'bottom-[74px] right-5 h-[min(560px,72vh)] w-[min(360px,calc(100vw-40px))] rounded-2xl',
+    'max-[900px]:bottom-[78px] max-[900px]:right-3 max-[900px]:h-[min(70vh,540px)] max-[900px]:w-[min(360px,calc(100vw-24px))] max-[900px]:rounded-[14px]',
     'max-[600px]:inset-0 max-[600px]:h-screen max-[600px]:w-screen max-[600px]:max-h-screen max-[600px]:max-w-screen max-[600px]:rounded-none max-[600px]:pb-[env(safe-area-inset-bottom)]',
   ]
 })

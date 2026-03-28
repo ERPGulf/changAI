@@ -32,14 +32,16 @@
       </button>
 
       <button
-        class="h-8 min-w-14 appearance-none items-center justify-center rounded-md border-0 px-2 text-[11px] font-semibold tracking-wide text-white/90 transition-colors focus:outline-none sm:flex"
+        class="flex h-8 min-w-8 appearance-none items-center justify-center rounded-md border-0 px-2 text-xs font-semibold text-white/90 transition-colors focus:outline-none"
         style="border-radius: 0.375rem;"
-        :class="responseMode === 'actual' ? 'bg-white/20' : 'hover:bg-white/15'"
-        title="Toggle Actual/Test mode"
-        aria-label="Toggle actual and test mode"
-        @click="$emit('toggleResponseMode')"
+        :class="windowMode === 'default' ? 'bg-white/20' : 'hover:bg-white/15'"
+        title="Compact"
+        aria-label="Resize to compact"
+        @click="$emit('resizeDefault')"
       >
-        {{ responseMode === 'actual' ? 'ACT' : 'TEST' }}
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <rect x="7" y="8" width="10" height="8" rx="2"/>
+        </svg>
       </button>
 
       <button
@@ -90,15 +92,11 @@ defineProps({
     type: String,
     required: true,
   },
-  responseMode: {
-    type: String,
-    required: true,
-  },
   autoReadEnabled: {
     type: Boolean,
     required: true,
   },
 })
 
-defineEmits(['close', 'resizeHalf', 'resizeFull', 'toggleResponseMode', 'toggleAutoRead'])
+defineEmits(['close', 'resizeDefault', 'resizeHalf', 'resizeFull', 'toggleAutoRead'])
 </script>

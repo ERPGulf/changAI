@@ -23,10 +23,6 @@ function scrollToBottom() {
   popupRef.value?.scrollToBottom()
 }
 
-function toggleResponseMode() {
-  responseMode.value = responseMode.value === 'actual' ? 'test' : 'actual'
-}
-
 function toggleAutoRead() {
   autoReadEnabled.value = !autoReadEnabled.value
 }
@@ -96,11 +92,9 @@ async function handleSupportSubmit(message) {
     :chatHistory="chatHistory"
     :debugLogs="debugLogs"
     :supportHistory="supportHistory"
-    :responseMode="responseMode"
     :autoReadEnabled="autoReadEnabled"
     @close="showChatbot = false"
     @submit="handleSubmit"
-    @toggleResponseMode="toggleResponseMode"
     @toggleAutoRead="toggleAutoRead"
   />
 </template>
