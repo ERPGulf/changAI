@@ -1,11 +1,11 @@
 <template>
   <div
-    class="flex gap-1.5"
+    class="flex w-full gap-1.5"
     :class="message.role === 'user' ? 'flex-col items-end' : 'items-start'"
   >
     <BotIcon v-if="message.role !== 'user'" />
 
-    <div v-if="message.role !== 'user'" class="flex max-w-[75%] flex-col">
+    <div v-if="message.role !== 'user'" class="flex min-w-0 max-w-[calc(100%-2.5rem)] flex-1 flex-col max-[600px]:max-w-[calc(100%-2.25rem)]">
       <div
         v-if="isLoadingStatus"
         class="inline-flex min-h-9.5 min-w-14.5 items-center justify-center gap-1.5 rounded-2xl bg-violet-200 px-3.5 py-2.5"
@@ -17,16 +17,16 @@
         <span class="h-2 w-2 animate-bounce rounded-full bg-slate-900/75 [animation-delay:160ms]"></span>
         <span class="h-2 w-2 animate-bounce rounded-full bg-slate-900/75 [animation-delay:320ms]"></span>
       </div>
-      <p
+      <div
         v-else
-        class="max-w-[75%] whitespace-pre-line rounded-[10px_10px_10px_3px] bg-brand-50 px-4 py-3 text-xs leading-relaxed text-black"
+        class="w-fit max-w-full overflow-x-auto whitespace-pre-line rounded-[10px_10px_10px_3px] bg-brand-50 px-4 py-3 text-xs leading-relaxed wrap-anywhere text-black"
         v-html="message.text"
-      ></p>
+      ></div>
     </div>
 
     <p
       v-else
-      class="max-w-[75%] whitespace-pre-line rounded-[13px_13px_3px_13px] bg-brand-500 px-4 py-3 text-[11px] leading-relaxed text-white"
+      class="w-fit max-w-[85%] whitespace-pre-line rounded-[13px_13px_3px_13px] bg-brand-500 px-4 py-3 text-[11px] leading-relaxed wrap-anywhere text-white max-[600px]:max-w-[88%]"
     >
       {{ message.text }}
     </p>

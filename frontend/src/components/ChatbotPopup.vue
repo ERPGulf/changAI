@@ -14,8 +14,8 @@
     />
     <TabBar v-model="localTab" />
 
-    <div class="min-h-0 flex-1 overflow-y-auto bg-white p-4 max-[900px]:p-3.5 max-[600px]:p-3" ref="chatBodyRef">
-      <div>
+    <div class="min-h-0 flex-1 overflow-x-hidden overflow-y-auto bg-white p-4 max-[900px]:p-3.5 max-[600px]:p-3" ref="chatBodyRef">
+      <div class="min-w-0">
         <ChatTab v-if="localTab === 'chat'" :messages="chatHistory" :autoReadEnabled="autoReadEnabled" />
         <DebugTab v-else-if="localTab === 'debug'" :logs="debugLogs" />
         <SupportTab v-else-if="localTab === 'support'" :messages="supportHistory" :autoReadEnabled="autoReadEnabled" />
