@@ -9,12 +9,6 @@
   "remote",
   "from_language",
   "to_language",
-  "langchain_tracing_details_section",
-  "langsmith_api_key",
-  "langsmith_endpoint",
-  "column_break_fnau",
-  "langsmith_tracing",
-  "langsmith_project",
   "models_section",
   "embedder",
   "qwen3_4b_instruct",
@@ -32,6 +26,10 @@
   "retain_memory",
   "testing_section",
   "retriever_structure",
+  "section_break_qwlc",
+  "aws_access_key_id",
+  "aws_secret_access_key",
+  "enable_voice_chat",
   "remote_server_tab",
   "replicate_section",
   "prediction_url",
@@ -68,36 +66,6 @@
    "fieldname": "remote",
    "fieldtype": "Check",
    "label": "Remote"
-  },
-  {
-   "fieldname": "langchain_tracing_details_section",
-   "fieldtype": "Section Break",
-   "label": "Langchain Tracing Details"
-  },
-  {
-   "fieldname": "langsmith_api_key",
-   "fieldtype": "Data",
-   "label": "LANGSMITH_API_KEY"
-  },
-  {
-   "fieldname": "langsmith_endpoint",
-   "fieldtype": "Data",
-   "label": "LANGSMITH_ENDPOINT"
-  },
-  {
-   "fieldname": "column_break_fnau",
-   "fieldtype": "Column Break"
-  },
-  {
-   "default": "0",
-   "fieldname": "langsmith_tracing",
-   "fieldtype": "Check",
-   "label": "LANGSMITH_TRACING"
-  },
-  {
-   "fieldname": "langsmith_project",
-   "fieldtype": "Data",
-   "label": "LANGSMITH_PROJECT"
   },
   {
    "fieldname": "models_section",
@@ -168,8 +136,7 @@
   },
   {
    "fieldname": "testing_section",
-   "fieldtype": "Section Break",
-   "label": "Testing"
+   "fieldtype": "Section Break"
   },
   {
    "default": "multi line",
@@ -329,13 +296,34 @@
    "fieldname": "gemini_authentication_free_tier_section",
    "fieldtype": "Section Break",
    "label": "Gemini Authentication (Free Tier)"
+  },
+  {
+   "fieldname": "section_break_qwlc",
+   "fieldtype": "Section Break",
+   "label": "Voice & Speech Settings"
+  },
+  {
+   "fieldname": "aws_access_key_id",
+   "fieldtype": "Data",
+   "label": "AWS Access key id"
+  },
+  {
+   "fieldname": "aws_secret_access_key",
+   "fieldtype": "Data",
+   "label": "AWS secret access key "
+  },
+  {
+   "default": "1",
+   "fieldname": "enable_voice_chat",
+   "fieldtype": "Check",
+   "label": "Enable Voice Chat"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-03-16 09:48:15.427764",
+ "modified": "2026-03-26 14:15:52.791258",
  "modified_by": "Administrator",
  "module": "Changai",
  "name": "ChangAI Settings",

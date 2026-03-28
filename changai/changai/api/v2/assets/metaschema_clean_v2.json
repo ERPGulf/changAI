@@ -1,20 +1,4 @@
 {
-  "tabAbout Us Settings": {
-    "name": "TEXT",
-    "page_title": "TEXT",
-    "company_introduction": "TEXT",
-    "company_history_heading": "TEXT",
-    "company_history": "TEXT",
-    "team_members_heading": "TEXT",
-    "team_members_subtitle": "TEXT",
-    "team_members": "TEXT",
-    "footer": "TEXT"
-  },
-  "tabAbout Us Team Member": {
-    "name": "TEXT",
-    "full_name": "TEXT",
-    "bio": "TEXT"
-  },
   "tabAccount": {
     "name": "TEXT",
     "disabled": "TEXT",
@@ -88,60 +72,6 @@
     "company": "TEXT",
     "closed_documents": "TEXT"
   },
-  "tabAccounts Settings": {
-    "name": "TEXT",
-    "unlink_payment_on_cancellation_of_invoice": "TEXT",
-    "unlink_advance_payment_on_cancelation_of_order": "TEXT",
-    "delete_linked_ledger_entries": "TEXT",
-    "enable_immutable_ledger": "TEXT",
-    "check_supplier_invoice_uniqueness": "TEXT",
-    "automatically_fetch_payment_terms": "TEXT",
-    "enable_common_party_accounting": "TEXT",
-    "allow_multi_currency_invoices_against_single_party_account": "TEXT",
-    "merge_similar_account_heads": "TEXT",
-    "book_deferred_entries_based_on": "TEXT",
-    "automatically_process_deferred_accounting_entry": "TEXT",
-    "book_deferred_entries_via_journal_entry": "TEXT",
-    "submit_journal_entries": "TEXT",
-    "determine_address_tax_category_from": "TEXT",
-    "add_taxes_from_item_tax_template": "TEXT",
-    "add_taxes_from_taxes_and_charges_template": "TEXT",
-    "book_tax_discount_loss": "TEXT",
-    "round_row_wise_tax": "TEXT",
-    "show_inclusive_tax_in_print": "TEXT",
-    "show_taxes_as_table_in_print": "TEXT",
-    "show_payment_schedule_in_print": "TEXT",
-    "maintain_same_internal_transaction_rate": "TEXT",
-    "fetch_valuation_rate_for_internal_transaction": "TEXT",
-    "maintain_same_rate_action": "TEXT",
-    "role_to_override_stop_action": "TEXT",
-    "allow_stale": "TEXT",
-    "allow_pegged_currencies_exchange_rates": "TEXT",
-    "stale_days": "TEXT",
-    "auto_reconcile_payments": "TEXT",
-    "auto_reconciliation_job_trigger": "TEXT",
-    "reconciliation_queue_size": "TEXT",
-    "exchange_gain_loss_posting_date": "TEXT",
-    "over_billing_allowance": "TEXT",
-    "role_allowed_to_over_bill": "TEXT",
-    "credit_controller": "TEXT",
-    "make_payment_via_journal_entry": "TEXT",
-    "post_change_gl_entries": "TEXT",
-    "calculate_depr_using_total_days": "TEXT",
-    "book_asset_depreciation_entry_automatically": "TEXT",
-    "acc_frozen_upto": "TEXT",
-    "ignore_account_closing_balance": "TEXT",
-    "use_legacy_controller_for_pcv": "TEXT",
-    "frozen_accounts_modifier": "TEXT",
-    "show_balance_in_coa": "TEXT",
-    "enable_party_matching": "TEXT",
-    "enable_fuzzy_matching": "TEXT",
-    "general_ledger_remarks_length": "TEXT",
-    "receivable_payable_remarks_length": "TEXT",
-    "receivable_payable_fetch_method": "TEXT",
-    "ignore_is_opening_check_for_reporting": "TEXT",
-    "create_pr_in_draft_status": "TEXT"
-  },
   "tabActivity Cost": {
     "name": "TEXT",
     "activity_type": "TEXT",
@@ -158,34 +88,6 @@
     "costing_rate": "TEXT",
     "billing_rate": "TEXT",
     "disabled": "TEXT"
-  },
-  "tabAddress": {
-    "name": "TEXT",
-    "address_title": "TEXT",
-    "address_type": "TEXT",
-    "address_line1": "TEXT",
-    "address_line2": "TEXT",
-    "custom_building_number": "TEXT",
-    "city": "TEXT",
-    "county": "TEXT",
-    "state": "TEXT",
-    "country": "TEXT",
-    "pincode": "TEXT",
-    "email_id": "TEXT",
-    "phone": "TEXT",
-    "fax": "TEXT",
-    "tax_category": "TEXT",
-    "is_primary_address": "TEXT",
-    "is_shipping_address": "TEXT",
-    "disabled": "TEXT",
-    "is_your_company_address": "TEXT",
-    "links": "TEXT"
-  },
-  "tabAddress Template": {
-    "name": "TEXT",
-    "country": "TEXT",
-    "is_default": "TEXT",
-    "template": "TEXT"
   },
   "tabAdvance Payment Ledger Entry": {
     "name": "TEXT",
@@ -234,11 +136,6 @@
     "name": "TEXT",
     "company": "TEXT"
   },
-  "tabAmended Document Naming Settings": {
-    "name": "TEXT",
-    "document_type": "TEXT",
-    "action": "TEXT"
-  },
   "tabApplicable On Account": {
     "name": "TEXT",
     "applicable_on_account": "TEXT",
@@ -256,18 +153,6 @@
     "appointment_with": "TEXT",
     "party": "TEXT",
     "calendar_event": "TEXT"
-  },
-  "tabAppointment Booking Settings": {
-    "name": "TEXT",
-    "enable_scheduling": "TEXT",
-    "availability_of_slots": "TEXT",
-    "number_of_agents": "TEXT",
-    "agent_list": "TEXT",
-    "holiday_list": "TEXT",
-    "appointment_duration": "TEXT",
-    "email_reminders": "TEXT",
-    "advance_booking_days": "TEXT",
-    "success_redirect_url": "TEXT"
   },
   "tabAppointment Booking Slots": {
     "name": "TEXT",
@@ -603,101 +488,6 @@
     "journal_entry": "TEXT",
     "cost_center": "TEXT"
   },
-  "tabAssignment Rule": {
-    "name": "TEXT",
-    "document_type": "TEXT",
-    "due_date_based_on": "TEXT",
-    "priority": "TEXT",
-    "disabled": "TEXT",
-    "description": "TEXT",
-    "assign_condition": "TEXT",
-    "unassign_condition": "TEXT",
-    "close_condition": "TEXT",
-    "assignment_days": "TEXT",
-    "rule": "TEXT",
-    "field": "TEXT",
-    "users": "TEXT",
-    "last_user": "TEXT"
-  },
-  "tabAssignment Rule Day": {
-    "name": "TEXT",
-    "day": "TEXT"
-  },
-  "tabAssignment Rule User": {
-    "name": "TEXT",
-    "user": "TEXT"
-  },
-  "tabAudit Trail": {
-    "name": "TEXT",
-    "doctype_name": "TEXT",
-    "document": "TEXT"
-  },
-  "tabAuthorization Control": {
-    "name": "TEXT"
-  },
-  "tabAuthorization Rule": {
-    "name": "TEXT",
-    "transaction": "TEXT",
-    "based_on": "TEXT",
-    "customer_or_item": "TEXT",
-    "master_name": "TEXT",
-    "company": "TEXT",
-    "value": "TEXT",
-    "system_role": "TEXT",
-    "to_emp": "TEXT",
-    "system_user": "TEXT",
-    "to_designation": "TEXT",
-    "approving_role": "TEXT",
-    "approving_user": "TEXT"
-  },
-  "tabAuto Email Report": {
-    "name": "TEXT",
-    "report": "TEXT",
-    "user": "TEXT",
-    "enabled": "TEXT",
-    "report_type": "TEXT",
-    "reference_report": "TEXT",
-    "send_if_data": "TEXT",
-    "data_modified_till": "TEXT",
-    "no_of_rows": "TEXT",
-    "filters": "TEXT",
-    "filter_meta": "TEXT",
-    "from_date_field": "TEXT",
-    "to_date_field": "TEXT",
-    "dynamic_date_period": "TEXT",
-    "use_first_day_of_period": "TEXT",
-    "email_to": "TEXT",
-    "day_of_week": "TEXT",
-    "sender": "TEXT",
-    "frequency": "TEXT",
-    "format": "TEXT",
-    "description": "TEXT"
-  },
-  "tabAuto Repeat": {
-    "name": "TEXT",
-    "reference_doctype": "TEXT",
-    "reference_document": "TEXT",
-    "submit_on_creation": "TEXT",
-    "start_date": "TEXT",
-    "end_date": "TEXT",
-    "disabled": "TEXT",
-    "frequency": "TEXT",
-    "repeat_on_day": "TEXT",
-    "repeat_on_last_day": "TEXT",
-    "next_schedule_date": "TEXT",
-    "repeat_on_days": "TEXT",
-    "notify_by_email": "TEXT",
-    "recipients": "TEXT",
-    "template": "TEXT",
-    "subject": "TEXT",
-    "message": "TEXT",
-    "print_format": "TEXT",
-    "status": "TEXT"
-  },
-  "tabAuto Repeat Day": {
-    "name": "TEXT",
-    "day": "TEXT"
-  },
   "tabAvailability Of Slots": {
     "name": "TEXT",
     "day_of_week": "TEXT",
@@ -896,11 +686,6 @@
     "bom_batches": "TEXT",
     "amended_from": "TEXT"
   },
-  "tabBOM Update Tool": {
-    "name": "TEXT",
-    "current_bom": "TEXT",
-    "new_bom": "TEXT"
-  },
   "tabBOM Website Item": {
     "name": "TEXT",
     "item_code": "TEXT",
@@ -951,17 +736,6 @@
     "name": "TEXT",
     "account_type": "TEXT"
   },
-  "tabBank Clearance": {
-    "name": "TEXT",
-    "account": "TEXT",
-    "account_currency": "TEXT",
-    "from_date": "TEXT",
-    "to_date": "TEXT",
-    "bank_account": "TEXT",
-    "include_reconciled_entries": "TEXT",
-    "include_pos_transactions": "TEXT",
-    "payment_entries": "TEXT"
-  },
   "tabBank Clearance Detail": {
     "name": "TEXT",
     "payment_document": "TEXT",
@@ -999,19 +773,6 @@
     "charges": "TEXT",
     "fixed_deposit_number": "TEXT",
     "amended_from": "TEXT"
-  },
-  "tabBank Reconciliation Tool": {
-    "name": "TEXT",
-    "company": "TEXT",
-    "bank_account": "TEXT",
-    "bank_statement_from_date": "TEXT",
-    "bank_statement_to_date": "TEXT",
-    "from_reference_date": "TEXT",
-    "to_reference_date": "TEXT",
-    "filter_by_reference_date": "TEXT",
-    "account_currency": "TEXT",
-    "account_opening_balance": "TEXT",
-    "bank_statement_closing_balance": "TEXT"
   },
   "tabBank Statement Import": {
     "name": "TEXT",
@@ -1103,19 +864,6 @@
     "valuation_rate": "TEXT",
     "stock_value": "TEXT"
   },
-  "tabBisect Accounting Statements": {
-    "name": "TEXT",
-    "company": "TEXT",
-    "from_date": "TEXT",
-    "to_date": "TEXT",
-    "algorithm": "TEXT",
-    "current_node": "TEXT",
-    "current_from_date": "TEXT",
-    "current_to_date": "TEXT",
-    "p_l_summary": "TEXT",
-    "b_s_summary": "TEXT",
-    "difference": "TEXT"
-  },
   "tabBisect Nodes": {
     "name": "TEXT",
     "root": "TEXT",
@@ -1156,72 +904,6 @@
     "ordered_qty": "TEXT",
     "terms_and_conditions": "TEXT"
   },
-  "tabBlock Module": {
-    "name": "TEXT",
-    "module": "TEXT"
-  },
-  "tabBlog Category": {
-    "name": "TEXT",
-    "published": "TEXT",
-    "title": "TEXT",
-    "description": "TEXT",
-    "route": "TEXT"
-  },
-  "tabBlog Post": {
-    "name": "TEXT",
-    "title": "TEXT",
-    "blog_category": "TEXT",
-    "blogger": "TEXT",
-    "route": "TEXT",
-    "read_time": "TEXT",
-    "published_on": "TEXT",
-    "published": "TEXT",
-    "featured": "TEXT",
-    "hide_cta": "TEXT",
-    "enable_email_notification": "TEXT",
-    "disable_comments": "TEXT",
-    "disable_likes": "TEXT",
-    "blog_intro": "TEXT",
-    "content_type": "TEXT",
-    "content": "TEXT",
-    "content_md": "TEXT",
-    "email_sent": "TEXT",
-    "meta_title": "TEXT",
-    "meta_description": "TEXT"
-  },
-  "tabBlog Settings": {
-    "name": "TEXT",
-    "blog_title": "TEXT",
-    "blog_introduction": "TEXT",
-    "enable_social_sharing": "TEXT",
-    "allow_guest_to_comment": "TEXT",
-    "browse_by_category": "TEXT",
-    "show_cta_in_blog": "TEXT",
-    "title": "TEXT",
-    "subtitle": "TEXT",
-    "cta_label": "TEXT",
-    "cta_url": "TEXT",
-    "like_limit": "TEXT",
-    "comment_limit": "TEXT"
-  },
-  "tabBlogger": {
-    "name": "TEXT",
-    "disabled": "TEXT",
-    "short_name": "TEXT",
-    "full_name": "TEXT",
-    "user": "TEXT",
-    "bio": "TEXT"
-  },
-  "tabBranch": {
-    "name": "TEXT",
-    "branch": "TEXT"
-  },
-  "tabBrand": {
-    "name": "TEXT",
-    "brand": "TEXT",
-    "description": "TEXT",
-    "brand_defaults": "TEXT"
-  },
   "tabBudget": {
     "name": "TEXT",
     "naming_series": "TEXT",
@@ -1248,95 +930,11 @@
     "account": "TEXT",
     "budget_amount": "TEXT"
   },
-  "tabBulk Transaction Log Detail": {
-    "name": "TEXT",
-    "from_doctype": "TEXT",
-    "transaction_name": "TEXT",
-    "date": "TEXT",
-    "time": "TEXT",
-    "transaction_status": "TEXT",
-    "error_description": "TEXT",
-    "to_doctype": "TEXT",
-    "retried": "TEXT"
-  },
-  "tabBulk Update": {
-    "name": "TEXT",
-    "document_type": "TEXT",
-    "field": "TEXT",
-    "update_value": "TEXT",
-    "condition": "TEXT",
-    "limit": "TEXT"
-  },
-  "tabBuying Settings": {
-    "name": "TEXT",
-    "supp_master_name": "TEXT",
-    "supplier_group": "TEXT",
-    "buying_price_list": "TEXT",
-    "maintain_same_rate_action": "TEXT",
-    "role_to_override_stop_action": "TEXT",
-    "po_required": "TEXT",
-    "blanket_order_allowance": "TEXT",
-    "pr_required": "TEXT",
-    "project_update_frequency": "TEXT",
-    "set_landed_cost_based_on_purchase_invoice_rate": "TEXT",
-    "allow_zero_qty_in_supplier_quotation": "TEXT",
-    "use_transaction_date_exchange_rate": "TEXT",
-    "allow_zero_qty_in_request_for_quotation": "TEXT",
-    "maintain_same_rate": "TEXT",
-    "allow_multiple_items": "TEXT",
-    "bill_for_rejected_quantity_in_purchase_invoice": "TEXT",
-    "set_valuation_rate_for_rejected_materials": "TEXT",
-    "disable_last_purchase_rate": "TEXT",
-    "show_pay_button": "TEXT",
-    "allow_zero_qty_in_purchase_order": "TEXT",
-    "backflush_raw_materials_of_subcontract_based_on": "TEXT",
-    "over_transfer_allowance": "TEXT",
-    "auto_create_subcontracting_order": "TEXT",
-    "auto_create_purchase_receipt": "TEXT",
-    "fixed_email": "TEXT"
-  },
   "tabCRM Note": {
     "name": "TEXT",
     "note": "TEXT",
     "added_by": "TEXT",
     "added_on": "TEXT"
-  },
-  "tabCRM Settings": {
-    "name": "TEXT",
-    "campaign_naming_by": "TEXT",
-    "allow_lead_duplication_based_on_emails": "TEXT",
-    "auto_creation_of_contact": "TEXT",
-    "close_opportunity_after_days": "TEXT",
-    "default_valid_till": "TEXT",
-    "carry_forward_communication_and_comments": "TEXT",
-    "update_timestamp_on_new_communication": "TEXT"
-  },
-  "tabCalendar View": {
-    "name": "TEXT",
-    "reference_doctype": "TEXT",
-    "subject_field": "TEXT",
-    "start_date_field": "TEXT",
-    "end_date_field": "TEXT",
-    "all_day": "TEXT"
-  },
-  "tabCall Log": {
-    "name": "TEXT",
-    "id": "TEXT",
-    "from": "TEXT",
-    "to": "TEXT",
-    "call_received_by": "TEXT",
-    "employee_user_id": "TEXT",
-    "medium": "TEXT",
-    "start_time": "TEXT",
-    "end_time": "TEXT",
-    "type": "TEXT",
-    "customer": "TEXT",
-    "status": "TEXT",
-    "duration": "TEXT",
-    "recording_url": "TEXT",
-    "type_of_call": "TEXT",
-    "summary": "TEXT",
-    "links": "TEXT"
   },
   "tabCampaign": {
     "name": "TEXT",
@@ -1374,72 +972,6 @@
     "mode_of_payment": "TEXT",
     "amount": "TEXT"
   },
-  "tabChangAI Chat History": {
-    "name": "TEXT",
-    "session_id": "TEXT",
-    "timestamp": "TEXT",
-    "content": "TEXT"
-  },
-  "tabChangAI Logs": {
-    "name": "TEXT",
-    "user_question": "TEXT",
-    "rewritten_question": "TEXT",
-    "schema_retrieved": "TEXT",
-    "sql_generated": "TEXT",
-    "result": "TEXT",
-    "formatted_result": "TEXT",
-    "error": "TEXT",
-    "validation": "TEXT",
-    "tries": "TEXT"
-  },
-  "tabChangAI Settings": {
-    "name": "TEXT",
-    "remote": "TEXT",
-    "langsmith_api_key": "TEXT",
-    "langsmith_endpoint": "TEXT",
-    "langsmith_tracing": "TEXT",
-    "langsmith_project": "TEXT",
-    "embedder": "TEXT",
-    "qwen3_4b_instruct": "TEXT",
-    "llm": "TEXT",
-    "dataset_repo": "TEXT",
-    "qwen25_15b": "TEXT",
-    "gemini_location": "TEXT",
-    "gemini_file_path": "TEXT",
-    "gemini_project_id": "TEXT",
-    "root_path": "TEXT",
-    "retain_memory": "TEXT",
-    "vite_api_url": "TEXT",
-    "retriever_structure": "TEXT",
-    "ollama_url": "TEXT",
-    "local_llm": "TEXT",
-    "local_schema_retriever": "TEXT",
-    "local_entity_retriever": "TEXT",
-    "prediction_url": "TEXT",
-    "deploy_url": "TEXT",
-    "llm_version_id": "TEXT",
-    "embedder_version_id": "TEXT",
-    "api_token": "TEXT",
-    "deploy": "TEXT",
-    "entity_retriever": "TEXT",
-    "openai_api_key": "TEXT",
-    "claude_api_key": "TEXT",
-    "support_url": "TEXT",
-    "get_ticket_details_url": "TEXT",
-    "choose_module": "TEXT",
-    "choose_file_size": "TEXT"
-  },
-  "tabChangelog Feed": {
-    "name": "TEXT",
-    "title": "TEXT",
-    "app_name": "TEXT",
-    "link": "TEXT",
-    "posting_timestamp": "TEXT"
-  },
-  "tabChart of Accounts Importer": {
-    "name": "TEXT",
-    "company": "TEXT"
-  },
   "tabCheque Print Template": {
     "name": "TEXT",
     "has_print_format": "TEXT",
@@ -1467,14 +999,6 @@
     "signatory_from_top_edge": "TEXT",
     "signatory_from_left_edge": "TEXT"
   },
-  "tabClient Script": {
-    "name": "TEXT",
-    "dt": "TEXT",
-    "view": "TEXT",
-    "module": "TEXT",
-    "enabled": "TEXT",
-    "script": "TEXT"
-  },
   "tabClosed Document": {
     "name": "TEXT",
     "document_type": "TEXT",
@@ -1494,232 +1018,6 @@
     "warehouse_type": "TEXT",
     "amended_from": "TEXT"
   },
-  "tabCode List": {
-    "name": "TEXT",
-    "title": "TEXT",
-    "canonical_uri": "TEXT",
-    "url": "TEXT",
-    "default_common_code": "TEXT",
-    "version": "TEXT",
-    "publisher": "TEXT",
-    "publisher_id": "TEXT",
-    "description": "TEXT"
-  },
-  "tabColor": {
-    "name": "TEXT",
-    "color": "TEXT"
-  },
-  "tabComment": {
-    "name": "TEXT",
-    "comment_type": "TEXT",
-    "comment_email": "TEXT",
-    "subject": "TEXT",
-    "comment_by": "TEXT",
-    "published": "TEXT",
-    "seen": "TEXT",
-    "reference_doctype": "TEXT",
-    "reference_name": "TEXT",
-    "reference_owner": "TEXT",
-    "ip_address": "TEXT"
-  },
-  "tabCommon Code": {
-    "name": "TEXT",
-    "code_list": "TEXT",
-    "canonical_uri": "TEXT",
-    "title": "TEXT",
-    "common_code": "TEXT",
-    "description": "TEXT",
-    "additional_data": "TEXT",
-    "applies_to": "TEXT"
-  },
-  "tabCommunication": {
-    "name": "TEXT",
-    "subject": "TEXT",
-    "communication_medium": "TEXT",
-    "sender": "TEXT",
-    "recipients": "TEXT",
-    "cc": "TEXT",
-    "bcc": "TEXT",
-    "phone_no": "TEXT",
-    "delivery_status": "TEXT",
-    "content": "TEXT",
-    "text_content": "TEXT",
-    "communication_type": "TEXT",
-    "comment_type": "TEXT",
-    "status": "TEXT",
-    "sent_or_received": "TEXT",
-    "communication_date": "TEXT",
-    "read_receipt": "TEXT",
-    "send_after": "TEXT",
-    "sender_full_name": "TEXT",
-    "read_by_recipient": "TEXT",
-    "read_by_recipient_on": "TEXT",
-    "reference_doctype": "TEXT",
-    "reference_name": "TEXT",
-    "reference_owner": "TEXT",
-    "email_account": "TEXT",
-    "company": "TEXT",
-    "in_reply_to": "TEXT",
-    "user": "TEXT",
-    "email_template": "TEXT",
-    "unread_notification_sent": "TEXT",
-    "seen": "TEXT",
-    "_user_tags": "TEXT",
-    "timeline_links": "TEXT",
-    "message_id": "TEXT",
-    "uid": "TEXT",
-    "imap_folder": "TEXT",
-    "email_status": "TEXT",
-    "has_attachment": "TEXT",
-    "rating": "TEXT",
-    "feedback_request": "TEXT"
-  },
-  "tabCommunication Link": {
-    "name": "TEXT",
-    "link_doctype": "TEXT",
-    "link_name": "TEXT",
-    "link_title": "TEXT"
-  },
-  "tabCommunication Medium": {
-    "name": "TEXT",
-    "communication_channel": "TEXT",
-    "communication_medium_type": "TEXT",
-    "catch_all": "TEXT",
-    "provider": "TEXT",
-    "disabled": "TEXT",
-    "timeslots": "TEXT"
-  },
-  "tabCommunication Medium Timeslot": {
-    "name": "TEXT",
-    "day_of_week": "TEXT",
-    "from_time": "TEXT",
-    "to_time": "TEXT",
-    "employee_group": "TEXT"
-  },
-  "tabCompany": {
-    "name": "TEXT",
-    "company_name": "TEXT",
-    "abbr": "TEXT",
-    "default_currency": "TEXT",
-    "country": "TEXT",
-    "is_group": "TEXT",
-    "default_holiday_list": "TEXT",
-    "custom__company_name_in_arabic__": "TEXT",
-    "custom_registration_type": "TEXT",
-    "custom_company_registration": "TEXT",
-    "custom_zatca__location_for_csr_configuratoin": "TEXT",
-    "custom_zatca__company_category_for_csr_configuration": "TEXT",
-    "default_letter_head": "TEXT",
-    "tax_id": "TEXT",
-    "domain": "TEXT",
-    "date_of_establishment": "TEXT",
-    "parent_company": "TEXT",
-    "date_of_incorporation": "TEXT",
-    "phone_no": "TEXT",
-    "email": "TEXT",
-    "company_description": "TEXT",
-    "date_of_commencement": "TEXT",
-    "fax": "TEXT",
-    "website": "TEXT",
-    "registration_details": "TEXT",
-    "lft": "TEXT",
-    "rgt": "TEXT",
-    "old_parent": "TEXT",
-    "create_chart_of_accounts_based_on": "TEXT",
-    "existing_company": "TEXT",
-    "chart_of_accounts": "TEXT",
-    "default_bank_account": "TEXT",
-    "default_cash_account": "TEXT",
-    "default_receivable_account": "TEXT",
-    "default_payable_account": "TEXT",
-    "write_off_account": "TEXT",
-    "unrealized_profit_loss_account": "TEXT",
-    "allow_account_creation_against_child_company": "TEXT",
-    "default_expense_account": "TEXT",
-    "default_income_account": "TEXT",
-    "default_discount_account": "TEXT",
-    "payment_terms": "TEXT",
-    "cost_center": "TEXT",
-    "default_finance_book": "TEXT",
-    "exchange_gain_loss_account": "TEXT",
-    "unrealized_exchange_gain_loss_account": "TEXT",
-    "round_off_account": "TEXT",
-    "round_off_cost_center": "TEXT",
-    "round_off_for_opening": "TEXT",
-    "default_deferred_revenue_account": "TEXT",
-    "default_deferred_expense_account": "TEXT",
-    "book_advance_payments_in_separate_party_account": "TEXT",
-    "reconcile_on_advance_payment_date": "TEXT",
-    "reconciliation_takes_effect_on": "TEXT",
-    "default_advance_received_account": "TEXT",
-    "default_advance_paid_account": "TEXT",
-    "auto_exchange_rate_revaluation": "TEXT",
-    "auto_err_frequency": "TEXT",
-    "submit_err_jv": "TEXT",
-    "exception_budget_approver_role": "TEXT",
-    "accumulated_depreciation_account": "TEXT",
-    "depreciation_expense_account": "TEXT",
-    "series_for_depreciation_entry": "TEXT",
-    "expenses_included_in_asset_valuation": "TEXT",
-    "disposal_account": "TEXT",
-    "depreciation_cost_center": "TEXT",
-    "capital_work_in_progress_account": "TEXT",
-    "asset_received_but_not_billed": "TEXT",
-    "default_buying_terms": "TEXT",
-    "sales_monthly_history": "TEXT",
-    "monthly_sales_target": "TEXT",
-    "total_monthly_sales": "TEXT",
-    "default_selling_terms": "TEXT",
-    "default_warehouse_for_sales_return": "TEXT",
-    "credit_limit": "TEXT",
-    "transactions_annual_history": "TEXT",
-    "enable_perpetual_inventory": "TEXT",
-    "enable_provisional_accounting_for_non_stock_items": "TEXT",
-    "default_inventory_account": "TEXT",
-    "stock_adjustment_account": "TEXT",
-    "default_in_transit_warehouse": "TEXT",
-    "stock_received_but_not_billed": "TEXT",
-    "default_provisional_account": "TEXT",
-    "expenses_included_in_valuation": "TEXT",
-    "default_operating_cost_account": "TEXT",
-    "custom_zatca_invoice_enabled": "TEXT",
-    "custom_costcenter": "TEXT",
-    "custom_submit_line_item_discount_to_zatca": "TEXT",
-    "custom_phase_1_or_2": "TEXT",
-    "custom_send_einvoice_background": "TEXT",
-    "custom_select": "TEXT",
-    "custom_send_invoice_to_zatca": "TEXT",
-    "custom_submit_or_not": "TEXT",
-    "custom_start_time": "TEXT",
-    "custom_end_time": "TEXT",
-    "custom_start_time_session": "TEXT",
-    "custom_end_time_session": "TEXT",
-    "custom_csr_config": "TEXT",
-    "custom_csr_data": "TEXT",
-    "custom_attach_xml_with_invoice": "TEXT",
-    "custom_attach_xml_with_qr_code": "TEXT",
-    "custom_attach_qr_code_doctype": "TEXT",
-    "custom_attach_e_invoice_send_status_with_invoice": "TEXT",
-    "custom_pih": "TEXT",
-    "custom_private_key": "TEXT",
-    "custom_public_key": "TEXT",
-    "custom_certificate": "TEXT",
-    "custom_sandbox_url": "TEXT",
-    "custom_simulation_url": "TEXT",
-    "custom_production_url": "TEXT",
-    "custom_otp": "TEXT",
-    "custom_basic_auth_from_csid": "TEXT",
-    "custom_compliance_request_id_": "TEXT",
-    "custom_validation_type": "TEXT",
-    "custom_sample_invoice_number_to_test": "TEXT",
-    "custom_basic_auth_from_production": "TEXT",
-    "custom_zatca_offline_machines": "TEXT"
-  },
-  "tabCompany History": {
-    "name": "TEXT",
-    "year": "TEXT",
-    "highlight": "TEXT"
-  },
   "tabCompetitor": {
     "name": "TEXT",
     "competitor_name": "TEXT",
@@ -1728,83 +1026,6 @@
   "tabCompetitor Detail": {
     "name": "TEXT",
     "competitor": "TEXT"
-  },
-  "tabConnected App": {
-    "name": "TEXT",
-    "provider_name": "TEXT",
-    "openid_configuration": "TEXT",
-    "client_id": "TEXT",
-    "redirect_uri": "TEXT",
-    "client_secret": "TEXT",
-    "scopes": "TEXT",
-    "authorization_uri": "TEXT",
-    "token_uri": "TEXT",
-    "revocation_uri": "TEXT",
-    "userinfo_uri": "TEXT",
-    "introspection_uri": "TEXT",
-    "query_parameters": "TEXT"
-  },
-  "tabConsole Log": {
-    "name": "TEXT",
-    "script": "TEXT",
-    "type": "TEXT",
-    "committed": "TEXT"
-  },
-  "tabContact": {
-    "name": "TEXT",
-    "first_name": "TEXT",
-    "middle_name": "TEXT",
-    "last_name": "TEXT",
-    "full_name": "TEXT",
-    "email_id": "TEXT",
-    "user": "TEXT",
-    "address": "TEXT",
-    "sync_with_google_contacts": "TEXT",
-    "status": "TEXT",
-    "salutation": "TEXT",
-    "designation": "TEXT",
-    "gender": "TEXT",
-    "phone": "TEXT",
-    "mobile_no": "TEXT",
-    "company_name": "TEXT",
-    "google_contacts": "TEXT",
-    "google_contacts_id": "TEXT",
-    "pulled_from_google_contacts": "TEXT",
-    "email_ids": "TEXT",
-    "phone_nos": "TEXT",
-    "links": "TEXT",
-    "is_primary_contact": "TEXT",
-    "is_billing_contact": "TEXT",
-    "department": "TEXT",
-    "unsubscribed": "TEXT"
-  },
-  "tabContact Email": {
-    "name": "TEXT",
-    "email_id": "TEXT",
-    "is_primary": "TEXT"
-  },
-  "tabContact Phone": {
-    "name": "TEXT",
-    "phone": "TEXT",
-    "is_primary_phone": "TEXT",
-    "is_primary_mobile_no": "TEXT"
-  },
-  "tabContact Us Settings": {
-    "name": "TEXT",
-    "forward_to_email": "TEXT",
-    "heading": "TEXT",
-    "introduction": "TEXT",
-    "query_options": "TEXT",
-    "address_title": "TEXT",
-    "address_line1": "TEXT",
-    "address_line2": "TEXT",
-    "city": "TEXT",
-    "state": "TEXT",
-    "pincode": "TEXT",
-    "country": "TEXT",
-    "phone": "TEXT",
-    "email_id": "TEXT",
-    "skype": "TEXT"
   },
   "tabContract": {
     "name": "TEXT",
@@ -1877,14 +1098,6 @@
     "cost_center": "TEXT",
     "percentage": "TEXT"
   },
-  "tabCountry": {
-    "name": "TEXT",
-    "country_name": "TEXT",
-    "date_format": "TEXT",
-    "time_format": "TEXT",
-    "time_zones": "TEXT",
-    "code": "TEXT"
-  },
   "tabCoupon Code": {
     "name": "TEXT",
     "coupon_name": "TEXT",
@@ -1899,37 +1112,6 @@
     "description": "TEXT",
     "amended_from": "TEXT"
   },
-  "tabCurrency": {
-    "name": "TEXT",
-    "currency_name": "TEXT",
-    "enabled": "TEXT",
-    "fraction": "TEXT",
-    "fraction_units": "TEXT",
-    "smallest_currency_fraction_value": "TEXT",
-    "symbol": "TEXT",
-    "symbol_on_right": "TEXT",
-    "number_format": "TEXT"
-  },
-  "tabCurrency Exchange": {
-    "name": "TEXT",
-    "date": "TEXT",
-    "from_currency": "TEXT",
-    "to_currency": "TEXT",
-    "exchange_rate": "TEXT",
-    "for_buying": "TEXT",
-    "for_selling": "TEXT"
-  },
-  "tabCurrency Exchange Settings": {
-    "name": "TEXT",
-    "disabled": "TEXT",
-    "service_provider": "TEXT",
-    "api_endpoint": "TEXT",
-    "use_http": "TEXT",
-    "access_key": "TEXT",
-    "url": "TEXT",
-    "req_params": "TEXT",
-    "result_key": "TEXT"
-  },
   "tabCurrency Exchange Settings Details": {
     "name": "TEXT",
     "key": "TEXT",
@@ -1939,98 +1121,12 @@
     "name": "TEXT",
     "key": "TEXT"
   },
-  "tabCustom DocPerm": {
-    "name": "TEXT",
-    "parent": "TEXT",
-    "role": "TEXT",
-    "if_owner": "TEXT",
-    "permlevel": "TEXT",
-    "select": "TEXT",
-    "read": "TEXT",
-    "write": "TEXT",
-    "create": "TEXT",
-    "delete": "TEXT",
-    "submit": "TEXT",
-    "cancel": "TEXT",
-    "amend": "TEXT",
-    "report": "TEXT",
-    "export": "TEXT",
-    "import": "TEXT",
-    "share": "TEXT",
-    "print": "TEXT",
-    "email": "TEXT"
-  },
-  "tabCustom Field": {
-    "name": "TEXT",
-    "is_system_generated": "TEXT",
-    "dt": "TEXT",
-    "module": "TEXT",
-    "label": "TEXT",
-    "placeholder": "TEXT",
-    "fieldname": "TEXT",
-    "insert_after": "TEXT",
-    "length": "TEXT",
-    "link_filters": "TEXT",
-    "fieldtype": "TEXT",
-    "precision": "TEXT",
-    "hide_seconds": "TEXT",
-    "hide_days": "TEXT",
-    "options": "TEXT",
-    "sort_options": "TEXT",
-    "fetch_from": "TEXT",
-    "fetch_if_empty": "TEXT",
-    "collapsible": "TEXT",
-    "collapsible_depends_on": "TEXT",
-    "default": "TEXT",
-    "depends_on": "TEXT",
-    "mandatory_depends_on": "TEXT",
-    "read_only_depends_on": "TEXT",
-    "non_negative": "TEXT",
-    "reqd": "TEXT",
-    "unique": "TEXT",
-    "is_virtual": "TEXT",
-    "read_only": "TEXT",
-    "ignore_user_permissions": "TEXT",
-    "hidden": "TEXT",
-    "print_hide": "TEXT",
-    "print_hide_if_no_value": "TEXT",
-    "print_width": "TEXT",
-    "no_copy": "TEXT",
-    "allow_on_submit": "TEXT",
-    "in_list_view": "TEXT",
-    "in_standard_filter": "TEXT",
-    "in_global_search": "TEXT",
-    "in_preview": "TEXT",
-    "bold": "TEXT",
-    "report_hide": "TEXT",
-    "search_index": "TEXT",
-    "allow_in_quick_entry": "TEXT",
-    "ignore_xss_filter": "TEXT",
-    "translatable": "TEXT",
-    "hide_border": "TEXT",
-    "show_dashboard": "TEXT",
-    "description": "TEXT",
-    "permlevel": "TEXT",
-    "width": "TEXT",
-    "columns": "TEXT"
-  },
-  "tabCustom HTML Block": {
-    "name": "TEXT",
-    "private": "TEXT",
-    "html": "TEXT",
-    "script": "TEXT",
-    "style": "TEXT",
-    "roles": "TEXT"
-  },
-  "tabCustom Role": {
-    "name": "TEXT",
-    "page": "TEXT",
-    "report": "TEXT",
-    "roles": "TEXT",
-    "ref_doctype": "TEXT"
-  },
   "tabCustomer": {
-    "basic_info": "TEXT",
+    "name": "TEXT",
+    "docstatus": "TEXT",
+    "owner": "TEXT",
+    "creation": "TEXT",
+    "modified": "TEXT",
     "naming_series": "TEXT",
     "salutation": "TEXT",
     "customer_name": "TEXT",
@@ -2042,77 +1138,46 @@
     "custom_buyer_id_type_ar": "TEXT",
     "customer_type": "TEXT",
     "customer_group": "TEXT",
-    "column_break0": "TEXT",
     "territory": "TEXT",
     "gender": "TEXT",
     "lead_name": "TEXT",
     "opportunity_name": "TEXT",
     "prospect_name": "TEXT",
     "account_manager": "TEXT",
-    "image": "TEXT",
-    "defaults_tab": "TEXT",
     "default_currency": "TEXT",
     "default_bank_account": "TEXT",
-    "column_break_14": "TEXT",
     "default_price_list": "TEXT",
     "custom_data": "TEXT",
-    "internal_customer_section": "TEXT",
     "is_internal_customer": "TEXT",
     "represents_company": "TEXT",
-    "column_break_70": "TEXT",
     "companies": "TEXT",
-    "more_info": "TEXT",
     "market_segment": "TEXT",
     "industry": "TEXT",
     "customer_pos_id": "TEXT",
     "website": "TEXT",
     "language": "TEXT",
-    "column_break_45": "TEXT",
     "customer_details": "TEXT",
     "customer_home_address_test": "TEXT",
-    "dashboard_tab": "TEXT",
-    "contact_and_address_tab": "TEXT",
-    "address_contacts": "TEXT",
-    "address_html": "TEXT",
-    "column_break1": "TEXT",
-    "contact_html": "TEXT",
-    "primary_address_and_contact_detail": "TEXT",
-    "column_break_26": "TEXT",
     "customer_primary_address": "TEXT",
     "primary_address": "TEXT",
-    "column_break_nwor": "TEXT",
     "customer_primary_contact": "TEXT",
     "mobile_no": "TEXT",
     "email_id": "TEXT",
-    "tax_tab": "TEXT",
-    "taxation_section": "TEXT",
     "tax_id": "TEXT",
-    "column_break_21": "TEXT",
     "tax_category": "TEXT",
     "tax_withholding_category": "TEXT",
-    "accounting_tab": "TEXT",
-    "credit_limit_section": "TEXT",
     "payment_terms": "TEXT",
     "credit_limits": "TEXT",
-    "default_receivable_accounts": "TEXT",
     "accounts": "TEXT",
-    "loyalty_points_tab": "TEXT",
     "loyalty_program": "TEXT",
-    "column_break_54": "TEXT",
     "loyalty_program_tier": "TEXT",
-    "sales_team_tab": "TEXT",
     "sales_team": "TEXT",
-    "sales_team_section": "TEXT",
     "default_sales_partner": "TEXT",
-    "column_break_66": "TEXT",
     "default_commission_rate": "TEXT",
-    "settings_tab": "TEXT",
     "so_required": "TEXT",
     "dn_required": "TEXT",
-    "column_break_53": "TEXT",
     "is_frozen": "TEXT",
     "disabled": "TEXT",
-    "portal_users_tab": "TEXT",
     "portal_users": "TEXT"
   },
   "tabCustomer Credit Limit": {
@@ -2120,19 +1185,6 @@
     "company": "TEXT",
     "credit_limit": "TEXT",
     "bypass_credit_limit_check": "TEXT"
-  },
-  "tabCustomer Group": {
-    "name": "TEXT",
-    "customer_group_name": "TEXT",
-    "parent_customer_group": "TEXT",
-    "is_group": "TEXT",
-    "default_price_list": "TEXT",
-    "payment_terms": "TEXT",
-    "lft": "TEXT",
-    "rgt": "TEXT",
-    "old_parent": "TEXT",
-    "accounts": "TEXT",
-    "credit_limits": "TEXT"
   },
   "tabCustomer Group Item": {
     "name": "TEXT",
@@ -2142,173 +1194,10 @@
     "name": "TEXT",
     "customer": "TEXT"
   },
-  "tabCustomize Form Field": {
-    "name": "TEXT",
-    "is_system_generated": "TEXT",
-    "label": "TEXT",
-    "fieldtype": "TEXT",
-    "fieldname": "TEXT",
-    "non_negative": "TEXT",
-    "reqd": "TEXT",
-    "unique": "TEXT",
-    "is_virtual": "TEXT",
-    "in_list_view": "TEXT",
-    "in_standard_filter": "TEXT",
-    "in_global_search": "TEXT",
-    "in_preview": "TEXT",
-    "bold": "TEXT",
-    "no_copy": "TEXT",
-    "allow_in_quick_entry": "TEXT",
-    "translatable": "TEXT",
-    "link_filters": "TEXT",
-    "default": "TEXT",
-    "precision": "TEXT",
-    "length": "TEXT",
-    "options": "TEXT",
-    "sort_options": "TEXT",
-    "fetch_from": "TEXT",
-    "fetch_if_empty": "TEXT",
-    "show_dashboard": "TEXT",
-    "depends_on": "TEXT",
-    "permlevel": "TEXT",
-    "hidden": "TEXT",
-    "read_only": "TEXT",
-    "collapsible": "TEXT",
-    "allow_bulk_edit": "TEXT",
-    "collapsible_depends_on": "TEXT",
-    "ignore_user_permissions": "TEXT",
-    "allow_on_submit": "TEXT",
-    "report_hide": "TEXT",
-    "remember_last_selected_value": "TEXT",
-    "hide_border": "TEXT",
-    "ignore_xss_filter": "TEXT",
-    "mandatory_depends_on": "TEXT",
-    "read_only_depends_on": "TEXT",
-    "in_filter": "TEXT",
-    "hide_seconds": "TEXT",
-    "hide_days": "TEXT",
-    "description": "TEXT",
-    "placeholder": "TEXT",
-    "print_hide": "TEXT",
-    "print_hide_if_no_value": "TEXT",
-    "print_width": "TEXT",
-    "columns": "TEXT",
-    "width": "TEXT",
-    "is_custom_field": "TEXT"
-  },
   "tabCustoms Tariff Number": {
     "name": "TEXT",
     "tariff_number": "TEXT",
     "description": "TEXT"
-  },
-  "tabDashboard": {
-    "name": "TEXT",
-    "dashboard_name": "TEXT",
-    "is_default": "TEXT",
-    "is_standard": "TEXT",
-    "module": "TEXT",
-    "charts": "TEXT",
-    "chart_options": "TEXT",
-    "cards": "TEXT"
-  },
-  "tabDashboard Chart": {
-    "name": "TEXT",
-    "is_standard": "TEXT",
-    "module": "TEXT",
-    "chart_name": "TEXT",
-    "chart_type": "TEXT",
-    "report_name": "TEXT",
-    "use_report_chart": "TEXT",
-    "x_field": "TEXT",
-    "y_axis": "TEXT",
-    "source": "TEXT",
-    "document_type": "TEXT",
-    "parent_document_type": "TEXT",
-    "based_on": "TEXT",
-    "value_based_on": "TEXT",
-    "group_by_type": "TEXT",
-    "group_by_based_on": "TEXT",
-    "aggregate_function_based_on": "TEXT",
-    "number_of_groups": "TEXT",
-    "is_public": "TEXT",
-    "heatmap_year": "TEXT",
-    "timespan": "TEXT",
-    "from_date": "TEXT",
-    "to_date": "TEXT",
-    "time_interval": "TEXT",
-    "timeseries": "TEXT",
-    "type": "TEXT",
-    "show_values_over_chart": "TEXT",
-    "currency": "TEXT",
-    "filters_json": "TEXT",
-    "dynamic_filters_json": "TEXT",
-    "custom_options": "TEXT",
-    "color": "TEXT",
-    "last_synced_on": "TEXT",
-    "roles": "TEXT"
-  },
-  "tabDashboard Chart Field": {
-    "name": "TEXT",
-    "y_field": "TEXT",
-    "color": "TEXT"
-  },
-  "tabDashboard Chart Link": {
-    "name": "TEXT",
-    "chart": "TEXT",
-    "width": "TEXT"
-  },
-  "tabDashboard Chart Source": {
-    "name": "TEXT",
-    "source_name": "TEXT",
-    "module": "TEXT",
-    "timeseries": "TEXT"
-  },
-  "tabDashboard Settings": {
-    "name": "TEXT",
-    "user": "TEXT",
-    "chart_config": "TEXT"
-  },
-  "tabData Export": {
-    "name": "TEXT",
-    "reference_doctype": "TEXT",
-    "export_without_main_header": "TEXT",
-    "file_type": "TEXT"
-  },
-  "tabData Import": {
-    "name": "TEXT",
-    "reference_doctype": "TEXT",
-    "import_type": "TEXT",
-    "payload_count": "TEXT",
-    "google_sheets_url": "TEXT",
-    "status": "TEXT",
-    "submit_after_import": "TEXT",
-    "mute_emails": "TEXT",
-    "template_options": "TEXT",
-    "template_warnings": "TEXT",
-    "show_failed_logs": "TEXT"
-  },
-  "tabData Import Log": {
-    "name": "TEXT",
-    "data_import": "TEXT",
-    "row_indexes": "TEXT",
-    "success": "TEXT",
-    "docname": "TEXT",
-    "messages": "TEXT",
-    "exception": "TEXT",
-    "log_index": "TEXT"
-  },
-  "tabDefaultValue": {
-    "name": "TEXT",
-    "defkey": "TEXT",
-    "defvalue": "TEXT"
-  },
-  "tabDeleted Document": {
-    "name": "TEXT",
-    "deleted_name": "TEXT",
-    "deleted_doctype": "TEXT",
-    "restored": "TEXT",
-    "new_name": "TEXT",
-    "data": "TEXT"
   },
   "tabDelivery Note": {
     "name": "TEXT",
@@ -2493,13 +1382,6 @@
     "project": "TEXT",
     "page_break": "TEXT"
   },
-  "tabDelivery Settings": {
-    "name": "TEXT",
-    "dispatch_template": "TEXT",
-    "dispatch_attachment": "TEXT",
-    "send_with_attachment": "TEXT",
-    "stop_delay": "TEXT"
-  },
   "tabDelivery Stop": {
     "name": "TEXT",
     "customer": "TEXT",
@@ -2537,17 +1419,6 @@
     "status": "TEXT",
     "amended_from": "TEXT"
   },
-  "tabDepartment": {
-    "name": "TEXT",
-    "department_name": "TEXT",
-    "parent_department": "TEXT",
-    "company": "TEXT",
-    "is_group": "TEXT",
-    "disabled": "TEXT",
-    "lft": "TEXT",
-    "rgt": "TEXT",
-    "old_parent": "TEXT"
-  },
   "tabDependent Task": {
     "name": "TEXT",
     "task": "TEXT"
@@ -2560,32 +1431,6 @@
     "journal_entry": "TEXT",
     "shift": "TEXT"
   },
-  "tabDesignation": {
-    "name": "TEXT",
-    "designation_name": "TEXT",
-    "description": "TEXT"
-  },
-  "tabDesktop Icon": {
-    "name": "TEXT",
-    "module_name": "TEXT",
-    "label": "TEXT",
-    "standard": "TEXT",
-    "custom": "TEXT",
-    "app": "TEXT",
-    "description": "TEXT",
-    "category": "TEXT",
-    "hidden": "TEXT",
-    "blocked": "TEXT",
-    "force_show": "TEXT",
-    "type": "TEXT",
-    "_doctype": "TEXT",
-    "_report": "TEXT",
-    "link": "TEXT",
-    "color": "TEXT",
-    "icon": "TEXT",
-    "reverse": "TEXT",
-    "idx": "TEXT"
-  },
   "tabDiscounted Invoice": {
     "name": "TEXT",
     "sales_invoice": "TEXT",
@@ -2593,196 +1438,6 @@
     "posting_date": "TEXT",
     "outstanding_amount": "TEXT",
     "debit_to": "TEXT"
-  },
-  "tabDiscussion Reply": {
-    "name": "TEXT",
-    "topic": "TEXT",
-    "reply": "TEXT"
-  },
-  "tabDiscussion Topic": {
-    "name": "TEXT",
-    "title": "TEXT",
-    "reference_doctype": "TEXT",
-    "reference_docname": "TEXT"
-  },
-  "tabDocField": {
-    "name": "TEXT",
-    "label": "TEXT",
-    "fieldtype": "TEXT",
-    "fieldname": "TEXT",
-    "length": "TEXT",
-    "precision": "TEXT",
-    "non_negative": "TEXT",
-    "hide_days": "TEXT",
-    "hide_seconds": "TEXT",
-    "reqd": "TEXT",
-    "is_virtual": "TEXT",
-    "search_index": "TEXT",
-    "options": "TEXT",
-    "sort_options": "TEXT",
-    "show_dashboard": "TEXT",
-    "link_filters": "TEXT",
-    "default": "TEXT",
-    "fetch_from": "TEXT",
-    "fetch_if_empty": "TEXT",
-    "hidden": "TEXT",
-    "show_on_timeline": "TEXT",
-    "bold": "TEXT",
-    "allow_in_quick_entry": "TEXT",
-    "translatable": "TEXT",
-    "print_hide": "TEXT",
-    "print_hide_if_no_value": "TEXT",
-    "report_hide": "TEXT",
-    "depends_on": "TEXT",
-    "collapsible": "TEXT",
-    "collapsible_depends_on": "TEXT",
-    "hide_border": "TEXT",
-    "in_list_view": "TEXT",
-    "in_standard_filter": "TEXT",
-    "in_preview": "TEXT",
-    "in_filter": "TEXT",
-    "in_global_search": "TEXT",
-    "read_only": "TEXT",
-    "allow_on_submit": "TEXT",
-    "ignore_user_permissions": "TEXT",
-    "allow_bulk_edit": "TEXT",
-    "make_attachment_public": "TEXT",
-    "permlevel": "TEXT",
-    "ignore_xss_filter": "TEXT",
-    "unique": "TEXT",
-    "no_copy": "TEXT",
-    "set_only_once": "TEXT",
-    "remember_last_selected_value": "TEXT",
-    "mandatory_depends_on": "TEXT",
-    "read_only_depends_on": "TEXT",
-    "print_width": "TEXT",
-    "width": "TEXT",
-    "max_height": "TEXT",
-    "columns": "TEXT",
-    "description": "TEXT",
-    "documentation_url": "TEXT",
-    "placeholder": "TEXT",
-    "oldfieldname": "TEXT",
-    "oldfieldtype": "TEXT"
-  },
-  "tabDocPerm": {
-    "name": "TEXT",
-    "role": "TEXT",
-    "if_owner": "TEXT",
-    "permlevel": "TEXT",
-    "select": "TEXT",
-    "read": "TEXT",
-    "write": "TEXT",
-    "create": "TEXT",
-    "delete": "TEXT",
-    "submit": "TEXT",
-    "cancel": "TEXT",
-    "amend": "TEXT",
-    "report": "TEXT",
-    "export": "TEXT",
-    "import": "TEXT",
-    "share": "TEXT",
-    "print": "TEXT",
-    "email": "TEXT"
-  },
-  "tabDocShare": {
-    "name": "TEXT",
-    "user": "TEXT",
-    "share_doctype": "TEXT",
-    "share_name": "TEXT",
-    "read": "TEXT",
-    "write": "TEXT",
-    "share": "TEXT",
-    "submit": "TEXT",
-    "everyone": "TEXT",
-    "notify_by_email": "TEXT"
-  },
-  "tabDocType Action": {
-    "name": "TEXT",
-    "label": "TEXT",
-    "action_type": "TEXT",
-    "action": "TEXT",
-    "group": "TEXT",
-    "hidden": "TEXT",
-    "custom": "TEXT"
-  },
-  "tabDocType Layout": {
-    "name": "TEXT",
-    "document_type": "TEXT",
-    "route": "TEXT",
-    "fields": "TEXT",
-    "client_script": "TEXT"
-  },
-  "tabDocType Layout Field": {
-    "name": "TEXT",
-    "label": "TEXT",
-    "fieldname": "TEXT"
-  },
-  "tabDocType Link": {
-    "name": "TEXT",
-    "link_doctype": "TEXT",
-    "link_fieldname": "TEXT",
-    "parent_doctype": "TEXT",
-    "table_fieldname": "TEXT",
-    "group": "TEXT",
-    "hidden": "TEXT",
-    "is_child_table": "TEXT",
-    "custom": "TEXT"
-  },
-  "tabDocType State": {
-    "name": "TEXT",
-    "title": "TEXT",
-    "color": "TEXT",
-    "custom": "TEXT"
-  },
-  "tabDocument Follow": {
-    "name": "TEXT",
-    "ref_doctype": "TEXT",
-    "ref_docname": "TEXT",
-    "user": "TEXT"
-  },
-  "tabDocument Naming Rule": {
-    "name": "TEXT",
-    "document_type": "TEXT",
-    "disabled": "TEXT",
-    "priority": "TEXT",
-    "conditions": "TEXT",
-    "prefix": "TEXT",
-    "counter": "TEXT",
-    "prefix_digits": "TEXT"
-  },
-  "tabDocument Naming Rule Condition": {
-    "name": "TEXT",
-    "field": "TEXT",
-    "condition": "TEXT",
-    "value": "TEXT"
-  },
-  "tabDocument Naming Settings": {
-    "name": "TEXT",
-    "transaction_type": "TEXT",
-    "naming_series_options": "TEXT",
-    "user_must_always_select": "TEXT",
-    "try_naming_series": "TEXT",
-    "series_preview": "TEXT",
-    "prefix": "TEXT",
-    "current_value": "TEXT",
-    "default_amend_naming": "TEXT",
-    "amend_naming_override": "TEXT"
-  },
-  "tabDocument Share Key": {
-    "name": "TEXT",
-    "reference_doctype": "TEXT",
-    "reference_docname": "TEXT",
-    "key": "TEXT",
-    "expires_on": "TEXT"
-  },
-  "tabDomain": {
-    "name": "TEXT",
-    "domain": "TEXT"
-  },
-  "tabDomain Settings": {
-    "name": "TEXT",
-    "active_domains": "TEXT"
   },
   "tabDowntime Entry": {
     "name": "TEXT",
@@ -2794,41 +1449,6 @@
     "downtime": "TEXT",
     "stop_reason": "TEXT",
     "remarks": "TEXT"
-  },
-  "tabDriver": {
-    "name": "TEXT",
-    "naming_series": "TEXT",
-    "full_name": "TEXT",
-    "status": "TEXT",
-    "transporter": "TEXT",
-    "employee": "TEXT",
-    "cell_number": "TEXT",
-    "address": "TEXT",
-    "license_number": "TEXT",
-    "issuing_date": "TEXT",
-    "expiry_date": "TEXT",
-    "driving_license_category": "TEXT"
-  },
-  "tabDriving License Category": {
-    "name": "TEXT",
-    "class": "TEXT",
-    "description": "TEXT",
-    "issuing_date": "TEXT",
-    "expiry_date": "TEXT"
-  },
-  "tabDropbox Settings": {
-    "name": "TEXT",
-    "enabled": "TEXT",
-    "send_notifications_to": "TEXT",
-    "send_email_for_successful_backup": "TEXT",
-    "backup_frequency": "TEXT",
-    "limit_no_of_backups": "TEXT",
-    "no_of_backups": "TEXT",
-    "file_backup": "TEXT",
-    "app_access_key": "TEXT",
-    "app_secret_key": "TEXT",
-    "dropbox_refresh_token": "TEXT",
-    "dropbox_access_token": "TEXT"
   },
   "tabDunning": {
     "name": "TEXT",
@@ -2885,68 +1505,6 @@
     "income_account": "TEXT",
     "cost_center": "TEXT"
   },
-  "tabDynamic Link": {
-    "name": "TEXT",
-    "link_doctype": "TEXT",
-    "link_name": "TEXT",
-    "link_title": "TEXT"
-  },
-  "tabEmail Account": {
-    "name": "TEXT",
-    "email_id": "TEXT",
-    "company": "TEXT",
-    "email_account_name": "TEXT",
-    "domain": "TEXT",
-    "service": "TEXT",
-    "auth_method": "TEXT",
-    "backend_app_flow": "TEXT",
-    "password": "TEXT",
-    "awaiting_password": "TEXT",
-    "ascii_encode_password": "TEXT",
-    "connected_app": "TEXT",
-    "connected_user": "TEXT",
-    "login_id_is_different": "TEXT",
-    "login_id": "TEXT",
-    "enable_incoming": "TEXT",
-    "default_incoming": "TEXT",
-    "use_imap": "TEXT",
-    "use_ssl": "TEXT",
-    "use_starttls": "TEXT",
-    "email_server": "TEXT",
-    "incoming_port": "TEXT",
-    "attachment_limit": "TEXT",
-    "email_sync_option": "TEXT",
-    "initial_sync_count": "TEXT",
-    "imap_folder": "TEXT",
-    "append_emails_to_sent_folder": "TEXT",
-    "sent_folder_name": "TEXT",
-    "append_to": "TEXT",
-    "create_contact": "TEXT",
-    "enable_automatic_linking": "TEXT",
-    "notify_if_unreplied": "TEXT",
-    "unreplied_for_mins": "TEXT",
-    "send_notification_to": "TEXT",
-    "enable_outgoing": "TEXT",
-    "use_tls": "TEXT",
-    "use_ssl_for_outgoing": "TEXT",
-    "smtp_server": "TEXT",
-    "smtp_port": "TEXT",
-    "default_outgoing": "TEXT",
-    "always_use_account_email_id_as_sender": "TEXT",
-    "always_use_account_name_as_sender_name": "TEXT",
-    "send_unsubscribe_message": "TEXT",
-    "track_email_status": "TEXT",
-    "no_smtp_authentication": "TEXT",
-    "always_bcc": "TEXT",
-    "add_signature": "TEXT",
-    "signature": "TEXT",
-    "enable_auto_reply": "TEXT",
-    "auto_reply_message": "TEXT",
-    "footer": "TEXT",
-    "uidvalidity": "TEXT",
-    "uidnext": "TEXT",
-    "no_failed": "TEXT"
-  },
   "tabEmail Campaign": {
     "name": "TEXT",
     "campaign_name": "TEXT",
@@ -2956,313 +1514,6 @@
     "start_date": "TEXT",
     "end_date": "TEXT",
     "status": "TEXT"
-  },
-  "tabEmail Digest": {
-    "name": "TEXT",
-    "enabled": "TEXT",
-    "company": "TEXT",
-    "frequency": "TEXT",
-    "next_send": "TEXT",
-    "recipients": "TEXT",
-    "income": "TEXT",
-    "expenses_booked": "TEXT",
-    "income_year_to_date": "TEXT",
-    "expense_year_to_date": "TEXT",
-    "bank_balance": "TEXT",
-    "credit_balance": "TEXT",
-    "invoiced_amount": "TEXT",
-    "payables": "TEXT",
-    "sales_orders_to_bill": "TEXT",
-    "purchase_orders_to_bill": "TEXT",
-    "sales_order": "TEXT",
-    "purchase_order": "TEXT",
-    "sales_orders_to_deliver": "TEXT",
-    "purchase_orders_to_receive": "TEXT",
-    "sales_invoice": "TEXT",
-    "purchase_invoice": "TEXT",
-    "new_quotations": "TEXT",
-    "pending_quotations": "TEXT",
-    "issue": "TEXT",
-    "project": "TEXT",
-    "purchase_orders_items_overdue": "TEXT",
-    "calendar_events": "TEXT",
-    "todo_list": "TEXT",
-    "notifications": "TEXT",
-    "add_quote": "TEXT"
-  },
-  "tabEmail Digest Recipient": {
-    "name": "TEXT",
-    "recipient": "TEXT"
-  },
-  "tabEmail Domain": {
-    "name": "TEXT",
-    "domain_name": "TEXT",
-    "email_server": "TEXT",
-    "use_imap": "TEXT",
-    "use_ssl": "TEXT",
-    "use_starttls": "TEXT",
-    "incoming_port": "TEXT",
-    "attachment_limit": "TEXT",
-    "smtp_server": "TEXT",
-    "use_tls": "TEXT",
-    "use_ssl_for_outgoing": "TEXT",
-    "smtp_port": "TEXT",
-    "append_emails_to_sent_folder": "TEXT",
-    "sent_folder_name": "TEXT"
-  },
-  "tabEmail Flag Queue": {
-    "name": "TEXT",
-    "is_completed": "TEXT",
-    "communication": "TEXT",
-    "action": "TEXT",
-    "email_account": "TEXT",
-    "uid": "TEXT"
-  },
-  "tabEmail Group": {
-    "name": "TEXT",
-    "title": "TEXT",
-    "total_subscribers": "TEXT",
-    "confirmation_email_template": "TEXT",
-    "welcome_email_template": "TEXT",
-    "welcome_url": "TEXT",
-    "add_query_parameters": "TEXT"
-  },
-  "tabEmail Group Member": {
-    "name": "TEXT",
-    "email_group": "TEXT",
-    "email": "TEXT",
-    "unsubscribed": "TEXT"
-  },
-  "tabEmail Queue": {
-    "name": "TEXT",
-    "sender": "TEXT",
-    "recipients": "TEXT",
-    "show_as_cc": "TEXT",
-    "message": "TEXT",
-    "status": "TEXT",
-    "error": "TEXT",
-    "message_id": "TEXT",
-    "reference_doctype": "TEXT",
-    "reference_name": "TEXT",
-    "communication": "TEXT",
-    "send_after": "TEXT",
-    "priority": "TEXT",
-    "add_unsubscribe_link": "TEXT",
-    "unsubscribe_param": "TEXT",
-    "unsubscribe_method": "TEXT",
-    "expose_recipients": "TEXT",
-    "attachments": "TEXT",
-    "retry": "TEXT",
-    "email_account": "TEXT"
-  },
-  "tabEmail Queue Recipient": {
-    "name": "TEXT",
-    "recipient": "TEXT",
-    "status": "TEXT",
-    "error": "TEXT"
-  },
-  "tabEmail Rule": {
-    "name": "TEXT",
-    "email_id": "TEXT",
-    "is_spam": "TEXT"
-  },
-  "tabEmail Template": {
-    "name": "TEXT",
-    "subject": "TEXT",
-    "use_html": "TEXT",
-    "response_html": "TEXT",
-    "response": "TEXT"
-  },
-  "tabEmail Unsubscribe": {
-    "name": "TEXT",
-    "email": "TEXT",
-    "reference_doctype": "TEXT",
-    "reference_name": "TEXT",
-    "global_unsubscribe": "TEXT"
-  },
-  "tabEmployee": {
-    "name": "TEXT",
-    "employee": "TEXT",
-    "naming_series": "TEXT",
-    "first_name": "TEXT",
-    "middle_name": "TEXT",
-    "last_name": "TEXT",
-    "employee_name": "TEXT",
-    "gender": "TEXT",
-    "date_of_birth": "TEXT",
-    "salutation": "TEXT",
-    "date_of_joining": "TEXT",
-    "status": "TEXT",
-    "user_id": "TEXT",
-    "create_user_permission": "TEXT",
-    "company": "TEXT",
-    "department": "TEXT",
-    "employee_number": "TEXT",
-    "designation": "TEXT",
-    "reports_to": "TEXT",
-    "branch": "TEXT",
-    "scheduled_confirmation_date": "TEXT",
-    "final_confirmation_date": "TEXT",
-    "contract_end_date": "TEXT",
-    "notice_number_of_days": "TEXT",
-    "date_of_retirement": "TEXT",
-    "cell_number": "TEXT",
-    "personal_email": "TEXT",
-    "company_email": "TEXT",
-    "prefered_contact_email": "TEXT",
-    "prefered_email": "TEXT",
-    "unsubscribed": "TEXT",
-    "current_address": "TEXT",
-    "current_accommodation_type": "TEXT",
-    "permanent_address": "TEXT",
-    "permanent_accommodation_type": "TEXT",
-    "person_to_be_contacted": "TEXT",
-    "emergency_phone_number": "TEXT",
-    "relation": "TEXT",
-    "attendance_device_id": "TEXT",
-    "holiday_list": "TEXT",
-    "ctc": "TEXT",
-    "salary_currency": "TEXT",
-    "salary_mode": "TEXT",
-    "bank_name": "TEXT",
-    "bank_ac_no": "TEXT",
-    "iban": "TEXT",
-    "marital_status": "TEXT",
-    "family_background": "TEXT",
-    "blood_group": "TEXT",
-    "health_details": "TEXT",
-    "passport_number": "TEXT",
-    "valid_upto": "TEXT",
-    "date_of_issue": "TEXT",
-    "place_of_issue": "TEXT",
-    "bio": "TEXT",
-    "education": "TEXT",
-    "external_work_history": "TEXT",
-    "internal_work_history": "TEXT",
-    "resignation_letter_date": "TEXT",
-    "relieving_date": "TEXT",
-    "held_on": "TEXT",
-    "new_workplace": "TEXT",
-    "leave_encashed": "TEXT",
-    "encashment_date": "TEXT",
-    "reason_for_leaving": "TEXT",
-    "feedback": "TEXT",
-    "lft": "TEXT",
-    "rgt": "TEXT",
-    "old_parent": "TEXT"
-  },
-  "tabEmployee Education": {
-    "name": "TEXT",
-    "school_univ": "TEXT",
-    "qualification": "TEXT",
-    "level": "TEXT",
-    "year_of_passing": "TEXT",
-    "class_per": "TEXT",
-    "maj_opt_subj": "TEXT"
-  },
-  "tabEmployee External Work History": {
-    "name": "TEXT",
-    "company_name": "TEXT",
-    "designation": "TEXT",
-    "salary": "TEXT",
-    "address": "TEXT",
-    "contact": "TEXT",
-    "total_experience": "TEXT"
-  },
-  "tabEmployee Group": {
-    "name": "TEXT",
-    "employee_group_name": "TEXT",
-    "employee_list": "TEXT"
-  },
-  "tabEmployee Group Table": {
-    "name": "TEXT",
-    "employee": "TEXT",
-    "employee_name": "TEXT",
-    "user_id": "TEXT"
-  },
-  "tabEmployee Internal Work History": {
-    "name": "TEXT",
-    "branch": "TEXT",
-    "department": "TEXT",
-    "designation": "TEXT",
-    "from_date": "TEXT",
-    "to_date": "TEXT"
-  },
-  "tabEnergy Point Log": {
-    "name": "TEXT",
-    "user": "TEXT",
-    "type": "TEXT",
-    "points": "TEXT",
-    "rule": "TEXT",
-    "reference_doctype": "TEXT",
-    "reference_name": "TEXT",
-    "reverted": "TEXT",
-    "revert_of": "TEXT",
-    "reason": "TEXT",
-    "seen": "TEXT"
-  },
-  "tabEnergy Point Rule": {
-    "name": "TEXT",
-    "enabled": "TEXT",
-    "rule_name": "TEXT",
-    "reference_doctype": "TEXT",
-    "for_doc_event": "TEXT",
-    "field_to_check": "TEXT",
-    "points": "TEXT",
-    "for_assigned_users": "TEXT",
-    "user_field": "TEXT",
-    "multiplier_field": "TEXT",
-    "max_points": "TEXT",
-    "apply_only_once": "TEXT",
-    "condition": "TEXT"
-  },
-  "tabEnergy Point Settings": {
-    "name": "TEXT",
-    "enabled": "TEXT",
-    "review_levels": "TEXT",
-    "point_allocation_periodicity": "TEXT",
-    "last_point_allocation_date": "TEXT"
-  },
-  "tabEvent": {
-    "name": "TEXT",
-    "subject": "TEXT",
-    "event_category": "TEXT",
-    "event_type": "TEXT",
-    "color": "TEXT",
-    "send_reminder": "TEXT",
-    "repeat_this_event": "TEXT",
-    "starts_on": "TEXT",
-    "ends_on": "TEXT",
-    "status": "TEXT",
-    "sender": "TEXT",
-    "all_day": "TEXT",
-    "sync_with_google_calendar": "TEXT",
-    "add_video_conferencing": "TEXT",
-    "google_calendar": "TEXT",
-    "google_calendar_id": "TEXT",
-    "google_calendar_event_id": "TEXT",
-    "google_meet_link": "TEXT",
-    "pulled_from_google_calendar": "TEXT",
-    "repeat_on": "TEXT",
-    "repeat_till": "TEXT",
-    "monday": "TEXT",
-    "tuesday": "TEXT",
-    "wednesday": "TEXT",
-    "thursday": "TEXT",
-    "friday": "TEXT",
-    "saturday": "TEXT",
-    "sunday": "TEXT",
-    "description": "TEXT",
-    "event_participants": "TEXT",
-    "reference_doctype": "TEXT",
-    "reference_docname": "TEXT",
-    "links": "TEXT"
-  },
-  "tabEvent Participants": {
-    "name": "TEXT",
-    "reference_doctype": "TEXT",
-    "reference_docname": "TEXT",
-    "email": "TEXT"
   },
   "tabExchange Rate Revaluation": {
     "name": "TEXT",
@@ -3290,26 +1541,6 @@
     "gain_loss": "TEXT",
     "zero_balance": "TEXT"
   },
-  "tabFile": {
-    "name": "TEXT",
-    "file_name": "TEXT",
-    "is_private": "TEXT",
-    "file_type": "TEXT",
-    "is_home_folder": "TEXT",
-    "is_attachments_folder": "TEXT",
-    "file_size": "TEXT",
-    "file_url": "TEXT",
-    "thumbnail_url": "TEXT",
-    "folder": "TEXT",
-    "is_folder": "TEXT",
-    "attached_to_doctype": "TEXT",
-    "attached_to_name": "TEXT",
-    "attached_to_field": "TEXT",
-    "old_parent": "TEXT",
-    "content_hash": "TEXT",
-    "uploaded_to_dropbox": "TEXT",
-    "uploaded_to_google_drive": "TEXT"
-  },
   "tabFinance Book": {
     "name": "TEXT",
     "finance_book_name": "TEXT"
@@ -3327,50 +1558,6 @@
   "tabFiscal Year Company": {
     "name": "TEXT",
     "company": "TEXT"
-  },
-  "tabForm Tour": {
-    "name": "TEXT",
-    "title": "TEXT",
-    "view_name": "TEXT",
-    "workspace_name": "TEXT",
-    "list_name": "TEXT",
-    "report_name": "TEXT",
-    "dashboard_name": "TEXT",
-    "new_document_form": "TEXT",
-    "page_name": "TEXT",
-    "reference_doctype": "TEXT",
-    "module": "TEXT",
-    "ui_tour": "TEXT",
-    "track_steps": "TEXT",
-    "is_standard": "TEXT",
-    "save_on_complete": "TEXT",
-    "first_document": "TEXT",
-    "include_name_field": "TEXT",
-    "page_route": "TEXT",
-    "steps": "TEXT"
-  },
-  "tabForm Tour Step": {
-    "name": "TEXT",
-    "ui_tour": "TEXT",
-    "is_table_field": "TEXT",
-    "title": "TEXT",
-    "parent_fieldname": "TEXT",
-    "fieldname": "TEXT",
-    "element_selector": "TEXT",
-    "parent_element_selector": "TEXT",
-    "position": "TEXT",
-    "hide_buttons": "TEXT",
-    "popover_element": "TEXT",
-    "modal_trigger": "TEXT",
-    "offset_x": "TEXT",
-    "offset_y": "TEXT",
-    "next_on_click": "TEXT",
-    "label": "TEXT",
-    "fieldtype": "TEXT",
-    "has_next_condition": "TEXT",
-    "next_step_condition": "TEXT",
-    "next_form_tour": "TEXT",
-    "child_doctype": "TEXT"
   },
   "tabGL Entry": {
     "name": "TEXT",
@@ -3407,150 +1594,6 @@
     "is_cancelled": "TEXT",
     "remarks": "TEXT"
   },
-  "tabGender": {
-    "name": "TEXT",
-    "gender": "TEXT"
-  },
-  "tabGlobal Defaults": {
-    "name": "TEXT",
-    "default_company": "TEXT",
-    "country": "TEXT",
-    "default_distance_unit": "TEXT",
-    "default_currency": "TEXT",
-    "hide_currency_symbol": "TEXT",
-    "disable_rounded_total": "TEXT",
-    "disable_in_words": "TEXT",
-    "demo_company": "TEXT"
-  },
-  "tabGlobal Search DocType": {
-    "name": "TEXT",
-    "document_type": "TEXT"
-  },
-  "tabGlobal Search Settings": {
-    "name": "TEXT",
-    "allowed_in_global_search": "TEXT"
-  },
-  "tabGoogle Calendar": {
-    "name": "TEXT",
-    "enable": "TEXT",
-    "calendar_name": "TEXT",
-    "user": "TEXT",
-    "pull_from_google_calendar": "TEXT",
-    "sync_as_public": "TEXT",
-    "push_to_google_calendar": "TEXT",
-    "google_calendar_id": "TEXT",
-    "refresh_token": "TEXT",
-    "authorization_code": "TEXT",
-    "next_sync_token": "TEXT"
-  },
-  "tabGoogle Contacts": {
-    "name": "TEXT",
-    "enable": "TEXT",
-    "email_id": "TEXT",
-    "last_sync_on": "TEXT",
-    "authorization_code": "TEXT",
-    "refresh_token": "TEXT",
-    "next_sync_token": "TEXT",
-    "pull_from_google_contacts": "TEXT",
-    "push_to_google_contacts": "TEXT"
-  },
-  "tabGoogle Drive": {
-    "name": "TEXT",
-    "enable": "TEXT",
-    "backup_folder_name": "TEXT",
-    "frequency": "TEXT",
-    "email": "TEXT",
-    "send_email_for_successful_backup": "TEXT",
-    "file_backup": "TEXT",
-    "backup_folder_id": "TEXT",
-    "last_backup_on": "TEXT",
-    "refresh_token": "TEXT",
-    "authorization_code": "TEXT"
-  },
-  "tabGoogle Settings": {
-    "name": "TEXT",
-    "enable": "TEXT",
-    "client_id": "TEXT",
-    "client_secret": "TEXT",
-    "api_key": "TEXT",
-    "google_drive_picker_enabled": "TEXT",
-    "app_id": "TEXT"
-  },
-  "tabHas Domain": {
-    "name": "TEXT",
-    "domain": "TEXT"
-  },
-  "tabHelp Article": {
-    "name": "TEXT",
-    "title": "TEXT",
-    "category": "TEXT",
-    "published": "TEXT",
-    "author": "TEXT",
-    "level": "TEXT",
-    "content": "TEXT",
-    "likes": "TEXT",
-    "route": "TEXT",
-    "helpful": "TEXT",
-    "not_helpful": "TEXT"
-  },
-  "tabHelp Category": {
-    "name": "TEXT",
-    "category_name": "TEXT",
-    "category_description": "TEXT",
-    "published": "TEXT",
-    "help_articles": "TEXT",
-    "route": "TEXT"
-  },
-  "tabHoliday": {
-    "name": "TEXT",
-    "holiday_date": "TEXT",
-    "weekly_off": "TEXT",
-    "description": "TEXT"
-  },
-  "tabHoliday List": {
-    "name": "TEXT",
-    "holiday_list_name": "TEXT",
-    "from_date": "TEXT",
-    "to_date": "TEXT",
-    "total_holidays": "TEXT",
-    "weekly_off": "TEXT",
-    "country": "TEXT",
-    "subdivision": "TEXT",
-    "holidays": "TEXT",
-    "color": "TEXT"
-  },
-  "tabHomepage": {
-    "name": "TEXT",
-    "company": "TEXT",
-    "hero_section_based_on": "TEXT",
-    "title": "TEXT",
-    "tag_line": "TEXT",
-    "description": "TEXT",
-    "slideshow": "TEXT",
-    "hero_section": "TEXT"
-  },
-  "tabHomepage Section": {
-    "name": "TEXT",
-    "section_based_on": "TEXT",
-    "section_cards": "TEXT",
-    "no_of_columns": "TEXT",
-    "section_html": "TEXT",
-    "section_order": "TEXT"
-  },
-  "tabHomepage Section Card": {
-    "name": "TEXT",
-    "title": "TEXT",
-    "subtitle": "TEXT",
-    "content": "TEXT",
-    "route": "TEXT"
-  },
-  "tabIMAP Folder": {
-    "name": "TEXT",
-    "folder_name": "TEXT",
-    "append_to": "TEXT",
-    "uidvalidity": "TEXT",
-    "uidnext": "TEXT"
-  },
   "tabImport Supplier Invoice": {
     "name": "TEXT",
     "invoice_series": "TEXT",
@@ -3560,27 +1603,6 @@
     "tax_account": "TEXT",
     "default_buying_price_list": "TEXT",
     "status": "TEXT"
-  },
-  "tabIncoming Call Handling Schedule": {
-    "name": "TEXT",
-    "day_of_week": "TEXT",
-    "from_time": "TEXT",
-    "to_time": "TEXT",
-    "agent_group": "TEXT"
-  },
-  "tabIncoming Call Settings": {
-    "name": "TEXT",
-    "call_routing": "TEXT",
-    "greeting_message": "TEXT",
-    "agent_busy_message": "TEXT",
-    "agent_unavailable_message": "TEXT",
-    "call_handling_schedule": "TEXT"
-  },
-  "tabIncoterm": {
-    "name": "TEXT",
-    "code": "TEXT",
-    "title": "TEXT",
-    "description": "TEXT"
   },
   "tabIndustry Type": {
     "name": "TEXT",
@@ -3617,29 +1639,6 @@
     "prevdoc_detail_docname": "TEXT",
     "prevdoc_docname": "TEXT",
     "prevdoc_doctype": "TEXT"
-  },
-  "tabInstalled Application": {
-    "name": "TEXT",
-    "app_name": "TEXT",
-    "app_version": "TEXT",
-    "git_branch": "TEXT",
-    "has_setup_wizard": "TEXT",
-    "is_setup_complete": "TEXT"
-  },
-  "tabIntegration Request": {
-    "name": "TEXT",
-    "request_id": "TEXT",
-    "integration_request_service": "TEXT",
-    "is_remote_request": "TEXT",
-    "request_description": "TEXT",
-    "status": "TEXT",
-    "url": "TEXT",
-    "request_headers": "TEXT",
-    "data": "TEXT",
-    "output": "TEXT",
-    "error": "TEXT",
-    "reference_doctype": "TEXT",
-    "reference_docname": "TEXT"
   },
   "tabInventory Dimension": {
     "name": "TEXT",
@@ -3850,17 +1849,6 @@
     "deferred_expense_account": "TEXT",
     "deferred_revenue_account": "TEXT"
   },
-  "tabItem Group": {
-    "name": "TEXT",
-    "item_group_name": "TEXT",
-    "parent_item_group": "TEXT",
-    "is_group": "TEXT",
-    "item_group_defaults": "TEXT",
-    "taxes": "TEXT",
-    "lft": "TEXT",
-    "old_parent": "TEXT",
-    "rgt": "TEXT"
-  },
   "tabItem Manufacturer": {
     "name": "TEXT",
     "item_code": "TEXT",
@@ -3953,12 +1941,6 @@
     "from_range": "TEXT",
     "increment": "TEXT",
     "to_range": "TEXT"
-  },
-  "tabItem Variant Settings": {
-    "name": "TEXT",
-    "do_not_update_variants": "TEXT",
-    "allow_rename_attribute_value": "TEXT",
-    "fields": "TEXT"
   },
   "tabItem Website Specification": {
     "name": "TEXT",
@@ -4142,60 +2124,6 @@
     "name": "TEXT",
     "account": "TEXT"
   },
-  "tabKanban Board": {
-    "name": "TEXT",
-    "kanban_board_name": "TEXT",
-    "reference_doctype": "TEXT",
-    "field_name": "TEXT",
-    "private": "TEXT",
-    "show_labels": "TEXT",
-    "columns": "TEXT",
-    "filters": "TEXT",
-    "fields": "TEXT"
-  },
-  "tabKanban Board Column": {
-    "name": "TEXT",
-    "column_name": "TEXT",
-    "status": "TEXT",
-    "indicator": "TEXT",
-    "order": "TEXT"
-  },
-  "tabLDAP Group Mapping": {
-    "name": "TEXT",
-    "ldap_group": "TEXT",
-    "erpnext_role": "TEXT"
-  },
-  "tabLDAP Settings": {
-    "name": "TEXT",
-    "enabled": "TEXT",
-    "ldap_directory_server": "TEXT",
-    "ldap_server_url": "TEXT",
-    "base_dn": "TEXT",
-    "password": "TEXT",
-    "ldap_search_path_user": "TEXT",
-    "ldap_search_string": "TEXT",
-    "ldap_search_path_group": "TEXT",
-    "ldap_email_field": "TEXT",
-    "ldap_username_field": "TEXT",
-    "ldap_first_name_field": "TEXT",
-    "do_not_create_new_user": "TEXT",
-    "ldap_middle_name_field": "TEXT",
-    "ldap_last_name_field": "TEXT",
-    "ldap_phone_field": "TEXT",
-    "ldap_mobile_field": "TEXT",
-    "ssl_tls_mode": "TEXT",
-    "require_trusted_certificate": "TEXT",
-    "local_private_key_file": "TEXT",
-    "local_server_certificate_file": "TEXT",
-    "local_ca_certs_file": "TEXT",
-    "ldap_group_objectclass": "TEXT",
-    "ldap_custom_group_search": "TEXT",
-    "ldap_group_member_attribute": "TEXT",
-    "default_user_type": "TEXT",
-    "default_role": "TEXT",
-    "ldap_groups": "TEXT",
-    "ldap_group_field": "TEXT"
-  },
   "tabLanded Cost Item": {
     "name": "TEXT",
     "item_code": "TEXT",
@@ -4239,14 +2167,6 @@
     "total_taxes_and_charges": "TEXT",
     "distribute_charges_based_on": "TEXT",
     "amended_from": "TEXT"
-  },
-  "tabLanguage": {
-    "name": "TEXT",
-    "enabled": "TEXT",
-    "language_code": "TEXT",
-    "language_name": "TEXT",
-    "flag": "TEXT",
-    "based_on": "TEXT"
   },
   "tabLead": {
     "name": "TEXT",
@@ -4305,14 +2225,6 @@
     "debit_credit_mismatch": "TEXT",
     "general_and_payment_ledger_mismatch": "TEXT"
   },
-  "tabLedger Health Monitor": {
-    "name": "TEXT",
-    "enable_health_monitor": "TEXT",
-    "monitor_for_last_x_days": "TEXT",
-    "debit_credit_mismatch": "TEXT",
-    "general_and_payment_ledger_mismatch": "TEXT",
-    "companies": "TEXT"
-  },
   "tabLedger Health Monitor Company": {
     "name": "TEXT",
     "company": "TEXT"
@@ -4333,43 +2245,9 @@
     "account_name": "TEXT",
     "merged": "TEXT"
   },
-  "tabLetter Head": {
-    "name": "TEXT",
-    "letter_head_name": "TEXT",
-    "source": "TEXT",
-    "footer_source": "TEXT",
-    "disabled": "TEXT",
-    "is_default": "TEXT",
-    "image_height": "TEXT",
-    "image_width": "TEXT",
-    "align": "TEXT",
-    "footer_image_height": "TEXT",
-    "footer_image_width": "TEXT",
-    "footer_align": "TEXT",
-    "header_script": "TEXT",
-    "footer_script": "TEXT"
-  },
   "tabLinked Location": {
     "name": "TEXT",
     "location": "TEXT"
-  },
-  "tabList Filter": {
-    "name": "TEXT",
-    "filter_name": "TEXT",
-    "reference_doctype": "TEXT",
-    "for_user": "TEXT",
-    "filters": "TEXT"
-  },
-  "tabList View Settings": {
-    "name": "TEXT",
-    "disable_count": "TEXT",
-    "disable_comment_count": "TEXT",
-    "disable_sidebar_stats": "TEXT",
-    "disable_auto_refresh": "TEXT",
-    "allow_edit": "TEXT",
-    "disable_automatic_recency_filters": "TEXT",
-    "total_fields": "TEXT",
-    "fields": "TEXT"
   },
   "tabLocation": {
     "name": "TEXT",
@@ -4385,19 +2263,6 @@
     "lft": "TEXT",
     "rgt": "TEXT",
     "old_parent": "TEXT"
-  },
-  "tabLog Setting User": {
-    "name": "TEXT",
-    "user": "TEXT"
-  },
-  "tabLog Settings": {
-    "name": "TEXT",
-    "logs_to_clear": "TEXT"
-  },
-  "tabLogs To Clear": {
-    "name": "TEXT",
-    "ref_doctype": "TEXT",
-    "days": "TEXT"
   },
   "tabLost Reason Detail": {
     "name": "TEXT",
@@ -4555,36 +2420,9 @@
     "country": "TEXT",
     "notes": "TEXT"
   },
-  "tabManufacturing Settings": {
-    "name": "TEXT",
-    "material_consumption": "TEXT",
-    "get_rm_cost_from_consumption_entry": "TEXT",
-    "backflush_raw_materials_based_on": "TEXT",
-    "validate_components_quantities_per_bom": "TEXT",
-    "update_bom_costs_automatically": "TEXT",
-    "default_wip_warehouse": "TEXT",
-    "default_fg_warehouse": "TEXT",
-    "default_scrap_warehouse": "TEXT",
-    "overproduction_percentage_for_sales_order": "TEXT",
-    "overproduction_percentage_for_work_order": "TEXT",
-    "add_corrective_operation_cost_in_finished_good_valuation": "TEXT",
-    "enforce_time_logs": "TEXT",
-    "job_card_excess_transfer": "TEXT",
-    "disable_capacity_planning": "TEXT",
-    "allow_overtime": "TEXT",
-    "allow_production_on_holidays": "TEXT",
-    "capacity_planning_for_days": "TEXT",
-    "mins_between_operations": "TEXT",
-    "set_op_cost_and_scrap_from_sub_assemblies": "TEXT",
-    "make_serial_no_batch_from_work_order": "TEXT"
-  },
   "tabMarket Segment": {
     "name": "TEXT",
     "market_segment": "TEXT"
-  },
-  "tabMarketing Campaign": {
-    "name": "TEXT",
-    "campaign_description": "TEXT"
   },
   "tabMaterial Request": {
     "name": "TEXT",
@@ -4673,20 +2511,6 @@
     "projected_qty": "TEXT",
     "safety_stock": "TEXT"
   },
-  "tabMilestone": {
-    "name": "TEXT",
-    "reference_type": "TEXT",
-    "reference_name": "TEXT",
-    "track_field": "TEXT",
-    "value": "TEXT",
-    "milestone_tracker": "TEXT"
-  },
-  "tabMilestone Tracker": {
-    "name": "TEXT",
-    "document_type": "TEXT",
-    "track_field": "TEXT",
-    "disabled": "TEXT"
-  },
   "tabMode of Payment": {
     "name": "TEXT",
     "mode_of_payment": "TEXT",
@@ -4699,22 +2523,6 @@
     "company": "TEXT",
     "default_account": "TEXT"
   },
-  "tabModule Onboarding": {
-    "name": "TEXT",
-    "title": "TEXT",
-    "subtitle": "TEXT",
-    "module": "TEXT",
-    "allow_roles": "TEXT",
-    "success_message": "TEXT",
-    "documentation_url": "TEXT",
-    "is_complete": "TEXT",
-    "steps": "TEXT"
-  },
-  "tabModule Profile": {
-    "name": "TEXT",
-    "module_profile_name": "TEXT",
-    "block_modules": "TEXT"
-  },
   "tabMonthly Distribution": {
     "name": "TEXT",
     "distribution_id": "TEXT",
@@ -4726,60 +2534,6 @@
     "month": "TEXT",
     "percentage_allocation": "TEXT"
   },
-  "tabNavbar Item": {
-    "name": "TEXT",
-    "item_label": "TEXT",
-    "item_type": "TEXT",
-    "route": "TEXT",
-    "action": "TEXT",
-    "hidden": "TEXT",
-    "is_standard": "TEXT",
-    "condition": "TEXT"
-  },
-  "tabNavbar Settings": {
-    "name": "TEXT",
-    "settings_dropdown": "TEXT",
-    "help_dropdown": "TEXT",
-    "announcement_widget": "TEXT"
-  },
-  "tabNetwork Printer Settings": {
-    "name": "TEXT",
-    "server_ip": "TEXT",
-    "port": "TEXT",
-    "printer_name": "TEXT"
-  },
-  "tabNewsletter": {
-    "name": "TEXT",
-    "email_sent_at": "TEXT",
-    "total_recipients": "TEXT",
-    "total_views": "TEXT",
-    "email_sent": "TEXT",
-    "sender_name": "TEXT",
-    "sender_email": "TEXT",
-    "send_from": "TEXT",
-    "email_group": "TEXT",
-    "subject": "TEXT",
-    "content_type": "TEXT",
-    "message": "TEXT",
-    "message_md": "TEXT",
-    "campaign": "TEXT",
-    "attachments": "TEXT",
-    "send_unsubscribe_link": "TEXT",
-    "send_webview_link": "TEXT",
-    "scheduled_to_send": "TEXT",
-    "schedule_sending": "TEXT",
-    "schedule_send": "TEXT",
-    "published": "TEXT",
-    "route": "TEXT"
-  },
-  "tabNewsletter Attachment": {
-    "name": "TEXT"
-  },
-  "tabNewsletter Email Group": {
-    "name": "TEXT",
-    "email_group": "TEXT",
-    "total_subscribers": "TEXT"
-  },
   "tabNon Conformance": {
     "name": "TEXT",
     "subject": "TEXT",
@@ -4790,208 +2544,6 @@
     "details": "TEXT",
     "corrective_action": "TEXT",
     "preventive_action": "TEXT"
-  },
-  "tabNote": {
-    "name": "TEXT",
-    "title": "TEXT",
-    "public": "TEXT",
-    "notify_on_login": "TEXT",
-    "notify_on_every_login": "TEXT",
-    "expire_notification_on": "TEXT",
-    "content": "TEXT",
-    "seen_by": "TEXT"
-  },
-  "tabNote Seen By": {
-    "name": "TEXT",
-    "user": "TEXT"
-  },
-  "tabNotification": {
-    "name": "TEXT",
-    "enabled": "TEXT",
-    "is_standard": "TEXT",
-    "module": "TEXT",
-    "channel": "TEXT",
-    "slack_webhook_url": "TEXT",
-    "subject": "TEXT",
-    "event": "TEXT",
-    "document_type": "TEXT",
-    "method": "TEXT",
-    "date_changed": "TEXT",
-    "days_in_advance": "TEXT",
-    "value_changed": "TEXT",
-    "sender": "TEXT",
-    "send_system_notification": "TEXT",
-    "sender_email": "TEXT",
-    "condition": "TEXT",
-    "set_property_after_alert": "TEXT",
-    "property_value": "TEXT",
-    "send_to_all_assignees": "TEXT",
-    "recipients": "TEXT",
-    "message_type": "TEXT",
-    "message": "TEXT",
-    "attach_print": "TEXT",
-    "print_format": "TEXT"
-  },
-  "tabNotification Log": {
-    "name": "TEXT",
-    "subject": "TEXT",
-    "for_user": "TEXT",
-    "type": "TEXT",
-    "email_content": "TEXT",
-    "document_type": "TEXT",
-    "read": "TEXT",
-    "document_name": "TEXT",
-    "attached_file": "TEXT",
-    "from_user": "TEXT",
-    "link": "TEXT"
-  },
-  "tabNotification Recipient": {
-    "name": "TEXT",
-    "receiver_by_document_field": "TEXT",
-    "receiver_by_role": "TEXT",
-    "cc": "TEXT",
-    "bcc": "TEXT",
-    "condition": "TEXT"
-  },
-  "tabNotification Settings": {
-    "name": "TEXT",
-    "enabled": "TEXT",
-    "subscribed_documents": "TEXT",
-    "enable_email_notifications": "TEXT",
-    "enable_email_mention": "TEXT",
-    "enable_email_assignment": "TEXT",
-    "enable_email_threads_on_assigned_document": "TEXT",
-    "enable_email_energy_point": "TEXT",
-    "enable_email_share": "TEXT",
-    "enable_email_event_reminders": "TEXT",
-    "user": "TEXT",
-    "seen": "TEXT",
-    "energy_points_system_notifications": "TEXT"
-  },
-  "tabNotification Subscribed Document": {
-    "name": "TEXT",
-    "document": "TEXT"
-  },
-  "tabNumber Card": {
-    "name": "TEXT",
-    "is_standard": "TEXT",
-    "module": "TEXT",
-    "label": "TEXT",
-    "type": "TEXT",
-    "report_name": "TEXT",
-    "method": "TEXT",
-    "function": "TEXT",
-    "aggregate_function_based_on": "TEXT",
-    "document_type": "TEXT",
-    "parent_document_type": "TEXT",
-    "report_field": "TEXT",
-    "report_function": "TEXT",
-    "is_public": "TEXT",
-    "currency": "TEXT",
-    "filters_config": "TEXT",
-    "show_percentage_stats": "TEXT",
-    "stats_time_interval": "TEXT",
-    "filters_json": "TEXT",
-    "dynamic_filters_json": "TEXT",
-    "color": "TEXT",
-    "background_color": "TEXT"
-  },
-  "tabNumber Card Link": {
-    "name": "TEXT",
-    "card": "TEXT"
-  },
-  "tabOAuth Authorization Code": {
-    "name": "TEXT",
-    "client": "TEXT",
-    "user": "TEXT",
-    "scopes": "TEXT",
-    "authorization_code": "TEXT",
-    "expiration_time": "TEXT",
-    "redirect_uri_bound_to_authorization_code": "TEXT",
-    "validity": "TEXT",
-    "nonce": "TEXT",
-    "code_challenge": "TEXT",
-    "code_challenge_method": "TEXT"
-  },
-  "tabOAuth Bearer Token": {
-    "name": "TEXT",
-    "client": "TEXT",
-    "user": "TEXT",
-    "scopes": "TEXT",
-    "access_token": "TEXT",
-    "refresh_token": "TEXT",
-    "expiration_time": "TEXT",
-    "expires_in": "TEXT",
-    "status": "TEXT"
-  },
-  "tabOAuth Client": {
-    "name": "TEXT",
-    "client_id": "TEXT",
-    "app_name": "TEXT",
-    "user": "TEXT",
-    "allowed_roles": "TEXT",
-    "client_secret": "TEXT",
-    "skip_authorization": "TEXT",
-    "scopes": "TEXT",
-    "redirect_uris": "TEXT",
-    "default_redirect_uri": "TEXT",
-    "grant_type": "TEXT",
-    "response_type": "TEXT"
-  },
-  "tabOAuth Client Role": {
-    "name": "TEXT",
-    "role": "TEXT"
-  },
-  "tabOAuth Provider Settings": {
-    "name": "TEXT",
-    "skip_authorization": "TEXT"
-  },
-  "tabOAuth Scope": {
-    "name": "TEXT",
-    "scope": "TEXT"
-  },
-  "tabOnboarding Permission": {
-    "name": "TEXT",
-    "role": "TEXT"
-  },
-  "tabOnboarding Step": {
-    "name": "TEXT",
-    "title": "TEXT",
-    "is_complete": "TEXT",
-    "is_skipped": "TEXT",
-    "description": "TEXT",
-    "intro_video_url": "TEXT",
-    "action": "TEXT",
-    "action_label": "TEXT",
-    "reference_document": "TEXT",
-    "show_full_form": "TEXT",
-    "show_form_tour": "TEXT",
-    "form_tour": "TEXT",
-    "is_single": "TEXT",
-    "reference_report": "TEXT",
-    "report_reference_doctype": "TEXT",
-    "report_type": "TEXT",
-    "report_description": "TEXT",
-    "path": "TEXT",
-    "callback_title": "TEXT",
-    "callback_message": "TEXT",
-    "validate_action": "TEXT",
-    "field": "TEXT",
-    "value_to_validate": "TEXT",
-    "video_url": "TEXT"
-  },
-  "tabOnboarding Step Map": {
-    "name": "TEXT",
-    "step": "TEXT"
-  },
-  "tabOpening Invoice Creation Tool": {
-    "name": "TEXT",
-    "company": "TEXT",
-    "create_missing_party": "TEXT",
-    "invoice_type": "TEXT",
-    "cost_center": "TEXT",
-    "project": "TEXT",
-    "invoices": "TEXT"
   },
   "tabOpening Invoice Creation Tool Item": {
     "name": "TEXT",
@@ -5472,11 +3024,6 @@
     "field": "TEXT",
     "fieldname": "TEXT"
   },
-  "tabPOS Settings": {
-    "name": "TEXT",
-    "invoice_fields": "TEXT",
-    "pos_search_fields": "TEXT"
-  },
   "tabPSOA Cost Center": {
     "name": "TEXT",
     "cost_center_name": "TEXT"
@@ -5484,29 +3031,6 @@
   "tabPSOA Project": {
     "name": "TEXT",
     "project_name": "TEXT"
-  },
-  "tabPackage": {
-    "name": "TEXT",
-    "package_name": "TEXT",
-    "readme": "TEXT",
-    "license_type": "TEXT",
-    "license": "TEXT"
-  },
-  "tabPackage Import": {
-    "name": "TEXT",
-    "activate": "TEXT",
-    "force": "TEXT",
-    "log": "TEXT"
-  },
-  "tabPackage Release": {
-    "name": "TEXT",
-    "package": "TEXT",
-    "publish": "TEXT",
-    "path": "TEXT",
-    "major": "TEXT",
-    "minor": "TEXT",
-    "patch": "TEXT",
-    "release_notes": "TEXT"
   },
   "tabPacked Item": {
     "name": "TEXT",
@@ -5564,17 +3088,6 @@
     "dn_detail": "TEXT",
     "pi_detail": "TEXT"
   },
-  "tabPage": {
-    "name": "TEXT",
-    "system_page": "TEXT",
-    "page_name": "TEXT",
-    "title": "TEXT",
-    "icon": "TEXT",
-    "module": "TEXT",
-    "restrict_to_domain": "TEXT",
-    "standard": "TEXT",
-    "roles": "TEXT"
-  },
   "tabParty Account": {
     "name": "TEXT",
     "company": "TEXT",
@@ -5594,17 +3107,6 @@
     "party": "TEXT",
     "restrict_based_on": "TEXT",
     "based_on_value": "TEXT"
-  },
-  "tabParty Type": {
-    "name": "TEXT",
-    "party_type": "TEXT",
-    "account_type": "TEXT"
-  },
-  "tabPatch Log": {
-    "name": "TEXT",
-    "patch": "TEXT",
-    "skipped": "TEXT",
-    "traceback": "TEXT"
   },
   "tabPause SLA On Status": {
     "name": "TEXT",
@@ -5866,10 +3368,6 @@
     "discount_validity_based_on": "TEXT",
     "discount_validity": "TEXT"
   },
-  "tabPegged Currencies": {
-    "name": "TEXT",
-    "pegged_currency_item": "TEXT"
-  },
   "tabPegged Currency Details": {
     "name": "TEXT",
     "source_currency": "TEXT",
@@ -5888,27 +3386,6 @@
     "gle_processing_status": "TEXT",
     "remarks": "TEXT",
     "error_message": "TEXT"
-  },
-  "tabPersonal Data Deletion Request": {
-    "name": "TEXT",
-    "email": "TEXT",
-    "status": "TEXT",
-    "anonymization_matrix": "TEXT",
-    "deletion_steps": "TEXT"
-  },
-  "tabPersonal Data Deletion Step": {
-    "name": "TEXT",
-    "document_type": "TEXT",
-    "status": "TEXT",
-    "partial": "TEXT",
-    "fields": "TEXT",
-    "filtered_by": "TEXT"
-  },
-  "tabPersonal Data Download Request": {
-    "name": "TEXT",
-    "user": "TEXT",
-    "user_name": "TEXT",
-    "amended_from": "TEXT"
   },
   "tabPick List": {
     "name": "TEXT",
@@ -5961,41 +3438,11 @@
     "material_request": "TEXT",
     "material_request_item": "TEXT"
   },
-  "tabPlaid Settings": {
-    "name": "TEXT",
-    "enabled": "TEXT",
-    "automatic_sync": "TEXT",
-    "plaid_client_id": "TEXT",
-    "plaid_secret": "TEXT",
-    "plaid_env": "TEXT",
-    "enable_european_access": "TEXT"
-  },
   "tabPlant Floor": {
     "name": "TEXT",
     "floor_name": "TEXT",
     "company": "TEXT",
     "warehouse": "TEXT"
-  },
-  "tabPortal Menu Item": {
-    "name": "TEXT",
-    "title": "TEXT",
-    "enabled": "TEXT",
-    "route": "TEXT",
-    "reference_doctype": "TEXT",
-    "role": "TEXT",
-    "target": "TEXT"
-  },
-  "tabPortal Settings": {
-    "name": "TEXT",
-    "default_role": "TEXT",
-    "default_portal_home": "TEXT",
-    "hide_standard_menu": "TEXT",
-    "menu": "TEXT",
-    "custom_menu": "TEXT"
-  },
-  "tabPortal User": {
-    "name": "TEXT",
-    "user": "TEXT"
   },
   "tabPrice List": {
     "name": "TEXT",
@@ -6099,79 +3546,6 @@
     "name": "TEXT",
     "item_group": "TEXT",
     "uom": "TEXT"
-  },
-  "tabPrint Format": {
-    "name": "TEXT",
-    "print_format_for": "TEXT",
-    "doc_type": "TEXT",
-    "report": "TEXT",
-    "module": "TEXT",
-    "default_print_language": "TEXT",
-    "standard": "TEXT",
-    "custom_format": "TEXT",
-    "disabled": "TEXT",
-    "pdf_generator": "TEXT",
-    "print_format_type": "TEXT",
-    "raw_printing": "TEXT",
-    "html": "TEXT",
-    "raw_commands": "TEXT",
-    "margin_top": "TEXT",
-    "margin_bottom": "TEXT",
-    "margin_left": "TEXT",
-    "margin_right": "TEXT",
-    "align_labels_right": "TEXT",
-    "show_section_headings": "TEXT",
-    "line_breaks": "TEXT",
-    "absolute_value": "TEXT",
-    "font_size": "TEXT",
-    "font": "TEXT",
-    "page_number": "TEXT",
-    "css": "TEXT",
-    "format_data": "TEXT",
-    "print_format_builder": "TEXT",
-    "print_format_builder_beta": "TEXT"
-  },
-  "tabPrint Format Field Template": {
-    "name": "TEXT",
-    "document_type": "TEXT",
-    "field": "TEXT",
-    "template_file": "TEXT",
-    "module": "TEXT",
-    "standard": "TEXT",
-    "template": "TEXT"
-  },
-  "tabPrint Heading": {
-    "name": "TEXT",
-    "print_heading": "TEXT",
-    "description": "TEXT"
-  },
-  "tabPrint Settings": {
-    "name": "TEXT",
-    "send_print_as_pdf": "TEXT",
-    "repeat_header_footer": "TEXT",
-    "pdf_page_size": "TEXT",
-    "pdf_page_height": "TEXT",
-    "pdf_page_width": "TEXT",
-    "with_letterhead": "TEXT",
-    "compact_item_print": "TEXT",
-    "print_uom_after_quantity": "TEXT",
-    "allow_print_for_draft": "TEXT",
-    "add_draft_heading": "TEXT",
-    "allow_page_break_inside_tables": "TEXT",
-    "allow_print_for_cancelled": "TEXT",
-    "print_taxes_with_zero_amount": "TEXT",
-    "enable_print_server": "TEXT",
-    "enable_raw_printing": "TEXT",
-    "print_style": "TEXT",
-    "font": "TEXT",
-    "font_size": "TEXT"
-  },
-  "tabPrint Style": {
-    "name": "TEXT",
-    "print_style_name": "TEXT",
-    "disabled": "TEXT",
-    "standard": "TEXT",
-    "css": "TEXT"
   },
   "tabProcess Deferred Accounting": {
     "name": "TEXT",
@@ -6506,13 +3880,6 @@
     "view_attachments": "TEXT",
     "hide_timesheets": "TEXT",
     "project_status": "TEXT"
-  },
-  "tabProjects Settings": {
-    "name": "TEXT",
-    "ignore_workstation_time_overlap": "TEXT",
-    "ignore_user_time_overlap": "TEXT",
-    "ignore_employee_time_overlap": "TEXT",
-    "fetch_timesheet_in_sales_invoice": "TEXT"
   },
   "tabPromotional Scheme": {
     "name": "TEXT",
@@ -7312,12 +4679,6 @@
     "tax_category": "TEXT",
     "taxes": "TEXT"
   },
-  "tabPush Notification Settings": {
-    "name": "TEXT",
-    "enable_push_notification_relay": "TEXT",
-    "api_key": "TEXT",
-    "api_secret": "TEXT"
-  },
   "tabPutaway Rule": {
     "name": "TEXT",
     "disable": "TEXT",
@@ -7503,23 +4864,6 @@
     "status": "TEXT",
     "review": "TEXT"
   },
-  "tabQuery Parameters": {
-    "name": "TEXT",
-    "key": "TEXT",
-    "value": "TEXT"
-  },
-  "tabQuick Stock Balance": {
-    "name": "TEXT",
-    "warehouse": "TEXT",
-    "date": "TEXT",
-    "item_barcode": "TEXT",
-    "item": "TEXT",
-    "item_name": "TEXT",
-    "item_description": "TEXT",
-    "image": "TEXT",
-    "qty": "TEXT",
-    "value": "TEXT"
-  },
   "tabQuotation": {
     "name": "TEXT",
     "title": "TEXT",
@@ -7661,67 +5005,6 @@
     "additional_notes": "TEXT",
     "page_break": "TEXT"
   },
-  "tabQuotation Lost Reason": {
-    "name": "TEXT",
-    "order_lost_reason": "TEXT"
-  },
-  "tabQuotation Lost Reason Detail": {
-    "name": "TEXT",
-    "lost_reason": "TEXT"
-  },
-  "tabReminder": {
-    "name": "TEXT",
-    "user": "TEXT",
-    "remind_at": "TEXT",
-    "description": "TEXT",
-    "reminder_doctype": "TEXT",
-    "reminder_docname": "TEXT",
-    "notified": "TEXT"
-  },
-  "tabRename Tool": {
-    "name": "TEXT",
-    "select_doctype": "TEXT"
-  },
-  "tabReport": {
-    "name": "TEXT",
-    "report_name": "TEXT",
-    "ref_doctype": "TEXT",
-    "reference_report": "TEXT",
-    "is_standard": "TEXT",
-    "module": "TEXT",
-    "report_type": "TEXT",
-    "letter_head": "TEXT",
-    "add_total_row": "TEXT",
-    "disabled": "TEXT",
-    "prepared_report": "TEXT",
-    "add_translate_data": "TEXT",
-    "timeout": "TEXT",
-    "filters": "TEXT",
-    "columns": "TEXT",
-    "query": "TEXT",
-    "report_script": "TEXT",
-    "javascript": "TEXT",
-    "json": "TEXT",
-    "roles": "TEXT"
-  },
-  "tabReport Column": {
-    "name": "TEXT",
-    "fieldname": "TEXT",
-    "label": "TEXT",
-    "fieldtype": "TEXT",
-    "options": "TEXT",
-    "width": "TEXT"
-  },
-  "tabReport Filter": {
-    "name": "TEXT",
-    "label": "TEXT",
-    "fieldtype": "TEXT",
-    "fieldname": "TEXT",
-    "mandatory": "TEXT",
-    "wildcard_filter": "TEXT",
-    "options": "TEXT",
-    "default": "TEXT"
-  },
   "tabRepost Accounting Ledger": {
     "name": "TEXT",
     "company": "TEXT",
@@ -7733,10 +5016,6 @@
     "name": "TEXT",
     "voucher_type": "TEXT",
     "voucher_no": "TEXT"
-  },
-  "tabRepost Accounting Ledger Settings": {
-    "name": "TEXT",
-    "allowed_types": "TEXT"
   },
   "tabRepost Allowed Types": {
     "name": "TEXT",
@@ -7840,89 +5119,15 @@
     "send_email": "TEXT",
     "email_sent": "TEXT"
   },
-  "tabReview Level": {
-    "name": "TEXT",
-    "level_name": "TEXT",
-    "role": "TEXT",
-    "review_points": "TEXT"
-  },
-  "tabRole Permission for Page and Report": {
-    "name": "TEXT",
-    "set_role_for": "TEXT",
-    "page": "TEXT",
-    "report": "TEXT",
-    "enable_prepared_report": "TEXT",
-    "roles": "TEXT"
-  },
-  "tabRole Profile": {
-    "name": "TEXT",
-    "role_profile": "TEXT",
-    "roles": "TEXT"
-  },
-  "tabRoute History": {
-    "name": "TEXT",
-    "route": "TEXT",
-    "user": "TEXT"
-  },
   "tabRouting": {
     "name": "TEXT",
     "routing_name": "TEXT",
     "disabled": "TEXT",
     "operations": "TEXT"
   },
-  "tabS3 Backup Settings": {
-    "name": "TEXT",
-    "enabled": "TEXT",
-    "access_key_id": "TEXT",
-    "secret_access_key": "TEXT",
-    "notify_email": "TEXT",
-    "send_email_for_successful_backup": "TEXT",
-    "bucket": "TEXT",
-    "endpoint_url": "TEXT",
-    "backup_path": "TEXT",
-    "frequency": "TEXT",
-    "backup_files": "TEXT"
-  },
   "tabSLA Fulfilled On Status": {
     "name": "TEXT",
     "status": "TEXT"
-  },
-  "tabSMS Center": {
-    "name": "TEXT",
-    "send_to": "TEXT",
-    "customer": "TEXT",
-    "supplier": "TEXT",
-    "sales_partner": "TEXT",
-    "department": "TEXT",
-    "branch": "TEXT",
-    "receiver_list": "TEXT",
-    "message": "TEXT",
-    "total_characters": "TEXT",
-    "total_messages": "TEXT"
-  },
-  "tabSMS Log": {
-    "name": "TEXT",
-    "sender_name": "TEXT",
-    "sent_on": "TEXT",
-    "message": "TEXT",
-    "no_of_requested_sms": "TEXT",
-    "requested_numbers": "TEXT",
-    "no_of_sent_sms": "TEXT",
-    "sent_to": "TEXT"
-  },
-  "tabSMS Parameter": {
-    "name": "TEXT",
-    "parameter": "TEXT",
-    "value": "TEXT",
-    "header": "TEXT"
-  },
-  "tabSMS Settings": {
-    "name": "TEXT",
-    "sms_gateway_url": "TEXT",
-    "message_parameter": "TEXT",
-    "receiver_parameter": "TEXT",
-    "parameters": "TEXT",
-    "use_post": "TEXT"
   },
   "tabSales Invoice": {
     "name": "TEXT",
@@ -8388,20 +5593,6 @@
     "cost_center": "TEXT",
     "project": "TEXT"
   },
-  "tabSales Partner": {
-    "name": "TEXT",
-    "partner_name": "TEXT",
-    "partner_type": "TEXT",
-    "territory": "TEXT",
-    "commission_rate": "TEXT",
-    "targets": "TEXT",
-    "show_in_website": "TEXT",
-    "referral_code": "TEXT",
-    "route": "TEXT",
-    "partner_website": "TEXT",
-    "introduction": "TEXT",
-    "description": "TEXT"
-  },
   "tabSales Partner Item": {
     "name": "TEXT",
     "sales_partner": "TEXT"
@@ -8409,20 +5600,6 @@
   "tabSales Partner Type": {
     "name": "TEXT",
     "sales_partner_type": "TEXT"
-  },
-  "tabSales Person": {
-    "name": "TEXT",
-    "sales_person_name": "TEXT",
-    "parent_sales_person": "TEXT",
-    "commission_rate": "TEXT",
-    "is_group": "TEXT",
-    "enabled": "TEXT",
-    "employee": "TEXT",
-    "department": "TEXT",
-    "lft": "TEXT",
-    "rgt": "TEXT",
-    "old_parent": "TEXT",
-    "targets": "TEXT"
   },
   "tabSales Stage": {
     "name": "TEXT",
@@ -8466,61 +5643,6 @@
     "allocated_amount": "TEXT",
     "commission_rate": "TEXT",
     "incentives": "TEXT"
-  },
-  "tabSalutation": {
-    "name": "TEXT",
-    "salutation": "TEXT"
-  },
-  "tabScheduled Job Log": {
-    "name": "TEXT",
-    "status": "TEXT",
-    "scheduled_job_type": "TEXT",
-    "details": "TEXT",
-    "debug_log": "TEXT"
-  },
-  "tabScheduled Job Type": {
-    "name": "TEXT",
-    "stopped": "TEXT",
-    "method": "TEXT",
-    "server_script": "TEXT",
-    "scheduler_event": "TEXT",
-    "frequency": "TEXT",
-    "cron_format": "TEXT",
-    "create_log": "TEXT",
-    "last_execution": "TEXT",
-    "next_execution": "TEXT"
-  },
-  "tabScheduler Event": {
-    "name": "TEXT",
-    "scheduled_against": "TEXT",
-    "method": "TEXT"
-  },
-  "tabSelling Settings": {
-    "name": "TEXT",
-    "cust_master_name": "TEXT",
-    "customer_group": "TEXT",
-    "territory": "TEXT",
-    "selling_price_list": "TEXT",
-    "maintain_same_rate_action": "TEXT",
-    "role_to_override_stop_action": "TEXT",
-    "maintain_same_sales_rate": "TEXT",
-    "fallback_to_default_price_list": "TEXT",
-    "editable_price_list_rate": "TEXT",
-    "validate_selling_price": "TEXT",
-    "editable_bundle_item_rates": "TEXT",
-    "allow_negative_rates_for_items": "TEXT",
-    "so_required": "TEXT",
-    "dn_required": "TEXT",
-    "sales_update_frequency": "TEXT",
-    "blanket_order_allowance": "TEXT",
-    "allow_multiple_items": "TEXT",
-    "allow_against_multiple_purchase_orders": "TEXT",
-    "allow_sales_order_creation_for_expired_quotation": "TEXT",
-    "dont_reserve_sales_order_qty_on_sales_return": "TEXT",
-    "hide_tax_id": "TEXT",
-    "enable_discount_accounting": "TEXT",
-    "allow_zero_qty_in_quotation": "TEXT",
-    "allow_zero_qty_in_sales_order": "TEXT"
   },
   "tabSerial No": {
     "name": "TEXT",
@@ -8585,22 +5707,6 @@
     "is_outward": "TEXT",
     "stock_queue": "TEXT"
   },
-  "tabServer Script": {
-    "name": "TEXT",
-    "script_type": "TEXT",
-    "reference_doctype": "TEXT",
-    "event_frequency": "TEXT",
-    "cron_format": "TEXT",
-    "doctype_event": "TEXT",
-    "api_method": "TEXT",
-    "allow_guest": "TEXT",
-    "module": "TEXT",
-    "disabled": "TEXT",
-    "script": "TEXT",
-    "enable_rate_limit": "TEXT",
-    "rate_limit_count": "TEXT",
-    "rate_limit_seconds": "TEXT"
-  },
   "tabService Day": {
     "name": "TEXT",
     "workday": "TEXT",
@@ -8632,14 +5738,6 @@
     "priority": "TEXT",
     "response_time": "TEXT",
     "resolution_time": "TEXT"
-  },
-  "tabSession Default": {
-    "name": "TEXT",
-    "ref_doctype": "TEXT"
-  },
-  "tabSession Default Settings": {
-    "name": "TEXT",
-    "session_defaults": "TEXT"
   },
   "tabShare Balance": {
     "name": "TEXT",
@@ -8779,37 +5877,6 @@
   "tabShipping Rule Country": {
     "name": "TEXT",
     "country": "TEXT"
-  },
-  "tabSlack Webhook URL": {
-    "name": "TEXT",
-    "webhook_name": "TEXT",
-    "webhook_url": "TEXT",
-    "show_document_link": "TEXT"
-  },
-  "tabSocial Link Settings": {
-    "name": "TEXT",
-    "social_link_type": "TEXT",
-    "color": "TEXT",
-    "background_color": "TEXT"
-  },
-  "tabSocial Login Key": {
-    "name": "TEXT",
-    "enable_social_login": "TEXT",
-    "social_login_provider": "TEXT",
-    "client_id": "TEXT",
-    "provider_name": "TEXT",
-    "client_secret": "TEXT",
-    "icon": "TEXT",
-    "base_url": "TEXT",
-    "sign_ups": "TEXT",
-    "authorize_url": "TEXT",
-    "access_token_url": "TEXT",
-    "redirect_url": "TEXT",
-    "api_endpoint": "TEXT",
-    "custom_base_url": "TEXT",
-    "api_endpoint_args": "TEXT",
-    "auth_url_data": "TEXT",
-    "user_id_property": "TEXT"
   },
   "tabSouth Africa VAT Account": {
     "name": "TEXT",
@@ -9011,94 +6078,34 @@
     "quantity_difference": "TEXT",
     "amount_difference": "TEXT"
   },
-  "tabStock Reposting Settings": {
-    "name": "TEXT",
-    "limit_reposting_timeslot": "TEXT",
-    "start_time": "TEXT",
-    "end_time": "TEXT",
-    "limits_dont_apply_on": "TEXT",
-    "item_based_reposting": "TEXT",
-    "notify_reposting_error_to_role": "TEXT"
-  },
   "tabStock Reservation Entry": {
+    "name": "TEXT",
+    "docstatus": "TEXT",
+    "owner": "TEXT",
+    "creation": "TEXT",
+    "modified": "TEXT",
     "item_code": "TEXT",
     "warehouse": "TEXT",
     "has_serial_no": "TEXT",
     "has_batch_no": "TEXT",
-    "column_break_elik": "TEXT",
     "voucher_type": "TEXT",
     "voucher_no": "TEXT",
     "voucher_detail_no": "TEXT",
-    "column_break_7dxj": "TEXT",
     "from_voucher_type": "TEXT",
     "from_voucher_no": "TEXT",
     "from_voucher_detail_no": "TEXT",
-    "section_break_xt4m": "TEXT",
     "stock_uom": "TEXT",
-    "column_break_grdt": "TEXT",
     "available_qty": "TEXT",
     "voucher_qty": "TEXT",
-    "column_break_o6ex": "TEXT",
     "reserved_qty": "TEXT",
     "delivered_qty": "TEXT",
-    "serial_and_batch_reservation_section": "TEXT",
     "reservation_based_on": "TEXT",
     "sb_entries": "TEXT",
-    "section_break_3vb3": "TEXT",
     "company": "TEXT",
-    "column_break_jbyr": "TEXT",
     "project": "TEXT",
     "status": "TEXT",
     "amended_from": "TEXT",
     "test": "TEXT"
-  },
-  "tabStock Settings": {
-    "name": "TEXT",
-    "item_naming_by": "TEXT",
-    "valuation_method": "TEXT",
-    "item_group": "TEXT",
-    "default_warehouse": "TEXT",
-    "sample_retention_warehouse": "TEXT",
-    "stock_uom": "TEXT",
-    "auto_insert_price_list_rate_if_missing": "TEXT",
-    "update_price_list_based_on": "TEXT",
-    "update_existing_price_list_rate": "TEXT",
-    "allow_to_edit_stock_uom_qty_for_sales": "TEXT",
-    "allow_to_edit_stock_uom_qty_for_purchase": "TEXT",
-    "allow_uom_with_conversion_rate_defined_in_item": "TEXT",
-    "over_delivery_receipt_allowance": "TEXT",
-    "mr_qty_allowance": "TEXT",
-    "over_picking_allowance": "TEXT",
-    "role_allowed_to_over_deliver_receive": "TEXT",
-    "allow_negative_stock": "TEXT",
-    "show_barcode_field": "TEXT",
-    "clean_description_html": "TEXT",
-    "allow_internal_transfer_at_arms_length_price": "TEXT",
-    "allow_existing_serial_no": "TEXT",
-    "do_not_use_batchwise_valuation": "TEXT",
-    "auto_create_serial_and_batch_bundle_for_outward": "TEXT",
-    "pick_serial_and_batch_based_on": "TEXT",
-    "disable_serial_no_and_batch_selector": "TEXT",
-    "use_serial_batch_fields": "TEXT",
-    "do_not_update_serial_batch_on_creation_of_auto_bundle": "TEXT",
-    "set_serial_and_batch_bundle_naming_based_on_naming_series": "TEXT",
-    "use_naming_series": "TEXT",
-    "naming_series_prefix": "TEXT",
-    "enable_stock_reservation": "TEXT",
-    "allow_partial_reservation": "TEXT",
-    "auto_reserve_stock_for_sales_order_on_purchase": "TEXT",
-    "auto_reserve_serial_and_batch": "TEXT",
-    "action_if_quality_inspection_is_not_submitted": "TEXT",
-    "action_if_quality_inspection_is_rejected": "TEXT",
-    "allow_to_make_quality_inspection_after_purchase_or_delivery": "TEXT",
-    "auto_indent": "TEXT",
-    "reorder_email_notify": "TEXT",
-    "allow_from_dn": "TEXT",
-    "allow_from_pr": "TEXT",
-    "stock_frozen_upto": "TEXT",
-    "stock_frozen_upto_days": "TEXT",
-    "role_allowed_to_create_edit_back_dated_transactions": "TEXT",
-    "stock_auth_role": "TEXT"
   },
   "tabSub Operation": {
     "name": "TEXT",
@@ -9344,17 +6351,6 @@
     "expense_account": "TEXT",
     "cost_center": "TEXT"
   },
-  "tabSubmission Queue": {
-    "name": "TEXT",
-    "status": "TEXT",
-    "created_at": "TEXT",
-    "enqueued_by": "TEXT",
-    "job_id": "TEXT",
-    "ended_at": "TEXT",
-    "ref_doctype": "TEXT",
-    "ref_docname": "TEXT",
-    "exception": "TEXT"
-  },
   "tabSubscription": {
     "name": "TEXT",
     "party_type": "TEXT",
@@ -9407,20 +6403,6 @@
     "plan": "TEXT",
     "qty": "TEXT"
   },
-  "tabSubscription Settings": {
-    "name": "TEXT",
-    "grace_period": "TEXT",
-    "cancel_after_grace": "TEXT",
-    "prorate": "TEXT"
-  },
-  "tabSuccess Action": {
-    "name": "TEXT",
-    "ref_doctype": "TEXT",
-    "first_success_message": "TEXT",
-    "message": "TEXT",
-    "next_actions": "TEXT",
-    "action_timeout": "TEXT"
-  },
   "tabSupplier": {
     "name": "TEXT",
     "naming_series": "TEXT",
@@ -9460,17 +6442,6 @@
     "hold_type": "TEXT",
     "release_date": "TEXT",
     "portal_users": "TEXT"
-  },
-  "tabSupplier Group": {
-    "name": "TEXT",
-    "supplier_group_name": "TEXT",
-    "parent_supplier_group": "TEXT",
-    "is_group": "TEXT",
-    "payment_terms": "TEXT",
-    "accounts": "TEXT",
-    "lft": "TEXT",
-    "rgt": "TEXT",
-    "old_parent": "TEXT"
   },
   "tabSupplier Group Item": {
     "name": "TEXT",
@@ -9710,125 +6681,6 @@
     "result_preview_field": "TEXT",
     "result_route_field": "TEXT"
   },
-  "tabSupport Settings": {
-    "name": "TEXT",
-    "track_service_level_agreement": "TEXT",
-    "allow_resetting_service_level_agreement": "TEXT",
-    "close_issue_after_days": "TEXT",
-    "get_started_sections": "TEXT",
-    "show_latest_forum_posts": "TEXT",
-    "forum_url": "TEXT",
-    "get_latest_query": "TEXT",
-    "response_key_list": "TEXT",
-    "post_title_key": "TEXT",
-    "post_description_key": "TEXT",
-    "post_route_key": "TEXT",
-    "post_route_string": "TEXT",
-    "greeting_title": "TEXT",
-    "greeting_subtitle": "TEXT",
-    "search_apis": "TEXT"
-  },
-  "tabSystem Console": {
-    "name": "TEXT",
-    "type": "TEXT",
-    "console": "TEXT",
-    "commit": "TEXT",
-    "output": "TEXT",
-    "show_processlist": "TEXT"
-  },
-  "tabSystem Settings": {
-    "name": "TEXT",
-    "app_name": "TEXT",
-    "country": "TEXT",
-    "language": "TEXT",
-    "time_zone": "TEXT",
-    "currency": "TEXT",
-    "enable_onboarding": "TEXT",
-    "setup_complete": "TEXT",
-    "disable_document_sharing": "TEXT",
-    "date_format": "TEXT",
-    "time_format": "TEXT",
-    "number_format": "TEXT",
-    "use_number_format_from_currency": "TEXT",
-    "first_day_of_the_week": "TEXT",
-    "float_precision": "TEXT",
-    "currency_precision": "TEXT",
-    "rounding_method": "TEXT",
-    "apply_strict_user_permissions": "TEXT",
-    "allow_older_web_view_links": "TEXT",
-    "session_expiry": "TEXT",
-    "document_share_key_expiry": "TEXT",
-    "deny_multiple_sessions": "TEXT",
-    "disable_user_pass_login": "TEXT",
-    "max_signups_allowed_per_hour": "TEXT",
-    "allow_login_using_mobile_number": "TEXT",
-    "allow_login_using_user_name": "TEXT",
-    "login_with_email_link": "TEXT",
-    "login_with_email_link_expiry": "TEXT",
-    "rate_limit_email_link_login": "TEXT",
-    "allow_consecutive_login_attempts": "TEXT",
-    "allow_login_after_fail": "TEXT",
-    "enable_two_factor_auth": "TEXT",
-    "bypass_2fa_for_retricted_ip_users": "TEXT",
-    "bypass_restrict_ip_check_if_2fa_enabled": "TEXT",
-    "two_factor_method": "TEXT",
-    "lifespan_qrcode_image": "TEXT",
-    "otp_issuer_name": "TEXT",
-    "otp_sms_template": "TEXT",
-    "logout_on_password_reset": "TEXT",
-    "force_user_to_reset_password": "TEXT",
-    "reset_password_link_expiry_duration": "TEXT",
-    "password_reset_limit": "TEXT",
-    "enable_password_policy": "TEXT",
-    "minimum_password_score": "TEXT",
-    "email_footer_address": "TEXT",
-    "email_retry_limit": "TEXT",
-    "disable_standard_email_footer": "TEXT",
-    "hide_footer_in_auto_email_reports": "TEXT",
-    "attach_view_link": "TEXT",
-    "store_attached_pdf_document": "TEXT",
-    "welcome_email_template": "TEXT",
-    "reset_password_template": "TEXT",
-    "max_file_size": "TEXT",
-    "allow_guests_to_upload_files": "TEXT",
-    "force_web_capture_mode_for_uploads": "TEXT",
-    "strip_exif_metadata_from_uploaded_images": "TEXT",
-    "delete_background_exported_reports_after": "TEXT",
-    "allowed_file_extensions": "TEXT",
-    "default_app": "TEXT",
-    "disable_system_update_notification": "TEXT",
-    "disable_change_log_notification": "TEXT",
-    "backup_limit": "TEXT",
-    "encrypt_backup": "TEXT",
-    "max_auto_email_report_per_user": "TEXT",
-    "max_report_rows": "TEXT",
-    "enable_scheduler": "TEXT",
-    "dormant_days": "TEXT",
-    "allow_error_traceback": "TEXT",
-    "enable_telemetry": "TEXT",
-    "link_field_results_limit": "TEXT",
-    "show_absolute_datetime_in_timeline": "TEXT",
-    "log_api_requests": "TEXT"
-  },
-  "tabTag": {
-    "name": "TEXT",
-    "description": "TEXT"
-  },
-  "tabTag Link": {
-    "name": "TEXT",
-    "document_type": "TEXT",
-    "document_name": "TEXT",
-    "tag": "TEXT",
-    "title": "TEXT"
-  },
-  "tabTarget Detail": {
-    "name": "TEXT",
-    "item_group": "TEXT",
-    "fiscal_year": "TEXT",
-    "target_qty": "TEXT",
-    "target_amount": "TEXT",
-    "distribution_id": "TEXT"
-  },
   "tabTask": {
     "name": "TEXT",
     "subject": "TEXT",
@@ -9940,30 +6792,6 @@
     "single_threshold": "TEXT",
     "cumulative_threshold": "TEXT"
   },
-  "tabTelephony Call Type": {
-    "name": "TEXT",
-    "call_type": "TEXT",
-    "amended_from": "TEXT"
-  },
-  "tabTerms and Conditions": {
-    "name": "TEXT",
-    "title": "TEXT",
-    "disabled": "TEXT",
-    "selling": "TEXT",
-    "buying": "TEXT",
-    "terms": "TEXT"
-  },
-  "tabTerritory": {
-    "name": "TEXT",
-    "territory_name": "TEXT",
-    "parent_territory": "TEXT",
-    "is_group": "TEXT",
-    "territory_manager": "TEXT",
-    "lft": "TEXT",
-    "rgt": "TEXT",
-    "old_parent": "TEXT",
-    "targets": "TEXT"
-  },
   "tabTerritory Item": {
     "name": "TEXT",
     "territory": "TEXT"
@@ -10023,92 +6851,12 @@
     "costing_rate": "TEXT",
     "costing_amount": "TEXT"
   },
-  "tabToDo": {
-    "name": "TEXT",
-    "status": "TEXT",
-    "priority": "TEXT",
-    "color": "TEXT",
-    "date": "TEXT",
-    "allocated_to": "TEXT",
-    "description": "TEXT",
-    "reference_type": "TEXT",
-    "reference_name": "TEXT",
-    "role": "TEXT",
-    "assigned_by": "TEXT",
-    "assigned_by_full_name": "TEXT",
-    "sender": "TEXT",
-    "assignment_rule": "TEXT"
-  },
-  "tabToken Cache": {
-    "name": "TEXT",
-    "user": "TEXT",
-    "connected_app": "TEXT",
-    "provider_name": "TEXT",
-    "access_token": "TEXT",
-    "refresh_token": "TEXT",
-    "expires_in": "TEXT",
-    "state": "TEXT",
-    "scopes": "TEXT",
-    "success_uri": "TEXT",
-    "token_type": "TEXT"
-  },
-  "tabTop Bar Item": {
-    "name": "TEXT",
-    "label": "TEXT",
-    "url": "TEXT",
-    "open_in_new_tab": "TEXT",
-    "right": "TEXT",
-    "parent_label": "TEXT"
-  },
-  "tabTransaction Deletion Record": {
-    "name": "TEXT",
-    "company": "TEXT",
-    "status": "TEXT",
-    "error_log": "TEXT",
-    "delete_bin_data": "TEXT",
-    "delete_leads_and_addresses": "TEXT",
-    "reset_company_default_values": "TEXT",
-    "clear_notifications": "TEXT",
-    "initialize_doctypes_table": "TEXT",
-    "delete_transactions": "TEXT",
-    "doctypes": "TEXT",
-    "doctypes_to_be_ignored": "TEXT",
-    "amended_from": "TEXT",
-    "process_in_single_transaction": "TEXT"
-  },
   "tabTransaction Deletion Record Details": {
     "name": "TEXT",
     "doctype_name": "TEXT",
     "docfield_name": "TEXT",
     "no_of_docs": "TEXT",
     "done": "TEXT"
-  },
-  "tabTransaction Deletion Record Item": {
-    "name": "TEXT",
-    "doctype_name": "TEXT"
-  },
-  "tabTransaction Log": {
-    "name": "TEXT",
-    "row_index": "TEXT",
-    "reference_doctype": "TEXT",
-    "document_name": "TEXT",
-    "timestamp": "TEXT",
-    "checksum_version": "TEXT",
-    "previous_hash": "TEXT",
-    "transaction_hash": "TEXT",
-    "chaining_hash": "TEXT",
-    "data": "TEXT",
-    "amended_from": "TEXT"
-  },
-  "tabTranslation": {
-    "name": "TEXT",
-    "contributed": "TEXT",
-    "language": "TEXT",
-    "source_text": "TEXT",
-    "context": "TEXT",
-    "translated_text": "TEXT",
-    "contribution_status": "TEXT",
-    "contribution_docname": "TEXT"
   },
   "tabUAE VAT Account": {
     "name": "TEXT",
@@ -10119,12 +6867,6 @@
     "company": "TEXT",
     "uae_vat_accounts": "TEXT"
   },
-  "tabUOM": {
-    "name": "TEXT",
-    "enabled": "TEXT",
-    "uom_name": "TEXT",
-    "must_be_whole_number": "TEXT"
-  },
   "tabUOM Category": {
     "name": "TEXT",
     "category_name": "TEXT"
@@ -10133,21 +6875,6 @@
     "name": "TEXT",
     "uom": "TEXT",
     "conversion_factor": "TEXT"
-  },
-  "tabUOM Conversion Factor": {
-    "name": "TEXT",
-    "category": "TEXT",
-    "from_uom": "TEXT",
-    "to_uom": "TEXT",
-    "value": "TEXT"
-  },
-  "tabUnhandled Email": {
-    "name": "TEXT",
-    "email_account": "TEXT",
-    "uid": "TEXT",
-    "reason": "TEXT",
-    "message_id": "TEXT",
-    "raw": "TEXT"
   },
   "tabUnreconcile Payment": {
     "name": "TEXT",
@@ -10168,139 +6895,9 @@
     "account_currency": "TEXT",
     "unlinked": "TEXT"
   },
-  "tabUser Document Type": {
-    "name": "TEXT",
-    "document_type": "TEXT",
-    "is_custom": "TEXT",
-    "read": "TEXT",
-    "write": "TEXT",
-    "create": "TEXT",
-    "submit": "TEXT",
-    "cancel": "TEXT",
-    "amend": "TEXT",
-    "delete": "TEXT",
-    "email": "TEXT",
-    "share": "TEXT",
-    "print": "TEXT"
-  },
-  "tabUser Email": {
-    "name": "TEXT",
-    "email_account": "TEXT",
-    "email_id": "TEXT",
-    "awaiting_password": "TEXT",
-    "used_oauth": "TEXT",
-    "enable_outgoing": "TEXT"
-  },
-  "tabUser Group": {
-    "name": "TEXT",
-    "user_group_members": "TEXT"
-  },
-  "tabUser Group Member": {
-    "name": "TEXT",
-    "user": "TEXT"
-  },
-  "tabUser Invitation": {
-    "name": "TEXT",
-    "email": "TEXT",
-    "app_name": "TEXT",
-    "redirect_to_path": "TEXT",
-    "roles": "TEXT",
-    "status": "TEXT",
-    "invited_by": "TEXT",
-    "key": "TEXT",
-    "user": "TEXT",
-    "email_sent_at": "TEXT",
-    "accepted_at": "TEXT"
-  },
-  "tabUser Role": {
-    "name": "TEXT",
-    "role": "TEXT"
-  },
-  "tabUser Select Document Type": {
-    "name": "TEXT",
-    "document_type": "TEXT"
-  },
-  "tabUser Social Login": {
-    "name": "TEXT",
-    "provider": "TEXT",
-    "username": "TEXT",
-    "userid": "TEXT"
-  },
-  "tabUser Type": {
-    "name": "TEXT",
-    "is_standard": "TEXT",
-    "role": "TEXT",
-    "apply_user_permission_on": "TEXT",
-    "user_id_field": "TEXT",
-    "user_doctypes": "TEXT",
-    "custom_select_doctypes": "TEXT",
-    "select_doctypes": "TEXT",
-    "user_type_modules": "TEXT"
-  },
-  "tabUser Type Module": {
-    "name": "TEXT",
-    "module": "TEXT"
-  },
   "tabVariant Field": {
     "name": "TEXT",
     "field_name": "TEXT"
-  },
-  "tabVehicle": {
-    "name": "TEXT",
-    "license_plate": "TEXT",
-    "make": "TEXT",
-    "model": "TEXT",
-    "last_odometer": "TEXT",
-    "acquisition_date": "TEXT",
-    "location": "TEXT",
-    "chassis_no": "TEXT",
-    "vehicle_value": "TEXT",
-    "employee": "TEXT",
-    "insurance_company": "TEXT",
-    "policy_no": "TEXT",
-    "start_date": "TEXT",
-    "end_date": "TEXT",
-    "fuel_type": "TEXT",
-    "uom": "TEXT",
-    "carbon_check_date": "TEXT",
-    "color": "TEXT",
-    "wheels": "TEXT",
-    "doors": "TEXT",
-    "amended_from": "TEXT"
-  },
-  "tabVideo": {
-    "name": "TEXT",
-    "title": "TEXT",
-    "provider": "TEXT",
-    "url": "TEXT",
-    "youtube_video_id": "TEXT",
-    "publish_date": "TEXT",
-    "duration": "TEXT",
-    "like_count": "TEXT",
-    "view_count": "TEXT",
-    "dislike_count": "TEXT",
-    "comment_count": "TEXT",
-    "description": "TEXT"
-  },
-  "tabVideo Settings": {
-    "name": "TEXT",
-    "enable_youtube_tracking": "TEXT",
-    "api_key": "TEXT",
-    "frequency": "TEXT"
-  },
-  "tabView Log": {
-    "name": "TEXT",
-    "viewed_by": "TEXT",
-    "reference_doctype": "TEXT",
-    "reference_name": "TEXT"
-  },
-  "tabVoice Call Settings": {
-    "name": "TEXT",
-    "user": "TEXT",
-    "call_receiving_device": "TEXT",
-    "greeting_message": "TEXT",
-    "agent_busy_message": "TEXT",
-    "agent_unavailable_message": "TEXT"
   },
   "tabWarehouse": {
     "name": "TEXT",
@@ -10360,310 +6957,6 @@
     "complaint_raised_by": "TEXT",
     "from_company": "TEXT",
     "amended_from": "TEXT"
-  },
-  "tabWeb Form": {
-    "name": "TEXT",
-    "title": "TEXT",
-    "route": "TEXT",
-    "published": "TEXT",
-    "doc_type": "TEXT",
-    "module": "TEXT",
-    "is_standard": "TEXT",
-    "introduction_text": "TEXT",
-    "web_form_fields": "TEXT",
-    "anonymous": "TEXT",
-    "login_required": "TEXT",
-    "apply_document_permissions": "TEXT",
-    "allow_edit": "TEXT",
-    "allow_multiple": "TEXT",
-    "allow_delete": "TEXT",
-    "allow_incomplete": "TEXT",
-    "allow_comments": "TEXT",
-    "allow_print": "TEXT",
-    "print_format": "TEXT",
-    "max_attachment_size": "TEXT",
-    "show_attachments": "TEXT",
-    "allowed_embedding_domains": "TEXT",
-    "condition_json": "TEXT",
-    "show_list": "TEXT",
-    "list_title": "TEXT",
-    "list_columns": "TEXT",
-    "show_sidebar": "TEXT",
-    "website_sidebar": "TEXT",
-    "button_label": "TEXT",
-    "breadcrumbs": "TEXT",
-    "success_title": "TEXT",
-    "success_url": "TEXT",
-    "success_message": "TEXT",
-    "meta_title": "TEXT",
-    "meta_description": "TEXT",
-    "client_script": "TEXT",
-    "custom_css": "TEXT"
-  },
-  "tabWeb Form Field": {
-    "name": "TEXT",
-    "fieldname": "TEXT",
-    "fieldtype": "TEXT",
-    "label": "TEXT",
-    "allow_read_on_all_link_options": "TEXT",
-    "reqd": "TEXT",
-    "read_only": "TEXT",
-    "show_in_filter": "TEXT",
-    "hidden": "TEXT",
-    "options": "TEXT",
-    "max_length": "TEXT",
-    "max_value": "TEXT",
-    "precision": "TEXT",
-    "depends_on": "TEXT",
-    "mandatory_depends_on": "TEXT",
-    "read_only_depends_on": "TEXT",
-    "description": "TEXT",
-    "default": "TEXT"
-  },
-  "tabWeb Form List Column": {
-    "name": "TEXT",
-    "fieldname": "TEXT",
-    "fieldtype": "TEXT",
-    "label": "TEXT",
-    "options": "TEXT"
-  },
-  "tabWeb Page": {
-    "name": "TEXT",
-    "title": "TEXT",
-    "route": "TEXT",
-    "dynamic_route": "TEXT",
-    "published": "TEXT",
-    "module": "TEXT",
-    "content_type": "TEXT",
-    "slideshow": "TEXT",
-    "dynamic_template": "TEXT",
-    "main_section": "TEXT",
-    "main_section_md": "TEXT",
-    "page_blocks": "TEXT",
-    "context_script": "TEXT",
-    "javascript": "TEXT",
-    "insert_style": "TEXT",
-    "text_align": "TEXT",
-    "css": "TEXT",
-    "full_width": "TEXT",
-    "show_title": "TEXT",
-    "start_date": "TEXT",
-    "end_date": "TEXT",
-    "meta_title": "TEXT",
-    "meta_description": "TEXT",
-    "show_sidebar": "TEXT",
-    "idx": "TEXT",
-    "website_sidebar": "TEXT",
-    "enable_comments": "TEXT",
-    "breadcrumbs": "TEXT"
-  },
-  "tabWeb Page Block": {
-    "name": "TEXT",
-    "web_template": "TEXT",
-    "web_template_values": "TEXT",
-    "css_class": "TEXT",
-    "section_id": "TEXT",
-    "add_container": "TEXT",
-    "add_top_padding": "TEXT",
-    "add_bottom_padding": "TEXT",
-    "add_border_at_top": "TEXT",
-    "add_border_at_bottom": "TEXT",
-    "add_shade": "TEXT",
-    "hide_block": "TEXT",
-    "add_background_image": "TEXT"
-  },
-  "tabWeb Page View": {
-    "name": "TEXT",
-    "path": "TEXT",
-    "referrer": "TEXT",
-    "browser": "TEXT",
-    "browser_version": "TEXT",
-    "is_unique": "TEXT",
-    "time_zone": "TEXT",
-    "user_agent": "TEXT",
-    "source": "TEXT",
-    "campaign": "TEXT",
-    "medium": "TEXT",
-    "visitor_id": "TEXT"
-  },
-  "tabWeb Template": {
-    "name": "TEXT",
-    "type": "TEXT",
-    "standard": "TEXT",
-    "module": "TEXT",
-    "template": "TEXT",
-    "fields": "TEXT"
-  },
-  "tabWeb Template Field": {
-    "name": "TEXT",
-    "label": "TEXT",
-    "fieldname": "TEXT",
-    "fieldtype": "TEXT",
-    "reqd": "TEXT",
-    "options": "TEXT",
-    "default": "TEXT"
-  },
-  "tabWebhook": {
-    "name": "TEXT",
-    "webhook_doctype": "TEXT",
-    "webhook_docevent": "TEXT",
-    "enabled": "TEXT",
-    "condition": "TEXT",
-    "request_url": "TEXT",
-    "is_dynamic_url": "TEXT",
-    "timeout": "TEXT",
-    "background_jobs_queue": "TEXT",
-    "request_method": "TEXT",
-    "request_structure": "TEXT",
-    "enable_security": "TEXT",
-    "webhook_secret": "TEXT",
-    "webhook_headers": "TEXT",
-    "webhook_data": "TEXT",
-    "webhook_json": "TEXT",
-    "preview_document": "TEXT",
-    "meets_condition": "TEXT",
-    "preview_request_body": "TEXT"
-  },
-  "tabWebhook Data": {
-    "name": "TEXT",
-    "fieldname": "TEXT",
-    "key": "TEXT"
-  },
-  "tabWebhook Header": {
-    "name": "TEXT",
-    "key": "TEXT",
-    "value": "TEXT"
-  },
-  "tabWebhook Request Log": {
-    "name": "TEXT",
-    "webhook": "TEXT",
-    "reference_document": "TEXT",
-    "headers": "TEXT",
-    "data": "TEXT",
-    "user": "TEXT",
-    "url": "TEXT",
-    "response": "TEXT",
-    "error": "TEXT"
-  },
-  "tabWebsite Attribute": {
-    "name": "TEXT",
-    "attribute": "TEXT"
-  },
-  "tabWebsite Filter Field": {
-    "name": "TEXT",
-    "fieldname": "TEXT"
-  },
-  "tabWebsite Item Group": {
-    "name": "TEXT",
-    "item_group": "TEXT"
-  },
-  "tabWebsite Meta Tag": {
-    "name": "TEXT",
-    "key": "TEXT",
-    "value": "TEXT"
-  },
-  "tabWebsite Route Meta": {
-    "name": "TEXT",
-    "meta_tags": "TEXT"
-  },
-  "tabWebsite Route Redirect": {
-    "name": "TEXT",
-    "source": "TEXT",
-    "target": "TEXT",
-    "redirect_http_status": "TEXT"
-  },
-  "tabWebsite Script": {
-    "name": "TEXT",
-    "javascript": "TEXT"
-  },
-  "tabWebsite Settings": {
-    "name": "TEXT",
-    "home_page": "TEXT",
-    "title_prefix": "TEXT",
-    "app_name": "TEXT",
-    "disable_signup": "TEXT",
-    "show_footer_on_login": "TEXT",
-    "website_theme": "TEXT",
-    "website_theme_image": "TEXT",
-    "website_theme_image_link": "TEXT",
-    "brand_html": "TEXT",
-    "top_bar_items": "TEXT",
-    "hide_login": "TEXT",
-    "navbar_search": "TEXT",
-    "show_language_picker": "TEXT",
-    "navbar_template": "TEXT",
-    "navbar_template_values": "TEXT",
-    "call_to_action": "TEXT",
-    "call_to_action_url": "TEXT",
-    "banner_html": "TEXT",
-    "footer_items": "TEXT",
-    "copyright": "TEXT",
-    "hide_footer_signup": "TEXT",
-    "address": "TEXT",
-    "footer_powered": "TEXT",
-    "footer_template": "TEXT",
-    "footer_template_values": "TEXT",
-    "enable_view_tracking": "TEXT",
-    "enable_google_indexing": "TEXT",
-    "indexing_refresh_token": "TEXT",
-    "indexing_authorization_code": "TEXT",
-    "google_analytics_id": "TEXT",
-    "google_analytics_anonymize_ip": "TEXT",
-    "auto_account_deletion": "TEXT",
-    "show_account_deletion_link": "TEXT",
-    "subdomain": "TEXT",
-    "head_html": "TEXT",
-    "robots_txt": "TEXT",
-    "route_redirects": "TEXT"
-  },
-  "tabWebsite Sidebar": {
-    "name": "TEXT",
-    "title": "TEXT",
-    "sidebar_items": "TEXT"
-  },
-  "tabWebsite Sidebar Item": {
-    "name": "TEXT",
-    "title": "TEXT",
-    "route": "TEXT",
-    "group": "TEXT"
-  },
-  "tabWebsite Slideshow": {
-    "name": "TEXT",
-    "slideshow_name": "TEXT",
-    "slideshow_items": "TEXT"
-  },
-  "tabWebsite Slideshow Item": {
-    "name": "TEXT",
-    "heading": "TEXT",
-    "description": "TEXT",
-    "url": "TEXT"
-  },
-  "tabWebsite Theme": {
-    "name": "TEXT",
-    "theme": "TEXT",
-    "module": "TEXT",
-    "custom": "TEXT",
-    "google_font": "TEXT",
-    "font_size": "TEXT",
-    "font_properties": "TEXT",
-    "button_rounded_corners": "TEXT",
-    "button_shadows": "TEXT",
-    "button_gradients": "TEXT",
-    "primary_color": "TEXT",
-    "text_color": "TEXT",
-    "light_color": "TEXT",
-    "dark_color": "TEXT",
-    "background_color": "TEXT",
-    "custom_overrides": "TEXT",
-    "custom_scss": "TEXT",
-    "ignored_apps": "TEXT",
-    "theme_scss": "TEXT",
-    "theme_url": "TEXT",
-    "js": "TEXT"
-  },
-  "tabWebsite Theme Ignore App": {
-    "name": "TEXT",
-    "app": "TEXT"
   },
   "tabWork Order": {
     "name": "TEXT",
@@ -10758,141 +7051,6 @@
     "actual_end_time": "TEXT",
     "actual_operating_cost": "TEXT"
   },
-  "tabWorkflow": {
-    "name": "TEXT",
-    "workflow_name": "TEXT",
-    "document_type": "TEXT",
-    "is_active": "TEXT",
-    "override_status": "TEXT",
-    "send_email_alert": "TEXT",
-    "states": "TEXT",
-    "transitions": "TEXT",
-    "workflow_state_field": "TEXT",
-    "workflow_data": "TEXT"
-  },
-  "tabWorkflow Action": {
-    "name": "TEXT",
-    "status": "TEXT",
-    "reference_name": "TEXT",
-    "reference_doctype": "TEXT",
-    "workflow_state": "TEXT",
-    "completed_by_role": "TEXT",
-    "completed_by": "TEXT",
-    "permitted_roles": "TEXT",
-    "user": "TEXT"
-  },
-  "tabWorkflow Action Master": {
-    "name": "TEXT",
-    "workflow_action_name": "TEXT"
-  },
-  "tabWorkflow Action Permitted Role": {
-    "name": "TEXT",
-    "role": "TEXT"
-  },
-  "tabWorkflow Document State": {
-    "name": "TEXT",
-    "state": "TEXT",
-    "doc_status": "TEXT",
-    "update_field": "TEXT",
-    "update_value": "TEXT",
-    "is_optional_state": "TEXT",
-    "avoid_status_override": "TEXT",
-    "next_action_email_template": "TEXT",
-    "allow_edit": "TEXT",
-    "send_email": "TEXT",
-    "message": "TEXT",
-    "workflow_builder_id": "TEXT"
-  },
-  "tabWorkflow State": {
-    "name": "TEXT",
-    "workflow_state_name": "TEXT",
-    "icon": "TEXT",
-    "style": "TEXT"
-  },
-  "tabWorkflow Transition": {
-    "name": "TEXT",
-    "state": "TEXT",
-    "action": "TEXT",
-    "next_state": "TEXT",
-    "allowed": "TEXT",
-    "allow_self_approval": "TEXT",
-    "send_email_to_creator": "TEXT",
-    "condition": "TEXT",
-    "workflow_builder_id": "TEXT"
-  },
-  "tabWorkspace": {
-    "name": "TEXT",
-    "label": "TEXT",
-    "title": "TEXT",
-    "sequence_id": "TEXT",
-    "for_user": "TEXT",
-    "parent_page": "TEXT",
-    "module": "TEXT",
-    "indicator_color": "TEXT",
-    "restrict_to_domain": "TEXT",
-    "hide_custom": "TEXT",
-    "public": "TEXT",
-    "is_hidden": "TEXT",
-    "content": "TEXT",
-    "number_cards": "TEXT",
-    "charts": "TEXT",
-    "shortcuts": "TEXT",
-    "links": "TEXT",
-    "quick_lists": "TEXT",
-    "custom_blocks": "TEXT",
-    "roles": "TEXT"
-  },
-  "tabWorkspace Chart": {
-    "name": "TEXT",
-    "chart_name": "TEXT",
-    "label": "TEXT"
-  },
-  "tabWorkspace Custom Block": {
-    "name": "TEXT",
-    "custom_block_name": "TEXT",
-    "label": "TEXT"
-  },
-  "tabWorkspace Link": {
-    "name": "TEXT",
-    "type": "TEXT",
-    "label": "TEXT",
-    "icon": "TEXT",
-    "hidden": "TEXT",
-    "link_type": "TEXT",
-    "link_to": "TEXT",
-    "report_ref_doctype": "TEXT",
-    "dependencies": "TEXT",
-    "only_for": "TEXT",
-    "onboard": "TEXT",
-    "is_query_report": "TEXT",
-    "link_count": "TEXT"
-  },
-  "tabWorkspace Number Card": {
-    "name": "TEXT",
-    "number_card_name": "TEXT",
-    "label": "TEXT"
-  },
-  "tabWorkspace Quick List": {
-    "name": "TEXT",
-    "document_type": "TEXT",
-    "label": "TEXT",
-    "quick_list_filter": "TEXT"
-  },
-  "tabWorkspace Shortcut": {
-    "name": "TEXT",
-    "type": "TEXT",
-    "link_to": "TEXT",
-    "url": "TEXT",
-    "doc_view": "TEXT",
-    "kanban_board": "TEXT",
-    "label": "TEXT",
-    "icon": "TEXT",
-    "restrict_to_domain": "TEXT",
-    "report_ref_doctype": "TEXT",
-    "stats_filter": "TEXT",
-    "color": "TEXT",
-    "format": "TEXT"
-  },
   "tabWorkstation": {
     "name": "TEXT",
     "workstation_name": "TEXT",
@@ -10927,74 +7085,5 @@
     "hours": "TEXT",
     "end_time": "TEXT",
     "enabled": "TEXT"
-  },
-  "tabZATCA ERPGulf Success Log": {
-    "name": "TEXT",
-    "title": "TEXT",
-    "message": "TEXT",
-    "zatca_response": "TEXT",
-    "invoice_number": "TEXT",
-    "time": "TEXT",
-    "uuid": "TEXT"
-  },
-  "tabZATCA Multiple Setting": {
-    "name": "TEXT",
-    "custom_otp": "TEXT",
-    "custom_linked_doctype": "TEXT",
-    "custom_send_pos_invoices_to_zatca_on_background": "TEXT",
-    "custom_csr_config": "TEXT",
-    "custom_csr_data": "TEXT",
-    "custom_pih": "TEXT",
-    "custom_certficate": "TEXT",
-    "custom_private_key": "TEXT",
-    "custom_public_key": "TEXT",
-    "custom_compliance_request_id_": "TEXT",
-    "custom_basic_auth_from_csid": "TEXT",
-    "custom_final_auth_csid": "TEXT"
-  },
-  "tabZatca ERPgulf Setting": {
-    "name": "TEXT",
-    "company": "TEXT",
-    "zatca_invoice_enabled": "TEXT",
-    "background": "TEXT",
-    "send_invoice_to_zatca": "TEXT",
-    "select": "TEXT",
-    "csr_config": "TEXT",
-    "csr_data": "TEXT",
-    "attach_xml_with_invoice": "TEXT",
-    "attach_xml_with_qr_code": "TEXT",
-    "attach_qr_code_doctype": "TEXT",
-    "attach_e_invoice_send_status_with_invoice": "TEXT",
-    "pih": "TEXT",
-    "private_key": "TEXT",
-    "public_key": "TEXT",
-    "certificate": "TEXT",
-    "sandbox_url": "TEXT",
-    "simulation_url": "TEXT",
-    "production_url": "TEXT",
-    "otp": "TEXT",
-    "basic_auth": "TEXT",
-    "compliance_request_id": "TEXT",
-    "validation_type": "TEXT",
-    "sample_invoice_to_test": "TEXT",
-    "basic_auth_production": "TEXT"
-  },
-  "tabZatca POS table": {
-    "name": "TEXT",
-    "zatca_multiple_setting": "TEXT"
-  },
-  "tabtest doc for schema auto test": {
-    "test": "TEXT",
-    "date_of_creation": "TEXT",
-    "test_check": "TEXT"
-  },
-  "tabtesting schema auto": {
-    "section_break_you8": "TEXT"
-  },
-  "tabtesting stock": {
-    "test": "TEXT",
-    "test1": "TEXT",
-    "testing": "TEXT",
-    "testign_schema_update_button": "TEXT"
   }
 }

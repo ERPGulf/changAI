@@ -1,19 +1,18 @@
-<!-- ChatMessage.vue -->
-<script setup>
-import ChatbotIcon from './ChatbotIcon.vue'
-
-const props = defineProps({
-  chat: {
-    type: Object,
-    required: true
-  }
-})
-</script>
-
 <template>
-  <div class="messageCon" :class="`${chat.role === 'model' ? 'bot' : 'user'}-message`">
-    <ChatbotIcon v-if="chat.role === 'model'" />
-    <p class="message-text">{{ chat.text }}</p>
+  <div class="messageCon" :class="message.role === 'user' ? 'user-message' : 'bot-message'">
+    <BotIcon v-if="message.role !== 'user'" />
+    <p v-if="message.role !== 'user'" class="message-text" v-html="message.text"></p>
+    <p v-else class="message-text">{{ message.text }}</p>
   </div>
 </template>
 
+<script setup>
+import BotIcon from './BotIcon.vue'
+
+defineProps({
+  message: {
+    type: Object,
+    required: true,
+  },
+})
+</script>

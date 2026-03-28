@@ -1,7 +1,7 @@
 {
-  "name": "changai",
+  "name": "changai-chatbot",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,7 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "axios": "^1.10.0",
     "vue": "^3.5.17"
   },
   "devDependencies": {

@@ -188,15 +188,11 @@ def get_embedding_engine():
     
     return _EMBEDDER_INSTANCE
 
-
+@frappe.whitelist(allow_guest=False)
 def get_settings() -> Dict[str, Any]:
     settings = frappe.get_single(CHANGAI_SETTINGS)
     langsmith_tracing = "true" if settings.langsmith_tracing else "false"
     config = {
-        "LANGSMITH_TRACING": langsmith_tracing,
-        "LANGSMITH_ENDPOINT": settings.langsmith_endpoint,
-        "LANGSMITH_API_KEY": settings.langsmith_api_key,
-        "LANGSMITH_PROJECT": settings.langsmith_project,
         "RETAIN_MEM": settings.retain_memory,
         "LLM_VERSION_ID": settings.llm_version_id,
         "EMBED_VERSION_ID": settings.embedder_version_id,
@@ -210,7 +206,10 @@ def get_settings() -> Dict[str, Any]:
         "location": settings.gemini_location,
         "retriever_structure": settings.retriever_structure,
         "gemini_project_id": settings.gemini_project_id,
-        "gemini_json_content": settings.gemini_json_content
+        "gemini_json_content": settings.gemini_json_content,
+        "aws_access_key_id":settings.aws_access_key_id,
+        "aws_secret_access_key":settings.aws_secret_access_key,
+        "enable_voice_chat":settings.enable_voice_chat
     }
     return config
 
@@ -1409,38 +1408,32 @@ def support_bot(message: str) -> Dict[str, Any]:
     task_flag = (output.get("task_flag") or "UNKNOWN").strip()
     ticket_id = output.get("ticket_id")
 
-    # normalize ticket_id
     if isinstance(ticket_id, str) and ticket_id.isdigit():
         ticket_id = int(ticket_id)
     if not isinstance(ticket_id, int):
         ticket_id = None
 
-    # 2) route by task
     if task_flag == "CREATE_TICKET":
         try:
-            created = create_helpdesk_ticket(message,full_name,user_email)
-            return created
-
+            response = create_helpdesk_ticket(message, full_name, user_email)
+            return json.loads(response.get_data(as_text=True))  # ✅ unwrap Response → dict
         except Exception as e:
-            return {"Error":str(e)}
+            return {"error": str(e)}
+
     if task_flag == "TICKET_DETAILS":
         if not ticket_id:
-            return {
-                "kind": "TICKET_DETAILS",
-                "error": "Ticket id missing. Please say like: ticket 29"
-            }
+            return {"kind": "TICKET_DETAILS", "error": "Ticket id missing. Please say like: ticket 29"}
         try:
-            details = get_user_tickets(ticket_id)
-            return details
+            response = get_user_tickets(ticket_id)
+            return json.loads(response.get_data(as_text=True))  # ✅ unwrap Response → dict
         except Exception as e:
-            return {"Error":str(e)}
+            return {"error": str(e)}
 
     if task_flag == "GET_USER_TICKETS":
-        tickets = get_user_tickets()
-        return tickets
+        response = get_user_tickets()
+        return json.loads(response.get_data(as_text=True))      # ✅ unwrap Response → dict
 
     return {"kind": "UNKNOWN", "message": "Please describe the issue or provide a ticket number."}
-
 
 def save_logs(
     user_question: Optional[str] = None,

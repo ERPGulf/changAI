@@ -205,7 +205,7 @@ function initChangAIChatbot() {
       },
       error: function (err) {
         console.error("Support API Error:", err);
-        thinkingMsg.text = "⚠️ Failed to send support request.";
+        thinkingMsg.text = err;
         renderMessages();
         scrollToBottom();
       },
