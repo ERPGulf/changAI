@@ -15,6 +15,16 @@
 
     <div class="ml-2 flex items-center gap-1.5">
       <button
+        class="h-8 min-w-14 items-center justify-center rounded-md px-2 text-[11px] font-semibold tracking-wide text-white/90 transition-colors sm:flex"
+        :class="responseMode === 'actual' ? 'bg-white/20' : 'hover:bg-white/15'"
+        title="Toggle Actual/Test mode"
+        aria-label="Toggle actual and test mode"
+        @click="$emit('toggleResponseMode')"
+      >
+        {{ responseMode === 'actual' ? 'ACT' : 'TEST' }}
+      </button>
+
+      <button
         class="hidden h-8 min-w-8 items-center justify-center rounded-md px-2 text-xs font-semibold text-white/90 transition-colors sm:flex"
         :class="windowMode === 'half' ? 'bg-white/20' : 'hover:bg-white/15'"
         title="Half screen"
@@ -59,7 +69,11 @@ defineProps({
     type: String,
     required: true,
   },
+  responseMode: {
+    type: String,
+    required: true,
+  },
 })
 
-defineEmits(['close', 'resizeHalf', 'resizeFull'])
+defineEmits(['close', 'resizeHalf', 'resizeFull', 'toggleResponseMode'])
 </script>

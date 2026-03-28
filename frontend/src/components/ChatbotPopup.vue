@@ -9,9 +9,11 @@
   >
     <ChatHeader
       :windowMode="windowMode"
+      :responseMode="responseMode"
       @close="$emit('close')"
       @resizeHalf="windowMode = 'half'"
       @resizeFull="windowMode = 'full'"
+      @toggleResponseMode="$emit('toggleResponseMode')"
     />
     <TabBar v-model="localTab" />
 
@@ -47,9 +49,10 @@ const props = defineProps({
   chatHistory: { type: Array, required: true },
   debugLogs: { type: Array, required: true },
   supportHistory: { type: Array, required: true },
+  responseMode: { type: String, required: true },
 })
 
-const emit = defineEmits(['close', 'submit', 'update:activeTab'])
+const emit = defineEmits(['close', 'submit', 'update:activeTab', 'toggleResponseMode'])
 
 const chatBodyRef = ref(null)
 const localTab = ref(props.activeTab)

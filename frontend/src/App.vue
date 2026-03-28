@@ -12,6 +12,7 @@ const chatHistory = ref([])
 const debugLogs = ref([])
 const supportHistory = ref([])
 const popupRef = ref(null)
+const responseMode = ref('actual')
 
 function toggleChatbot() {
   showChatbot.value = !showChatbot.value
@@ -19,6 +20,10 @@ function toggleChatbot() {
 
 function scrollToBottom() {
   popupRef.value?.scrollToBottom()
+}
+
+function toggleResponseMode() {
+  responseMode.value = responseMode.value === 'actual' ? 'test' : 'actual'
 }
 
 async function handleSubmit(message) {
@@ -40,7 +45,7 @@ async function handleChatSubmit(message) {
   scrollToBottom()
 
   try {
-    const response = await runPipeline(message, getOrCreateChatId())
+    const response = await runPipeline(message, getOrCreateChatId(), responseMode.value)
     thinkingMsg.text = normalizeBotText(response?.Bot)?.trim() || 'No response.'
     debugLogs.value.push({ user: message, response })
   } catch (err) {
@@ -65,7 +70,7 @@ async function handleSupportSubmit(message) {
   scrollToBottom()
 
   try {
-    const response = await callSupportBot(message)
+    const response = await callSupportBot(message, responseMode.value)
     thinkingMsg.text = response ? safeStringify(response) : 'Support request sent successfully.'
   } catch (err) {
     console.error('Support API Error:', err)
@@ -86,7 +91,9 @@ async function handleSupportSubmit(message) {
     :chatHistory="chatHistory"
     :debugLogs="debugLogs"
     :supportHistory="supportHistory"
+    :responseMode="responseMode"
     @close="showChatbot = false"
     @submit="handleSubmit"
+    @toggleResponseMode="toggleResponseMode"
   />
 </template>
