@@ -1,9 +1,21 @@
 <template>
-  <div class="chatbot-popup" :class="{ show: isOpen }">
-    <ChatHeader @close="$emit('close')" />
+  <div
+    class="chatbot-popup flex flex-col overflow-hidden"
+    :class="{
+      show: isOpen,
+      'mode-half': windowMode === 'half',
+      'mode-full': windowMode === 'full',
+    }"
+  >
+    <ChatHeader
+      :windowMode="windowMode"
+      @close="$emit('close')"
+      @resizeHalf="windowMode = 'half'"
+      @resizeFull="windowMode = 'full'"
+    />
     <TabBar v-model="localTab" />
 
-    <div class="chat-body" ref="chatBodyRef">
+    <div class="chat-body min-h-0 flex-1 overflow-y-auto p-3 sm:p-4" ref="chatBodyRef">
       <div>
         <ChatTab v-if="localTab === 'chat'" :messages="chatHistory" />
         <DebugTab v-else-if="localTab === 'debug'" :logs="debugLogs" />
@@ -11,7 +23,7 @@
       </div>
     </div>
 
-    <div class="chat-footer">
+    <div class="mt-auto border-t border-violet-100 bg-white p-3 pb-[calc(12px+env(safe-area-inset-bottom))] sm:p-4">
       <ChatForm
         :placeholder="localTab === 'support' ? 'Message Support...' : 'Message...'"
         @submit="(text) => $emit('submit', text)"
@@ -41,6 +53,7 @@ const emit = defineEmits(['close', 'submit', 'update:activeTab'])
 
 const chatBodyRef = ref(null)
 const localTab = ref(props.activeTab)
+const windowMode = ref('half')
 
 watch(() => props.activeTab, (val) => { localTab.value = val })
 watch(localTab, (val) => { emit('update:activeTab', val) })

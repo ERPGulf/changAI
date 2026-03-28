@@ -1,10 +1,10 @@
 <template>
-  <div class="tab_box">
+  <div class="grid grid-cols-3 border-b border-gray-200 bg-white">
     <button
       v-for="tab in tabs"
       :key="tab.id"
-      class="tab_btn"
-      :class="{ active: modelValue === tab.id }"
+      class="h-11 px-2 text-xs font-semibold transition-colors"
+      :class="modelValue === tab.id ? 'text-brand-600' : 'text-gray-500 hover:text-gray-700'"
       @click="$emit('update:modelValue', tab.id)"
     >
       {{ tab.label }}
