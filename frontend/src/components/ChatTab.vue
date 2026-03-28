@@ -4,7 +4,7 @@
       <BotIcon />
       <p class="message-text">Hello there &#x1F44B; I am ChangAI, your ERP assistant</p>
     </div>
-    <ChatMessage v-for="(msg, i) in messages" :key="i" :message="msg" />
+    <ChatMessage v-for="(msg, i) in messages" :key="i" :message="msg" :autoReadEnabled="autoReadEnabled" />
   </div>
 </template>
 
@@ -16,6 +16,10 @@ defineProps({
   messages: {
     type: Array,
     required: true,
+  },
+  autoReadEnabled: {
+    type: Boolean,
+    default: false,
   },
 })
 </script>

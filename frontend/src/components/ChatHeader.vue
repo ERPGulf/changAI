@@ -15,6 +15,21 @@
 
     <div class="ml-2 flex items-center gap-1.5">
       <button
+        class="h-8 min-w-8 items-center justify-center rounded-md px-2 text-xs font-semibold text-white/90 transition-colors sm:flex"
+        :class="autoReadEnabled ? 'bg-white/20' : 'hover:bg-white/15'"
+        :title="autoReadEnabled ? 'Auto speech on' : 'Auto speech off'"
+        :aria-label="autoReadEnabled ? 'Turn off auto speech' : 'Turn on auto speech'"
+        @click="$emit('toggleAutoRead')"
+      >
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M11 5L6 9H3v6h3l5 4V5z"/>
+          <path d="M15 9a4 4 0 0 1 0 6"/>
+          <path d="M18 7a7 7 0 0 1 0 10"/>
+        </svg>
+        <span class="ml-1 text-[10px]">{{ autoReadEnabled ? 'AUTO' : 'OFF' }}</span>
+      </button>
+
+      <button
         class="h-8 min-w-14 items-center justify-center rounded-md px-2 text-[11px] font-semibold tracking-wide text-white/90 transition-colors sm:flex"
         :class="responseMode === 'actual' ? 'bg-white/20' : 'hover:bg-white/15'"
         title="Toggle Actual/Test mode"
@@ -73,7 +88,11 @@ defineProps({
     type: String,
     required: true,
   },
+  autoReadEnabled: {
+    type: Boolean,
+    required: true,
+  },
 })
 
-defineEmits(['close', 'resizeHalf', 'resizeFull', 'toggleResponseMode'])
+defineEmits(['close', 'resizeHalf', 'resizeFull', 'toggleResponseMode', 'toggleAutoRead'])
 </script>

@@ -10,18 +10,20 @@
     <ChatHeader
       :windowMode="windowMode"
       :responseMode="responseMode"
+      :autoReadEnabled="autoReadEnabled"
       @close="$emit('close')"
       @resizeHalf="windowMode = 'half'"
       @resizeFull="windowMode = 'full'"
       @toggleResponseMode="$emit('toggleResponseMode')"
+      @toggleAutoRead="$emit('toggleAutoRead')"
     />
     <TabBar v-model="localTab" />
 
     <div class="chat-body min-h-0 flex-1 overflow-y-auto p-3 sm:p-4" ref="chatBodyRef">
       <div>
-        <ChatTab v-if="localTab === 'chat'" :messages="chatHistory" />
+        <ChatTab v-if="localTab === 'chat'" :messages="chatHistory" :autoReadEnabled="autoReadEnabled" />
         <DebugTab v-else-if="localTab === 'debug'" :logs="debugLogs" />
-        <SupportTab v-else-if="localTab === 'support'" :messages="supportHistory" />
+        <SupportTab v-else-if="localTab === 'support'" :messages="supportHistory" :autoReadEnabled="autoReadEnabled" />
       </div>
     </div>
 
@@ -50,9 +52,10 @@ const props = defineProps({
   debugLogs: { type: Array, required: true },
   supportHistory: { type: Array, required: true },
   responseMode: { type: String, required: true },
+  autoReadEnabled: { type: Boolean, required: true },
 })
 
-const emit = defineEmits(['close', 'submit', 'update:activeTab', 'toggleResponseMode'])
+const emit = defineEmits(['close', 'submit', 'update:activeTab', 'toggleResponseMode', 'toggleAutoRead'])
 
 const chatBodyRef = ref(null)
 const localTab = ref(props.activeTab)

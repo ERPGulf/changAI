@@ -13,6 +13,7 @@ const debugLogs = ref([])
 const supportHistory = ref([])
 const popupRef = ref(null)
 const responseMode = ref('actual')
+const autoReadEnabled = ref(false)
 
 function toggleChatbot() {
   showChatbot.value = !showChatbot.value
@@ -24,6 +25,10 @@ function scrollToBottom() {
 
 function toggleResponseMode() {
   responseMode.value = responseMode.value === 'actual' ? 'test' : 'actual'
+}
+
+function toggleAutoRead() {
+  autoReadEnabled.value = !autoReadEnabled.value
 }
 
 async function handleSubmit(message) {
@@ -92,8 +97,10 @@ async function handleSupportSubmit(message) {
     :debugLogs="debugLogs"
     :supportHistory="supportHistory"
     :responseMode="responseMode"
+    :autoReadEnabled="autoReadEnabled"
     @close="showChatbot = false"
     @submit="handleSubmit"
     @toggleResponseMode="toggleResponseMode"
+    @toggleAutoRead="toggleAutoRead"
   />
 </template>
