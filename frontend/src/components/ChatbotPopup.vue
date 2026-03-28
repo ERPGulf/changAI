@@ -6,9 +6,7 @@
       :windowMode="windowMode"
       :autoReadEnabled="autoReadEnabled"
       @close="$emit('close')"
-      @resizeDefault="windowMode = 'default'"
-      @resizeHalf="windowMode = 'half'"
-      @resizeFull="windowMode = 'full'"
+      @cycleResize="cycleWindowMode"
       @toggleAutoRead="$emit('toggleAutoRead')"
     />
     <TabBar v-model="localTab" />
@@ -53,6 +51,20 @@ const emit = defineEmits(['close', 'submit', 'update:activeTab', 'toggleAutoRead
 const chatBodyRef = ref(null)
 const localTab = ref(props.activeTab)
 const windowMode = ref('default')
+
+function cycleWindowMode() {
+  if (windowMode.value === 'default') {
+    windowMode.value = 'half'
+    return
+  }
+
+  if (windowMode.value === 'half') {
+    windowMode.value = 'full'
+    return
+  }
+
+  windowMode.value = 'default'
+}
 
 const popupClasses = computed(() => {
   const base = 'fixed z-[9999] flex min-h-0 flex-col overflow-hidden bg-white shadow-[0_0_128px_rgba(0,0,0,0.1),0_32px_64px_-48px_rgba(0,0,0,0.5)] transition-all duration-150 ease-out origin-bottom-right'

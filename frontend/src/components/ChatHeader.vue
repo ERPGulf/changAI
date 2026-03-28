@@ -1,6 +1,6 @@
 <template>
   <div class="chat-header flex min-h-14 items-center justify-between bg-brand-500 px-4 py-3 text-white sm:px-5">
-    <div class="flex min-w-0 items-center gap-2.5">
+    <div class="flex min-w-0 flex-1 items-center gap-2 sm:gap-2.5">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="35"
@@ -23,50 +23,64 @@
         :aria-label="autoReadEnabled ? 'Turn off auto speech' : 'Turn on auto speech'"
         @click="$emit('toggleAutoRead')"
       >
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <svg v-if="autoReadEnabled" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <path d="M11 5L6 9H3v6h3l5 4V5z"/>
           <path d="M15 9a4 4 0 0 1 0 6"/>
           <path d="M18 7a7 7 0 0 1 0 10"/>
         </svg>
-        <span class="ml-1 text-[10px]">{{ autoReadEnabled ? 'AUTO' : 'OFF' }}</span>
-      </button>
-
-      <button
-        class="flex h-8 min-w-8 appearance-none items-center justify-center rounded-md border-0 px-2 text-xs font-semibold text-white/90 transition-colors focus:outline-none"
-        style="border-radius: 0.375rem;"
-        :class="windowMode === 'default' ? 'bg-white/20' : 'hover:bg-white/15'"
-        title="Compact"
-        aria-label="Resize to compact"
-        @click="$emit('resizeDefault')"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <rect x="7" y="8" width="10" height="8" rx="2"/>
+        <svg v-else viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M11 5L6 9H3v6h3l5 4V5z"/>
+          <path d="M22 9l-6 6"/>
+          <path d="M16 9l6 6"/>
         </svg>
       </button>
 
       <button
         class="flex h-8 min-w-8 appearance-none items-center justify-center rounded-md border-0 px-2 text-xs font-semibold text-white/90 transition-colors focus:outline-none"
         style="border-radius: 0.375rem;"
-        :class="windowMode === 'half' ? 'bg-white/20' : 'hover:bg-white/15'"
-        title="Half screen"
-        aria-label="Resize to half screen"
-        @click="$emit('resizeHalf')"
+        :class="'bg-white/20 hover:bg-white/25'"
+        :title="`Resize mode: ${currentWindowModeLabel} (click to ${nextWindowModeLabel})`"
+        :aria-label="`Resize mode ${currentWindowModeLabel}. Click to switch to ${nextWindowModeLabel}`"
+        @click="$emit('cycleResize')"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <svg
+          v-if="windowMode === 'default'"
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <rect x="7" y="8" width="10" height="8" rx="2"/>
+        </svg>
+        <svg
+          v-else-if="windowMode === 'half'"
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
           <rect x="4" y="5" width="16" height="14" rx="2"/>
           <path d="M12 5v14"/>
         </svg>
-      </button>
-
-      <button
-        class="flex h-8 min-w-8 appearance-none items-center justify-center rounded-md border-0 px-2 text-xs font-semibold text-white/90 transition-colors focus:outline-none"
-        style="border-radius: 0.375rem;"
-        :class="windowMode === 'full' ? 'bg-white/20' : 'hover:bg-white/15'"
-        title="Full screen"
-        aria-label="Resize to full screen"
-        @click="$emit('resizeFull')"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <svg
+          v-else
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
           <rect x="4" y="5" width="16" height="14" rx="2"/>
           <path d="M8 8H6v2M16 8h2v2M8 16H6v-2M16 16h2v-2"/>
         </svg>
@@ -87,7 +101,9 @@
 </template>
 
 <script setup>
-defineProps({
+import { computed } from 'vue'
+
+const props = defineProps({
   windowMode: {
     type: String,
     required: true,
@@ -98,5 +114,19 @@ defineProps({
   },
 })
 
-defineEmits(['close', 'resizeDefault', 'resizeHalf', 'resizeFull', 'toggleAutoRead'])
+const modeLabels = {
+  default: 'Compact',
+  half: 'Half Screen',
+  full: 'Full Screen',
+}
+
+const currentWindowModeLabel = computed(() => modeLabels[props.windowMode] || 'Compact')
+
+const nextWindowModeLabel = computed(() => {
+  if (props.windowMode === 'default') return 'Half Screen'
+  if (props.windowMode === 'half') return 'Full Screen'
+  return 'Compact'
+})
+
+defineEmits(['close', 'cycleResize', 'toggleAutoRead'])
 </script>

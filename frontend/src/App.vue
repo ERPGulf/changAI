@@ -13,7 +13,7 @@ const debugLogs = ref([])
 const supportHistory = ref([])
 const popupRef = ref(null)
 const responseMode = ref('actual')
-const autoReadEnabled = ref(false)
+const autoReadEnabled = ref(true)
 
 function toggleChatbot() {
   showChatbot.value = !showChatbot.value
