@@ -3,8 +3,8 @@
     <button
       v-for="tab in tabs"
       :key="tab.id"
-      class="h-11 px-2 text-xs font-semibold transition-colors"
-      :class="modelValue === tab.id ? 'text-brand-600' : 'text-gray-500 hover:text-gray-700'"
+      class="h-11 appearance-none border-0 bg-transparent px-2 text-xs font-semibold transition-colors focus:outline-none"
+      :class="modelValue === tab.id ? 'text-[#5f44ad]' : 'text-gray-500 hover:text-gray-700'"
       @click="$emit('update:modelValue', tab.id)"
     >
       {{ tab.label }}

@@ -22,7 +22,7 @@
         <button
           v-if="dismissible"
           type="button"
-          class="ml-1 text-current/80 transition hover:text-current"
+          class="ml-1 appearance-none border-0 text-current/80 transition hover:text-current focus:outline-none"
           aria-label="Dismiss notification"
           @click="$emit('close')"
         >
