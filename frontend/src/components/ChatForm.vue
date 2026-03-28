@@ -2,6 +2,7 @@
   <div class="relative w-full">
     <form
       class="flex min-h-11 items-center gap-2 rounded-full border border-violet-200 bg-white px-3 shadow-sm transition-all focus-within:ring-2 focus-within:ring-brand-500/35"
+      style="border-radius: 9999px;"
       autocomplete="off"
       @submit.prevent="handleSubmit"
     >
@@ -16,7 +17,8 @@
 
       <button
         type="button"
-        class="grid h-8 w-8 shrink-0 place-items-center rounded-full text-slate-600 transition-all hover:bg-slate-100 hover:text-slate-900 disabled:cursor-not-allowed disabled:opacity-40"
+        class="grid h-8 w-8 shrink-0 appearance-none place-items-center rounded-full border-0 text-slate-600 transition-all hover:bg-slate-100 hover:text-slate-900 focus:outline-none disabled:cursor-not-allowed disabled:opacity-40"
+        style="border-radius: 9999px;"
         :class="isListening ? 'bg-red-100 text-red-600 hover:bg-red-100 hover:text-red-600' : ''"
         :title="micButtonTitle"
         :aria-label="micButtonTitle"
@@ -37,7 +39,8 @@
       <button
         type="submit"
         title="Send"
-        class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-brand-500 text-white transition-all hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-40"
+        class="grid h-8 w-8 shrink-0 appearance-none place-items-center rounded-full border-0 bg-brand-500 text-white transition-all hover:bg-brand-600 focus:outline-none disabled:cursor-not-allowed disabled:opacity-40"
+        style="border-radius: 9999px;"
         :disabled="!messageText.trim()"
       >
         <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">

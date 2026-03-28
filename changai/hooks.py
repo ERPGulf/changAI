@@ -8,9 +8,11 @@ app_license = "mit"
 from changai import __version__ as app_version
 from pathlib import Path
 
-dist_js_path = Path(__file__).resolve().parent / "public" / "dist" / "changai-chatbot.js"
+dist_dir = Path(__file__).resolve().parent / "public" / "dist"
+dist_js_path = dist_dir / "changai-chatbot.js"
+dist_css_path = dist_dir / "changai-chatbot.css"
 try:
-    asset_build_stamp = str(int(dist_js_path.stat().st_mtime))
+    asset_build_stamp = str(int(max(dist_js_path.stat().st_mtime, dist_css_path.stat().st_mtime)))
 except FileNotFoundError:
     asset_build_stamp = app_version
 

@@ -5,3 +5,37 @@
   --color-brand-600: #5f44ad;
   --color-brand-50: #f6f2ff;
 }
+
+@layer base {
+  #changai-chatbot-root,
+  #changai-chatbot-root * {
+    box-sizing: border-box;
+  }
+
+  #changai-chatbot-root button,
+  #changai-chatbot-root input,
+  #changai-chatbot-root textarea,
+  #changai-chatbot-root select {
+    font: inherit;
+  }
+
+  #changai-chatbot-root button {
+    appearance: none;
+    -webkit-appearance: none;
+    border: 0;
+    background-clip: padding-box;
+  }
+
+  #changai-chatbot-root button.rounded-full,
+  #changai-chatbot-root form.rounded-full {
+    border-radius: 9999px;
+  }
+
+  #changai-chatbot-root button.rounded-md {
+    border-radius: 0.375rem;
+  }
+
+  #changai-chatbot-root button.rounded-lg {
+    border-radius: 0.5rem;
+  }
+}
