@@ -191,7 +191,6 @@ def get_embedding_engine():
 @frappe.whitelist(allow_guest=False)
 def get_settings() -> Dict[str, Any]:
     settings = frappe.get_single(CHANGAI_SETTINGS)
-    langsmith_tracing = "true" if settings.langsmith_tracing else "false"
     config = {
         "RETAIN_MEM": settings.retain_memory,
         "LLM_VERSION_ID": settings.llm_version_id,
