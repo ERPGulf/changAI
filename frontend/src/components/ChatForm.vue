@@ -1,25 +1,33 @@
 <template>
   <div class="relative w-full">
     <form
-      class="flex min-h-11 items-center gap-2 rounded-full border border-violet-200 bg-white px-3 shadow-sm transition-all focus-within:ring-2 focus-within:ring-brand-500/35"
+      class="group flex min-h-11 items-center gap-2 rounded-full border border-slate-200/90 bg-white/95 px-3 shadow-[0_12px_26px_-20px_rgba(15,23,42,0.7)] transition-all duration-250 focus-within:-translate-y-0.5 focus-within:border-brand-200 focus-within:shadow-[0_18px_30px_-20px_rgba(13,110,253,0.5)] focus-within:ring-2 focus-within:ring-brand-500/25"
       style="border-radius: 9999px;"
       autocomplete="off"
       @submit.prevent="handleSubmit"
+      @click.stop
+      @mousedown.stop
+      @keydown.stop
+      @keyup.stop
     >
       <input
         ref="inputRef"
         type="text"
         v-model="messageText"
-        class="h-11 w-full border-none bg-transparent text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none"
+        class="h-11 w-full border-none bg-transparent text-sm font-medium text-slate-800 placeholder:text-slate-400 focus:outline-none"
         :placeholder="placeholder"
         required
+        @keydown.stop
+        @keyup.stop
+        @keypress.stop
+        @input.stop
       />
 
       <button
         type="button"
-        class="grid h-8 w-8 shrink-0 appearance-none place-items-center rounded-full border-0 text-slate-600 transition-all hover:bg-slate-100 hover:text-slate-900 focus:outline-none disabled:cursor-not-allowed disabled:opacity-40"
+        class="grid h-8 w-8 shrink-0 appearance-none place-items-center rounded-full border border-transparent text-slate-600 transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-200 hover:bg-slate-100 hover:text-slate-900 focus:outline-none disabled:cursor-not-allowed disabled:opacity-40"
         style="border-radius: 9999px;"
-        :class="isListening ? 'bg-red-100 text-red-600 hover:bg-red-100 hover:text-red-600' : ''"
+        :class="isListening ? 'border-red-200 bg-red-100 text-red-600 shadow-[0_10px_20px_-18px_rgba(220,38,38,0.9)] hover:bg-red-100 hover:text-red-600' : ''"
         :title="micButtonTitle"
         :aria-label="micButtonTitle"
         :disabled="!recognitionSupported || requestingMic"
@@ -39,7 +47,7 @@
       <button
         type="submit"
         title="Send"
-        class="grid h-8 w-8 shrink-0 appearance-none place-items-center rounded-full border-0 bg-brand-500 text-white transition-all hover:bg-brand-600 focus:outline-none disabled:cursor-not-allowed disabled:opacity-40"
+        class="grid h-8 w-8 shrink-0 appearance-none place-items-center rounded-full border-0 bg-gradient-to-br from-brand-500 to-brand-600 text-white shadow-[0_10px_24px_-16px_rgba(109,79,194,0.85)] transition-all duration-200 hover:-translate-y-0.5 hover:from-brand-600 hover:to-violet-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-40"
         style="border-radius: 9999px;"
         :disabled="!messageText.trim()"
       >

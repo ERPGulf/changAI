@@ -4,7 +4,13 @@
   --color-brand-500: #6d4fc2;
   --color-brand-600: #5f44ad;
   --color-brand-50: #f6f2ff;
+  --color-accent-500: #12b981;
+  --color-ink-900: #0f172a;
+  --color-surface-50: #f8fafc;
   --animate-dot-wave: dot-wave 1.4s ease-in-out infinite;
+  --animate-soft-float: soft-float 4.8s ease-in-out infinite;
+  --animate-surface-in: surface-in 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-fade-rise: fade-rise 280ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes dot-wave {
@@ -18,10 +24,47 @@
   }
 }
 
+@keyframes soft-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes surface-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @layer base {
   #changai-chatbot-root,
   #changai-chatbot-root * {
     box-sizing: border-box;
+  }
+
+  #changai-chatbot-root {
+    font-family: "Plus Jakarta Sans", "Segoe UI", "Helvetica Neue", sans-serif;
+    color: #0f172a;
   }
 
   #changai-chatbot-root button,
@@ -49,5 +92,43 @@
 
   #changai-chatbot-root button.rounded-lg {
     border-radius: 0.5rem;
+  }
+
+  #changai-chatbot-root .chat-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(109, 79, 194, 0.35) transparent;
+  }
+
+  #changai-chatbot-root .chat-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  #changai-chatbot-root .chat-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, rgba(109, 79, 194, 0.4), rgba(109, 79, 194, 0.2));
+    border-radius: 9999px;
+  }
+
+  #changai-chatbot-root .chat-shell {
+    background:
+      radial-gradient(120% 120% at 100% 0%, rgba(109, 79, 194, 0.1) 0%, rgba(109, 79, 194, 0) 58%),
+      radial-gradient(120% 120% at 0% 100%, rgba(109, 79, 194, 0.06) 0%, rgba(109, 79, 194, 0) 55%),
+      #ffffff;
+  }
+
+  #changai-chatbot-root .chat-card {
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.92));
+    box-shadow: 0 12px 35px -28px rgba(15, 23, 42, 0.45);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #changai-chatbot-root *,
+    #changai-chatbot-root *::before,
+    #changai-chatbot-root *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }

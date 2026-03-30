@@ -2,24 +2,36 @@
   <div
     :class="popupClasses"
   >
+    <div class="pointer-events-none absolute -right-14 -top-14 h-36 w-36 rounded-full bg-brand-500/15 blur-2xl"></div>
+    <div class="pointer-events-none absolute -bottom-14 -left-12 h-32 w-32 rounded-full bg-violet-400/15 blur-2xl"></div>
+
     <ChatHeader
       :windowMode="windowMode"
       :autoReadEnabled="autoReadEnabled"
+      :activeTtsProvider="activeTtsProvider"
       @close="$emit('close')"
       @cycleResize="cycleWindowMode"
       @toggleAutoRead="$emit('toggleAutoRead')"
     />
     <TabBar v-model="localTab" />
 
-    <div class="min-h-0 flex-1 overflow-x-hidden overflow-y-auto bg-white p-4 max-[900px]:p-3.5 max-[600px]:p-3" ref="chatBodyRef">
+    <div class="chat-scrollbar min-h-0 flex-1 overflow-x-hidden overflow-y-auto bg-slate-50/60 px-4 py-4 max-[900px]:px-3.5 max-[900px]:py-3.5 max-[600px]:px-3 max-[600px]:py-3" ref="chatBodyRef">
       <div class="min-w-0">
-        <ChatTab v-if="localTab === 'chat'" :messages="chatHistory" :autoReadEnabled="autoReadEnabled" />
+        <ChatTab v-if="localTab === 'chat'" :messages="chatHistory" :autoReadEnabled="autoReadEnabled" :ttsConfig="ttsConfig" />
         <DebugTab v-else-if="localTab === 'debug'" :logs="debugLogs" />
-        <SupportTab v-else-if="localTab === 'support'" :messages="supportHistory" :autoReadEnabled="autoReadEnabled" />
+        <SupportTab v-else-if="localTab === 'support'" :messages="supportHistory" :autoReadEnabled="autoReadEnabled" :ttsConfig="ttsConfig" />
+        <SettingsTab
+          v-else-if="localTab === 'settings'"
+          :autoReadEnabled="autoReadEnabled"
+          :ttsConfig="ttsConfig"
+          :settings="settings"
+          @toggleAutoRead="$emit('toggleAutoRead')"
+          @togglePollyPreference="$emit('togglePollyPreference')"
+        />
       </div>
     </div>
 
-    <div class="border-t border-violet-100 bg-white p-3 pb-[calc(12px+env(safe-area-inset-bottom))] sm:p-4">
+    <div v-if="localTab !== 'settings'" class="border-t border-slate-200/80 bg-white/90 px-3 py-3 pb-[calc(12px+env(safe-area-inset-bottom))] backdrop-blur-sm sm:px-4 sm:py-4">
       <ChatForm
         :placeholder="localTab === 'support' ? 'Message Support...' : 'Message...'"
         @submit="(text) => $emit('submit', text)"
@@ -35,6 +47,7 @@ import TabBar from './TabBar.vue'
 import ChatTab from './ChatTab.vue'
 import DebugTab from './DebugTab.vue'
 import SupportTab from './SupportTab.vue'
+import SettingsTab from './SettingsTab.vue'
 import ChatForm from './ChatForm.vue'
 
 const props = defineProps({
@@ -44,9 +57,12 @@ const props = defineProps({
   debugLogs: { type: Array, required: true },
   supportHistory: { type: Array, required: true },
   autoReadEnabled: { type: Boolean, required: true },
+  ttsConfig: { type: Object, required: true },
+  activeTtsProvider: { type: String, required: true },
+  settings: { type: Object, default: null },
 })
 
-const emit = defineEmits(['close', 'submit', 'update:activeTab', 'toggleAutoRead'])
+const emit = defineEmits(['close', 'submit', 'update:activeTab', 'toggleAutoRead', 'togglePollyPreference'])
 
 const chatBodyRef = ref(null)
 const localTab = ref(props.activeTab)
@@ -67,10 +83,10 @@ function cycleWindowMode() {
 }
 
 const popupClasses = computed(() => {
-  const base = 'fixed z-[9999] flex min-h-0 flex-col overflow-hidden bg-white shadow-[0_0_128px_rgba(0,0,0,0.1),0_32px_64px_-48px_rgba(0,0,0,0.5)] transition-all duration-150 ease-out origin-bottom-right'
+  const base = 'chat-shell fixed z-[9999] flex min-h-0 flex-col overflow-hidden border border-slate-200/80 shadow-[0_32px_80px_-44px_rgba(2,6,23,0.7),0_18px_40px_-24px_rgba(15,23,42,0.45)] transition-all duration-300 ease-out origin-bottom-right motion-safe:animate-surface-in'
   const state = props.isOpen
     ? 'pointer-events-auto opacity-100 translate-x-0 translate-y-0 scale-100'
-    : 'pointer-events-none opacity-0 translate-x-1/2 translate-y-full scale-0'
+    : 'pointer-events-none opacity-0 translate-x-1/5 translate-y-8 scale-95'
 
   if (windowMode.value === 'full') {
     return [
