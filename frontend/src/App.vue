@@ -1,8 +1,8 @@
 <script setup>
-import { ref, reactive, nextTick } from 'vue'
+import { ref, reactive, nextTick, onMounted } from 'vue'
 import ChatbotToggler from './components/ChatbotToggler.vue'
 import ChatbotPopup from './components/ChatbotPopup.vue'
-import { runPipeline, callSupportBot } from './utils/frappe.js'
+import { runPipeline, callSupportBot, getSettingsDetails } from './utils/frappe.js'
 import { getOrCreateChatId } from './utils/session.js'
 import { normalizeBotText, getErrorText, safeStringify } from './utils/helpers.js'
 
@@ -14,6 +14,25 @@ const supportHistory = ref([])
 const popupRef = ref(null)
 const responseMode = ref('actual')
 const autoReadEnabled = ref(true)
+const settings = ref(null)
+const isLoadingSettings = ref(false)
+
+async function loadSettings() {
+  if (isLoadingSettings.value || settings.value) return
+
+  isLoadingSettings.value = true
+  try {
+    settings.value = await getSettingsDetails(responseMode.value)
+    console.log('get_settings response:', settings.value)
+    debugLogs.value.push({ type: 'settings', settings: settings.value })
+  } catch (err) {
+    const errorText = getErrorText(err)
+    console.error('Settings API Error:', err)
+    debugLogs.value.push({ type: 'settings', error: errorText })
+  } finally {
+    isLoadingSettings.value = false
+  }
+}
 
 function toggleChatbot() {
   showChatbot.value = !showChatbot.value
@@ -36,6 +55,10 @@ async function handleSubmit(message) {
 }
 
 async function handleChatSubmit(message) {
+  if (responseMode.value === 'actual') {
+    await loadSettings()
+  }
+
   chatHistory.value.push({ role: 'user', text: message })
   await nextTick()
   scrollToBottom()
@@ -81,6 +104,12 @@ async function handleSupportSubmit(message) {
   await nextTick()
   scrollToBottom()
 }
+
+onMounted(() => {
+  if (responseMode.value === 'actual') {
+    loadSettings()
+  }
+})
 </script>
 
 <template>

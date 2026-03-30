@@ -3,6 +3,7 @@ const IS_DEV = import.meta.env.DEV
 export const API = {
   PIPELINE: 'changai.changai.api.v2.text2sql_pipeline_v2.run_text2sql_pipeline',
   SUPPORT: 'changai.changai.api.v2.text2sql_pipeline_v2.support_bot',
+  SETTINGS: 'changai.changai.api.v2.text2sql_pipeline_v2.get_settings',
 }
 
 export function frappeCall(method, args = {}, mode = 'actual') {
@@ -40,4 +41,8 @@ export function runPipeline(userQuestion, chatId, mode = 'actual') {
 
 export function callSupportBot(message, mode = 'actual') {
   return frappeCall(API.SUPPORT, { message }, mode)
+}
+
+export function getSettingsDetails(mode = 'actual') {
+  return frappeCall(API.SETTINGS, {}, mode)
 }
