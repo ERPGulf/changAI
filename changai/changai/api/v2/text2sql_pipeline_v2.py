@@ -2070,15 +2070,3 @@ def run_text2sql_pipeline(user_question: str, chat_id: str) -> Dict:
         }
 
     return _handle_sql_result(final, sql, orm, formatted_q, fields,selected_tables, res, entity_debug, user_question, chat_id)
-with open("/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/v2/test_questions (1).json", "r") as f:
-    test_questions = json.load(f)
-
-@frappe.whitelist(allow_guest=True)
-def testing():
-    res = []
-    for test_question in test_questions:
-        tables = call_fvs_table_search(test_question)
-        res.append({"question": test_question, "answer": tables[:10]})
-        with open("/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/v2/test_results.json", "w") as f:
-            json.dump(res, f)
-    return "/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/v2/test_results.json"
