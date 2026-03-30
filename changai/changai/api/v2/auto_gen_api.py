@@ -39,6 +39,7 @@ erpnext_modules = [
     "Quality Management",
     "Regional",
     "Maintenance",
+    "Setup"
 ]
 
 SYSTEM_FIELDS = [
