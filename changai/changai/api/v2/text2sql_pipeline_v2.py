@@ -2078,7 +2078,7 @@ def testing():
     res = []
     for test_question in test_questions:
         tables = call_fvs_table_search(test_question)
-        res.append({"question": test_question, "answer": tables[:6]})
+        res.append({"question": test_question, "answer": tables[:10]})
         with open("/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/v2/test_results.json", "w") as f:
             json.dump(res, f)
     return "/opt/hyrin/frappe-bench/apps/changai/changai/changai/api/v2/test_results.json"
