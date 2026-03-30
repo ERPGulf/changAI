@@ -32,11 +32,11 @@
         </div>
         <button
           class="rounded-full px-3 py-1.5 text-xs font-semibold text-white"
-          :class="ttsConfig?.usePolly ? 'bg-emerald-600' : 'bg-gray-400'"
-          :disabled="!ttsConfig?.pollyAvailable"
+          :class="(ttsConfig?.usePolly && ttsConfig?.enableVoiceChat && ttsConfig?.pollyAvailable) ? 'bg-emerald-600' : 'bg-gray-400'"
+          :disabled="!ttsConfig?.pollyAvailable || !ttsConfig?.enableVoiceChat"
           @click="$emit('togglePollyPreference')"
         >
-          {{ ttsConfig?.usePolly ? 'Enabled' : 'Disabled' }}
+          {{ (ttsConfig?.usePolly && ttsConfig?.enableVoiceChat && ttsConfig?.pollyAvailable) ? 'Enabled' : 'Disabled' }}
         </button>
       </div>
       <p v-if="!ttsConfig?.enableVoiceChat" class="mt-3 text-xs text-amber-700">Voice chat is disabled in ChangAI Settings.</p>

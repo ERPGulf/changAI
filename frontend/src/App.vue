@@ -45,7 +45,6 @@ async function loadSettings() {
   isLoadingSettings.value = true
   try {
     settings.value = await getSettingsDetails(responseMode.value)
-    console.log('get_settings response:', settings.value)
     ttsConfig.value = {
       enableVoiceChat: Boolean(settings.value?.enable_voice_chat),
       pollyAvailable: Boolean(settings.value?.polly_enabled),
