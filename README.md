@@ -50,6 +50,7 @@ Open-source AI assistant for ERPNext. Ask business questions in plain English an
 9. **Module-Wise Training Data Automation** — changAI includes tools to auto-generate training data on a per-module basis across your ERPNext installation. You can select individual modules such as Accounts, Inventory, or HR and generate targeted training data for each, allowing the model's retrieval accuracy to improve incrementally without needing to retrain everything at once.
 
 10. **Fine-Tuned Embedding Model** — changAI uses a custom fine-tuned embedding model built on nomic-embed-text-v1.5, specifically trained on ERPNext schema and retrieval data for better semantic matching.
+11. **Translation Support** — changAI supports multilingual ERP usage by translating values across all DocTypes. This allows users to interact with ERPNext in their preferred language. Users can configure their preferred language directly in ChangAI Settings.
 
 
 ## Tech Stack
