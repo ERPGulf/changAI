@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex w-full gap-1.5"
+    class="motion-safe:animate-fade-rise flex w-full gap-1.5"
     :class="message.role === 'user' ? 'flex-col items-end' : 'items-start'"
   >
     <BotIcon v-if="message.role !== 'user'" />
@@ -8,7 +8,7 @@
     <div v-if="message.role !== 'user'" class="flex min-w-0 max-w-[calc(100%-2.5rem)] flex-1 flex-col max-[600px]:max-w-[calc(100%-2.25rem)]">
       <div
         v-if="isLoadingStatus"
-        class="inline-flex min-h-9.5 min-w-16 items-center justify-center gap-2 rounded-[10px_10px_10px_3px] bg-brand-50 px-4 py-3"
+        class="chat-card inline-flex min-h-9.5 min-w-16 items-center justify-center gap-2 rounded-[10px_10px_10px_3px] px-4 py-3"
         role="status"
         aria-live="polite"
         :aria-label="loaderLabel"
@@ -19,14 +19,14 @@
       </div>
       <div
         v-else
-        class="w-fit max-w-full overflow-x-auto whitespace-pre-line rounded-[10px_10px_10px_3px] bg-brand-50 px-4 py-3 text-xs leading-relaxed wrap-anywhere text-black"
+        class="chat-card w-fit max-w-full overflow-x-auto whitespace-pre-line rounded-[10px_10px_10px_3px] px-4 py-3 text-xs leading-relaxed wrap-anywhere text-slate-900"
         v-html="message.text"
       ></div>
     </div>
 
     <p
       v-else
-      class="w-fit max-w-[85%] whitespace-pre-line rounded-[13px_13px_3px_13px] bg-brand-500 px-4 py-3 text-[11px] leading-relaxed wrap-anywhere text-white max-[600px]:max-w-[88%]"
+      class="w-fit max-w-[85%] whitespace-pre-line rounded-[13px_13px_3px_13px] bg-gradient-to-br from-brand-500 to-brand-600 px-4 py-3 text-[11px] leading-relaxed wrap-anywhere text-white shadow-[0_14px_30px_-18px_rgba(109,79,194,0.85)] max-[600px]:max-w-[88%]"
     >
       {{ message.text }}
     </p>

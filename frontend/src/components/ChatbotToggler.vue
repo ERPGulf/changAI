@@ -1,6 +1,6 @@
 <template>
   <button
-    class="fixed bottom-5 right-5 z-9999 grid h-12 w-12 appearance-none place-items-center rounded-full border-0 bg-brand-500 text-white shadow-lg transition-all duration-200 hover:bg-brand-600 focus:outline-none max-[600px]:bottom-3 max-[600px]:right-3 max-[600px]:h-13 max-[600px]:w-13"
+    class="fixed bottom-5 right-5 z-9999 grid h-12 w-12 appearance-none place-items-center rounded-full border border-white/20 bg-gradient-to-br from-brand-500 to-brand-600 text-white shadow-[0_20px_36px_-20px_rgba(109,79,194,0.85)] transition-all duration-250 hover:-translate-y-0.5 hover:from-brand-600 hover:to-violet-700 hover:shadow-[0_22px_40px_-22px_rgba(109,79,194,1)] focus:outline-none max-[600px]:bottom-3 max-[600px]:right-3 max-[600px]:h-13 max-[600px]:w-13"
     style="border-radius: 9999px;"
     :aria-pressed="isOpen ? 'true' : 'false'"
     @click="$emit('toggle')"
