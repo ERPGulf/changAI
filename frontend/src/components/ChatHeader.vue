@@ -15,6 +15,14 @@
     </div>
 
     <div class="ml-2 flex items-center gap-1.5">
+      <span
+        class="hidden rounded-full px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-white/95 sm:inline"
+        :class="providerBadgeClass"
+        :title="`TTS provider: ${providerLabel}`"
+      >
+        {{ providerLabel }}
+      </span>
+
       <button
         class="h-8 min-w-8 appearance-none items-center justify-center rounded-md border-0 px-2 text-xs font-semibold text-white/90 transition-colors focus:outline-none sm:flex"
         style="border-radius: 0.375rem;"
@@ -112,6 +120,10 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
+  activeTtsProvider: {
+    type: String,
+    required: true,
+  },
 })
 
 const modeLabels = {
@@ -126,6 +138,18 @@ const nextWindowModeLabel = computed(() => {
   if (props.windowMode === 'default') return 'Half Screen'
   if (props.windowMode === 'half') return 'Full Screen'
   return 'Compact'
+})
+
+const providerLabel = computed(() => {
+  if (props.activeTtsProvider === 'polly') return 'TTS: Polly'
+  if (props.activeTtsProvider === 'browser') return 'TTS: Browser'
+  return 'TTS: Off'
+})
+
+const providerBadgeClass = computed(() => {
+  if (props.activeTtsProvider === 'polly') return 'bg-emerald-500/40'
+  if (props.activeTtsProvider === 'browser') return 'bg-amber-500/40'
+  return 'bg-white/20'
 })
 
 defineEmits(['close', 'cycleResize', 'toggleAutoRead'])

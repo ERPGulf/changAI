@@ -6,7 +6,7 @@
         Hello there &#x1F44B; I am ChangAI, your ERP assistant
       </p>
     </div>
-    <ChatMessage v-for="(msg, i) in messages" :key="i" :message="msg" :autoReadEnabled="autoReadEnabled" />
+    <ChatMessage v-for="(msg, i) in messages" :key="i" :message="msg" :autoReadEnabled="autoReadEnabled" :ttsConfig="ttsConfig" />
   </div>
 </template>
 
@@ -22,6 +22,10 @@ defineProps({
   autoReadEnabled: {
     type: Boolean,
     default: false,
+  },
+  ttsConfig: {
+    type: Object,
+    required: true,
   },
 })
 </script>

@@ -2,6 +2,7 @@ from langgraph.graph import StateGraph, END
 from collections import OrderedDict
 from typing_extensions import TypedDict
 from typing import Any, Dict, List, Tuple, Union, Optional, Set
+import boto3
 import requests
 import json
 import yaml
@@ -188,6 +189,38 @@ def get_embedding_engine():
     
     return _EMBEDDER_INSTANCE
 
+def _build_frontend_settings_config() -> Dict[str, Any]:
+    settings = frappe.get_single(CHANGAI_SETTINGS)
+
+    aws_access_key_id = (getattr(settings, "aws_access_key_id", None) or "").strip()
+    aws_secret_access_key = (getattr(settings, "aws_secret_access_key", None) or "").strip()
+    aws_region = (
+        getattr(settings, "aws_region", None)
+        or getattr(settings, "aws_default_region", None)
+        or "us-east-1"
+    )
+
+    return {
+        "RETAIN_MEM": settings.retain_memory,
+        "LLM_VERSION_ID": settings.llm_version_id,
+        "EMBED_VERSION_ID": settings.embedder_version_id,
+        "REMOTE": bool(settings.remote),
+        "deploy_url": settings.deploy_url,
+        "entity_retriever": settings.entity_retriever,
+        "support_api_url": settings.support_url,
+        "get_ticket_details_url": settings.get_ticket_details_url,
+        "llm": settings.llm,
+        "location": settings.gemini_location,
+        "retriever_structure": settings.retriever_structure,
+        "gemini_project_id": settings.gemini_project_id,
+        "gemini_json_content": settings.gemini_json_content,
+        "enable_voice_chat": bool(settings.enable_voice_chat),
+        "aws_region": aws_region,
+        "polly_voice_id": "Joanna",
+        "polly_enabled": bool(settings.enable_voice_chat and aws_access_key_id and aws_secret_access_key),
+    }
+
+
 @frappe.whitelist(allow_guest=False)
 def get_settings() -> Dict[str, Any]:
     settings = frappe.get_single(CHANGAI_SETTINGS)
@@ -206,11 +239,16 @@ def get_settings() -> Dict[str, Any]:
         "retriever_structure": settings.retriever_structure,
         "gemini_project_id": settings.gemini_project_id,
         "gemini_json_content": settings.gemini_json_content,
-        "aws_access_key_id":settings.aws_access_key_id,
-        "aws_secret_access_key":settings.aws_secret_access_key,
-        "enable_voice_chat":settings.enable_voice_chat
+        "aws_access_key_id": settings.aws_access_key_id,
+        "aws_secret_access_key": settings.aws_secret_access_key,
+        "enable_voice_chat": settings.enable_voice_chat,
     }
     return config
+
+
+@frappe.whitelist(allow_guest=False)
+def get_frontend_settings() -> Dict[str, Any]:
+    return _build_frontend_settings_config()
 
 class ChangAIConfig:
     @classmethod
@@ -219,6 +257,59 @@ class ChangAIConfig:
             frappe.clear_document_cache(CHANGAI_SETTINGS)
             frappe.local._changai_config = get_settings()
         return frappe.local._changai_config
+
+
+@frappe.whitelist(allow_guest=False)
+def synthesize_tts(text: str, voice_id: Optional[str] = None) -> Dict[str, Any]:
+    config = ChangAIConfig.get()
+
+    if not bool(config.get("enable_voice_chat")):
+        return {"ok": False, "error": "Voice chat is disabled in settings.", "provider": "browser"}
+
+    aws_access_key_id = (config.get("aws_access_key_id") or "").strip()
+    aws_secret_access_key = (config.get("aws_secret_access_key") or "").strip()
+    if not aws_access_key_id or not aws_secret_access_key:
+        return {"ok": False, "error": "AWS Polly credentials are missing.", "provider": "browser"}
+
+    cleaned_text = re.sub(r"<[^>]*>", " ", text or "")
+    cleaned_text = re.sub(r"\s+", " ", cleaned_text).strip()
+    if not cleaned_text:
+        return {"ok": False, "error": "Text is empty.", "provider": "browser"}
+
+    if len(cleaned_text) > 2500:
+        cleaned_text = cleaned_text[:2500]
+
+    try:
+        polly_client = boto3.client(
+            "polly",
+            aws_access_key_id=aws_access_key_id,
+            aws_secret_access_key=aws_secret_access_key,
+            region_name=(config.get("aws_region") or "us-east-1"),
+        )
+        voice = (voice_id or config.get("polly_voice_id") or "Joanna").strip() or "Joanna"
+        response = polly_client.synthesize_speech(
+            Text=cleaned_text,
+            OutputFormat="mp3",
+            VoiceId=voice,
+            Engine="neural",
+            TextType="text",
+        )
+        stream = response.get("AudioStream")
+        if stream is None:
+            return {"ok": False, "error": "Polly did not return audio stream.", "provider": "browser"}
+
+        audio_bytes = stream.read()
+        audio_base64 = base64.b64encode(audio_bytes).decode("utf-8")
+        return {
+            "ok": True,
+            "provider": "polly",
+            "mime_type": "audio/mpeg",
+            "audio_base64": audio_base64,
+            "voice_id": voice,
+        }
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), "ChangAI Polly TTS Error")
+        return {"ok": False, "error": str(e), "provider": "browser"}
 
 
 @frappe.whitelist(allow_guest=True)  # nosemgrep: security.guest-whitelisted-method - intentional, validates credentials via OAuth client lookup and Frappe password grant before returning a token

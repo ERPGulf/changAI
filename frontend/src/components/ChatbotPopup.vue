@@ -5,6 +5,7 @@
     <ChatHeader
       :windowMode="windowMode"
       :autoReadEnabled="autoReadEnabled"
+      :activeTtsProvider="activeTtsProvider"
       @close="$emit('close')"
       @cycleResize="cycleWindowMode"
       @toggleAutoRead="$emit('toggleAutoRead')"
@@ -13,13 +14,21 @@
 
     <div class="min-h-0 flex-1 overflow-x-hidden overflow-y-auto bg-white p-4 max-[900px]:p-3.5 max-[600px]:p-3" ref="chatBodyRef">
       <div class="min-w-0">
-        <ChatTab v-if="localTab === 'chat'" :messages="chatHistory" :autoReadEnabled="autoReadEnabled" />
+        <ChatTab v-if="localTab === 'chat'" :messages="chatHistory" :autoReadEnabled="autoReadEnabled" :ttsConfig="ttsConfig" />
         <DebugTab v-else-if="localTab === 'debug'" :logs="debugLogs" />
-        <SupportTab v-else-if="localTab === 'support'" :messages="supportHistory" :autoReadEnabled="autoReadEnabled" />
+        <SupportTab v-else-if="localTab === 'support'" :messages="supportHistory" :autoReadEnabled="autoReadEnabled" :ttsConfig="ttsConfig" />
+        <SettingsTab
+          v-else-if="localTab === 'settings'"
+          :autoReadEnabled="autoReadEnabled"
+          :ttsConfig="ttsConfig"
+          :settings="settings"
+          @toggleAutoRead="$emit('toggleAutoRead')"
+          @togglePollyPreference="$emit('togglePollyPreference')"
+        />
       </div>
     </div>
 
-    <div class="border-t border-violet-100 bg-white p-3 pb-[calc(12px+env(safe-area-inset-bottom))] sm:p-4">
+    <div v-if="localTab !== 'settings'" class="border-t border-violet-100 bg-white p-3 pb-[calc(12px+env(safe-area-inset-bottom))] sm:p-4">
       <ChatForm
         :placeholder="localTab === 'support' ? 'Message Support...' : 'Message...'"
         @submit="(text) => $emit('submit', text)"
@@ -35,6 +44,7 @@ import TabBar from './TabBar.vue'
 import ChatTab from './ChatTab.vue'
 import DebugTab from './DebugTab.vue'
 import SupportTab from './SupportTab.vue'
+import SettingsTab from './SettingsTab.vue'
 import ChatForm from './ChatForm.vue'
 
 const props = defineProps({
@@ -44,9 +54,12 @@ const props = defineProps({
   debugLogs: { type: Array, required: true },
   supportHistory: { type: Array, required: true },
   autoReadEnabled: { type: Boolean, required: true },
+  ttsConfig: { type: Object, required: true },
+  activeTtsProvider: { type: String, required: true },
+  settings: { type: Object, default: null },
 })
 
-const emit = defineEmits(['close', 'submit', 'update:activeTab', 'toggleAutoRead'])
+const emit = defineEmits(['close', 'submit', 'update:activeTab', 'toggleAutoRead', 'togglePollyPreference'])
 
 const chatBodyRef = ref(null)
 const localTab = ref(props.activeTab)

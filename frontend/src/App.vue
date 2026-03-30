@@ -1,9 +1,9 @@
 <script setup>
-import { ref, reactive, nextTick, onMounted } from 'vue'
+import { ref, reactive, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import ChatbotToggler from './components/ChatbotToggler.vue'
 import ChatbotPopup from './components/ChatbotPopup.vue'
 import { runPipeline, callSupportBot, getSettingsDetails } from './utils/frappe.js'
-import { getOrCreateChatId } from './utils/session.js'
+import { getOrCreateChatId, getPollyPreference, setPollyPreference } from './utils/session.js'
 import { normalizeBotText, getErrorText, safeStringify } from './utils/helpers.js'
 
 const showChatbot = ref(false)
@@ -16,6 +16,28 @@ const responseMode = ref('actual')
 const autoReadEnabled = ref(true)
 const settings = ref(null)
 const isLoadingSettings = ref(false)
+const ttsConfig = ref({
+  enableVoiceChat: false,
+  pollyAvailable: false,
+  usePolly: true,
+  voiceId: 'Joanna',
+})
+const activeTtsProvider = ref('off')
+
+function updateProviderFromSettings() {
+  if (!ttsConfig.value.enableVoiceChat) {
+    activeTtsProvider.value = 'off'
+    return
+  }
+  activeTtsProvider.value = ttsConfig.value.usePolly ? 'polly' : 'browser'
+}
+
+function handleTtsProviderEvent(event) {
+  const provider = event?.detail?.provider
+  if (provider === 'polly' || provider === 'browser' || provider === 'off') {
+    activeTtsProvider.value = provider
+  }
+}
 
 async function loadSettings() {
   if (isLoadingSettings.value || settings.value) return
@@ -24,6 +46,13 @@ async function loadSettings() {
   try {
     settings.value = await getSettingsDetails(responseMode.value)
     console.log('get_settings response:', settings.value)
+    ttsConfig.value = {
+      enableVoiceChat: Boolean(settings.value?.enable_voice_chat),
+      pollyAvailable: Boolean(settings.value?.polly_enabled),
+      usePolly: Boolean(settings.value?.polly_enabled) && getPollyPreference(),
+      voiceId: settings.value?.polly_voice_id || 'Joanna',
+    }
+    updateProviderFromSettings()
     debugLogs.value.push({ type: 'settings', settings: settings.value })
   } catch (err) {
     const errorText = getErrorText(err)
@@ -44,6 +73,16 @@ function scrollToBottom() {
 
 function toggleAutoRead() {
   autoReadEnabled.value = !autoReadEnabled.value
+}
+
+function togglePollyPreference() {
+  const nextValue = !ttsConfig.value.usePolly
+  ttsConfig.value = {
+    ...ttsConfig.value,
+    usePolly: nextValue && ttsConfig.value.pollyAvailable,
+  }
+  setPollyPreference(ttsConfig.value.usePolly)
+  updateProviderFromSettings()
 }
 
 async function handleSubmit(message) {
@@ -106,8 +145,18 @@ async function handleSupportSubmit(message) {
 }
 
 onMounted(() => {
+  if (typeof window !== 'undefined') {
+    window.addEventListener('changai-tts-provider', handleTtsProviderEvent)
+  }
+
   if (responseMode.value === 'actual') {
     loadSettings()
+  }
+})
+
+onBeforeUnmount(() => {
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('changai-tts-provider', handleTtsProviderEvent)
   }
 })
 </script>
@@ -122,8 +171,12 @@ onMounted(() => {
     :debugLogs="debugLogs"
     :supportHistory="supportHistory"
     :autoReadEnabled="autoReadEnabled"
+    :ttsConfig="ttsConfig"
+    :activeTtsProvider="activeTtsProvider"
+    :settings="settings"
     @close="showChatbot = false"
     @submit="handleSubmit"
     @toggleAutoRead="toggleAutoRead"
+    @togglePollyPreference="togglePollyPreference"
   />
 </template>
