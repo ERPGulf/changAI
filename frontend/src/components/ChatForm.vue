@@ -5,6 +5,10 @@
       style="border-radius: 9999px;"
       autocomplete="off"
       @submit.prevent="handleSubmit"
+      @click.stop
+      @mousedown.stop
+      @keydown.stop
+      @keyup.stop
     >
       <input
         ref="inputRef"
@@ -13,6 +17,10 @@
         class="h-11 w-full border-none bg-transparent text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none"
         :placeholder="placeholder"
         required
+        @keydown.stop
+        @keyup.stop
+        @keypress.stop
+        @input.stop
       />
 
       <button
