@@ -54,11 +54,11 @@
   "section_break_qwlc",
   "enable_voice_chat",
   "tts_provider",
+  "aws_access_key_id",
+  "aws_secret_access_key",
   "aws_region",
   "polly_voice_id",
-  "polly_engine",
-  "aws_access_key_id",
-  "aws_secret_access_key"
+  "polly_engine"
  ],
  "fields": [
   {
@@ -338,21 +338,21 @@
    "depends_on": "eval:doc.tts_provider == \"polly\" && doc.enable_voice_chat == 1",
    "fieldname": "aws_region",
    "fieldtype": "Data",
-   "label": "AWS Region"
+   "label": "AWS Region (Optional)"
   },
   {
    "default": "Joanna",
    "depends_on": "eval:doc.tts_provider == \"polly\" && doc.enable_voice_chat == 1",
    "fieldname": "polly_voice_id",
    "fieldtype": "Data",
-   "label": "Polly Voice ID"
+   "label": "Polly Voice ID (Optional)"
   },
   {
    "default": "neural",
    "depends_on": "eval:doc.tts_provider == \"polly\" && doc.enable_voice_chat == 1",
    "fieldname": "polly_engine",
    "fieldtype": "Select",
-   "label": "Polly Engine",
+   "label": "Polly Engine (Optional)",
    "options": "standard\nneural"
   },
   {
@@ -365,7 +365,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-03-30 13:16:55.637081",
+ "modified": "2026-03-31 07:29:37.364170",
  "modified_by": "Administrator",
  "module": "Changai",
  "name": "ChangAI Settings",

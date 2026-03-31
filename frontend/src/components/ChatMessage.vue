@@ -8,14 +8,18 @@
     <div v-if="message.role !== 'user'" class="flex min-w-0 max-w-[calc(100%-2.5rem)] flex-1 flex-col max-[600px]:max-w-[calc(100%-2.25rem)]">
       <div
         v-if="isLoadingStatus"
-        class="chat-card inline-flex min-h-9.5 min-w-16 items-center justify-center gap-2 rounded-[10px_10px_10px_3px] px-4 py-3"
+        class="chat-card inline-flex min-h-9.5 min-w-16 items-center justify-center rounded-[10px_10px_10px_3px] px-4 py-3"
         role="status"
         aria-live="polite"
         :aria-label="loaderLabel"
       >
-        <span class="h-2 w-2 animate-dot-wave rounded-full bg-brand-500 [animation-delay:0ms]"></span>
-        <span class="h-2 w-2 animate-dot-wave rounded-full bg-brand-500 [animation-delay:200ms]"></span>
-        <span class="h-2 w-2 animate-dot-wave rounded-full bg-brand-500 [animation-delay:400ms]"></span>
+        <div class="inline-flex items-center gap-2.5">
+          <span class="relative inline-block h-5 w-5">
+            <span class="absolute inset-0 rounded-full border-2 border-transparent border-t-[#4e8cff] border-r-[#4e8cff]/65 animate-gemini-arc"></span>
+            <span class="absolute left-1/2 top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rotate-45 rounded-[2px] bg-[#4e8cff] animate-gemini-spark"></span>
+          </span>
+          <span class="text-[10px] font-semibold tracking-[0.15em] uppercase text-[#3a67c9]">{{ loaderLabel }}</span>
+        </div>
       </div>
       <div
         v-else
