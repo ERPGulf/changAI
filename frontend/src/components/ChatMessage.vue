@@ -8,14 +8,20 @@
     <div v-if="message.role !== 'user'" class="flex min-w-0 max-w-[calc(100%-2.5rem)] flex-1 flex-col max-[600px]:max-w-[calc(100%-2.25rem)]">
       <div
         v-if="isLoadingStatus"
-        class="chat-card inline-flex min-h-9.5 min-w-16 items-center justify-center gap-2 rounded-[10px_10px_10px_3px] px-4 py-3"
+        class="chat-card inline-flex w-fit rounded-[10px_10px_10px_3px] px-3 py-2"
         role="status"
         aria-live="polite"
         :aria-label="loaderLabel"
       >
-        <span class="h-2 w-2 animate-dot-wave rounded-full bg-brand-500 [animation-delay:0ms]"></span>
-        <span class="h-2 w-2 animate-dot-wave rounded-full bg-brand-500 [animation-delay:200ms]"></span>
-        <span class="h-2 w-2 animate-dot-wave rounded-full bg-brand-500 [animation-delay:400ms]"></span>
+        <div class="inline-flex items-center gap-1.5">
+          <span class="relative inline-flex h-4 w-4 shrink-0 items-center justify-center">
+            <span class="absolute inset-0 rounded-full border border-transparent border-t-[#4b89ff] border-r-[#4b89ff]/70 animate-gemini-arc"></span>
+            <svg viewBox="0 0 24 24" class="relative h-3 w-3 text-[#4b89ff] animate-gemini-spark" aria-hidden="true">
+              <path fill="currentColor" d="M12 2.8c.52 3.22 1.6 5.66 3.22 7.28 1.62 1.62 4.06 2.7 7.28 3.22-3.22.52-5.66 1.6-7.28 3.22-1.62 1.62-2.7 4.06-3.22 7.28-.52-3.22-1.6-5.66-3.22-7.28-1.62-1.62-4.06-2.7-7.28-3.22 3.22-.52 5.66-1.6 7.28-3.22 1.62-1.62 2.7-4.06 3.22-7.28Z"/>
+            </svg>
+          </span>
+          <span class="text-[8px] font-semibold tracking-[0.12em] uppercase text-[#3a67c9]">{{ loaderLabel }}</span>
+        </div>
       </div>
       <div
         v-else

@@ -5,15 +5,18 @@
     <div class="pointer-events-none absolute -right-14 -top-14 h-36 w-36 rounded-full bg-brand-500/15 blur-2xl"></div>
     <div class="pointer-events-none absolute -bottom-14 -left-12 h-32 w-32 rounded-full bg-violet-400/15 blur-2xl"></div>
 
-    <ChatHeader
-      :windowMode="windowMode"
-      :autoReadEnabled="autoReadEnabled"
-      :activeTtsProvider="activeTtsProvider"
-      @close="$emit('close')"
-      @cycleResize="cycleWindowMode"
-      @toggleAutoRead="$emit('toggleAutoRead')"
-    />
-    <TabBar v-model="localTab" />
+    <div class="relative overflow-hidden bg-linear-to-br from-brand-600 via-brand-500 to-violet-400">
+      <div class="pointer-events-none absolute inset-0 opacity-45" style="background: linear-gradient(120deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.02) 52%, rgba(255,255,255,0.12) 100%);"></div>
+      <ChatHeader
+        :windowMode="windowMode"
+        :autoReadEnabled="autoReadEnabled"
+        :activeTtsProvider="activeTtsProvider"
+        @close="$emit('close')"
+        @cycleResize="cycleWindowMode"
+        @toggleAutoRead="$emit('toggleAutoRead')"
+      />
+      <TabBar v-model="localTab" />
+    </div>
 
     <div class="chat-scrollbar min-h-0 flex-1 overflow-x-hidden overflow-y-auto bg-slate-50/60 px-4 py-4 max-[900px]:px-3.5 max-[900px]:py-3.5 max-[600px]:px-3 max-[600px]:py-3" ref="chatBodyRef">
       <div class="min-w-0">
