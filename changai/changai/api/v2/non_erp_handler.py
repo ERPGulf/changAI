@@ -6,7 +6,8 @@ from dataclasses import dataclass
 import json
 import frappe
 from typing import Dict, List, Optional, Set, Tuple, Any
-from rapidfuzz import process
+from rapidfuzz import process, fuzz
+
 
 @dataclass
 class ResponseEntry:
@@ -34,21 +35,29 @@ class IntelligentStaticResponder:
         )
 
         with open(alias_path, "r", encoding="utf-8") as f:
-
             alias_map = json.load(f)
 
-        self.en_alias_map = alias_map["english"]
-        self.ar_alias_map = alias_map["arabic"]
-                # Safe categories for broader partial matching
-        self.safe_categories_for_partial = {
-                    "greeting",
-                    "support",
-                    "identity",
-                    "thanks",
-                    "goodbye",
-                }
+        self.en_alias_map = self._flatten_alias_groups(alias_map["english"]["aliases"])
+        self.ar_alias_map = self._flatten_alias_groups(alias_map["arabic"]["aliases"])
 
-        # Small stopword sets to avoid weak overlap scoring
+        # optional: separate brand maps for lower-threshold fuzzy
+        self.en_brand_aliases = {
+            k: v for k, v in self.en_alias_map.items()
+            if v in {"changai", "erpgulf"}
+        }
+        self.ar_brand_aliases = {
+            k: v for k, v in self.ar_alias_map.items()
+            if v in {"changai", "erpgulf"}
+        }
+
+        self.safe_categories_for_partial = {
+            "greeting",
+            "support",
+            "identity",
+            "thanks",
+            "goodbye",
+        }
+
         self.en_stopwords = {
             "the", "a", "an", "is", "are", "am", "i", "you", "me",
             "my", "your", "to", "for", "of", "and", "or", "please"
@@ -60,9 +69,12 @@ class IntelligentStaticResponder:
 
         self._load_csv()
 
-    # -----------------------------
-    # CSV loading
-    # -----------------------------
+    def _flatten_alias_groups(self, grouped_aliases: Dict[str, Dict[str, str]]) -> Dict[str, str]:
+        flat: Dict[str, str] = {}
+        for group_map in grouped_aliases.values():
+            for k, v in group_map.items():
+                flat[str(k).lower().strip()] = str(v).lower().strip()
+        return flat
 
     def _load_csv(self) -> None:
         self.entries.clear()
@@ -106,27 +118,24 @@ class IntelligentStaticResponder:
                 self.responses_by_key.setdefault(normalized_key, []).append(entry)
 
         self.keys = list(self.responses_by_key.keys())
+
     def get_response(self, user_input: str) -> Dict[str, Any]:
         clean_input = self.preprocess(user_input)
         if not clean_input:
             return self._empty_result()
 
-        # 1. Exact
         result = self._exact_match(clean_input)
         if result:
             return result
 
-        # 2. Partial token subset
         result = self._partial_match(clean_input)
         if result:
             return result
 
-        # 3. Token overlap
         result = self._token_overlap_match(clean_input)
         if result:
             return result
 
-        # 4. Fuzzy
         result = self._fuzzy_match(clean_input)
         if result:
             return result
@@ -164,13 +173,18 @@ class IntelligentStaticResponder:
 
             if best_entry.category not in self.safe_categories_for_partial:
                 continue
+            common = input_tokens & key_tokens
 
-            if input_tokens.issubset(key_tokens):
-                coverage = len(input_tokens) / max(len(key_tokens), 1)
-
-                # Prefer closest-size phrase + higher priority
-                score = (coverage * 100) + min(best_entry.priority / 100.0, 5)
-                candidates.append((best_entry, score))
+            if not common:
+                continue
+            precision = len(common) / len(input_tokens)
+            recall = len(common) / len(key_tokens)
+            score_ratio = (0.7 * precision) + (0.3 * recall)
+            threshold = 0.80 if len(input_tokens) <= 2 else 0.7
+            if score_ratio < threshold:
+                continue
+            score = (score_ratio * 100) + min(best_entry.priority / 100.0, 5)
+            candidates.append((best_entry, score))
 
         if not candidates:
             return None
@@ -208,7 +222,6 @@ class IntelligentStaticResponder:
             precision = len(common) / len(input_tokens)
             recall = len(common) / len(key_tokens)
             overlap_score = (0.7 * precision) + (0.3 * recall)
-
             min_threshold = 0.85 if len(input_tokens) <= 2 else 0.75
 
             if overlap_score >= min_threshold:
@@ -234,19 +247,18 @@ class IntelligentStaticResponder:
         if not self.keys:
             return None
 
-        result = process.extractOne(clean_input, self.keys)
+        result = process.extractOne(clean_input, self.keys, scorer=fuzz.ratio)
         if not result:
             return None
 
         best_key = result[0]
         score = result[1]
+
         entries = self.responses_by_key.get(best_key, [])
         if not entries:
             return None
 
         best_entry = self._choose_best_entry(entries)
-
-        # stricter thresholds for short inputs
         token_count = len(clean_input.split())
 
         if self._contains_arabic(clean_input):
@@ -266,38 +278,27 @@ class IntelligentStaticResponder:
             score=score,
         )
 
-    # -----------------------------
-    # Helpers
-    # -----------------------------
-
     def preprocess(self, text: str) -> str:
         text = self._normalize_unicode(text)
         text = self._normalize_arabic(text)
         text = self._normalize_english(text)
+        text = self._normalize_spaces(text)
         text = self._apply_aliases(text)
         text = self._normalize_spaces(text)
         return text.strip()
 
     def _normalize_unicode(self, text: str) -> str:
-        text = unicodedata.normalize("NFKC", text)
+        text = unicodedata.normalize("NFKC", text or "")
         return text.lower().strip()
 
     def _normalize_english(self, text: str) -> str:
-        # remove punctuation but keep Arabic/English letters/numbers/spaces
-        text = re.sub(r"[^\w\s\u0600-\u06FF]", " ", text)
-        return text
+        return re.sub(r"[^\w\s\u0600-\u06FF]", " ", text)
 
     def _normalize_arabic(self, text: str) -> str:
-        # remove tatweel
         text = text.replace("ـ", "")
-
-        # remove Arabic diacritics
-        arabic_diacritics = re.compile(r"""
-            ّ|َ|ً|ُ|ٌ|ِ|ٍ|ْ|ـ
-        """, re.VERBOSE)
+        arabic_diacritics = re.compile(r"""ّ|َ|ً|ُ|ٌ|ِ|ٍ|ْ|ـ""", re.VERBOSE)
         text = re.sub(arabic_diacritics, "", text)
 
-        # normalize common Arabic letter variants
         replacements = {
             "أ": "ا",
             "إ": "ا",
@@ -313,29 +314,92 @@ class IntelligentStaticResponder:
         return text
 
     def _normalize_spaces(self, text: str) -> str:
-        text = re.sub(r"\s+", " ", text)
-        return text.strip()
+        return re.sub(r"\s+", " ", text).strip()
+
+    def _fuzzy_lookup_alias(
+        self,
+        text: str,
+        alias_map: Dict[str, str],
+        threshold: int,
+    ) -> Optional[str]:
+        if not text or not alias_map:
+            return None
+
+        result = process.extractOne(text, alias_map.keys(), scorer=fuzz.ratio)
+        if not result:
+            return None
+
+        best_key = result[0]
+        score = result[1]
+
+        if score >= threshold:
+            return alias_map[best_key]
+
+        return None
 
     def _apply_aliases(self, text: str) -> str:
-        # phrase-level aliases first
+        if not text:
+            return text
+
+        # 1. exact phrase aliases
         phrase_aliases = {
             "who r you": "who are you",
             "what are you": "who are you",
+            "who r u": "who are you",
+            "what r u": "what are you",
+            "how r u": "how are you",
+            "hw r u": "how are you",
+            "ho r u": "how are you",
             "منو انت": "من انت",
+            "مين انت": "من انت",
             "السلامعليكم": "السلام عليكم",
+            "سلام عليكم": "السلام عليكم",
         }
 
         for old, new in phrase_aliases.items():
             text = text.replace(old, new)
 
+        # 2. fuzzy phrase alias on whole text
+        phrase_fuzzy = self._fuzzy_lookup_alias(
+            text,
+            phrase_aliases,
+            threshold = 84 if not self._contains_arabic(text) else 93,
+        )
+        if phrase_fuzzy:
+            text = phrase_fuzzy
+
+        # 3. token-level exact + fuzzy alias
         words = text.split()
-        mapped_words = []
+        mapped_words: List[str] = []
 
         for word in words:
             if self._is_arabic_word(word):
-                mapped_words.append(self.ar_alias_map.get(word, word))
+                exact = self.ar_alias_map.get(word)
+                if exact:
+                    mapped_words.append(exact)
+                    continue
+
+                brand_fuzzy = self._fuzzy_lookup_alias(word, self.ar_brand_aliases, threshold=88)
+                if brand_fuzzy:
+                    mapped_words.append(brand_fuzzy)
+                    continue
+
+                fuzzy_val = self._fuzzy_lookup_alias(word, self.ar_alias_map, threshold=91)
+                mapped_words.append(fuzzy_val if fuzzy_val else word)
             else:
-                mapped_words.append(self.en_alias_map.get(word, word))
+                exact = self.en_alias_map.get(word)
+                if exact:
+                    mapped_words.append(exact)
+                    continue
+
+                brand_fuzzy = self._fuzzy_lookup_alias(word, self.en_brand_aliases, threshold=80)
+                if brand_fuzzy:
+                    mapped_words.append(brand_fuzzy)
+                    continue
+
+                threshold = 70 if len(word) <= 6 else 90
+                fuzzy_val = self._fuzzy_lookup_alias(word, self.en_alias_map, threshold=threshold)
+                mapped_words.append(fuzzy_val if fuzzy_val else word)
 
         return " ".join(mapped_words)
 
@@ -354,10 +418,6 @@ class IntelligentStaticResponder:
         return filtered
 
     def _choose_best_entry(self, entries: List[ResponseEntry]) -> ResponseEntry:
-        # Prefer:
-        # 1. higher priority
-        # 2. longer trigger phrase (more specific)
-        # 3. stable order otherwise
         return sorted(
             entries,
             key=lambda e: (e.priority, len(e.user_input.split())),
@@ -397,7 +457,8 @@ class IntelligentStaticResponder:
             "matched_key": None,
             "score": None,
         }
-    
+
+
 def handle_non_erp_query(user_input: str) -> dict:
     csv_path = os.path.join(
         frappe.get_app_path("changai"),
@@ -408,9 +469,7 @@ def handle_non_erp_query(user_input: str) -> dict:
         "non_erp.csv"
     )
 
-
     responder = IntelligentStaticResponder(csv_path)
-
     static_result = responder.get_response(user_input)
 
     if static_result["matched"]:
@@ -418,8 +477,6 @@ def handle_non_erp_query(user_input: str) -> dict:
             "kind": "NON_ERP_STATIC",
             "data": static_result["response"]
         }
-
-    # fallback to your normal non-ERP AI flow
 
     return {
         "kind": "NON_ERP_AI",

@@ -712,15 +712,16 @@ def guardrail_router(state: SQLState) -> SQLState:
 
 
 def send_non_erp_request(state: SQLState) -> SQLState:
-    qstn = state.get("formatted_q") or state.get("question")
+    qstn =state.get("question")
     if not qstn:
         return {**state, "non_erp_res": "", "error": "No question provided"}
     prompt = NON_ERP_PROMPT.format(question=qstn)
     try:
-        response = call_model(prompt, "llm")
-        if not response or isinstance(response, dict):
-            return {**state, "prompt": prompt, "non_erp_res": "", "error": str(response)}
-        return {**state, "prompt": prompt, "non_erp_res": response, "error": None}
+        response = handle_non_erp_query(qstn)
+        # response = call_model(prompt, "llm")
+        if not response or not response.get("data"):
+            return {**state,"non_erp_res": "", "error": str(response)}
+        return {**state,"non_erp_res": response["data"], "error": None}
     except frappe.exceptions.ValidationError:
         raise
     except Exception as e:
@@ -1431,6 +1432,7 @@ def validate_sql_against_mapping(
         result["ambiguous_columns"] = sorted(ambiguous)
 
     return result
+from changai.changai.api.v2.non_erp_handler import handle_non_erp_query
 
 
 
@@ -1445,10 +1447,11 @@ workflow.add_node("generate_sql",generate_sql)
 workflow.add_node("validate_sql",validate_sql)
 workflow.add_node("repair_sql",repair_sqlquery)
 workflow.add_node("send_non_erp_request",send_non_erp_request)
-workflow.set_entry_point("rewrite_question")
-workflow.add_edge("rewrite_question", "guardrail_router")
-workflow.add_conditional_edges("guardrail_router",route_guardrail,{"ERP":"retrieve","NON_ERP":"send_non_erp_request"})
+workflow.set_entry_point("guardrail_router")
+workflow.add_conditional_edges("guardrail_router",route_guardrail,{"ERP":"rewrite_question","NON_ERP":"send_non_erp_request"})
+# workflow.add_edge("guardrail_router", "rewrite_question")
 workflow.add_edge("send_non_erp_request", END)
+workflow.add_edge("rewrite_question", "retrieve")
 workflow.add_edge("retrieve","detect_entities")
 workflow.add_conditional_edges("detect_entities", route_after_entities, {"CONTEXT":"build_context","DIRECT":"generate_sql"})
 workflow.add_edge("build_context", "generate_sql")

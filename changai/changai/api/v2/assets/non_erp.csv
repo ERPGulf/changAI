@@ -39,8 +39,11 @@ greeting,hey erpgulf,"Hello! You've reached changAI, ERPGulf's AI assistant.",10
 greeting,changai hi,Hi! changAI here — powered by ERPGulf. How can I assist?,108,1
 greeting,changai hello,Hi there! changAI is online and ready to assist you.,108,1
 greeting,erpgulf hi,Hey! Welcome to ERPGulf. I am changAI — ask me anything.,104,1
-greeting,good morning,Hi there! changAI is online and ready to assist you.,100,1
-greeting,good afternoon,"Hello! You've reached changAI, ERPGulf's AI assistant.",100,1
+greeting,good morning,Good morning! changAI from ERPGulf is here and ready to assist you.,100,1
+greeting,morning,Good morning! ERPGulf's changAI here. What can I do for you today?,90,1
+greeting,good mrng,Good morning! changAI is online and ready to help you.,88,1
+greeting,gd morning,Good morning! You've reached changAI, ERPGulf's AI assistant.,88,1
+greeting,morning changai,Good morning! I am changAI from ERPGulf. Ready to help!,105,1
 greeting,good evening,Hello! I am changAI from ERPGulf. How can I help?,100,1
 greeting,good night,Hello! I am changAI from ERPGulf. How can I help?,100,1
 greeting,morning,Hello! ERPGulf's changAI here. What can I do for you today?,90,1
@@ -49,7 +52,7 @@ greeting,evening,Hey! Welcome to ERPGulf. I am changAI — ask me anything.,90,1
 greeting,good mrng,Hello! ERPGulf's changAI here. What can I do for you today?,88,1
 greeting,gd morning,"Hello! You've reached changAI, ERPGulf's AI assistant.",88,1
 greeting,gd evening,Hey! Welcome to ERPGulf. I am changAI — ask me anything.,88,1
-greeting,morning changai,Greetings! I am changAI from ERPGulf. Ready to help!,105,1
+greeting,morning changai,Morning! I am changAI from ERPGulf. Ready to help!,105,1
 greeting,evening changai,Hey there! changAI at your service. How may I help?,105,1
 greeting,hi bot,"Welcome! I am changAI, your ERPGulf assistant.",90,1
 greeting,hello bot,Hi there! changAI is online and ready to assist you.,90,1
