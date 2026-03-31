@@ -721,7 +721,7 @@ def send_non_erp_request(state: SQLState) -> SQLState:
         # response = call_model(prompt, "llm")
         if not response or not response.get("data"):
             return {**state,"non_erp_res": "", "error": str(response)}
-        return {**state,"non_erp_res":  response["data"]["response"], "error": None}
+        return {**state,"non_erp_res": response["data"], "error": None}
     except frappe.exceptions.ValidationError:
         raise
     except Exception as e:
@@ -1432,7 +1432,7 @@ def validate_sql_against_mapping(
         result["ambiguous_columns"] = sorted(ambiguous)
 
     return result
-from changai.changai.api.v2non_erp_handler import handle_non_erp_query
+from changai.changai.api.v2.non_erp_handler import handle_non_erp_query
 
 
 

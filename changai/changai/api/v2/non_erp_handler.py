@@ -40,7 +40,7 @@ class IntelligentStaticResponder:
         self.en_alias_map = alias_map["english"]
         self.ar_alias_map = alias_map["arabic"]
                 # Safe categories for broader partial matching
-                self.safe_categories_for_partial = {
+        self.safe_categories_for_partial = {
                     "greeting",
                     "support",
                     "identity",
@@ -238,7 +238,8 @@ class IntelligentStaticResponder:
         if not result:
             return None
 
-        best_key, score = result
+        best_key = result[0]
+        score = result[1]
         entries = self.responses_by_key.get(best_key, [])
         if not entries:
             return None
@@ -415,19 +416,12 @@ def handle_non_erp_query(user_input: str) -> dict:
     if static_result["matched"]:
         return {
             "kind": "NON_ERP_STATIC",
-            "data": {
-                "response": static_result["response"],
-                "category": static_result["category"],
-                "match_type": static_result["match_type"],
-                "matched_key": static_result["matched_key"],
-                "score": static_result["score"],
-            }
+            "data": static_result["response"]
         }
 
     # fallback to your normal non-ERP AI flow
-    ai_reply = run_non_erp_llm(user_input)
 
     return {
         "kind": "NON_ERP_AI",
-        "data": ai_reply
+        "data": "Hello Iam ChangAI, I am here to assist you with your queries."
     }

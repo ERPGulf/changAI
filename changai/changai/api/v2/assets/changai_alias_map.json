@@ -3,6 +3,7 @@
         "aliases": {
             "greetings": {
                 "helo": "hello",
+                "hy": "Hi",
                 "hlo": "hello",
                 "hlw": "hello",
                 "heyy": "hey",
