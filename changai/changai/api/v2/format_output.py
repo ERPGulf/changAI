@@ -348,10 +348,14 @@ def render_scalar(
         tables = extract_tables_from_ast(tree)
         if tables:
             table_name = clean_table_name(tables[0])
-            return f"Total {table_name.lower()}s: {value}."
+            # "tabEmployee" → "Employee" → "employees"
+            label = table_name.lower().rstrip("s") + "s"  # simple pluralize
+            return f"Total {label}: {value}."
 
+        # fallback: try to get a meaningful label from COUNT column
         col_node = next(count_expr.find_all(exp.Column), None)
-        if col_node:
+        if col_node and col_node.name.lower() != "name":
+            # only use column name if it's meaningful (not just "name")
             label = clean_label(col_node.name)
             return f"Total {label.lower()}s: {value}."
 
@@ -487,7 +491,7 @@ def render_response(
         return pick_empty_response(sql, tree, columns)
 
     if response_type == "scalar":
-        return render_scalar(labels, sample_rows)
+        return render_scalar(sql,tree,labels, sample_rows)
 
     if response_type == "single_record":
         return render_single_record(labels, sample_rows)
@@ -581,7 +585,7 @@ def format_sql_response(
     }
 
 @frappe.whitelist(allow_guest=True)
-def test(sql, sample_rows):
+def local_format(sql, sample_rows):
     row_count = len(sample_rows)
     result = format_sql_response(sql, row_count, sample_rows)
     return result

@@ -892,30 +892,6 @@ def call_retrieve_multi_line(user_question: str) -> Dict[str, Any]:
         return {"selected_fields": {}, "selected_tables": [], "top_tables": [], "error": str(e)}
 
 
-def get_full_fields_vs():
-    global _FULL_FIELDS_VS
-
-    if _FULL_FIELDS_VS is None:
-        emb = get_embedding_engine()
-        if emb is None:
-            frappe.throw(_(EMBEDDING_ENGINE_NONE_MESSG))
-        app_root = frappe.get_app_path("changai")
-        full_fields_vs_path = os.path.join(
-            app_root,
-            "changai", "api", "v2", "fvs_stores", "erpnext", "schema_fvs"
-        )
-
-        if not os.path.isdir(full_fields_vs_path):
-            frappe.throw(_("Vector store path not found: {0}").format(full_fields_vs_path))
-
-        _FULL_FIELDS_VS = FAISS.load_local(
-            full_fields_vs_path,
-            emb,
-            allow_dangerous_deserialization=True
-        )
-
-    return _FULL_FIELDS_VS
-
 
 def get_full_fields_vs_test():
     global _FULL_FIELDS_VS
@@ -940,6 +916,31 @@ def get_full_fields_vs_test():
 
     return _FULL_FIELDS_VS
 
+
+
+def get_full_fields_vs():
+    global _FULL_FIELDS_VS
+
+    if _FULL_FIELDS_VS is None:
+        emb = get_embedding_engine()
+        if emb is None:
+            frappe.throw(_(EMBEDDING_ENGINE_NONE_MESSG))
+        app_root = frappe.get_app_path("changai")
+        full_fields_vs_path = os.path.join(
+            app_root,
+            "changai", "api", "v2", "fvs_stores", "erpnext", "schema_fvs"
+        )
+
+        if not os.path.isdir(full_fields_vs_path):
+            frappe.throw(_("Vector store path not found: {0}").format(full_fields_vs_path))
+
+        _FULL_FIELDS_VS = FAISS.load_local(
+            full_fields_vs_path,
+            emb,
+            allow_dangerous_deserialization=True
+        )
+
+    return _FULL_FIELDS_VS
 
 def get_sub_vs(selected_tables: List[str]) -> Optional[FAISS]:
     """Build sub-index ONCE per unique selected_tables set (cached)."""

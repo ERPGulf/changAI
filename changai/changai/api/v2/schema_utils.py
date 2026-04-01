@@ -108,7 +108,7 @@ def validate_sql_schema(sql: str, dialect: str = "mysql") -> dict:
             if table.name and table.name not in mapping_data:
                 return {"ok": False, "error": f"Table '{table.name}' does not exist in schema"}
 
-        qualified = optimizer.qualify.qualify(ast, schema=schema)
+        qualified = optimizer.qualify.qualify(ast, schema=schema, dialect=dialect,identify=False,)
         return {"ok": True, "qualified_sql": qualified.sql()}
 
     except sqlglot.errors.OptimizeError as e:
