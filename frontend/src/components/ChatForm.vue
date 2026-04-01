@@ -33,11 +33,17 @@
         :disabled="!recognitionSupported || requestingMic"
         @click="toggleVoiceInput"
       >
-        <svg v-if="!requestingMic" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <!-- Stop icon while listening -->
+        <svg v-if="isListening && !requestingMic" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+          <rect x="6" y="6" width="12" height="12" rx="2"/>
+        </svg>
+        <!-- Mic icon when idle -->
+        <svg v-else-if="!requestingMic" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3z"/>
           <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
           <path d="M12 19v3"/>
         </svg>
+        <!-- Spinner while requesting permission -->
         <svg v-else viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" class="animate-spin">
           <circle cx="12" cy="12" r="9" opacity="0.3"/>
           <path d="M21 12a9 9 0 0 1-9 9"/>
@@ -93,6 +99,7 @@ const micUnavailableReason = ref('Voice input is unavailable in this browser/con
 let recognition = null
 let toastTimer = null
 const toastKey = ref('')
+const submitOnVoiceStop = ref(false)
 
 const micButtonTitle = computed(() => {
   if (requestingMic.value) return 'Requesting microphone permission...'
@@ -121,7 +128,7 @@ function initSpeechRecognition() {
   if (!recognitionSupported.value) return
 
   recognition = new SpeechRecognitionCtor()
-  recognition.continuous = false
+  recognition.continuous = true
   recognition.interimResults = true
   recognition.lang = (typeof navigator !== 'undefined' && navigator.language) || 'en-US'
 
@@ -135,10 +142,16 @@ function initSpeechRecognition() {
     if (toastKey.value === 'listening') {
       hideToast()
     }
+
+    if (submitOnVoiceStop.value) {
+      submitOnVoiceStop.value = false
+      handleSubmit()
+    }
   }
 
   recognition.onerror = (event) => {
     isListening.value = false
+    submitOnVoiceStop.value = false
     if (event?.error === 'not-allowed' || event?.error === 'service-not-allowed') {
       showToast('Microphone permission denied. Please allow microphone access in browser settings.', 'error')
       return
@@ -173,6 +186,7 @@ function toggleVoiceInput() {
   }
 
   if (isListening.value) {
+    submitOnVoiceStop.value = true
     recognition.stop()
     return
   }
@@ -216,6 +230,7 @@ async function startVoiceInput() {
   const allowed = await ensureMicPermission()
   if (!allowed || !recognition) return
 
+  submitOnVoiceStop.value = false
   inputRef.value?.focus()
   recognition.start()
 }
@@ -263,6 +278,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   if (recognition && isListening.value) {
+    submitOnVoiceStop.value = false
     recognition.stop()
   }
 

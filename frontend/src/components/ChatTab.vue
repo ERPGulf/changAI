@@ -6,13 +6,22 @@
         Hello there &#x1F44B; I am ChangAI, your ERP assistant
       </p>
     </div>
-    <ChatMessage v-for="(msg, i) in messages" :key="i" :message="msg" :autoReadEnabled="autoReadEnabled" :ttsConfig="ttsConfig" />
+    <ChatMessage
+      v-for="(msg, i) in messages"
+      :key="i"
+      :message="msg"
+      :autoReadEnabled="autoReadEnabled"
+      :ttsConfig="ttsConfig"
+      @cancel="emit('cancelResponse')"
+    />
   </div>
 </template>
 
 <script setup>
 import BotIcon from './BotIcon.vue'
 import ChatMessage from './ChatMessage.vue'
+
+const emit = defineEmits(['cancelResponse'])
 
 defineProps({
   messages: {

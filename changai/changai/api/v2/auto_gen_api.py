@@ -686,6 +686,17 @@ def fill_missing_field_descriptions(
 
 
 
+def clear_schema_field_caches() -> None:
+    """
+    Call this when schema_fvs is rebuilt/refreshed.
+    """
+    global _TABLE_FIELD_DOCS_CACHE, _TABLE_FIELD_VS_CACHE, _FULL_FIELDS_VS
+    with _TABLE_FIELD_CACHE_LOCK:
+        _TABLE_FIELD_DOCS_CACHE = None
+        _TABLE_FIELD_VS_CACHE = OrderedDict()
+        _FULL_FIELDS_VS = None
+
+
 @frappe.whitelist(allow_guest=False)
 def sync_tables_and_schema_smart() -> Dict[str, Any]:
     payload = _read_filedoctype(SCHEMA_YAML, RAG_FOLDER)
@@ -739,7 +750,6 @@ def sync_tables_and_schema_smart() -> Dict[str, Any]:
     }
 
 
-@frappe.whitelist(allow_guest=False)
 def _get_claude_client() -> Optional[Anthropic]:
     
     settings = frappe.get_single("ChangAI Settings")
@@ -1009,6 +1019,7 @@ def sync_schema_and_enqueue_descriptions() -> Dict[str, Any]:
         queue="long",
         timeout=1800,
     )
+    clear_schema_field_caches()
     return {"ok": True, "message": _("Schema updated ✅ Field descriptions running in background 🧠")}
 
 

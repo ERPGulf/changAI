@@ -20,7 +20,13 @@
 
     <div class="chat-scrollbar min-h-0 flex-1 overflow-x-hidden overflow-y-auto bg-slate-50/60 px-4 py-4 max-[900px]:px-3.5 max-[900px]:py-3.5 max-[600px]:px-3 max-[600px]:py-3" ref="chatBodyRef">
       <div class="min-w-0">
-        <ChatTab v-if="localTab === 'chat'" :messages="chatHistory" :autoReadEnabled="autoReadEnabled" :ttsConfig="ttsConfig" />
+        <ChatTab
+          v-if="localTab === 'chat'"
+          :messages="chatHistory"
+          :autoReadEnabled="autoReadEnabled"
+          :ttsConfig="ttsConfig"
+          @cancelResponse="$emit('cancelResponse')"
+        />
         <DebugTab v-else-if="localTab === 'debug'" :logs="debugLogs" />
         <SupportTab v-else-if="localTab === 'support'" :messages="supportHistory" :autoReadEnabled="autoReadEnabled" :ttsConfig="ttsConfig" />
         <SettingsTab
@@ -65,7 +71,7 @@ const props = defineProps({
   settings: { type: Object, default: null },
 })
 
-const emit = defineEmits(['close', 'submit', 'update:activeTab', 'toggleAutoRead', 'togglePollyPreference'])
+const emit = defineEmits(['close', 'submit', 'cancelResponse', 'update:activeTab', 'toggleAutoRead', 'togglePollyPreference'])
 
 const chatBodyRef = ref(null)
 const localTab = ref(props.activeTab)
