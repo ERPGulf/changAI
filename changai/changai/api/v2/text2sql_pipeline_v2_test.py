@@ -7,7 +7,7 @@ import requests
 from changai.changai.api.v2.non_erp_handler import handle_non_erp_query
 import json
 import yaml
-from changai.changai.api.v2.format_output import test
+from changai.changai.api.v2.format_output import local_format
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from threading import Lock
 import re
@@ -864,7 +864,6 @@ def _parse_json_list(raw: str) -> List[Any]:
 def call_retrieve_multi_line(user_question: str) -> Dict[str, Any]:
     try:
         top_tables = call_fvs_table_search(user_question)
-
         table_prompt = FILTER_TABLES.replace("{user_question}", user_question)
         table_prompt = table_prompt.replace("{table_list}", json.dumps(top_tables, ensure_ascii=False))
         selected_raw = call_gemini(table_prompt)
@@ -938,18 +937,16 @@ def get_full_fields_vs():
     return _FULL_FIELDS_VS
 
 def _build_table_field_docs_cache() -> Dict[str, List[Any]]:
-    """
-    Build lightweight table -> docs mapping once from full schema FVS.
-    Does NOT build per-table FAISS upfront.
-    """
     global _TABLE_FIELD_DOCS_CACHE
 
-    if _TABLE_FIELD_DOCS_CACHE is not None:
-        return _TABLE_FIELD_DOCS_CACHE
+    # Quick check with lock
+    with _TABLE_FIELD_CACHE_LOCK:
+        if _TABLE_FIELD_DOCS_CACHE is not None:
+            return _TABLE_FIELD_DOCS_CACHE
 
+    # Build outside lock (expensive)
     full_vs = get_full_fields_vs()
     doc_dict = getattr(full_vs.docstore, "_dict", {})
-
     grouped: Dict[str, List[Any]] = {}
     for d in doc_dict.values():
         meta = getattr(d, "metadata", {}) or {}
@@ -959,7 +956,11 @@ def _build_table_field_docs_cache() -> Dict[str, List[Any]]:
             continue
         grouped.setdefault(table, []).append(d)
 
-    _TABLE_FIELD_DOCS_CACHE = grouped
+    # Double check before storing
+    with _TABLE_FIELD_CACHE_LOCK:
+        if _TABLE_FIELD_DOCS_CACHE is None:
+            _TABLE_FIELD_DOCS_CACHE = grouped
+
     return _TABLE_FIELD_DOCS_CACHE
 
 
@@ -974,6 +975,43 @@ def _touch_table_field_vs_cache(table_name: str, vs: FAISS) -> None:
 
     _TABLE_FIELD_VS_CACHE[table_name] = vs
 
+def call_fvs_field_search(
+    user_question: str,
+    table_name: str,
+    selected_tables: List[str],
+    k: int = 40,
+) -> List[Dict[str, Any]]:
+    if not user_question or not table_name:
+        return []
+    sub_vs = get_sub_vs(selected_tables)
+    if sub_vs is None:
+        return []
+    hits = sub_vs.similarity_search(user_question, k=min(60, max(40, k)))
+    results: List[Dict[str, Any]] = []
+    seen = set()
+    for d in hits:
+        meta = getattr(d, "metadata", {}) or {}
+        tbl = meta.get("table")
+        fld = meta.get("field")
+        if tbl != table_name:
+            continue
+        key = (tbl, fld)
+        if key in seen:
+            continue
+        seen.add(key)
+        row = {
+            "field": fld,
+        }
+        if meta.get("join_hint"):
+            row["join_hint"] = meta.get("join_hint")
+        if meta.get("options"):
+            row["options"] = meta.get("options")
+
+        results.append(row)
+        if len(results) >= k:
+            break
+    return results
+
 
 def _evict_old_table_field_vs_cache(max_tables: int = MAX_TABLE_FIELD_VS_CACHE) -> None:
     """
@@ -986,21 +1024,17 @@ def _evict_old_table_field_vs_cache(max_tables: int = MAX_TABLE_FIELD_VS_CACHE) 
 
 
 def get_table_field_vs(table_name: str) -> Optional[FAISS]:
-    """
-    Lazy-build FAISS for one table only when first needed.
-    Reuse from cache afterward.
-    """
     if not table_name:
         return None
 
-    global _TABLE_FIELD_VS_CACHE
-
+    # Quick check with lock
     with _TABLE_FIELD_CACHE_LOCK:
         cached = _TABLE_FIELD_VS_CACHE.get(table_name)
         if cached is not None:
             _touch_table_field_vs_cache(table_name, cached)
             return cached
 
+    # Build outside lock (expensive)
     grouped = _build_table_field_docs_cache()
     docs = grouped.get(table_name) or []
     if not docs:
@@ -1012,7 +1046,12 @@ def get_table_field_vs(table_name: str) -> Optional[FAISS]:
 
     vs = FAISS.from_documents(docs, emb)
 
+    # Double check before storing
     with _TABLE_FIELD_CACHE_LOCK:
+        existing = _TABLE_FIELD_VS_CACHE.get(table_name)
+        if existing is not None:
+            _touch_table_field_vs_cache(table_name, existing)
+            return existing
         _touch_table_field_vs_cache(table_name, vs)
         _evict_old_table_field_vs_cache()
 
@@ -1075,7 +1114,7 @@ def get_fields_candidates_parallel(
     if not selected_tables:
         return fields_candidates
 
-    worker_count = min(max_workers, len(selected_tables))
+    worker_count = min(max_workers, len(selected_tables)) # count of parallel workers
 
     with ThreadPoolExecutor(max_workers=worker_count) as executor:
         futures = [
@@ -1213,7 +1252,6 @@ def remote_entity_embedder(q: str) -> Union[list, str]:
 #     return _VS_MASTER
 
 
-@frappe.whitelist(allow_guest=False)
 def get_master_vs():
     global _VS_MASTER
 
@@ -2097,7 +2135,7 @@ def _handle_sql_result(final: SQLState, sql: str, orm: str, formatted_q: str, fi
         formatting_result = format_data(formatted_q, sql_result)
         formatted_result = formatting_result.get("answer") or ""
     else:
-        formatting_result = test(formatted_q, sql_result)
+        formatting_result = local_format(formatted_q, sql_result)
         formatted_result = formatting_result.get("formatted_answer") or ""
 
     if not err:
@@ -2137,7 +2175,7 @@ def run_text2sql_pipeline(user_question: str, chat_id: str) -> Dict:
         return _handle_non_erp(final, user_question, chat_id)
 
     sql = clean_sql(final.get("sql")) or ""
-    res=validate_sql_schema(sql)
+    res = validate_sql_schema(sql)
     orm = clean_sql(final.get("orm")) or ""
     formatted_q = _safe_strip(final.get("formatted_q") or "")
     selected_tables = final.get("selected_tables") or []
