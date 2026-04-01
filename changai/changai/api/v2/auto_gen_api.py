@@ -48,8 +48,11 @@ SYSTEM_FIELDS = [
     {"fieldname": "owner", "fieldtype": "Link", "label": "Owner", "options": "User"},
     {"fieldname": "creation", "fieldtype": "Datetime", "label": "Created On"},
     {"fieldname": "modified", "fieldtype": "Datetime", "label": "Last Modified"},
+    {"fieldname": "parent", "fieldtype": "Data", "label": "Parent Document"},
+    {"fieldname": "parenttype", "fieldtype": "Data", "label": "Parent DocType"},
+    {"fieldname": "parentfield", "fieldtype": "Data", "label": "Parent Field"},
+    {"fieldname": "idx", "fieldtype": "Int", "label": "Row Index"},
 ]
-
 EXCLUDED_FIELDTYPES: Set[str] = {
     "Section Break", "Column Break", "Tab Break", "Page Break", "Table Break",
     "Fold", "Heading", "HTML", "Button", "Attach Image", "Image", "Signature", "Icon",
@@ -281,7 +284,6 @@ def sync_master_data_smart() -> Dict[str, Any]:
         "fvs_error": None,
     }
 
-
 def _clean_schema_fields(by_table: Dict[str, Dict[str, Any]]) -> None:
     for block in by_table.values():
         for field in block.get("fields", []) or []:
@@ -293,7 +295,8 @@ def _clean_schema_fields(by_table: Dict[str, Dict[str, Any]]) -> None:
 
             if field.get("fieldtype") != "Link":
                 field.pop("join_hint", None)
-            return "ok"
+
+
 @frappe.whitelist(allow_guest=True)
 def test():
     payload = _read_filedoctype("schema.yaml", "Home/RAG Sources")

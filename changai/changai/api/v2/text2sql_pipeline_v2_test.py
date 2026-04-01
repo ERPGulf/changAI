@@ -6,6 +6,7 @@ import boto3
 import requests
 import json
 import yaml
+from changai.changai.api.v2.format_output import test
 import re
 import os
 import time
@@ -2007,7 +2008,7 @@ def _handle_sql_result(final: SQLState, sql: str, orm: str, formatted_q: str, fi
     context = (final.get("context") or final.get("selected_fields") or "")[:800]
     contains_values = final.get("contains_values") or ""
     err = final.get("error")
-    formatted_result = format_data(formatted_q, sql_result)
+    formatted_result = test(formatted_q, sql_result)
 
     if not err:
         try:
