@@ -1,8 +1,8 @@
 <script setup>
-import { ref, reactive, nextTick, onMounted, onBeforeUnmount } from 'vue'
+import { ref, reactive, computed, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import ChatbotToggler from './components/ChatbotToggler.vue'
 import ChatbotPopup from './components/ChatbotPopup.vue'
-import { runPipeline, callSupportBot, getSettingsDetails } from './utils/frappe.js'
+import { runPipelineCancelable, callSupportBot, getSettingsDetails } from './utils/frappe.js'
 import { getOrCreateChatId, getPollyPreference, setPollyPreference } from './utils/session.js'
 import { normalizeBotText, getErrorText, safeStringify } from './utils/helpers.js'
 
@@ -23,6 +23,8 @@ const ttsConfig = ref({
   voiceId: 'Joanna',
 })
 const activeTtsProvider = ref('off')
+const cancelPendingChatRequest = ref(null)
+const isAwaitingChatResponse = computed(() => cancelPendingChatRequest.value !== null)
 
 function updateProviderFromSettings() {
   if (!ttsConfig.value.enableVoiceChat) {
@@ -101,24 +103,48 @@ async function handleChatSubmit(message) {
   await nextTick()
   scrollToBottom()
 
-  const thinkingMsg = reactive({ role: 'model', text: 'Thinking...' })
+  const thinkingMsg = reactive({ role: 'model', text: 'Thinking...', cancelable: true })
   chatHistory.value.push(thinkingMsg)
   await nextTick()
   scrollToBottom()
 
+  let cancelled = false
+  const request = runPipelineCancelable(message, getOrCreateChatId(), responseMode.value)
+  cancelPendingChatRequest.value = () => {
+    if (cancelled) return
+    cancelled = true
+    request.cancel()
+    thinkingMsg.text = 'Cancelled by user.'
+    thinkingMsg.cancelable = false
+    debugLogs.value.push({ user: message, cancelled: true })
+    cancelPendingChatRequest.value = null
+  }
+
   try {
-    const response = await runPipeline(message, getOrCreateChatId(), responseMode.value)
+    const response = await request.promise
+    if (cancelled) return
+    thinkingMsg.cancelable = false
     thinkingMsg.text = normalizeBotText(response?.Bot)?.trim() || 'No response.'
     debugLogs.value.push({ user: message, response })
   } catch (err) {
+    if (cancelled) return
+    thinkingMsg.cancelable = false
     const errorText = getErrorText(err)
     console.error('ChangAI API Error:', err)
     thinkingMsg.text = '⚠️ Something went wrong. Please try again.'
     debugLogs.value.push({ user: message, error: errorText })
+  } finally {
+    if (!cancelled) {
+      cancelPendingChatRequest.value = null
+    }
   }
 
   await nextTick()
   scrollToBottom()
+}
+
+function handleCancelResponse() {
+  cancelPendingChatRequest.value?.()
 }
 
 async function handleSupportSubmit(message) {
@@ -173,8 +199,10 @@ onBeforeUnmount(() => {
     :ttsConfig="ttsConfig"
     :activeTtsProvider="activeTtsProvider"
     :settings="settings"
+    :isAwaitingResponse="isAwaitingChatResponse"
     @close="showChatbot = false"
     @submit="handleSubmit"
+    @cancelResponse="handleCancelResponse"
     @toggleAutoRead="toggleAutoRead"
     @togglePollyPreference="togglePollyPreference"
   />

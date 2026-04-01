@@ -40,6 +40,53 @@ export function runPipeline(userQuestion, chatId, mode = 'actual') {
   }, mode)
 }
 
+export function runPipelineCancelable(userQuestion, chatId, mode = 'actual') {
+  if (mode === 'test') {
+    return {
+      promise: Promise.resolve({ Bot: `[TEST MODE] ${JSON.stringify({ user_question: userQuestion, chat_id: chatId })}` }),
+      cancel: () => false,
+    }
+  }
+
+  if (!window.frappe || !window.frappe.call) {
+    return {
+      promise: Promise.reject(new Error('Frappe API is unavailable in actual mode.')),
+      cancel: () => false,
+    }
+  }
+
+  let requestHandle = null
+  let settled = false
+
+  const promise = new Promise((resolve, reject) => {
+    requestHandle = window.frappe.call({
+      method: API.PIPELINE,
+      args: {
+        user_question: userQuestion,
+        chat_id: chatId,
+      },
+      callback(r) {
+        settled = true
+        resolve(r.message)
+      },
+      error(err) {
+        settled = true
+        reject(err)
+      },
+    })
+  })
+
+  const cancel = () => {
+    if (settled) return false
+    if (!requestHandle || typeof requestHandle.abort !== 'function') return false
+    requestHandle.abort()
+    settled = true
+    return true
+  }
+
+  return { promise, cancel }
+}
+
 export function callSupportBot(message, mode = 'actual') {
   return frappeCall(API.SUPPORT, { message }, mode)
 }

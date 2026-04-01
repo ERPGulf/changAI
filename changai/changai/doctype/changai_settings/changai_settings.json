@@ -26,6 +26,7 @@
   "retain_memory",
   "testing_section",
   "retriever_structure",
+  "result_formatting",
   "remote_server_tab",
   "replicate_section",
   "prediction_url",
@@ -359,13 +360,20 @@
    "fieldname": "voice_and_speech_settings_tab",
    "fieldtype": "Tab Break",
    "label": "Voice and Speech Settings"
+  },
+  {
+   "default": "Model",
+   "fieldname": "result_formatting",
+   "fieldtype": "Select",
+   "label": "Result Formatting",
+   "options": "Model\nLocal"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-03-31 07:29:37.364170",
+ "modified": "2026-04-01 10:19:01.380166",
  "modified_by": "Administrator",
  "module": "Changai",
  "name": "ChangAI Settings",

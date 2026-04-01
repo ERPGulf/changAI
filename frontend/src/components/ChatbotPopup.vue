@@ -20,7 +20,13 @@
 
     <div class="chat-scrollbar min-h-0 flex-1 overflow-x-hidden overflow-y-auto bg-slate-50/60 px-4 py-4 max-[900px]:px-3.5 max-[900px]:py-3.5 max-[600px]:px-3 max-[600px]:py-3" ref="chatBodyRef">
       <div class="min-w-0">
-        <ChatTab v-if="localTab === 'chat'" :messages="chatHistory" :autoReadEnabled="autoReadEnabled" :ttsConfig="ttsConfig" />
+        <ChatTab
+          v-if="localTab === 'chat'"
+          :messages="chatHistory"
+          :autoReadEnabled="autoReadEnabled"
+          :ttsConfig="ttsConfig"
+          @cancelResponse="$emit('cancelResponse')"
+        />
         <DebugTab v-else-if="localTab === 'debug'" :logs="debugLogs" />
         <SupportTab v-else-if="localTab === 'support'" :messages="supportHistory" :autoReadEnabled="autoReadEnabled" :ttsConfig="ttsConfig" />
         <SettingsTab
@@ -37,6 +43,7 @@
     <div v-if="localTab !== 'settings'" class="border-t border-slate-200/80 bg-white/90 px-3 py-3 pb-[calc(12px+env(safe-area-inset-bottom))] backdrop-blur-sm sm:px-4 sm:py-4">
       <ChatForm
         :placeholder="localTab === 'support' ? 'Message Support...' : 'Message...'"
+        :disabled="localTab === 'chat' && isAwaitingResponse"
         @submit="(text) => $emit('submit', text)"
       />
     </div>
@@ -63,9 +70,10 @@ const props = defineProps({
   ttsConfig: { type: Object, required: true },
   activeTtsProvider: { type: String, required: true },
   settings: { type: Object, default: null },
+  isAwaitingResponse: { type: Boolean, default: false },
 })
 
-const emit = defineEmits(['close', 'submit', 'update:activeTab', 'toggleAutoRead', 'togglePollyPreference'])
+const emit = defineEmits(['close', 'submit', 'cancelResponse', 'update:activeTab', 'toggleAutoRead', 'togglePollyPreference'])
 
 const chatBodyRef = ref(null)
 const localTab = ref(props.activeTab)

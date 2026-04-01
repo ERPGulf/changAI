@@ -4,8 +4,12 @@ from typing_extensions import TypedDict
 from typing import Any, Dict, List, Tuple, Union, Optional, Set
 import boto3
 import requests
+from changai.changai.api.v2.non_erp_handler import handle_non_erp_query
 import json
 import yaml
+from changai.changai.api.v2.format_output import test
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from threading import Lock
 import re
 import os
 import time
@@ -101,7 +105,10 @@ _EMBEDDER_INSTANCE = None
 __vector_store = None
 _FULL_FIELDS_VS = None
 STATUS_200 = 200
-_SUB_VS_CACHE = {}
+_TABLE_FIELD_DOCS_CACHE = None
+_TABLE_FIELD_VS_CACHE = OrderedDict()
+_TABLE_FIELD_CACHE_LOCK = Lock()
+MAX_TABLE_FIELD_VS_CACHE = 15
 APPLICATION_JSON = "application/json"
 EMBEDDING_ENGINE_NONE_MESSG = "Embedding engine is None. Model not loaded."
 MODEL_ID = "gemini-2.5-flash-lite"
@@ -242,6 +249,7 @@ def get_settings() -> Dict[str, Any]:
         "aws_access_key_id": settings.aws_access_key_id,
         "aws_secret_access_key": settings.aws_secret_access_key,
         "enable_voice_chat": settings.enable_voice_chat,
+        "result_formatting":settings.result_formatting
     }
     return config
 
@@ -853,43 +861,56 @@ def _parse_json_list(raw: str) -> List[Any]:
     except Exception:
         return []
 
-
 def call_retrieve_multi_line(user_question: str) -> Dict[str, Any]:
     try:
         top_tables = call_fvs_table_search(user_question)
+
         table_prompt = FILTER_TABLES.replace("{user_question}", user_question)
         table_prompt = table_prompt.replace("{table_list}", json.dumps(top_tables, ensure_ascii=False))
         selected_raw = call_gemini(table_prompt)
         selected_tables = _parse_json_list(selected_raw)
+
         top_set = set(top_tables)
         selected_tables = [t for t in selected_tables if t in top_set]
+
         if not selected_tables:
             return {"selected_fields": {}, "selected_tables": [], "top_tables": top_tables}
-        fields_candidates = {}
-        for table in selected_tables:
-            fields_candidates[table] = call_fvs_field_search(
-                user_question,
-                table_name=table,
-                selected_tables=selected_tables,
-                k=40
-            )
+
+        fields_candidates = get_fields_candidates_parallel(
+            user_question=user_question,
+            selected_tables=selected_tables,
+            k=40,
+            max_workers=4,
+        )
+
         field_prompt = filter_fields.replace("{user_question}", user_question)
-        field_prompt = field_prompt.replace("{fields_tables}", json.dumps(fields_candidates, ensure_ascii=False))
+        field_prompt = field_prompt.replace(
+            "{fields_tables}",
+            json.dumps(fields_candidates, ensure_ascii=False)
+        )
+
         selected_raw = call_gemini(field_prompt)
         try:
             selected_map = json.loads(selected_raw) if isinstance(selected_raw, str) else {}
         except Exception:
             selected_map = {}
+
         return {
             "selected_fields": json.dumps(selected_map, ensure_ascii=False),
             "selected_tables": selected_tables,
             "top_tables": top_tables,
             "top_fields": fields_candidates,
         }
+
     except frappe.exceptions.ValidationError:
         raise
     except Exception as e:
-        return {"selected_fields": {}, "selected_tables": [], "top_tables": [], "error": str(e)}
+        return {
+            "selected_fields": {},
+            "selected_tables": [],
+            "top_tables": [],
+            "error": str(e),
+        }
 
 
 def get_full_fields_vs():
@@ -915,6 +936,87 @@ def get_full_fields_vs():
         )
 
     return _FULL_FIELDS_VS
+
+def _build_table_field_docs_cache() -> Dict[str, List[Any]]:
+    """
+    Build lightweight table -> docs mapping once from full schema FVS.
+    Does NOT build per-table FAISS upfront.
+    """
+    global _TABLE_FIELD_DOCS_CACHE
+
+    if _TABLE_FIELD_DOCS_CACHE is not None:
+        return _TABLE_FIELD_DOCS_CACHE
+
+    full_vs = get_full_fields_vs()
+    doc_dict = getattr(full_vs.docstore, "_dict", {})
+
+    grouped: Dict[str, List[Any]] = {}
+    for d in doc_dict.values():
+        meta = getattr(d, "metadata", {}) or {}
+        table = meta.get("table")
+        field = meta.get("field")
+        if not table or not field:
+            continue
+        grouped.setdefault(table, []).append(d)
+
+    _TABLE_FIELD_DOCS_CACHE = grouped
+    return _TABLE_FIELD_DOCS_CACHE
+
+
+def _touch_table_field_vs_cache(table_name: str, vs: FAISS) -> None:
+    """
+    Move table cache entry to end (most recently used).
+    """
+    global _TABLE_FIELD_VS_CACHE
+
+    if table_name in _TABLE_FIELD_VS_CACHE:
+        _TABLE_FIELD_VS_CACHE.pop(table_name)
+
+    _TABLE_FIELD_VS_CACHE[table_name] = vs
+
+
+def _evict_old_table_field_vs_cache(max_tables: int = MAX_TABLE_FIELD_VS_CACHE) -> None:
+    """
+    LRU-style eviction: keep only most recently used table VS objects.
+    """
+    global _TABLE_FIELD_VS_CACHE
+
+    while len(_TABLE_FIELD_VS_CACHE) > max_tables:
+        _TABLE_FIELD_VS_CACHE.popitem(last=False)
+
+
+def get_table_field_vs(table_name: str) -> Optional[FAISS]:
+    """
+    Lazy-build FAISS for one table only when first needed.
+    Reuse from cache afterward.
+    """
+    if not table_name:
+        return None
+
+    global _TABLE_FIELD_VS_CACHE
+
+    with _TABLE_FIELD_CACHE_LOCK:
+        cached = _TABLE_FIELD_VS_CACHE.get(table_name)
+        if cached is not None:
+            _touch_table_field_vs_cache(table_name, cached)
+            return cached
+
+    grouped = _build_table_field_docs_cache()
+    docs = grouped.get(table_name) or []
+    if not docs:
+        return None
+
+    emb = get_embedding_engine()
+    if emb is None:
+        frappe.throw(_(EMBEDDING_ENGINE_NONE_MESSG))
+
+    vs = FAISS.from_documents(docs, emb)
+
+    with _TABLE_FIELD_CACHE_LOCK:
+        _touch_table_field_vs_cache(table_name, vs)
+        _evict_old_table_field_vs_cache()
+
+    return vs
 
 
 def get_full_fields_vs_test():
@@ -942,66 +1044,50 @@ def get_full_fields_vs_test():
 
 
 def get_sub_vs(selected_tables: List[str]) -> Optional[FAISS]:
-    """Build sub-index ONCE per unique selected_tables set (cached)."""
-    key = tuple(sorted([t for t in selected_tables if isinstance(t, str)]))
-    if not key:
-        return None
+    """
+    Deprecated in lazy per-table mode.
+    Kept only for compatibility.
+    """
+    return None
 
-    global _SUB_VS_CACHE
-    if key in _SUB_VS_CACHE:
-        return _SUB_VS_CACHE[key]
-
-    full_vs = get_full_fields_vs()
-    emb = get_embedding_engine()
-
-    selected_set = set(key)
-    doc_dict = getattr(full_vs.docstore, "_dict", {})
-    docs = []
-    for d in doc_dict.values():
-        meta = getattr(d, "metadata", {}) or {}
-        if meta.get("table") in selected_set:
-            docs.append(d)
-    sub = FAISS.from_documents(docs, emb)
-    _SUB_VS_CACHE[key] = sub
-    return sub
-
-
-def call_fvs_field_search(
+def _fetch_fields_for_one_table(
     user_question: str,
-    table_name: str,
+    table: str,
     selected_tables: List[str],
     k: int = 40,
-) -> List[Dict[str, Any]]:
-    if not user_question or not table_name:
-        return []
-    sub_vs = get_sub_vs(selected_tables)
-    if sub_vs is None:
-        return []
-    hits = sub_vs.similarity_search(user_question, k=min(60, max(40, k)))
-    results: List[Dict[str, Any]] = []
-    seen = set()
-    for d in hits:
-        meta = getattr(d, "metadata", {}) or {}
-        tbl = meta.get("table")
-        fld = meta.get("field")
-        if tbl != table_name:
-            continue
-        key = (tbl, fld)
-        if key in seen:
-            continue
-        seen.add(key)
-        row = {
-            "field": fld,
-        }
-        if meta.get("join_hint"):
-            row["join_hint"] = meta.get("join_hint")
-        if meta.get("options"):
-            row["options"] = meta.get("options")
+) -> Tuple[str, List[Dict[str, Any]]]:
+    return table, call_fvs_field_search(
+        user_question=user_question,
+        table_name=table,
+        selected_tables=selected_tables,
+        k=k,
+    )
 
-        results.append(row)
-        if len(results) >= k:
-            break
-    return results
+
+def get_fields_candidates_parallel(
+    user_question: str,
+    selected_tables: List[str],
+    k: int = 40,
+    max_workers: int = 4,
+) -> Dict[str, List[Dict[str, Any]]]:
+    fields_candidates: Dict[str, List[Dict[str, Any]]] = {}
+
+    if not selected_tables:
+        return fields_candidates
+
+    worker_count = min(max_workers, len(selected_tables))
+
+    with ThreadPoolExecutor(max_workers=worker_count) as executor:
+        futures = [
+            executor.submit(_fetch_fields_for_one_table, user_question, table, selected_tables, k)
+            for table in selected_tables
+        ]
+
+        for future in as_completed(futures):
+            table, fields = future.result()
+            fields_candidates[table] = fields
+
+    return fields_candidates
 
 
 # Node 1: Retrive with Fiass Vector Store.
@@ -1432,7 +1518,6 @@ def validate_sql_against_mapping(
         result["ambiguous_columns"] = sorted(ambiguous)
 
     return result
-from changai.changai.api.v2.non_erp_handler import handle_non_erp_query
 
 
 
@@ -1994,7 +2079,6 @@ def _get_sql_error_message(err: Any, val: Dict) -> str:
 
     return f"⚠️ The model generated an invalid query. {error_text}"
 
-
 def _handle_sql_result(final: SQLState, sql: str, orm: str, formatted_q: str, fields: str,
                        selected_tables: List, val: Dict, entity_debug: Dict,
                        user_question: str, chat_id: str) -> Dict:
@@ -2007,7 +2091,14 @@ def _handle_sql_result(final: SQLState, sql: str, orm: str, formatted_q: str, fi
     context = (final.get("context") or final.get("selected_fields") or "")[:800]
     contains_values = final.get("contains_values") or ""
     err = final.get("error")
-    formatted_result = format_data(formatted_q, sql_result)
+    config = ChangAIConfig.get()
+
+    if config.get("result_formatting") == "Model" and not err:
+        formatting_result = format_data(formatted_q, sql_result)
+        formatted_result = formatting_result.get("answer") or ""
+    else:
+        formatting_result = test(formatted_q, sql_result)
+        formatted_result = formatting_result.get("formatted_answer") or ""
 
     if not err:
         try:
@@ -2026,11 +2117,10 @@ def _handle_sql_result(final: SQLState, sql: str, orm: str, formatted_q: str, fi
         "Entity Values present ?": contains_values,
         "Validation": val,
         "Error": err,
-        "result":sql_result,
+        "result": sql_result,
         "EntityDebug": entity_debug,
         "Bot": formatted_result,
     }
-
 
 @frappe.whitelist(allow_guest=False)
 def run_text2sql_pipeline(user_question: str, chat_id: str) -> Dict:

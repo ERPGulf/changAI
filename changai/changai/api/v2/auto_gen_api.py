@@ -48,8 +48,11 @@ SYSTEM_FIELDS = [
     {"fieldname": "owner", "fieldtype": "Link", "label": "Owner", "options": "User"},
     {"fieldname": "creation", "fieldtype": "Datetime", "label": "Created On"},
     {"fieldname": "modified", "fieldtype": "Datetime", "label": "Last Modified"},
+    {"fieldname": "parent", "fieldtype": "Data", "label": "Parent Document"},
+    {"fieldname": "parenttype", "fieldtype": "Data", "label": "Parent DocType"},
+    {"fieldname": "parentfield", "fieldtype": "Data", "label": "Parent Field"},
+    {"fieldname": "idx", "fieldtype": "Int", "label": "Row Index"},
 ]
-
 EXCLUDED_FIELDTYPES: Set[str] = {
     "Section Break", "Column Break", "Tab Break", "Page Break", "Table Break",
     "Fold", "Heading", "HTML", "Button", "Attach Image", "Image", "Signature", "Icon",
@@ -281,7 +284,6 @@ def sync_master_data_smart() -> Dict[str, Any]:
         "fvs_error": None,
     }
 
-
 def _clean_schema_fields(by_table: Dict[str, Dict[str, Any]]) -> None:
     for block in by_table.values():
         for field in block.get("fields", []) or []:
@@ -293,7 +295,8 @@ def _clean_schema_fields(by_table: Dict[str, Dict[str, Any]]) -> None:
 
             if field.get("fieldtype") != "Link":
                 field.pop("join_hint", None)
-            return "ok"
+
+
 @frappe.whitelist(allow_guest=True)
 def test():
     payload = _read_filedoctype("schema.yaml", "Home/RAG Sources")
@@ -683,6 +686,17 @@ def fill_missing_field_descriptions(
 
 
 
+def clear_schema_field_caches() -> None:
+    """
+    Call this when schema_fvs is rebuilt/refreshed.
+    """
+    global _TABLE_FIELD_DOCS_CACHE, _TABLE_FIELD_VS_CACHE, _FULL_FIELDS_VS
+    with _TABLE_FIELD_CACHE_LOCK:
+        _TABLE_FIELD_DOCS_CACHE = None
+        _TABLE_FIELD_VS_CACHE = OrderedDict()
+        _FULL_FIELDS_VS = None
+
+
 @frappe.whitelist(allow_guest=False)
 def sync_tables_and_schema_smart() -> Dict[str, Any]:
     payload = _read_filedoctype(SCHEMA_YAML, RAG_FOLDER)
@@ -736,7 +750,6 @@ def sync_tables_and_schema_smart() -> Dict[str, Any]:
     }
 
 
-@frappe.whitelist(allow_guest=False)
 def _get_claude_client() -> Optional[Anthropic]:
     
     settings = frappe.get_single("ChangAI Settings")
@@ -1006,6 +1019,7 @@ def sync_schema_and_enqueue_descriptions() -> Dict[str, Any]:
         queue="long",
         timeout=1800,
     )
+    clear_schema_field_caches()
     return {"ok": True, "message": _("Schema updated ✅ Field descriptions running in background 🧠")}
 
 
