@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, nextTick, onMounted, onBeforeUnmount } from 'vue'
+import { ref, reactive, computed, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import ChatbotToggler from './components/ChatbotToggler.vue'
 import ChatbotPopup from './components/ChatbotPopup.vue'
 import { runPipelineCancelable, callSupportBot, getSettingsDetails } from './utils/frappe.js'
@@ -24,6 +24,7 @@ const ttsConfig = ref({
 })
 const activeTtsProvider = ref('off')
 const cancelPendingChatRequest = ref(null)
+const isAwaitingChatResponse = computed(() => cancelPendingChatRequest.value !== null)
 
 function updateProviderFromSettings() {
   if (!ttsConfig.value.enableVoiceChat) {
@@ -198,6 +199,7 @@ onBeforeUnmount(() => {
     :ttsConfig="ttsConfig"
     :activeTtsProvider="activeTtsProvider"
     :settings="settings"
+    :isAwaitingResponse="isAwaitingChatResponse"
     @close="showChatbot = false"
     @submit="handleSubmit"
     @cancelResponse="handleCancelResponse"

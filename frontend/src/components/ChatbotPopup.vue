@@ -43,6 +43,7 @@
     <div v-if="localTab !== 'settings'" class="border-t border-slate-200/80 bg-white/90 px-3 py-3 pb-[calc(12px+env(safe-area-inset-bottom))] backdrop-blur-sm sm:px-4 sm:py-4">
       <ChatForm
         :placeholder="localTab === 'support' ? 'Message Support...' : 'Message...'"
+        :disabled="localTab === 'chat' && isAwaitingResponse"
         @submit="(text) => $emit('submit', text)"
       />
     </div>
@@ -69,6 +70,7 @@ const props = defineProps({
   ttsConfig: { type: Object, required: true },
   activeTtsProvider: { type: String, required: true },
   settings: { type: Object, default: null },
+  isAwaitingResponse: { type: Boolean, default: false },
 })
 
 const emit = defineEmits(['close', 'submit', 'cancelResponse', 'update:activeTab', 'toggleAutoRead', 'togglePollyPreference'])

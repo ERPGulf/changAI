@@ -14,8 +14,9 @@
         ref="inputRef"
         type="text"
         v-model="messageText"
-        class="h-11 w-full border-none bg-transparent text-sm font-medium text-slate-800 placeholder:text-slate-400 focus:outline-none"
-        :placeholder="placeholder"
+        class="h-11 w-full border-none bg-transparent text-sm font-medium text-slate-800 placeholder:text-slate-400 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+        :placeholder="disabled ? 'Waiting for response...' : placeholder"
+        :disabled="disabled"
         required
         @keydown.stop
         @keyup.stop
@@ -30,7 +31,7 @@
         :class="isListening ? 'border-red-200 bg-red-100 text-red-600 shadow-[0_10px_20px_-18px_rgba(220,38,38,0.9)] hover:bg-red-100 hover:text-red-600' : ''"
         :title="micButtonTitle"
         :aria-label="micButtonTitle"
-        :disabled="!recognitionSupported || requestingMic"
+        :disabled="disabled || !recognitionSupported || requestingMic"
         @click="toggleVoiceInput"
       >
         <!-- Stop icon while listening -->
@@ -55,7 +56,7 @@
         title="Send"
         class="grid h-8 w-8 shrink-0 appearance-none place-items-center rounded-full border-0 bg-gradient-to-br from-brand-500 to-brand-600 text-white shadow-[0_10px_24px_-16px_rgba(109,79,194,0.85)] transition-all duration-200 hover:-translate-y-0.5 hover:from-brand-600 hover:to-violet-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-40"
         style="border-radius: 9999px;"
-        :disabled="!messageText.trim()"
+        :disabled="disabled || !messageText.trim()"
       >
         <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
           <path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.59 5.58L20 12l-8-8-8 8z"/>
@@ -81,6 +82,10 @@ defineProps({
   placeholder: {
     type: String,
     default: 'Message...',
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
   },
 })
 

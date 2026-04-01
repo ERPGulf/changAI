@@ -144,7 +144,7 @@ const isMuted = ref(false)
 const cancelVisible = ref(false)
 let cancelDelayTimer = null
 
-const CANCEL_DELAY_MS = 3000
+const CANCEL_DELAY_MS = 4000
 
 const speechSupported = computed(() => (
   typeof window !== 'undefined' &&
@@ -184,6 +184,20 @@ function toggleMute() {
   isMuted.value = !isMuted.value
   if (isMuted.value) {
     stopSpeech()
+  } else {
+    // Resume TTS with the current message text when unmuting
+    const speakable = normalizedMessageText.value
+    if (!props.autoReadEnabled || !props.ttsConfig?.enableVoiceChat) return
+    if (!speakable || isPlaceholderStatus(speakable)) return
+
+    if (props.ttsConfig?.pollyAvailable && props.ttsConfig?.usePolly) {
+      speakTextWithPolly(speakable).catch((err) => {
+        console.warn('Polly TTS failed, falling back to browser speech:', err)
+        speakText(speakable)
+      })
+      return
+    }
+    speakText(speakable)
   }
 }
 
