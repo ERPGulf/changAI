@@ -26,18 +26,6 @@
             <span class="text-[8px] font-semibold tracking-[0.12em] uppercase text-[#3a67c9]">{{ loaderLabel }}</span>
           </div>
         </div>
-
-        <button
-          v-if="showCancelOnThinking"
-          type="button"
-          class="group ml-0.5 inline-flex items-center gap-1 text-[9px] font-semibold tracking-[0.07em] text-red-400 transition-all duration-200 hover:translate-x-0.5 hover:text-red-600 focus:outline-none active:scale-95"
-          @click="emit('cancel')"
-        >
-          <svg viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2.5" class="opacity-60 transition-all duration-200 group-hover:opacity-100 group-hover:rotate-90" aria-hidden="true">
-            <path d="M18 6L6 18M6 6l12 12"/>
-          </svg>
-          Cancel
-        </button>
       </div>
       <div
         v-else
@@ -53,7 +41,7 @@
           ></div>
           <div
             v-if="shouldCollapse && !isExpanded"
-            class="pointer-events-none absolute inset-x-0 bottom-0 h-14 rounded-b-[10px] bg-gradient-to-t from-white via-white/92 to-white/0"
+            class="pointer-events-none absolute inset-x-0 bottom-0 h-14 rounded-b-[10px] bg-linear-to-t from-white via-white/92 to-white/0"
             aria-hidden="true"
           ></div>
         </div>
@@ -92,10 +80,14 @@
               aria-hidden="true"
             >
               <path d="M11 5L6 9H3v6h3l5 4V5Z" />
-              <path v-if="isMuted" d="M15 9l4 6" />
-              <path v-if="isMuted" d="M19 9l-4 6" />
-              <path v-else d="M15 10a3 3 0 0 1 0 4" />
-              <path v-else d="M17.5 7.5a6 6 0 0 1 0 9" />
+              <template v-if="isMuted">
+                <path d="M15 9l4 6" />
+                <path d="M19 9l-4 6" />
+              </template>
+              <template v-else>
+                <path d="M15 10a3 3 0 0 1 0 4" />
+                <path d="M17.5 7.5a6 6 0 0 1 0 9" />
+              </template>
             </svg>
           </button>
         </div>
@@ -104,7 +96,7 @@
 
     <p
       v-else
-      class="w-fit max-w-[85%] whitespace-pre-line rounded-[13px_13px_3px_13px] bg-gradient-to-br from-brand-500 to-brand-600 px-4 py-3 text-[11px] leading-relaxed wrap-anywhere text-white shadow-[0_14px_30px_-18px_rgba(109,79,194,0.85)] max-[600px]:max-w-[88%]"
+      class="w-fit max-w-[85%] whitespace-pre-line rounded-[13px_13px_3px_13px] bg-linear-to-br from-brand-500 to-brand-600 px-4 py-3 text-[11px] leading-relaxed wrap-anywhere text-white shadow-[0_14px_30px_-18px_rgba(109,79,194,0.85)] max-[600px]:max-w-[88%]"
     >
       {{ message.text }}
     </p>
@@ -112,7 +104,7 @@
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref, watch, watchEffect } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import BotIcon from './BotIcon.vue'
 import { synthesizeTTS } from '../utils/frappe.js'
 
@@ -135,16 +127,11 @@ const props = defineProps({
     }),
   },
 })
-const emit = defineEmits(['cancel'])
 
 const isSpeaking = ref(false)
 const currentAudio = ref(null)
 const isExpanded = ref(false)
 const isMuted = ref(false)
-const cancelVisible = ref(false)
-let cancelDelayTimer = null
-
-const CANCEL_DELAY_MS = 4000
 
 const speechSupported = computed(() => (
   typeof window !== 'undefined' &&
@@ -280,15 +267,6 @@ const loaderLabel = computed(() => (
   normalizedMessageText.value === 'Sending to support...' ? 'Sending to support' : 'Thinking'
 ))
 
-const isThinkingStatus = computed(() => normalizedMessageText.value === 'Thinking...')
-
-const showCancelOnThinking = computed(() => (
-  isLoadingStatus.value &&
-  isThinkingStatus.value &&
-  Boolean(props.message?.cancelable) &&
-  cancelVisible.value
-))
-
 const shouldCollapse = computed(() => {
   if (props.message?.role === 'user' || isLoadingStatus.value) return false
 
@@ -342,21 +320,6 @@ watch(
   },
 )
 
-watchEffect(() => {
-  if (isLoadingStatus.value && isThinkingStatus.value && props.message?.cancelable) {
-    if (cancelDelayTimer) return
-    cancelDelayTimer = setTimeout(() => {
-      cancelVisible.value = true
-    }, CANCEL_DELAY_MS)
-  } else {
-    cancelVisible.value = false
-    if (cancelDelayTimer) {
-      clearTimeout(cancelDelayTimer)
-      cancelDelayTimer = null
-    }
-  }
-})
-
 onMounted(() => {
   if (typeof window !== 'undefined') {
     window.addEventListener('changai-tts-stop', handleGlobalStop)
@@ -369,10 +332,6 @@ onBeforeUnmount(() => {
   }
   if (isSpeaking.value) {
     stopSpeech()
-  }
-  if (cancelDelayTimer) {
-    clearTimeout(cancelDelayTimer)
-    cancelDelayTimer = null
   }
 })
 </script>

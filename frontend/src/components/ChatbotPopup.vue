@@ -1,6 +1,9 @@
 <template>
   <div
     :class="popupClasses"
+    @keydown.stop
+    @keyup.stop
+    @keypress.stop
   >
     <div class="pointer-events-none absolute -right-14 -top-14 h-36 w-36 rounded-full bg-brand-500/15 blur-2xl"></div>
     <div class="pointer-events-none absolute -bottom-14 -left-12 h-32 w-32 rounded-full bg-violet-400/15 blur-2xl"></div>
@@ -25,7 +28,6 @@
           :messages="chatHistory"
           :autoReadEnabled="autoReadEnabled"
           :ttsConfig="ttsConfig"
-          @cancelResponse="$emit('cancelResponse')"
         />
         <DebugTab v-else-if="localTab === 'debug'" :logs="debugLogs" />
         <SupportTab v-else-if="localTab === 'support'" :messages="supportHistory" :autoReadEnabled="autoReadEnabled" :ttsConfig="ttsConfig" />
@@ -44,7 +46,9 @@
       <ChatForm
         :placeholder="localTab === 'support' ? 'Message Support...' : 'Message...'"
         :disabled="localTab === 'chat' && isAwaitingResponse"
+        :isAwaitingResponse="localTab === 'chat' && isAwaitingResponse"
         @submit="(text) => $emit('submit', text)"
+        @cancel="$emit('cancelResponse')"
       />
     </div>
   </div>
