@@ -1,0 +1,92 @@
+.tooltip-container {
+    position: relative;
+    display: inline-flex;
+    /* Align elements horizontally */
+    align-items: center;
+    /* Vertically center align icon and label */
+    margin-left: 4px;
+    padding-bottom: 2px;
+    /* Add spacing between checkbox label and icon */
+}
+
+.info-icon {
+    cursor: pointer;
+    font-size: 16px;
+    /* Ensure consistent size */
+    color: #0666b5;
+    /* Neutral gray color */
+    display: inline-block;
+    line-height: 1;
+    /* Remove extra vertical space */
+    vertical-align: middle;
+    /* Align icon with label text */
+    margin: 0;
+    /* Reset margins */
+    margin-left: 2px;
+    /* Reduce spacing from label */
+    margin-top: -2px;
+    border-radius: 50%;
+}
+
+/* Adjust for checkbox labels */
+.checkbox-label+.tooltip-container .info-icon {
+    margin-top: -1px;
+    /* Bring icon slightly upwards for checkbox labels */
+}
+
+/* Adjust for control-label (default alignment) */
+.control-label+.tooltip-container .info-icon {
+    margin-top: 0;
+    /* Keep alignment as is for control labels */
+}
+
+.custom-tooltip {
+    visibility: hidden;
+    position: absolute;
+    opacity: 0;
+    pointer-events: auto;
+    top: calc(100% + 8px);
+    /* Adjust distance below the icon */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #007BFF;
+    color: white;
+    text-align: left;
+    /* Align text to the left for better readability */
+    padding: 15px;
+    border-radius: 6px;
+    font-size: 12px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.3s ease, max-height 0.3s ease;
+    z-index: 1000;
+    max-width: 300px;
+    min-width: 200px;
+    max-height: none;
+    overflow: hidden;
+    word-wrap: break-word;
+}
+
+.custom-tooltip::after {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: transparent transparent #007BFF transparent;
+}
+
+.custom-tooltip a {
+    color: #FFDD44;
+    /* Bright yellow for visibility */
+    text-decoration: underline;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.custom-tooltip a:hover {
+    color: #FFD700;
+    /* Lighter yellow on hover */
+    text-decoration: none;
+}
