@@ -45,11 +45,11 @@ ASSET_VERSION = f"?v={app_version}-{asset_build_stamp}"
 app_include_js = [
     f"/assets/changai/dist/changai-chatbot.js{ASSET_VERSION}",
     "/assets/changai/js/ai_translate.js",
-    "changai/public/js/tooltip.js"
+    "/assets/changai/public/js/tooltip.js"
 ]
 app_include_css = [
     f"/assets/changai/dist/changai-chatbot.css{ASSET_VERSION}",
-    "changai/public/css/tooltip.css"
+    "/assets/changai/public/css/tooltip.css"
 ]
 # In hooks.py
 # app_include_css = [
