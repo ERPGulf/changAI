@@ -25,7 +25,6 @@
           :messages="chatHistory"
           :autoReadEnabled="autoReadEnabled"
           :ttsConfig="ttsConfig"
-          @cancelResponse="$emit('cancelResponse')"
         />
         <DebugTab v-else-if="localTab === 'debug'" :logs="debugLogs" />
         <SupportTab v-else-if="localTab === 'support'" :messages="supportHistory" :autoReadEnabled="autoReadEnabled" :ttsConfig="ttsConfig" />
@@ -44,7 +43,9 @@
       <ChatForm
         :placeholder="localTab === 'support' ? 'Message Support...' : 'Message...'"
         :disabled="localTab === 'chat' && isAwaitingResponse"
+        :isAwaitingResponse="localTab === 'chat' && isAwaitingResponse"
         @submit="(text) => $emit('submit', text)"
+        @cancel="$emit('cancelResponse')"
       />
     </div>
   </div>

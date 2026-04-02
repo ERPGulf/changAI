@@ -44,9 +44,13 @@ ASSET_VERSION = f"?v={app_version}-{asset_build_stamp}"
 # Include JS globally on all pages
 app_include_js = [
     f"/assets/changai/dist/changai-chatbot.js{ASSET_VERSION}",
-    "/assets/changai/js/ai_translate.js"
+    "/assets/changai/js/ai_translate.js",
+    "changai/public/js/tooltip.js"
 ]
-app_include_css = [f"/assets/changai/dist/changai-chatbot.css{ASSET_VERSION}"]
+app_include_css = [
+    f"/assets/changai/dist/changai-chatbot.css{ASSET_VERSION}",
+    "changai/public/css/tooltip.css"
+]
 # In hooks.py
 # app_include_css = [
 #     "https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css"

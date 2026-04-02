@@ -53,12 +53,32 @@
 
       <button
         type="submit"
-        title="Send"
-        class="grid h-8 w-8 shrink-0 appearance-none place-items-center rounded-full border-0 bg-gradient-to-br from-brand-500 to-brand-600 text-white shadow-[0_10px_24px_-16px_rgba(109,79,194,0.85)] transition-all duration-200 hover:-translate-y-0.5 hover:from-brand-600 hover:to-violet-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-40"
+        :title="submitButtonTitle"
+        :aria-label="submitButtonTitle"
+        class="grid h-8 w-8 shrink-0 appearance-none place-items-center rounded-full border-0 transition-all duration-200 hover:-translate-y-0.5 focus:outline-none disabled:cursor-not-allowed disabled:opacity-40"
         style="border-radius: 9999px;"
-        :disabled="disabled || !messageText.trim()"
+        :class="submitButtonClass"
+        :disabled="submitButtonDisabled"
       >
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+        <svg v-if="isAwaitingResponse" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true" class="text-rose-600 motion-safe:animate-stop-button-pulse">
+          <circle
+            cx="12"
+            cy="12"
+            r="8"
+            stroke="currentColor"
+            stroke-width="2.1"
+            class="opacity-95"
+          />
+          <rect
+            x="9"
+            y="9"
+            width="6"
+            height="6"
+            rx="1.35"
+            fill="currentColor"
+          />
+        </svg>
+        <svg v-else viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
           <path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.59 5.58L20 12l-8-8-8 8z"/>
         </svg>
       </button>
@@ -78,7 +98,7 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import StatusToast from './StatusToast.vue'
 
-defineProps({
+const props = defineProps({
   placeholder: {
     type: String,
     default: 'Message...',
@@ -87,9 +107,13 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  isAwaitingResponse: {
+    type: Boolean,
+    default: false,
+  },
 })
 
-const emit = defineEmits(['submit'])
+const emit = defineEmits(['submit', 'cancel'])
 const messageText = ref('')
 const inputRef = ref(null)
 const isListening = ref(false)
@@ -111,6 +135,21 @@ const micButtonTitle = computed(() => {
   if (!recognitionSupported.value) return 'Voice input is unavailable in this browser/context'
   return isListening.value ? 'Stop voice input' : 'Start voice input'
 })
+
+const submitButtonTitle = computed(() => (
+  props.isAwaitingResponse ? 'Stop response' : 'Send'
+))
+
+const submitButtonDisabled = computed(() => {
+  if (props.isAwaitingResponse) return false
+  return props.disabled || !messageText.value.trim()
+})
+
+const submitButtonClass = computed(() => (
+  props.isAwaitingResponse
+    ? 'bg-white border border-rose-100 shadow-[0_8px_20px_-12px_rgba(159,18,57,0.35)] hover:bg-rose-50'
+    : 'bg-linear-to-br from-brand-500 to-brand-600 text-white shadow-[0_10px_24px_-16px_rgba(109,79,194,0.85)] hover:from-brand-600 hover:to-violet-700'
+))
 
 function getSpeechRecognitionCtor() {
   if (typeof window === 'undefined') return null
@@ -266,6 +305,11 @@ function hideToast() {
 }
 
 function handleSubmit() {
+  if (props.isAwaitingResponse) {
+    emit('cancel')
+    return
+  }
+
   const text = messageText.value.trim()
   if (!text) return
 
