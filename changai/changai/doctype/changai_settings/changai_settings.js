@@ -50,7 +50,7 @@ frappe.ui.form.on("ChangAI Settings", {
 
                 const tooltipContainer = labelElement.next('.tooltip-container');
                 if (tooltipContainer.length === 0) {
-                    const tooltip = new Tooltip({
+                    const tooltip = new ChangAITooltip({
                         containerClass: "tooltip-container",
                         tooltipClass: "custom-tooltip",
                         iconClass: "info-icon",

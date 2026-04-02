@@ -1,4 +1,4 @@
-class Tooltip {
+class ChangAITooltip {
     constructor(options) {
         this.maxLength = options.maxLength || 200;
         this.containerClass = options.containerClass || "tooltip-container";
@@ -85,4 +85,4 @@ class Tooltip {
         });
     }
 }
-window.Tooltip = Tooltip;
+window.ChangAITooltip = ChangAITooltip; 
