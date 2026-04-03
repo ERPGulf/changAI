@@ -33,17 +33,24 @@ export function frappeCall(method, args = {}, mode = 'actual') {
   })
 }
 
-export function runPipeline(userQuestion, chatId, mode = 'actual') {
+export function runPipeline(userQuestion, chatId, mode = 'actual', requestId = null) {
   return frappeCall(API.PIPELINE, {
     user_question: userQuestion,
     chat_id: chatId,
+    request_id: requestId,
   }, mode)
 }
 
-export function runPipelineCancelable(userQuestion, chatId, mode = 'actual') {
+export function runPipelineCancelable(userQuestion, chatId, mode = 'actual', requestId = null) {
   if (mode === 'test') {
     return {
-      promise: Promise.resolve({ Bot: `[TEST MODE] ${JSON.stringify({ user_question: userQuestion, chat_id: chatId })}` }),
+      promise: Promise.resolve({
+        Bot: `[TEST MODE] ${JSON.stringify({
+          user_question: userQuestion,
+          chat_id: chatId,
+          request_id: requestId,
+        })}`
+      }),
       cancel: () => false,
     }
   }
@@ -64,6 +71,7 @@ export function runPipelineCancelable(userQuestion, chatId, mode = 'actual') {
       args: {
         user_question: userQuestion,
         chat_id: chatId,
+        request_id: requestId,
       },
       callback(r) {
         settled = true

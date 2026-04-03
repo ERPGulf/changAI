@@ -119,8 +119,7 @@ BUSINESS_KEYWORDS = bk.get("business_keywords", bk)
 
 mapping_data = read_asset("metaschema_clean_v2.json", base="assets")
 CONVERSATION_TEMPLATE = read_asset("conversation_template_v2.j2", base="assets")
-
-SQL_PROMPT = read_asset("sql_prompt.txt", base="prompts")
+SQL_PROMPT = read_asset("sql_prompt copy.txt", base="prompts")
 FORMAT_PROMPT = read_asset("user_friendly_prompt.txt", base="prompts")
 NON_ERP_PROMPT = read_asset("non_erp_prompt.txt", base="prompts")
 SUPPORT_PROMPT = read_asset("support.txt", base="prompts")

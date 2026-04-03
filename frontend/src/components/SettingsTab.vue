@@ -54,6 +54,33 @@
       <p v-if="!ttsConfig?.enableVoiceChat" class="mt-3 rounded-md bg-amber-50 px-2.5 py-2 text-xs text-amber-700">Voice chat is disabled in ChangAI Settings.</p>
       <p v-else-if="!ttsConfig?.pollyAvailable" class="mt-3 rounded-md bg-amber-50 px-2.5 py-2 text-xs text-amber-700">Polly is not available for this site. Browser speech will be used.</p>
     </div>
+    <div class="chat-card motion-safe:animate-fade-rise rounded-xl p-4">
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <p class="text-sm font-semibold text-slate-900">Enable Debug Tab</p>
+        <p class="mt-1 text-xs text-slate-600">
+          Show or hide the Debug tab inside this chatbot.
+        </p>
+        <p class="mt-2 text-[11px] font-medium" :class="debugEnabled ? 'text-emerald-700' : 'text-slate-500'">
+          {{ debugEnabled ? 'Debug tab is active.' : 'Debug tab is currently off.' }}
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="relative h-7 w-12 shrink-0 rounded-full border border-slate-200 transition-all duration-200"
+        :class="debugEnabled ? 'bg-emerald-500/95' : 'bg-slate-300'"
+        :aria-pressed="debugEnabled ? 'true' : 'false'"
+        :title="debugEnabled ? 'Disable debug tab' : 'Enable debug tab'"
+        @click="$emit('toggleDebug')"
+      >
+        <span
+          class="absolute top-0.5 h-5.5 w-5.5 rounded-full bg-white shadow-sm transition-all duration-200"
+          :class="debugEnabled ? 'left-[1.45rem]' : 'left-0.5'"
+        ></span>
+      </button>
+    </div>
+  </div>
   </div>
 </template>
 
@@ -73,9 +100,13 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  debugEnabled: {
+  type: Boolean,
+  default: false,
+},
 })
 
-defineEmits(['toggleAutoRead', 'togglePollyPreference'])
+defineEmits(['toggleAutoRead', 'togglePollyPreference', 'toggleDebug'])
 
 const pollyAvailabilityLabel = computed(() => {
   if (!props.ttsConfig?.enableVoiceChat) return 'Voice disabled on server'
