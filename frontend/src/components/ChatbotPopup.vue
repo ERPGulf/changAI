@@ -18,7 +18,7 @@
         @cycleResize="cycleWindowMode"
         @toggleAutoRead="$emit('toggleAutoRead')"
       />
-      <TabBar v-model="localTab" />
+      <TabBar v-model="localTab" :debugEnabled="debugEnabled" />
     </div>
 
     <div class="chat-scrollbar min-h-0 flex-1 overflow-x-hidden overflow-y-auto bg-slate-50/60 px-4 py-4 max-[900px]:px-3.5 max-[900px]:py-3.5 max-[600px]:px-3 max-[600px]:py-3" ref="chatBodyRef">
@@ -29,15 +29,17 @@
           :autoReadEnabled="autoReadEnabled"
           :ttsConfig="ttsConfig"
         />
-        <DebugTab v-else-if="localTab === 'debug'" :logs="debugLogs" />
+        <DebugTab v-else-if="localTab === 'debug' && debugEnabled" :logs="debugLogs" :currentDebug="currentDebug" />
         <SupportTab v-else-if="localTab === 'support'" :messages="supportHistory" :autoReadEnabled="autoReadEnabled" :ttsConfig="ttsConfig" />
         <SettingsTab
           v-else-if="localTab === 'settings'"
           :autoReadEnabled="autoReadEnabled"
           :ttsConfig="ttsConfig"
           :settings="settings"
+          :debugEnabled="debugEnabled"
           @toggleAutoRead="$emit('toggleAutoRead')"
           @togglePollyPreference="$emit('togglePollyPreference')"
+          @toggleDebug="$emit('toggleDebug')"
         />
       </div>
     </div>
@@ -67,8 +69,13 @@ import ChatForm from './ChatForm.vue'
 const props = defineProps({
   isOpen: { type: Boolean, required: true },
   activeTab: { type: String, required: true },
+  debugEnabled: {
+  type: Boolean,
+  default: false,
+},
   chatHistory: { type: Array, required: true },
   debugLogs: { type: Array, required: true },
+  currentDebug: { type: Object, default: null },
   supportHistory: { type: Array, required: true },
   autoReadEnabled: { type: Boolean, required: true },
   ttsConfig: { type: Object, required: true },
@@ -77,7 +84,7 @@ const props = defineProps({
   isAwaitingResponse: { type: Boolean, default: false },
 })
 
-const emit = defineEmits(['close', 'submit', 'cancelResponse', 'update:activeTab', 'toggleAutoRead', 'togglePollyPreference'])
+const emit = defineEmits(['close', 'submit', 'cancelResponse', 'update:activeTab', 'toggleAutoRead', 'togglePollyPreference', 'toggleDebug'])
 
 const chatBodyRef = ref(null)
 const localTab = ref(props.activeTab)
@@ -132,6 +139,14 @@ const popupClasses = computed(() => {
 
 watch(() => props.activeTab, (val) => { localTab.value = val })
 watch(localTab, (val) => { emit('update:activeTab', val) })
+watch(
+  () => props.debugEnabled,
+  (enabled) => {
+    if (!enabled && localTab.value === 'debug') {
+      localTab.value = 'chat'
+    }
+  }
+)
 
 defineExpose({
   scrollToBottom() {

@@ -19,19 +19,31 @@
 </template>
 
 <script setup>
-defineProps({
+import { computed } from 'vue'
+
+const props = defineProps({
   modelValue: {
     type: String,
     required: true,
+  },
+  debugEnabled: {
+    type: Boolean,
+    default: false,
   },
 })
 
 defineEmits(['update:modelValue'])
 
-const tabs = [
-  { id: 'chat', label: 'Chats' },
-  { id: 'debug', label: 'Debug' },
-  { id: 'support', label: 'Support' },
-  { id: 'settings', label: 'Settings' },
-]
+const tabs = computed(() => {
+  const allTabs = [
+    { id: 'chat', label: 'Chats' },
+    { id: 'debug', label: 'Debug' },
+    { id: 'support', label: 'Support' },
+    { id: 'settings', label: 'Settings' },
+  ]
+
+  return props.debugEnabled
+    ? allTabs
+    : allTabs.filter(tab => tab.id !== 'debug')
+})
 </script>

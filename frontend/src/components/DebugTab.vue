@@ -4,6 +4,12 @@
     <div v-for="(log, i) in logs" :key="i" class="mb-3 min-w-0 overflow-x-auto rounded-lg bg-gray-100 p-2 text-[11px]">
       <pre class="whitespace-pre-wrap wrap-anywhere text-[11px] leading-relaxed text-black">{{ formatLog(log) }}</pre>
     </div>
+    <div
+    v-if="currentDebug"
+    class="mb-3 min-w-0 overflow-x-auto rounded-lg bg-brand-50 p-2 text-[11px]"
+  >
+    <pre class="whitespace-pre-wrap wrap-anywhere text-[11px] leading-relaxed text-black">{{ formatLog(currentDebug) }}</pre>
+  </div>
   </div>
 </template>
 
@@ -14,6 +20,10 @@ defineProps({
   logs: {
     type: Array,
     required: true,
+  },
+  currentDebug: {
+    type: Object,
+    default: null,
   },
 })
 

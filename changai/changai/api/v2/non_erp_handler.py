@@ -466,7 +466,7 @@ def handle_non_erp_query(user_input: str) -> dict:
         "api",
         "v2",
         "assets",
-        "non_erp.csv"
+        "non_erp_combined.csv"
     )
 
     responder = IntelligentStaticResponder(csv_path)

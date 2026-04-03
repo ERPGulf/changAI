@@ -5,17 +5,18 @@ import ChatbotPopup from './components/ChatbotPopup.vue'
 import { runPipelineCancelable, callSupportBot, getSettingsDetails } from './utils/frappe.js'
 import { getOrCreateChatId, getPollyPreference, setPollyPreference } from './utils/session.js'
 import { normalizeBotText, getErrorText, safeStringify } from './utils/helpers.js'
-
 const showChatbot = ref(false)
 const activeTab = ref('chat')
 const chatHistory = ref([])
 const debugLogs = ref([])
+const debugEnabled = ref(false)
 const supportHistory = ref([])
 const popupRef = ref(null)
 const responseMode = ref('actual')
 const autoReadEnabled = ref(true)
 const settings = ref(null)
 const isLoadingSettings = ref(false)
+const currentDebug = ref(null)
 const ttsConfig = ref({
   enableVoiceChat: false,
   pollyAvailable: false,
@@ -95,6 +96,7 @@ async function handleSubmit(message) {
 }
 
 async function handleChatSubmit(message) {
+  currentDebug.value = null
   if (responseMode.value === 'actual') {
     await loadSettings()
   }
@@ -103,42 +105,118 @@ async function handleChatSubmit(message) {
   await nextTick()
   scrollToBottom()
 
-  const thinkingMsg = reactive({ role: 'model', text: 'Thinking...', cancelable: true })
+  const thinkingMsg = reactive({ role: 'model', text: 'Thinking...', cancelable: true,isStatus: true,statusType: 'thinking'})
   chatHistory.value.push(thinkingMsg)
   await nextTick()
   scrollToBottom()
 
   let cancelled = false
-  const request = runPipelineCancelable(message, getOrCreateChatId(), responseMode.value)
-  cancelPendingChatRequest.value = () => {
-    if (cancelled) return
-    cancelled = true
-    request.cancel()
-    thinkingMsg.text = 'Cancelled by user.'
-    thinkingMsg.cancelable = false
-    debugLogs.value.push({ user: message, cancelled: true })
-    cancelPendingChatRequest.value = null
+  const chatId = getOrCreateChatId()
+  const requestId = `${chatId}_${Date.now()}`
+  const request = runPipelineCancelable(message,chatId, responseMode.value,requestId)
+  const eventName = `debug_${requestId}`
+  let lastStepTime = Date.now()
+  const steps = []
+  const onPipelineUpdate = (msg) => {
+  const now = Date.now()
+  const seconds = ((now - lastStepTime) / 1000).toFixed(2)
+  lastStepTime = now
+  console.log('REALTIME STEP', msg)
+  const step = `${msg.message} (${seconds}s)`
+  if (msg.message) {
+  steps.push(step)
+  currentDebug.value = step
+}
+
+  if (!msg.done && msg.message) {
+    thinkingMsg.text = msg.message
+    thinkingMsg.statusType = 'pipeline'
   }
 
+  if (msg.done) {
+  thinkingMsg.cancelable = false
+  thinkingMsg.isStatus = false
+  thinkingMsg.statusType = null
+
+  if (msg.error) {
+    thinkingMsg.text = `⚠️ ${msg.message || 'Something failed'}`
+    thinkingMsg.isStatus = false
+    thinkingMsg.statusType = null
+  } else if (msg.data?.answer) {
+    thinkingMsg.text = msg.data.answer
+    thinkingMsg.isStatus = false
+    thinkingMsg.statusType = null
+  } else if (msg.message) {
+    thinkingMsg.text = msg.message
+
+  }
+
+  frappe.realtime.off(eventName)
+  currentDebug.value = null
+  return
+}
+}
+
+  frappe.realtime.on(eventName, onPipelineUpdate)
+  cancelPendingChatRequest.value = () => {
+  if (cancelled) return
+  cancelled = true
+  request.cancel()
+  frappe.realtime.off(eventName)
+  thinkingMsg.isStatus = false
+  thinkingMsg.statusType = null
+  thinkingMsg.text = 'Cancelled by user.'
+  debugLogs.value.push({
+  type: 'cancelled',
+  user: message,
+  request_id: requestId,
+  steps: [...steps],
+})
+  currentDebug.value = null
+  thinkingMsg.cancelable = false
+  cancelPendingChatRequest.value = null
+}
   try {
     const response = await request.promise
     if (cancelled) return
     thinkingMsg.cancelable = false
-    thinkingMsg.text = normalizeBotText(response?.Bot)?.trim() || 'No response.'
-    debugLogs.value.push({ user: message, response })
+    const finalBotText = normalizeBotText(response?.Bot)?.trim() || 'No response.'
+    thinkingMsg.isStatus = false
+    thinkingMsg.statusType = null
+    thinkingMsg.text = finalBotText
+    debugLogs.value.push({
+      type: 'success',
+      user: message,
+      request_id: requestId,
+      steps: [...steps],
+      final_response: response,
+    })
+    currentDebug.value = null
   } catch (err) {
     if (cancelled) return
+    frappe.realtime.off(eventName)
     thinkingMsg.cancelable = false
+    thinkingMsg.isStatus = false
+    thinkingMsg.statusType = null
     const errorText = getErrorText(err)
+    currentDebug.value = null
+    debugLogs.value.push({
+  type: 'failed',
+  user: message,
+  request_id: requestId,
+  steps: [...steps],
+  error: errorText,
+})
     console.error('ChangAI API Error:', err)
+    thinkingMsg.isStatus = false
+    thinkingMsg.statusType = null
     thinkingMsg.text = '⚠️ Something went wrong. Please try again.'
-    debugLogs.value.push({ user: message, error: errorText })
   } finally {
-    if (!cancelled) {
-      cancelPendingChatRequest.value = null
-    }
+  frappe.realtime.off(eventName)
+  if (!cancelled) {
+    cancelPendingChatRequest.value = null
   }
-
+}
   await nextTick()
   scrollToBottom()
 }
@@ -152,7 +230,7 @@ async function handleSupportSubmit(message) {
   await nextTick()
   scrollToBottom()
 
-  const thinkingMsg = reactive({ role: 'model', text: 'Sending to support...' })
+  const thinkingMsg = reactive({ role: 'model', text: 'Sending to support...',isStatus: true,statusType : 'support' })
   supportHistory.value.push(thinkingMsg)
   await nextTick()
   scrollToBottom()
@@ -194,12 +272,15 @@ onBeforeUnmount(() => {
     v-model:activeTab="activeTab"
     :chatHistory="chatHistory"
     :debugLogs="debugLogs"
+    :currentDebug="currentDebug"
     :supportHistory="supportHistory"
     :autoReadEnabled="autoReadEnabled"
     :ttsConfig="ttsConfig"
     :activeTtsProvider="activeTtsProvider"
     :settings="settings"
     :isAwaitingResponse="isAwaitingChatResponse"
+    :debugEnabled="debugEnabled"
+    @toggleDebug="debugEnabled = !debugEnabled"
     @close="showChatbot = false"
     @submit="handleSubmit"
     @cancelResponse="handleCancelResponse"

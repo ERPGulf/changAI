@@ -90,3 +90,17 @@
     /* Lighter yellow on hover */
     text-decoration: none;
 }
+
+/* Fix for button-type fields */
+.frappe-control[data-fieldtype="Button"] .tooltip-container {
+    display: inline-flex !important;
+    align-items: center !important;
+    vertical-align: middle !important;
+    margin-left: 6px !important;
+}
+
+.frappe-control[data-fieldtype="Button"] {
+    display: flex !important;
+    align-items: center !important;
+    flex-direction: row !important;
+}

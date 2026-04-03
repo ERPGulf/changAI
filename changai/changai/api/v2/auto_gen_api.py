@@ -25,23 +25,15 @@ JSON_EXT = ".json"
 SCHEMA_YAML = "schema.yaml"
 YAML_EXT = ".yaml"
 RAG_FOLDER = "Home/RAG Sources"
-erpnext_modules = [
-    "Selling",
-    "Stock",
-    "Buying",
-    "Assets",
-    "Accounts",
-    "CRM",
-    "Projects",
-    "Manufacturing",
-    "Support",
-    "Subcontracting",
-    "Quality Management",
-    "Regional",
-    "Maintenance",
-    "Setup"
-]
-
+@frappe.whitelist(allow_guest=False)
+def get_mod(app_names: list[str]):
+    if isinstance(app_names, str):
+        app_names = frappe.parse_json(app_names)
+    return [
+        module 
+        for app in app_names 
+        for module in frappe.get_all("Module Def", filters={"app_name": app}, pluck="name")
+    ]
 SYSTEM_FIELDS = [
     {"fieldname": "name", "fieldtype": "Data", "label": "ID"},
     {"fieldname": "docstatus", "fieldtype": "Int", "label": "Document Status"},
@@ -362,6 +354,8 @@ def test():
 
 @frappe.whitelist(allow_guest=False)
 def get_doctypes_changed_since(last_sync: Optional[str]) -> List[str]:
+    app_names=["erpnext","frappe"]
+    erpnext_modules = get_mod(app_names)
     filters = {
     "module": ["in", erpnext_modules],
     "issingle": 0,
@@ -686,15 +680,15 @@ def fill_missing_field_descriptions(
 
 
 
-def clear_schema_field_caches() -> None:
-    """
-    Call this when schema_fvs is rebuilt/refreshed.
-    """
-    global _TABLE_FIELD_DOCS_CACHE, _TABLE_FIELD_VS_CACHE, _FULL_FIELDS_VS
-    with _TABLE_FIELD_CACHE_LOCK:
-        _TABLE_FIELD_DOCS_CACHE = None
-        _TABLE_FIELD_VS_CACHE = OrderedDict()
-        _FULL_FIELDS_VS = None
+# def clear_schema_field_caches() -> None:
+#     """
+#     Call this when schema_fvs is rebuilt/refreshed.
+#     """
+#     global _TABLE_FIELD_DOCS_CACHE, _TABLE_FIELD_VS_CACHE, _FULL_FIELDS_VS
+#     with _TABLE_FIELD_CACHE_LOCK:
+#         _TABLE_FIELD_DOCS_CACHE = None
+#         _TABLE_FIELD_VS_CACHE = OrderedDict()
+#         _FULL_FIELDS_VS = None
 
 
 @frappe.whitelist(allow_guest=False)
@@ -705,7 +699,8 @@ def sync_tables_and_schema_smart() -> Dict[str, Any]:
     by_table = _build_table_map(tables_blocks)
     last_sync_raw = meta.get("last_doctype_sync")
     changed_doctypes = _get_changed_doctypes(last_sync_raw)
-
+    app_names=["erpnext","frappe"]
+    erpnext_modules = get_mod(app_names)
     current_doctypes = frappe.get_all(
     "DocType",
     filters={
@@ -720,7 +715,7 @@ def sync_tables_and_schema_smart() -> Dict[str, Any]:
     changed_tables = {_tab(dt) for dt in changed_doctypes}
     missing_from_schema = {t for t in current_tables if t not in by_table}
 
-    tables_to_process = sorted(changed_tables | missing_from_schema)
+    tables_to_process =current_tables
 
     for table in tables_to_process:
         _process_schema_table(table, by_table)
@@ -1019,7 +1014,7 @@ def sync_schema_and_enqueue_descriptions() -> Dict[str, Any]:
         queue="long",
         timeout=1800,
     )
-    clear_schema_field_caches()
+    # clear_schema_field_caches()
     return {"ok": True, "message": _("Schema updated ✅ Field descriptions running in background 🧠")}
 
 

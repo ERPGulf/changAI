@@ -11,49 +11,28 @@ from langchain_community.vectorstores import FAISS
 from changai.changai.api.v2.text2sql_pipeline_v2 import get_embedding_engine
 import os
 
-
-def get_base_fvs_dir() -> str:
-    base = frappe.get_site_path("private", "changai", "fvs_stores", "erpnext")
-    base_path = Path(base).resolve()
-    base_path.mkdir(parents=True, exist_ok=True)
-    return str(base_path)
-
-def _get_paths() -> tuple:
-    """Lazily resolve all paths — called only at runtime, never at import."""
-    base = get_base_fvs_dir()
-    return (
-        base,
-        os.path.join(base, "table_fvs"),
-        os.path.join(base, "schema_fvs"),
-        os.path.join(base, "masterdata_fvs"),
-    )
-
-def _get_paths_test() -> tuple:
-    app_base = os.path.join(
+def get_app_fvs_base():
+    return os.path.join(
         frappe.get_app_path("changai"),
-        "changai",
-        "api",
-        "v2",
-        "fvs_stores",
-        "erpnext"
+        "changai", "api", "v2", "fvs_stores", "erpnext"
     )
 
-    private_base = frappe.get_site_path(
-        "private", "changai", "fvs_stores", "erpnext"
-    )
+def get_private_fvs_base():
+    return frappe.get_site_path("private", "changai", "fvs_stores", "erpnext")
+
+
+def _get_fvs_paths() -> tuple:
+    app_base = get_app_fvs_base()
+    private_base = get_private_fvs_base()
 
     table_path = os.path.join(app_base, "table_fvs")
     schema_path = os.path.join(app_base, "schema_fvs")
     master_path = os.path.join(private_base, "masterdata_fvs")
+
     for p in (app_base, private_base, table_path, schema_path, master_path):
         os.makedirs(p, exist_ok=True)
 
-    return (
-        app_base,
-        table_path,
-        schema_path,
-        master_path,
-    )
+    return app_base, private_base, table_path, schema_path, master_path
 
 RAG_FOLDER = "Home/RAG Sources"
 HNSW_M           = 32
@@ -303,12 +282,12 @@ def _build_and_save_faiss(
     docs: List[Document],
     out_path: str,
     label: str,
+    base_dir: str,
 ) -> None:
-    """Build a FAISS HNSW index from docs and save to disk."""
     if not docs:
         frappe.throw(f"No documents to index for: {label}")
-    base_fvs, _, _, _ = _get_paths_test()
-    safe_path = _assert_dir_inside_base(out_path, base_fvs)
+
+    safe_path = _assert_dir_inside_base(out_path, base_dir)
     safe_path.mkdir(parents=True, exist_ok=True)
     emb = get_embedding_engine()
 
@@ -359,10 +338,10 @@ def build_all_fvs() -> Dict[str, Any]:
 
 def build_table_fvs_job():
     try:
-        _, table_path, _, _ = _get_paths_test()
+        app_base, _, table_path, _, _ = _get_fvs_paths()
         tables_list = _load_json_from_file_doc("tables.json")
         table_docs = build_table_docs(tables_list)
-        _build_and_save_faiss(table_docs, table_path, "ERPNext Table FVS")
+        _build_and_save_faiss(table_docs, table_path, "ERPNext Table FVS", app_base)
         frappe.logger().info(f"ERPNext Table FVS built: {len(table_docs)} docs")
     except Exception :
         frappe.log_error(frappe.get_traceback(), "Build Table FVS Failed")
@@ -373,8 +352,8 @@ def build_schema_fvs_job():
     try:
         schema = _load_yaml_from_file_doc("schema.yaml")
         schema_docs = build_schema_docs(schema)
-        _, _, schema_path, _ = _get_paths_test()
-        _build_and_save_faiss(schema_docs, schema_path, "ERPNext Schema FVS")
+        app_base, _, _, schema_path, _ = _get_fvs_paths()
+        _build_and_save_faiss(schema_docs, schema_path, "ERPNext Schema FVS", app_base)
         frappe.logger().info(f"ERPNext Schema FVS built: {len(schema_docs)} docs")
     except Exception :
         frappe.log_error(frappe.get_traceback(), "Build Schema FVS Failed")
@@ -383,10 +362,10 @@ def build_schema_fvs_job():
 
 def build_master_data_fvs_job():
     try:
+        _, private_base, _, _, master_path = _get_fvs_paths()
         master_data = _load_yaml_from_file_doc("master_data.yaml")
         entity_docs = build_entity_docs(master_data)
-        _, _, _, entity_path = _get_paths_test()
-        _build_and_save_faiss(entity_docs, entity_path, "ERPNext Master Data FVS")
+        _build_and_save_faiss(entity_docs, master_path, "ERPNext Master Data FVS", private_base)
         frappe.logger().info(f"ERPNext Master Data FVS built: {len(entity_docs)} docs")
     except Exception :
         frappe.log_error(frappe.get_traceback(), "Build Master Data FVS Failed")

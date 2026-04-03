@@ -5,6 +5,7 @@ from typing import Any, Dict, List, Tuple, Union, Optional, Set
 import boto3
 import requests
 import json
+from changai.changai.api.v2.non_erp_handler import handle_non_erp_query
 import yaml
 import re
 import os
@@ -42,6 +43,30 @@ _ASSETS_DIR = Path(frappe.get_app_path("changai", "changai", "api", "v2", "asset
 _PROMPTS_DIR = Path(frappe.get_app_path("changai", "changai", "prompts")).resolve()
 CHANGAI_SETTINGS = "ChangAI Settings"
 _ALLOWED_EXT = {".json", ".yaml",".j2", ".yml", ".txt", ".md"}
+
+import frappe
+from typing import Any, Dict, Optional
+
+def publish_pipeline_update(request_id, stage, message, data=None, done=False, error=False):
+    if not request_id:
+        return
+    payload = {
+        "request_id": request_id,
+        "stage": stage,
+        "message": message,
+        "data": data or {},
+        "done": done,
+        "error": error,
+        "timestamp": frappe.utils.now_datetime().isoformat(),
+    }
+    frappe.publish_realtime(
+        event=f"debug_{request_id}",
+        message=payload,
+        user=frappe.session.user,
+    )
+# @frappe.whitelist(allow_guest=False)
+# def test():
+#     return publish_pipeline_update("session_1775182859529_ecd7cd87-cec1-42f4-be0d-c969b48a5117_1775182993037", "test_stage", "Test realtime working")
 
 def _safe_join(base: Path, rel: str) -> Path:
     """
@@ -668,6 +693,7 @@ def _safe_strip(v):
 
 # Shared State
 class SQLState(TypedDict, total=False):
+    request_id: str
     session_id: str
     question: str
     contains_values: bool
@@ -694,21 +720,29 @@ class SQLState(TypedDict, total=False):
 
 def fill_sql_prompt(question: str, context: str) -> str:
     return SQL_PROMPT.format(question=question, context=context)
-
-
 def guardrail_router(state: SQLState) -> SQLState:
+    request_id = state.get("request_id")
+
+    # publish_pipeline_update(
+    #     request_id,
+    #     "router_check",
+    #     "Checking ERP vs NON-ERP"
+    # )
+
     raw_q = state.get("formatted_q") or state.get("question") or ""
     q = str(raw_q).lower().strip()
 
-    safe_keywords: List[str] = []
-    for kw in BUSINESS_KEYWORDS:
-        try:
-            safe_keywords.append(str(kw).lower())
-        except Exception:
-            continue
+    is_erp = any(kw in q for kw in BUSINESS_KEYWORDS)
 
-    is_erp = any(kw in q for kw in safe_keywords)
-    return {**state, "query_type": "ERP" if is_erp else "NON_ERP"}
+    query_type = "ERP" if is_erp else "NON_ERP"
+
+    publish_pipeline_update(
+        request_id,
+        "router_result",
+        f"Query type detected: {query_type}"
+    )
+
+    return {**state, "query_type": query_type}
 
 
 def send_non_erp_request(state: SQLState) -> SQLState:
@@ -754,12 +788,30 @@ def _parse_rewrite_response(raw: Any, user_qstn: str) -> Tuple[str, bool]:
 
 @traceable(name="rewrite_question", run_type="tool")
 def rewrite_question(state: SQLState) -> SQLState:
+    request_id = state.get("request_id")
+
+    # publish_pipeline_update(
+    #     request_id,
+    #     "question_rewrite_start",
+    #     "Rewriting user question"
+    # )
+
     user_qstn = state.get("question") or ""
     session_id = state.get("session_id")
+
     prompt = inject_prompt(user_qstn, session_id)
+
     try:
         raw = call_model(prompt, "llm")
         standalone, contains_values = _parse_rewrite_response(raw, user_qstn)
+
+        publish_pipeline_update(
+            request_id,
+            "question_rewrite_done",
+            "Question rewritten",
+            data={"formatted_q": standalone}
+        )
+
         return {
             **state,
             "formatted_q": standalone,
@@ -767,16 +819,16 @@ def rewrite_question(state: SQLState) -> SQLState:
             "formatting_prompt": prompt,
             "error": None,
         }
-    except frappe.exceptions.ValidationError:
-        raise
+
     except Exception as e:
-        return {
-            **state,
-            "error": str(e),
-            "formatted_q": "",
-            "contains_values": False,
-            "formatting_prompt": prompt,
-        }
+        publish_pipeline_update(
+            request_id,
+            "failed",
+            str(e),
+            error=True,
+            done=True
+        )
+        return {**state, "error": str(e)}
 
 def get_table_vs():
     global _VS_TABLE
@@ -854,9 +906,19 @@ def _parse_json_list(raw: str) -> List[Any]:
         return []
 
 
-def call_retrieve_multi_line(user_question: str) -> Dict[str, Any]:
+def call_retrieve_multi_line(user_question: str, request_id: str) -> Dict[str, Any]:
     try:
+        # publish_pipeline_update(
+        #     request_id,
+        #     "table_retrieval",
+        #     "Searching relevant tables"
+        # )
         top_tables = call_fvs_table_search(user_question)
+        publish_pipeline_update(
+            request_id,
+            "table_retrieval_done",
+            "Tables retrieved"
+        )
         table_prompt = FILTER_TABLES.replace("{user_question}", user_question)
         table_prompt = table_prompt.replace("{table_list}", json.dumps(top_tables, ensure_ascii=False))
         selected_raw = call_gemini(table_prompt)
@@ -867,12 +929,22 @@ def call_retrieve_multi_line(user_question: str) -> Dict[str, Any]:
             return {"selected_fields": {}, "selected_tables": [], "top_tables": top_tables}
         fields_candidates = {}
         for table in selected_tables:
+        #     publish_pipeline_update(
+        #     request_id,
+        #     "field_retrieval",
+        #     "Selecting fields"
+        # )
             fields_candidates[table] = call_fvs_field_search(
                 user_question,
                 table_name=table,
                 selected_tables=selected_tables,
                 k=40
             )
+        publish_pipeline_update(
+            request_id,
+            "field_retrieval_done",
+            "Fields selected"
+        )
         field_prompt = filter_fields.replace("{user_question}", user_question)
         field_prompt = field_prompt.replace("{fields_tables}", json.dumps(fields_candidates, ensure_ascii=False))
         selected_raw = call_gemini(field_prompt)
@@ -1014,7 +1086,7 @@ def schema_retriever(state: SQLState) -> SQLState:
             hits = remote_embedder_request(state.get("formatted_q", "") or state.get("question", ""))
             return {**state, "hits": hits}
         else:
-            out = call_retrieve_multi_line(state.get("formatted_q") or state.get("question") or "")
+            out = call_retrieve_multi_line(state.get("formatted_q") or state.get("question") or "",state.get("request_id"),)
             return {
                 **state,
                 "retrieval_mode": "multi",
@@ -1049,6 +1121,7 @@ def hits_to_prompt_context(state:SQLState) -> SQLState:
 # # Node 3:Generate the SQL Prompt and call LLM(Ollama Http)
 @traceable(name="generate_sql", run_type="tool")
 def generate_sql(state:SQLState) -> SQLState:
+    request_id = state.get("request_id")
     selected_fields = state.get("selected_fields") or ""
     entity_cards = state.get("entity_cards") or []
     entity_block = ""
@@ -1064,6 +1137,11 @@ def generate_sql(state:SQLState) -> SQLState:
     else:
         prompt=fill_sql_prompt(formatted_q,state["context"])
     try:
+        # publish_pipeline_update(
+        #     request_id,
+        #     "sql_generation",
+        #     "Generating SQL query"
+        # )
         response=call_model(prompt)
         if not response:
             return {**state, "error": "Empty response from LLM", "sql_prompt": prompt}
@@ -1071,6 +1149,11 @@ def generate_sql(state:SQLState) -> SQLState:
             response = json.loads(response)
         sql = response.get("sql", "")
         orm = response.get("orm", "")
+        publish_pipeline_update(
+            request_id,
+            "sql_generated",
+            "SQL generated"
+        )
         return {**state,"sql_prompt":prompt,"sql":sql,"orm":orm,"error":None}
     except frappe.exceptions.ValidationError:
         raise
@@ -1433,7 +1516,7 @@ def validate_sql_against_mapping(
         result["ambiguous_columns"] = sorted(ambiguous)
 
     return result
-from changai.changai.api.v2.non_erp_handler import handle_non_erp_query
+
 
 
 
@@ -1928,8 +2011,12 @@ def debug_entity_retriever(q: str):
     }
 
 
-def _invoke_pipeline(user_question: str, chat_id: str):
-    initial_state: SQLState = {"question": user_question or "", "session_id": chat_id}
+def _invoke_pipeline(user_question: str, chat_id: str, request_id: str):
+    initial_state: SQLState = {
+        "question": user_question or "",
+        "session_id": chat_id,
+        "request_id": request_id,
+    }
     config = {
         "configurable": {"thread_id": chat_id},
         "run_name": "changai_text2sql_graph",
@@ -2000,16 +2087,37 @@ def _handle_sql_result(final: SQLState, sql: str, orm: str, formatted_q: str, fi
                        selected_tables: List, val: Dict, entity_debug: Dict,
                        user_question: str, chat_id: str) -> Dict:
     try:
+        request_id = final.get("request_id")
+        # publish_pipeline_update(
+        #     request_id,
+        #     "sql_execution",
+        #     "Executing query"
+        # )
         extracted_tables = extract_tables_from_sql(sql)
         sql_result = execute_query(sql, extracted_tables)
+        publish_pipeline_update(
+            request_id,
+            "sql_executed",
+            "Query executed"
+        )
     except Exception as e:
         return {"ok": False, "error": f"SQL Execution Failed: {e}"}
 
     context = (final.get("context") or final.get("selected_fields") or "")[:800]
     contains_values = final.get("contains_values") or ""
     err = final.get("error")
+#     publish_pipeline_update(
+#     request_id,
+#     "format_data_start",
+#     "Started Formatting Result"
+# )
     formatted_result = format_data(user_question, sql_result)
-
+    publish_pipeline_update(
+    request_id,
+    "format_data_completed",
+    "Completed Formatting Result",
+    done=True
+)
     if not err:
         try:
             save_turn_2(session_id=chat_id, user_text=formatted_q, bot_text=formatted_result)
@@ -2034,8 +2142,8 @@ def _handle_sql_result(final: SQLState, sql: str, orm: str, formatted_q: str, fi
 
 
 @frappe.whitelist(allow_guest=False)
-def run_text2sql_pipeline(user_question: str, chat_id: str) -> Dict:
-    final, err_response = _invoke_pipeline(user_question, chat_id)
+def run_text2sql_pipeline(user_question: str, chat_id: str, request_id: str) -> Dict:
+    final, err_response = _invoke_pipeline(user_question, chat_id, request_id)
     if err_response:
         return err_response
 
@@ -2048,7 +2156,19 @@ def run_text2sql_pipeline(user_question: str, chat_id: str) -> Dict:
         return _handle_non_erp(final, user_question, chat_id)
 
     sql = clean_sql(final.get("sql")) or ""
+    # publish_pipeline_update(
+    #     request_id,
+    #     "sql_validation",
+    #     "Validating SQL"
+
+    # )
     res=validate_sql_schema(sql)
+    
+    publish_pipeline_update(
+        request_id,
+        "sql_validated",
+        "SQL valididation Completed"
+    )
     orm = clean_sql(final.get("orm")) or ""
     formatted_q = _safe_strip(final.get("formatted_q") or "")
     selected_tables = final.get("selected_tables") or []

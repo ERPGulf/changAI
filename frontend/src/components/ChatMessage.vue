@@ -175,7 +175,7 @@ function toggleMute() {
     // Resume TTS with the current message text when unmuting
     const speakable = normalizedMessageText.value
     if (!props.autoReadEnabled || !props.ttsConfig?.enableVoiceChat) return
-    if (!speakable || isPlaceholderStatus(speakable)) return
+    if (!speakable || isPlaceholderStatus()) return
 
     if (props.ttsConfig?.pollyAvailable && props.ttsConfig?.usePolly) {
       speakTextWithPolly(speakable).catch((err) => {
@@ -253,19 +253,21 @@ function handleGlobalStop() {
   isSpeaking.value = false
 }
 
-function isPlaceholderStatus(text) {
-  return text === 'Thinking...' || text === 'Sending to support...'
+function isPlaceholderStatus() {
+  return Boolean(props.message?.isStatus)
 }
 
 const normalizedMessageText = computed(() => getSpeakableText(props.message?.text || ''))
 
 const isLoadingStatus = computed(() => (
-  props.message?.role !== 'user' && isPlaceholderStatus(normalizedMessageText.value)
+  props.message?.role !== 'user' && isPlaceholderStatus()
 ))
 
-const loaderLabel = computed(() => (
-  normalizedMessageText.value === 'Sending to support...' ? 'Sending to support' : 'Thinking'
-))
+const loaderLabel = computed(() => {
+  if (!props.message?.isStatus) return ''
+  if (props.message.statusType === 'support') return 'Sending to support'
+  return normalizedMessageText.value || 'Thinking'
+})
 
 const shouldCollapse = computed(() => {
   if (props.message?.role === 'user' || isLoadingStatus.value) return false
@@ -294,7 +296,7 @@ watch(
     }
 
     const speakable = getSpeakableText(newText)
-    if (!speakable || isPlaceholderStatus(speakable)) return
+    if (!speakable || isPlaceholderStatus()) return
 
     const oldSpeakable = getSpeakableText(oldText || '')
     if (speakable === oldSpeakable) return
