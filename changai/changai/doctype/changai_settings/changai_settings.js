@@ -24,18 +24,27 @@ frappe.ui.form.on("ChangAI Settings", {
                     return;
                 }
 
+                if (fieldWrapper.find('.tooltip-container').length > 0) {
+                    return;
+                }
+
                 let labelElement;
+                const buttonElement = fieldWrapper.find('button').first();
+                const isButtonField = (fieldContainer.df && fieldContainer.df.fieldtype === 'Button')
+                    || buttonElement.length > 0;
+
+                // For button fields, anchor tooltip next to the actual button text.
+                if (isButtonField && buttonElement.length > 0) {
+                    labelElement = buttonElement;
+                }
 
                 // 1. Try label
-                if (fieldWrapper.find('label').length > 0) {
+                else if (fieldWrapper.find('label').length > 0) {
                     labelElement = fieldWrapper.find('label').first();
                 }
                 // 2. Try control-label
                 else if (fieldWrapper.find('.control-label').length > 0) {
                     labelElement = fieldWrapper.find('.control-label').first();
-                }
-                else if (fieldWrapper.find('button').length > 0) {
-                    labelElement = fieldWrapper.find('button').first();
                 }
                 else if (context.dialog || context.page) {
                     labelElement = fieldWrapper.find('.form-control').first();
@@ -46,17 +55,14 @@ frappe.ui.form.on("ChangAI Settings", {
                     return;
                 }
 
-                const tooltipContainer = labelElement.next('.tooltip-container');
-                if (tooltipContainer.length === 0) {
-                    const tooltip = new ChangAITooltip({
-                        containerClass: "tooltip-container",
-                        tooltipClass: "custom-tooltip",
-                        iconClass: "info-icon",
-                        text: field.text,
-                        links: field.links || [],
-                    });
-                    tooltip.renderTooltip(labelElement[0]);
-                }
+                const tooltip = new ChangAITooltip({
+                    containerClass: "tooltip-container",
+                    tooltipClass: "custom-tooltip",
+                    iconClass: "info-icon",
+                    text: field.text,
+                    links: field.links || [],
+                });
+                tooltip.renderTooltip(labelElement[0]);
             });
         }
         const fieldsWithTooltips = [
