@@ -6,6 +6,9 @@
     /* Vertically center align icon and label */
     margin-left: 4px;
     padding-bottom: 2px;
+    overflow: visible;
+    flex: 0 0 auto;
+    white-space: nowrap;
     /* Add spacing between checkbox label and icon */
 }
 
@@ -91,16 +94,14 @@
     text-decoration: none;
 }
 
-/* Fix for button-type fields */
-.frappe-control[data-fieldtype="Button"] .tooltip-container {
-    display: inline-flex !important;
-    align-items: center !important;
-    vertical-align: middle !important;
-    margin-left: 6px !important;
-}
-
+/* Add this — prevents frappe control from clipping the tooltip */
 .frappe-control[data-fieldtype="Button"] {
     display: flex !important;
     align-items: center !important;
     flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    overflow: visible !important;
+    /* ADD THIS — this is why tooltip clips */
+    position: relative !important;
+    /* ADD THIS — ensure anchor is correct */
 }

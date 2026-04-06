@@ -3,7 +3,7 @@ TASK: Generate EXACTLY one executable MariaDB SELECT query and one equivalent Fr
 STEP 0 — SCHEMA GROUNDING (INTERNAL, DO FIRST)
 Internally build:
   ALLOWED_TABLES = [all tables in SCHEMA CONTEXT]
-  ALLOWED_FIELDS = {table: [fields listed under that table in SCHEMA CONTEXT]}
+  ALLOWED_FIELDS = {{table: [fields listed under that table in SCHEMA CONTEXT]}}
   ALLOWED_JOINS  = [only pairs with explicit join_hint or link field in SCHEMA CONTEXT]
 LAW: Use ONLY items from these lists. If a field or table is not in them, it does NOT exist. Do NOT use it.
 STEP 0-B — SYSTEM FIELDS EXCEPTION
@@ -50,9 +50,8 @@ STEP 5 — PRE-OUTPUT CHECKLIST (fix before output)
 INPUT
 USER QUESTION: {question}
 SCHEMA CONTEXT: {context}
-ENTITY_CARD: {entity_card}
 OUTPUT — RAW JSON ONLY, NO EXPLANATION
-{
+{{
   "sql": "<MARIADB_SQL_QUERY>",
   "orm": "<FRAPPE_ORM_QUERY>"
-}
+}}

@@ -905,65 +905,196 @@ def _parse_json_list(raw: str) -> List[Any]:
     except Exception:
         return []
 
+
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from threading import Lock
+
+def _fetch_fields_for_one_table(
+    user_question: str,
+    table: str,
+    selected_tables: List[str],
+    k: int = 40,
+) -> Tuple[str, List[Dict[str, Any]]]:
+    return table, call_fvs_field_search(
+        user_question=user_question,
+        table_name=table,
+        selected_tables=selected_tables,
+        k=k,
+    )
+
+
 @frappe.whitelist(allow_guest=True)
-def call_retrieve_multi_line(user_question: str, request_id: str) -> Dict[str, Any]:
+def get_fields_candidates_parallel(
+    user_question: str,
+    selected_tables: List[str],
+    k: int = 40,
+    max_workers: int = 4,
+) -> Dict[str, List[Dict[str, Any]]]:
+    fields_candidates: Dict[str, List[Dict[str, Any]]] = {}
+
     try:
-        # publish_pipeline_update(
-        #     request_id,
-        #     "table_retrieval",
-        #     "Searching relevant tables"
-        # )
-        top_tables = call_fvs_table_search(user_question)
-        publish_pipeline_update(
-            request_id,
-            "table_retrieval_done",
-            "Tables retrieved"
-        )
-        table_prompt = FILTER_TABLES.replace("{user_question}", user_question)
-        table_prompt = table_prompt.replace("{table_list}", json.dumps(top_tables, ensure_ascii=False))
-        selected_raw = call_gemini(table_prompt)
-        selected_tables = _parse_json_list(selected_raw)
-        top_set = set(top_tables)
-        selected_tables = [t for t in selected_tables if t in top_set]
         if not selected_tables:
-            return {"selected_fields": {}, "selected_tables": [], "top_tables": top_tables}
-        fields_candidates = {}
-        for table in selected_tables:
-        #     publish_pipeline_update(
-        #     request_id,
-        #     "field_retrieval",
-        #     "Selecting fields"
-        # )
-            fields_candidates[table] = call_fvs_field_search(
-                user_question,
-                table_name=table,
-                selected_tables=selected_tables,
-                k=40
-            )
-        publish_pipeline_update(
-            request_id,
-            "field_retrieval_done",
-            "Fields selected"
+            return fields_candidates
+
+        worker_count = min(max_workers, len(selected_tables))  # count of parallel workers
+
+        with ThreadPoolExecutor(max_workers=worker_count) as executor:
+            futures = [
+                executor.submit(_fetch_fields_for_one_table, user_question, table, selected_tables, k)
+                for table in selected_tables
+            ]
+
+            for future in as_completed(futures):
+                try:
+                    table, fields = future.result()
+                    fields_candidates[table] = fields
+                except Exception as e:
+                    frappe.log_error(
+                        title="Field Retrieval Error (Thread)",
+                        message=f"Error in parallel field fetch: {str(e)}"
+                    )
+
+        return fields_candidates
+
+    except Exception as e:
+        frappe.log_error(
+            title="Field Retrieval Error (Main)",
+            message=f"get_fields_candidates_parallel failed: {str(e)}"
         )
-        field_prompt = filter_fields.replace("{user_question}", user_question)
-        field_prompt = field_prompt.replace("{fields_tables}", json.dumps(fields_candidates, ensure_ascii=False))
-        selected_raw = call_gemini(field_prompt)
+        return {}
+
+@frappe.whitelist(allow_guest=True)
+def get_fields_candidates_single(
+    user_question: str,
+    selected_tables: List[str],
+    k_per_table: int = 40,
+    overall_k: int = 100,
+) -> Dict[str, List[Dict[str, Any]]]:
+
+    result = {t: [] for t in selected_tables}
+
+    if not user_question or not selected_tables:
+        return result
+
+    sub_vs = get_sub_vs(selected_tables)
+    if sub_vs is None:
+        return result
+
+    hits = sub_vs.similarity_search(user_question, k=overall_k)
+
+    seen = {t: set() for t in selected_tables}
+
+    for h in hits:
+        meta = getattr(h, "metadata", {}) or {}
+
+        tbl = meta.get("table")
+        field = meta.get("field")
+
+        if tbl not in result or not field:
+            continue
+
+        # avoid duplicates
+        if field in seen[tbl]:
+            continue
+        seen[tbl].add(field)
+
+        row = {
+            "field": field,
+            "table": tbl
+        }
+
+        if meta.get("join_hint"):
+            row["join_hint"] = meta["join_hint"]
+
+        if meta.get("options"):
+            row["options"] = meta["options"]
+
+        if len(result[tbl]) < k_per_table:
+            result[tbl].append(row)
+
+    return result
+@frappe.whitelist(allow_guest=True)
+def call_retrieve_multi_line(user_question: str) -> Dict[str, Any]:
+    try:
+        # ---------------- STEP 1: TABLE RETRIEVAL ----------------
         try:
-            selected_map = json.loads(selected_raw) if isinstance(selected_raw, str) else {}
-        except Exception:
-            selected_map = {}
+            top_tables = call_fvs_table_search(user_question)
+        except Exception as e:
+            frappe.log_error(f"Table retrieval failed: {str(e)}")
+            return {"error": "table_retrieval_failed", "details": str(e)}
+
+        # ---------------- STEP 2: TABLE FILTER LLM ----------------
+        try:
+            table_prompt = FILTER_TABLES.replace("{user_question}", user_question)
+            table_prompt = table_prompt.replace("{table_list}", json.dumps(top_tables, ensure_ascii=False))
+
+            selected_raw = call_gemini(table_prompt)
+            selected_tables = _parse_json_list(selected_raw)
+
+            top_set = set(top_tables)
+            selected_tables = [t for t in selected_tables if t in top_set]
+        except Exception as e:
+            frappe.log_error(f"Table filtering failed: {str(e)}")
+            return {"error": "table_filter_failed", "details": str(e)}
+
+        if not selected_tables:
+            return {
+                "selected_fields": {},
+                "selected_tables": [],
+                "top_tables": top_tables
+            }
+
+        # ---------------- STEP 3: FIELD RETRIEVAL (PARALLEL) ----------------
+        try:
+            fields_candidates = get_fields_candidates_single(
+                user_question=user_question,
+                selected_tables=selected_tables,
+                k_per_table=40,
+                overall_k=300,
+            )
+        except Exception as e:
+            frappe.log_error(f"Field retrieval failed: {str(e)}")
+            return {"error": "field_retrieval_failed", "details": str(e)}
+
+        # ---------------- STEP 4: FIELD FILTER LLM ----------------
+        try:
+            field_prompt = filter_fields.replace("{user_question}", user_question)
+            field_prompt = field_prompt.replace(
+                "{fields_tables}",
+                json.dumps(fields_candidates, ensure_ascii=False)
+            )
+
+            selected_raw = call_gemini(field_prompt)
+
+            try:
+                selected_map = json.loads(selected_raw) if isinstance(selected_raw, str) else {}
+            except Exception as e:
+                frappe.log_error(f"Field JSON parse failed: {str(e)}")
+                selected_map = {}
+
+        except Exception as e:
+            frappe.log_error(f"Field filtering failed: {str(e)}")
+            return {"error": "field_filter_failed", "details": str(e)}
+
+        # ---------------- FINAL OUTPUT ----------------
         return {
             "selected_fields": json.dumps(selected_map, ensure_ascii=False),
             "selected_tables": selected_tables,
             "top_tables": top_tables,
             "top_fields": fields_candidates,
         }
+
     except frappe.exceptions.ValidationError:
         raise
+
     except Exception as e:
-        return {"selected_fields": {}, "selected_tables": [], "top_tables": [], "error": str(e)}
-
-
+        frappe.log_error(f"Pipeline failed: {str(e)}")
+        return {
+            "selected_fields": {},
+            "selected_tables": [],
+            "top_tables": [],
+            "error": str(e),
+        }
 
 def get_full_fields_vs_test():
     global _FULL_FIELDS_VS

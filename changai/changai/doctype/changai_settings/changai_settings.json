@@ -165,7 +165,7 @@
    "default": "https://api.replicate.com/v1/predictions",
    "fieldname": "prediction_url",
    "fieldtype": "Data",
-   "label": "Replicate Prediction Url"
+   "label": "Replicate Prediction Url (Optional)"
   },
   {
    "fieldname": "deploy_url",
@@ -373,7 +373,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-04-01 10:19:01.380166",
+ "modified": "2026-04-06 07:26:18.351391",
  "modified_by": "Administrator",
  "module": "Changai",
  "name": "ChangAI Settings",

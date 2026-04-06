@@ -860,6 +860,7 @@ def _parse_json_list(raw: str) -> List[Any]:
     except Exception:
         return []
 
+@frappe.whitelist(allow_guest=False)
 def call_retrieve_multi_line(user_question: str) -> Dict[str, Any]:
     try:
         top_tables = call_fvs_table_search(user_question)
@@ -982,9 +983,6 @@ def call_fvs_field_search(
 ) -> List[Dict[str, Any]]:
     if not user_question or not table_name:
         return []
-    sub_vs = get_sub_vs(selected_tables)
-    if sub_vs is None:
-        return []
     hits = sub_vs.similarity_search(user_question, k=min(60, max(40, k)))
     results: List[Dict[str, Any]] = []
     seen = set()
@@ -1079,14 +1077,6 @@ def get_full_fields_vs_test():
         )
 
     return _FULL_FIELDS_VS
-
-
-def get_sub_vs(selected_tables: List[str]) -> Optional[FAISS]:
-    """
-    Deprecated in lazy per-table mode.
-    Kept only for compatibility.
-    """
-    return None
 
 def _fetch_fields_for_one_table(
     user_question: str,
@@ -1578,8 +1568,6 @@ workflow.add_edge("retrieve","detect_entities")
 workflow.add_conditional_edges("detect_entities", route_after_entities, {"CONTEXT":"build_context","DIRECT":"generate_sql"})
 workflow.add_edge("build_context", "generate_sql")
 workflow.add_edge("generate_sql",END)
-# workflow.add_conditional_edges("validate_sql",router,{"repair":"repair_sql","end":END})
-# workflow.add_edge("repair_sql","validate_sql")
 checkpointer=MemorySaver()
 app=workflow.compile(checkpointer=checkpointer)
 
