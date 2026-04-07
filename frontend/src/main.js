@@ -59,6 +59,16 @@ async function initChangAIChatbot() {
   shadowRoot.appendChild(mountEl)
 
   createApp(App).mount(mountEl)
+
+  // Prevent keyboard events generated inside the shadow DOM from bubbling out
+  // into the host page (e.g. ERPNext / Frappe shortcut handlers registered on
+  // document). stopPropagation() here keeps every keydown/keyup/keypress
+  // contained within the shadow tree so host-page shortcuts are never triggered
+  // while the user is interacting with the chatbot.
+  function _stopKeyboardEscape(e) { e.stopPropagation() }
+  mountEl.addEventListener('keydown', _stopKeyboardEscape)
+  mountEl.addEventListener('keyup',   _stopKeyboardEscape)
+  mountEl.addEventListener('keypress', _stopKeyboardEscape)
 }
 
 if (document.readyState === 'loading') {

@@ -46,6 +46,7 @@
 
     <div v-if="localTab !== 'settings'" class="border-t border-slate-200/80 bg-white/90 px-3 py-3 pb-[calc(12px+env(safe-area-inset-bottom))] backdrop-blur-sm sm:px-4 sm:py-4">
       <ChatForm
+        ref="chatFormRef"
         :placeholder="localTab === 'support' ? 'Message Support...' : 'Message...'"
         :disabled="localTab === 'chat' && isAwaitingResponse"
         :isAwaitingResponse="localTab === 'chat' && isAwaitingResponse"
@@ -87,6 +88,7 @@ const props = defineProps({
 const emit = defineEmits(['close', 'submit', 'cancelResponse', 'update:activeTab', 'toggleAutoRead', 'togglePollyPreference', 'toggleDebug'])
 
 const chatBodyRef = ref(null)
+const chatFormRef = ref(null)
 const localTab = ref(props.activeTab)
 const windowMode = ref('default')
 
@@ -138,6 +140,15 @@ const popupClasses = computed(() => {
 })
 
 watch(() => props.activeTab, (val) => { localTab.value = val })
+
+// Auto-focus the chat input whenever the popup is opened so that
+// keyboard events are routed through our shadow DOM (preventing
+// host-page shortcuts from firing while the user is chatting).
+watch(() => props.isOpen, (isOpen) => {
+  if (isOpen && localTab.value !== 'settings') {
+    nextTick(() => chatFormRef.value?.focus())
+  }
+})
 watch(localTab, (val) => { emit('update:activeTab', val) })
 watch(
   () => props.debugEnabled,
