@@ -749,7 +749,7 @@ def send_non_erp_request(state: SQLState) -> SQLState:
     qstn =state.get("question")
     if not qstn:
         return {**state, "non_erp_res": "", "error": "No question provided"}
-    prompt = NON_ERP_PROMPT.format(question=qstn)
+    # prompt = NON_ERP_PROMPT.format(question=qstn)
     try:
         response = handle_non_erp_query(qstn)
         # response = call_model(prompt, "llm")
@@ -906,6 +906,20 @@ def _parse_json_list(raw: str) -> List[Any]:
         return []
 
 
+from langchain_community.vectorstores import FAISS
+import faiss
+
+def build_hnsw_index(embeddings):
+    dim = len(embeddings[0])
+    
+    index = faiss.IndexHNSWFlat(dim, 32)  # 32 = neighbors (tune this)
+    index.hnsw.efConstruction = 200       # build quality
+    index.hnsw.efSearch = 50              # search accuracy/speed tradeoff
+    
+    return index
+
+
+@frappe.whitelist(allow_guest=True)
 def call_retrieve_multi_line(user_question: str, request_id: str) -> Dict[str, Any]:
     try:
         # publish_pipeline_update(
@@ -929,11 +943,7 @@ def call_retrieve_multi_line(user_question: str, request_id: str) -> Dict[str, A
             return {"selected_fields": {}, "selected_tables": [], "top_tables": top_tables}
         fields_candidates = {}
         for table in selected_tables:
-        #     publish_pipeline_update(
-        #     request_id,
-        #     "field_retrieval",
-        #     "Selecting fields"
-        # )
+
             fields_candidates[table] = call_fvs_field_search(
                 user_question,
                 table_name=table,
@@ -1064,7 +1074,7 @@ def call_fvs_field_search(
             continue
         seen.add(key)
         row = {
-            "field": fld,
+            "field": fld,"table":tbl
         }
         if meta.get("join_hint"):
             row["join_hint"] = meta.get("join_hint")
@@ -2088,11 +2098,6 @@ def _handle_sql_result(final: SQLState, sql: str, orm: str, formatted_q: str, fi
                        user_question: str, chat_id: str) -> Dict:
     try:
         request_id = final.get("request_id")
-        # publish_pipeline_update(
-        #     request_id,
-        #     "sql_execution",
-        #     "Executing query"
-        # )
         extracted_tables = extract_tables_from_sql(sql)
         sql_result = execute_query(sql, extracted_tables)
         publish_pipeline_update(
@@ -2106,11 +2111,6 @@ def _handle_sql_result(final: SQLState, sql: str, orm: str, formatted_q: str, fi
     context = (final.get("context") or final.get("selected_fields") or "")[:800]
     contains_values = final.get("contains_values") or ""
     err = final.get("error")
-#     publish_pipeline_update(
-#     request_id,
-#     "format_data_start",
-#     "Started Formatting Result"
-# )
     formatted_result = format_data(user_question, sql_result)
     publish_pipeline_update(
     request_id,
@@ -2128,6 +2128,7 @@ def _handle_sql_result(final: SQLState, sql: str, orm: str, formatted_q: str, fi
 
     return {
         "Question": user_question,
+        "Formated Question":formatted_q,
         "SQL": sql,
         "ORM": orm,
         "Tables": selected_tables,
@@ -2146,24 +2147,14 @@ def run_text2sql_pipeline(user_question: str, chat_id: str, request_id: str) -> 
     final, err_response = _invoke_pipeline(user_question, chat_id, request_id)
     if err_response:
         return err_response
-
     entity_debug = {
         "contains_values": final.get("contains_values"),
         "entity_cards": final.get("entity_cards") or [],
     }
-
     if (final.get("query_type") or "NON_ERP") == "NON_ERP":
         return _handle_non_erp(final, user_question, chat_id)
-
     sql = clean_sql(final.get("sql")) or ""
-    # publish_pipeline_update(
-    #     request_id,
-    #     "sql_validation",
-    #     "Validating SQL"
-
-    # )
     res=validate_sql_schema(sql)
-    
     publish_pipeline_update(
         request_id,
         "sql_validated",
@@ -2194,3 +2185,6 @@ def run_text2sql_pipeline(user_question: str, chat_id: str, request_id: str) -> 
         }
 
     return _handle_sql_result(final, sql, orm, formatted_q, fields,selected_tables, res, entity_debug, user_question, chat_id)
+
+
+print(run_text2sql_pipeline("Hye whatsapp there...","22","22"))

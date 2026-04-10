@@ -128,7 +128,6 @@ app_include_css = [
 # ------------------
 # To set up dependencies/integrations with other apps
 # Name of the app being installed is passed as an argument
-
 # before_app_install = "changai.utils.before_app_install"
 # after_app_install = "changai.utils.after_app_install"
 

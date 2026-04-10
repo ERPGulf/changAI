@@ -169,7 +169,6 @@ async function handleChatSubmit(message) {
   debugLogs.value.push({
   type: 'cancelled',
   user: message,
-  request_id: requestId,
   steps: [...steps],
 })
   currentDebug.value = null
@@ -187,7 +186,6 @@ async function handleChatSubmit(message) {
     debugLogs.value.push({
       type: 'success',
       user: message,
-      request_id: requestId,
       steps: [...steps],
       final_response: response,
     })
@@ -203,7 +201,6 @@ async function handleChatSubmit(message) {
     debugLogs.value.push({
   type: 'failed',
   user: message,
-  request_id: requestId,
   steps: [...steps],
   error: errorText,
 })

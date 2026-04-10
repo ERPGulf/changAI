@@ -24,21 +24,28 @@ frappe.ui.form.on("ChangAI Settings", {
                     return;
                 }
 
+                if (fieldWrapper.find('.tooltip-container').length > 0) {
+                    return;
+                }
+
                 let labelElement;
+                const buttonElement = fieldWrapper.find('button').first();
+                const isButtonField = (fieldContainer.df && fieldContainer.df.fieldtype === 'Button')
+                    || buttonElement.length > 0;
+
+                // For button fields, anchor tooltip next to the actual button text.
+                if (isButtonField && buttonElement.length > 0) {
+                    labelElement = buttonElement;
+                }
 
                 // 1. Try label
-                if (fieldWrapper.find('label').length > 0) {
+                else if (fieldWrapper.find('label').length > 0) {
                     labelElement = fieldWrapper.find('label').first();
                 }
                 // 2. Try control-label
                 else if (fieldWrapper.find('.control-label').length > 0) {
                     labelElement = fieldWrapper.find('.control-label').first();
                 }
-                // 3. ✅ Try button (for button-type fields) — FIXED POSITION
-                else if (fieldWrapper.find('button').length > 0) {
-                    labelElement = fieldWrapper.find('button').first();
-                }
-                // 4. Fallback for dialog/page
                 else if (context.dialog || context.page) {
                     labelElement = fieldWrapper.find('.form-control').first();
                 }
@@ -48,17 +55,14 @@ frappe.ui.form.on("ChangAI Settings", {
                     return;
                 }
 
-                const tooltipContainer = labelElement.next('.tooltip-container');
-                if (tooltipContainer.length === 0) {
-                    const tooltip = new ChangAITooltip({
-                        containerClass: "tooltip-container",
-                        tooltipClass: "custom-tooltip",
-                        iconClass: "info-icon",
-                        text: field.text,
-                        links: field.links || [],
-                    });
-                    tooltip.renderTooltip(labelElement[0]);
-                }
+                const tooltip = new ChangAITooltip({
+                    containerClass: "tooltip-container",
+                    tooltipClass: "custom-tooltip",
+                    iconClass: "info-icon",
+                    text: field.text,
+                    links: field.links || [],
+                });
+                tooltip.renderTooltip(labelElement[0]);
             });
         }
         const fieldsWithTooltips = [
@@ -140,6 +144,54 @@ frappe.ui.form.on("ChangAI Settings", {
                     Sync the latest database schema so the AI knows your current doctype structure and fields. Run this after adding or modifying any doctypes.
                 `,
             },
+            {
+                fieldname: "replicate_prediction_url",
+                text: `
+        Optional - The Replicate API endpoint used to send prediction requests to your deployed model on Replicate. Required for remote inference.
+    `,
+            },
+            {
+                fieldname: "replicate_deploy_url",
+                text: `
+        The Replicate deployment endpoint for your model on Replicate. Used to manage or trigger deployments of your AI model.
+    `,
+            },
+            {
+                fieldname: "sql_generator_llm_version_id",
+                text: `
+        Replicate Version ID of the LLM used to generate SQL queries. This controls which model handles text-to-SQL conversion.
+    `,
+            },
+            {
+                fieldname: "schema_retriever_version_id",
+                text: `
+        Replicate Version ID of the schema retriever model. Used to fetch relevant tables and fields from the database schema.
+    `,
+            },
+            {
+                fieldname: "replicate_api_token",
+                text: `
+        Your Replicate API token for authentication. Required to access deployed models on Replicate.
+    `,
+            },
+            {
+                fieldname: "entity_retriever_version_id",
+                text: `
+        Replicate Version ID of the entity retriever model. Helps detect and match real business values like customer names, items, etc.
+    `,
+            },
+            {
+                fieldname: "openai_api_key",
+                text: `
+        API key for OpenAI services. Used for tasks like training data generation or fallback LLM operations.
+    `,
+            },
+            {
+                fieldname: "claude_api_key",
+                text: `
+        API key for Claude (Anthropic). Used for schema enrichment, field descriptions, and optional data generation.
+    `,
+            }
         ];
         applyTooltips(frm, fieldsWithTooltips);
         frm.add_custom_button(__('Download Embedding Model'), () => {

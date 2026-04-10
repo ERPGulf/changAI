@@ -155,6 +155,7 @@ Chat history (use ONLY human lines):
 
 Latest user message:
 {qstn}
+- Always output the "standalone_question" in clear English, regardless of the user's original language, preserving the exact meaning.
 """
 @frappe.whitelist(allow_guest=False)
 def respond_from_cache(user_question:str):

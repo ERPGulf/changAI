@@ -321,6 +321,10 @@ function handleSubmit() {
   messageText.value = ''
 }
 
+defineExpose({
+  focus: () => inputRef.value?.focus(),
+})
+
 onMounted(() => {
   initSpeechRecognition()
 })
