@@ -749,7 +749,7 @@ def send_non_erp_request(state: SQLState) -> SQLState:
     qstn =state.get("question")
     if not qstn:
         return {**state, "non_erp_res": "", "error": "No question provided"}
-    prompt = NON_ERP_PROMPT.format(question=qstn)
+    # prompt = NON_ERP_PROMPT.format(question=qstn)
     try:
         response = handle_non_erp_query(qstn)
         # response = call_model(prompt, "llm")
@@ -905,6 +905,20 @@ def _parse_json_list(raw: str) -> List[Any]:
     except Exception:
         return []
 
+
+from langchain_community.vectorstores import FAISS
+import faiss
+
+def build_hnsw_index(embeddings):
+    dim = len(embeddings[0])
+    
+    index = faiss.IndexHNSWFlat(dim, 32)  # 32 = neighbors (tune this)
+    index.hnsw.efConstruction = 200       # build quality
+    index.hnsw.efSearch = 50              # search accuracy/speed tradeoff
+    
+    return index
+
+
 @frappe.whitelist(allow_guest=True)
 def call_retrieve_multi_line(user_question: str, request_id: str) -> Dict[str, Any]:
     try:
@@ -929,11 +943,7 @@ def call_retrieve_multi_line(user_question: str, request_id: str) -> Dict[str, A
             return {"selected_fields": {}, "selected_tables": [], "top_tables": top_tables}
         fields_candidates = {}
         for table in selected_tables:
-        #     publish_pipeline_update(
-        #     request_id,
-        #     "field_retrieval",
-        #     "Selecting fields"
-        # )
+
             fields_candidates[table] = call_fvs_field_search(
                 user_question,
                 table_name=table,
@@ -2175,3 +2185,6 @@ def run_text2sql_pipeline(user_question: str, chat_id: str, request_id: str) -> 
         }
 
     return _handle_sql_result(final, sql, orm, formatted_q, fields,selected_tables, res, entity_debug, user_question, chat_id)
+
+
+print(run_text2sql_pipeline("Hye whatsapp there...","22","22"))
