@@ -145,42 +145,6 @@ frappe.ui.form.on("ChangAI Settings", {
                 `,
             },
             {
-                fieldname: "replicate_prediction_url",
-                text: `
-        Optional - The Replicate API endpoint used to send prediction requests to your deployed model on Replicate. Required for remote inference.
-    `,
-            },
-            {
-                fieldname: "replicate_deploy_url",
-                text: `
-        The Replicate deployment endpoint for your model on Replicate. Used to manage or trigger deployments of your AI model.
-    `,
-            },
-            {
-                fieldname: "sql_generator_llm_version_id",
-                text: `
-        Replicate Version ID of the LLM used to generate SQL queries. This controls which model handles text-to-SQL conversion.
-    `,
-            },
-            {
-                fieldname: "schema_retriever_version_id",
-                text: `
-        Replicate Version ID of the schema retriever model. Used to fetch relevant tables and fields from the database schema.
-    `,
-            },
-            {
-                fieldname: "replicate_api_token",
-                text: `
-        Your Replicate API token for authentication. Required to access deployed models on Replicate.
-    `,
-            },
-            {
-                fieldname: "entity_retriever_version_id",
-                text: `
-        Replicate Version ID of the entity retriever model. Helps detect and match real business values like customer names, items, etc.
-    `,
-            },
-            {
                 fieldname: "openai_api_key",
                 text: `
         API key for OpenAI services. Used for tasks like training data generation or fallback LLM operations.

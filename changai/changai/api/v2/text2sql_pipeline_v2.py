@@ -74,7 +74,8 @@ def _safe_join(base: Path, rel: str) -> Path:
     """
     p = (base / rel).resolve()
     if base != p and base not in p.parents:
-        frappe.throw(_("Unsafe path: {0}").format(rel))
+        frappe.throw(_("Unsafe path: {0}\n"
+                       "Check Quick Start Guide Here 👇:\n {1}").format(rel,CHANGAI_GUIDE_LINK))
     return p
 
 
@@ -86,11 +87,13 @@ def read_asset(file_name: str, base: str = "assets") -> Any:
     """
     file_name = (file_name or "").strip()
     if not file_name:
-        frappe.throw(_("file_name is required"))
+        frappe.throw(_("file_name is required\n"
+                       "Check Quick Start Guide Here 👇:\n {0}").format(CHANGAI_GUIDE_LINK))
 
     ext = Path(file_name).suffix.lower()
     if ext not in _ALLOWED_EXT:
-        frappe.throw(_("Unsupported file type: {0}").format(ext))
+        frappe.throw(_("Unsupported file type: {0}\n"
+                       "Check Quick Start Guide Here 👇:\n {1}").format(ext, CHANGAI_GUIDE_LINK))
 
     if base == "assets":
         root = _ASSETS_DIR
@@ -99,12 +102,14 @@ def read_asset(file_name: str, base: str = "assets") -> Any:
     else:
         root = None
     if root is None:
-        frappe.throw(_("Invalid base: {0}").format(base))
+        frappe.throw(_("Invalid base: {0}\n"
+                       "Check Quick Start Guide Here 👇:\n {1}").format(base, CHANGAI_GUIDE_LINK))
 
     path = _safe_join(root, file_name)
 
     if not path.is_file():
-        frappe.throw(_("File not found: {0}").format(str(path)))
+        frappe.throw(_("File not found: {0}\n"
+                       "Check Quick Start Guide Here 👇:\n {1}").format(str(path), CHANGAI_GUIDE_LINK))
 
     content = path.read_text(encoding="utf-8", errors="replace")
 
@@ -112,12 +117,14 @@ def read_asset(file_name: str, base: str = "assets") -> Any:
         try:
             return json.loads(content)
         except json.JSONDecodeError as e:
-            frappe.throw(_("Invalid JSON in {0}: {1}").format(str(path), str(e)))
+            frappe.throw(_("Invalid JSON in {0}: {1}"
+                           "Check Quick Start Guide Here 👇:\n {2}").format(str(path), str(e), CHANGAI_GUIDE_LINK))
     if ext == ".yaml" or ext == ".yml":
         try:
             return yaml.safe_load(content)
         except yaml.YAMLError as e:
-            frappe.throw(_("Invalid YAML in {0}: {1}").format(str(path), str(e)))
+            frappe.throw(_("Invalid YAML in {0}: {1}"
+                           "Check Quick Start Guide Here 👇:\n {2}").format(str(path), str(e), CHANGAI_GUIDE_LINK))
     return content
 
 _VS_TABLE = None
@@ -128,7 +135,11 @@ _FULL_FIELDS_VS = None
 STATUS_200 = 200
 _SUB_VS_CACHE = {}
 APPLICATION_JSON = "application/json"
-EMBEDDING_ENGINE_NONE_MESSG = "Embedding engine is None. Model not loaded."
+CHANGAI_GUIDE_LINK="https://app.erpgulf.com/en/articles/chang-ai-quick-start-guide"
+EMBEDDING_ENGINE_NONE_MESSG = f"""
+Embedding engine is None. Model not loaded.
+Check Quick Start Guide Here 👇:
+{CHANGAI_GUIDE_LINK}"""
 MODEL_ID = "gemini-2.5-flash-lite"
 RETRY_LIMIT = 2
 BACKEND_SERVER_SETTINGS = "Backend Server Settings"
@@ -187,7 +198,7 @@ def download_model_from_ui():
 
     except Exception as e:
         frappe.log_error(frappe.get_traceback(), "Embedding Model Download Failed")
-        frappe.throw(f"Model download failed: {str(e)}")
+        frappe.throw(_("Model download failed: {0}\n Check Quick Start Guide Here 👇:\n{1}").format(str(e),CHANGAI_GUIDE_LINK))
 
 
 def get_embedding_engine():
@@ -200,9 +211,9 @@ def get_embedding_engine():
         frappe.throw(
             _(
                 "Go to <b>ChangAI Settings</b> and click <b>'Download Embedding Model'</b>.<br><br>"
-                "Watch this documentation tutorial for more detail: "
-                "<a href='{0}' target='_blank'>Click here to watch</a>"
-            ).format("https://your-docs-url-here.com"),
+                "Check this Quick Start Guide for more detail: "
+                "<a href='{0}' target='_blank' rel='noopener noreferrer' style='color: #1e90ff;'>Click here</a>"
+            ).format(CHANGAI_GUIDE_LINK),
             title=_("Embedding Model Required")
         )
     
@@ -416,7 +427,8 @@ def whoami() -> Dict[str, Any]:
             mimetype=APPLICATION_JSON,
         )
     except ValueError as ve:
-        frappe.throw(ve)
+        frappe.throw(_("{0}\n Check Quick Start Guide Here 👇:\n {1}").format(ve,CHANGAI_GUIDE_LINK))
+                     
 
 
 def extract_tables_from_sql(sql: str) -> List[str]:
@@ -480,17 +492,20 @@ def _get_gemini_vertex_config(config):
 def _throw_missing_vertex_field(project_id: str, location: str, credentials_json: str) -> None:
     if not project_id:
         frappe.throw(
-            _("Gemini Project ID is missing.<br><br>Please go to <b>ChangAI Settings</b> and enter your <b>Gemini Project ID</b>."),
+            _("Gemini Project ID is missing.<br><br>Please go to <b>ChangAI Settings</b> and enter your <b>Gemini Project ID</b>.<br>"
+              "Check Quick Start Guide 👇:<br><a href='{0}' target='_blank'>Click here</a>").format(CHANGAI_GUIDE_LINK),
             title=_("Missing Gemini Project ID"),
         )
     if not location:
         frappe.throw(
-            _("Gemini Location is missing.<br><br>Please go to <b>ChangAI Settings</b> and enter your <b>Gemini Location</b>."),
+            _("Gemini Location is missing.<br><br>Please go to <b>ChangAI Settings</b> and enter your <b>Gemini Location</b>.<br>"
+              "Check Quick Start Guide 👇:<br><a href='{0}' target='_blank'>Click here</a>").format(CHANGAI_GUIDE_LINK),
             title=_("Missing Gemini Location"),
         )
     if not credentials_json:
         frappe.throw(
-            _("Service Account Credentials are missing.<br><br>Please go to <b>ChangAI Settings</b> and enter your <b>Service Account Credential</b>."),
+            _("Service Account Credentials are missing.<br><br>Please go to <b>ChangAI Settings</b> and enter your <b>Service Account Credential</b>.<br>"
+              "Check Quick Start Guide 👇:<br><a href='{0}' target='_blank'>Click here</a>").format(CHANGAI_GUIDE_LINK),
             title=_("Missing Service Account Credentials"),
         )
 
@@ -528,8 +543,9 @@ def _get_api_key_client(config):
                 "<a href='https://aistudio.google.com/app/apikey' target='_blank'>Google AI Studio</a>.<br><br>"
                 "<b>Option 2 (Vertex AI / Service Account):</b><br>"
                 "Fill in <b>Gemini Project ID</b>, <b>Gemini Location</b>, "
-                "and <b>Service Account Credentials</b> in <b>ChangAI Settings</b>."
-            ),
+                "and <b>Service Account Credentials</b> in <b>ChangAI Settings</b>.<br>"
+                "ChangAI Quick Start Guide 👇:<br><a href='{0}' target='_blank' rel='noopener noreferrer' style='color: #1e90ff;'>Click here</a>"
+            ).format(CHANGAI_GUIDE_LINK),
             title=_("Gemini Authentication Not Configured"),
         )
 
@@ -564,28 +580,35 @@ def _clean_gemini_response_text(text: str) -> str:
 def _handle_gemini_api_exception(e: Exception) -> None:
     if isinstance(e, google_exceptions.ResourceExhausted):
         frappe.throw(
-            _("Gemini API quota exceeded.<br><br>Please wait and try again or upgrade your plan."),
+            _("Gemini API quota exceeded.<br><br>Please wait and try again or upgrade your plan.<br>Check Quick Start Guide 👇:<br>"
+              "<a href='{0}' target='_blank' rel='noopener noreferrer' style='color: #1e90ff;'>Click here</a>").format(CHANGAI_GUIDE_LINK),
             title=_("Gemini Quota Exceeded"),
         )
     if isinstance(e, google_exceptions.Unauthenticated):
         frappe.throw(
-            _("Gemini API key is invalid.<br><br>Please go to <b>ChangAI Settings</b> and enter a valid <b>Gemini API Key</b>."),
+            _("Gemini API key is invalid.<br><br>Please go to <b>ChangAI Settings</b> and enter a valid <b>Gemini API Key</b>.<br>"
+              "Check ChangAI Quick Start Guide 👇:<br><a href='{0}' target='_blank' rel='noopener noreferrer' style='color: #1e90ff;'>Click here</a>").format(CHANGAI_GUIDE_LINK),
             title=_("Invalid Gemini API Key"),
         )
     if isinstance(e, google_exceptions.PermissionDenied):
         frappe.throw(
-            _("Gemini API permission denied.<br><br>Please check your API key permissions."),
+            _("Gemini API permission denied.<br><br>Please check your API key permissions.<br>"
+              "Check ChangAI Quick Start Guide 👇:<br><a href='{0}' target='_blank' rel='noopener noreferrer' style='color: #1e90ff;'>Click here</a>").format(CHANGAI_GUIDE_LINK),
             title=_("Gemini Permission Denied"),
         )
     if isinstance(e, google_exceptions.InvalidArgument):
         frappe.throw(
-            _("Invalid request to Gemini API: {0}").format(str(e)),
+            _("Invalid request to Gemini API: {0}<br>"
+              "Check ChangAI Quick Start Guide 👇:<br>"
+              "<a href='{1}' target='_blank' rel='noopener noreferrer' style='color: #1e90ff;'>Click here</a>").format(str(e),CHANGAI_GUIDE_LINK),
             title=_("Gemini Invalid Request"),
         )
 
     frappe.log_error(frappe.get_traceback(), "Gemini API Unexpected Error")
     frappe.throw(
-        _("Gemini API error: {0}").format(str(e)),
+        _("Gemini API error: {0}<br>"
+          "Check ChangAI Quick Start Guide 👇:<br>"
+          "<a href='{1}' target='_blank' rel='noopener noreferrer' style='color: #1e90ff;'>Click here</a>").format(str(e),CHANGAI_GUIDE_LINK),
         title=_("Gemini API Error"),
     )
 
@@ -789,13 +812,6 @@ def _parse_rewrite_response(raw: Any, user_qstn: str) -> Tuple[str, bool]:
 @traceable(name="rewrite_question", run_type="tool")
 def rewrite_question(state: SQLState) -> SQLState:
     request_id = state.get("request_id")
-
-    # publish_pipeline_update(
-    #     request_id,
-    #     "question_rewrite_start",
-    #     "Rewriting user question"
-    # )
-
     user_qstn = state.get("question") or ""
     session_id = state.get("session_id")
 
@@ -852,7 +868,8 @@ def get_table_vs():
         )
 
         if not os.path.exists(table_vs_path):
-            frappe.throw(_("FAISS table store not found at {0}").format(table_vs_path))
+            frappe.throw(_("FAISS table store not found at {0}\n"
+            "Check Quick Start Guide Here 👇:\n {1}").format(table_vs_path,CHANGAI_GUIDE_LINK))
 
         _VS_TABLE = FAISS.load_local(
             table_vs_path,
@@ -876,7 +893,8 @@ def get_table_vs_test():
         )
 
         if not os.path.exists(table_vs_path):
-            frappe.throw(_("FAISS table store not found at {0}").format(table_vs_path))
+            frappe.throw(_("FAISS table store not found at {0} <br>"
+            f"Check Quick Start Guide Here 👇:\n {1}").format(table_vs_path,CHANGAI_GUIDE_LINK))
 
         _VS_TABLE = FAISS.load_local(
             table_vs_path,
@@ -988,7 +1006,8 @@ def get_full_fields_vs_test():
         )
 
         if not os.path.isdir(full_fields_vs_path):
-            frappe.throw(_("Vector store path not found: {0}").format(full_fields_vs_path))
+            frappe.throw(_("Vector store path not found: {0}"
+            "Check Quick Start Guide Here 👇:\n {1}").format(full_fields_vs_path, CHANGAI_GUIDE_LINK))
 
         _FULL_FIELDS_VS = FAISS.load_local(
             full_fields_vs_path,
@@ -1014,7 +1033,8 @@ def get_full_fields_vs():
         )
 
         if not os.path.isdir(full_fields_vs_path):
-            frappe.throw(_("Vector store path not found: {0}").format(full_fields_vs_path))
+            frappe.throw(_("Vector store path not found: {0} <br>"
+            "Check Quick Start Guide Here 👇:\n {1}").format(full_fields_vs_path,CHANGAI_GUIDE_LINK))
 
         _FULL_FIELDS_VS = FAISS.load_local(
             full_fields_vs_path,
@@ -1235,7 +1255,8 @@ def get_master_vs():
         )
 
         if not os.path.exists(master_vs_path):
-            frappe.throw(_("FAISS MASTER store not found at {0}.Please click on Update Master Data button in Training tab in ChangAI Settings").format(master_vs_path))
+            frappe.throw(_(f"FAISS MASTER store not found at {0}.Please click on Update Master Data button in Training tab in ChangAI Settings"
+                           f"Check Quick Start Guide Here 👇:\n {1}").format(master_vs_path, CHANGAI_GUIDE_LINK))
 
         _VS_MASTER = FAISS.load_local(
             master_vs_path,
@@ -1576,13 +1597,14 @@ def execute_query(sql: str, doctypes: List[str]) -> Any:
         if not sql:
             return []
         if not str(sql).lower().strip().startswith("select"):
-            frappe.throw(_("Only SELECT queries are allowed."))
+            frappe.throw(_("Only SELECT queries are allowed."
+                           "Check Quick Start Guide Here 👇:\n {0}").format(CHANGAI_GUIDE_LINK))
         combined = _build_match_conditions(doctypes)
         if combined:
             sql = _append_conditions(sql, combined)
         return frappe.db.sql(sql, as_dict=True)
     except Exception as e:
-        return {"error": f"SQL Execution Failed: {e}"}
+        return {"error": f"SQL Execution Failed: {e}\n Check Quick Start Guide Here 👇:\n {CHANGAI_GUIDE_LINK}"}
 
 
 @frappe.whitelist(allow_guest=False)
@@ -2037,8 +2059,8 @@ def _invoke_pipeline(user_question: str, chat_id: str, request_id: str):
     try:
         return app.invoke(initial_state, config=config), None
     except frappe.exceptions.ValidationError as e:
-        clean_msg = re.sub(r'<[^>]+>', '', str(e))
-        return None, {"Bot": clean_msg, "error": clean_msg}
+        # clean_msg = re.sub(r'<[^>]+>', '', str(e))
+        return None, {"Bot": str(e), "error": str(e)}
     except Exception as e:
         frappe.log_error(frappe.get_traceback(), "ChangAI Pipeline Invoke Error")
         return None, {"Bot": "⚠️ An unexpected error occurred. Please try again.", "error": str(e)}
