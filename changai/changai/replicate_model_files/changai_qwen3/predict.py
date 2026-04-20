@@ -166,7 +166,7 @@ Write a clear final answer for the user based strictly on the JSON above.
 
     # ---------------- Predict ----------------
 
-   def _handle_llm_task(self, user_input: str) -> Any:
+def _handle_llm_task(self, user_input: str) -> Any:
     if not user_input:
         return "Error: user_input is required when task='llm'."
     return self._run_main_llm(user_input=user_input)
