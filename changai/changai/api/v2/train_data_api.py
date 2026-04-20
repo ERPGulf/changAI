@@ -26,6 +26,7 @@ FIELD_TAG = "[FIELD]"
 LINK_TAG = "[LINK]"
 CHANGAI_SETTINGS = "ChangAI Settings"
 VALID_OUTPUT_MESSAGE = "You must output ONLY a valid JSON array."
+GEMINI_JSON_PARSE_FAIL = "Gemini JSON parse failed"
 
 SYSTEM_FIELDS = {
     "name", "owner", "creation", "modified", "modified_by",
@@ -579,28 +580,6 @@ def _extract_unique_training_records(arr: List[dict], seen_anchors) -> List[dict
         records.append({"anchor": anchor, "positives": positives})
 
     return records
-
-# def _generate_batch(
-#     client,
-#     module_name,
-#     seen_anchors,
-#     module_description,
-#     total_count,
-#     wrong_examples=None,
-# ) -> List[dict]:
-#     raw = _call_claude_batch_with_retry(
-#         client=client,
-#         module_name=module_name,
-#         module_description=module_description,
-#         wrong_examples=wrong_examples,
-#     )
-#     if not raw:
-#         frappe.log_error("All retries failed", "OpenAI generate_batch failed")
-#         return []
-
-#     arr = _parse_openai_json_array(raw)
-#     return _extract_unique_training_records(arr, seen_anchors)
-
 def _get_gemini_client():
     settings = frappe.get_single(CHANGAI_SETTINGS)
     json_content = (settings.get("gemini_json_content") or "").strip()
@@ -698,8 +677,6 @@ def _get_generation_backend(use_claude: bool, use_gemini: bool):
         return _get_claude_client(), _generate_batch_claude
     if use_gemini:
         return _get_gemini_client(), _generate_batch_gemini
-    # return _get_openai_client(), _generate_batch
-
 
 def _normalize_modules(modules):
     if isinstance(modules, str):
@@ -864,15 +841,15 @@ def start_train(modules: str, total_count: int):
         use_claude=False,
         use_gemini=True
     )
-    # frappe.enqueue(
-    #     "changai.changai.api.v2.train_data_api.generate_data",
-    #     queue="long",
-    #     timeout=14400,
-    #     modules=modules,
-    #     total_count=val_count,
-    #     path="Home/Validation Data/Batch 7",
-    #     use_claude=True,                     # <-- Claude
-    # )
+    frappe.enqueue(
+        "changai.changai.api.v2.train_data_api.generate_data",
+        queue="long",
+        timeout=14400,
+        modules=modules,
+        total_count=val_count,
+        path="Home/Validation Data/Batch 7",
+        use_claude=True,                     # <-- Claude
+    )
     return {"ok": True, "message": "Training and validation jobs queued."}
 
 def _build_gemini_system_instruction() -> str:
@@ -964,10 +941,10 @@ def _parse_gemini_json_array(raw: str) -> List[dict]:
         try:
             arr = json.loads(cleaned)
         except Exception:
-            frappe.log_error(title="Gemini JSON parse failed", message=raw[:3000])
+            frappe.log_error(title=GEMINI_JSON_PARSE_FAIL, message=raw[:3000])
             return []
     except Exception:
-        frappe.log_error(title="Gemini JSON parse failed", message=raw[:3000])
+        frappe.log_error(title=GEMINI_JSON_PARSE_FAIL, message=raw[:3000])
         return []
 
     return arr if isinstance(arr, list) else []
@@ -996,17 +973,6 @@ def _extract_valid_records(arr: List[dict], seen_anchors: set) -> List[dict]:
 
 @frappe.whitelist(allow_guest=True)
 def _call_openai_correction(raw):
-    # client = _get_gemini_client()
-
-    # res = _generate_batch_gemini(
-    #     client,
-    #     "Stock",
-    #     set(),
-    #     "This module includes all tables related to stock management, inventory levels, stock movements, warehouses, and related entities.",
-    #     25,
-    #     []
-    # )
-
     try:
         cleaned_res = json.loads(raw)
     except Exception as e:
@@ -1014,7 +980,6 @@ def _call_openai_correction(raw):
         return []
 
     try:
-        claude_client = _get_claude_client()
         openai_client=_get_openai_client()
 
         # validate records first
@@ -1029,7 +994,6 @@ def _call_openai_correction(raw):
         # process in batches of 5
         for i in range(0, len(cleaned_res), 5):
             batch = cleaned_res[i:i+5]
-            # corrected_raw = _call_claude_batch_with_retry(claude_client, input_raw=batch,module_name=None, module_description=None)
             corrected_raw = _call_openai_batch_with_retry(openai_client, input_raw=batch,module_name=None, module_description=None)
 
             # if OpenAI returns JSONs string
@@ -1081,7 +1045,7 @@ def _generate_batch_gemini(
         arr = raw if isinstance(raw, list) else _parse_gemini_json_array(raw)
     except Exception as e:
         frappe.log_error(
-            title="Gemini JSON parse failed",
+            title=GEMINI_JSON_PARSE_FAIL,
             message=f"{e}\n\nRaw output:\n{str(raw)[:5000]}"
         )
         return []
@@ -1281,34 +1245,6 @@ OUTPUT: RAW JSON ARRAY [{batch_size} records]. Start '[' end ']'.
 Important !!! Format: RAW JSON ARRAY ONLY. No markdown/prose.
 Make sure positives' must be a SINGLE-LEVEL list of strings.DO NOT use objects, nested lists, or dictionaries inside 'positives'.
 """.strip()
-
-
-# def _training_prompt(module_name: str, module_description: str, batch_size: int, wrong_examples: list = None) -> str:
-#     hard_n = (batch_size * 3) // 10
-#     std_n = batch_size - hard_n 
-#     return f"""
-# Act: ERP Architect. Task: Generate {batch_size} training records (JSON).
-# Module: {module_name} ({module_description})
-# ANCHOR RULES:
-# - Queries for: SEE, FIND, LIST, CHECK, COUNT.
-# - Style: Fast/Urgent, Casual, Typos. No SQL/Technical phrasing.
-# - Mix: {std_n} Standard, {hard_n} Targeted (Hard/Tricky). 1 distractor from other module.
-# RULES:
-# - Use standard ERPNext schema (incl. Parent-Child).
-# - Format: RAW JSON ARRAY ONLY. No markdown/prose.
-# EXAMPLE:
-# [{{
-#     "anchor": "who authorized the extra items received in the Dammam warehouse yesterday?",
-#     "positives": [
-#       "[TABLE] tabPurchase Receipt | desc: Root transaction for physical goods arrival; holds authorization metadata.",
-#       "[TABLE] tabUser | desc: Master table for system users to map 'owner' IDs to full names/emails.",
-#       "[FIELD] owner | [TABLE] tabPurchase Receipt | desc: The User ID of the specific employee who 'Submitted' (authorized) this receipt.",
-#       "[FIELD] set_warehouse | [TABLE] tabPurchase Receipt | desc: Header-level field to filter by location, like 'Dammam'.",
-#     ]
-# }}]
-# Make sure positives' must be a SINGLE-LEVEL list of strings.DO NOT use objects, nested lists, or dictionaries inside 'positives'.
-# Important - All tables and fields must exist natively in ERPNext — include every one needed to answer the anchor, with zero omissions and zero custom additions.OUTPUT: RAW JSON ARRAY [{batch_size} records]. Start '[' end ']'.
-# """.strip()
 
 
 def __correction_prompt(input_raw) -> str:
