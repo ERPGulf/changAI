@@ -8,7 +8,7 @@ def get_meta(doc:str):
     return frappe.get_meta(doc) 
 def get_doctype(doc:str,docname: str):
     return frappe.get_doc(doc, docname)
-def get_settings(doc:str):
+def get_settings():
     return frappe.get_single("ChangAI Settings")
 
 @frappe.whitelist(allow_guest=False)
@@ -25,7 +25,7 @@ def translate_and_store(docname: str, doctype: str, from_field: str, to_field: s
         )
     if not text:
         frappe.throw(_("No text to translate"))
-    settings = get_settings(doctype)
+    settings = get_settings()
     try:
         api_key = settings.claude_api_key
     except Exception:
