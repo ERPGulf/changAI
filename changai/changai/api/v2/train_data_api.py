@@ -971,8 +971,7 @@ def _extract_valid_records(arr: List[dict], seen_anchors: set) -> List[dict]:
 
     return records
 
-@frappe.whitelist(allow_guest=True)
-def _call_openai_correction(raw):
+def _call_openai_correction(raw:str):
     try:
         cleaned_res = json.loads(raw)
     except Exception as e:
