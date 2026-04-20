@@ -10,7 +10,6 @@ from typing import Any, Dict, List, Tuple, Union, Optional, Set
 import yaml
 from pathlib import Path
 
-
 def _safe_join(base: Path, rel: str) -> Path:
     """
     Prevent path traversal. Only allow reading inside base directory.
@@ -116,6 +115,23 @@ def validate_sql_schema(sql: str, dialect: str = "mysql") -> dict:
     except sqlglot.errors.ParseError as e:
         return {"ok": False, "error": str(e)}
 
+from frappe.utils import add_to_date, today, date_diff, days_diff
+
+@frappe.whitelist(allow_guest=False)
+def checkmaster_updates():
+    file_name = "master_data.yaml"
+    payload = _read_filedoctype(file_name, RAG_FOLDER)
+    if not payload:
+        return {"update": False, "data": False}
+    if not payload.get("data") or not payload.get("_meta"):
+        return {"data": False}
+    meta = payload.get("_meta") or {}
+    lastdate = meta["last_sync"]
+    docs = frappe.get_all("DocType",filters={"modified":[">",lastdate]})
+    if len(docs)>0:
+        return {"update": False,"data":True,"days": days_diff(today(),lastdate)}
+    return {"update": True,"data":True}
+
 
 @frappe.whitelist()
 def convert_yaml_schema_to_sqlglot_meta() -> dict:
@@ -148,3 +164,9 @@ def convert_yaml_schema_to_sqlglot_meta() -> dict:
             "message": str(e)
         }
     
+from frappe import _
+@frappe.whitelist(allow_guest=False)
+def test():
+        res=checkmaster_updates()
+        if not res.get("update"):
+            frappe.throw(_("Please update master data for entity recognition to work. Click on Update Master Data button in Training tab in ChangAI Settings.<br>Check Quick Start Guide Here 👇"))

@@ -107,9 +107,9 @@ function cycleWindowMode() {
 }
 
 const popupClasses = computed(() => {
-  const base = 'chat-shell fixed z-[9999] flex min-h-0 flex-col overflow-hidden border border-slate-200/80 shadow-[0_32px_80px_-44px_rgba(2,6,23,0.7),0_18px_40px_-24px_rgba(15,23,42,0.45)] transition-all duration-300 ease-out origin-bottom-right motion-safe:animate-surface-in'
+  const base = 'chat-shell fixed z-[9999] flex min-h-0 flex-col overflow-hidden border border-slate-200/80 shadow-[0_32px_80px_-44px_rgba(2,6,23,0.7),0_18px_40px_-24px_rgba(15,23,42,0.45)] transition-all duration-300 ease-out origin-bottom-right'
   const state = props.isOpen
-    ? 'pointer-events-auto opacity-100 translate-x-0 translate-y-0 scale-100'
+    ? 'pointer-events-auto opacity-100 translate-x-0 translate-y-0 scale-100 motion-safe:animate-surface-in'
     : 'pointer-events-none opacity-0 translate-x-1/5 translate-y-8 scale-95'
 
   if (windowMode.value === 'full') {

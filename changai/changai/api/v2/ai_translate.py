@@ -1,4 +1,5 @@
 import os
+import anthropic
 import frappe
 from frappe import _
 from anthropic import Anthropic
@@ -7,11 +8,12 @@ def get_meta(doc:str):
     return frappe.get_meta(doc) 
 def get_doctype(doc:str,docname: str):
     return frappe.get_doc(doc, docname)
-def get_settings(doc:str):
+def get_settings():
     return frappe.get_single("ChangAI Settings")
 
 @frappe.whitelist(allow_guest=False)
-def translate_and_store(docname: str, doctype: str, from_field: str, to_field: str, text: str, to_language: str):    """
+def translate_and_store(docname: str, doctype: str, from_field: str, to_field: str, text: str, to_language: str):
+    """
     Translates text and stores it in a dynamically created field
     """
     meta = get_meta(doctype)
@@ -23,7 +25,7 @@ def translate_and_store(docname: str, doctype: str, from_field: str, to_field: s
         )
     if not text:
         frappe.throw(_("No text to translate"))
-    settings = get_settings(doctype)
+    settings = get_settings()
     try:
         api_key = settings.claude_api_key
     except Exception:
@@ -43,11 +45,11 @@ def translate_and_store(docname: str, doctype: str, from_field: str, to_field: s
     try:
         client = Anthropic(api_key=api_key)
         prompt = f"""
-Translate the following text into {to_language}.
-Return ONLY the translated text.
-Text:
-{text}
-"""
+        Translate the following text into {to_language}.
+        Return ONLY the translated text.
+        Text:
+        {text}
+        """
         response = client.messages.create(
             model="claude-3-haiku-20240307",
             max_tokens=1024,

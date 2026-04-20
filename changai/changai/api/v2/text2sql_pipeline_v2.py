@@ -19,8 +19,9 @@ from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 from google import genai
 from google.genai import types
-from changai.changai.api.v2.schema_utils import validate_sql_schema,_load_mapping_data
+from changai.changai.api.v2.schema_utils import validate_sql_schema,_load_mapping_data,checkmaster_updates
 from google.oauth2 import service_account
+
 from werkzeug.wrappers import Response
 from changai.changai.api.v2.helpdesk_api import(
     create_helpdesk_ticket,
@@ -156,7 +157,6 @@ SUPPORT_PROMPT = read_asset("support.txt", base="prompts")
 
 FILTER_TABLES = read_asset("filter_tables.txt", base="prompts")
 filter_fields = read_asset("filter_fields.txt", base="prompts")
-
 
 @frappe.whitelist(allow_guest=False)
 def download_model():
@@ -1167,11 +1167,6 @@ def generate_sql(state:SQLState) -> SQLState:
     else:
         prompt=fill_sql_prompt(formatted_q,state["context"])
     try:
-        # publish_pipeline_update(
-        #     request_id,
-        #     "sql_generation",
-        #     "Generating SQL query"
-        # )
         response=call_model(prompt)
         if not response:
             return {**state, "error": "Empty response from LLM", "sql_prompt": prompt}
@@ -1347,18 +1342,27 @@ def repair_sqlquery(state: SQLState) -> SQLState:
 def detect_specific_entities(state: SQLState) -> SQLState:
     if not state.get("contains_values"):
         return {**state, "entity_cards": [], "entity_raw": None}
-
+    
     q = (state.get("formatted_q") or "").strip()
     if not q:
         return {**state, "entity_cards": [], "entity_raw": None}
 
     try:
+        res=checkmaster_updates()
+        if not res.get("data"):
+            frappe.throw(_("Master Data do not exist. Bcs of that result may not come accurate. For better accuracy please update by clicking on <b>Update Master Data</b> button in Training tab in ChangAI Settings.<br>Check Quick Start Guide Here 👇:\n"
+            "<a href='{1}' target='_blank' rel='noopener noreferrer' style='color: #1e90ff;'>Click here</a>").format(res.get("days"), CHANGAI_GUIDE_LINK))   
+        if not res.get("update") and res.get("days")>0:
+            frappe.throw(_("Your master data is {0} days old. Bcs of that result may not come accurate. For better accuracy please update by clicking on <b>Update Master Data</b> button in Training tab in ChangAI Settings.<br>Check Quick Start Guide Here 👇:\n"
+            "<a href='{1}' target='_blank' rel='noopener noreferrer' style='color: #1e90ff;'>Click here</a>").format(res.get("days"), CHANGAI_GUIDE_LINK))
         out = call_entity_retriever(q)
         return {
             **state,
             "entity_cards": out.get("cards") or [],
             "entity_raw": out.get("raw"),
         }
+    except frappe.exceptions.ValidationError:
+        raise
     except Exception as e:
         frappe.log_error(f"Entity retriever failed: {e}", "ChangAI Entity Gate")
         return {**state, "entity_cards": [], "entity_raw": {"error": str(e)}}

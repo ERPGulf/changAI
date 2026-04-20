@@ -210,6 +210,7 @@ def update_masterdata():
         "message":"Master Data update running in RQ Job"
     }
 
+
 def sync_master_data_smart() -> Dict[str, Any]:
     file_name = "master_data.yaml"
     payload = _read_filedoctype(file_name, RAG_FOLDER)

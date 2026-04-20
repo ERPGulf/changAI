@@ -26,6 +26,7 @@ FIELD_TAG = "[FIELD]"
 LINK_TAG = "[LINK]"
 CHANGAI_SETTINGS = "ChangAI Settings"
 VALID_OUTPUT_MESSAGE = "You must output ONLY a valid JSON array."
+GEMINI_JSON_PARSE_FAIL = "Gemini JSON parse failed"
 
 SYSTEM_FIELDS = {
     "name", "owner", "creation", "modified", "modified_by",
@@ -176,7 +177,6 @@ def _validate_table(doctype: str) -> bool:
     if doctype not in _table_cache:
         _table_cache[doctype] = bool(frappe.db.exists("DocType", doctype))
     return _table_cache[doctype]
-
 
 def _get_fieldnames_set(doctype: str) -> set:
     if doctype in _field_cache:
@@ -353,10 +353,21 @@ def _call_claude_batch_once(client, messages: List[dict]) -> str:
         frappe.log_error(str(e), "Claude Unexpected Error")
         raise
 
+from typing import Optional
 
-def _call_claude_batch_with_retry(client, module_name, module_description) -> str:
+def _call_claude_batch_with_retry(
+    client,
+    input_raw: Optional[str] = None,
+    module_name: Optional[str] = None,
+    module_description: Optional[str] = None,
+) -> str:
     raw = None
-    messages = _build_claude_messages(module_name, module_description)
+
+    if input_raw and not module_name and module_description:
+       messages = _build_claude_correction_messages(input_raw) 
+    else:
+       messages = _build_claude_messages(module_name, module_description)
+        
 
     for attempt in range(MAX_RETRIES):
         try:
@@ -367,11 +378,12 @@ def _call_claude_batch_with_retry(client, module_name, module_description) -> st
 
             break
 
-        except anthropic.AuthenticationError:
+        except anthropic.AuthenticationError as e:
+            frappe.log_error(str(e), "Claude authentication failed")
             return ""
 
         except Exception as e:
-            frappe.log_error(str(e)[:100], "Claude call failed (retrying)")
+            frappe.log_error(str(e), "Claude call failed (retrying)")
             _sleep_backoff(attempt)
 
     return raw or ""
@@ -438,7 +450,7 @@ def _generate_batch_claude(
     arr = _parse_json_array(raw, "Claude")
     return _extract_unique_records(arr, seen_anchors)
 
-def _build_openai_messages(module_name, module_description, wrong_examples=None) -> List[dict]:
+def _build_claude_correction_messages(input_raw) -> List[dict]:
     return [
         {
             "role": "system",
@@ -450,11 +462,8 @@ def _build_openai_messages(module_name, module_description, wrong_examples=None)
         },
         {
             "role": "user",
-            "content": _training_prompt(
-                module_name,
-                module_description,
-                BATCH_SIZE,
-                wrong_examples,
+            "content": __correction_prompt(                
+                input_raw
             ),
         },
     ]
@@ -494,9 +503,16 @@ def _call_openai_batch_once(client, messages: List[dict]) -> str:
         raise
 
 
-def _call_openai_batch_with_retry(client, module_name, module_description, wrong_examples=None) -> str:
+def _call_openai_batch_with_retry(client,input_raw:None, module_name:None, module_description:None) -> str:
     raw = None
-    messages = _build_openai_messages(module_name, module_description, wrong_examples)
+    messages = None
+    if input_raw:
+        messages = _build_claude_correction_messages(input_raw)
+    elif module_name and module_description:
+        messages = _build_claude_messages(module_name, module_description)
+    else:
+        frappe.log_error("No valid input to build messages", "Claude batch skipped")
+        return ""
 
     for attempt in range(MAX_RETRIES):
         try:
@@ -507,13 +523,14 @@ def _call_openai_batch_with_retry(client, module_name, module_description, wrong
 
             break
 
-        except openai.AuthenticationError:
+        except anthropic.AuthenticationError:
             return ""
 
         except Exception as e:
-            frappe.log_error(str(e)[:300], "OpenAI call failed (retrying)")
+            frappe.log_error(str(e)[:2000], "Claude call failed (retrying)")
             _sleep_backoff(attempt)
-
+    if not raw:
+        frappe.log_error("All retries exhausted", "Claude batch failed")
     return raw or ""
 
 
@@ -563,30 +580,6 @@ def _extract_unique_training_records(arr: List[dict], seen_anchors) -> List[dict
         records.append({"anchor": anchor, "positives": positives})
 
     return records
-
-
-def _generate_batch(
-    client,
-    module_name,
-    seen_anchors,
-    module_description,
-    total_count,
-    wrong_examples=None,
-) -> List[dict]:
-    raw = _call_openai_batch_with_retry(
-        client=client,
-        module_name=module_name,
-        module_description=module_description,
-        wrong_examples=wrong_examples,
-    )
-
-    if not raw:
-        frappe.log_error("All retries failed", "OpenAI generate_batch failed")
-        return []
-
-    arr = _parse_openai_json_array(raw)
-    return _extract_unique_training_records(arr, seen_anchors)
-
 def _get_gemini_client():
     settings = frappe.get_single(CHANGAI_SETTINGS)
     json_content = (settings.get("gemini_json_content") or "").strip()
@@ -684,8 +677,6 @@ def _get_generation_backend(use_claude: bool, use_gemini: bool):
         return _get_claude_client(), _generate_batch_claude
     if use_gemini:
         return _get_gemini_client(), _generate_batch_gemini
-    return _get_openai_client(), _generate_batch
-
 
 def _normalize_modules(modules):
     if isinstance(modules, str):
@@ -740,13 +731,14 @@ def _generate_and_store_module_records(
         )
         if not raw_records:
             continue
+        
+        # validated_records, removed = _validate_records(raw_records)
+        # if not validated_records:
+        #     continue
 
-        validated_records, removed = _validate_records(raw_records)
-        if not validated_records:
-            continue
 
         try:
-            final_records = _assign_qids(validated_records, module_name, existing_count)
+            final_records = _assign_qids(raw_records, module_name, existing_count)
         except Exception as e:
             return {"ok": False, "message": f"Error assigning QIDs: {str(e)}"}
 
@@ -845,7 +837,7 @@ def start_train(modules: str, total_count: int):
         timeout=14400,
         modules=modules,
         total_count=total_count,
-        path="Home/Training Data/Batch 5",
+        path="Home/Training Data/Batch 7",
         use_claude=False,
         use_gemini=True
     )
@@ -855,7 +847,7 @@ def start_train(modules: str, total_count: int):
         timeout=14400,
         modules=modules,
         total_count=val_count,
-        path="Home/Validation Data/Batch 5",
+        path="Home/Validation Data/Batch 7",
         use_claude=True,                     # <-- Claude
     )
     return {"ok": True, "message": "Training and validation jobs queued."}
@@ -893,7 +885,7 @@ def _call_gemini_with_retry(client, model_id: str, contents: List[dict], system_
         try:
             cfg = types.GenerateContentConfig(
                 temperature=0.9,
-                max_output_tokens=4096,
+                max_output_tokens=8192,
                 system_instruction=system_instruction,
             )
 
@@ -949,10 +941,10 @@ def _parse_gemini_json_array(raw: str) -> List[dict]:
         try:
             arr = json.loads(cleaned)
         except Exception:
-            frappe.log_error(title="Gemini JSON parse failed", message=raw[:3000])
+            frappe.log_error(title=GEMINI_JSON_PARSE_FAIL, message=raw[:3000])
             return []
     except Exception:
-        frappe.log_error(title="Gemini JSON parse failed", message=raw[:3000])
+        frappe.log_error(title=GEMINI_JSON_PARSE_FAIL, message=raw[:3000])
         return []
 
     return arr if isinstance(arr, list) else []
@@ -979,6 +971,45 @@ def _extract_valid_records(arr: List[dict], seen_anchors: set) -> List[dict]:
 
     return records
 
+def _call_openai_correction(raw:str):
+    try:
+        cleaned_res = json.loads(raw)
+    except Exception as e:
+        frappe.log_error(title="Cleaning failed", message=frappe.get_traceback())
+        return []
+
+    try:
+        openai_client=_get_openai_client()
+
+        # validate records first
+        for i, record in enumerate(cleaned_res):
+            if not isinstance(record, dict):
+                raise ValueError(f"Record {i} is not a dict")
+            if not record.get("anchor") or not record.get("positives"):
+                raise ValueError(f"Record {i} missing anchor or positives")
+
+        corrected_all = []
+
+        # process in batches of 5
+        for i in range(0, len(cleaned_res), 5):
+            batch = cleaned_res[i:i+5]
+            corrected_raw = _call_openai_batch_with_retry(openai_client, input_raw=batch,module_name=None, module_description=None)
+
+            # if OpenAI returns JSONs string
+            corrected_batch = json.loads(corrected_raw)
+
+            if not isinstance(corrected_batch, list):
+                raise ValueError(f"Corrected batch starting at index {i} is not a list")
+
+            corrected_all.extend(corrected_batch)
+
+    except Exception as e:
+        frappe.log_error(title="Correction failed", message=frappe.get_traceback()[:4000])
+        return []
+
+    return corrected_all
+
+import json
 
 def _generate_batch_gemini(
     client,
@@ -987,7 +1018,7 @@ def _generate_batch_gemini(
     module_description,
     total_count,
     wrong_examples,
-) -> List[dict]:
+) -> list[dict]:
     model_id = "gemini-2.5-flash-lite"
     system_instruction = _build_gemini_system_instruction()
 
@@ -1008,55 +1039,251 @@ def _generate_batch_gemini(
     if not raw:
         return []
 
-    arr = _parse_gemini_json_array(raw)
-    return _extract_valid_records(arr, seen_anchors)
+    # Step 1: parse Gemini output into valid array
+    try:
+        arr = raw if isinstance(raw, list) else _parse_gemini_json_array(raw)
+    except Exception as e:
+        frappe.log_error(
+            title=GEMINI_JSON_PARSE_FAIL,
+            message=f"{e}\n\nRaw output:\n{str(raw)[:5000]}"
+        )
+        return []
 
+    if not isinstance(arr, list):
+        frappe.log_error(
+            title="Gemini output is not a list",
+            message=str(arr)[:5000]
+        )
+        return []
+
+    # Step 2: content correction only after valid JSON exists
+    try:
+        corrected_raw = _call_openai_correction(
+            json.dumps(arr, ensure_ascii=False)
+        )
+        if corrected_raw:
+            corrected_arr = (
+                corrected_raw
+                if isinstance(corrected_raw, list)
+                else _parse_gemini_json_array(corrected_raw)
+            )
+            if isinstance(corrected_arr, list):
+                arr = corrected_arr
+    except Exception as e:
+        frappe.log_error(
+            title="OpenAI content correction failed",
+            message=str(e)
+        )
+        # keep original arr
+
+    return _extract_valid_records(arr, seen_anchors)
 
 def _training_prompt(module_name: str, module_description: str, batch_size: int, wrong_examples: list = None) -> str:
     hard_n = (batch_size * 3) // 10
     std_n = batch_size - hard_n 
-
-    err_data = ""
-    if wrong_examples:
-        wrong_examples = json.loads(wrong_examples) if isinstance(wrong_examples, str) else wrong_examples
-        err_list = "\n".join(
-            [f"Fail: {e['anchor']} | Wrong: {e.get('top5',['?'])[0]}" for e in wrong_examples[:4]]
-        )
-        err_data = f"""
-        FIX FAILED PATTERNS:
-        {err_list}
-        RULE:
-        - If failed patterns are provided above, generate targeted corrected anchors or similar anchors that retrieve the correct tables/fields.
-        """
-    else:
-        err_data = """
-        NOTE:
-        - No failed patterns are provided.
-        - Generate normal high-quality training examples for this module.
-        """
     return f"""
-Act: ERP Architect. Task: Generate {batch_size} training records (JSON).
-Module: {module_name} ({module_description})
-{err_data}
-if the Error 
-ANCHOR RULES:
-- Queries for: SEE, FIND, LIST, CHECK, COUNT.
-- Style: Fast/Urgent, Casual, Typos. No SQL/Technical phrasing.
-- Mix: {std_n} Standard, {hard_n} Targeted (Hard/Tricky). 1 distractor from other module.
+Act as an ERPNext ERP Architect and Text2SQL dataset designer.
+
+Task:
+Generate {batch_size} high-quality training records as a RAW JSON ARRAY only.
+
+Module:
+{module_name} ({module_description})
+
+Goal:
+Create production-grade Text2SQL training data where each record contains:
+- qid
+- anchor
+- positives
+
+Anchor generation rules:
+- Generate only business-style natural language queries.
+- Query intent must be one of: SEE, FIND, LIST, CHECK, COUNT.
+- Use natural end-user phrasing only.
+- Style mix must include:
+  - urgent / fast phrasing
+  - casual phrasing
+  - typo / messy phrasing
+- Do not use SQL terms, database terms, schema terms, or technical wording.
+- Mix:
+  - {std_n} standard queries
+  - {hard_n} targeted hard/tricky queries
+- Include 1 distractor inspired by another module, but keep the main answer grounded in the current module where logically valid.
+
+Schema rules:
+- Use standard ERPNext schema.
+- Use parent-child tables whenever required by the query.
+- Use only tables and fields that would genuinely be required to generate correct SQL.
+- Do not invent tables, fields, joins, or doctypes.
+- If a query logically requires a child table, linked table, lookup table, date field, grouping field, filter field, aggregation field, sorting field, or join-relevant field, it must be included in positives.
+- If a table or field is not required for correct SQL generation, do not include it.
+
+Critical positives rules:
+- positives must be a flat, single-level list of strings only.
+- Do not use objects, dictionaries, nested lists, tuples, arrays inside arrays, or any structured item inside positives.
+- Every item inside positives must be a string.
+- Missing even one critical table or field makes the sample invalid.
+- Positives must include every table and field genuinely needed to answer the anchor and generate the SQL correctly.
+- This includes, when applicable:
+  - root transaction tables
+  - child tables
+  - lookup/master tables
+  - identifier fields
+  - output/display fields
+  - filter fields
+  - date/time fields
+  - amount/value fields
+  - grouping fields
+  - aggregation fields
+  - sorting/ranking fields
+- Prefer completeness and schema correctness over shortness.
+
+Field/table selection policy:
+- Think like a production Text2SQL system, not like a casual annotator.
+- For every anchor, determine:
+  1. the main entity/table,
+  2. all fields needed in SELECT,
+  3. all fields needed in WHERE,
+  4. all fields needed in GROUP BY,
+  5. all fields needed in ORDER BY,
+  6. all fields needed for aggregation,
+  7. all tables/fields needed for joins.
+- Then include all of them in positives.
+- Do not omit child tables if the business meaning depends on line items, ledger rows, account rows, stock rows, or detail rows.
+- Do not rely on only a parent table when SQL would require a child/detail table.
+- Do not return weak positives with only one table unless that is truly sufficient.
+CRITICAL SQL REASONING STEP (MANDATORY):
+
+Before constructing positives, explicitly derive the SQL requirements from the anchor:
+
+1. Identify SELECT fields (what needs to be shown).
+2. Identify WHERE conditions (filters such as dates, status, names, etc.).
+3. Identify GROUP BY fields (if query includes "per", "each", "by").
+4. Identify ORDER BY fields (if query includes "top", "highest", "lowest").
+5. Identify AGGREGATION fields:
+   - "total", "sum", "amount" → numeric fields (e.g., grand_total, paid_amount, debit, credit, amount)
+   - "count" → identifier field (e.g., name)
+   - "balance" → debit/credit fields from ledger tables (NOT master tables)
+6. Identify JOIN requirements:
+   - If query references related entity (customer, item, account, warehouse), include linking fields and related tables.
+7. Identify TIME filters:
+   - "today", "yesterday", "last month", "this year" → 반드시 include correct date field (posting_date, transaction_date, etc.)
+
+MANDATORY RULE:
+If any of the above are required by the query, the corresponding fields MUST be included in positives.
+
+Samples missing:
+- aggregation field
+- grouping field
+- numeric field for totals
+- ledger fields for balance
+- correct date field for time filtering
+
+are INVALID and must be corrected before output.
+Validation pass (mandatory before final output):
+For each generated record, perform an internal validation pass and correct the sample before returning it.
+Check:
+- Can correct SQL be generated from these positives alone?
+- Is any required table missing?
+- Is any required field missing?
+- If the query uses time logic, is the correct date field included?
+- If the query uses ranking/comparison, is the numeric/sort field included?
+- If the query uses grouping like “per customer”, is the grouping field included?
+- If the query needs joins, are the linked tables and join-relevant fields included?
+- If the query refers to line-level business meaning, is the child table included?
+If any answer is no, fix the record before output.
+
+CRITICAL OUTPUT CONSTRAINT:
+- Output MUST be a raw JSON array (UTF-8 text).
+- DO NOT wrap in ``` or ```json.
+- DO NOT include any explanation, notes, or extra text.
+- DO NOT include trailing commas.
+- DO NOT include comments.
+- The first character must be '[' and the last character must be ']'.
+- If the format is violated, the response will be discarded.
+- Return exactly {batch_size} records.
+
+Each record must follow this structure:
+{{
+  "qid": "<module_code>_<number>",
+  "anchor": "<natural language business query>",
+  "positives": [
+    "<string>",
+    "<string>"
+  ]
+}}
+Do not include Generic fields like creation, modified, owner, parenttype,parentfield, parent, idx, name, docstatus.
+Important MUST!!! - Positive string format rules:
+- Use only these string formats:
+  - "[TABLE] tabDoctype | desc: ..."
+  - "[FIELD] fieldname | [TABLE] tabDoctype | desc: ..."
+- Keep descriptions short, precise, and business-relevant.
+- Descriptions must support retrieval quality, but must not replace required fields/tables.
+- Use only tables and fields that eixst in ERPNext"
 RULES:
-- Use standard ERPNext schema (incl. Parent-Child).
 - Format: RAW JSON ARRAY ONLY. No markdown/prose.
-EXAMPLE:
-[{{
+Example:
+[
+  {{
+    "qid": "PR_001",
     "anchor": "who authorized the extra items received in the Dammam warehouse yesterday?",
     "positives": [
-      "[TABLE] tabPurchase Receipt | desc: Root transaction for physical goods arrival; holds authorization metadata.",
-      "[TABLE] tabUser | desc: Master table for system users to map 'owner' IDs to full names/emails.",
-      "[FIELD] owner | [TABLE] tabPurchase Receipt | desc: The User ID of the specific employee who 'Submitted' (authorized) this receipt.",
-      "[FIELD] set_warehouse | [TABLE] tabPurchase Receipt | desc: Header-level field to filter by location, like 'Dammam'.",
-      "[LINK] tabPurchase Receipt -> tabUser ON owner | desc: Join: Connects the document creator to their profile to identify the 'who'."
+      "[TABLE] tabPurchase Receipt | desc: Root transaction for received goods.",
+      "[FIELD] owner | [TABLE] tabPurchase Receipt | desc: User who created or submitted the receipt.",
+      "[FIELD] set_warehouse | [TABLE] tabPurchase Receipt | desc: Header warehouse used to filter location.",
+      "[FIELD] posting_date | [TABLE] tabPurchase Receipt | desc: Date used for filtering yesterday.",
+      "[TABLE] tabUser | desc: User master used to resolve owner details.",
+      "[FIELD] name | [TABLE] tabUser | desc: User identifier used for joining.",
     ]
-}}]
-Make sure positives' must be a SINGLE-LEVEL list of strings.DO NOT use objects, nested lists, or dictionaries inside 'positives'.
+  }}
+]
+RULES:
+- Use standard ERPNext schema (incl. Parent-Child).do not use custom tables or fields not in ERPNext.
+- Format: RAW JSON ARRAY ONLY. No markdown/prose.
 OUTPUT: RAW JSON ARRAY [{batch_size} records]. Start '[' end ']'.
+Important !!! Format: RAW JSON ARRAY ONLY. No markdown/prose.
+Make sure positives' must be a SINGLE-LEVEL list of strings.DO NOT use objects, nested lists, or dictionaries inside 'positives'.
+""".strip()
+
+
+def __correction_prompt(input_raw) -> str:
+    return f"""
+Act as an ERPNext data validation expert.
+
+Task:
+{input_raw}
+
+Review the training records provided above.
+For each record, carefully inspect:
+1. the anchor
+2. the positives list
+
+Your goal is to improve the quality of the dataset for embedding-model training, where the model must retrieve the correct ERPNext tables and fields needed for SQL generation.
+
+Instructions:
+- Check whether all required tables and fields needed to answer the anchor are present in positives.
+- Add any missing required tables or fields that are semantically necessary to answer the query.
+- Remove any wrong, irrelevant, duplicate, or unnecessary tables or fields.
+- Keep only the minimum necessary positives required to answer the anchor correctly.
+- Do NOT include generic system fields such as: name, docstatus, status, creation, modified, owner, idx — these will be injected automatically later.
+- Do NOT include optional or convenience fields unless they are strictly required for the SQL logic.
+- Only use standard ERPNext tables and fields that actually exist in standard ERPNext modules.
+- Do not invent custom tables or fields.
+- Prefer standard ERPNext field names (e.g., use territory instead of region, transaction_date instead of posting_date where appropriate).
+- Ensure the final corrected records are high-quality, precise, and minimal for retrieval training.
+ADDITIONAL PRODUCTION RULES (STRICT):
+* Every query MUST include: entity + metric + filter (time/status/condition).
+* Mandatory fields must always be included based on query intent (e.g., sales → amount field, time → date field).
+* Remove all noise/irrelevant fields (non-business or system fields).
+* Queries must include messy, real-world, and typo variations.
+* Cover edge cases: zero/no data, highest/lowest, time ranges, status conditions.
+* Ensure records are validation-ready (complete, correct, and usable for SQL generation).
+- if the positives are not in this below format.Make it in this below fomat also:
+[TABLE] <table_name> | desc: <short table description>
+[FIELD] <field_name> | [TABLE] <table_name> | desc: <short field description>
+Output rules:
+- Return the corrected records only.
+- Preserve the same JSONL structure (one JSON object per line).
+- Do not add explanations, notes, markdown, or extra text.
+- Output raw JSON only.
 """.strip()
