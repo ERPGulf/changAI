@@ -1,4 +1,5 @@
 import os
+import anthropic
 import frappe
 from frappe import _
 from anthropic import Anthropic
@@ -11,7 +12,8 @@ def get_settings(doc:str):
     return frappe.get_single("ChangAI Settings")
 
 @frappe.whitelist(allow_guest=False)
-def translate_and_store(docname: str, doctype: str, from_field: str, to_field: str, text: str, to_language: str):    """
+def translate_and_store(docname: str, doctype: str, from_field: str, to_field: str, text: str, to_language: str):
+    """
     Translates text and stores it in a dynamically created field
     """
     meta = get_meta(doctype)
@@ -43,11 +45,11 @@ def translate_and_store(docname: str, doctype: str, from_field: str, to_field: s
     try:
         client = Anthropic(api_key=api_key)
         prompt = f"""
-Translate the following text into {to_language}.
-Return ONLY the translated text.
-Text:
-{text}
-"""
+        Translate the following text into {to_language}.
+        Return ONLY the translated text.
+        Text:
+        {text}
+        """
         response = client.messages.create(
             model="claude-3-haiku-20240307",
             max_tokens=1024,
