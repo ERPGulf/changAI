@@ -15,12 +15,9 @@ dependencies = [
     "google-auth==2.49.0.dev0",
     "google-cloud-aiplatform==1.135.0",
     "huggingface_hub",
-
-    "langchain>=0.1.0",
     "langchain-core",
     "langchain-community",
     "langchain-huggingface",
-    "langchain-ollama",
     "langgraph",    
     "transformers>=4.48.0",
     "sentence-transformers>=3.0.0",
@@ -49,3 +46,10 @@ build-backend = "flit_core.buildapi"
 
 [tool.bench.frappe-dependencies]
     frappe = ">=15.0.0,<=17.0.0-dev"
+[deploy.dependencies.apt]
+packages = [
+  "libffi-dev",
+  "pkg-config",
+  "build-essential",
+  "python3-dev"
+]
