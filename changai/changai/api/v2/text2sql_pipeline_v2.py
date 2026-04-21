@@ -13,7 +13,6 @@ import time
 import base64
 import sqlglot
 from sqlglot import exp
-from langsmith.run_helpers import traceable
 from langgraph.checkpoint.memory import MemorySaver
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
@@ -809,7 +808,6 @@ def _parse_rewrite_response(raw: Any, user_qstn: str) -> Tuple[str, bool]:
     return standalone or user_qstn.strip(), contains_values
 
 
-@traceable(name="rewrite_question", run_type="tool")
 def rewrite_question(state: SQLState) -> SQLState:
     request_id = state.get("request_id")
     user_qstn = state.get("question") or ""
@@ -1108,7 +1106,6 @@ def call_fvs_field_search(
 
 
 # Node 1: Retrive with Fiass Vector Store.
-@traceable(name="schema_retriever", run_type="tool")
 def schema_retriever(state: SQLState) -> SQLState:
     config = ChangAIConfig.get()
     try:
@@ -1132,7 +1129,6 @@ def schema_retriever(state: SQLState) -> SQLState:
 
 
 # # Node 2: Build schema context from hits - for SQL Prompt
-@traceable(name="hits_to_prompt_context", run_type="tool")
 def hits_to_prompt_context(state:SQLState) -> SQLState:
     ctx=hits_to_schema_context(state["hits"],title="SCHEMA CONTEXT",max_fields_per_table=25)
     entity_context=state.get("entity_cards", [])
@@ -1149,7 +1145,6 @@ def hits_to_prompt_context(state:SQLState) -> SQLState:
 
 
 # # Node 3:Generate the SQL Prompt and call LLM(Ollama Http)
-@traceable(name="generate_sql", run_type="tool")
 def generate_sql(state:SQLState) -> SQLState:
     request_id = state.get("request_id")
     selected_fields = state.get("selected_fields") or ""
@@ -1187,7 +1182,6 @@ def generate_sql(state:SQLState) -> SQLState:
 
 
 # # Node 4:Validate the SQL Generate with meta schema mapping using SQLGlot
-@traceable(name="validate_sql", run_type="tool")
 def validate_sql(state: SQLState) -> SQLState:
     sql = clean_sql(state.get("sql") or "")
     if not sql:
@@ -1299,7 +1293,6 @@ def call_entity_retriever(qstn: str) -> Dict[str, Any]:
 
 
 # # Node 5:Repair Loop :Simple prompt for one more try.
-@traceable(name="repair_sqlquery", run_type="tool")
 def repair_sqlquery(state: SQLState) -> SQLState:
     hints: List[str] = []
     tries = int(state.get("tries") or 0) + 1
@@ -1338,7 +1331,6 @@ def repair_sqlquery(state: SQLState) -> SQLState:
         return {**state, "tries": tries, "error": f"Repair call failed {e}"}
 
 
-@traceable(name="detect_specific_entities", run_type="tool")
 def detect_specific_entities(state: SQLState) -> SQLState:
     if not state.get("contains_values"):
         return {**state, "entity_cards": [], "entity_raw": None}
@@ -1405,7 +1397,6 @@ def clean_sql(s: Any) -> str:
 
 
 # # Router to decide next stage:
-@traceable(name="router", run_type="tool")
 def router(state:SQLState) -> str:
     if state.get("error"):
         return "end"

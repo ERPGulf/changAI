@@ -21,9 +21,7 @@ dependencies = [
     "langchain-community",
     "langchain-huggingface",
     "langchain-ollama",
-    "langgraph",
-    "langsmith",
-    
+    "langgraph",    
     "transformers>=4.48.0",
     "sentence-transformers>=3.0.0",
     "faiss-cpu>=1.7.0",
