@@ -25,6 +25,44 @@ JSON_EXT = ".json"
 SCHEMA_YAML = "schema.yaml"
 YAML_EXT = ".yaml"
 RAG_FOLDER = "Home/RAG Sources"
+
+def ensure_file_folder(folder_path: str, is_private: int = 1) -> str:
+    """
+    Ensure a File folder path like 'Home/RAG Sources' exists.
+    Returns the full folder path.
+    """
+    if not folder_path:
+        return "Home"
+
+    parts = [p.strip() for p in folder_path.split("/") if p.strip()]
+    if not parts:
+        return "Home"
+
+    current_path = parts[0]
+
+    # Usually Home already exists, but keep this safe.
+    if not frappe.db.exists("File", current_path):
+        frappe.get_doc({
+            "doctype": "File",
+            "file_name": parts[0],
+            "is_folder": 1,
+            "folder": "",
+            "is_private": is_private,
+        }).insert(ignore_permissions=True)
+
+    for part in parts[1:]:
+        next_path = f"{current_path}/{part}"
+        if not frappe.db.exists("File", next_path):
+            frappe.get_doc({
+                "doctype": "File",
+                "file_name": part,
+                "is_folder": 1,
+                "folder": current_path,
+                "is_private": is_private,
+            }).insert(ignore_permissions=True)
+        current_path = next_path
+
+    return current_path
 @frappe.whitelist(allow_guest=False)
 def get_mod(app_names: list[str]):
     if isinstance(app_names, str):
@@ -75,19 +113,18 @@ def _read_filedoctype(file_name: str, folder: str = RAG_FOLDER):
         obj = yaml.safe_load(raw) or {}
         return obj if isinstance(obj, dict) else {}
     return raw
-
 def write_filedoctype(
     file_name: str,
-    payload,
+    payload: Any,
     folder: str = "Home/RAG Sources",
     is_private: int = 1
 ):
+    folder = ensure_file_folder(folder, is_private=is_private)
+
     if file_name.endswith(JSON_EXT):
         text = json.dumps(payload, ensure_ascii=False, indent=2)
-
     elif file_name.endswith((YAML_EXT, ".yml")):
         text = yaml.safe_dump(payload, allow_unicode=True, sort_keys=False)
-
     else:
         text = str(payload)
 
@@ -101,20 +138,21 @@ def write_filedoctype(
 
     if existing:
         doc = frappe.get_doc("File", existing)
-        frappe.logger().info(f"Overwriting {file_name} → file_url={doc.file_url}")
+        frappe.logger().info(f"Overwriting {file_name} -> file_url={doc.file_url}")
         doc.save_file(content=content, overwrite=True)
         doc.save(ignore_permissions=True)
         doc.reload()
         return doc
-    else:
-        doc = frappe.get_doc({
-            "doctype": "File",
-            "file_name": file_name,
-            "folder": folder,
-            "is_private": is_private,
-            "content": content,
-        }).insert(ignore_permissions=True)
-        return doc
+
+    doc = frappe.get_doc({
+        "doctype": "File",
+        "file_name": file_name,
+        "folder": folder,
+        "is_private": is_private,
+        "content": content,
+    }).insert(ignore_permissions=True)
+
+    return doc
 def _tab(dt: str) -> str:
     dt = (dt or "").strip()
     return f"tab{dt}"
@@ -128,11 +166,15 @@ MODULES_TO_SYNC = ["Customer", "Item", "Currency", "Supplier"]
 
 
 def _normalize_master_data_payload(payload: Any) -> tuple[Dict[str, Any], List[Dict[str, Any]]]:
+    if not isinstance(payload, dict):
+        payload = {}
+
     meta = payload.get("_meta") or {}
     data = payload.get("data") or []
 
     if not isinstance(meta, dict):
         meta = {}
+
     if not isinstance(data, list):
         data = []
 
