@@ -29,15 +29,11 @@ HARD CONSTRAINT (MARIADB COMPATIBILITY — ZERO TOLERANCE):
 - DO NOT USE : STRFTIME, DATE_TRUNC, DATE_TRUNC, ::, ILIKE, TRUE/FALSE literals, INTERVAL 'x', EXTRACT, TO_CHAR, NOW()::,When generating SQL as MariaDB not supports it.
 - If you are about to output any forbidden token, you MUST REWRITE the query using MariaDB equivalents.
 - If you cannot express the date logic using MariaDB functions, you MUST NOT output a query that contains forbidden tokens.
-
 INPUT:
-
 USER QUESTION:
 {question}
-
 SCHEMA CONTEXT:
 {context}
-
 ENTITY FILTERING (ABSOLUTE):
 - If ENTITY_CARD exists, you MUST use entity values ONLY from ENTITY_CARD.
 - 🔒 The EXACT SAME entity literal values MUST be used in BOTH SQL and ORM.
@@ -53,7 +49,6 @@ Example:
   "sql": "<MARIA_DB_SQL_QUERY>",
   "orm": "<FRAPPE_ORM_QUERY>"
 }}
-
 FORBIDDEN TOKENS (HARD FAIL): 
 -  STRFTIME, DATE_TRUNC, ::, ILIKE, TO_CHAR, NOW()::, INTERVAL 'x'
 DATE FILTERING (WHITELIST ONLY — MUST FOLLOW):
@@ -61,6 +56,10 @@ DATE FILTERING (WHITELIST ONLY — MUST FOLLOW):
   A. (MONTH(date_col) = MONTH(CURDATE()) AND YEAR(date_col) = YEAR(CURDATE()))
   B.  (date_col BETWEEN DATE_SUB(CURDATE(), INTERVAL DAYOFMONTH(CURDATE())-1 DAY) AND LAST_DAY(CURDATE()))
 - You MUST NOT use STRFTIME, DATE(), DATE_FORMAT, TO_CHAR, EXTRACT, DATE_TRUNC, or any other formatting function for month filtering.
+- Use ONLY: DATE_SUB(date, INTERVAL n UNIT)
+- NEVER use: DATE_SUB(date, n, UNIT)
+- Use YEAR(), MONTH(), QUARTER() for filtering
+- Do NOT use non-MariaDB date functions
 
 VALIDATION STEP (MANDATORY BEFORE OUTPUT):
 Before returning the result, internally verify:
@@ -78,3 +77,22 @@ ALLOWED ERPNext JOIN-KEY EXCEPTION:
 - Never miss adding the tab prefix for table names, as this SQL will run on MariaDB.
 Only output the final JSON if ALL validations pass.
 Do not output the validation steps or any explanation.
+### CRITICAL SCHEMA-GROUNDING LAW
+
+Field names and table/document names mentioned in the USER QUESTION are ONLY semantic hints.
+
+They are NOT proof that the field or table exists.
+
+Before using ANY table or field in SQL or ORM:
+
+1. The table MUST exist exactly in SCHEMA CONTEXT.
+2. The field MUST exist exactly under that same table in SCHEMA CONTEXT.
+3. A field mentioned in the question MUST NOT be used unless it appears in SCHEMA CONTEXT for the selected table.
+4. A table/document mentioned in the question MUST NOT be used unless it appears in SCHEMA CONTEXT.
+5. Do NOT invent, infer, rename, translate, or substitute fields.
+6. Do NOT borrow fields from another table.
+7. Do NOT use a field only because it appears in the rewritten question.
+8. If the required field/table is not in SCHEMA CONTEXT, omit it or return an empty SQL string.
+
+ABSOLUTE RULE:
+Any SQL using a table or field not present in SCHEMA CONTEXT is INVALID, even if it sounds correct in ERPNext.
