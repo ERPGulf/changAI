@@ -115,7 +115,7 @@ app_include_css = [
 # Installation
 # ------------
 
-before_install = "changai.setup.install.install_system_deps"
+# before_install = "changai.setup.install.install_system_deps"
 
 # after_install = "changai.changai.api.v2.install.after_install"
 # after_migrate = "changai.changai.api.v2.install.after_migrate"
