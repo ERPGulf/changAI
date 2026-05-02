@@ -1,7 +1,7 @@
 from __future__ import annotations
 from pathlib import Path
 import os, json, math, re, time, random, traceback
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Tuple,Union
 import frappe
 from google.oauth2 import service_account
 from frappe import _
@@ -91,7 +91,7 @@ def _get_abs_path(module_name: str, folder_path: str,suffix: str = "") -> str:
     site_path = frappe.get_site_path("private", "files")
     target_dir = os.path.join(site_path, relative)
     os.makedirs(target_dir, exist_ok=True)
-    return os.path.join(target_dir, f"{module_name}{suffix}.jsonl")
+    return os.path.join(target_dir, f"{module_name}_batch8_{suffix}.jsonl")
 
 
 def _seed_seen_from_disk(abs_path: str) -> Tuple[set, int]:
@@ -142,7 +142,7 @@ def _sync_frappe_file_doc(module_name: str, abs_path: str, folder_path: str, suf
     Create/Update File doc that points to the on-disk file.
     """
     relative = folder_path.replace("Home/", "", 1)
-    out_file_name = f"{module_name}{suffix}.jsonl"
+    out_file_name = f"{module_name}_batch8_{suffix}.jsonl"
     file_url = f"/private/files/{relative}/{out_file_name}"
     existing = frappe.db.get_value(
         "File",
@@ -310,10 +310,11 @@ def _assign_qids(validated_records: List[dict], module_name: str, existing_count
     return final_records
 
 def _build_claude_messages(module_name, module_description) -> List[dict]:
+    schema = get_module_schema_str(module_name)
     return [
         {
             "role": "user",
-            "content": _val_prompt(module_name, module_description, BATCH_SIZE),
+            "content": _val_prompt(schema,module_name, module_description, BATCH_SIZE),
         }
     ]
 
@@ -606,39 +607,30 @@ def _get_gemini_client():
         location=location,
         credentials=creds,
     )
-
-def _val_prompt(module_name, description, batch_size):
-    return f"""
-You are generating ERPNext schema-retrieval training data.
-This is for production testing of a trained retrieval model, so focus on variety and real-world business questions.
-CRITICAL OUTPUT RULE:
-Return ONLY a valid JSON array. Start with '[' and end with ']'. No markdown. No code fences. No explanation.
+def _val_prompt(schema:str,module_name, description, batch_size):
+    return f"""You are generating ERPNext schema-retrieval TEST data for evaluating a trained retrieval model.
+CRITICAL OUTPUT RULE: Return ONLY a valid JSON array. Start with '[' and end with ']'. No markdown, code fences, or explanations.
+FORMAT:
+[{{"anchor":"query text","positives":["[TABLE] tabX","[FIELD] field_name | [TABLE] tabX"]}}]
 ANCHOR RULES:
-- Questions must be data fetch/lookup intent only
-- Casual, messy, real chat style.
-- Mix styles: ultra-short ("helmet stock dubai"), casual ("how many cement bags in sharjah?"), urgency ("need diesel qty in muscat asap"), doubt ("any PVC fittings left in doha or not?") et..
-- cover all styles of queriy types in the output, with no specific ratio. The more variety the better.
-- Do NOT mention DocType or table names in anchor.
-- Use business wording and synonyms.
-[
-  {{
-    "anchor": "which suppliers didnt deliver on time last month?",
-    "positives": [
-      "[TABLE] tabPurchase Order",
-      "[FIELD] supplier | [TABLE] tabPurchase Order",
-      "[FIELD] schedule_date | [TABLE] tabPurchase Order",
-      "[FIELD] status | [TABLE] tabPurchase Order"
-    ]
-  }}
-]
-REQUIREMENTS:
-- Generate EXACTLY {batch_size} UNIQUE objects
-- NEVER include Doctype names in questions
-- Casual business language
-- Grammar mistakes allowed
-- This is for testing a trained Model in retrieval, so focus on covering all varieties and production oriented questions.
-- {module_name}: {description}
-""".strip()
+- Generate a realistic mix of query types: simple (single table), medium (join OR aggregation OR time filter), complex (multi-condition, joins + aggregation + reasoning).
+- Do NOT force all queries to be complex.
+STYLE VARIATION:
+- Include short, natural, business, messy/typo, urgent, and ambiguous queries.
+LOGIC COVERAGE:
+- Include filters, aggregations, ranking, joins, time-based queries, comparisons, and some complex reasoning.
+STRICT RULES:
+- NEVER mention table/doctype names in anchor.
+- Use realistic business language.
+- Ensure anchors are UNIQUE.
+POSITIVES RULES:
+- Include ALL required tables and fields.
+- Include identifier, filter, aggregation, and join fields if needed.
+- Do NOT miss required fields or include unrelated ones.
+FINAL:
+- Generate EXACTLY {batch_size} UNIQUE objects.
+- {schema}
+Use this Given schema only for produciton grade test data generation.""".strip()
 
 
 
@@ -734,8 +726,9 @@ def _generate_and_store_module_records(
         
         # validated_records, removed = _validate_records(raw_records)
         # if not validated_records:
-        #     continue
-
+        # #     continue
+        # try:
+        #     neg_records = raw_records
 
         try:
             final_records = _assign_qids(raw_records, module_name, existing_count)
@@ -837,19 +830,19 @@ def start_train(modules: str, total_count: int):
         timeout=14400,
         modules=modules,
         total_count=total_count,
-        path="Home/Training Data/Batch 7",
+        path="Home/Training Data/Batch 10",
         use_claude=False,
         use_gemini=True
     )
-    frappe.enqueue(
-        "changai.changai.api.v2.train_data_api.generate_data",
-        queue="long",
-        timeout=14400,
-        modules=modules,
-        total_count=val_count,
-        path="Home/Validation Data/Batch 7",
-        use_claude=True,                     # <-- Claude
-    )
+    # frappe.enqueue(
+    #     "changai.changai.api.v2.train_data_api.generate_data",
+    #     queue="long",
+    #     timeout=14400,
+    #     modules=modules,
+    #     total_count=val_count,
+    #     path="Home/Validation Data/Batch 8",
+    #     use_claude=True,                     # <-- Claude
+    # )
     return {"ok": True, "message": "Training and validation jobs queued."}
 
 def _build_gemini_system_instruction() -> str:
@@ -862,11 +855,10 @@ def _build_gemini_system_instruction() -> str:
 
 def _build_gemini_contents(module_name: str, module_description, wrong_examples) -> List[dict]:
     try:
-        prompt = _training_prompt(
-            module_name,
-            module_description,
+        schema=get_module_schema_str(module_name)
+        prompt = _training_prompt_1(
+            schema,
             BATCH_SIZE,
-            wrong_examples,
         )
     except Exception as e:
         frappe.log_error(
@@ -949,7 +941,6 @@ def _parse_gemini_json_array(raw: str) -> List[dict]:
 
     return arr if isinstance(arr, list) else []
 
-
 def _extract_valid_records(arr: List[dict], seen_anchors: set) -> List[dict]:
     records = []
 
@@ -957,59 +948,77 @@ def _extract_valid_records(arr: List[dict], seen_anchors: set) -> List[dict]:
         if not isinstance(obj, dict):
             continue
 
-        anchor = (obj.get("anchor") or "").strip()
+        raw_anchor = obj.get("anchors") or obj.get("anchor") or ""
+
+        if isinstance(raw_anchor, list):
+            anchors_list = [a.strip() for a in raw_anchor if isinstance(a, str) and a.strip()]
+            anchor = anchors_list[0] if anchors_list else ""
+        elif isinstance(raw_anchor, str):
+            anchor = raw_anchor.strip()
+            anchors_list = [anchor]
+        else:
+            anchor = ""
+            anchors_list = []
+
         positives = obj.get("positives")
+        qid = obj.get("qid", "")
 
         if not anchor or not isinstance(positives, list) or not positives:
             continue
 
-        if anchor in seen_anchors:
+        if any(a in seen_anchors for a in anchors_list):
             continue
 
-        seen_anchors.add(anchor)
-        records.append({"anchor": anchor, "positives": positives})
+        seen_anchors.update(anchors_list)
+
+        # Expand each paraphrase into its own record
+        for i, a in enumerate(anchors_list):
+            records.append({
+                "qid": f"{qid}_p{i}" if i > 0 else qid,  # Stock_026, Stock_026_p1, Stock_026_p2
+                "anchor": a,
+                "positives": positives
+            })
 
     return records
+# def _call_openai_correction(raw:str):
+#     try:
+#         cleaned_res = json.loads(raw)
+#     except Exception as e:
+#         frappe.log_error(title="Cleaning failed", message=frappe.get_traceback())
+#         return []
 
-def _call_openai_correction(raw:str):
-    try:
-        cleaned_res = json.loads(raw)
-    except Exception as e:
-        frappe.log_error(title="Cleaning failed", message=frappe.get_traceback())
-        return []
+    # try:
+    #     openai_client=_get_openai_client()
 
-    try:
-        openai_client=_get_openai_client()
+    #     # validate records first
+    #     for i, record in enumerate(cleaned_res):
+    #         if not isinstance(record, dict):
+    #             raise ValueError(f"Record {i} is not a dict")
+    #         if not record.get("anchor") or not record.get("positives"):
+    #             raise ValueError(f"Record {i} missing anchor or positives")
 
-        # validate records first
-        for i, record in enumerate(cleaned_res):
-            if not isinstance(record, dict):
-                raise ValueError(f"Record {i} is not a dict")
-            if not record.get("anchor") or not record.get("positives"):
-                raise ValueError(f"Record {i} missing anchor or positives")
+        # corrected_all = []
 
-        corrected_all = []
+        # # process in batches of 5
+        # for i in range(0, len(cleaned_res), 5):
+        #     batch = cleaned_res[i:i+5]
+        #     corrected_raw = _call_openai_batch_with_retry(openai_client, input_raw=batch,module_name=None, module_description=None)
 
-        # process in batches of 5
-        for i in range(0, len(cleaned_res), 5):
-            batch = cleaned_res[i:i+5]
-            corrected_raw = _call_openai_batch_with_retry(openai_client, input_raw=batch,module_name=None, module_description=None)
+        #     # if OpenAI returns JSONs string
+        #     corrected_batch = json.loads(corrected_raw)
 
-            # if OpenAI returns JSONs string
-            corrected_batch = json.loads(corrected_raw)
+        #     if not isinstance(corrected_batch, list):
+        #         raise ValueError(f"Corrected batch starting at index {i} is not a list")
 
-            if not isinstance(corrected_batch, list):
-                raise ValueError(f"Corrected batch starting at index {i} is not a list")
+        #     corrected_all.extend(corrected_batch)
 
-            corrected_all.extend(corrected_batch)
+#     except Exception as e:
+#         frappe.log_error(title="Correction failed", message=frappe.get_traceback()[:4000])
+#         return []
 
-    except Exception as e:
-        frappe.log_error(title="Correction failed", message=frappe.get_traceback()[:4000])
-        return []
+#     return corrected_all
 
-    return corrected_all
-
-import json
+# import json
 
 def _generate_batch_gemini(
     client,
@@ -1057,23 +1066,23 @@ def _generate_batch_gemini(
         return []
 
     # Step 2: content correction only after valid JSON exists
-    try:
-        corrected_raw = _call_openai_correction(
-            json.dumps(arr, ensure_ascii=False)
-        )
-        if corrected_raw:
-            corrected_arr = (
-                corrected_raw
-                if isinstance(corrected_raw, list)
-                else _parse_gemini_json_array(corrected_raw)
-            )
-            if isinstance(corrected_arr, list):
-                arr = corrected_arr
-    except Exception as e:
-        frappe.log_error(
-            title="OpenAI content correction failed",
-            message=str(e)
-        )
+    # try:
+    #     corrected_raw = _call_openai_correction(
+    #         json.dumps(arr, ensure_ascii=False)
+    #     )
+    #     if corrected_raw:
+    #         corrected_arr = (
+    #             corrected_raw
+    #             if isinstance(corrected_raw, list)
+    #             else _parse_gemini_json_array(corrected_raw)
+    #         )
+    #         if isinstance(corrected_arr, list):
+    #             arr = corrected_arr
+    # except Exception as e:
+    #     frappe.log_error(
+    #         title="OpenAI content correction failed",
+    #         message=str(e)
+    #     )
         # keep original arr
 
     return _extract_valid_records(arr, seen_anchors)
@@ -1245,21 +1254,214 @@ Important !!! Format: RAW JSON ARRAY ONLY. No markdown/prose.
 Make sure positives' must be a SINGLE-LEVEL list of strings.DO NOT use objects, nested lists, or dictionaries inside 'positives'.
 """.strip()
 
+import frappe
+@frappe.whitelist(allow_guest=False)
+def get_module_schema_str(module_name: str) -> str:
+
+    SKIP_FIELDTYPES = {
+        "Section Break", "Column Break", "Tab Break", "HTML",
+        "Heading", "Button", "Fold", "Table", "Table MultiSelect",
+        "Text Editor", "Small Text", "Read Only", "Attach Image",
+        "Attach", "Color", "Signature", "Geolocation", "Code"
+    }
+
+    SKIP_FIELDNAMES = {
+        "address_display", "contact_display", "other_charges_calculation",
+        "base_in_words", "in_words", "scan_barcode", "last_scanned_warehouse",
+        "company_address_display", "shipping_address", "dispatch_address",
+        "base_rounding_adjustment", "rounding_adjustment", "disable_rounded_total",
+        "ignore_pricing_rule", "plc_conversion_rate", "price_list_currency",
+        "has_unit_price_items", "group_same_items", "select_print_heading",
+        "letter_head", "auto_repeat", "tc_name", "terms", "packed_items",
+        "pricing_rules", "payment_schedule", "named_place", "incoterm",
+        "reserve_stock", "set_warehouse"
+    }
+
+    doctypes = frappe.get_all(
+        "DocType",
+        filters={"module": module_name, "istable": 0},
+        fields=["name"]
+    )
+
+    parts = []
+    for dt in doctypes:
+        try:
+            meta = frappe.get_meta(dt["name"])
+            fieldnames = []
+            for f in meta.fields:
+                if f.fieldname in SKIP_FIELDNAMES:
+                    continue
+                if f.fieldtype in SKIP_FIELDTYPES:
+                    continue
+                fieldnames.append(f.fieldname)
+
+            if fieldnames:
+                parts.append(f"tab{dt['name']}({', '.join(fieldnames)})")
+
+        except Exception:
+            continue
+
+    return " | ".join(parts)
+
+
+def _training_prompt_1(schema: str, batch_size: int) -> str:
+    hard_n = (batch_size * 3) // 10
+    std_n = batch_size - hard_n
+    return f"""
+You are a senior ERPNext architect and Text2SQL dataset designer.
+Generate exactly {batch_size} COMPLEX training records as RAW JSON ARRAY only.
+━━━ COMPLEXITY MANDATE ━━━
+Every anchor MUST require at least one of:
+  • Multi-table JOIN (2+ tables minimum)
+  • Aggregation + GROUP BY (SUM / COUNT / AVG with grouping dimension)
+  • Time filter + aggregation combined
+  • Comparison / mismatch logic (e.g. expected vs actual, billed vs delivered)
+  • Anomaly detection (missing links, zero where non-zero expected, NULL references)
+  • Cross-module reasoning (tables from 2+ ERPNext modules)
+  • Ranking (TOP N by a computed metric)
+DO NOT generate:
+  • Single-table queries
+  • Simple lookup or filter-only queries
+  • "list all X" or "show me X" style queries
+Distribution: {hard_n} anomaly/mismatch/cross-module | {std_n} aggregation/trend/ranking
+━━━ QUERY GENERATION RULES ━━━
+Think deeply about the given schema and its business processes.
+For this module, identify:
+  • What are the most important business KPIs and metrics?
+  • What are common business anomalies or exceptions in this module?
+  • What cross-module workflows does this module participate in?
+  • What time-based trends matter for this module?
+  • What comparisons or mismatches would a business analyst care about?
+Then generate anchors that reflect real complex business questions a manager,
+analyst, or accountant would ask about the given schema — not a developer.
+Style mix:
+  • Urgent phrasing ("which ones are at risk", "need to flag immediately")
+  • Casual business phrasing ("which customers are we losing money on")
+  • Typo/messy phrasing ("custmer with hghest prfit lst mnth")
+  • Domain-specific phrasing ("show COGS vs revenue by SKU this quarter")
+━━━ SQL REASONING (do internally before building positives) ━━━
+For every anchor identify:
+  SELECT  → fields to display
+  WHERE   → all filter conditions (status, date, amount, flag, type)
+  GROUP BY → grouping dimension
+  ORDER BY → sort/ranking field
+  AGG     → SUM/COUNT/AVG field
+  JOIN    → all linking fields + all linked tables
+  DATE    → correct date field for this module's time filters
+  CHILD   → child/detail table if line-item or ledger rows needed
+  ANOMALY → the specific field whose NULL or absence defines the missing link
+━━━ DESCRIPTION QUALITY (CRITICAL — this directly affects retrieval) ━━━
+Format:
+  "[FIELD] fieldname | [TABLE] tabDoctype | desc: ..."
+  "[TABLE] tabDoctype | desc: ..."
+Do not give simple queries. Give complicated queries that require multiple tables, joins, filters, and aggregations.
+Make sure with this dataset i wouldnot get any JSON parse Error.That's important. So please follow the format and rules strictly.
+Every field description MUST contain ALL of:
+  1. BUSINESS PURPOSE — what this field means in plain business English
+     BAD:  "date field"
+     GOOD: "date the transaction was recorded in books; used for period filtering and trend analysis"
+  2. SYNONYMS — business words that map to this field
+     BAD:  "net rate of item"
+     GOOD: "selling rate per unit after discounts; synonyms: sale price, unit price, discounted rate"
+  3. For COST / VALUATION fields — profit/loss relevance explicitly stated
+     GOOD: "cost price at which item was stocked at time of sale; compare with selling rate to calculate
+            profit or loss per unit — if this exceeds selling rate, item was sold at a loss;
+            synonyms: cost price, buying price, valuation rate, COGS"
+  4. For AMOUNT / NUMERIC fields — financial meaning + aggregation purpose
+     GOOD: "total net revenue for this line (rate x qty); SUM per customer to get total revenue"
+  5. For STATUS fields — list actual ERPNext option values
+     GOOD: "payment status; values: Draft, Unpaid, Paid, Partly Paid, Overdue, Cancelled —
+            filter Unpaid/Overdue for receivables analysis"
+  6. For DATE fields — which business event + filtering use
+     GOOD: "date invoice posted to books; use for monthly/quarterly trends and date range filters"
+  7. For FK / LINK fields — what it joins + why join is needed
+     GOOD: "links to Customer master; required to group by customer or filter by customer segment"
+  8. For ANOMALY fields — what NULL or absence means
+     GOOD: "reference to originating Sales Order; if NULL on Delivery Note means delivery made
+            without a sales order — use to detect unlinked deliveries"
+Every table description MUST contain:
+  • What business entity/transaction this table represents
+  • When it is required (e.g. "required for line-item level analysis")
+  • Synonyms if table name doesn't match business language
+  BAD:  "child table"
+  GOOD: "line-item rows of a sales invoice; contains per-item price, cost, and quantity —
+         required for item-level profit, margin, or discount analysis;
+         synonyms: invoice lines, sold items, invoice details"
+━━━ ANCHOR PARAPHRASES (MANDATORY) ━━━
+For every record, generate exactly 3 phrasings of the same question:
+  • Original: formal business analyst style
+  • Paraphrase 2: casual manager phrasing ("which products are we losing money on")
+  • Paraphrase 3: messy/typo style ("itms whr cost exceeds selng pric lst qtr")
+Store all 3 in "anchors" list instead of single "anchor" field.
+All 3 must map to the SAME positives — same tables, same fields.
+━━━ POSITIVES RULES ━━━
+  • Flat list of strings only — no objects, dicts, or nested lists
+  • Every string MUST follow exactly one of these two formats:
+      "[FIELD] fieldname | [TABLE] tabDoctype | desc: ..."
+      "[TABLE] tabDoctype | desc: ..."
+  • NO raw SQL — do NOT include SUM(), GROUP BY, WHERE, HAVING, JOIN,
+    ORDER BY, LIMIT, COUNT(), AVG(), DATE(), Comparison:, or any SQL
+    fragment as a standalone string. Encode all logic into field descriptions instead.
+    BAD:  "SUM(amount)"
+    BAD:  "WHERE purchase_order IS NULL"
+    BAD:  "Comparison: valuation_rate > standard_selling_rate"
+    GOOD: "[FIELD] amount | [TABLE] tabPurchase Order Item | desc: net amount per line; SUM per supplier to get total spend"
+    GOOD: "[FIELD] purchase_order | [TABLE] tabPurchase Receipt | desc: links to originating PO; if NULL, receipt was created without a PO — use to detect unlinked receipts"
+  • Include ALL: root tables, child tables, lookup/master tables,
+                 SELECT fields, WHERE fields, GROUP BY fields,
+                 ORDER BY fields, aggregation fields, JOIN fields
+  • Exclude: creation, modified, owner, parenttype, parentfield, idx, docstatus
+  • Never invent tables or fields not in standard ERPNext
+  • For profit/loss/margin queries: ALWAYS include both cost field AND selling rate field
+  • For time queries: ALWAYS include correct date field for this module
+  • For anomaly queries: ALWAYS include the field whose NULL defines the missing link
+  • For cross-module: ALWAYS include tables and link fields from ALL modules involved
+━━━ VALIDATION (run for every record before output) ━━━
+  ✓ Is query genuinely complex — multi-table / aggregation / anomaly / cross-module?
+  ✓ Can correct SQL be generated from positives alone?
+  ✓ For profit/margin/loss: cost field AND selling field both present?
+  ✓ For time queries: correct date field present?
+  ✓ For aggregation: numeric field AND grouping field present?
+  ✓ For anomaly: NULL-defining link field present?
+  ✓ For cross-module: tables from ALL modules present?
+  ✓ Are descriptions rich enough to match a business query without seeing the field name?
+  ✓ Do synonyms bridge business language to technical field names?
+  ✓ Does every positive string start with [FIELD] or [TABLE]? If not — fix it.
+  ✓ Are there ANY raw SQL fragments in positives? If yes — remove and encode into desc instead.
+If any check fails — fix before output.
+━━━ OUTPUT FORMAT ━━━
+Raw JSON array only. No markdown. No explanation. No trailing commas. No comments.
+First char '[' last char ']'. Exactly {batch_size} records.
+{{
+  "qid": "<module_code>_<number>",
+  "anchors": ["<formal phrasing>", "<casual phrasing>", "<messy/typo phrasing>"],
+  "positives": ["<string>", "<string>"]
+}}
+- Format: RAW JSON ARRAY ONLY. No markdown/prose.
+Important !!! Format: RAW JSON ARRAY ONLY. No markdown/prose.
+Make sure 'positives' must be a SINGLE-LEVEL list of strings. DO NOT use objects, nested lists, or dictionaries inside 'positives'.
+IMPORTANT !!!
+schema : {schema}
+Never ever write the training data with any fields or tables that do not exist in this given schema.
+IMPORTANT !!! Use only the above schema to generate training data.
+OUTPUT: RAW JSON ARRAY [{batch_size} records]. Start '[' end ']'.
+- Do not add explanations, notes, markdown, or extra text like json.
+Your entire response must be raw JSON only.
+Do NOT include ```json, ```, or any other text before or after the JSON.
+Start your response with [ and end with ].
+""".strip()
+
 
 def __correction_prompt(input_raw) -> str:
     return f"""
 Act as an ERPNext data validation expert.
-
 Task:
 {input_raw}
-
 Review the training records provided above.
 For each record, carefully inspect:
 1. the anchor
 2. the positives list
-
 Your goal is to improve the quality of the dataset for embedding-model training, where the model must retrieve the correct ERPNext tables and fields needed for SQL generation.
-
 Instructions:
 - Check whether all required tables and fields needed to answer the anchor are present in positives.
 - Add any missing required tables or fields that are semantically necessary to answer the query.
@@ -1281,9 +1483,13 @@ ADDITIONAL PRODUCTION RULES (STRICT):
 - if the positives are not in this below format.Make it in this below fomat also:
 [TABLE] <table_name> | desc: <short table description>
 [FIELD] <field_name> | [TABLE] <table_name> | desc: <short field description>
+Use only those fields and tables that exist in ERPNext.
 Output rules:
 - Return the corrected records only.
 - Preserve the same JSONL structure (one JSON object per line).
-- Do not add explanations, notes, markdown, or extra text.
+- Do not add explanations, notes, markdown, or extra text like json .
+Your entire response must be raw JSON only.
+Do NOT include ```json, ```, or any other text before or after the JSON.
+Start your response with [ and end with ] .
 - Output raw JSON only.
 """.strip()

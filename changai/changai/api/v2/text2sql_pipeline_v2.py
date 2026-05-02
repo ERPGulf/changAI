@@ -38,7 +38,14 @@ from frappe.desk.reportview import build_match_conditions
 import shutil
 from frappe import _
 from pathlib import Path
+import numpy as np
+from typing import List, Dict, Any
+from symspellpy.symspellpy import SymSpell
+sym_spell = None
 
+_FIELD_DOCS_CACHE = None
+_FIELD_EMBS_CACHE = None
+_TABLE_TO_IDX_CACHE = None
 _ASSETS_DIR = Path(frappe.get_app_path("changai", "changai", "api", "v2", "assets")).resolve()
 _PROMPTS_DIR = Path(frappe.get_app_path("changai", "changai", "prompts")).resolve()
 CHANGAI_SETTINGS = "ChangAI Settings"
@@ -46,6 +53,30 @@ _ALLOWED_EXT = {".json", ".yaml",".j2", ".yml", ".txt", ".md"}
 
 import frappe
 from typing import Any, Dict, Optional
+
+
+def get_symspell():
+    global sym_spell
+
+    if sym_spell is not None:
+        return sym_spell
+
+    sym_spell = SymSpell(max_dictionary_edit_distance=2, prefix_length=7)
+
+    dictionary_path = frappe.get_app_path(
+        "changai",
+        "utils",
+        "dictionaries",
+        "frequency_dictionary_en_82_765.txt"
+    )
+
+    sym_spell.load_dictionary(dictionary_path, term_index=0, count_index=1)
+
+    for kw in BUSINESS_KEYWORDS:
+        sym_spell.create_dictionary_entry(kw.lower(), 1000)
+
+    return sym_spell
+
 
 def publish_pipeline_update(request_id, stage, message, data=None, done=False, error=False):
     if not request_id:
@@ -189,7 +220,15 @@ def download_model_from_ui():
 
         snapshot_download(
             repo_id="hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned",
-            local_dir=model_path
+            local_dir=model_path,
+            ignore_patterns=[
+        "*.pt",
+        "*.pth",
+        "*.bin",
+        "trainer_*",
+        "optimizer*"
+    ]
+
         )
 
         _EMBEDDER_INSTANCE = None
@@ -198,6 +237,48 @@ def download_model_from_ui():
     except Exception as e:
         frappe.log_error(frappe.get_traceback(), "Embedding Model Download Failed")
         frappe.throw(_("Model download failed: {0}\n Check Quick Start Guide Here 👇:\n{1}").format(str(e),CHANGAI_GUIDE_LINK))
+
+import os
+import pickle
+import numpy as np
+
+_FIELD_DOCS_CACHE = None
+_FIELD_EMBS_CACHE = None
+_TABLE_TO_IDX_CACHE = None
+
+
+def load_field_matrix():
+    global _FIELD_DOCS_CACHE, _FIELD_EMBS_CACHE, _TABLE_TO_IDX_CACHE
+
+    if _FIELD_DOCS_CACHE is not None:
+        return _FIELD_DOCS_CACHE, _FIELD_EMBS_CACHE, _TABLE_TO_IDX_CACHE
+
+    app_root = frappe.get_app_path("changai")
+    schema_path = os.path.join(
+        app_root,
+        "changai", "api", "v2", "fvs_stores", "erpnext", "emb_dir"
+    )
+
+    embs_path = os.path.join(schema_path, "field_embs.npy")
+    docs_path = os.path.join(schema_path, "field_docs.pkl")
+    table_idx_path = os.path.join(schema_path, "table_to_idx.pkl")
+
+    if not os.path.exists(embs_path):
+        frappe.throw(f"Missing field_embs.npy. Rebuild schema FVS first: {embs_path}")
+
+    with open(docs_path, "rb") as f:
+        docs = pickle.load(f)
+
+    with open(table_idx_path, "rb") as f:
+        table_to_idx = pickle.load(f)
+
+    embs = np.load(embs_path, mmap_mode="r")
+
+    _FIELD_DOCS_CACHE = docs
+    _FIELD_EMBS_CACHE = embs
+    _TABLE_TO_IDX_CACHE = table_to_idx
+
+    return docs, embs, table_to_idx
 
 
 def get_embedding_engine():
@@ -219,7 +300,10 @@ def get_embedding_engine():
     if _EMBEDDER_INSTANCE is None:
         _EMBEDDER_INSTANCE = HuggingFaceEmbeddings(
             model_name=model_path,
-            model_kwargs={"device": "cpu"}
+            model_kwargs={"device": "cpu","trust_remote_code": True,},
+            encode_kwargs={
+        "normalize_embeddings": True,
+    },
         )
     
     return _EMBEDDER_INSTANCE
@@ -740,32 +824,43 @@ class SQLState(TypedDict, total=False):
     selected_fields: str
 
 
+def is_erp_query(q: str, keywords: list[str]) -> bool:
+    return any(kw in q for kw in keywords)
+
+def correct_spelling(text: str) -> str:
+    sym = get_symspell()
+    suggestions = sym.lookup_compound(text, max_edit_distance=2)
+    return suggestions[0].term if suggestions else text
+
+
 def fill_sql_prompt(question: str, context: str) -> str:
     return SQL_PROMPT.format(question=question, context=context)
+
+
 def guardrail_router(state: SQLState) -> SQLState:
     request_id = state.get("request_id")
 
-    # publish_pipeline_update(
-    #     request_id,
-    #     "router_check",
-    #     "Checking ERP vs NON-ERP"
-    # )
-
     raw_q = state.get("formatted_q") or state.get("question") or ""
     q = str(raw_q).lower().strip()
-
-    is_erp = any(kw in q for kw in BUSINESS_KEYWORDS)
+    q_corrected = correct_spelling(q)
+    is_erp = is_erp_query(q_corrected, BUSINESS_KEYWORDS)
 
     query_type = "ERP" if is_erp else "NON_ERP"
 
+    # optional debug
+    # print("RAW:", q)
+    # print("CORRECTED:", q_corrected)
+
+    state["query_type"] = query_type
     publish_pipeline_update(
-        request_id,
-        "router_result",
-        f"Query type detected: {query_type}"
-    )
+            request_id,
+            "question_rewrite_done",
+            "Query classified as " + query_type,
+            data={"query_type": query_type}
+        )
 
-    return {**state, "query_type": query_type}
 
+    return state
 
 def send_non_erp_request(state: SQLState) -> SQLState:
     qstn =state.get("question")
@@ -904,7 +999,7 @@ def get_table_vs_test():
 
 
 def call_fvs_table_search(q: str) -> List[str]:
-    hits = get_table_vs().similarity_search(q, k=15)
+    hits = get_table_vs().similarity_search(q, k=5)
     out, seen = [], set()
     for h in hits:
         t = h.metadata.get("table")
@@ -949,38 +1044,34 @@ def call_retrieve_multi_line(user_question: str, request_id: str) -> Dict[str, A
             "table_retrieval_done",
             "Tables retrieved"
         )
-        table_prompt = FILTER_TABLES.replace("{user_question}", user_question)
-        table_prompt = table_prompt.replace("{table_list}", json.dumps(top_tables, ensure_ascii=False))
-        selected_raw = call_gemini(table_prompt)
-        selected_tables = _parse_json_list(selected_raw)
-        top_set = set(top_tables)
-        selected_tables = [t for t in selected_tables if t in top_set]
-        if not selected_tables:
-            return {"selected_fields": {}, "selected_tables": [], "top_tables": top_tables}
-        fields_candidates = {}
-        for table in selected_tables:
-
-            fields_candidates[table] = call_fvs_field_search(
-                user_question,
-                table_name=table,
-                selected_tables=selected_tables,
-                k=40
-            )
+        # table_prompt = FILTER_TABLES.replace("{user_question}", user_question)
+        # table_prompt = table_prompt.replace("{table_list}", json.dumps(top_tables, ensure_ascii=False))
+        # selected_raw = call_gemini(table_prompt)
+        # selected_tables = _parse_json_list(selected_raw)
+        # top_set = set(top_tables)
+        # selected_tables = [t for t in selected_tables if t in top_set]
+        # if not selected_tables:
+        #     return {"selected_fields": {}, "selected_tables": [], "top_tables": top_tables}
+        fields_candidates= call_fvs_field_search_global_k(
+            user_question,
+            selected_tables=top_tables,
+            k_total=20
+        )
         publish_pipeline_update(
             request_id,
             "field_retrieval_done",
             "Fields selected"
         )
-        field_prompt = filter_fields.replace("{user_question}", user_question)
-        field_prompt = field_prompt.replace("{fields_tables}", json.dumps(fields_candidates, ensure_ascii=False))
-        selected_raw = call_gemini(field_prompt)
-        try:
-            selected_map = json.loads(selected_raw) if isinstance(selected_raw, str) else {}
-        except Exception:
-            selected_map = {}
+        # field_prompt = filter_fields.replace("{user_question}", user_question)
+        # field_prompt = field_prompt.replace("{fields_tables}", json.dumps(fields_candidates, ensure_ascii=False))
+        # selected_raw = call_gemini(field_prompt)
+        # try:
+        #     selected_map = json.loads(selected_raw) if isinstance(selected_raw, str) else {}
+        # except Exception:
+        #     selected_map = {}
         return {
-            "selected_fields": json.dumps(selected_map, ensure_ascii=False),
-            "selected_tables": selected_tables,
+            "selected_fields": fields_candidates,
+            "selected_tables": top_tables,
             "top_tables": top_tables,
             "top_fields": fields_candidates,
         }
@@ -990,6 +1081,123 @@ def call_retrieve_multi_line(user_question: str, request_id: str) -> Dict[str, A
         return {"selected_fields": {}, "selected_tables": [], "top_tables": [], "error": str(e)}
 
 
+def call_fvs_field_search_global_k(
+    user_question: str,
+    selected_tables: List[str],
+    k_total: int = 20,
+) -> str:
+
+    if not user_question or not selected_tables:
+        return ""
+
+    docs, embs, table_to_idx = load_field_matrix()
+
+    import numpy as np
+
+    emb = get_embedding_engine()
+
+    q_vec = np.array(
+        emb.embed_query(user_question),
+        dtype="float32"
+    )
+
+    q_vec = q_vec / max(np.linalg.norm(q_vec), 1e-12)
+
+    # collect indices
+    all_idxs = []
+    for t in selected_tables:
+        all_idxs.extend(table_to_idx.get(t, []))
+
+    if not all_idxs:
+        return ""
+
+    sub_embs = embs[all_idxs]
+    scores = sub_embs @ q_vec
+
+    top_global = np.argsort(-scores)[:k_total]
+
+    grouped = {}
+    seen = set()
+
+    for i in top_global:
+        doc_i = all_idxs[int(i)]
+        d = docs[doc_i]
+
+        meta = getattr(d, "metadata", {}) or {}
+        table = meta.get("table")
+        field = meta.get("field")
+
+        if not table or not field:
+            continue
+
+        key = (table, field)
+        if key in seen:
+            continue
+        seen.add(key)
+
+        name = field
+
+        # join hint
+        if meta.get("join_hint"):
+            linked_table = meta["join_hint"].get("table")
+            if linked_table:
+                name += f" -> {linked_table}"
+
+        # options
+        if meta.get("options"):
+            opts = meta["options"]
+            if isinstance(opts, list):
+                name += " {" + ", ".join(map(str, opts[:5])) + "}"
+
+        grouped.setdefault(table, []).append(name)
+
+    # 🔥 final compact string
+    parts = []
+    for table, fields in grouped.items():
+        parts.append(f"{table}: " + ", ".join(fields))
+
+    return "\n".join(parts)
+
+
+def call_fvs_field_search_grouped(
+    user_question: str,
+    selected_tables: List[str],
+) -> Dict[str, List[Dict[str, Any]]]:
+
+    if not user_question or not selected_tables:
+        return {}
+
+    sub_vs = get_sub_vs(selected_tables)
+    if sub_vs is None:
+        return {}
+
+    hits = sub_vs.similarity_search(user_question, k=20)
+
+    selected_set = set(selected_tables)
+    grouped = {}
+    seen = set()
+
+    for d in hits:
+        meta = getattr(d, "metadata", {}) or {}
+        tbl = meta.get("table")
+        fld = meta.get("field")
+        key = (tbl, fld)
+        if key in seen:
+            continue
+        seen.add(key)
+        row = {"field": fld, "table": tbl}
+
+        join_hint = meta.get("join_hint")
+        if join_hint:
+            row["join_hint"] = join_hint
+
+        options = meta.get("options")
+        if options:
+            row["options"] = options
+
+        grouped.setdefault(tbl, []).append(row)
+
+    return grouped
 
 def get_full_fields_vs_test():
     global _FULL_FIELDS_VS
@@ -1067,42 +1275,44 @@ def get_sub_vs(selected_tables: List[str]) -> Optional[FAISS]:
     return sub
 
 
-def call_fvs_field_search(
-    user_question: str,
-    table_name: str,
-    selected_tables: List[str],
-    k: int = 40,
-) -> List[Dict[str, Any]]:
-    if not user_question or not table_name:
-        return []
-    sub_vs = get_sub_vs(selected_tables)
-    if sub_vs is None:
-        return []
-    hits = sub_vs.similarity_search(user_question, k=min(60, max(40, k)))
-    results: List[Dict[str, Any]] = []
-    seen = set()
-    for d in hits:
-        meta = getattr(d, "metadata", {}) or {}
-        tbl = meta.get("table")
-        fld = meta.get("field")
-        if tbl != table_name:
-            continue
-        key = (tbl, fld)
-        if key in seen:
-            continue
-        seen.add(key)
-        row = {
-            "field": fld,"table":tbl
-        }
-        if meta.get("join_hint"):
-            row["join_hint"] = meta.get("join_hint")
-        if meta.get("options"):
-            row["options"] = meta.get("options")
+# def call_fvs_field_search(
+#     user_question: str,
+#     table_name: str,
+#     selected_tables: List[str],
+#     k: int = 40,
+# ) -> List[Dict[str, Any]]:
+#     if not user_question or not table_name:
+#         return []
+#     sub_vs = get_sub_vs(selected_tables)
+#     if sub_vs is None:
+#         return []
+#     # hits = sub_vs.similarity_search(user_question, k=min(60, max(40, k)))
+#     hits = sub_vs.similarity_search(user_question, k=20)
 
-        results.append(row)
-        if len(results) >= k:
-            break
-    return results
+#     results: List[Dict[str, Any]] = []
+#     seen = set()
+#     for d in hits:
+#         meta = getattr(d, "metadata", {}) or {}
+#         tbl = meta.get("table")
+#         fld = meta.get("field")
+#         if tbl != table_name:
+#             continue
+#         key = (tbl, fld)
+#         if key in seen:
+#             continue
+#         seen.add(key)
+#         row = {
+#             "field": fld,"table":tbl
+#         }
+#         if meta.get("join_hint"):
+#             row["join_hint"] = meta.get("join_hint")
+#         if meta.get("options"):
+#             row["options"] = meta.get("options")
+
+#         results.append(row)
+#         if len(results) >= k:
+#             break
+#     return results
 
 
 # Node 1: Retrive with Fiass Vector Store.
@@ -2205,3 +2415,14 @@ def run_text2sql_pipeline(user_question: str, chat_id: str, request_id: str) -> 
 
 
 print(run_text2sql_pipeline("Hye whatsapp there...","22","22"))
+
+@frappe.whitelist(allow_guest=False)
+def test(user_qstn, session_id):
+    prompt = inject_prompt(user_qstn, session_id)
+    
+    try:
+        raw = call_model(prompt, "llm")
+        standalone, contains_values = _parse_rewrite_response(raw, user_qstn)
+        return standalone, contains_values
+    except Exception as e:
+        print(f"Error during model call: {e}")

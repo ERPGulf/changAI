@@ -27,12 +27,13 @@ def _get_fvs_paths() -> tuple:
 
     table_path = os.path.join(app_base, "table_fvs")
     schema_path = os.path.join(app_base, "schema_fvs")
+    schema_emb_path = os.path.join(app_base, "emb_dir")
     master_path = os.path.join(private_base, "masterdata_fvs")
 
     for p in (app_base, private_base, table_path, schema_path, master_path):
         os.makedirs(p, exist_ok=True)
 
-    return app_base, private_base, table_path, schema_path, master_path
+    return app_base, private_base, table_path, schema_path, master_path,schema_emb_path
 
 RAG_FOLDER = "Home/RAG Sources"
 HNSW_M           = 32
@@ -200,7 +201,10 @@ def build_schema_docs(schema: Dict[str, Any]) -> List[Document]:
 
     if not isinstance(tables, list):
         return docs
-
+    GENERIC_FIELDS = {
+    'creation', 'modified', 'owner', 'parenttype','old_parent',
+    'parentfield', 'parent', 'idx', 'name', 'docstatus'
+}
     for table_block in tables:
         if not _is_valid_schema_table(table_block):
             continue
@@ -211,8 +215,12 @@ def build_schema_docs(schema: Dict[str, Any]) -> List[Document]:
 
         if not isinstance(fields, list):
             continue
-
+        
         for field_row in fields:
+            field_name = field_row.get("name")
+            if field_name in GENERIC_FIELDS:
+                continue
+                
             doc = _build_field_document(table_name, module, field_row)
             if doc:
                 docs.append(doc)
@@ -338,7 +346,7 @@ def build_all_fvs() -> Dict[str, Any]:
 
 def build_table_fvs_job():
     try:
-        app_base, _, table_path, _, _ = _get_fvs_paths()
+        app_base, _, table_path, _, _,_ = _get_fvs_paths()
         tables_list = _load_json_from_file_doc("tables.json")
         table_docs = build_table_docs(tables_list)
         _build_and_save_faiss(table_docs, table_path, "ERPNext Table FVS", app_base)
@@ -347,13 +355,50 @@ def build_table_fvs_job():
         frappe.log_error(frappe.get_traceback(), "Build Table FVS Failed")
         raise
 
+import os
+import pickle
+import numpy as np
+def save_field_matrix(schema_docs, base_dir):
+    emb = get_embedding_engine()
+
+    texts = [d.page_content for d in schema_docs]
+    vectors = emb.embed_documents(texts)
+
+    embs = np.array(vectors, dtype="float32")
+    embs = embs / np.clip(
+        np.linalg.norm(embs, axis=1, keepdims=True),
+        1e-12,
+        None
+    )
+
+    table_to_idx = {}
+
+    for i, d in enumerate(schema_docs):
+        meta = getattr(d, "metadata", {}) or {}
+        table = meta.get("table")
+        field = meta.get("field")
+
+        if table and field:
+            table_to_idx.setdefault(table, []).append(i)
+
+    os.makedirs(base_dir, exist_ok=True)
+
+    np.save(os.path.join(base_dir, "field_embs.npy"), embs)
+
+    with open(os.path.join(base_dir, "field_docs.pkl"), "wb") as f:
+        pickle.dump(schema_docs, f)
+
+    with open(os.path.join(base_dir, "table_to_idx.pkl"), "wb") as f:
+        pickle.dump(table_to_idx, f)
+
 
 def build_schema_fvs_job():
     try:
         schema = _load_yaml_from_file_doc("schema.yaml")
         schema_docs = build_schema_docs(schema)
-        app_base, _, _, schema_path, _ = _get_fvs_paths()
+        app_base, _, _, schema_path, _,schema_emb_dir = _get_fvs_paths()
         _build_and_save_faiss(schema_docs, schema_path, "ERPNext Schema FVS", app_base)
+        save_field_matrix(schema_docs, schema_emb_dir)
         frappe.logger().info(f"ERPNext Schema FVS built: {len(schema_docs)} docs")
     except Exception :
         frappe.log_error(frappe.get_traceback(), "Build Schema FVS Failed")
@@ -362,7 +407,7 @@ def build_schema_fvs_job():
 
 def build_master_data_fvs_job():
     try:
-        _, private_base, _, _, master_path = _get_fvs_paths()
+        _, private_base, _, _, master_path,_ = _get_fvs_paths()
         master_data = _load_yaml_from_file_doc("master_data.yaml")
         entity_docs = build_entity_docs(master_data)
         _build_and_save_faiss(entity_docs, master_path, "ERPNext Master Data FVS", private_base)
