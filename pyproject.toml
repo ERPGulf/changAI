@@ -23,7 +23,7 @@ dependencies = [
     "sentence-transformers>=3.0.0,<4.0.0",
     "huggingface_hub>=0.23.0,<1.0.0",
     "faiss-cpu>=1.7.0",
-    
+    "zstandard>=0.23.0",  
     # Critical Framework Compatibility
     "numpy>=1.22.0,<2.0.0",         # DO NOT REMOVE <2.0.0 (Breaks ERPNext)
     "sqlglot>=27.0.0",
