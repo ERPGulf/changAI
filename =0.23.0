@@ -1,0 +1,4 @@
+[version-2 a8dd7b3] Added zstandard
+ 3 files changed, 12 insertions(+)
+ create mode 100644 "=0.23.0\n"
+ create mode 100644 changai/changai/setup/install.py
