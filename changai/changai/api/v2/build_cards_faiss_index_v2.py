@@ -189,6 +189,26 @@ def _build_field_document(table_name: str, module: str, field_row: Dict[str, Any
             options=options,
         ),
     )
+GENERIC_FIELDS = {
+    'creation', 'modified', 'owner', 'parenttype','old_parent',
+    'parentfield', 'parent', 'idx', 'name', 'docstatus'
+}
+@frappe.whitelist(allow_guest=True)
+def clean_schema(schema: Dict[str, Any], output_path: str):
+
+    tables = schema.get("tables", [])
+    for table_block in tables:
+        fields = table_block.get("fields")
+        if isinstance(fields, list):
+            table_block["fields"] = [
+                field for field in fields
+                if field.get("name") not in GENERIC_FIELDS
+            ]
+
+    with open(output_path, "w") as f:
+        yaml.dump(schema, f, allow_unicode=True, sort_keys=False)
+
+    print(f"Cleaned schema written to {output_path}")
 
 
 def build_schema_docs(schema: Dict[str, Any]) -> List[Document]:
@@ -201,10 +221,7 @@ def build_schema_docs(schema: Dict[str, Any]) -> List[Document]:
 
     if not isinstance(tables, list):
         return docs
-    GENERIC_FIELDS = {
-    'creation', 'modified', 'owner', 'parenttype','old_parent',
-    'parentfield', 'parent', 'idx', 'name', 'docstatus'
-}
+
     for table_block in tables:
         if not _is_valid_schema_table(table_block):
             continue
@@ -395,8 +412,10 @@ def save_field_matrix(schema_docs, base_dir):
 def build_schema_fvs_job():
     try:
         schema = _load_yaml_from_file_doc("schema.yaml")
+        # schema = clean_schema(schema,schema_path)
         schema_docs = build_schema_docs(schema)
         app_base, _, _, schema_path, _,schema_emb_dir = _get_fvs_paths()
+        # clean_schema(schema_path,schema_path)
         _build_and_save_faiss(schema_docs, schema_path, "ERPNext Schema FVS", app_base)
         save_field_matrix(schema_docs, schema_emb_dir)
         frappe.logger().info(f"ERPNext Schema FVS built: {len(schema_docs)} docs")

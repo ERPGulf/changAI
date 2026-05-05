@@ -85,7 +85,7 @@ SYSTEM_FIELDS = [
 ]
 EXCLUDED_FIELDTYPES: Set[str] = {
     "Section Break", "Column Break", "Tab Break", "Page Break", "Table Break",
-    "Fold", "Heading", "HTML", "Button", "Attach Image", "Image", "Signature", "Icon",
+    "Fold", "Heading", "HTML", "Button", "Attach Image", "Image", "Signature", "Icon","Table"
 }
 
 
@@ -516,12 +516,12 @@ def _build_fields_from_meta(
     fields: List[Dict[str, Any]] = []
     added_fieldnames = set()
 
-    # always add system fields first
-    for sys_field in SYSTEM_FIELDS:
-        field_entry = _build_field_entry(sys_field, existing_fields, meta_dt.name)
-        if field_entry:
-            fields.append(field_entry)
-            added_fieldnames.add(field_entry["name"])
+    # # always add system fields first
+    # for sys_field in SYSTEM_FIELDS:
+    #     field_entry = _build_field_entry(sys_field, existing_fields, meta_dt.name)
+    #     if field_entry:
+    #         fields.append(field_entry)
+    #         added_fieldnames.add(field_entry["name"])
 
     # then add real doctype fields
     for field_meta in meta_dt.fields:

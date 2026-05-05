@@ -99,6 +99,11 @@ def _load_mapping_data() -> dict:
 def validate_sql_schema(sql: str, dialect: str = "mysql") -> dict:
     try:
         mapping_data = _load_mapping_data()  # fresh load every time
+        mapping_data = {
+            table: columns
+            for table, columns in mapping_data.items()
+            if table and table.strip() and columns  # skip empty table names AND empty column dicts
+        }
         schema = MappingSchema(mapping_data, dialect=dialect)
 
         ast = sqlglot.parse_one(sql, read=dialect)
@@ -136,17 +141,30 @@ def checkmaster_updates():
 @frappe.whitelist()
 def convert_yaml_schema_to_sqlglot_meta() -> dict:
     try:
+        FRAPPE_GENERIC_FIELDS = {
+            "name": "TEXT",
+            "owner": "TEXT",
+            "creation": "TEXT",
+            "modified": "TEXT",
+            "modified_by": "TEXT",
+            "docstatus": "INT",
+            "idx": "INT",
+            "parent": "TEXT",
+            "parentfield": "TEXT",
+            "parenttype": "TEXT",
+        }
         data = _read_filedoctype("schema.yaml")
         meta = {}
         for table_entry in data.get("tables", []):
             table_name = table_entry.get("table")
             fields = table_entry.get("fields", [])
-            if table_name:
+            if table_name and fields:
                 meta[table_name] = {
                     field["name"]: "TEXT"
                     for field in fields
                     if field.get("name")
                 }
+                meta[table_name].update(FRAPPE_GENERIC_FIELDS)
 
         output_path = _ASSETS_DIR / "metaschema_clean_v2.json"
         output_path.write_text(

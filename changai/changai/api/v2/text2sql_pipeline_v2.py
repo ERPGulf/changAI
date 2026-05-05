@@ -42,7 +42,8 @@ import numpy as np
 from typing import List, Dict, Any
 from symspellpy.symspellpy import SymSpell
 sym_spell = None
-
+_GEMINI_CLIENT = None
+_GEMINI_CONFIG = None
 _FIELD_DOCS_CACHE = None
 _FIELD_EMBS_CACHE = None
 _TABLE_TO_IDX_CACHE = None
@@ -59,7 +60,10 @@ def get_symspell():
     global sym_spell
 
     if sym_spell is not None:
+        frappe.logger().info(f"SymSpell already loaded, skipping PID: {os.getpid()}")
         return sym_spell
+
+    frappe.logger().error(f"SymSpell loading NOW in PID: {os.getpid()}") 
 
     sym_spell = SymSpell(max_dictionary_edit_distance=2, prefix_length=7)
 
@@ -161,7 +165,6 @@ def read_asset(file_name: str, base: str = "assets") -> Any:
 _VS_TABLE = None
 _VS_MASTER = None
 _EMBEDDER_INSTANCE = None
-__vector_store = None
 _FULL_FIELDS_VS = None
 STATUS_200 = 200
 _SUB_VS_CACHE = {}
@@ -173,7 +176,6 @@ Check Quick Start Guide Here 👇:
 {CHANGAI_GUIDE_LINK}"""
 MODEL_ID = "gemini-2.5-flash-lite"
 RETRY_LIMIT = 2
-BACKEND_SERVER_SETTINGS = "Backend Server Settings"
 bk = read_asset("business_keywords_v1.json", base="assets")
 BUSINESS_KEYWORDS = bk.get("business_keywords", bk)
 
@@ -695,16 +697,21 @@ def _handle_gemini_api_exception(e: Exception) -> None:
         title=_("Gemini API Error"),
     )
 
+def gemini_client():
+    global _GEMINI_CLIENT,_GEMINI_CONFIG
+    if _GEMINI_CLIENT is None:
+        config = frappe.get_single(CHANGAI_SETTINGS)
+        _GEMINI_CONFIG =  config
+        _GEMINI_CLIENT = _build_gemini_client(config)
+    return _GEMINI_CLIENT
 
 def call_gemini(prompt: str) -> Union[str, Dict[str, Any]]:
     try:
-        frappe.clear_document_cache(CHANGAI_SETTINGS)
-        config = frappe.get_single(CHANGAI_SETTINGS)
-
-        client = _build_gemini_client(config)
+        # frappe.clear_document_cache(CHANGAI_SETTINGS)
+        client = gemini_client()
 
         gemini_config = types.GenerateContentConfig(
-            system_instruction="You are an ERPNext assistant. Follow the task instructions exactly."
+            system_instruction="You are an ERPNext assistant.Follow the task instructions exactly.",
         )
         response = client.models.generate_content(
             model=MODEL_ID,
@@ -846,10 +853,6 @@ def guardrail_router(state: SQLState) -> SQLState:
     is_erp = is_erp_query(q_corrected, BUSINESS_KEYWORDS)
 
     query_type = "ERP" if is_erp else "NON_ERP"
-
-    # optional debug
-    # print("RAW:", q)
-    # print("CORRECTED:", q_corrected)
 
     state["query_type"] = query_type
     publish_pipeline_update(
@@ -999,7 +1002,7 @@ def get_table_vs_test():
 
 
 def call_fvs_table_search(q: str) -> List[str]:
-    hits = get_table_vs().similarity_search(q, k=5)
+    hits = get_table_vs().similarity_search(q, k=20)
     out, seen = [], set()
     for h in hits:
         t = h.metadata.get("table")
@@ -1055,7 +1058,7 @@ def call_retrieve_multi_line(user_question: str, request_id: str) -> Dict[str, A
         fields_candidates= call_fvs_field_search_global_k(
             user_question,
             selected_tables=top_tables,
-            k_total=20
+            k_total=40
         )
         publish_pipeline_update(
             request_id,
@@ -2320,7 +2323,7 @@ def _get_sql_error_message(err: Any, val: Dict) -> str:
     return f"⚠️ The model generated an invalid query. {error_text}"
 
 
-def _handle_sql_result(final: SQLState, sql: str, orm: str, formatted_q: str, fields: str,
+def _handle_sql_result(sql_prompt:str,final: SQLState, sql: str, orm: str, formatted_q: str, fields: str,
                        selected_tables: List, val: Dict, entity_debug: Dict,
                        user_question: str, chat_id: str) -> Dict:
     try:
@@ -2391,6 +2394,7 @@ def run_text2sql_pipeline(user_question: str, chat_id: str, request_id: str) -> 
     formatted_q = _safe_strip(final.get("formatted_q") or "")
     selected_tables = final.get("selected_tables") or []
     fields = _safe_strip(final.get("selected_fields") or "")
+    sql_prompt = _safe_strip(final.get("sql_prompt") or "")
     # val = final.get("validation") or {}
     err = final.get("error")
 
@@ -2411,10 +2415,9 @@ def run_text2sql_pipeline(user_question: str, chat_id: str, request_id: str) -> 
             "Bot": _get_sql_error_message(err, res),
         }
 
-    return _handle_sql_result(final, sql, orm, formatted_q, fields,selected_tables, res, entity_debug, user_question, chat_id)
+    return _handle_sql_result(sql_prompt, final, sql, orm, formatted_q, fields, selected_tables, res, entity_debug, user_question, chat_id)
 
 
-print(run_text2sql_pipeline("Hye whatsapp there...","22","22"))
 
 @frappe.whitelist(allow_guest=False)
 def test(user_qstn, session_id):
@@ -2426,3 +2429,31 @@ def test(user_qstn, session_id):
         return standalone, contains_values
     except Exception as e:
         print(f"Error during model call: {e}")
+
+
+def load_on_startup():
+    global _EMBEDDER_INSTANCE, _VS_TABLE, _FULL_FIELDS_VS, _VS_MASTER, _FIELD_DOCS_CACHE, sym_spell, _GEMINI_CLIENT
+
+    # If all are already loaded, skip
+    if all([
+        _EMBEDDER_INSTANCE is not None,
+        _VS_TABLE is not None,
+        _FULL_FIELDS_VS is not None,
+        _VS_MASTER is not None,
+        _FIELD_DOCS_CACHE is not None,
+        sym_spell is not None,
+        _GEMINI_CLIENT is not None,
+    ]):
+        return 
+    try:
+        frappe.logger().error(f"ChangAI loading in PID: {os.getpid()}")
+        get_symspell()
+        get_embedding_engine()
+        get_table_vs()
+        get_full_fields_vs()
+        load_field_matrix()
+        gemini_client()
+        get_master_vs()
+        frappe.logger().info("ChangAI: All components loaded into memory")
+    except Exception as e:
+        frappe.logger().error(f"ChangAI startup load failed: {e}")

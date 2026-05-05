@@ -181,7 +181,7 @@ doc_events = {
 # 		"on_trash": "method"
 # 	}
 }
-
+before_request = ["changai.changai.api.v2.text2sql_pipeline_v2.load_on_startup"]
 # Scheduled Tasks
 # ---------------
 
