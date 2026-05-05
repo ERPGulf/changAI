@@ -1,11 +1,2 @@
-On branch version-2
-Your branch is up to date with 'origin/version-2'.
-
-Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git restore <file>..." to discard changes in working directory)
-	modified:   =0.23.0
-	modified:   changai/changai/setup/install.py
-	modified:   changai/hooks.py
-
-no changes added to commit (use "git add" and/or "git commit -a")
+[version-2 2943ab3] Added zstandard
+ 3 files changed, 20 insertions(+), 12 deletions(-)

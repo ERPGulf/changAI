@@ -83,33 +83,31 @@ def respond_from_cache(user_question:str):
         doc=frappe.db.get_value("ChangAI Logs",{"user_question":user_question},["sql_generated","result"],as_dict=False)
         return doc
 
-PROMPT_FOLLOWUP = """You are ChangAI, an ERP query rewriter and entity detector.
+PROMPT_FOLLOWUP = """You are an ERP query rewriter and entity detector.
 Return ONLY valid JSON:
 {{"standalone_question":"...","contains_values":true/false}}
 TASK 1 — FOLLOW-UP
 - If the query depends on previous messages, rewrite it as a complete standalone question.
 - Otherwise keep it unchanged.
 TASK 2 — ENTITY DETECTION
-contains_values = TRUE if the query includes any specific entity
-(customer, supplier, item, warehouse, employee, etc.), else FALSE.
-When unsure → TRUE.
+contains_values = TRUE Any noun that refers to a specific named master record 
+(item name, customer name, supplier name, warehouse name, employee name) 
+if not sure then also contains_values = TRUE otherwise contains_values = FALSE
+Eg:
 TASK 3 — ERP CONTEXTUAL REWRITE
 1. Normalize:
 - Fix typos, clear English
 - Do NOT change entity values
-2. Complete intent:
-- Expand vague queries (total, list, top, filter)
+2.complete intent
+Never change the question's intent — only fix grammar and map ERP terms.
 3. ERP mapping:
 - Map generic terms to standard ERPNext concepts based on intent
 - Avoid vague words if clearer business terms exist
-- Do NOT invent documents or use report names that
+- Do NOT invent documents or use report names.
 Examples:
-invoice → Sales Invoice / Purchase Invoice
-order → Sales Order / Purchase Order
 stock → Bin / Stock Ledger Entry
 production → Work Order
-timesheet → Timesheet / Timesheet Detail
-finance/profit → GL Entry (use credit and debit)
+finance/profit → GL Entry
 4. Field hints (max 1–2):
 Use natural phrasing ("based on", "using")
 sales → grand_total
@@ -123,7 +121,6 @@ Sales/Stock/Finance → posting_date
 Work Order → actual_start_date / actual_end_date
 Timesheet → start_date / end_date
 Timesheet Detail → from_time / to_time
-STRICT:
 - NEVER use posting_date for Timesheet
 - NEVER use creation unless asked
 6. Relationships:
@@ -132,14 +129,18 @@ STYLE:
 - Natural business language
 - No SQL, no tab* names
 EXAMPLES:
-"sales invoice last month"
+"total sales amount last month"
 → What is the total sales amount from Sales Invoices last month based on grand_total and posting_date?
-
 "stock in warehouse a"
 → What is the stock quantity in Warehouse A based on actual_qty from Bin?
-
 "who worked today"
 → Which employees logged time today based on Timesheet start_date or Timesheet Detail from_time?
+If the query mentions Draft, Submitted, or Cancelled, explicitly include docstatus in the rewritten question.
+- Do not add a specific document type unless it is clearly implied by the user query or required by standard ERPNext business meaning.
+- For vague money questions, clarify the business meaning as actual, ordered, quoted, paid, or outstanding, but do not guess the document type incorrectly.
+- If the user says "spend", treat it as actual purchase/expense, not quotation or order commitment, unless the user explicitly mentions order, quotation, or planned purchase.
+- Preserve all filter conditions, status values, and keywords from the original question — never drop them during rewriting.
+
 Chat history:
 {rows}
 User:
